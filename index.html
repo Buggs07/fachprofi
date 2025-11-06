@@ -1418,6 +1418,20 @@
 
     <!-- Hero Section -->
     <section class="hero" style="display: none;">
+        <div class="hero-nav-buttons">
+    <a href="about.html" class="hero-nav-btn">
+        <i class="fas fa-info-circle"></i>
+        About Us
+    </a>
+    <a href="deutsch-lernen.html" class="hero-nav-btn">
+        <i class="fas fa-language"></i>
+        Deutsch Lernen
+    </a>
+    <a href="erkrankungen.html" class="hero-nav-btn">
+        <i class="fas fa-heartbeat"></i>
+        Erkrankungen
+    </a>
+        </div>
         <div class="floating-icons" id="floating-icons"></div>
         <div class="container">
             <div class="hero-content">
@@ -3285,6 +3299,59 @@ function startApplication() {
     updateUI();
     setupNavigation(); // Add this line
 }
+
+
+// Mobile Navigation Functionality
+const mobileNavToggle = document.getElementById('mobileNavToggle');
+const mobileNavMenu = document.getElementById('mobileNavMenu');
+const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+
+function toggleMobileNav() {
+    mobileNavMenu.classList.toggle('active');
+    mobileNavOverlay.classList.toggle('active');
+    document.body.style.overflow = mobileNavMenu.classList.contains('active') ? 'hidden' : '';
+    
+    // Change icon
+    const icon = mobileNavToggle.querySelector('i');
+    icon.className = mobileNavMenu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+}
+
+mobileNavToggle.addEventListener('click', toggleMobileNav);
+mobileNavOverlay.addEventListener('click', toggleMobileNav);
+
+// Close mobile nav when clicking on links
+document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileNavMenu.classList.remove('active');
+        mobileNavOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        mobileNavToggle.querySelector('i').className = 'fas fa-bars';
+    });
+});
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        mobileNavMenu.classList.remove('active');
+        mobileNavOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        mobileNavToggle.querySelector('i').className = 'fas fa-bars';
+    }
+});
+
+// Add active class to current page
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = window.location.pathname.split('/').pop();
+    const navLinks = document.querySelectorAll('.mobile-nav-link, .hero-nav-btn');
+    
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+        }
+    });
+});
+
+        
     </script>
 </body>
 </html>
