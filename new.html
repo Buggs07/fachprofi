@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PflegefachProfi | Meistere die Pflegeplanung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #eef2ff;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --warning: #fca311;
+            --danger: #e63946;
+            --coin: #ffd166;
+            --text-primary: #1d3557;
+            --text-secondary: #457b9d;
+            --text-tertiary: #a8dadc;
+            --background: #f1faee;
+            --surface: #ffffff;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 32px;
+            --spacing-xl: 48px;
+            --spacing-xxl: 64px;
+            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background-color: var(--background);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--surface);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--primary-light);
+            padding: 6px 10px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .coins {
+            background: linear-gradient(135deg, var(--coin) 0%, #ffb347 100%);
+            color: var(--text-primary);
+        }
+
+        .level {
+            background: var(--primary);
+            color: white;
+        }
+
+        .xp {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: var(--spacing-xxl) 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+            font-size: 2.5rem;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--accent);
+            color: white;
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--radius);
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: var(--shadow-elevated);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(247, 37, 133, 0.4);
+        }
+
+        /* Learning Path */
+        .learning-path {
+            padding: var(--spacing-xl) 0;
+            background: var(--background);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            font-size: 2rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .path-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        .path-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .path-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .path-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-elevated);
+            border-color: var(--primary-light);
+        }
+
+        .path-card.locked {
+            opacity: 0.7;
+            filter: grayscale(0.5);
+        }
+
+        .path-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .path-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .path-cost {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--coin);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .path-title {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .path-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            font-size: 0.9rem;
+        }
+
+        .path-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .path-action {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .path-action.unlock {
+            background: var(--primary);
+            color: white;
+        }
+
+        .path-action.unlock:hover {
+            background: var(--primary-dark);
+        }
+
+        .path-action.start {
+            background: var(--success);
+            color: white;
+        }
+
+        .path-action.start:hover {
+            background: #3ab0d9;
+        }
+
+        .path-action.continue {
+            background: var(--accent);
+            color: white;
+        }
+
+        .path-action.continue:hover {
+            background: #e1156d;
+        }
+
+        /* Learning Module */
+        .learning-module {
+            display: none;
+            padding: var(--spacing-xl) 0;
+            background: var(--surface);
+            min-height: 100vh;
+        }
+
+        .learning-module.active {
+            display: block;
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .module-progress {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .module-steps {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .step.completed {
+            background: var(--success);
+        }
+
+        .lesson-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .lesson-card {
+            display: none;
+            padding: var(--spacing-xl);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-card.active {
+            display: block;
+        }
+
+        .lesson-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .key-point {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .key-point i {
+            color: var(--primary);
+            margin-right: var(--spacing-xs);
+        }
+
+        .example-box {
+            background: #fff9e6;
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-left: 4px solid var(--warning);
+        }
+
+        .example-title {
+            font-weight: 700;
+            color: var(--warning);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .interactive-element {
+            background: var(--background);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border: 2px dashed var(--primary);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-xl);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--primary);
+            color: white;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .nav-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .quiz-option {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(76, 201, 240, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: rgba(230, 57, 70, 0.1);
+        }
+
+        .option-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .quiz-option.correct .option-indicator {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .quiz-option.incorrect .option-indicator {
+            border-color: var(--danger);
+            background: var(--danger);
+            color: white;
+        }
+
+        .quiz-feedback {
+            padding: var(--spacing-md);
+            border-radius: var(--radius);
+            margin-top: var(--spacing-md);
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(230, 57, 70, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .quiz-results {
+            text-align: center;
+            padding: var(--spacing-xl);
+            display: none;
+        }
+
+        .quiz-results.active {
+            display: block;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .result-icon.correct {
+            color: var(--success);
+        }
+
+        .result-score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .result-score.good {
+            color: var(--success);
+        }
+
+        .result-score.average {
+            color: var(--warning);
+        }
+
+        .result-score.poor {
+            color: var(--danger);
+        }
+
+        .reward-animation {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .reward-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .reward-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .reward-icon.coins {
+            background: var(--coin);
+            color: var(--text-primary);
+        }
+
+        .reward-icon.xp {
+            background: var(--success);
+            color: white;
+        }
+
+        .reward-amount {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .countdown {
+            margin-top: var(--spacing-md);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Login Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-elevated);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .path-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-stats {
+                gap: 8px;
+            }
+            
+            .stat-item {
+                padding: 4px 8px;
+                font-size: 0.75rem;
+            }
+            
+            .stat-item i {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: var(--spacing-xl) 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .user-stats {
+                gap: 4px;
+            }
+            
+            .stat-item {
+                padding: 3px 6px;
+                font-size: 0.7rem;
+            }
+            
+            .cta-button {
+                padding: var(--spacing-sm) var(--spacing-lg);
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <span>PflegefachProfi</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-item coins">
+                        <i class="fas fa-coins"></i>
+                        <span id="coins">150</span>
+                    </div>
+                    <div class="stat-item level">
+                        <i class="fas fa-level-up-alt"></i>
+                        <span id="level">5</span>
+                    </div>
+                    <div class="stat-item xp">
+                        <i class="fas fa-fire"></i>
+                        <span id="xp">1,250</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Meistere deine Pflegeprüfung mit System</h1>
+                <p>Lerne nur das Wesentliche und erreiche Spitzennoten mit unserer prüfungsoptimierten Lernmethode.</p>
+                <button class="cta-button" id="start-learning">
+                    <i class="fas fa-play"></i>
+                    Jetzt starten
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Path -->
+    <section class="learning-path">
+        <div class="container">
+            <h2 class="section-title">Dein Lernpfad zur Bestnote</h2>
+            <p class="section-subtitle">Systematisch lernen mit Fokus auf prüfungsrelevante Inhalte. Keine Zeitverschwendung mit unnötigen Details.</p>
+            
+            <div class="path-container">
+                <!-- Module 1: Fallbeispiel-Analyse -->
+                <div class="path-card">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div class="path-cost">
+                            <i class="fas fa-coins"></i>
+                            <span>50</span>
+                        </div>
+                    </div>
+                    <h3 class="path-title">Fallbeispiel-Analyse Mastery</h3>
+                    <p class="path-description">Lerne wie ein Prüfer denkt. Systematische Analyse von Patientenfällen mit Fokus auf Prüfungsrelevanz.</p>
+                    <div class="path-stats">
+                        <div class="stat">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Lektionen</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">45min</span>
+                            <span class="stat-label">Dauer</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">95%</span>
+                            <span class="stat-label">Erfolg</span>
+                        </div>
+                    </div>
+                    <button class="path-action start" data-module="fallbeispiel">
+                        <i class="fas fa-play"></i>
+                        Modul starten
+                    </button>
+                </div>
+
+                <!-- Module 2: Pharmakologie -->
+                <div class="path-card">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div class="path-cost">
+                            <i class="fas fa-coins"></i>
+                            <span>75</span>
+                        </div>
+                    </div>
+                    <h3 class="path-title">Pharmakologie-Crashkurs</h3>
+                    <p class="path-description">Nur die Medikamente die wirklich drankommen. Wirkungen, Nebenwirkungen und kritische Interaktionen.</p>
+                    <div class="path-stats">
+                        <div class="stat">
+                            <span class="stat-value">12</span>
+                            <span class="stat-label">Lektionen</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">60min</span>
+                            <span class="stat-label">Dauer</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">92%</span>
+                            <span class="stat-label">Erfolg</span>
+                        </div>
+                    </div>
+                    <button class="path-action start" data-module="pharmakologie">
+                        <i class="fas fa-play"></i>
+                        Modul starten
+                    </button>
+                </div>
+
+                <!-- Module 3: Pflegeprozess -->
+                <div class="path-card">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="path-cost">
+                            <i class="fas fa-coins"></i>
+                            <span>60</span>
+                        </div>
+                    </div>
+                    <h3 class="path-title">Pflegeprozess & Dokumentation</h3>
+                    <p class="path-description">Der Pflegeplan den Prüfer lieben. AEDL/ATL systematisch anwenden und perfekt dokumentieren.</p>
+                    <div class="path-stats">
+                        <div class="stat">
+                            <span class="stat-value">10</span>
+                            <span class="stat-label">Lektionen</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">50min</span>
+                            <span class="stat-label">Dauer</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">94%</span>
+                            <span class="stat-label">Erfolg</span>
+                        </div>
+                    </div>
+                    <button class="path-action start" data-module="pflegeprozess">
+                        <i class="fas fa-play"></i>
+                        Modul starten
+                    </button>
+                </div>
+
+                <!-- Module 4: Pathophysiologie -->
+                <div class="path-card">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="path-cost">
+                            <i class="fas fa-coins"></i>
+                            <span>80</span>
+                        </div>
+                    </div>
+                    <h3 class="path-title">Pathophysiologie-Visualisiert</h3>
+                    <p class="path-description">Komplexe Prozesse einfach erklärt. Herzinsuffizienz, Diabetes, Niereninsuffizienz und mehr.</p>
+                    <div class="path-stats">
+                        <div class="stat">
+                            <span class="stat-value">15</span>
+                            <span class="stat-label">Lektionen</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">75min</span>
+                            <span class="stat-label">Dauer</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">89%</span>
+                            <span class="stat-label">Erfolg</span>
+                        </div>
+                    </div>
+                    <button class="path-action start" data-module="pathophysiologie">
+                        <i class="fas fa-play"></i>
+                        Modul starten
+                    </button>
+                </div>
+
+                <!-- Module 5: Ethik & Recht -->
+                <div class="path-card">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="path-cost">
+                            <i class="fas fa-coins"></i>
+                            <span>40</span>
+                        </div>
+                    </div>
+                    <h3 class="path-title">Ethik & Recht - Die Punktesammler</h3>
+                    <p class="path-description">Ethische Prinzipien die du in JEDEM Fall anwenden kannst. Autonomie vs. Fürsorge Dilemmata meistern.</p>
+                    <div class="path-stats">
+                        <div class="stat">
+                            <span class="stat-value">6</span>
+                            <span class="stat-label">Lektionen</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">35min</span>
+                            <span class="stat-label">Dauer</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">98%</span>
+                            <span class="stat-label">Erfolg</span>
+                        </div>
+                    </div>
+                    <button class="path-action start" data-module="ethik-recht">
+                        <i class="fas fa-play"></i>
+                        Modul starten
+                    </button>
+                </div>
+
+                <!-- Module 6: Prüfungssimulation -->
+                <div class="path-card locked">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="path-cost">
+                            <i class="fas fa-coins"></i>
+                            <span>100</span>
+                        </div>
+                    </div>
+                    <h3 class="path-title">Prüfungssimulation Master</h3>
+                    <p class="path-description">Reale Prüfungsbedingungen mit Zeitlimit und Bewertung. Der ultimative Test vor der echten Prüfung.</p>
+                    <div class="path-stats">
+                        <div class="stat">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Simulationen</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">120min</span>
+                            <span class="stat-label">Dauer</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">-</span>
+                            <span class="stat-label">Erfolg</span>
+                        </div>
+                    </div>
+                    <button class="path-action unlock">
+                        <i class="fas fa-lock"></i>
+                        Modul freischalten
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Module: Fallbeispiel-Analyse -->
+    <section class="learning-module" id="module-fallbeispiel">
+        <div class="container">
+            <div class="module-header">
+                <h2>Fallbeispiel-Analyse Mastery</h2>
+                <div class="module-progress">
+                    <span>Fortschritt: <strong>0/8</strong></span>
+                    <div class="module-steps">
+                        <div class="step active"></div>
+                        <div class="step"></div>
+                        <div class="step"></div>
+                        <div class="step"></div>
+                        <div class="step"></div>
+                        <div class="step"></div>
+                        <div class="step"></div>
+                        <div class="step"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Lesson 1 -->
+                <div class="lesson-card active" data-lesson="1">
+                    <div class="lesson-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Lektion 1: Das 5-Minuten-Decodierungssystem</h3>
+                    <p>Lerne, wie du in nur 5 Minuten jedes Fallbeispiel systematisch analysieren und die versteckten Hinweise identifizieren kannst.</p>
+                    
+                    <div class="key-point">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Schlüsselprinzip:</strong> Prüfer testen Mustererkennung, nicht Auswendiglernen.
+                    </div>
+                    
+                    <div class="example-box">
+                        <div class="example-title">Beispiel: Frau K. (78 Jahre)</div>
+                        <p><strong>Symptom-Cluster erkennen:</strong></p>
+                        <ul>
+                            <li>Vermehrte Schmerzen + Ablehnung von Schmerzmitteln</li>
+                            <li>Häufiger Toilettengang + Unruhe</li>
+                            <li>Kopfschmerzen + Übelkeit + Verwirrtheit</li>
+                        </ul>
+                        <p><strong>Mögliche Ursachen:</strong> Dehydrierung, Harnwegsinfekt, Medikamentennebenwirkungen</p>
+                    </div>
+                    
+                    <div class="interactive-element">
+                        <h4>Übung: Symptome gruppieren</h4>
+                        <p>Ordne folgende Symptome möglichen Ursachen zu:</p>
+                        <!-- Interactive element would be implemented with JavaScript -->
+                        <button class="nav-btn" onclick="nextLesson()">
+                            Weiter
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- More lessons would follow here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Container -->
+    <section class="quiz-container" id="quiz-container" style="display: none;">
+        <div class="quiz-header">
+            <h2>Wissenstest</h2>
+            <p>Überprüfe dein Verständnis mit dieser interaktiven Übung</p>
+        </div>
+        
+        <div class="quiz-progress">
+            <span>Frage <strong id="current-question">1</strong> von <strong id="total-questions">5</strong></span>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%"></div>
+            </div>
+        </div>
+        
+        <div class="quiz-question" id="question-text">
+            Welche der folgenden Symptome sind typische Red Flags bei einer dekompensierenden Herzinsuffizienz?
+        </div>
+        
+        <div class="quiz-options" id="options-container">
+            <!-- Options will be populated by JavaScript -->
+        </div>
+        
+        <div class="quiz-feedback" id="feedback">
+            <!-- Feedback will be shown here -->
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn" disabled>
+                <i class="fas fa-arrow-left"></i>
+                Zurück
+            </button>
+            <button class="nav-btn" id="next-btn">
+                Weiter
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <div class="quiz-results" id="quiz-results">
+            <div class="result-icon correct">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="result-score good">85%</div>
+            <p>Herzlichen Glückwunsch! Du hast den Test bestanden.</p>
+            
+            <div class="reward-animation">
+                <div class="reward-item">
+                    <div class="reward-icon coins">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="reward-amount">+25</div>
+                    <div class="reward-label">Coins</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon xp">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="reward-amount">+100</div>
+                    <div class="reward-label">XP</div>
+                </div>
+            </div>
+            
+            <div class="countdown" id="countdown">
+                Weiterleitung in <span id="countdown-number">5</span> Sekunden...
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Willkommen bei PflegefachProfi</h3>
+                <button class="close-modal" id="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p>Melde dich an oder erstelle ein Konto, um deinen Lernfortschritt zu speichern.</p>
+            <!-- Login form would go here -->
+            <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm);">
+                <button class="cta-button" style="flex: 1;" onclick="closeLoginModal()">
+                    Als Gast fortfahren
+                </button>
+                <button class="cta-button" style="flex: 1; background: var(--secondary);" onclick="closeLoginModal()">
+                    <i class="fas fa-user"></i>
+                    Anmelden
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for the application
+        const userData = {
+            coins: 150,
+            level: 5,
+            xp: 1250,
+            modules: {
+                fallbeispiel: { progress: 0, completed: false },
+                pharmakologie: { progress: 0, completed: false },
+                pflegeprozess: { progress: 0, completed: false },
+                pathophysiologie: { progress: 0, completed: false },
+                ethikRecht: { progress: 0, completed: false },
+                pruefung: { locked: true }
+            }
+        };
+
+        // Quiz data
+        const quizData = [
+            {
+                question: "Welche der folgenden Symptome sind typische Red Flags bei einer dekompensierenden Herzinsuffizienz?",
+                options: [
+                    "Knöchelödeme und Gewichtszunahme",
+                    "Tachykardie und Ruhedyspnoe", 
+                    "Hautrötung und Juckreiz",
+                    "Hyperglykämie und Polyurie"
+                ],
+                correct: 1,
+                explanation: "Knöchelödeme und Gewichtszunahme deuten auf Flüssigkeitsretention hin, Tachykardie und Ruhedyspnoe sind Zeichen der kardialen Überlastung."
+            },
+            {
+                question: "Warum sollte Atorvastatin abends eingenommen werden?",
+                options: [
+                    "Weil die Cholesterinproduktion nachts am höchsten ist",
+                    "Weil es dann besser wirkt auf nüchternen Magen",
+                    "Weil es müde macht und so den Schlaf fördert",
+                    "Weil es die Wirkung anderer Medikamente nicht beeinflusst"
+                ],
+                correct: 0,
+                explanation: "Die Cholesterinbiosynthese ist nachts am aktivsten, daher ist die abendliche Einnahme von Statinen am effektivsten."
+            }
+        ];
+
+        // DOM Elements
+        const startLearningBtn = document.getElementById('start-learning');
+        const loginModal = document.getElementById('login-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const moduleButtons = document.querySelectorAll('.path-action.start');
+        const coinsElement = document.getElementById('coins');
+        const levelElement = document.getElementById('level');
+        const xpElement = document.getElementById('xp');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show login modal on first visit
+            setTimeout(() => {
+                loginModal.classList.add('active');
+            }, 1000);
+
+            // Update user stats
+            updateUserStats();
+        });
+
+        startLearningBtn.addEventListener('click', function() {
+            loginModal.classList.add('active');
+        });
+
+        closeModalBtn.addEventListener('click', closeLoginModal);
+
+        moduleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const module = this.getAttribute('data-module');
+                startModule(module);
+            });
+        });
+
+        // Functions
+        function closeLoginModal() {
+            loginModal.classList.remove('active');
+        }
+
+        function updateUserStats() {
+            coinsElement.textContent = userData.coins;
+            levelElement.textContent = userData.level;
+            xpElement.textContent = userData.xp.toLocaleString();
+        }
+
+        function startModule(moduleName) {
+            // Hide learning path and show selected module
+            document.querySelector('.learning-path').style.display = 'none';
+            document.getElementById(`module-${moduleName}`).classList.add('active');
+            
+            // Update UI based on module
+            // This would be expanded with actual module content
+        }
+
+        function nextLesson() {
+            // Logic to navigate to next lesson
+            // This would be expanded with actual lesson navigation
+        }
+
+        function showQuiz() {
+            // Logic to display quiz
+            document.getElementById('quiz-container').style.display = 'block';
+            // This would be expanded with actual quiz implementation
+        }
+
+        // Sample function to simulate earning rewards
+        function earnRewards(coins, xp) {
+            userData.coins += coins;
+            userData.xp += xp;
+            
+            // Check for level up
+            if (userData.xp >= userData.level * 500) {
+                userData.level++;
+            }
+            
+            updateUserStats();
+            
+            // Show animation
+            // This would be expanded with actual reward animation
+        }
+    </script>
+</body>
+</html>
