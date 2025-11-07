@@ -3,36 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fallbeispielle | PflegefachProfi</title>
+    <title>Fallbeispiel | PflegefachProfi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ===== CSS VARIABLES ===== */
         :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --primary-light: #eef2ff;
-            --secondary: #7209b7;
-            --accent: #f72585;
-            --success: #4cc9f0;
-            --warning: #fca311;
-            --danger: #e63946;
-            --coin: #ffd166;
-            --text-primary: #1d3557;
-            --text-secondary: #457b9d;
-            --text-tertiary: #a8dadc;
-            --background: #f8f9fa;
+            --primary-blue: #4361ee;
+            --primary-purple: #7209b7;
+            --primary-pink: #f72585;
+            --primary-cyan: #4cc9f0;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --background: #f8fafc;
             --surface: #ffffff;
-            --border: #e0e0e0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --radius: 12px;
-            --radius-lg: 20px;
-            --spacing-xs: 8px;
-            --spacing-sm: 16px;
-            --spacing-md: 24px;
-            --spacing-lg: 32px;
-            --spacing-xl: 48px;
-            --spacing-xxl: 64px;
-            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --border: #e2e8f0;
+            --coin-gold: #ffd166;
+            --xp-orange: #fb923c;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
         }
 
         * {
@@ -42,52 +39,53 @@
         }
 
         body {
-            font-family: var(--font-primary);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: var(--text-primary);
             background-color: var(--background);
             line-height: 1.6;
-            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 var(--spacing-md);
+            padding: 0 var(--space-md);
         }
 
         /* Header */
         .header {
-            background-color: var(--surface);
-            box-shadow: var(--shadow);
+            background: var(--surface);
+            box-shadow: var(--shadow-md);
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--spacing-sm) 0;
+            padding: var(--space-sm) 0;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-            font-weight: 800;
+            gap: var(--space-sm);
+            font-weight: 700;
             font-size: 1.5rem;
-            color: var(--primary);
+            color: var(--primary-blue);
             text-decoration: none;
         }
 
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -96,7 +94,7 @@
 
         .user-stats {
             display: flex;
-            gap: var(--spacing-sm);
+            gap: var(--space-sm);
             align-items: center;
         }
 
@@ -104,497 +102,276 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: var(--primary-light);
+            background: var(--background);
             padding: 6px 12px;
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             font-weight: 600;
             font-size: 0.85rem;
         }
 
-        .coins {
-            background: linear-gradient(135deg, var(--coin) 0%, #ffb347 100%);
+        .stat-item.coins {
+            background: linear-gradient(135deg, var(--coin-gold), #ffb347);
             color: var(--text-primary);
         }
 
-        .level {
-            background: var(--primary);
+        .stat-item.level {
+            background: var(--primary-blue);
             color: white;
         }
 
-        .xp {
-            background: var(--success);
+        .stat-item.xp {
+            background: linear-gradient(135deg, var(--xp-orange), #fdba74);
             color: white;
         }
 
-        /* Hero Section with Medical Animation */
-        .hero {
-            padding: var(--spacing-xxl) 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            padding: var(--space-sm) 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: var(--space-md);
+        }
+
+        .nav-link {
             color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .medical-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            pointer-events: none;
-        }
-
-        .medical-icon {
-            position: absolute;
-            font-size: 2rem;
-            opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .medical-icon:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
-        .medical-icon:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
-        .medical-icon:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
-        .medical-icon:nth-child(4) { bottom: 15%; right: 20%; animation-delay: 3s; }
-        .medical-icon:nth-child(5) { top: 40%; left: 25%; animation-delay: 4s; }
-        .medical-icon:nth-child(6) { top: 60%; right: 30%; animation-delay: 5s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            text-align: center;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            color: white;
-            margin-bottom: var(--spacing-md);
-            font-size: 2.5rem;
-        }
-
-        .hero p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--accent);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: var(--radius);
-            font-weight: 700;
             text-decoration: none;
-            box-shadow: var(--shadow-elevated);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(247, 37, 133, 0.4);
-        }
-
-        /* Fallbeispiel Modules */
-        .fallbeispiel-section {
-            padding: var(--spacing-xl) 0;
-            background: var(--background);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .section-header h2 {
-            font-size: 2.25rem;
-            margin-bottom: var(--spacing-sm);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
-        }
-
-        .module-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .module-card.fallbeispiel-special {
-            border: 2px solid var(--accent);
-            background: linear-gradient(135deg, var(--surface) 0%, #fef7ff 100%);
-        }
-
-        .module-card.fallbeispiel-special::before {
-            background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
-            height: 6px;
-        }
-
-        .module-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-elevated);
-        }
-
-        .module-card.locked {
-            opacity: 0.7;
-            filter: grayscale(0.5);
+        /* Fallbeispiel Module */
+        .fallbeispiel-module {
+            padding: var(--space-xl) 0;
+            flex: 1;
         }
 
         .module-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .module-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.5rem;
-        }
-
-        .module-card.fallbeispiel-special .module-icon {
-            background: var(--accent);
-            color: white;
-        }
-
-        .module-cost {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--coin);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--space-xl);
         }
 
         .module-title {
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-
-        .module-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            line-height: 1.5;
-        }
-
-        .module-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-tertiary);
-        }
-
-        .module-action {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-        }
-
-        .module-action.unlock {
-            background: var(--primary);
-            color: white;
-        }
-
-        .module-action.unlock:hover {
-            background: var(--primary-dark);
-        }
-
-        .module-action.start {
-            background: var(--success);
-            color: white;
-        }
-
-        .module-action.start:hover {
-            background: #3ab0d9;
-        }
-
-        .module-action.continue {
-            background: var(--accent);
-            color: white;
-        }
-
-        .module-action.continue:hover {
-            background: #e1156d;
-        }
-
-        /* Learning Module */
-        .learning-module {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .learning-module.active {
-            display: block;
-        }
-
-        .module-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-            flex-wrap: wrap;
-            gap: var(--spacing-md);
-        }
-
-        .module-title-large {
-            font-size: 2rem;
-            color: var(--text-primary);
-        }
-
-        .module-progress {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .progress-steps {
-            display: flex;
-            gap: var(--spacing-xs);
-        }
-
-        .progress-step {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .progress-step.active {
-            background: var(--primary);
-            transform: scale(1.2);
-        }
-
-        .progress-step.completed {
-            background: var(--success);
-        }
-
-        .step-counter {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .lesson-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .lesson-content {
-            padding: var(--spacing-xl);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .lesson-card {
-            display: none;
-        }
-
-        .lesson-card.active {
-            display: block;
-        }
-
-        .lesson-icon-large {
-            width: 100px;
-            height: 100px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
             font-size: 2.5rem;
-            margin: 0 auto var(--spacing-lg);
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .lesson-title {
+        .module-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Exam Paper Design */
+        .exam-paper {
+            background: #fff9e6;
+            border: 2px solid #d4af37;
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .exam-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 40px;
+            right: 0;
+            height: 100%;
+            background: repeating-linear-gradient(
+                transparent,
+                transparent 24px,
+                rgba(0,0,0,0.1) 24px,
+                rgba(0,0,0,0.1) 25px
+            );
+            pointer-events: none;
+        }
+
+        .exam-header {
             text-align: center;
-            font-size: 1.75rem;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--space-lg);
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: var(--space-md);
+        }
+
+        .exam-title {
+            font-size: 1.5rem;
             color: var(--text-primary);
-        }
-
-        /* Fallbeispiel Content Styles */
-        .fallbeispiel-text {
-            background: var(--primary-light);
-            border-radius: var(--radius);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
-            border-left: 4px solid var(--primary);
-        }
-
-        .fallbeispiel-text h3 {
-            color: var(--primary);
-            margin-bottom: var(--spacing-md);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
+            margin-bottom: var(--space-sm);
         }
 
         .patient-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-md);
-            margin: var(--spacing-lg) 0;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
         }
 
-        .info-card {
+        .info-item {
             background: white;
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
-            box-shadow: var(--shadow);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-blue);
         }
 
-        .info-card h4 {
-            color: var(--primary);
-            margin-bottom: var(--spacing-sm);
+        .info-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 25%;
+            right: 25%;
+            height: 4px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border);
             display: flex;
             align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .info-card ul {
-            margin-left: var(--spacing-md);
-        }
-
-        .info-card li {
-            margin-bottom: var(--spacing-xs);
+            justify-content: center;
+            font-weight: bold;
             color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+            transition: all 0.3s ease;
         }
 
-        /* Quiz Styles */
-        .quiz-container {
-            width: 100%;
+        .step.active .step-circle {
+            background: var(--primary-blue);
+            color: white;
+            transform: scale(1.1);
         }
 
-        .quiz-header {
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
+        .step.completed .step-circle {
+            background: var(--success);
+            color: white;
         }
 
-        .quiz-progress {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .quiz-question {
-            font-size: 1.25rem;
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
             font-weight: 600;
-            margin-bottom: var(--spacing-lg);
+        }
+
+        .step.active .step-label {
+            color: var(--primary-blue);
+        }
+
+        /* Question Container */
+        .question-container {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-lg);
+            animation: slideInUp 0.5s ease;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .question-title {
+            font-size: 1.25rem;
             color: var(--text-primary);
-            line-height: 1.4;
-            padding: 0 var(--spacing-sm);
         }
 
-        .quiz-options {
+        .question-counter {
+            background: var(--primary-blue);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: var(--space-lg);
+            line-height: 1.6;
+        }
+
+        /* Options Grid */
+        .options-grid {
             display: grid;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
+            gap: var(--space-md);
         }
 
-        .quiz-option {
+        .option {
             background: var(--surface);
             border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: flex-start;
-            gap: var(--spacing-md);
+            gap: var(--space-md);
         }
 
-        .quiz-option:hover {
-            border-color: var(--primary);
+        .option:hover {
+            border-color: var(--primary-blue);
             transform: translateY(-2px);
         }
 
-        .quiz-option.correct {
-            border-color: var(--success);
-            background: rgba(76, 201, 240, 0.1);
+        .option.selected {
+            border-color: var(--primary-blue);
+            background: rgba(67, 97, 238, 0.05);
         }
 
-        .quiz-option.incorrect {
-            border-color: var(--danger);
-            background: rgba(230, 57, 70, 0.1);
+        .option.correct {
+            border-color: var(--success);
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .option-indicator {
@@ -606,20 +383,13 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 0.875rem;
             flex-shrink: 0;
             margin-top: 2px;
         }
 
-        .quiz-option.correct .option-indicator {
-            border-color: var(--success);
-            background: var(--success);
-            color: white;
-        }
-
-        .quiz-option.incorrect .option-indicator {
-            border-color: var(--danger);
-            background: var(--danger);
+        .option.selected .option-indicator {
+            border-color: var(--primary-blue);
+            background: var(--primary-blue);
             color: white;
         }
 
@@ -628,76 +398,83 @@
             line-height: 1.4;
         }
 
-        .quiz-feedback {
-            padding: var(--spacing-md);
-            border-radius: var(--radius);
-            margin-top: var(--spacing-md);
-            display: none;
+        /* Navigation Buttons */
+        .module-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--space-xl);
         }
 
-        .quiz-feedback.correct {
-            background: rgba(76, 201, 240, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--primary-blue);
+            color: white;
+            padding: var(--space-md) var(--space-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .quiz-feedback.incorrect {
-            background: rgba(230, 57, 70, 0.1);
-            border: 1px solid var(--danger);
-            color: var(--danger);
+        .nav-btn:hover {
+            background: var(--primary-purple);
+            transform: translateY(-2px);
         }
 
-        .quiz-results {
+        .nav-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Screen */
+        .results-screen {
             text-align: center;
-            padding: var(--spacing-xl);
-            display: none;
+            padding: var(--space-xl);
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            animation: slideInUp 0.5s ease;
         }
 
-        .quiz-results.active {
-            display: block;
-            animation: fadeIn 0.8s ease;
-        }
-
-        .result-icon {
+        .results-icon {
             font-size: 4rem;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-title {
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .result-score {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-score.good {
             color: var(--success);
+            margin-bottom: var(--space-lg);
+            animation: bounce 1s ease;
         }
 
-        .result-score.average {
-            color: var(--warning);
+        .results-title {
+            font-size: 2rem;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
         }
 
-        .result-score.poor {
-            color: var(--danger);
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .reward-animation {
+        .rewards {
             display: flex;
             justify-content: center;
-            gap: var(--spacing-lg);
-            margin: var(--spacing-lg) 0;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
         }
 
         .reward-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: var(--spacing-xs);
+            gap: var(--space-sm);
         }
 
         .reward-icon {
@@ -712,61 +489,73 @@
         }
 
         .reward-icon.coins {
-            background: var(--coin);
+            background: var(--coin-gold);
             color: var(--text-primary);
         }
 
         .reward-icon.xp {
-            background: var(--success);
+            background: var(--xp-orange);
             color: white;
         }
 
         .reward-amount {
-            font-weight: 700;
+            font-weight: bold;
             font-size: 1.25rem;
         }
 
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: var(--spacing-xl);
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--primary);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0,-15px,0);
+            }
+            70% {
+                transform: translate3d(0,-7px,0);
+            }
+            90% {
+                transform: translate3d(0,-3px,0);
+            }
         }
 
-        .nav-btn:hover {
-            background: var(--primary-dark);
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
         }
 
-        .nav-btn:disabled {
-            background: var(--border);
-            cursor: not-allowed;
-        }
-
-        .countdown {
-            margin-top: var(--spacing-md);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-secondary);
+        @keyframes confettiRain {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* Footer */
         .footer {
-            padding: var(--spacing-xl) 0;
+            padding: var(--space-xl) 0;
             background: var(--text-primary);
             color: white;
+            margin-top: auto;
         }
 
         .footer-content {
@@ -775,112 +564,19 @@
             align-items: center;
         }
 
-        .footer-logo {
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-
         .footer-links {
             display: flex;
-            gap: var(--spacing-lg);
+            gap: var(--space-lg);
         }
 
         .footer-link {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-size: 0.875rem;
             transition: color 0.2s ease;
         }
 
         .footer-link:hover {
             color: white;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes correctFlash {
-            0% { background-color: var(--surface); }
-            50% { background-color: rgba(76, 201, 240, 0.2); }
-            100% { background-color: var(--surface); }
-        }
-
-        @keyframes incorrectFlash {
-            0% { background-color: var(--surface); }
-            50% { background-color: rgba(230, 57, 70, 0.2); }
-            100% { background-color: var(--surface); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        .correct-flash {
-            animation: correctFlash 0.5s ease;
-        }
-
-        .incorrect-flash {
-            animation: incorrectFlash 0.5s ease, shake 0.5s ease;
-        }
-
-        /* Confetti */
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            opacity: 0;
-            z-index: 1000;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: var(--spacing-sm);
-            }
-            
-            .user-stats {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .module-nav {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .navigation {
-                flex-direction: column;
-                gap: var(--spacing-md);
-            }
-            
-            .nav-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .patient-info {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -913,730 +609,485 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="medical-background">
-            <div class="medical-icon"><i class="fas fa-heartbeat"></i></div>
-            <div class="medical-icon"><i class="fas fa-stethoscope"></i></div>
-            <div class="medical-icon"><i class="fas fa-syringe"></i></div>
-            <div class="medical-icon"><i class="fas fa-pills"></i></div>
-            <div class="medical-icon"><i class="fas fa-procedures"></i></div>
-            <div class="medical-icon"><i class="fas fa-user-md"></i></div>
-        </div>
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="container">
-            <div class="hero-content">
-                <h1>Fallbeispielle Meistern</h1>
-                <p>Praktische Pflegeplanung trainieren - Vom Fallbeispiel zur kompletten Pflegeplanung. Dein Weg zur Prüfungsexpertise!</p>
-                <a href="#fallbeispielle" class="cta-button">
-                    <i class="fas fa-play"></i>
-                    Fallbeispielle starten
-                </a>
-            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Startseite</a></li>
+                <li><a href="fallbeispiele.html" class="nav-link active"><i class="fas fa-book-medical"></i> Fallbeispiele</a></li>
+                <li><a href="fortschritt.html" class="nav-link"><i class="fas fa-chart-line"></i> Fortschritt</a></li>
+            </ul>
         </div>
-    </section>
+    </nav>
 
-    <!-- Fallbeispiel Modules Section -->
-    <section class="fallbeispiel-section" id="fallbeispielle">
+    <!-- Fallbeispiel Module -->
+    <main class="fallbeispiel-module">
         <div class="container">
-            <div class="section-header">
-                <h2>Fallbeispiel-Sammlung</h2>
-                <p>Wähle ein Fallbeispiel aus und übe die komplette Pflegeplanung. Verdiene Coins und verbessere deine Fähigkeiten!</p>
+            <div class="module-header">
+                <h1 class="module-title">Fallbeispiel: COPD & Herzinsuffizienz</h1>
+                <p class="module-subtitle">Komplette Pflegeplanung vom Assessment bis zur Evaluation</p>
             </div>
-            
-            <div class="modules-grid" id="modules-container">
-                <!-- Modules will be loaded here dynamically -->
-            </div>
-        </div>
-    </section>
 
-    <!-- Learning Module -->
-    <section class="learning-module" id="learning-module">
-        <div class="container">
-            <div class="module-nav">
-                <h2 class="module-title-large" id="module-title">Lade Modul...</h2>
-                <div class="module-progress">
-                    <div class="progress-steps" id="progress-steps">
-                        <!-- Steps will be loaded dynamically -->
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active" id="step-probleme">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Probleme</div>
+                </div>
+                <div class="step" id="step-ziele">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Ziele</div>
+                </div>
+                <div class="step" id="step-massnahmen">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Maßnahmen</div>
+                </div>
+                <div class="step" id="step-ergebnis">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Ergebnis</div>
+                </div>
+            </div>
+
+            <!-- Exam Paper - Fixed at top -->
+            <div class="exam-paper" id="exam-paper">
+                <div class="exam-header">
+                    <h2 class="exam-title">Fallbeschreibung</h2>
+                </div>
+                <div class="patient-info">
+                    <div class="info-item">
+                        <h4>👤 Patient</h4>
+                        <p>Herr Karl Müller, 76 Jahre</p>
                     </div>
-                    <span class="step-counter" id="step-counter">Schritt 1 von X</span>
+                    <div class="info-item">
+                        <h4>🏥 Aufnahmegrund</h4>
+                        <p>Zunehmende Atemnot und Beinödeme</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>📋 Diagnosen</h4>
+                        <p>COPD Stadium II, Herzinsuffizienz NYHA II, Diabetes mellitus Typ 2</p>
+                    </div>
+                </div>
+                <div class="case-description">
+                    <p>Herr Müller stellt sich mit seit 6 Stunden zunehmenden Bauchschmerzen in der Notaufnahme vor. Die Schmerzen begannen periumbilikal und sind jetzt in den rechten Unterbauch gewandert. Begleitsymptome sind Übelkeit und einmaliges Erbrechen.</p>
+                    <p><strong>Klinische Untersuchung:</strong> Abdomen weich, Druckschmerz mit Loslassschmerz im rechten Unterbauch. Temperatur: 37,8°C, Blutdruck: 145/90 mmHg, Puls: 95/min.</p>
+                    <p><strong>Labor:</strong> Leukozyten 13.500/μl, CRP 28 mg/l. Sonographie: Verdickte, ödematöse Wand des terminalen Ileums.</p>
                 </div>
             </div>
 
-            <div class="lesson-container">
-                <div class="lesson-content" id="lesson-container">
-                    <!-- Lesson content will be loaded here -->
-                </div>
+            <!-- Question Container -->
+            <div class="question-container" id="question-container">
+                <!-- Content will be loaded dynamically -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="module-navigation">
+                <button class="nav-btn" id="prev-btn" disabled>
+                    <i class="fas fa-arrow-left"></i>
+                    Zurück
+                </button>
+                <button class="nav-btn" id="next-btn">
+                    Weiter
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">PflegefachProfi - Fallbeispielle</div>
+                <div class="footer-logo">PflegefachProfi</div>
                 <div class="footer-links">
-                    <a href="index.html" class="footer-link">Hauptseite</a>
-                    <a href="#" class="footer-link">Über uns</a>
-                    <a href="#" class="footer-link">Kontakt</a>
                     <a href="#" class="footer-link">Datenschutz</a>
+                    <a href="#" class="footer-link">Impressum</a>
+                    <a href="#" class="footer-link">Kontakt</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // ==================== FALLBEISPIEL MODULE DATA ====================
-        const FALLBEISPIEL_MODULES = [
-            {
-                id: 1,
-                title: "Herr Müller - COPD & Herzinsuffizienz",
-                description: "Komplexes Fallbeispiel mit Atemwegsproblematik und kardiovaskulären Einschränkungen. Übe Problemidentifikation, Zielformulierung und Maßnahmenplanung.",
-                cost: 100,
-                coins: 200,
-                xp: 300,
-                duration: "30 min",
-                difficulty: "Mittel",
-                patient: "Herr Karl Müller, 76 Jahre",
-                icon: "fas fa-lungs",
-                content: [
-                    {
-                        title: "Fallbeispiel kennenlernen",
-                        icon: "fas fa-file-medical-alt",
-                        type: "content",
-                        content: `
-                            <div class="fallbeispiel-text">
-                                <h3><i class="fas fa-user-injured"></i> Patient: Herr Karl Müller, 76 Jahre</h3>
-                                <p><strong>Aufnahmegrund:</strong> Stationäre Aufnahme wegen zunehmender Atemnot und Beinödemen</p>
-                                
-                                <div class="patient-info">
-                                    <div class="info-card">
-                                        <h4><i class="fas fa-stethoscope"></i> Diagnosen</h4>
-                                        <ul>
-                                            <li>COPD Stadium II (seit 8 Jahren)</li>
-                                            <li>Herzinsuffizienz NYHA II</li>
-                                            <li>Diabetes mellitus Typ 2</li>
-                                            <li>Arthrose beider Kniegelenke</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <h4><i class="fas fa-heartbeat"></i> Aktueller Zustand</h4>
-                                        <ul>
-                                            <li>Dyspnoe bereits in Ruhe</li>
-                                            <li>Atemfrequenz: 28/min</li>
-                                            <li>Ödeme an beiden Unterschenkeln (+2)</li>
-                                            <li>BZ-Werte: 180-250 mg/dl</li>
-                                            <li>Mobilisation nur mit Rollator</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <h4><i class="fas fa-pills"></i> Medikation</h4>
-                                        <ul>
-                                            <li>Metformin 1000mg</li>
-                                            <li>Furosemid 40mg</li>
-                                            <li>Bisoprolol 2,5mg</li>
-                                            <li>ASS 100mg</li>
-                                            <li>Ibuprofen bei Bedarf</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <h4><i class="fas fa-comments"></i> Patientenäußerungen</h4>
-                                        <ul>
-                                            <li>"Ich schaffe das Treppensteigen nicht mehr"</li>
-                                            <li>"Mir ist ständig schwindelig"</li>
-                                            <li>"Ich habe Angst, allein zu Hause zu stürzen"</li>
-                                            <li>"Das viele Wasser trinken bringt doch nichts"</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                
-                                <p><strong>Soziale Situation:</strong> Verwitwet seit 2 Jahren, lebt allein in 3. OG ohne Aufzug. Zwei Töchter wohnen in derselben Stadt. Ehemaliger Buchhalter.</p>
-                            </div>
-                            
-                            <div class="key-point">
-                                <i class="fas fa-lightbulb"></i>
-                                <strong>Aufgabe:</strong> Aus diesen Informationen müssen Sie Pflegeprobleme identifizieren, realistische Ziele setzen und geeignete Maßnahmen planen.
-                            </div>
-                        `
-                    },
-                    {
-                        title: "Pflegeprobleme identifizieren",
-                        icon: "fas fa-search",
-                        type: "quiz",
-                        quiz: [
-                            {
-                                question: "Welche der folgenden Aussagen sind echte Pflegeprobleme? (Wähle 4 aus)",
-                                options: [
-                                    { text: "COPD Stadium II", correct: false, explanation: "Das ist eine ärztliche Diagnose, kein Pflegeproblem" },
-                                    { text: "Atemnot (Dyspnoe) in Ruhe", correct: true, explanation: "Richtig! Atemnot ist ein Pflegeproblem, das die Pflege eigenständig behandeln kann" },
-                                    { text: "Herzinsuffizienz NYHA II", correct: false, explanation: "Medizinische Diagnose - kein Pflegeproblem" },
-                                    { text: "Selbstpflegedefizit bei der Körperpflege", correct: true, explanation: "Korrekt! Selbstpflegedefizit ist ein klassisches Pflegeproblem" },
-                                    { text: "Patient ist unkooperativ", correct: false, explanation: "Wertende Formulierung - kein fachliches Pflegeproblem" },
-                                    { text: "Mobilitätseinschränkung mit Sturzgefahr", correct: true, explanation: "Perfekt! Mobilitätseinschränkung ist ein Pflegeproblem" },
-                                    { text: "Diabetes mellitus Typ 2", correct: false, explanation: "Ärztliche Diagnose" },
-                                    { text: "Flüssigkeitsdefizit und Dehydrationsgefahr", correct: true, explanation: "Richtig! Flüssigkeitsbilanzierung ist pflegerische Aufgabe" }
-                                ],
-                                explanation: "Gut erkannt! Die richtigen Pflegeprobleme sind: Dyspnoe, Selbstpflegedefizit, Mobilitätseinschränkung und Flüssigkeitsdefizit."
-                            }
-                        ]
-                    },
-                    {
-                        title: "Ursachen & Symptome analysieren",
-                        icon: "fas fa-diagnoses",
-                        type: "quiz",
-                        quiz: [
-                            {
-                                question: "Was ist die Hauptursache für die Dyspnoe bei Herrn Müller?",
-                                options: [
-                                    { text: "COPD-bedingte Atemwegsobstruktion", correct: true, explanation: "Richtig! Die COPD ist die Grunderkrankung, die die Atemnot verursacht" },
-                                    { text: "Zu wenig Bewegung", correct: false, explanation: "Bewegungsmangel ist eine Folge, nicht die Ursache" },
-                                    { text: "Nicht ausreichende Medikamenteneinnahme", correct: false, explanation: "Kann ein Faktor sein, aber nicht die Hauptursache" },
-                                    { text: "Psychische Belastung", correct: false, explanation: "Kann die Symptome verstärken, ist aber nicht die primäre Ursache" }
-                                ],
-                                explanation: "Korrekt! Die COPD führt zur Obstruktion der Atemwege und damit zur Dyspnoe."
-                            },
-                            {
-                                question: "Welches Symptom bestätigt das Flüssigkeitsdefizit?",
-                                options: [
-                                    { text: "Trockene Haut und Juckreiz", correct: true, explanation: "Richtig! Trockene Haut ist ein typisches Symptom bei Dehydration" },
-                                    { text: "Ödeme an den Beinen", correct: false, explanation: "Ödeme zeigen eher eine Flüssigkeitsüberladung an" },
-                                    { text: "Hoher Blutdruck", correct: false, explanation: "Nicht direkt mit Flüssigkeitsdefizit assoziiert" },
-                                    { text: "Gesteigerter Appetit", correct: false, explanation: "Appetit hat mit Flüssigkeitshaushalt wenig zu tun" }
-                                ],
-                                explanation: "Genau! Trockene Haut und Schleimhäute sind klassische Dehydrationszeichen."
-                            }
-                        ]
-                    },
-                    {
-                        title: "SMART-Ziele formulieren",
-                        icon: "fas fa-bullseye",
-                        type: "quiz",
-                        quiz: [
-                            {
-                                question: "Für das Problem 'Dyspnoe': Welches ist ein SMART formuliertes Ziel?",
-                                options: [
-                                    { text: "Atemnot reduzieren", correct: false, explanation: "Nicht SMART: Nicht messbar, kein Zeitraum" },
-                                    { text: "Herr Müller hat in 3 Tagen eine Atemfrequenz von 16-20/min in Ruhe", correct: true, explanation: "Perfekt! Spezifisch, messbar, erreichbar, relevant, terminiert" },
-                                    { text: "Bessere Atmung erreichen", correct: false, explanation: "Nicht SMART: Zu vage, nicht messbar" },
-                                    { text: "Herr Müller kann in 5 Tagen ohne Atemnot sprechen", correct: true, explanation: "Richtig! Konkret, beobachtbar und terminiert" }
-                                ],
-                                explanation: "Exzellent! SMART-Ziele müssen spezifisch, messbar, erreichbar, relevant und terminiert sein."
-                            },
-                            {
-                                question: "Für 'Mobilitätseinschränkung': Welches Ziel ist SMART?",
-                                options: [
-                                    { text: "Herr Müller geht morgen besser", correct: false, explanation: "Nicht messbar, nicht spezifisch" },
-                                    { text: "Bewegung fördern", correct: false, explanation: "Zu allgemein, nicht SMART" },
-                                    { text: "Herr Müller geht in 4 Tagen 20 Meter mit Rollator ohne Atemnot", correct: true, explanation: "Korrekt! Alles SMART-Kriterien erfüllt" },
-                                    { text: "Herr Müller transferiert in 3 Tagen mit einer Person vom Bett in den Stuhl", correct: true, explanation: "Sehr gut! Konkret, messbar und terminiert" }
-                                ],
-                                explanation: "Super! Die guten Ziele sind konkret, haben messbare Kriterien und einen klaren Zeitrahmen."
-                            }
-                        ]
-                    },
-                    {
-                        title: "Maßnahmen planen",
-                        icon: "fas fa-tasks",
-                        type: "quiz",
-                        quiz: [
-                            {
-                                question: "Welche Maßnahmen sind bei Dyspnoe geeignet? (Wähle 3)",
-                                options: [
-                                    { text: "Atemtherapie 2x täglich für 10 Minuten durchführen", correct: true, explanation: "Richtig! Regelmäßige Atemtherapie ist essentiell" },
-                                    { text: "Bettruhe verordnen", correct: false, explanation: "Bettruhe kann die Atemfunktion verschlechtern" },
-                                    { text: "Oberkörperhochlagerung bei Atemnot", correct: true, explanation: "Korrekt! Erleichtert die Atmung" },
-                                    { text: "Sauerstoffgabe nach ärztlicher Anordnung überwachen", correct: true, explanation: "Wichtig! Pflegerische Überwachungsaufgabe" },
-                                    { text: "Patient ans Trinken erinnern", correct: false, explanation: "Gehört zum Flüssigkeitsmanagement, nicht direkt zur Dyspnoe" },
-                                    { text: "Psychologische Betreuung anbieten", correct: false, explanation: "Kann unterstützend sein, ist aber keine direkte pflegerische Maßnahme bei Dyspnoe" }
-                                ],
-                                explanation: "Perfekt! Atemtherapie, Oberkörperhochlagerung und Sauerstoffüberwachung sind die Kernmaßnahmen bei Dyspnoe."
-                            },
-                            {
-                                question: "Welche Maßnahmen helfen bei Mobilitätseinschränkung? (Wähle 3)",
-                                options: [
-                                    { text: "Mobilisation 3x täglich für 5-10 Minuten", correct: true, explanation: "Richtig! Regelmäßige, kurze Mobilisation ist effektiv" },
-                                    { text: "Im Rollstuhl durch die Station fahren", correct: false, explanation: "Passive Mobilisation ist weniger effektiv als aktive" },
-                                    { text: "Sturzprophylaxe: Nachtlicht, rutschfeste Socken", correct: true, explanation: "Wichtig! Sturzprophylaxe ist essentiell" },
-                                    { text: "Krankengymnastik nach Plan durchführen", correct: true, explanation: "Korrekt! Gezielte Physiotherapie unterstützt die Mobilisation" },
-                                    { text: "Bettgitter anbringen", correct: false, explanation: "Kann Sturzrisiko erhöhen und ist freiheitseinschränkend" },
-                                    { text: "Patient im Bett lassen wegen Sturzgefahr", correct: false, explanation: "Immobilisation verschlechtert den Zustand" }
-                                ],
-                                explanation: "Ausgezeichnet! Aktive Mobilisation, Sturzprophylaxe und Physiotherapie sind die richtigen Maßnahmen."
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                id: 2,
-                title: "Frau Schmidt - Diabetes & Sturzrisiko",
-                description: "Fallbeispiel mit Diabetes-Management und Sturzprophylaxe. Lerne ganzheitliche Pflegeplanung bei chronischen Erkrankungen.",
-                cost: 150,
-                coins: 250,
-                xp: 400,
-                duration: "35 min",
-                difficulty: "Mittel",
-                patient: "Frau Helga Schmidt, 72 Jahre",
-                icon: "fas fa-user-friends",
-                content: []
-            },
-            {
-                id: 3,
-                title: "Herr Weber - Demenz & Ernährung",
-                description: "Komplexes Fallbeispiel mit kognitiven Einschränkungen und Ernährungsproblemen. Übe Kommunikation und Biografiearbeit.",
-                cost: 200,
-                coins: 300,
-                xp: 500,
-                duration: "40 min",
-                difficulty: "Schwer",
-                patient: "Herr Walter Weber, 81 Jahre",
-                icon: "fas fa-brain",
-                content: []
-            }
-        ];
-
-        // ==================== GAME STATE MANAGEMENT ====================
-        let gameState = {
+        // ===== GAME STATE MANAGEMENT =====
+        const GameState = {
             coins: 150,
             level: 3,
             xp: 450,
-            unlockedModules: [1],
-            completedModules: [],
-            currentModule: null,
-            currentLesson: 0
+            currentModule: 1,
+            moduleProgress: 0,
+            
+            save() {
+                const data = {
+                    coins: this.coins,
+                    level: this.level,
+                    xp: this.xp,
+                    currentModule: this.currentModule,
+                    moduleProgress: this.moduleProgress
+                };
+                localStorage.setItem('gameState', JSON.stringify(data));
+            },
+            
+            load() {
+                const saved = localStorage.getItem('gameState');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    Object.assign(this, data);
+                }
+                this.updateUI();
+            },
+            
+            addCoins(amount) {
+                this.coins += amount;
+                this.save();
+                this.updateUI();
+                this.showCoinAnimation(amount);
+            },
+            
+            addXP(amount) {
+                this.xp += amount;
+                const newLevel = this.calculateLevel(this.xp);
+                if (newLevel > this.level) {
+                    this.level = newLevel;
+                    this.showLevelUp();
+                }
+                this.save();
+                this.updateUI();
+            },
+            
+            calculateLevel(xp) {
+                if (xp >= 2000) return 5;
+                if (xp >= 1200) return 4;
+                if (xp >= 600) return 3;
+                if (xp >= 200) return 2;
+                return 1;
+            },
+            
+            updateUI() {
+                document.getElementById('coin-count').textContent = this.coins;
+                document.getElementById('level-count').textContent = this.level;
+                document.getElementById('xp-count').textContent = this.xp;
+            },
+            
+            showCoinAnimation(amount) {
+                const animation = document.createElement('div');
+                animation.innerHTML = `<i class="fas fa-coins"></i> +${amount}`;
+                animation.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: var(--coin-gold);
+                    color: var(--text-primary);
+                    padding: 10px 20px;
+                    border-radius: 25px;
+                    font-weight: bold;
+                    z-index: 10000;
+                    animation: bounce 1s ease;
+                `;
+                document.body.appendChild(animation);
+                setTimeout(() => animation.remove(), 2000);
+            },
+            
+            showLevelUp() {
+                // Level up animation would go here
+                console.log('Level up! New level:', this.level);
+            }
         };
 
-        // ==================== CORE APPLICATION ====================
-        function initApp() {
-            loadGameState();
-            renderModules();
-            updateUI();
-            setupEventListeners();
-        }
-
-        function loadGameState() {
-            const saved = localStorage.getItem('fallbeispielle_save');
-            if (saved) {
-                gameState = JSON.parse(saved);
-            }
-        }
-
-        function saveGameState() {
-            localStorage.setItem('fallbeispielle_save', JSON.stringify(gameState));
-        }
-
-        function renderModules() {
-            const container = document.getElementById('modules-container');
-            container.innerHTML = FALLBEISPIEL_MODULES.map(module => `
-                <div class="module-card fallbeispiel-special ${gameState.unlockedModules.includes(module.id) ? '' : 'locked'}" data-module="${module.id}">
-                    <div class="module-header">
-                        <div class="module-icon">
-                            <i class="${module.icon}"></i>
-                        </div>
-                        <div class="module-cost">
-                            <i class="fas fa-coins"></i>
-                            <span>${module.cost}</span>
-                        </div>
-                    </div>
-                    <h3 class="module-title">${module.title}</h3>
-                    <p class="module-description">${module.description}</p>
-                    <div class="module-stats">
-                        <div class="stat">
-                            <span class="stat-value">${module.content.length}</span>
-                            <span class="stat-label">Schritte</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">${module.duration}</span>
-                            <span class="stat-label">Dauer</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">${module.difficulty}</span>
-                            <span class="stat-label">Schwierigkeit</span>
-                        </div>
-                    </div>
-                    ${renderModuleButton(module)}
-                </div>
-            `).join('');
-
-            // Add event listeners to module buttons
-            document.querySelectorAll('.module-action').forEach(button => {
-                button.addEventListener('click', function() {
-                    const card = this.closest('.module-card');
-                    const moduleId = parseInt(card.dataset.module);
-                    handleModuleAction(moduleId, this);
-                });
-            });
-        }
-
-        function renderModuleButton(module) {
-            if (gameState.completedModules.includes(module.id)) {
-                return `<button class="module-action continue">
-                    <i class="fas fa-redo"></i>
-                    Fallbeispiel wiederholen
-                </button>`;
-            } else if (gameState.unlockedModules.includes(module.id)) {
-                return `<button class="module-action start">
-                    <i class="fas fa-play"></i>
-                    Fallbeispiel starten
-                </button>`;
-            } else {
-                const canAfford = gameState.coins >= module.cost;
-                return `<button class="module-action unlock" ${!canAfford ? 'disabled' : ''}>
-                    <i class="fas fa-${canAfford ? 'lock-open' : 'lock'}"></i>
-                    ${canAfford ? `Für ${module.cost} Coins freischalten` : `Noch ${module.cost - gameState.coins} Coins benötigt`}
-                </button>`;
-            }
-        }
-
-        function handleModuleAction(moduleId, button) {
-            const module = FALLBEISPIEL_MODULES.find(m => m.id === moduleId);
+        // ===== MODULE DATA =====
+        const ModuleData = {
+            currentStep: 0,
+            score: 0,
+            userAnswers: [],
             
-            if (button.classList.contains('unlock')) {
-                if (gameState.coins >= module.cost) {
-                    gameState.coins -= module.cost;
-                    gameState.unlockedModules.push(moduleId);
-                    saveGameState();
-                    renderModules();
-                    updateUI();
-                    startModule(moduleId);
+            steps: [
+                {
+                    title: "Probleme identifizieren",
+                    question: "Welche der folgenden Aussagen sind echte Pflegeprobleme? (Wähle alle zutreffenden aus)",
+                    type: "multiple",
+                    options: [
+                        { text: "Atemnot (Dyspnoe) in Ruhe", correct: true },
+                        { text: "COPD Stadium II", correct: false },
+                        { text: "Beinödeme", correct: true },
+                        { text: "Herzinsuffizienz NYHA II", correct: false },
+                        { text: "Mobilitätseinschränkung mit Sturzgefahr", correct: true },
+                        { text: "Selbstpflegedefizit bei Körperpflege", correct: true }
+                    ]
+                },
+                {
+                    title: "Ziele formulieren", 
+                    question: "Welche Ziele sind für die identifizierten Probleme SMART formuliert?",
+                    type: "multiple",
+                    options: [
+                        { text: "Herr Müller hat in 3 Tagen eine Atemfrequenz von 16-20/min", correct: true },
+                        { text: "Atemnot reduzieren", correct: false },
+                        { text: "Bessere Mobilität erreichen", correct: false },
+                        { text: "Herr Müller transferiert in 2 Tagen mit einer Person vom Bett in den Stuhl", correct: true },
+                        { text: "Ödeme reduzieren", correct: false },
+                        { text: "Beinödeme sind in 4 Tagen um 50% reduziert", correct: true }
+                    ]
+                },
+                {
+                    title: "Maßnahmen planen",
+                    question: "Welche Maßnahmen sind für die formulierten Ziele geeignet? (Wähle alle zutreffenden aus)",
+                    type: "multiple", 
+                    options: [
+                        { text: "Oberkörperhochlagerung bei Atemnot", correct: true },
+                        { text: "Atemtherapie 2x täglich", correct: true },
+                        { text: "Bettruhe verordnen", correct: false },
+                        { text: "Mobilisation 3x täglich mit Rollator", correct: true },
+                        { text: "Kompressionsstrümpfe anlegen", correct: true },
+                        { text: "Patient im Bett lassen", correct: false }
+                    ]
                 }
-            } else if (button.classList.contains('start') || button.classList.contains('continue')) {
-                startModule(moduleId);
+            ],
+            
+            calculateScore() {
+                let correct = 0;
+                let total = 0;
+                
+                this.userAnswers.forEach((answer, index) => {
+                    const step = this.steps[index];
+                    const correctAnswers = step.options.filter(opt => opt.correct).length;
+                    const userCorrect = answer.filter(ans => ans.correct).length;
+                    const userIncorrect = answer.filter(ans => !ans.correct).length;
+                    
+                    if (userIncorrect === 0 && userCorrect === correctAnswers) {
+                        correct++;
+                    }
+                    total++;
+                });
+                
+                return {
+                    percentage: Math.round((correct / total) * 100),
+                    correct: correct,
+                    total: total
+                };
+            },
+            
+            getRewards(score) {
+                const baseCoins = 200;
+                const baseXP = 300;
+                
+                const multiplier = score.percentage / 100;
+                
+                return {
+                    coins: Math.round(baseCoins * multiplier),
+                    xp: Math.round(baseXP * multiplier)
+                };
             }
-        }
+        };
 
-        function startModule(moduleId) {
-            gameState.currentModule = moduleId;
-            gameState.currentLesson = 0;
-            saveGameState();
+        // ===== MODULE CONTROLLER =====
+        const ModuleController = {
+            init() {
+                GameState.load();
+                this.loadStep(0);
+                this.setupEventListeners();
+            },
             
-            // Scroll to top and show learning module
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.querySelector('.fallbeispiel-section').style.display = 'none';
-            document.querySelector('.learning-module').classList.add('active');
+            setupEventListeners() {
+                document.getElementById('prev-btn').addEventListener('click', () => this.previousStep());
+                document.getElementById('next-btn').addEventListener('click', () => this.nextStep());
+            },
             
-            loadLesson(moduleId, 0);
-        }
-
-        function loadLesson(moduleId, lessonIndex) {
-            const module = FALLBEISPIEL_MODULES.find(m => m.id === moduleId);
-            const lesson = module.content[lessonIndex];
+            loadStep(stepIndex) {
+                ModuleData.currentStep = stepIndex;
+                
+                // Update progress steps
+                this.updateProgressSteps();
+                
+                // Load appropriate content
+                if (stepIndex < ModuleData.steps.length) {
+                    this.loadQuestion(stepIndex);
+                } else {
+                    this.showResults();
+                }
+                
+                // Update navigation buttons
+                this.updateNavigation();
+            },
             
-            document.getElementById('module-title').textContent = module.title;
+            updateProgressSteps() {
+                const steps = ['probleme', 'ziele', 'massnahmen', 'ergebnis'];
+                steps.forEach((step, index) => {
+                    const element = document.getElementById(`step-${step}`);
+                    if (index === ModuleData.currentStep) {
+                        element.classList.add('active');
+                    } else if (index < ModuleData.currentStep) {
+                        element.classList.remove('active');
+                        element.classList.add('completed');
+                    } else {
+                        element.classList.remove('active', 'completed');
+                    }
+                });
+            },
             
-            // Update progress steps
-            const stepsContainer = document.getElementById('progress-steps');
-            stepsContainer.innerHTML = '';
-            for (let i = 0; i < module.content.length; i++) {
-                const step = document.createElement('div');
-                step.className = `progress-step ${i === lessonIndex ? 'active' : i < lessonIndex ? 'completed' : ''}`;
-                stepsContainer.appendChild(step);
-            }
-            
-            document.getElementById('step-counter').textContent = `Schritt ${lessonIndex + 1} von ${module.content.length}`;
-            
-            // Load lesson content
-            const container = document.getElementById('lesson-container');
-            if (lesson.type === 'quiz') {
-                loadQuiz(module, lesson, container);
-            } else {
+            loadQuestion(stepIndex) {
+                const step = ModuleData.steps[stepIndex];
+                const container = document.getElementById('question-container');
+                
                 container.innerHTML = `
-                    <div class="lesson-card active">
-                        <div class="lesson-icon-large">
-                            <i class="${lesson.icon}"></i>
-                        </div>
-                        <h2 class="lesson-title">${lesson.title}</h2>
-                        ${lesson.content}
-                        <div class="navigation">
-                            <button class="nav-btn" onclick="previousLesson()" ${lessonIndex === 0 ? 'disabled' : ''}>
-                                <i class="fas fa-arrow-left"></i>
-                                Zurück
-                            </button>
-                            <button class="nav-btn" onclick="nextLesson()">
-                                ${lessonIndex === module.content.length - 1 ? 'Quiz starten' : 'Weiter'}
-                                <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
+                    <div class="question-header">
+                        <h2 class="question-title">${step.title}</h2>
+                        <div class="question-counter">Frage ${stepIndex + 1} von ${ModuleData.steps.length}</div>
+                    </div>
+                    <div class="question-text">${step.question}</div>
+                    <div class="options-grid" id="options-grid">
+                        ${step.options.map((option, index) => `
+                            <div class="option" data-index="${index}">
+                                <div class="option-indicator">${String.fromCharCode(65 + index)}</div>
+                                <div class="option-text">${option.text}</div>
+                            </div>
+                        `).join('')}
                     </div>
                 `;
-            }
-        }
-
-        // Quiz functionality
-        let currentQuestion = 0;
-        let quizScore = 0;
-        let quizQuestions = [];
-
-        function loadQuiz(module, lesson, container) {
-            container.innerHTML = `
-                <div class="quiz-container">
-                    <div class="quiz-header">
-                        <h3>${lesson.title}</h3>
-                        <p>Teste dein Wissen und verdiene Coins!</p>
-                    </div>
-                    <div class="quiz-progress">
-                        <span id="quiz-counter">Frage 1 von ${lesson.quiz.length}</span>
-                        <div class="progress-steps" id="quiz-steps">
-                            ${lesson.quiz.map((_, i) => `<div class="progress-step ${i === 0 ? 'active' : ''}"></div>`).join('')}
-                        </div>
-                    </div>
-                    <div class="quiz-content" id="quiz-content">
-                        <!-- Quiz questions will be loaded here -->
-                    </div>
-                    <div class="quiz-results" id="quiz-results">
-                        <div class="result-icon correct">
+                
+                // Add event listeners to options
+                document.querySelectorAll('.option').forEach(option => {
+                    option.addEventListener('click', () => this.selectOption(option, stepIndex));
+                });
+            },
+            
+            selectOption(optionElement, stepIndex) {
+                const step = ModuleData.steps[stepIndex];
+                const optionIndex = parseInt(optionElement.dataset.index);
+                
+                if (step.type === 'multiple') {
+                    optionElement.classList.toggle('selected');
+                } else {
+                    // For single choice, deselect all others
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    optionElement.classList.add('selected');
+                }
+                
+                // Save user answer
+                this.saveUserAnswer(stepIndex);
+            },
+            
+            saveUserAnswer(stepIndex) {
+                const selectedOptions = Array.from(document.querySelectorAll('.option.selected'));
+                ModuleData.userAnswers[stepIndex] = selectedOptions.map(opt => {
+                    const index = parseInt(opt.dataset.index);
+                    return {
+                        text: ModuleData.steps[stepIndex].options[index].text,
+                        correct: ModuleData.steps[stepIndex].options[index].correct
+                    };
+                });
+            },
+            
+            updateNavigation() {
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+                
+                prevBtn.disabled = ModuleData.currentStep === 0;
+                
+                if (ModuleData.currentStep < ModuleData.steps.length) {
+                    nextBtn.innerHTML = ModuleData.currentStep === ModuleData.steps.length - 1 ? 
+                        'Ergebnis anzeigen <i class="fas fa-chart-line"></i>' : 
+                        'Weiter <i class="fas fa-arrow-right"></i>';
+                }
+            },
+            
+            previousStep() {
+                if (ModuleData.currentStep > 0) {
+                    this.loadStep(ModuleData.currentStep - 1);
+                }
+            },
+            
+            nextStep() {
+                if (ModuleData.currentStep < ModuleData.steps.length) {
+                    // Validate current step has answers
+                    if (!ModuleData.userAnswers[ModuleData.currentStep] || 
+                        ModuleData.userAnswers[ModuleData.currentStep].length === 0) {
+                        alert('Bitte wähle mindestens eine Antwort aus!');
+                        return;
+                    }
+                    
+                    this.loadStep(ModuleData.currentStep + 1);
+                }
+            },
+            
+            showResults() {
+                const score = ModuleData.calculateScore();
+                const rewards = ModuleData.getRewards(score);
+                
+                // Give rewards
+                GameState.addCoins(rewards.coins);
+                GameState.addXP(rewards.xp);
+                
+                const container = document.getElementById('question-container');
+                container.innerHTML = `
+                    <div class="results-screen">
+                        <div class="results-icon">
                             <i class="fas fa-trophy"></i>
                         </div>
-                        <h2 class="result-title">Quiz abgeschlossen!</h2>
-                        <div class="result-score good" id="score-display">0/0 Richtige</div>
-                        <div class="reward-animation">
+                        <h2 class="results-title">Fallbeispiel abgeschlossen!</h2>
+                        <div class="score-display">${score.percentage}%</div>
+                        <p>Du hast ${score.correct} von ${score.total} Fragen richtig beantwortet</p>
+                        
+                        <div class="rewards">
                             <div class="reward-item">
                                 <div class="reward-icon coins">
                                     <i class="fas fa-coins"></i>
                                 </div>
-                                <div class="reward-amount" id="coins-earned">+0</div>
+                                <div class="reward-amount">+${rewards.coins}</div>
+                                <div>Coins</div>
                             </div>
                             <div class="reward-item">
                                 <div class="reward-icon xp">
                                     <i class="fas fa-fire"></i>
                                 </div>
-                                <div class="reward-amount" id="xp-earned">+0</div>
+                                <div class="reward-amount">+${rewards.xp}</div>
+                                <div>XP</div>
                             </div>
                         </div>
-                        <p id="result-message"></p>
-                        <div class="countdown" id="countdown">
-                            Rückkehr in <span id="countdown-number">5</span> Sekunden...
-                        </div>
+                        
+                        <button class="nav-btn" onclick="location.href='fallbeispiele.html'">
+                            <i class="fas fa-arrow-left"></i>
+                            Zurück zu Fallbeispielen
+                        </button>
                     </div>
-                </div>
-            `;
-            
-            startQuiz(module, lesson.quiz);
-        }
-
-        function startQuiz(module, questions) {
-            currentQuestion = 0;
-            quizScore = 0;
-            quizQuestions = questions;
-            loadQuestion(currentQuestion);
-        }
-
-        function loadQuestion(index) {
-            const question = quizQuestions[index];
-            const content = document.getElementById('quiz-content');
-            const steps = document.querySelectorAll('#quiz-steps .progress-step');
-            
-            steps.forEach((step, i) => {
-                step.classList.remove('active');
-                if (i === index) step.classList.add('active');
-            });
-            
-            document.getElementById('quiz-counter').textContent = `Frage ${index + 1} von ${quizQuestions.length}`;
-            
-            content.innerHTML = `
-                <div class="quiz-question">${question.question}</div>
-                <div class="quiz-options">
-                    ${question.options.map((option, i) => `
-                        <div class="quiz-option" data-correct="${option.correct}" data-index="${i}">
-                            <div class="option-indicator">${String.fromCharCode(65 + i)}</div>
-                            <div class="option-text">${option.text}</div>
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="quiz-feedback" id="quiz-feedback"></div>
-                <div class="navigation" style="margin-top: var(--spacing-lg);">
-                    <button class="nav-btn" id="next-question" style="display: none;">
-                        ${index === quizQuestions.length - 1 ? 'Ergebnisse anzeigen' : 'Nächste Frage'}
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            `;
-            
-            // Add event listeners
-            document.querySelectorAll('.quiz-option').forEach(option => {
-                option.addEventListener('click', handleAnswer);
-            });
-            
-            document.getElementById('next-question').addEventListener('click', nextQuestion);
-        }
-
-        function handleAnswer(e) {
-            const option = e.currentTarget;
-            const isCorrect = option.dataset.correct === 'true';
-            const feedback = document.getElementById('quiz-feedback');
-            const nextBtn = document.getElementById('next-question');
-            
-            // Disable all options
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.style.pointerEvents = 'none';
-            });
-            
-            // Mark correct/incorrect
-            option.classList.add(isCorrect ? 'correct' : 'incorrect');
-            
-            // Show correct answer if wrong
-            if (!isCorrect) {
-                document.querySelector('.quiz-option[data-correct="true"]').classList.add('correct');
-            }
-            
-            // Show feedback
-            feedback.textContent = quizQuestions[currentQuestion].explanation;
-            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
-            feedback.style.display = 'block';
-            
-            // Update score
-            if (isCorrect) {
-                quizScore++;
-                document.getElementById('quiz-content').classList.add('correct-flash');
-            } else {
-                document.getElementById('quiz-content').classList.add('incorrect-flash');
-            }
-            
-            // Show next button
-            nextBtn.style.display = 'flex';
-        }
-
-        function nextQuestion() {
-            currentQuestion++;
-            
-            if (currentQuestion < quizQuestions.length) {
-                loadQuestion(currentQuestion);
-            } else {
-                showQuizResults();
-            }
-        }
-
-        function showQuizResults() {
-            const module = FALLBEISPIEL_MODULES.find(m => m.id === gameState.currentModule);
-            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
-            const coinsEarned = Math.round(module.coins * (percentage / 100));
-            const xpEarned = Math.round(module.xp * (percentage / 100));
-            
-            document.getElementById('quiz-content').style.display = 'none';
-            document.getElementById('quiz-results').classList.add('active');
-            
-            document.getElementById('score-display').textContent = `${quizScore}/${quizQuestions.length} Richtige (${percentage}%)`;
-            document.getElementById('coins-earned').textContent = `+${coinsEarned}`;
-            document.getElementById('xp-earned').textContent = `+${xpEarned}`;
-            
-            // Set score style
-            const scoreDisplay = document.getElementById('score-display');
-            if (percentage >= 80) {
-                scoreDisplay.className = 'result-score good';
-                document.getElementById('result-message').textContent = 'Herzlichen Glückwunsch! Exzellente Leistung!';
-                createConfetti();
-            } else if (percentage >= 60) {
-                scoreDisplay.className = 'result-score average';
-                document.getElementById('result-message').textContent = 'Gut gemacht! Du kehrst jetzt zum Fallbeispiel-Menü zurück.';
-            } else {
-                scoreDisplay.className = 'result-score poor';
-                document.getElementById('result-message').textContent = 'Weiter so! Übung macht den Meister. Du kannst es nochmal versuchen.';
-            }
-            
-            // Add rewards if passed (60% or higher) and not already completed
-            if (percentage >= 60 && !gameState.completedModules.includes(gameState.currentModule)) {
-                gameState.coins += coinsEarned;
-                gameState.xp += xpEarned;
-                gameState.completedModules.push(gameState.currentModule);
-                
-                // Calculate level based on XP
-                gameState.level = calculateLevel(gameState.xp);
-                
-                saveGameState();
-                updateUI();
-            }
-            
-            // Start countdown to return
-            startCountdown();
-        }
-
-        function calculateLevel(xp) {
-            if (xp >= 2000) return 5;
-            if (xp >= 1200) return 4;
-            if (xp >= 600) return 3;
-            if (xp >= 200) return 2;
-            return 1;
-        }
-
-        function startCountdown() {
-            let countdown = 5;
-            const countdownEl = document.getElementById('countdown-number');
-            
-            const timer = setInterval(() => {
-                countdown--;
-                countdownEl.textContent = countdown;
-                
-                if (countdown <= 0) {
-                    clearInterval(timer);
-                    returnToFallbeispielMenu();
-                }
-            }, 1000);
-        }
-
-        function returnToFallbeispielMenu() {
-            document.querySelector('.learning-module').classList.remove('active');
-            document.querySelector('.fallbeispiel-section').style.display = 'block';
-            renderModules();
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function nextLesson() {
-            const module = FALLBEISPIEL_MODULES.find(m => m.id === gameState.currentModule);
-            if (gameState.currentLesson < module.content.length - 1) {
-                gameState.currentLesson++;
-                loadLesson(gameState.currentModule, gameState.currentLesson);
-            }
-        }
-
-        function previousLesson() {
-            if (gameState.currentLesson > 0) {
-                gameState.currentLesson--;
-                loadLesson(gameState.currentModule, gameState.currentLesson);
-            }
-        }
-
-        function updateUI() {
-            document.getElementById('coin-count').textContent = gameState.coins;
-            document.getElementById('level-count').textContent = gameState.level;
-            document.getElementById('xp-count').textContent = gameState.xp;
-        }
-
-        function createConfetti() {
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.cssText = `
-                    position: fixed;
-                    width: 10px;
-                    height: 10px;
-                    background: ${['#4361ee', '#7209b7', '#f72585', '#4cc9f0', '#ffd166'][Math.floor(Math.random() * 5)]};
-                    top: -20px;
-                    left: ${Math.random() * 100}vw;
-                    animation: fall ${Math.random() * 3 + 2}s linear forwards;
-                    border-radius: 2px;
-                    z-index: 1000;
                 `;
-                document.body.appendChild(confetti);
                 
-                setTimeout(() => confetti.remove(), 5000);
+                // Hide navigation buttons
+                document.querySelector('.module-navigation').style.display = 'none';
+                
+                // Create confetti for good scores
+                if (score.percentage >= 80) {
+                    this.createConfetti();
+                }
+            },
+            
+            createConfetti() {
+                const colors = ['#4361ee', '#7209b7', '#f72585', '#4cc9f0', '#ffd166'];
+                
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: 10px;
+                        height: 10px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        top: -20px;
+                        left: ${Math.random() * 100}vw;
+                        animation: confettiRain ${Math.random() * 3 + 2}s linear forwards;
+                        border-radius: 2px;
+                        z-index: 10001;
+                    `;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }
             }
-        }
+        };
 
-        function setupEventListeners() {
-            // Add any additional event listeners here
-        }
-
-        // Global functions for navigation
-        window.nextLesson = nextLesson;
-        window.previousLesson = previousLesson;
-
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', initApp);
+        // Initialize the module
+        document.addEventListener('DOMContentLoaded', () => {
+            ModuleController.init();
+        });
     </script>
 </body>
 </html>
