@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herz-Lernmodul | PflegefachProfi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            /* Primary Colors */
+            --primary-blue: #4361ee;
+            --primary-purple: #7209b7;
+            --primary-pink: #f72585;
+            --primary-cyan: #4cc9f0;
+            
+            /* Neutral Colors */
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            /* Effects */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-2xl: 64px;
+            
+            /* Typography */
+            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background-color: var(--background);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-20px) rotate(5deg); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.05); 
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0,-8px,0);
+            }
+            70% {
+                transform: translate3d(0,-4px,0);
+            }
+            90% {
+                transform: translate3d(0,-2px,0);
+            }
+        }
+
+        @keyframes confettiRain {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 0 5px rgba(67, 97, 238, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(67, 97, 238, 0.6);
+            }
+        }
+
+        @keyframes successFlash {
+            0% { background-color: #f0f9ff; }
+            50% { background-color: rgba(76, 201, 240, 0.2); }
+            100% { background-color: #f0f9ff; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes correctBurst {
+            0% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.7);
+            }
+            70% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(76, 201, 240, 0);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0);
+            }
+        }
+
+        /* ===== COMPONENT STYLES ===== */
+
+        /* Header & Navigation */
+        .header {
+            background: var(--surface);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: var(--font-weight-bold);
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            padding: var(--space-sm) 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: var(--space-md);
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: var(--space-sm);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .dropdown-item i {
+            margin-right: var(--space-xs);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: var(--space-2xl) 0;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .medical-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .medical-item {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-md);
+            line-height: 1.2;
+            animation: slideInUp 0.8s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: var(--space-xl);
+            animation: slideInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+            animation: slideInUp 0.8s ease 0.4s both;
+        }
+
+        .stat-bubble {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .cta-pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--primary-pink);
+            color: white;
+            padding: var(--space-md) var(--space-xl);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: var(--font-weight-bold);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: glow 2s infinite, slideInUp 0.8s ease 0.6s both;
+        }
+
+        .cta-pulse:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--space-xl) 0;
+            flex: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-header h2 {
+            font-size: 2.25rem;
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Modules Grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-lg);
+        }
+
+        .module-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .module-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto var(--space-md);
+        }
+
+        .module-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .module-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .module-progress {
+            height: 6px;
+            background-color: var(--border-light);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: var(--space-sm);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Learning Module */
+        .learning-module {
+            display: none;
+            padding: var(--space-xl) 0;
+            background: var(--background);
+            min-height: 100vh;
+        }
+
+        .learning-module.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .module-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .module-title-large {
+            font-size: 2rem;
+            color: var(--text-primary);
+        }
+
+        .module-progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .progress-steps {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        .progress-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
+        }
+
+        .progress-step.completed {
+            background: var(--primary-cyan);
+        }
+
+        .step-counter {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .lesson-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .lesson-content {
+            padding: var(--space-xl);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-card {
+            display: none;
+        }
+
+        .lesson-card.active {
+            display: block;
+        }
+
+        .lesson-icon-large {
+            width: 100px;
+            height: 100px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 2.5rem;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .lesson-title {
+            text-align: center;
+            font-size: 1.75rem;
+            margin-bottom: var(--space-lg);
+            color: var(--text-primary);
+        }
+
+        .lesson-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto var(--space-lg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .lesson-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .content-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .content-section p {
+            margin-bottom: var(--space-md);
+            line-height: 1.7;
+        }
+
+        .content-section ul {
+            margin-bottom: var(--space-md);
+            padding-left: var(--space-lg);
+        }
+
+        .content-section li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .info-box {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .info-box.warning {
+            background: #fef3e2;
+            border-left-color: var(--warning);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            width: 100%;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            color: var(--text-primary);
+            line-height: 1.4;
+            padding: 0 var(--space-sm);
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .quiz-option {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-blue);
+            background: var(--primary-light);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--primary-cyan);
+            background: rgba(76, 201, 240, 0.1);
+            animation: correctBurst 0.6s ease;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--primary-pink);
+            background: rgba(247, 37, 133, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        .option-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .quiz-option.selected .option-indicator {
+            border-color: var(--primary-blue);
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .quiz-option.correct .option-indicator {
+            border-color: var(--primary-cyan);
+            background: var(--primary-cyan);
+            color: white;
+        }
+
+        .quiz-option.incorrect .option-indicator {
+            border-color: var(--primary-pink);
+            background: var(--primary-pink);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .quiz-feedback {
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            margin-top: var(--space-md);
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid var(--primary-cyan);
+            color: var(--text-primary);
+            animation: successFlash 1s ease;
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(247, 37, 133, 0.1);
+            border: 1px solid var(--primary-pink);
+            color: var(--text-primary);
+        }
+
+        .quiz-results {
+            text-align: center;
+            padding: var(--space-xl);
+            display: none;
+        }
+
+        .quiz-results.active {
+            display: block;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-md);
+            color: var(--primary-cyan);
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .result-score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+        }
+
+        .result-score.good {
+            color: var(--primary-cyan);
+        }
+
+        .result-score.average {
+            color: var(--warning);
+        }
+
+        .result-score.poor {
+            color: var(--primary-pink);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--space-xl);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: var(--primary-blue);
+            color: white;
+            padding: var(--space-md) var(--space-lg);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-purple);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .complete-btn {
+            background: var(--primary-pink);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: white;
+            padding: var(--space-md) var(--space-lg);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: var(--space-xl) auto 0;
+        }
+
+        .complete-btn:hover {
+            background: #e1156d;
+            transform: translateY(-2px);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-pink);
+            opacity: 0;
+            z-index: 1000;
+        }
+
+        /* Footer */
+        .footer {
+            padding: var(--space-xl) 0;
+            background: var(--text-primary);
+            color: white;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .footer-logo {
+            font-weight: var(--font-weight-bold);
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        .footer-copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: var(--space-md);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-title {
+                font-size: 1.75rem;
+            }
+            
+            .lesson-content {
+                padding: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-star-of-life"></i>
+                    </div>
+                    <span>PflegefachProfi</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Startseite
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-book-medical"></i>
+                        Lernmodule
+                    </a>
+                    <div class="nav-dropdown">
+                        <a href="#" class="dropdown-item" data-module="herz">
+                            <i class="fas fa-heartbeat"></i>
+                            Herz & Kreislauf
+                        </a>
+                        <a href="#" class="dropdown-item" data-module="nieren">
+                            <i class="fas fa-filter"></i>
+                            Nieren & Harnsystem
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-lungs"></i>
+                            Atmungssystem
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-brain"></i>
+                            Neurologie
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="lernmaterialien.html" class="nav-link">
+                        <i class="fas fa-graduation-cap"></i>
+                        Lernmaterialien
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="fortschritt.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        Fortschritt
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="hilfe.html" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        Hilfe
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="medical-animation">
+            <div class="medical-item" style="top: 10%; left: 5%;"><i class="fas fa-heartbeat"></i></div>
+            <div class="medical-item" style="top: 20%; right: 10%;"><i class="fas fa-stethoscope"></i></div>
+            <div class="medical-item" style="bottom: 30%; left: 15%;"><i class="fas fa-syringe"></i></div>
+            <div class="medical-item" style="bottom: 15%; right: 20%;"><i class="fas fa-pills"></i></div>
+            <div class="medical-item" style="top: 40%; left: 25%;"><i class="fas fa-procedures"></i></div>
+            <div class="medical-item" style="top: 60%; right: 30%;"><i class="fas fa-user-md"></i></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Lernmodule für Pflegefachkräfte</h1>
+                <p class="hero-subtitle">Vertiefe dein Wissen mit interaktiven Lernmodulen zu verschiedenen medizinischen Themenbereichen</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-bubble">
+                        <div class="stat-value" id="hero-modules">12</div>
+                        <div class="stat-label">Lernmodule</div>
+                    </div>
+                    <div class="stat-bubble">
+                        <div class="stat-value" id="hero-users">2.4k</div>
+                        <div class="stat-label">Aktive Lernende</div>
+                    </div>
+                    <div class="stat-bubble">
+                        <div class="stat-value" id="hero-success">94%</div>
+                        <div class="stat-label">Erfolgsquote</div>
+                    </div>
+                </div>
+                
+                <button class="cta-pulse" id="start-learning">
+                    <i class="fas fa-play"></i>
+                    Jetzt lernen starten
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-header">
+                <h2>Verfügbare Lernmodule</h2>
+                <p>Wähle ein Thema aus und vertiefe dein Wissen mit strukturierten Lerninhalten und interaktiven Quizzen</p>
+            </div>
+            
+            <div class="modules-grid">
+                <div class="module-card" data-module="herz">
+                    <div class="module-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Herz & Kreislauf</h3>
+                    <p>Anatomie, Physiologie, Erkrankungen und Pflegemaßnahmen des Herz-Kreislauf-Systems</p>
+                    <div class="module-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="module-card" data-module="nieren">
+                    <div class="module-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3>Nieren & Harnsystem</h3>
+                    <p>Struktur, Funktion, Erkrankungen und pflegerische Aspekte des Harnsystems</p>
+                    <div class="module-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-lungs"></i>
+                    </div>
+                    <h3>Atmungssystem</h3>
+                    <p>Anatomie der Atemwege, Lungenfunktion, Erkrankungen und Beatmung</p>
+                    <div class="module-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Neurologie</h3>
+                    <p>Nervensystem, Gehirnfunktionen, neurologische Erkrankungen und Pflege</p>
+                    <div class="module-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-bone"></i>
+                    </div>
+                    <h3>Muskuloskelettal</h3>
+                    <p>Knochen, Gelenke, Muskeln und deren Erkrankungen sowie Mobilisation</p>
+                    <div class="module-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-icon">
+                        <i class="fas fa-stomach"></i>
+                    </div>
+                    <h3>Verdauungssystem</h3>
+                    <p>Magen-Darm-Trakt, Leber, Ernährung und gastroenterologische Erkrankungen</p>
+                    <div class="module-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Learning Module -->
+    <section class="learning-module" id="learning-module">
+        <div class="container">
+            <div class="module-nav">
+                <h2 class="module-title-large" id="module-title">Herz & Kreislauf</h2>
+                <div class="module-progress-indicator">
+                    <div class="progress-steps" id="progress-steps">
+                        <!-- Steps will be loaded dynamically -->
+                    </div>
+                    <span class="step-counter" id="step-counter">Schritt 1 von 6</span>
+                </div>
+            </div>
+
+            <div class="lesson-container">
+                <div class="lesson-content" id="lesson-container">
+                    <!-- Lesson content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">PflegefachProfi - Deine Lernplattform</div>
+                <div class="footer-links">
+                    <a href="index.html" class="footer-link">Startseite</a>
+                    <a href="ueber-uns.html" class="footer-link">Über uns</a>
+                    <a href="kontakt.html" class="footer-link">Kontakt</a>
+                    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
+                    <a href="impressum.html" class="footer-link">Impressum</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2023 PflegefachProfi. Alle Rechte vorbehalten.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== MODULE DATA =====
+        const ModuleData = {
+            herz: {
+                title: "Herz & Kreislauf",
+                icon: "fas fa-heartbeat",
+                color: "#4361ee",
+                lessons: [
+                    {
+                        title: "Anatomie des Herzens",
+                        type: "content",
+                        content: `
+                            <div class="lesson-icon-large">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h2 class="lesson-title">Anatomie des Herzens</h2>
+                            
+                            <div class="lesson-image">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Herzanatomie">
+                            </div>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-heart"></i> Grundaufbau des Herzens</h3>
+                                <p>Das Herz ist ein hohler Muskel, der als Pumpe für den Blutkreislauf dient. Es liegt im Mediastinum, hinter dem Brustbein und vor der Wirbelsäule.</p>
+                                
+                                <div class="info-box">
+                                    <h4>Wichtige Strukturen:</h4>
+                                    <ul>
+                                        <li><strong>Rechter Vorhof:</strong> Erhält sauerstoffarmes Blut aus Körper- und Herzkranzvenen</li>
+                                        <li><strong>Rechte Kammer:</strong> Pumpt Blut zur Lunge</li>
+                                        <li><strong>Linker Vorhof:</strong> Erhält sauerstoffreiches Blut aus der Lunge</li>
+                                        <li><strong>Linke Kammer:</strong> Pumpt Blut in den Körperkreislauf</li>
+                                        <li><strong>Herzklappen:</strong> Sorgen für gerichteten Blutfluss</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-arrows-alt-h"></i> Herzklappen</h3>
+                                <p>Das Herz besitzt vier Klappen, die den Blutfluss in eine Richtung sicherstellen:</p>
+                                <ul>
+                                    <li><strong>Trikuspidalklappe:</strong> Zwischen rechtem Vorhof und rechter Kammer</li>
+                                    <li><strong>Pulmonalklappe:</strong> Zwischen rechter Kammer und Lungenschlagader</li>
+                                    <li><strong>Mitralklappe:</strong> Zwischen linkem Vorhof und linker Kammer</li>
+                                    <li><strong>Aortenklappe:</strong> Zwischen linker Kammer und Hauptschlagader</li>
+                                </ul>
+                            </div>
+                        `
+                    },
+                    {
+                        title: "Physiologie & Herzfunktion",
+                        type: "content",
+                        content: `
+                            <div class="lesson-icon-large">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h2 class="lesson-title">Physiologie & Herzfunktion</h2>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-tasks"></i> Aufgaben des Herzens</h3>
+                                <p>Das Herz hat die Hauptaufgabe, das Blut durch den Körper zu pumpen und so Sauerstoff und Nährstoffe zu den Zellen zu transportieren.</p>
+                                
+                                <div class="info-box">
+                                    <h4>Wichtige Funktionen:</h4>
+                                    <ul>
+                                        <li><strong>Transportfunktion:</strong> Versorgung des Körpers mit Sauerstoff und Nährstoffen</li>
+                                        <li><strong>Druckregulation:</strong> Aufrechterhaltung des Blutdrucks</li>
+                                        <li><strong>Wärmeverteilung:</strong> Gleichmäßige Verteilung der Körperwärme</li>
+                                        <li><strong>Hormontransport:</strong> Verteilung von Hormonen im Körper</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-redo-alt"></i> Herzzyklus</h3>
+                                <p>Der Herzzyklus beschreibt die wiederholende Abfolge von Kontraktion (Systole) und Erschlaffung (Diastole) des Herzmuskels.</p>
+                                
+                                <div class="info-box warning">
+                                    <h4>Klinisch relevant:</h4>
+                                    <p>Die Systole ist die Phase, in der das Blut aus den Herzkammern in die Gefäße gepumpt wird. In der Diastole füllen sich die Herzkammern erneut mit Blut.</p>
+                                </div>
+                                
+                                <ul>
+                                    <li><strong>Ruheherzfrequenz:</strong> 60-80 Schläge/Minute</li>
+                                    <li><strong>Herzzeitvolumen:</strong> 4-8 Liter/Minute in Ruhe</li>
+                                    <li><strong>Schlagvolumen:</strong> 70-100 ml pro Herzschlag</li>
+                                </ul>
+                            </div>
+                        `
+                    },
+                    {
+                        title: "Quiz: Anatomie & Physiologie",
+                        type: "quiz",
+                        questions: [
+                            {
+                                question: "Welche Herzkammer pumpt sauerstoffreiches Blut in den Körperkreislauf?",
+                                options: [
+                                    "Rechter Vorhof",
+                                    "Rechte Kammer", 
+                                    "Linker Vorhof",
+                                    "Linke Kammer"
+                                ],
+                                correct: 3,
+                                explanation: "Die linke Kammer pumpt das sauerstoffreiche Blut über die Aorta in den Körperkreislauf. Sie hat die dickste Muskulatur, da sie gegen den höchsten Druck arbeiten muss."
+                            },
+                            {
+                                question: "Welche Herzklappe befindet sich zwischen dem linken Vorhof und der linken Kammer?",
+                                options: [
+                                    "Trikuspidalklappe",
+                                    "Pulmonalklappe",
+                                    "Mitralklappe",
+                                    "Aortenklappe"
+                                ],
+                                correct: 2,
+                                explanation: "Die Mitralklappe (auch Bikuspidalklappe) liegt zwischen linkem Vorhof und linker Kammer und verhindert den Rückfluss des Blutes während der Systole."
+                            },
+                            {
+                                question: "Was beschreibt der Begriff 'Herzzeitvolumen'?",
+                                options: [
+                                    "Die Menge Blut, die pro Herzschlag ausgeworfen wird",
+                                    "Die Blutmenge, die pro Minute vom Herzen gepumpt wird",
+                                    "Die Frequenz der Herzschläge pro Minute",
+                                    "Der Druck in den Herzkammern während der Systole"
+                                ],
+                                correct: 1,
+                                explanation: "Das Herzzeitvolumen (HZV) ist die Blutmenge, die pro Minute vom Herzen in den Kreislauf gepumpt wird. Es berechnet sich aus Schlagvolumen × Herzfrequenz."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Pathophysiologie: Herzerkrankungen",
+                        type: "content",
+                        content: `
+                            <div class="lesson-icon-large">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h2 class="lesson-title">Pathophysiologie: Herzerkrankungen</h2>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-disease"></i> Koronare Herzkrankheit (KHK)</h3>
+                                <p>Die KHK ist eine Erkrankung der Herzkranzgefäße, die durch Arteriosklerose verursacht wird und zu einer Minderdurchblutung des Herzmuskels führt.</p>
+                                
+                                <div class="info-box">
+                                    <h4>Symptome:</h4>
+                                    <ul>
+                                        <li>Brustschmerz (Angina pectoris)</li>
+                                        <li>Atemnot bei Belastung</li>
+                                        <li>Herzrhythmusstörungen</li>
+                                        <li>In fortgeschrittenen Stadien: Herzinsuffizienz</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box warning">
+                                    <h4>Pflegerelevanz:</h4>
+                                    <p>Patienten mit KHK benötigen regelmäßige Kontrolle von Blutdruck, Puls und Gewicht. Wichtig ist die Unterstützung bei der Medikamenteneinnahme und die Schulung zu Risikofaktoren.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-heart-broken"></i> Herzinsuffizienz</h3>
+                                <p>Bei der Herzinsuffizienz ist das Herz nicht mehr in der Lage, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.</p>
+                                
+                                <ul>
+                                    <li><strong>Linksherzinsuffizienz:</strong> Rückstau in den Lungenkreislauf → Lungenödem</li>
+                                    <li><strong>Rechtsherzinsuffizienz:</strong> Rückstau in den Körperkreislauf → Ödeme, Leberschwellung</li>
+                                    <li><strong>Globale Herzinsuffizienz:</strong> Kombination aus beiden</li>
+                                </ul>
+                                
+                                <div class="info-box">
+                                    <h4>Therapieansätze:</h4>
+                                    <ul>
+                                        <li>Medikamente (ACE-Hemmer, Betablocker, Diuretika)</li>
+                                        <li>Flüssigkeitsrestriktion</li>
+                                        <li>Kochsalzarme Ernährung</li>
+                                        <li>In schweren Fällen: Herzschrittmacher, Herztransplantation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        title: "Quiz: Herzerkrankungen",
+                        type: "quiz",
+                        questions: [
+                            {
+                                question: "Welches ist das Leitsymptom der Koronaren Herzkrankheit?",
+                                options: [
+                                    "Ödeme in den Beinen",
+                                    "Brustschmerz (Angina pectoris)",
+                                    "Hohes Fieber",
+                                    "Gelbsucht"
+                                ],
+                                correct: 1,
+                                explanation: "Angina pectoris (Brustenge) ist das typische Leitsymptom der KHK. Sie entsteht durch eine vorübergehende Minderdurchblutung des Herzmuskels."
+                            },
+                            {
+                                question: "Welche Komplikation ist typisch für eine Linksherzinsuffizienz?",
+                                options: [
+                                    "Aszites (Bauchwassersucht)",
+                                    "Lungenödem",
+                                    "Nierenversagen",
+                                    "Hirnblutung"
+                                ],
+                                correct: 1,
+                                explanation: "Bei Linksherzinsuffizienz staut sich das Blut in den Lungenkreislauf zurück, was zu einem Lungenödem führen kann. Typische Symptome sind Atemnot und Rasselgeräusche über der Lunge."
+                            },
+                            {
+                                question: "Welche Medikamentengruppe wird bei Herzinsuffizienz zur Senkung der Nachlast eingesetzt?",
+                                options: [
+                                    "Antibiotika",
+                                    "ACE-Hemmer",
+                                    "Antikoagulantien",
+                                    "Antidepressiva"
+                                ],
+                                correct: 1,
+                                explanation: "ACE-Hemmer erweitern die Gefäße und senken so die Nachlast für das Herz. Dies entlastet den Herzmuskel und verbessert die Pumpleistung."
+                            }
+                        ]
+                    },
+                    {
+                        title: "Abschlussquiz",
+                        type: "final-quiz",
+                        questions: [
+                            {
+                                question: "Welche Herzkammer hat die dickste Muskulatur?",
+                                options: [
+                                    "Rechter Vorhof",
+                                    "Rechte Kammer",
+                                    "Linker Vorhof", 
+                                    "Linke Kammer"
+                                ],
+                                correct: 3,
+                                explanation: "Die linke Kammer hat die dickste Muskulatur, da sie das Blut gegen den hohen Druck des Körperkreislaufs pumpen muss."
+                            },
+                            {
+                                question: "Was ist die Hauptfunktion der Herzklappen?",
+                                options: [
+                                    "Blut mit Sauerstoff anzureichern",
+                                    "Den Blutfluss in eine Richtung zu lenken",
+                                    "Den Blutdruck zu regulieren",
+                                    "Hormone zu produzieren"
+                                ],
+                                correct: 1,
+                                explanation: "Die Herzklappen sorgen für einen gerichteten Blutfluss und verhindern den Rückfluss des Blutes."
+                            },
+                            {
+                                question: "Welches Symptom ist bei einem Lungenödem typisch?",
+                                options: [
+                                    "Bradykardie",
+                                    "Hypertonie",
+                                    "Atemnot",
+                                    "Fieber"
+                                ],
+                                correct: 2,
+                                explanation: "Atemnot ist das Leitsymptom eines Lungenödems, da sich Flüssigkeit in den Lungenbläschen ansammelt und den Gasaustausch behindert."
+                            },
+                            {
+                                question: "Welche Maßnahme ist bei einem Patienten mit Herzinsuffizienz besonders wichtig?",
+                                options: [
+                                    "Hohe Flüssigkeitszufuhr",
+                                    "Kochsalzreiche Ernährung",
+                                    "Regelmäßige Gewichtskontrolle",
+                                    "Vermeidung von Bewegung"
+                                ],
+                                correct: 2,
+                                explanation: "Die tägliche Gewichtskontrolle ist wichtig, um eine Flüssigkeitsretention frühzeitig zu erkennen. Eine Gewichtszunahme von >2kg in 3 Tagen kann auf eine Verschlechterung der Herzinsuffizienz hinweisen."
+                            }
+                        ]
+                    }
+                ]
+            },
+            nieren: {
+                title: "Nieren & Harnsystem",
+                icon: "fas fa-filter",
+                color: "#7209b7",
+                lessons: [
+                    {
+                        title: "Anatomie der Nieren",
+                        type: "content",
+                        content: `
+                            <div class="lesson-icon-large">
+                                <i class="fas fa-filter"></i>
+                            </div>
+                            <h2 class="lesson-title">Anatomie der Nieren</h2>
+                            
+                            <div class="lesson-image">
+                                <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Nierenanatomie">
+                            </div>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-filter"></i> Aufbau der Nieren</h3>
+                                <p>Die Nieren sind bohnenförmige Organe, die beidseits der Wirbelsäule auf Höhe der unteren Rippen liegen. Jede Niere ist etwa 11-12 cm lang und wiegt 120-200 g.</p>
+                                
+                                <div class="info-box">
+                                    <h4>Wichtige Strukturen:</h4>
+                                    <ul>
+                                        <li><strong>Nierenrinde:</strong> Enthält die Nierenkörperchen</li>
+                                        <li><strong>Nierenmark:</strong> Enthält die Nierenkanälchen</li>
+                                        <li><strong>Nierenbecken:</strong> Sammelt den Urin</li>
+                                        <li><strong>Nephron:</strong> Funktionelle Einheit der Niere</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="content-section">
+                                <h3><i class="fas fa-tint"></i> Harnwege</h3>
+                                <p>Der gebildete Urin wird über ein System von Harnwegen ausgeschieden:</p>
+                                <ul>
+                                    <li><strong>Nierenbecken:</strong> Sammelbecken für den Urin</li>
+                                    <li><strong>Harnleiter (Ureter):</strong> Transportieren Urin zur Harnblase</li>
+                                    <li><strong>Harnblase:</strong> Speichert den Urin</li>
+                                    <li><strong>Harnröhre (Urethra):</strong> Leitet Urin nach außen</li>
+                                </ul>
+                            </div>
+                        `
+                    },
+                    // Weitere Lektionen für das Nierenmodul würden hier folgen...
+                ]
+            }
+        };
+
+        // ===== APPLICATION STATE =====
+        const AppState = {
+            currentModule: null,
+            currentLesson: 0,
+            quizAnswers: {},
+            moduleProgress: {
+                herz: 0,
+                nieren: 0
+            },
+            
+            // Initialize the application
+            init() {
+                this.loadProgress();
+                this.setupEventListeners();
+                this.updateModuleProgressBars();
+            },
+            
+            // Load progress from localStorage
+            loadProgress() {
+                const saved = localStorage.getItem('pflegefachprofi_progress');
+                if (saved) {
+                    this.moduleProgress = JSON.parse(saved);
+                }
+            },
+            
+            // Save progress to localStorage
+            saveProgress() {
+                localStorage.setItem('pflegefachprofi_progress', JSON.stringify(this.moduleProgress));
+            },
+            
+            // Set up event listeners
+            setupEventListeners() {
+                // Module card clicks
+                document.querySelectorAll('.module-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const moduleId = card.dataset.module;
+                        if (moduleId) {
+                            this.startModule(moduleId);
+                        }
+                    });
+                });
+                
+                // Dropdown module links
+                document.querySelectorAll('.dropdown-item[data-module]').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const moduleId = link.dataset.module;
+                        this.startModule(moduleId);
+                    });
+                });
+                
+                // Start learning button
+                document.getElementById('start-learning').addEventListener('click', () => {
+                    document.getElementById('modules-container').scrollIntoView({ behavior: 'smooth' });
+                });
+                
+                // Navigation buttons
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('nav-btn') || e.target.closest('.nav-btn')) {
+                        const btn = e.target.classList.contains('nav-btn') ? e.target : e.target.closest('.nav-btn');
+                        const direction = btn.dataset.direction;
+                        
+                        if (direction === 'next') {
+                            this.nextLesson();
+                        } else if (direction === 'prev') {
+                            this.prevLesson();
+                        }
+                    }
+                    
+                    if (e.target.classList.contains('complete-btn') || e.target.closest('.complete-btn')) {
+                        this.completeModule();
+                    }
+                });
+            },
+            
+            // Start a module
+            startModule(moduleId) {
+                this.currentModule = moduleId;
+                this.currentLesson = 0;
+                this.quizAnswers = {};
+                
+                document.querySelector('.main-content').style.display = 'none';
+                document.getElementById('learning-module').classList.add('active');
+                
+                this.loadLesson();
+                this.updateProgressIndicator();
+            },
+            
+            // Load the current lesson
+            loadLesson() {
+                const module = ModuleData[this.currentModule];
+                const lesson = module.lessons[this.currentLesson];
+                
+                // Update module title
+                document.getElementById('module-title').textContent = module.title;
+                
+                // Load lesson content based on type
+                const lessonContainer = document.getElementById('lesson-container');
+                
+                if (lesson.type === 'content') {
+                    lessonContainer.innerHTML = `
+                        <div class="lesson-card active">
+                            ${lesson.content}
+                            <div class="navigation">
+                                <button class="nav-btn" data-direction="prev" ${this.currentLesson === 0 ? 'disabled' : ''}>
+                                    <i class="fas fa-arrow-left"></i> Zurück
+                                </button>
+                                <button class="nav-btn" data-direction="next">
+                                    Weiter <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else if (lesson.type === 'quiz' || lesson.type === 'final-quiz') {
+                    this.loadQuiz(lesson, lessonContainer, lesson.type === 'final-quiz');
+                }
+                
+                // Update step counter
+                document.getElementById('step-counter').textContent = `Schritt ${this.currentLesson + 1} von ${module.lessons.length}`;
+            },
+            
+            // Load a quiz
+            loadQuiz(lesson, container, isFinal = false) {
+                const currentQuestion = this.quizAnswers[this.currentLesson]?.currentQuestion || 0;
+                const question = lesson.questions[currentQuestion];
+                const userAnswers = this.quizAnswers[this.currentLesson]?.answers || [];
+                
+                let optionsHTML = '';
+                question.options.forEach((option, index) => {
+                    const isSelected = userAnswers[currentQuestion] === index;
+                    optionsHTML += `
+                        <div class="quiz-option ${isSelected ? 'selected' : ''}" data-index="${index}">
+                            <div class="option-indicator">${String.fromCharCode(65 + index)}</div>
+                            <div class="option-text">${option}</div>
+                        </div>
+                    `;
+                });
+                
+                const feedback = userAnswers[currentQuestion] !== undefined ? 
+                    `<div class="quiz-feedback ${userAnswers[currentQuestion] === question.correct ? 'correct' : 'incorrect'}">
+                        <strong>${userAnswers[currentQuestion] === question.correct ? 'Richtig!' : 'Leider falsch.'}</strong>
+                        ${question.explanation}
+                    </div>` : '';
+                
+                container.innerHTML = `
+                    <div class="lesson-card active">
+                        <div class="quiz-container">
+                            <div class="quiz-header">
+                                <h2 class="lesson-title">${lesson.title}</h2>
+                                <div class="quiz-progress">
+                                    <span>Frage ${currentQuestion + 1} von ${lesson.questions.length}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-question">${question.question}</div>
+                            
+                            <div class="quiz-options">
+                                ${optionsHTML}
+                            </div>
+                            
+                            ${feedback}
+                            
+                            <div class="navigation">
+                                <button class="nav-btn" data-direction="prev" ${currentQuestion === 0 ? 'disabled' : ''}>
+                                    <i class="fas fa-arrow-left"></i> Vorherige Frage
+                                </button>
+                                <button class="nav-btn" id="next-question-btn" data-direction="next" 
+                                    ${userAnswers[currentQuestion] === undefined ? 'disabled' : ''}>
+                                    ${currentQuestion < lesson.questions.length - 1 ? 'Nächste Frage <i class="fas fa-arrow-right"></i>' : 'Ergebnisse anzeigen'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners to options
+                container.querySelectorAll('.quiz-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        if (userAnswers[currentQuestion] !== undefined) return;
+                        
+                        const selectedIndex = parseInt(option.dataset.index);
+                        this.selectAnswer(selectedIndex, question.correct);
+                    });
+                });
+                
+                // Special handling for final quiz
+                if (isFinal && currentQuestion === lesson.questions.length - 1 && userAnswers[currentQuestion] !== undefined) {
+                    this.showQuizResults(lesson, container);
+                }
+            },
+            
+            // Select an answer in a quiz
+            selectAnswer(selectedIndex, correctIndex) {
+                if (!this.quizAnswers[this.currentLesson]) {
+                    this.quizAnswers[this.currentLesson] = {
+                        currentQuestion: 0,
+                        answers: []
+                    };
+                }
+                
+                this.quizAnswers[this.currentLesson].answers[this.quizAnswers[this.currentLesson].currentQuestion] = selectedIndex;
+                
+                const isCorrect = selectedIndex === correctIndex;
+                const optionElements = document.querySelectorAll('.quiz-option');
+                
+                optionElements.forEach((option, index) => {
+                    if (index === correctIndex) {
+                        option.classList.add('correct');
+                    } else if (index === selectedIndex && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                // Show feedback
+                const feedbackElement = document.querySelector('.quiz-feedback');
+                if (feedbackElement) {
+                    feedbackElement.style.display = 'block';
+                    if (isCorrect) {
+                        this.createConfetti();
+                    }
+                }
+                
+                // Enable next button
+                document.getElementById('next-question-btn').disabled = false;
+            },
+            
+            // Show quiz results
+            showQuizResults(lesson, container) {
+                const userAnswers = this.quizAnswers[this.currentLesson].answers;
+                let correctCount = 0;
+                
+                lesson.questions.forEach((question, index) => {
+                    if (userAnswers[index] === question.correct) {
+                        correctCount++;
+                    }
+                });
+                
+                const percentage = Math.round((correctCount / lesson.questions.length) * 100);
+                let resultClass = 'good';
+                let resultMessage = 'Ausgezeichnet!';
+                
+                if (percentage < 70) {
+                    resultClass = 'poor';
+                    resultMessage = 'Üben Sie weiter!';
+                } else if (percentage < 90) {
+                    resultClass = 'average';
+                    resultMessage = 'Gut gemacht!';
+                }
+                
+                container.innerHTML = `
+                    <div class="lesson-card active">
+                        <div class="quiz-results active">
+                            <div class="result-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h2 class="result-title">${resultMessage}</h2>
+                            <div class="result-score ${resultClass}">${percentage}%</div>
+                            <p>Sie haben ${correctCount} von ${lesson.questions.length} Fragen richtig beantwortet.</p>
+                            
+                            ${percentage >= 70 ? `
+                                <div class="reward-animation">
+                                    <div class="reward-item">
+                                        <div class="reward-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="reward-amount">Modul abgeschlossen!</div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <button class="complete-btn">
+                                <i class="fas fa-home"></i>
+                                Zurück zur Startseite
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                if (percentage >= 70) {
+                    this.createConfetti();
+                    this.moduleProgress[this.currentModule] = 100;
+                    this.saveProgress();
+                    this.updateModuleProgressBars();
+                }
+            },
+            
+            // Navigate to next lesson
+            nextLesson() {
+                const module = ModuleData[this.currentModule];
+                const currentLessonData = module.lessons[this.currentLesson];
+                
+                // For quizzes, handle question navigation
+                if (currentLessonData.type === 'quiz' || currentLessonData.type === 'final-quiz') {
+                    const currentQuestion = this.quizAnswers[this.currentLesson]?.currentQuestion || 0;
+                    
+                    if (currentQuestion < currentLessonData.questions.length - 1) {
+                        // Go to next question
+                        this.quizAnswers[this.currentLesson].currentQuestion++;
+                        this.loadLesson();
+                    } else {
+                        // Quiz completed, go to next lesson
+                        this.currentLesson++;
+                        if (this.currentLesson < module.lessons.length) {
+                            this.loadLesson();
+                            this.updateProgressIndicator();
+                        } else {
+                            this.completeModule();
+                        }
+                    }
+                } else {
+                    // Regular lesson, go to next
+                    this.currentLesson++;
+                    if (this.currentLesson < module.lessons.length) {
+                        this.loadLesson();
+                        this.updateProgressIndicator();
+                    } else {
+                        this.completeModule();
+                    }
+                }
+            },
+            
+            // Navigate to previous lesson
+            prevLesson() {
+                const module = ModuleData[this.currentModule];
+                const currentLessonData = module.lessons[this.currentLesson];
+                
+                // For quizzes, handle question navigation
+                if (currentLessonData.type === 'quiz' || currentLessonData.type === 'final-quiz') {
+                    const currentQuestion = this.quizAnswers[this.currentLesson]?.currentQuestion || 0;
+                    
+                    if (currentQuestion > 0) {
+                        // Go to previous question
+                        this.quizAnswers[this.currentLesson].currentQuestion--;
+                        this.loadLesson();
+                    } else {
+                        // Go to previous lesson
+                        this.currentLesson--;
+                        this.loadLesson();
+                        this.updateProgressIndicator();
+                    }
+                } else {
+                    // Regular lesson, go to previous
+                    this.currentLesson--;
+                    this.loadLesson();
+                    this.updateProgressIndicator();
+                }
+            },
+            
+            // Complete the module
+            completeModule() {
+                document.getElementById('learning-module').classList.remove('active');
+                document.querySelector('.main-content').style.display = 'block';
+                
+                // Update progress
+                this.moduleProgress[this.currentModule] = 100;
+                this.saveProgress();
+                this.updateModuleProgressBars();
+                
+                // Scroll to modules
+                document.getElementById('modules-container').scrollIntoView({ behavior: 'smooth' });
+            },
+            
+            // Update progress indicator
+            updateProgressIndicator() {
+                const module = ModuleData[this.currentModule];
+                const progressSteps = document.getElementById('progress-steps');
+                
+                progressSteps.innerHTML = '';
+                
+                for (let i = 0; i < module.lessons.length; i++) {
+                    const step = document.createElement('div');
+                    step.className = 'progress-step';
+                    
+                    if (i < this.currentLesson) {
+                        step.classList.add('completed');
+                    } else if (i === this.currentLesson) {
+                        step.classList.add('active');
+                    }
+                    
+                    progressSteps.appendChild(step);
+                }
+            },
+            
+            // Update module progress bars
+            updateModuleProgressBars() {
+                document.querySelectorAll('.module-card').forEach(card => {
+                    const moduleId = card.dataset.module;
+                    if (moduleId && this.moduleProgress[moduleId] !== undefined) {
+                        const progressBar = card.querySelector('.progress-bar');
+                        progressBar.style.width = `${this.moduleProgress[moduleId]}%`;
+                    }
+                });
+            },
+            
+            // Create confetti animation
+            createConfetti() {
+                const colors = ['#4361ee', '#7209b7', '#f72585', '#4cc9f0', '#ffd166'];
+                
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: 10px;
+                        height: 10px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        top: -20px;
+                        left: ${Math.random() * 100}vw;
+                        animation: confettiRain ${Math.random() * 3 + 2}s linear forwards;
+                        border-radius: 2px;
+                        z-index: 10001;
+                    `;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+        };
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            AppState.init();
+            
+            // Add active class to current page in navigation
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Close dropdown when clicking elsewhere
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-item')) {
+                    document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+                        dropdown.style.opacity = '0';
+                        dropdown.style.visibility = 'hidden';
+                        dropdown.style.transform = 'translateY(10px)';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
