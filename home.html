@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PflegefachProfi - Revolutionäre Lernplattform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            /* Primary Colors */
+            --primary-blue: #4361ee;
+            --primary-purple: #7209b7;
+            --primary-pink: #f72585;
+            --primary-cyan: #4cc9f0;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            
+            /* Neutral Colors */
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            
+            /* Effects */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-2xl: 64px;
+            
+            /* Typography */
+            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background-color: var(--background);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-20px) rotate(5deg); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.05); 
+            }
+        }
+
+        @keyframes confettiRain {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 0 5px rgba(67, 97, 238, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(67, 97, 238, 0.6);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===== COMPONENT STYLES ===== */
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            padding: var(--space-sm) 0;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: var(--font-weight-bold);
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .nav-cta {
+            background: var(--primary-pink);
+            color: white;
+            padding: var(--space-xs) var(--space-lg);
+            border-radius: var(--radius-lg);
+            font-weight: var(--font-weight-bold);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.4);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(247, 37, 133, 0.5);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: var(--space-2xl) 0;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .medical-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .medical-item {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-md);
+            line-height: 1.2;
+            animation: slideInUp 0.8s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: var(--space-xl);
+            animation: slideInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+            animation: slideInUp 0.8s ease 0.4s both;
+        }
+
+        .stat-bubble {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .cta-pulse {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--primary-pink);
+            color: white;
+            padding: var(--space-md) var(--space-xl);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: var(--font-weight-bold);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: glow 2s infinite, slideInUp 0.8s ease 0.6s both;
+            box-shadow: 0 8px 20px rgba(247, 37, 133, 0.4);
+        }
+
+        .cta-pulse:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(247, 37, 133, 0.5);
+        }
+
+        /* Services Section */
+        .services {
+            padding: var(--space-2xl) 0;
+            background: var(--background);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-lg);
+        }
+
+        .service-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .service-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            margin: 0 auto var(--space-md);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .service-features {
+            text-align: left;
+            margin-bottom: var(--space-lg);
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-xs);
+            color: var(--text-secondary);
+        }
+
+        .service-features i {
+            color: var(--success);
+        }
+
+        .service-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: var(--primary-blue);
+            color: white;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius);
+            font-weight: var(--font-weight-semibold);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .service-cta:hover {
+            background: var(--primary-purple);
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: var(--space-2xl) 0;
+            background: linear-gradient(135deg, #f0f4ff, #f8fafc);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto var(--space-md);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: var(--space-2xl) 0;
+            background: var(--background);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .testimonial-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .author-info p {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Investor Section */
+        .investor {
+            padding: var(--space-2xl) 0;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+        }
+
+        .investor-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .investor-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+
+        .investor-stat {
+            text-align: center;
+        }
+
+        .investor-value {
+            font-size: 2.5rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-xs);
+        }
+
+        .investor-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: var(--space-2xl) 0;
+            background: var(--background);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+        }
+
+        /* Footer */
+        .footer {
+            padding: var(--space-xl) 0;
+            background: var(--text-primary);
+            color: white;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .footer-logo {
+            font-weight: var(--font-weight-bold);
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        .footer-copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: var(--space-md);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-lg);
+                padding: var(--space-lg) 0;
+                gap: 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: var(--space-sm) 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                justify-content: center;
+                padding: var(--space-md);
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .hero-stats, .investor-stats {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+            
+            .services-grid, .features-grid, .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-star-of-life"></i>
+                </div>
+                <span>PflegefachProfi</span>
+            </a>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        Startseite
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="lernmodule.html" class="nav-link">
+                        <i class="fas fa-book-medical"></i>
+                        Lernmodule
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="lernspiele.html" class="nav-link">
+                        <i class="fas fa-gamepad"></i>
+                        Lernspiele
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="fallbeispiele.html" class="nav-link">
+                        <i class="fas fa-procedures"></i>
+                        Fallbeispiele
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-cta">
+                        <i class="fas fa-rocket"></i>
+                        Jetzt starten
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="medical-animation">
+            <div class="medical-item" style="top: 10%; left: 5%;"><i class="fas fa-heartbeat"></i></div>
+            <div class="medical-item" style="top: 20%; right: 10%;"><i class="fas fa-stethoscope"></i></div>
+            <div class="medical-item" style="bottom: 30%; left: 15%;"><i class="fas fa-syringe"></i></div>
+            <div class="medical-item" style="bottom: 15%; right: 20%;"><i class="fas fa-pills"></i></div>
+            <div class="medical-item" style="top: 40%; left: 25%;"><i class="fas fa-procedures"></i></div>
+            <div class="medical-item" style="top: 60%; right: 30%;"><i class="fas fa-user-md"></i></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Revolutionäre Lernplattform für Pflegefachkräfte</h1>
+                <p class="hero-subtitle">Interaktive Module, spielerisches Lernen und praxisnahe Fallbeispiele - dein Weg zur Prüfungsexpertise</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-bubble">
+                        <div class="stat-value">94%</div>
+                        <div class="stat-label">Bestehensquote</div>
+                    </div>
+                    <div class="stat-bubble">
+                        <div class="stat-value">2.4k+</div>
+                        <div class="stat-label">Aktive Lernende</div>
+                    </div>
+                    <div class="stat-bubble">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Lernmodule</div>
+                    </div>
+                </div>
+                
+                <button class="cta-pulse" id="start-learning">
+                    <i class="fas fa-gem"></i>
+                    Kostenlos testen
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Unsere Lernangebote</h2>
+                <p>Entdecke unsere drei innovativen Lernformate, die deine Prüfungsvorbereitung revolutionieren</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-book-medical"></i>
+                    </div>
+                    <h3>Strukturierte Lernmodule</h3>
+                    <p>Umfassende Wissensvermittlung mit interaktiven Inhalten und progressiven Quizzen</p>
+                    
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Anatomie & Physiologie</li>
+                        <li><i class="fas fa-check"></i> Pathophysiologie & Erkrankungen</li>
+                        <li><i class="fas fa-check"></i> Schritt-für-Schritt Pflegeplanung</li>
+                        <li><i class="fas fa-check"></i> Abschlussquiz mit Erfolgsmessung</li>
+                    </ul>
+                    
+                    <a href="lernmodule.html" class="service-cta">
+                        <i class="fas fa-play"></i>
+                        Module entdecken
+                    </a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Gamified Lernspiele</h3>
+                    <p>Spielerisches Lernen mit Karteikarten, Quiz-Duellen und interaktiven Challenges</p>
+                    
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Flip-Learn Karteikarten</li>
+                        <li><i class="fas fa-check"></i> Quiz-Duelle mit anderen Lernenden</li>
+                        <li><i class="fas fa-check"></i> Lern-Challenges & Belohnungen</li>
+                        <li><i class="fas fa-check"></i> Fortschritts-Ranglisten</li>
+                    </ul>
+                    
+                    <a href="lernspiele.html" class="service-cta">
+                        <i class="fas fa-play"></i>
+                        Spiele starten
+                    </a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-procedures"></i>
+                    </div>
+                    <h3>Praktische Fallbeispiele</h3>
+                    <p>Realistische Patientenfälle mit vollständiger Pflegeplanung und interaktiven Übungen</p>
+                    
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Realistische Patientenszenarien</li>
+                        <li><i class="fas fa-check"></i> Komplette Pflegeplanung</li>
+                        <li><i class="fas fa-check"></i> Interaktive Entscheidungsübungen</li>
+                        <li><i class="fas fa-check"></i> Prüfungsrelevante Fragestellungen</li>
+                    </ul>
+                    
+                    <a href="fallbeispiele.html" class="service-cta">
+                        <i class="fas fa-play"></i>
+                        Fälle erkunden
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Warum PflegefachProfi?</h2>
+                <p>Unsere einzigartige Plattform kombiniert modernste Lerntechnologien mit pflegespezifischem Fachwissen</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Wissenschaftlich fundiert</h3>
+                    <p>Alle Inhalte wurden von erfahrenen Pflegepädagogen und Fachkräften entwickelt</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Immer verfügbar</h3>
+                    <p>Lerne wann und wo du willst - optimiert für alle Geräte</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Persönlicher Fortschritt</h3>
+                    <p>Detaillierte Analysen zeigen deine Stärken und Verbesserungsbereiche</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Gamification</h3>
+                    <p>Spielerische Elemente motivieren und steigern den Lernerfolg</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community</h3>
+                    <p>Tausche dich mit anderen Pflegeschülern aus und lerne gemeinsam</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Prüfungsvorbereitung</h3>
+                    <p>Gezielte Vorbereitung auf staatliche Prüfungen und Examina</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Erfolgsgeschichten</h2>
+                <p>Was unsere Lernenden über PflegefachProfi sagen</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Durch die interaktiven Lernmodule habe ich komplexe Themen wie die Herz-Kreislauf-Physiologie endlich verstanden. Die Quizze geben mir Sicherheit für die Prüfung!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MS</div>
+                        <div class="author-info">
+                            <h4>Maria Schmidt</h4>
+                            <p>Pflegeschülerin, 2. Ausbildungsjahr</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Die Fallbeispiele sind super realistisch! Endlich kann ich Pflegeplanung üben, ohne Angst vor Fehlern zu haben. Die sofortige Rückmeldung hilft mir enorm."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">TW</div>
+                        <div class="author-info">
+                            <h4>Thomas Weber</h4>
+                            <p>Examen 2023, Note 1,7</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Die Lernspiele machen süchtig! Ich lerne jetzt regelmäßig, ohne dass es sich wie Arbeit anfühlt. Besonders die Duell-Funktion motiviert mich."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SJ</div>
+                        <div class="author-info">
+                            <h4>Sarah Jansen</h4>
+                            <p>Pflegeschülerin, 1. Ausbildungsjahr</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investor Section -->
+    <section class="investor">
+        <div class="container">
+            <div class="investor-content">
+                <h2 style="font-size: 2.5rem; margin-bottom: var(--space-md);">Für Investoren</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: var(--space-xl);">
+                    Wir revolutionieren die Pflegeausbildung mit modernster Lerntechnologie und skalierbaren Geschäftsmodellen
+                </p>
+                
+                <div class="investor-stats">
+                    <div class="investor-stat">
+                        <div class="investor-value">€2.5M</div>
+                        <div class="investor-label">Addressable Market</div>
+                    </div>
+                    <div class="investor-stat">
+                        <div class="investor-value">+320%</div>
+                        <div class="investor-label">Wachstum 2023</div>
+                    </div>
+                    <div class="investor-stat">
+                        <div class="investor-value">15k</div>
+                        <div class="investor-label">Potenzielle Nutzer/Jahr</div>
+                    </div>
+                </div>
+                
+                <button class="cta-pulse" style="background: white; color: var(--primary-blue);">
+                    <i class="fas fa-chart-line"></i>
+                    Investor Pitch anfordern
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Bereit für deine Lernrevolution?</h2>
+                <p class="cta-subtitle">Starte jetzt kostenlos und entdecke, wie einfach und effektiv Lernen sein kann</p>
+                
+                <button class="cta-pulse" style="font-size: 1.3rem; padding: var(--space-lg) var(--space-2xl);">
+                    <i class="fas fa-rocket"></i>
+                    Jetzt kostenlos registrieren
+                </button>
+                
+                <p style="margin-top: var(--space-md); color: var(--text-tertiary);">
+                    Keine Kreditkarte erforderlich · 7 Tage kostenlos testen
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">PflegefachProfi - Revolutionäre Lernplattform</div>
+                <div class="footer-links">
+                    <a href="index.html" class="footer-link">Startseite</a>
+                    <a href="ueber-uns.html" class="footer-link">Über uns</a>
+                    <a href="karriere.html" class="footer-link">Karriere</a>
+                    <a href="kontakt.html" class="footer-link">Kontakt</a>
+                    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
+                    <a href="impressum.html" class="footer-link">Impressum</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2023 PflegefachProfi GmbH. Alle Rechte vorbehalten.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hamburger menu functionality
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            
+            hamburger.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                });
+            });
+            
+            // Start learning button
+            document.getElementById('start-learning').addEventListener('click', () => {
+                document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Add active class to current page in navigation
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Create confetti on CTA clicks
+            document.querySelectorAll('.cta-pulse').forEach(button => {
+                button.addEventListener('click', () => {
+                    createConfetti();
+                });
+            });
+        });
+
+        // Create confetti animation
+        function createConfetti() {
+            const colors = ['#4361ee', '#7209b7', '#f72585', '#4cc9f0', '#ffd166'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: fixed;
+                    width: 10px;
+                    height: 10px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    top: -20px;
+                    left: ${Math.random() * 100}vw;
+                    animation: confettiRain ${Math.random() * 3 + 2}s linear forwards;
+                    border-radius: 2px;
+                    z-index: 10001;
+                `;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
