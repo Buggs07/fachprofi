@@ -1074,12 +1074,12 @@
                         Fortschritt
                     </a>
                 </li>
-                <li class="nav-item">
+            <!--    <li class="nav-item">
                     <a href="#" class="nav-link nav-cta">
                         <i class="fas fa-rocket"></i>
                         Jetzt starten
                     </a>
-                </li>
+                </li>-->`
             </ul>
         </div>
     </nav>
@@ -1813,7 +1813,7 @@
             },
             
             // Set up event listeners
-            setupEventListeners() {
+        /*    setupEventListeners() {
                 // Hamburger menu
                 const hamburger = document.getElementById('hamburger');
                 const navMenu = document.getElementById('nav-menu');
@@ -1843,8 +1843,73 @@
                         }
                     });
                 });
-                
-                // Start learning button
+               */
+
+// Set up event listeners
+setupEventListeners() {
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+    
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+    
+    // Use event delegation for module actions
+    document.addEventListener('click', (e) => {
+        // Handle unlock buttons
+        if (e.target.classList.contains('module-action') && e.target.classList.contains('unlock')) {
+            e.stopPropagation();
+            const moduleCard = e.target.closest('.module-card');
+            const moduleId = moduleCard.dataset.module;
+            this.unlockModule(moduleId);
+        }
+        
+        // Handle start buttons
+        if (e.target.classList.contains('module-action') && e.target.classList.contains('start')) {
+            e.stopPropagation();
+            const moduleCard = e.target.closest('.module-card');
+            const moduleId = moduleCard.dataset.module;
+            this.startModule(moduleId);
+        }
+        
+        // Handle card clicks for unlocked modules (excluding buttons)
+        if (e.target.closest('.module-card') && !e.target.classList.contains('module-action')) {
+            const moduleCard = e.target.closest('.module-card');
+            const moduleId = moduleCard.dataset.module;
+            if (this.unlockedModules[moduleId]) {
+                this.startModule(moduleId);
+            }
+        }
+    });
+    
+    // Start learning button
+    document.getElementById('start-learning').addEventListener('click', () => {
+        document.getElementById('modules-container').scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Navigation buttons
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('nav-btn') || e.target.closest('.nav-btn')) {
+            const btn = e.target.classList.contains('nav-btn') ? e.target : e.target.closest('.nav-btn');
+            const direction = btn.dataset.direction;
+            
+            if (direction === 'next') {
+                this.nextLesson();
+            } else if (direction === 'prev') {
+                this.prevLesson();
+            }
+        }
+        
+        if (e.target.classList.contains('complete-btn') || e.target.closest('.complete-btn')) {
+            this.completeModule();
+        }
+    });
+},
+
+
+            
+            /*    // Start learning button
                 document.getElementById('start-learning').addEventListener('click', () => {
                     document.getElementById('modules-container').scrollIntoView({ behavior: 'smooth' });
                 });
@@ -1867,7 +1932,7 @@
                     }
                 });
             },
-            
+            */
             // Unlock a module
             unlockModule(moduleId) {
                 this.unlockedModules[moduleId] = true;
