@@ -8,24 +8,18 @@
     <style>
         /* ===== CSS VARIABLES ===== */
         :root {
-            --primary-blue: #4361ee;
-            --primary-purple: #7209b7;
-            --primary-pink: #f72585;
-            --primary-cyan: #4cc9f0;
-            --success: #4ade80;
-            --warning: #f59e0b;
-            --error: #ef4444;
+            --primary-red: #e30613;
+            --primary-white: #ffffff;
+            --primary-black: #000000;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --background: #f8fafc;
             --surface: #ffffff;
             --border: #e2e8f0;
-            --coin-gold: #ffd166;
-            --xp-orange: #fb923c;
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --radius-md: 12px;
-            --radius-lg: 16px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
             --space-sm: 16px;
             --space-md: 24px;
             --space-lg: 32px;
@@ -77,56 +71,25 @@
             gap: var(--space-sm);
             font-weight: 700;
             font-size: 1.5rem;
-            color: var(--primary-blue);
+            color: var(--primary-black);
             text-decoration: none;
         }
 
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-            border-radius: var(--radius-md);
+            background: var(--primary-red);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-        }
-
-        .user-stats {
-            display: flex;
-            gap: var(--space-sm);
-            align-items: center;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--background);
-            padding: 6px 12px;
-            border-radius: var(--radius-lg);
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .stat-item.coins {
-            background: linear-gradient(135deg, var(--coin-gold), #ffb347);
-            color: var(--text-primary);
-        }
-
-        .stat-item.level {
-            background: var(--primary-blue);
-            color: white;
-        }
-
-        .stat-item.xp {
-            background: linear-gradient(135deg, var(--xp-orange), #fdba74);
-            color: white;
+            font-weight: bold;
         }
 
         /* Navigation */
         .navbar {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            background: var(--primary-red);
             padding: var(--space-sm) 0;
         }
 
@@ -134,18 +97,20 @@
             display: flex;
             list-style: none;
             gap: var(--space-md);
+            flex-wrap: wrap;
         }
 
         .nav-link {
             color: white;
             text-decoration: none;
             font-weight: 600;
-            padding: 8px 16px;
+            padding: 8px 12px;
             border-radius: var(--radius-md);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            white-space: nowrap;
         }
 
         .nav-link:hover, .nav-link.active {
@@ -166,9 +131,8 @@
         .impressum-title {
             font-size: 2.5rem;
             margin-bottom: var(--space-sm);
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-black);
+            font-weight: 700;
         }
 
         .impressum-subtitle {
@@ -182,6 +146,7 @@
             padding: var(--space-xl);
             box-shadow: var(--shadow-md);
             margin-bottom: var(--space-lg);
+            border-top: 4px solid var(--primary-red);
         }
 
         .impressum-section {
@@ -194,10 +159,11 @@
 
         .section-title {
             font-size: 1.5rem;
-            color: var(--primary-blue);
+            color: var(--primary-black);
             margin-bottom: var(--space-md);
             padding-bottom: var(--space-sm);
-            border-bottom: 2px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
         }
 
         .info-grid {
@@ -210,29 +176,31 @@
             background: var(--background);
             padding: var(--space-md);
             border-radius: var(--radius-md);
-            border-left: 4px solid var(--primary-blue);
+            border-left: 4px solid var(--primary-red);
         }
 
         .info-item h4 {
-            color: var(--primary-blue);
+            color: var(--primary-black);
             margin-bottom: var(--space-sm);
+            font-weight: 700;
         }
 
         .notice-box {
-            background: linear-gradient(135deg, #ffd166, #ffb347);
+            background: #fff9e6;
             border-radius: var(--radius-md);
             padding: var(--space-md);
             margin: var(--space-lg) 0;
-            border-left: 4px solid var(--warning);
+            border-left: 4px solid var(--primary-red);
         }
 
         .notice-box h3 {
-            color: var(--text-primary);
+            color: var(--primary-black);
             margin-bottom: var(--space-sm);
+            font-weight: 700;
         }
 
         .contact-link {
-            color: var(--primary-blue);
+            color: var(--primary-red);
             font-weight: 600;
             text-decoration: none;
         }
@@ -241,10 +209,15 @@
             text-decoration: underline;
         }
 
+        .placeholder {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
         /* Footer */
         .footer {
             padding: var(--space-xl) 0;
-            background: var(--text-primary);
+            background: var(--primary-black);
             color: white;
             margin-top: auto;
         }
@@ -270,6 +243,36 @@
             color: white;
         }
 
+        /* Swiss Design Elements */
+        .swiss-flag {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-red);
+            position: relative;
+            margin-right: 8px;
+        }
+
+        .swiss-flag::before, .swiss-flag::after {
+            content: '';
+            position: absolute;
+            background: white;
+        }
+
+        .swiss-flag::before {
+            width: 12px;
+            height: 4px;
+            top: 8px;
+            left: 4px;
+        }
+
+        .swiss-flag::after {
+            width: 4px;
+            height: 12px;
+            top: 4px;
+            left: 8px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .info-grid {
@@ -286,6 +289,29 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
+            
+            .nav-menu {
+                gap: var(--space-sm);
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                justify-content: space-between;
+            }
+            
+            .nav-link span {
+                display: none;
+            }
+            
+            .nav-link i {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -300,20 +326,6 @@
                     </div>
                     <span>PflegefachProfi</span>
                 </a>
-                <div class="user-stats">
-                    <div class="stat-item coins">
-                        <i class="fas fa-coins"></i>
-                        <span id="coin-count">150</span>
-                    </div>
-                    <div class="stat-item level">
-                        <i class="fas fa-level-up-alt"></i>
-                        <span>Level <span id="level-count">3</span></span>
-                    </div>
-                    <div class="stat-item xp">
-                        <i class="fas fa-fire"></i>
-                        <span id="xp-count">450</span> XP
-                    </div>
-                </div>
             </div>
         </div>
     </header>
@@ -322,10 +334,12 @@
     <nav class="navbar">
         <div class="container">
             <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Startseite</a></li>
-                <li><a href="fallbeispiele.html" class="nav-link"><i class="fas fa-book-medical"></i> Fallbeispiele</a></li>
-                <li><a href="fortschritt.html" class="nav-link"><i class="fas fa-chart-line"></i> Fortschritt</a></li>
-                <li><a href="impressum.html" class="nav-link active"><i class="fas fa-file-contract"></i> Impressum</a></li>
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> <span>Startseite</span></a></li>
+                <li><a href="fallbeispiele.html" class="nav-link"><i class="fas fa-book-medical"></i> <span>Fallbeispiele</span></a></li>
+                <li><a href="fortschritt.html" class="nav-link"><i class="fas fa-chart-line"></i> <span>Fortschritt</span></a></li>
+                <li><a href="impressum.html" class="nav-link active"><i class="fas fa-file-contract"></i> <span>Impressum</span></a></li>
+                <li><a href="datenschutz.html" class="nav-link"><i class="fas fa-shield-alt"></i> <span>Datenschutz</span></a></li>
+                <li><a href="kontakt.html" class="nav-link"><i class="fas fa-envelope"></i> <span>Kontakt</span></a></li>
             </ul>
         </div>
     </nav>
@@ -335,69 +349,56 @@
         <div class="container">
             <div class="impressum-header">
                 <h1 class="impressum-title">Impressum</h1>
-                <p class="impressum-subtitle">Rechtliche Informationen gemäß § 5 TMG</p>
+                <p class="impressum-subtitle">Rechtliche Informationen gemäß Schweizer Recht</p>
             </div>
 
             <div class="impressum-card">
                 <div class="notice-box">
                     <h3><i class="fas fa-info-circle"></i> Wichtiger Hinweis</h3>
-                    <p>Dieses Impressum befindet sich derzeit in Bearbeitung. Während dieser Zeit können Sie uns für alle rechtlichen Anfragen unter folgender E-Mail-Adresse kontaktieren:</p>
+                    <p>Diese Seite befindet sich derzeit in Bearbeitung. Das vollständige Impressum wird in Kürze zur Verfügung stehen. Bis dahin können Sie uns für alle rechtlichen Anfragen unter folgender E-Mail-Adresse kontaktieren:</p>
                     <p><strong><a href="mailto:dvbuggs@gmail.com" class="contact-link">dvbuggs@gmail.com</a></strong></p>
                 </div>
 
                 <div class="impressum-section">
-                    <h2 class="section-title">Angaben gemäß § 5 TMG</h2>
+                    <h2 class="section-title">Angaben gemäß Art. 321e des Schweizer Obligationenrechts (OR)</h2>
                     <div class="info-grid">
                         <div class="info-item">
                             <h4>Betreiber</h4>
-                            <p>PflegefachProfi</p>
-                            <p>Musterstraße 123</p>
-                            <p>12345 Musterstadt</p>
-                            <p>Deutschland</p>
+                            <p class="placeholder">Informationen in Bearbeitung</p>
                         </div>
                         <div class="info-item">
                             <h4>Kontakt</h4>
-                            <p>Telefon: +49 (0) 123 456789</p>
-                            <p>E-Mail: dvbuggs@gmail.com</p>
+                            <p>E-Mail: <a href="mailto:dvbuggs@gmail.com" class="contact-link">dvbuggs@gmail.com</a></p>
+                            <p class="placeholder">Weitere Kontaktdaten folgen</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="impressum-section">
                     <h2 class="section-title">Vertreten durch</h2>
-                    <p>Max Mustermann</p>
+                    <p class="placeholder">Informationen in Bearbeitung</p>
                 </div>
 
                 <div class="impressum-section">
-                    <h2 class="section-title">Registereintrag</h2>
-                    <p>Eintragung im Handelsregister</p>
-                    <p>Registergericht: Amtsgericht Musterstadt</p>
-                    <p>Registernummer: HRB 12345</p>
+                    <h2 class="section-title">Handelsregistereintrag</h2>
+                    <p class="placeholder">Informationen in Bearbeitung</p>
                 </div>
 
                 <div class="impressum-section">
-                    <h2 class="section-title">Umsatzsteuer-ID</h2>
-                    <p>Umsatzsteuer-Identifikationsnummer gemäß §27a Umsatzsteuergesetz:</p>
-                    <p>DE 123 456 789</p>
-                </div>
-
-                <div class="impressum-section">
-                    <h2 class="section-title">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-                    <p>Max Mustermann</p>
-                    <p>Musterstraße 123</p>
-                    <p>12345 Musterstadt</p>
+                    <h2 class="section-title">Mehrwertsteuernummer</h2>
+                    <p class="placeholder">Informationen in Bearbeitung</p>
                 </div>
 
                 <div class="impressum-section">
                     <h2 class="section-title">Haftungsausschluss</h2>
                     <h3>Haftung für Inhalte</h3>
-                    <p>Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+                    <p>Der Autor übernimmt keinerlei Gewähr hinsichtlich der inhaltlichen Richtigkeit, Genauigkeit, Aktualität, Zuverlässigkeit und Vollständigkeit der Informationen.</p>
                     
                     <h3>Haftung für Links</h3>
-                    <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
+                    <p>Verweise und Links auf Webseiten Dritter liegen ausserhalb unseres Verantwortungsbereichs. Es wird jegliche Verantwortung für solche Webseiten abgelehnt.</p>
                     
                     <h3>Urheberrecht</h3>
-                    <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet.</p>
+                    <p>Die Urheber- und alle anderen Rechte an Inhalten, Bildern, Fotos oder anderen Dateien auf der Website, gehören ausschliesslich der Firma [Firmenname] oder den speziell genannten Rechtsinhabern. Für die Reproduktion jeglicher Elemente ist die schriftliche Zustimmung der Urheberrechtsträger im Voraus einzuholen.</p>
                 </div>
             </div>
         </div>
