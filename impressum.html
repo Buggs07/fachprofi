@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum | PflegefachProfi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary-blue: #4361ee;
+            --primary-purple: #7209b7;
+            --primary-pink: #f72585;
+            --primary-cyan: #4cc9f0;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --coin-gold: #ffd166;
+            --xp-orange: #fb923c;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--background);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--background);
+            padding: 6px 12px;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .stat-item.coins {
+            background: linear-gradient(135deg, var(--coin-gold), #ffb347);
+            color: var(--text-primary);
+        }
+
+        .stat-item.level {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .stat-item.xp {
+            background: linear-gradient(135deg, var(--xp-orange), #fdba74);
+            color: white;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            padding: var(--space-sm) 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: var(--space-md);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Impressum Content */
+        .impressum-content {
+            padding: var(--space-xl) 0;
+            flex: 1;
+        }
+
+        .impressum-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .impressum-title {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .impressum-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .impressum-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .impressum-section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .impressum-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .info-item {
+            background: var(--background);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .info-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: var(--space-sm);
+        }
+
+        .notice-box {
+            background: linear-gradient(135deg, #ffd166, #ffb347);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin: var(--space-lg) 0;
+            border-left: 4px solid var(--warning);
+        }
+
+        .notice-box h3 {
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .contact-link {
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            padding: var(--space-xl) 0;
+            background: var(--text-primary);
+            color: white;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: var(--space-md);
+                text-align: center;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-star-of-life"></i>
+                    </div>
+                    <span>PflegefachProfi</span>
+                </a>
+                <div class="user-stats">
+                    <div class="stat-item coins">
+                        <i class="fas fa-coins"></i>
+                        <span id="coin-count">150</span>
+                    </div>
+                    <div class="stat-item level">
+                        <i class="fas fa-level-up-alt"></i>
+                        <span>Level <span id="level-count">3</span></span>
+                    </div>
+                    <div class="stat-item xp">
+                        <i class="fas fa-fire"></i>
+                        <span id="xp-count">450</span> XP
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Startseite</a></li>
+                <li><a href="fallbeispiele.html" class="nav-link"><i class="fas fa-book-medical"></i> Fallbeispiele</a></li>
+                <li><a href="fortschritt.html" class="nav-link"><i class="fas fa-chart-line"></i> Fortschritt</a></li>
+                <li><a href="impressum.html" class="nav-link active"><i class="fas fa-file-contract"></i> Impressum</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Impressum Content -->
+    <main class="impressum-content">
+        <div class="container">
+            <div class="impressum-header">
+                <h1 class="impressum-title">Impressum</h1>
+                <p class="impressum-subtitle">Rechtliche Informationen gemäß § 5 TMG</p>
+            </div>
+
+            <div class="impressum-card">
+                <div class="notice-box">
+                    <h3><i class="fas fa-info-circle"></i> Wichtiger Hinweis</h3>
+                    <p>Dieses Impressum befindet sich derzeit in Bearbeitung. Während dieser Zeit können Sie uns für alle rechtlichen Anfragen unter folgender E-Mail-Adresse kontaktieren:</p>
+                    <p><strong><a href="mailto:dvbuggs@gmail.com" class="contact-link">dvbuggs@gmail.com</a></strong></p>
+                </div>
+
+                <div class="impressum-section">
+                    <h2 class="section-title">Angaben gemäß § 5 TMG</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h4>Betreiber</h4>
+                            <p>PflegefachProfi</p>
+                            <p>Musterstraße 123</p>
+                            <p>12345 Musterstadt</p>
+                            <p>Deutschland</p>
+                        </div>
+                        <div class="info-item">
+                            <h4>Kontakt</h4>
+                            <p>Telefon: +49 (0) 123 456789</p>
+                            <p>E-Mail: dvbuggs@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="impressum-section">
+                    <h2 class="section-title">Vertreten durch</h2>
+                    <p>Max Mustermann</p>
+                </div>
+
+                <div class="impressum-section">
+                    <h2 class="section-title">Registereintrag</h2>
+                    <p>Eintragung im Handelsregister</p>
+                    <p>Registergericht: Amtsgericht Musterstadt</p>
+                    <p>Registernummer: HRB 12345</p>
+                </div>
+
+                <div class="impressum-section">
+                    <h2 class="section-title">Umsatzsteuer-ID</h2>
+                    <p>Umsatzsteuer-Identifikationsnummer gemäß §27a Umsatzsteuergesetz:</p>
+                    <p>DE 123 456 789</p>
+                </div>
+
+                <div class="impressum-section">
+                    <h2 class="section-title">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+                    <p>Max Mustermann</p>
+                    <p>Musterstraße 123</p>
+                    <p>12345 Musterstadt</p>
+                </div>
+
+                <div class="impressum-section">
+                    <h2 class="section-title">Haftungsausschluss</h2>
+                    <h3>Haftung für Inhalte</h3>
+                    <p>Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+                    
+                    <h3>Haftung für Links</h3>
+                    <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
+                    
+                    <h3>Urheberrecht</h3>
+                    <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">
+                    &copy; 2023 PflegefachProfi. Alle Rechte vorbehalten.
+                </div>
+                <div class="footer-links">
+                    <a href="impressum.html" class="footer-link">Impressum</a>
+                    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
+                    <a href="agb.html" class="footer-link">AGB</a>
+                    <a href="kontakt.html" class="footer-link">Kontakt</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
