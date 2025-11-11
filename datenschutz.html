@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenschutz | PflegefachProfi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== COMPACT CSS VARIABLES ===== */
+        :root {
+            --primary-blue: #4361ee;
+            --primary-purple: #7209b7;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--background);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* Header - Compact */
+        .header {
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Navigation - Compact */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            padding: var(--space-xs) 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            gap: var(--space-lg);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Content - Compact */
+        .datenschutz-content {
+            padding: var(--space-lg) 0;
+            flex: 1;
+        }
+
+        .datenschutz-header {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .datenschutz-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-xs);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .datenschutz-card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .legal-section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .legal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+        }
+
+        .info-item {
+            background: var(--background);
+            padding: var(--space-sm);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--primary-blue);
+            margin-bottom: var(--space-sm);
+        }
+
+        .info-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .contact-box {
+            background: #f0f7ff;
+            border-radius: var(--radius-sm);
+            padding: var(--space-md);
+            border: 1px solid var(--primary-blue);
+            margin: var(--space-lg) 0;
+        }
+
+        .contact-link {
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        .disclaimer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .disclaimer-text h3 {
+            color: var(--text-primary);
+            margin: var(--space-md) 0 var(--space-xs) 0;
+            font-size: 1rem;
+        }
+
+        .disclaimer-text p {
+            margin-bottom: var(--space-sm);
+        }
+
+        /* Footer - Compact */
+        .footer {
+            padding: var(--space-lg) 0;
+            background: var(--text-primary);
+            color: white;
+            margin-top: auto;
+            font-size: 0.85rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: var(--space-sm);
+                text-align: center;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-menu {
+                gap: var(--space-sm);
+            }
+            
+            .datenschutz-card {
+                padding: var(--space-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                justify-content: space-between;
+                gap: var(--space-xs);
+            }
+            
+            .nav-link span {
+                display: none;
+            }
+            
+            .nav-link i {
+                font-size: 1.1rem;
+            }
+            
+            .datenschutz-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-star-of-life"></i>
+                    </div>
+                    <span>PflegefachProfi</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> <span>Startseite</span></a></li>
+                <li><a href="impressum.html" class="nav-link"><i class="fas fa-file-contract"></i> <span>Impressum</span></a></li>
+                <li><a href="datenschutz.html" class="nav-link active"><i class="fas fa-shield-alt"></i> <span>Datenschutz</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Datenschutz Content -->
+    <main class="datenschutz-content">
+        <div class="container">
+            <div class="datenschutz-header">
+                <h1 class="datenschutz-title">Datenschutzerklärung</h1>
+                <p class="disclaimer-text">Stand: Januar 2024</p>
+            </div>
+
+            <div class="datenschutz-card">
+                <!-- Einleitung -->
+                <div class="legal-section">
+                    <h2 class="section-title">1. Allgemeine Informationen</h2>
+                    <div class="disclaimer-text">
+                        <p>Wir freuen uns über Ihr Interesse an unserer Website. Der Schutz Ihrer Privatsphäre ist für uns sehr wichtig. Nachstehend informieren wir Sie ausführlich über den Umgang mit Ihren Daten.</p>
+                    </div>
+                </div>
+
+                <!-- Verantwortliche Stelle -->
+                <div class="legal-section">
+                    <h2 class="section-title">2. Verantwortliche Stelle</h2>
+                    <div class="info-item">
+                        <h4>Verantwortlich im Sinne der DSGVO:</h4>
+                        <p>PflegefachProfi</p>
+                        <p>E-Mail: <a href="mailto:dvbuggs@gmail.com" class="contact-link">dvbuggs@gmail.com</a></p>
+                    </div>
+                </div>
+
+                <!-- Datenerhebung -->
+                <div class="legal-section">
+                    <h2 class="section-title">3. Umfang der Datenverarbeitung</h2>
+                    <div class="disclaimer-text">
+                        <p><strong>Wichtig:</strong> Wir erheben und speichern grundsätzlich keine personenbezogenen Daten von Ihnen.</p>
+                        <p>Wir fragen Sie nicht nach persönlichen Informationen und sammeln keine Daten über Kontaktformulare, Registrierungen oder ähnliche Methoden.</p>
+                    </div>
+                </div>
+
+                <!-- Lokale Speicherung -->
+                <div class="legal-section">
+                    <h2 class="section-title">4. Lokale Speicherung (Cookies)</h2>
+                    <div class="disclaimer-text">
+                        <p>Um Ihre Lernfortschritte zu speichern, verwenden wir ausschließlich lokale Speichertechnologien:</p>
+                        <ul style="padding-left: 20px; margin: 10px 0;">
+                            <li>Lokaler Speicher (Local Storage)</li>
+                            <li>Session-Speicher (Session Storage)</li>
+                        </ul>
+                        <p>Diese Daten verbleiben ausschließlich auf Ihrem Gerät und werden nicht an unsere Server übertragen. Sie dienen ausschließlich der Funktionalität der Website und können von Ihnen jederzeit über Ihre Browsereinstellungen gelöscht werden.</p>
+                    </div>
+                </div>
+
+                <!-- Hosting -->
+                <div class="legal-section">
+                    <h2 class="section-title">5. Hosting bei Cloudflare</h2>
+                    <div class="disclaimer-text">
+                        <p>Unsere Webseite wird bei Cloudflare gehostet. Anbieter ist die Cloudflare Inc., 101 Townsend St, San Francisco, CA 94107, USA.</p>
+                        <p>Cloudflare erhebt möglicherweise Protokolldateien, insbesondere:</p>
+                        <ul style="padding-left: 20px; margin: 10px 0;">
+                            <li>Zugriffszeiten</li>
+                            <li>IP-Adressen (die jedoch von Cloudflare anonymisiert werden)</li>
+                            <li>Übertragene Datenmengen</li>
+                        </ul>
+                        <p>Wir haben keinen Einfluss auf diese Datenerhebung durch Cloudflare. Details entnehmen Sie bitte der Datenschutzerklärung von Cloudflare: <a href="https://www.cloudflare.com/de-de/privacypolicy/" class="contact-link">https://www.cloudflare.com/de-de/privacypolicy/</a></p>
+                    </div>
+                </div>
+
+                <!-- Haftungsausschluss für Dritte -->
+                <div class="legal-section">
+                    <h2 class="section-title">6. Haftungsausschluss für Dritte</h2>
+                    <div class="disclaimer-text">
+                        <p>Wir übernehmen keine Haftung für die Datenschutzpraktiken von Drittanbietern, insbesondere:</p>
+                        <ul style="padding-left: 20px; margin: 10px 0;">
+                            <li>Für die Datenschutzpraktiken unseres Hosting-Providers Cloudflare</li>
+                            <li>Für externe Links, auf die unsere Webseite verweisen könnte</li>
+                        </ul>
+                        <p>Für diese sind ausschließlich die jeweiligen Anbieter verantwortlich.</p>
+                    </div>
+                </div>
+
+                <!-- Betroffenenrechte -->
+                <div class="legal-section">
+                    <h2 class="section-title">7. Ihre Rechte</h2>
+                    <div class="disclaimer-text">
+                        <p>Sie haben folgende Rechte bezüglich Ihrer personenbezogenen Daten:</p>
+                        <ul style="padding-left: 20px; margin: 10px 0;">
+                            <li>Recht auf Auskunft</li>
+                            <li>Recht auf Berichtigung oder Löschung</li>
+                            <li>Recht auf Einschränkung der Verarbeitung</li>
+                            <li>Recht auf Datenübertragbarkeit</li>
+                            <li>Widerspruchsrecht</li>
+                        </ul>
+                        <p>Da wir keine personenbezogenen Daten von Ihnen speichern, beschränken sich diese Rechte in der Praxis auf die von Ihnen lokal gespeicherten Fortschrittsdaten, die Sie selbst über Ihre Browsereinstellungen verwalten können.</p>
+                    </div>
+                </div>
+
+                <!-- Kontakt -->
+                <div class="legal-section">
+                    <h2 class="section-title">8. Kontakt bei Datenschutzfragen</h2>
+                    <div class="contact-box">
+                        <p>Bei Fragen zur Erhebung, Verarbeitung oder Nutzung Ihrer personenbezogenen Daten, bei Auskünften, Berichtigung, Sperrung oder Löschung von Daten sowie Widerruf erteilter Einwilligungen wenden Sie sich bitte an:</p>
+                        <p style="margin-top: 10px;"><strong>E-Mail: <a href="mailto:dvbuggs@gmail.com" class="contact-link">dvbuggs@gmail.com</a></strong></p>
+                    </div>
+                </div>
+
+                <!-- Änderungsvorbehalt -->
+                <div class="legal-section">
+                    <h2 class="section-title">9. Änderung dieser Datenschutzerklärung</h2>
+                    <div class="disclaimer-text">
+                        <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, damit sie stets den aktuellen rechtlichen Anforderungen entspricht oder um Änderungen unserer Leistungen in der Datenschutzerklärung umzusetzen.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">
+                    &copy; 2024 PflegefachProfi. Alle Rechte vorbehalten.
+                </div>
+                <div class="footer-links">
+                    <a href="impressum.html" class="footer-link">Impressum</a>
+                    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
