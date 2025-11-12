@@ -3,37 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pflegeplanung Master | PflegefachProfi</title>
+    <title>Pflegeplanung Master Course</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --primary-light: #eef2ff;
-            --secondary: #7209b7;
-            --accent: #f72585;
-            --success: #4cc9f0;
-            --warning: #fca311;
-            --danger: #e63946;
-            --coin: #ffd166;
-            --text-primary: #1d3557;
-            --text-secondary: #457b9d;
-            --text-tertiary: #a8dadc;
-            --background: #f1faee;
-            --surface: #ffffff;
-            --border: #e0e0e0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --radius: 12px;
-            --radius-lg: 20px;
+            --primary: #2c5530;
+            --primary-light: #4a7856;
+            --primary-dark: #1e3a23;
+            --secondary: #5d823b;
+            --accent: #8fb339;
+            --light-bg: #f8f9fa;
+            --light-surface: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border: #dee2e6;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --radius: 8px;
+            --shadow: 0 2px 10px rgba(0,0,0,0.08);
             --spacing-xs: 8px;
             --spacing-sm: 16px;
             --spacing-md: 24px;
             --spacing-lg: 32px;
             --spacing-xl: 48px;
-            --spacing-xxl: 64px;
-            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         * {
@@ -43,34 +36,27 @@
         }
 
         body {
-            font-family: var(--font-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text-primary);
-            background-color: var(--background);
+            background-color: var(--light-bg);
             line-height: 1.6;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
 
         .container {
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--spacing-md);
         }
 
-        /* ===== NAVIGATION BAR ===== */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: var(--spacing-sm) 0;
-            box-shadow: var(--shadow-elevated);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: var(--spacing-lg) 0;
+            box-shadow: var(--shadow);
         }
 
-        .nav-container {
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -80,211 +66,112 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: white;
-            text-decoration: none;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .user-info {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
             gap: var(--spacing-md);
-            align-items: center;
         }
 
-        .nav-item {
-            position: relative;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
+        .progress-info {
+            background: rgba(255,255,255,0.2);
             padding: var(--spacing-xs) var(--spacing-sm);
             border-radius: var(--radius);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-link i {
-            font-size: 1.1rem;
-        }
-
-        .nav-cta {
-            background: var(--accent);
-            color: white;
-            padding: var(--spacing-xs) var(--spacing-lg);
-            border-radius: var(--radius-lg);
-            font-weight: 700;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.4);
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(247, 37, 133, 0.5);
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: white;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        /* ===== ECONOMY STATS BAR ===== */
-        .user-stats {
-            display: flex;
-            gap: var(--spacing-lg);
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            background: var(--primary-light);
-            padding: 14px 18px;
-            border-radius: var(--radius);
-            font-weight: 900;
             font-size: 0.9rem;
-            transition: all 0.3s ease;
         }
 
-        .coins {
-            background: linear-gradient(135deg, var(--coin) 0%, #ffb347 100%);
-            color: var(--text-primary);
+        /* Navigation */
+        nav {
+            background-color: var(--primary-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
         }
 
-        .level {
-            background: var(--primary);
-            color: white;
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .xp {
-            background: var(--success);
-            color: white;
+        .nav-links {
+            display: flex;
+            list-style: none;
         }
 
-        /* Hero Section */
-        .hero {
-            padding: var(--spacing-xxl) 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
+        .nav-links li {
             position: relative;
-            overflow: hidden;
         }
 
-        .hero::before {
+        .nav-links a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: var(--spacing-md) var(--spacing-lg);
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--primary-dark);
+        }
+
+        .nav-links a.active::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            z-index: 1;
+            height: 4px;
+            background-color: var(--accent);
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            text-align: center;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            color: white;
-            margin-bottom: var(--spacing-md);
-            font-size: 2.5rem;
-        }
-
-        .hero p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--accent);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: var(--radius);
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: var(--shadow-elevated);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .mobile-menu-btn {
+            display: none;
+            background: none;
             border: none;
+            color: white;
+            font-size: 1.5rem;
             cursor: pointer;
-            font-size: 1.1rem;
         }
 
-        .cta-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(247, 37, 133, 0.4);
-        }
-
-        /* Modules Dashboard */
-        .dashboard {
+        /* Main Content */
+        main {
             padding: var(--spacing-xl) 0;
-            background: var(--background);
+            min-height: calc(100vh - 200px);
+        }
+
+        .course-overview {
+            margin-bottom: var(--spacing-xl);
         }
 
         .section-title {
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
             font-size: 2rem;
-            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: var(--spacing-xs);
         }
 
         .section-subtitle {
-            text-align: center;
-            margin-bottom: var(--spacing-xl);
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: var(--spacing-lg);
+            max-width: 800px;
         }
 
+        /* Module Cards */
         .modules-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -293,1937 +180,1032 @@
         }
 
         .module-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
+            background: var(--light-surface);
+            border-radius: var(--radius);
             overflow: hidden;
-            border: 2px solid transparent;
-        }
-
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--primary);
         }
 
         .module-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-elevated);
-            border-color: var(--primary-light);
-        }
-
-        .module-card.locked {
-            opacity: 0.7;
-            filter: grayscale(0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
 
         .module-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-lg);
+            background: var(--light-surface);
+            border-bottom: 1px solid var(--border);
         }
 
-        .module-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-light);
+        .module-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.5rem;
-        }
-
-        .module-cost {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--coin);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
+            text-align: center;
+            line-height: 30px;
+            margin-bottom: var(--spacing-sm);
+            font-weight: bold;
         }
 
         .module-title {
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-sm);
-            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: var(--spacing-xs);
+            color: var(--primary);
         }
 
         .module-description {
             color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+        }
+
+        .module-content {
+            padding: var(--spacing-lg);
         }
 
         .module-stats {
             display: flex;
             justify-content: space-between;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
+            margin-bottom: var(--spacing-md);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
 
         .module-action {
+            display: block;
             width: 100%;
             padding: var(--spacing-md);
+            background: var(--primary);
+            color: white;
             border: none;
             border-radius: var(--radius);
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: background-color 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .module-action:hover {
+            background: var(--primary-dark);
+        }
+
+        .module-action.continue {
+            background: var(--secondary);
+        }
+
+        .module-action.continue:hover {
+            background: var(--primary);
+        }
+
+        /* Lesson Content */
+        .lesson-container {
+            background: var(--light-surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: var(--spacing-xl);
+            margin-top: var(--spacing-lg);
+        }
+
+        .lesson-header {
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lesson-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .lesson-progress {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
 
-        .module-action.unlock {
+        .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+
+        .lesson-content {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .content-section {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .content-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: var(--spacing-xs);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content-text {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .example-box {
+            background: #f0f7f0;
+            border-left: 4px solid var(--accent);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            color: var(--primary);
+        }
+
+        /* Interactive Exercises */
+        .exercise {
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            border: 1px solid var(--border);
+        }
+
+        .exercise-title {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--primary);
+        }
+
+        .exercise-instruction {
+            margin-bottom: var(--spacing-md);
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .exercise-content {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(44, 85, 48, 0.2);
+        }
+
+        .exercise-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
             background: var(--primary);
             color: white;
         }
 
-        .module-action.unlock:hover {
+        .btn-primary:hover {
             background: var(--primary-dark);
         }
 
-        .module-action.start {
-            background: var(--success);
-            color: white;
+        .btn-secondary {
+            background: var(--light-surface);
+            color: var(--primary);
+            border: 1px solid var(--primary);
         }
 
-        .module-action.start:hover {
-            background: #3ab0d9;
+        .btn-secondary:hover {
+            background: #f0f0f0;
         }
 
-        .module-action.continue {
+        .btn-check {
             background: var(--accent);
             color: white;
         }
 
-        .module-action.continue:hover {
-            background: #e1156d;
+        .btn-check:hover {
+            background: #7da031;
         }
 
-        /* Module Content Sections */
-        .module-content {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .module-content.active {
-            display: block;
-        }
-
-        .back-button {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--primary);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .back-button:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Module 1: Interactive PESR Diagram */
-        .pesr-diagram {
-            max-width: 800px;
-            margin: 0 auto var(--spacing-xl);
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-        }
-
-        .pesr-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-lg);
-        }
-
-        @media (max-width: 768px) {
-            .pesr-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .pesr-component {
-            background: var(--primary-light);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius);
-            border-left: 4px solid var(--primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .pesr-component:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .pesr-component.problem {
-            border-left-color: var(--danger);
-            background: rgba(230, 57, 70, 0.1);
-        }
-
-        .pesr-component.atiologie {
-            border-left-color: var(--warning);
-            background: rgba(252, 163, 17, 0.1);
-        }
-
-        .pesr-component.symptome {
-            border-left-color: var(--success);
-            background: rgba(76, 201, 240, 0.1);
-        }
-
-        .pesr-component.ressourcen {
-            border-left-color: var(--secondary);
-            background: rgba(114, 9, 183, 0.1);
-        }
-
-        .pesr-label {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: var(--spacing-xs);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .pesr-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* SMART Checker */
-        .smart-checker {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-        }
-
-        .smart-input {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            margin-bottom: var(--spacing-md);
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .smart-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .smart-results {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-lg);
-        }
-
-        .smart-criterion {
-            text-align: center;
+        /* Feedback Messages */
+        .feedback {
             padding: var(--spacing-md);
             border-radius: var(--radius);
-            background: var(--primary-light);
-        }
-
-        .smart-criterion.valid {
-            background: rgba(76, 201, 240, 0.2);
-            border: 1px solid var(--success);
-        }
-
-        .smart-criterion.invalid {
-            background: rgba(230, 57, 70, 0.1);
-            border: 1px solid var(--danger);
-        }
-
-        .smart-icon {
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        /* 7W Maßnahmen Builder */
-        .massnahmen-builder {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .builder-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .builder-input {
-            padding: var(--spacing-md);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.9rem;
-        }
-
-        .builder-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .massnahmen-preview {
-            background: var(--primary-light);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius);
-            margin-top: var(--spacing-lg);
-            border-left: 4px solid var(--primary);
-        }
-
-        /* Module 2: Baustein Trainer */
-        .trainer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
-        }
-
-        .trainer-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-            border: 2px solid transparent;
-        }
-
-        .trainer-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-elevated);
-            border-color: var(--primary-light);
-        }
-
-        .trainer-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 2rem;
-            margin: 0 auto var(--spacing-md);
-        }
-
-        .trainer-title {
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .trainer-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-md);
-            font-size: 0.9rem;
-        }
-
-        /* Matching Game */
-        .matching-game {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .matching-area {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        @media (max-width: 768px) {
-            .matching-area {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .matching-column {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-
-        .matching-item {
-            background: var(--primary-light);
-            padding: var(--spacing-md);
-            border-radius: var(--radius);
-            cursor: grab;
-            border: 2px dashed var(--primary);
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .matching-item.dragging {
-            opacity: 0.5;
-            transform: scale(0.95);
-        }
-
-        .matching-target {
-            background: var(--surface);
-            padding: var(--spacing-md);
-            border-radius: var(--radius);
-            border: 2px solid var(--border);
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .matching-target.hover {
-            background: var(--primary-light);
-            border-color: var(--primary);
-        }
-
-        .matching-target.correct {
-            background: rgba(76, 201, 240, 0.1);
-            border-color: var(--success);
-        }
-
-        .matching-target.incorrect {
-            background: rgba(230, 57, 70, 0.1);
-            border-color: var(--danger);
-        }
-
-        /* Module 3: Simulator */
-        .simulator {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .case-study {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .case-header {
-            display: flex;
-            justify-content: between;
-            align-items: flex-start;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .case-title {
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .case-description {
-            color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .simulator-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-lg);
-            position: relative;
-        }
-
-        .simulator-steps::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--border);
-            z-index: 1;
-        }
-
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            margin-bottom: var(--spacing-xs);
-            transition: all 0.3s ease;
-        }
-
-        .step.active .step-number {
-            background: var(--primary);
-            color: white;
-        }
-
-        .step.completed .step-number {
-            background: var(--success);
-            color: white;
-        }
-
-        .step-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .step-content {
+            margin: var(--spacing-md) 0;
             display: none;
         }
 
-        .step-content.active {
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
             display: block;
         }
 
-        .pesr-form {
-            display: grid;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs);
+        .feedback-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
         }
 
-        .form-label {
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .form-input {
-            padding: var(--spacing-md);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1rem;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .feedback-panel {
-            padding: var(--spacing-md);
-            border-radius: var(--radius);
+        .solution {
             margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: #e2f0fb;
+            border-radius: var(--radius);
+            border-left: 4px solid #4dabf7;
             display: none;
         }
 
-        .feedback-panel.correct {
-            background: rgba(76, 201, 240, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-            display: block;
+        .solution-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
         }
 
-        .feedback-panel.incorrect {
-            background: rgba(230, 57, 70, 0.1);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            display: block;
-        }
-
-        .navigation-buttons {
+        /* Navigation between lessons */
+        .lesson-navigation {
             display: flex;
             justify-content: space-between;
-            margin-top: var(--spacing-lg);
-        }
-
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--primary);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        .nav-btn:disabled {
-            background: var(--border);
-            cursor: not-allowed;
-        }
-
-        /* Results Screen */
-        .results-screen {
-            display: none;
-            text-align: center;
-            padding: var(--spacing-xl);
-            animation: fadeIn 0.8s ease;
-        }
-
-        .results-screen.active {
-            display: block;
-        }
-
-        .result-icon {
-            font-size: 4rem;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-icon.correct {
-            color: var(--success);
-        }
-
-        .result-score {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-score.good {
-            color: var(--success);
-        }
-
-        .result-score.average {
-            color: var(--warning);
-        }
-
-        .result-score.poor {
-            color: var(--danger);
-        }
-
-        .reward-animation {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-lg);
-            margin: var(--spacing-lg) 0;
-        }
-
-        .reward-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .reward-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        .reward-icon.coins {
-            background: var(--coin);
-            color: var(--text-primary);
-        }
-
-        .reward-icon.xp {
-            background: var(--success);
-            color: white;
-        }
-
-        .reward-amount {
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border);
         }
 
         /* Footer */
-        .footer {
-            background: var(--text-primary);
+        footer {
+            background: var(--primary-dark);
             color: white;
-            padding: var(--spacing-lg) 0;
-            margin-top: auto;
+            padding: var(--spacing-xl) 0;
+            margin-top: var(--spacing-xl);
         }
 
         .footer-content {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             flex-wrap: wrap;
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
         }
 
-        .footer-logo {
-            font-weight: 700;
-            font-size: 1.1rem;
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--accent);
         }
 
         .footer-links {
-            display: flex;
-            gap: var(--spacing-lg);
-            flex-wrap: wrap;
+            list-style: none;
         }
 
-        .footer-link {
-            color: rgba(255, 255, 255, 0.7);
+        .footer-links li {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .footer-links a {
+            color: #ddd;
             text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.2s ease;
+            transition: color 0.3s;
         }
 
-        .footer-link:hover {
+        .footer-links a:hover {
             color: white;
         }
 
-        .footer-copyright {
-            width: 100%;
+        .footer-bottom {
             text-align: center;
-            margin-top: var(--spacing-md);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.875rem;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .hamburger {
+            .header-content {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                text-align: center;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: var(--primary-light);
+                box-shadow: var(--shadow);
+            }
+            
+            .nav-links.active {
                 display: flex;
             }
             
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 70px;
-                flex-direction: column;
-                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: var(--shadow-elevated);
-                padding: var(--spacing-lg) 0;
-                gap: 0;
+            .mobile-menu-btn {
+                display: block;
             }
             
-            .user-stats {
-                gap: 8px;
+            .modules-grid {
+                grid-template-columns: 1fr;
             }
             
-            .stat-item {
-                padding: 4px 8px;
-                font-size: 0.75rem;
-            }
-            
-            .stat-item i {
-                font-size: 0.7rem;
-            }
-            
-            .nav-menu.active {
-                left: 0;
-            }
-            
-            .nav-item {
-                margin: var(--spacing-sm) 0;
-                width: 100%;
-            }
-            
-            .nav-link {
-                justify-content: center;
+            .lesson-container {
                 padding: var(--spacing-md);
             }
             
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .simulator-steps {
-                flex-wrap: wrap;
-                gap: var(--spacing-md);
-            }
-
-            .simulator-steps::before {
-                display: none;
-            }
-
-            .footer-content {
+            .exercise-actions {
                 flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-links {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero {
-                padding: var(--spacing-xl) 0;
             }
             
-            .hero h1 {
-                font-size: 1.75rem;
-            }
-            
-            .section-title {
-                font-size: 1.5rem;
-            }
-            
-            .user-stats {
-                gap: 4px;
-            }
-            
-            .stat-item {
-                padding: 3px 6px;
-                font-size: 0.7rem;
-            }
-            
-            .cta-button {
-                padding: var(--spacing-sm) var(--spacing-lg);
-                font-size: 1rem;
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="index.html" class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-stethoscope"></i>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-stethoscope logo-icon"></i>
+                    <div class="logo-text">Pflegeplanung Master Course</div>
                 </div>
-                <span>PflegefachProfi</span>
-            </a>
-            
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+                <div class="user-info">
+                    <div class="progress-info">
+                        Fortschritt: <span id="overall-progress">0%</span>
+                    </div>
+                </div>
             </div>
-            
-            <ul class="nav-menu" id="nav-menu">
-                <li class="nav-item">
-                    <a href="lernmodule.html" class="nav-link active">
-                        <i class="fas fa-book-medical"></i>
-                        Lernmodule
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="lernspiele.html" class="nav-link">
-                        <i class="fas fa-gamepad"></i>
-                        Lernspiele
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="fallbeispiele.html" class="nav-link">
-                        <i class="fas fa-procedures"></i>
-                        Fallbeispiele
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#modules-grid" class="nav-link nav-cta">
-                        <i class="fas fa-rocket"></i>
-                        Jetzt lernen
-                    </a>
-                </li>
-            </ul>
+        </div>
+    </header>
 
-            <div class="user-stats">
-                <div class="stat-item coins">
-                    <i class="fas fa-coins"></i>
-                    <span id="coins">100</span>
-                </div>
-                <div class="stat-item level">
-                    <i class="fas fa-level-up-alt"></i>
-                    <span id="level">1</span>
-                </div>
-                <div class="stat-item xp">
-                    <i class="fas fa-fire"></i>
-                    <span id="xp">0</span>
-                </div>
-            </div>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#" class="active">Kursübersicht</a></li>
+                <li><a href="#">Mein Fortschritt</a></li>
+                <li><a href="#">Hilfe & Ressourcen</a></li>
+                <li><a href="#">Community</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- Main Content -->
+    <main>
         <div class="container">
-            <div class="hero-content">
-                <h1>Pflegeplanung Master</h1>
-                <p>Lerne professionelle Pflegeplanung nach PESR, SMART und 7W-Regeln mit interaktiven Übungen!</p>
-                <button class="cta-button" id="start-learning">
-                    <i class="fas fa-play"></i>
-                    Jetzt starten
-                </button>
-            </div>
+            <!-- Course Overview -->
+            <section class="course-overview" id="course-overview">
+                <h1 class="section-title">Pflegeplanung Master Course</h1>
+                <p class="section-subtitle">
+                    Lernen Sie systematisch die professionelle Pflegeplanung nach deutschen Standards. 
+                    Von den Grundlagen bis zur komplexen Fallbearbeitung - in 10 kompakten Modulen.
+                </p>
+
+                <!-- Module Grid -->
+                <div class="modules-grid">
+                    <!-- Module 1 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">1</div>
+                            <h2 class="module-title">Grundlagen der Pflegeplanung</h2>
+                            <p class="module-description">
+                                Einführung in den Pflegeprozess und die Bedeutung der Pflegeplanung.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>3 Lektionen</span>
+                                <span>45 Minuten</span>
+                            </div>
+                            <button class="module-action start-module" data-module="1">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">2</div>
+                            <h2 class="module-title">Das PESR-Schema</h2>
+                            <p class="module-description">
+                                Problemerkennung und -formulierung nach dem PESR-Modell.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>4 Lektionen</span>
+                                <span>60 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="2">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 3 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">3</div>
+                            <h2 class="module-title">SMART-Ziele formulieren</h2>
+                            <p class="module-description">
+                                Lernen Sie, spezifische, messbare und realistische Ziele zu setzen.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>3 Lektionen</span>
+                                <span>50 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="3">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 4 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">4</div>
+                            <h2 class="module-title">Maßnahmen nach der 7W-Regel</h2>
+                            <p class="module-description">
+                                Konkrete Pflegemaßnahmen systematisch planen und dokumentieren.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>4 Lektionen</span>
+                                <span>55 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="4">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 5 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">5</div>
+                            <h2 class="module-title">Ressourcenorientierung</h2>
+                            <p class="module-description">
+                                Stärken und Fähigkeiten der Patienten erkennen und nutzen.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>3 Lektionen</span>
+                                <span>40 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="5">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 6 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">6</div>
+                            <h2 class="module-title">Dokumentation und Evaluation</h2>
+                            <p class="module-description">
+                                Pflegeplanung richtig dokumentieren und den Erfolg bewerten.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>3 Lektionen</span>
+                                <span>45 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="6">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 7 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">7</div>
+                            <h2 class="module-title">Häufige Pflegeprobleme I</h2>
+                            <p class="module-description">
+                                Sturzgefahr, Schmerzen, Mobilitätseinschränkungen.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>4 Lektionen</span>
+                                <span>60 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="7">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 8 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">8</div>
+                            <h2 class="module-title">Häufige Pflegeprobleme II</h2>
+                            <p class="module-description">
+                                Dekubitus, Mangelernährung, Selbstpflegedefizite.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>4 Lektionen</span>
+                                <span>60 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="8">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 9 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">9</div>
+                            <h2 class="module-title">Komplexe Fallbearbeitung</h2>
+                            <p class="module-description">
+                                Mehrere Pflegeprobleme gleichzeitig planen und priorisieren.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>3 Lektionen</span>
+                                <span>50 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="9">Starten</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 10 -->
+                    <div class="module-card">
+                        <div class="module-header">
+                            <div class="module-number">10</div>
+                            <h2 class="module-title">Prüfungsvorbereitung</h2>
+                            <p class="module-description">
+                                Abschlusstest mit realistischen Prüfungsfällen.
+                            </p>
+                        </div>
+                        <div class="module-content">
+                            <div class="module-stats">
+                                <span>2 Lektionen</span>
+                                <span>40 Minuten</span>
+                            </div>
+                            <button class="module-action" data-module="10">Starten</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lesson Content (initially hidden) -->
+            <section class="lesson-container" id="lesson-container" style="display: none;">
+                <!-- Lesson content will be dynamically loaded here -->
+            </section>
         </div>
-    </section>
-
-    <!-- Modules Dashboard -->
-    <section class="dashboard" id="dashboard">
-        <div class="container">
-            <h2 class="section-title">Lernmodule</h2>
-            <p class="section-subtitle">Wähle ein Modul aus und meistere die Pflegeplanung Schritt für Schritt</p>
-            
-            <div class="modules-grid" id="modules-grid">
-                <!-- Modules will be loaded by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Module 1: Das Fundament -->
-    <section class="module-content" id="module-1">
-        <div class="container">
-            <button class="back-button" id="back-to-modules-1">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Modulen
-            </button>
-            
-            <h2 class="section-title">Modul 1: Das Fundament</h2>
-            <p class="section-subtitle">Lerne die Grundlagen der Pflegeplanung mit PESR, SMART und 7W</p>
-
-            <!-- PESR Diagram -->
-            <div class="pesr-diagram">
-                <h3>Das PESR-Schema</h3>
-                <p>Die Basis jeder Pflegediagnose besteht aus vier Komponenten:</p>
-                
-                <div class="pesr-grid">
-                    <div class="pesr-component problem" data-component="problem">
-                        <div class="pesr-label">
-                            <i class="fas fa-exclamation-circle"></i>
-                            P - Problem
-                        </div>
-                        <div class="pesr-description">
-                            Das Hauptproblem der zu pflegenden Person wird klar benannt.
-                        </div>
-                    </div>
-                    
-                    <div class="pesr-component atiologie" data-component="atiologie">
-                        <div class="pesr-label">
-                            <i class="fas fa-search"></i>
-                            E - Ätiologie
-                        </div>
-                        <div class="pesr-description">
-                            Die Ursachen und Einflussfaktoren des Problems.
-                        </div>
-                    </div>
-                    
-                    <div class="pesr-component symptome" data-component="symptome">
-                        <div class="pesr-label">
-                            <i class="fas fa-clipboard-list"></i>
-                            S - Symptome
-                        </div>
-                        <div class="pesr-description">
-                            Wie sich das Problem konkret äußert (beobachtbare Anzeichen).
-                        </div>
-                    </div>
-                    
-                    <div class="pesr-component ressourcen" data-component="ressourcen">
-                        <div class="pesr-label">
-                            <i class="fas fa-hand-holding-heart"></i>
-                            R - Ressourcen
-                        </div>
-                        <div class="pesr-description">
-                            Fähigkeiten und Hilfsmittel der Person zur Problemlösung.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SMART Checker -->
-            <div class="smart-checker">
-                <h3>SMART-Ziele Checker</h3>
-                <p>Überprüfe deine Zielformulierungen nach den SMART-Kriterien:</p>
-                
-                <textarea class="smart-input" id="smart-input" placeholder="Gib dein Pflegeziel hier ein (im Passiv Perfekt)..."></textarea>
-                <button class="cta-button" id="check-smart">
-                    <i class="fas fa-check"></i>
-                    Ziel überprüfen
-                </button>
-                
-                <div class="smart-results" id="smart-results">
-                    <div class="smart-criterion" data-criterion="spezifisch">
-                        <div class="smart-icon">
-                            <i class="fas fa-bullseye"></i>
-                        </div>
-                        <div class="stat-value">Spezifisch</div>
-                        <div class="stat-label">Eindeutig formuliert</div>
-                    </div>
-                    
-                    <div class="smart-criterion" data-criterion="messbar">
-                        <div class="smart-icon">
-                            <i class="fas fa-ruler"></i>
-                        </div>
-                        <div class="stat-value">Messbar</div>
-                        <div class="stat-label">Überprüfbar</div>
-                    </div>
-                    
-                    <div class="smart-criterion" data-criterion="attraktiv">
-                        <div class="smart-icon">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="stat-value">Attraktiv</div>
-                        <div class="stat-label">Akzeptiert</div>
-                    </div>
-                    
-                    <div class="smart-criterion" data-criterion="realistisch">
-                        <div class="smart-icon">
-                            <i class="fas fa-balance-scale"></i>
-                        </div>
-                        <div class="stat-value">Realistisch</div>
-                        <div class="stat-label">Erreichbar</div>
-                    </div>
-                    
-                    <div class="smart-criterion" data-criterion="terminiert">
-                        <div class="smart-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-value">Terminiert</div>
-                        <div class="stat-label">Zeitlich festgelegt</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 7W Maßnahmen Builder -->
-            <div class="massnahmen-builder">
-                <h3>7W-Maßnahmen Builder</h3>
-                <p>Erstelle vollständige Maßnahmen nach der 7W-Regel:</p>
-                
-                <div class="builder-grid">
-                    <input type="text" class="builder-input" id="builder-wer" placeholder="Wer (Pflegekraft)">
-                    <input type="text" class="builder-input" id="builder-was" placeholder="Was (Handlung)">
-                    <input type="text" class="builder-input" id="builder-wann" placeholder="Wann (Zeitpunkt)">
-                    <input type="text" class="builder-input" id="builder-wie" placeholder="Wie (Methode)">
-                    <input type="text" class="builder-input" id="builder-wo" placeholder="Wo (Ort)">
-                    <input type="text" class="builder-input" id="builder-wie-oft" placeholder="Wie oft (Frequenz)">
-                    <input type="text" class="builder-input" id="builder-womit" placeholder="Womit (Hilfsmittel)">
-                </div>
-                
-                <button class="cta-button" id="generate-massnahme">
-                    <i class="fas fa-magic"></i>
-                    Maßnahme generieren
-                </button>
-                
-                <div class="massnahmen-preview" id="massnahmen-preview">
-                    Deine generierte Maßnahme erscheint hier...
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Module 2: Baustein Trainer -->
-    <section class="module-content" id="module-2">
-        <div class="container">
-            <button class="back-button" id="back-to-modules-2">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Modulen
-            </button>
-            
-            <h2 class="section-title">Modul 2: Der Baustein-Trainer</h2>
-            <p class="section-subtitle">Übe jede Komponente der Pflegeplanung isoliert</p>
-
-            <div class="trainer-grid">
-                <div class="trainer-card" data-trainer="problem-katalog">
-                    <div class="trainer-icon">
-                        <i class="fas fa-list-alt"></i>
-                    </div>
-                    <h3 class="trainer-title">Problem-Katalog</h3>
-                    <p class="trainer-description">Lerne die 20 häufigsten Pflegeprobleme und ihre korrekten Formulierungen.</p>
-                </div>
-
-                <div class="trainer-card" data-trainer="matching-game">
-                    <div class="trainer-icon">
-                        <i class="fas fa-puzzle-piece"></i>
-                    </div>
-                    <h3 class="trainer-title">Ursachen & Symptome</h3>
-                    <p class="trainer-description">Verbinde Pflegeprobleme mit ihren Ursachen und Symptomen.</p>
-                </div>
-
-                <div class="trainer-card" data-trainer="ressourcen-detektiv">
-                    <div class="trainer-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3 class="trainer-title">Ressourcen-Detektiv</h3>
-                    <p class="trainer-description">Erkunde Fallbeispiele und identifiziere patienteneigene Ressourcen.</p>
-                </div>
-
-                <div class="trainer-card" data-trainer="smart-checker">
-                    <div class="trainer-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h3 class="trainer-title">Ziel-Checker</h3>
-                    <p class="trainer-description">Überprüfe Zielformulierungen auf SMART-Konformität.</p>
-                </div>
-
-                <div class="trainer-card" data-trainer="massnahmen-labor">
-                    <div class="trainer-icon">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <h3 class="trainer-title">Maßnahmen-Labor</h3>
-                    <p class="trainer-description">Erstelle und optimiere Pflegemaßnahmen nach der 7W-Regel.</p>
-                </div>
-            </div>
-
-            <!-- Matching Game (example content) -->
-            <div class="matching-game" id="matching-game-content" style="display: none;">
-                <h3>Ursachen & Symptome Matching</h3>
-                <p>Ziehe die Symptome zu den richtigen Pflegeproblemen:</p>
-                
-                <div class="matching-area">
-                    <div class="matching-column" id="problems-column">
-                        <div class="matching-item" data-problem="Sturzgefahr">Sturzgefahr</div>
-                        <div class="matching-item" data-problem="Schmerzen">Akute Schmerzen</div>
-                        <div class="matching-item" data-problem="Dekubitus">Dekubitusrisiko</div>
-                    </div>
-                    
-                    <div class="matching-column" id="symptoms-column">
-                        <div class="matching-target" data-correct="Sturzgefahr">Unsicherer Gang, Schwindel</div>
-                        <div class="matching-target" data-correct="Schmerzen">Schonhaltung, Gesichtsverzerrung</div>
-                        <div class="matching-target" data-correct="Dekubitus">Rötung am Sakrum, Immobilität</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Module 3: Pflegeplanungs-Simulator -->
-    <section class="module-content" id="module-3">
-        <div class="container">
-            <button class="back-button" id="back-to-modules-3">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Modulen
-            </button>
-            
-            <h2 class="section-title">Modul 3: Der Pflegeplanungs-Simulator</h2>
-            <p class="section-subtitle">Wende dein Wissen in realistischen Fallbeispielen an</p>
-
-            <div class="simulator">
-                <div class="case-study">
-                    <div class="case-header">
-                        <h3 class="case-title">Fallbeispiel: Herr Müller</h3>
-                    </div>
-                    
-                    <div class="case-description">
-                        <p><strong>Patient:</strong> Herr Müller, 78 Jahre</p>
-                        <p><strong>Situation:</strong> Postoperativ nach Hüft-OP, eingeschränkte Mobilität, Schmerzen, Sturzgefahr</p>
-                        <p><strong>Assessment:</strong> Unsicherer Gang, Schonhaltung, kann Bett nicht selbstständig verlassen, ist orientiert und motiviert</p>
-                    </div>
-
-                    <div class="simulator-steps">
-                        <div class="step active" data-step="1">
-                            <div class="step-number">1</div>
-                            <div class="step-label">PESR</div>
-                        </div>
-                        <div class="step" data-step="2">
-                            <div class="step-number">2</div>
-                            <div class="step-label">Ziele</div>
-                        </div>
-                        <div class="step" data-step="3">
-                            <div class="step-number">3</div>
-                            <div class="step-label">Maßnahmen</div>
-                        </div>
-                        <div class="step" data-step="4">
-                            <div class="step-number">4</div>
-                            <div class="step-label">Evaluation</div>
-                        </div>
-                    </div>
-
-                    <!-- Step 1: PESR -->
-                    <div class="step-content active" data-step="1">
-                        <h4>Pflegediagnose erstellen (PESR)</h4>
-                        
-                        <div class="pesr-form">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    P - Problem
-                                </label>
-                                <input type="text" class="form-input" id="input-problem" placeholder="z.B. Sturzgefahr, Schmerzen...">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-search"></i>
-                                    E - Ätiologie
-                                </label>
-                                <input type="text" class="form-input" id="input-atiologie" placeholder="Ursachen des Problems...">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-clipboard-list"></i>
-                                    S - Symptome
-                                </label>
-                                <input type="text" class="form-input" id="input-symptome" placeholder="Beobachtbare Anzeichen...">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-hand-holding-heart"></i>
-                                    R - Ressourcen
-                                </label>
-                                <input type="text" class="form-input" id="input-ressourcen" placeholder="Fähigkeiten des Patienten...">
-                            </div>
-                        </div>
-                        
-                        <div class="feedback-panel" id="pesr-feedback"></div>
-                        
-                        <div class="navigation-buttons">
-                            <button class="nav-btn" id="prev-step-1" disabled>
-                                <i class="fas fa-arrow-left"></i>
-                                Zurück
-                            </button>
-                            <button class="nav-btn" id="next-step-1">
-                                Weiter zu Zielen
-                                <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: Ziele -->
-                    <div class="step-content" data-step="2">
-                        <h4>SMART-Ziele formulieren</h4>
-                        
-                        <div class="pesr-form">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-bullseye"></i>
-                                    Nahziel (kurzfristig)
-                                </label>
-                                <input type="text" class="form-input" id="input-nahziel" placeholder="Im Passiv Perfekt, z.B. Der Patient hat...">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <i class="fas fa-flag"></i>
-                                    Fernziel (langfristig)
-                                </label>
-                                <input type="text" class="form-input" id="input-fernziel" placeholder="Im Passiv Perfekt, z.B. Der Patient ist...">
-                            </div>
-                        </div>
-                        
-                        <div class="feedback-panel" id="ziel-feedback"></div>
-                        
-                        <div class="navigation-buttons">
-                            <button class="nav-btn" id="prev-step-2">
-                                <i class="fas fa-arrow-left"></i>
-                                Zurück zu PESR
-                            </button>
-                            <button class="nav-btn" id="next-step-2">
-                                Weiter zu Maßnahmen
-                                <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Additional steps would continue here... -->
-                </div>
-            </div>
-        </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">PflegefachProfi - Pflegeplanung</div>
-                <div class="footer-links">
-                    <a href="index.html" class="footer-link">Startseite</a>
-                    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
-                    <a href="impressum.html" class="footer-link">Impressum</a>
-                    <a href="kontakt.html" class="footer-link">Kontakt</a>
+                <div class="footer-section">
+                    <h3 class="footer-title">Pflegeplanung Master Course</h3>
+                    <p>Ein umfassender Online-Kurs zur professionellen Pflegeplanung nach deutschen Standards.</p>
                 </div>
-                <div class="footer-copyright">
-                    &copy; 2024 PflegefachProfi. Alle Rechte vorbehalten.
+                <div class="footer-section">
+                    <h3 class="footer-title">Kursmodule</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Grundlagen</a></li>
+                        <li><a href="#">PESR-Schema</a></li>
+                        <li><a href="#">SMART-Ziele</a></li>
+                        <li><a href="#">7W-Maßnahmen</a></li>
+                        <li><a href="#">Alle Module anzeigen</a></li>
+                    </ul>
                 </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Häufige Fragen</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                        <li><a href="#">Datenschutz</a></li>
+                        <li><a href="#">Impressum</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2023 Pflegeplanung Master Course. Alle Rechte vorbehalten.
             </div>
         </div>
     </footer>
 
     <script>
-        // ===============================
-        // DATA STRUCTURES
-        // ===============================
-
-        // User data structure
-        let user = {
-            coins: 100,
-            xp: 0,
-            level: 1,
-            unlockedModules: ['module-1'], // First module is always unlocked
-            progress: {}
+        // Course data structure
+        const courseData = {
+            modules: {
+                1: {
+                    title: "Grundlagen der Pflegeplanung",
+                    lessons: [
+                        {
+                            id: "1-1",
+                            title: "Einführung in den Pflegeprozess",
+                            content: `
+                                <div class="content-section">
+                                    <h3 class="content-title">Was ist Pflegeplanung?</h3>
+                                    <p class="content-text">
+                                        Die Pflegeplanung ist ein systematischer Prozess, der die Grundlage für eine professionelle, 
+                                        individuelle und zielgerichtete Pflege bildet. Sie folgt einem klaren Ablauf:
+                                    </p>
+                                    <div class="example-box">
+                                        <div class="example-title">Der Pflegeprozess</div>
+                                        <ol>
+                                            <li><strong>Assessment</strong> - Erhebung von Daten und Informationen</li>
+                                            <li><strong>Pflegediagnose</strong> - Identifikation von Pflegeproblemen (PESR)</li>
+                                            <li><strong>Zielsetzung</strong> - Formulierung von Pflegezielen (SMART)</li>
+                                            <li><strong>Planung</strong> - Festlegung von Maßnahmen (7W)</li>
+                                            <li><strong>Durchführung</strong> - Umsetzung der geplanten Maßnahmen</li>
+                                            <li><strong>Evaluation</strong> - Überprüfung der Zielerreichung</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="content-section">
+                                    <h3 class="content-title">Warum ist Pflegeplanung wichtig?</h3>
+                                    <p class="content-text">
+                                        Eine sorgfältige Pflegeplanung hat mehrere wichtige Funktionen:
+                                    </p>
+                                    <ul>
+                                        <li>Sie sichert die <strong>Qualität der Pflege</strong></li>
+                                        <li>Sie ermöglicht <strong>Kontinuität</strong> im Pflegeprozess</li>
+                                        <li>Sie dient der <strong>Dokumentation</strong> und <strong>Rechtssicherheit</strong></li>
+                                        <li>Sie fördert die <strong>Ressourcenorientierung</strong></li>
+                                        <li>Sie unterstützt die <strong>interdisziplinäre Zusammenarbeit</strong></li>
+                                    </ul>
+                                </div>
+                            `,
+                            exercise: {
+                                instruction: "Beantworten Sie die folgenden Fragen zur Pflegeplanung:",
+                                questions: [
+                                    {
+                                        type: "text",
+                                        question: "Nennen Sie die ersten drei Schritte des Pflegeprozesses:",
+                                        answer: "Assessment, Pflegediagnose, Zielsetzung",
+                                        hint: "Denken Sie an die systematische Abfolge der Pflegeplanung."
+                                    },
+                                    {
+                                        type: "multiple",
+                                        question: "Welche Aussagen zur Pflegeplanung sind richtig?",
+                                        options: [
+                                            "Pflegeplanung dient nur der Dokumentation",
+                                            "Pflegeplanung sichert die Qualität der Pflege",
+                                            "Pflegeplanung fördert die Ressourcenorientierung",
+                                            "Pflegeplanung ist nur in stationären Einrichtungen wichtig"
+                                        ],
+                                        correct: [1, 2], // Indices of correct options
+                                        explanation: "Pflegeplanung dient nicht nur der Dokumentation, sondern ist ein zentrales Instrument zur Qualitätssicherung in allen Pflegesettings."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            id: "1-2",
+                            title: "Rechtliche Grundlagen und Standards",
+                            content: `
+                                <div class="content-section">
+                                    <h3 class="content-title">Rechtliche Verpflichtung</h3>
+                                    <p class="content-text">
+                                        In Deutschland ist die Pflegeplanung gesetzlich verankert. Die wichtigsten Grundlagen sind:
+                                    </p>
+                                    <div class="example-box">
+                                        <div class="example-title">Gesetzliche Grundlagen</div>
+                                        <ul>
+                                            <li><strong>§ 11 SGB XI</strong> - Pflegeversicherung: Anspruch auf individuelle Pflegeplanung</li>
+                                            <li><strong>§ 80 SGB XI</strong> - Qualitätsprüfungen in Pflegeeinrichtungen</li>
+                                            <li><strong>Pflegeberufegesetz (PflBG)</strong> - Berufliche Pflicht zur Pflegeplanung</li>
+                                            <li><strong>Expertenstandards</strong> des DNQP (Deutsches Netzwerk für Qualitätsentwicklung in der Pflege)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="content-section">
+                                    <h3 class="content-title">Expertenstandards</h3>
+                                    <p class="content-text">
+                                        Expertenstandards definieren den aktuellen Stand des pflegefachlichen Wissens zu bestimmten Pflegethemen. 
+                                        Die wichtigsten Standards für die Pflegeplanung sind:
+                                    </p>
+                                    <ul>
+                                        <li>Dekubitusprophylaxe in der Pflege</li>
+                                        <li>Sturzprophylaxe in der Pflege</li>
+                                        <li>Schmerzmanagement in der Pflege</li>
+                                        <li>Förderung der Harnkontinenz</li>
+                                        <li>Ernährungsmanagement</li>
+                                    </ul>
+                                </div>
+                            `,
+                            exercise: {
+                                instruction: "Überprüfen Sie Ihr Wissen zu den rechtlichen Grundlagen:",
+                                questions: [
+                                    {
+                                        type: "text",
+                                        question: "In welchem Gesetzbuch ist die Pflegeplanung für Pflegebedürftige verankert?",
+                                        answer: "SGB XI",
+                                        hint: "Es handelt sich um das Elfte Buch des Sozialgesetzbuchs."
+                                    },
+                                    {
+                                        type: "multiple",
+                                        question: "Welche der folgenden sind Expertenstandards des DNQP?",
+                                        options: [
+                                            "Dekubitusprophylaxe",
+                                            "Medikamentengabe",
+                                            "Sturzprophylaxe",
+                                            "Wundmanagement"
+                                        ],
+                                        correct: [0, 2],
+                                        explanation: "Dekubitusprophylaxe und Sturzprophylaxe sind Expertenstandards. Medikamentengabe und Wundmanagement sind wichtige Pflegetätigkeiten, aber keine offiziellen Expertenstandards."
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+                // Additional modules would be defined here
+            }
         };
 
-        // Module data
-        const modules = {
-            'module-1': {
-                title: 'Das Fundament',
-                description: 'Lerne PESR, SMART und 7W - die Grundlagen der Pflegeplanung',
-                icon: 'fas fa-layer-group',
-                cost: 0, // First module is free
-                color: '#4361ee',
-                completed: false
-            },
-            'module-2': {
-                title: 'Baustein-Trainer',
-                description: 'Übe jede Komponente isoliert mit interaktiven Übungen',
-                icon: 'fas fa-puzzle-piece',
-                cost: 50,
-                color: '#7209b7',
-                completed: false
-            },
-            'module-3': {
-                title: 'Pflegeplanungs-Simulator',
-                description: 'Wende dein Wissen in realistischen Fallbeispielen an',
-                icon: 'fas fa-user-md',
-                cost: 75,
-                color: '#f72585',
-                completed: false
-            }
-        };
+        // DOM Elements
+        const courseOverview = document.getElementById('course-overview');
+        const lessonContainer = document.getElementById('lesson-container');
+        const navLinks = document.getElementById('nav-links');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const overallProgress = document.getElementById('overall-progress');
+        const moduleButtons = document.querySelectorAll('.module-action');
 
-        // Sample data for exercises
-        const trainingData = {
-            problems: [
-                {
-                    problem: 'Sturzgefahr',
-                    atiologie: 'Muskelschwäche, Schwindel, postoperative Einschränkungen',
-                    symptome: 'Unsicherer Gang, Schwanken, benötigt Hilfe beim Aufstehen',
-                    ressourcen: 'Ist orientiert, kann um Hilfe rufen, motiviert zur Mobilisation'
-                },
-                {
-                    problem: 'Akute Schmerzen',
-                    atiologie: 'Postoperativer Zustand nach Hüft-OP',
-                    symptome: 'Schonhaltung, Gesichtsverzerrung, Ruhelosigkeit',
-                    ressourcen: 'Kann Schmerzen auf Skala beschreiben, kooperativ'
-                }
-            ],
-            smartExamples: {
-                valid: [
-                    'Der Patient ist in 3 Tagen 10 Meter mit dem Gehstock gegangen.',
-                    'Die Schmerzintensität ist innerhalb von 30 Minuten von 8/10 auf 4/10 reduziert worden.',
-                    'Der Patient hat sich in 2 Wochen selbstständig gewaschen.'
-                ],
-                invalid: [
-                    'Der Patient soll weniger Schmerzen haben.',
-                    'Mobilisation verbessern.',
-                    'Der Patient nimmt regelmäßig Schmerzmittel.'
-                ]
-            }
-        };
-
-        // ===============================
-        // UTILITY FUNCTIONS
-        // ===============================
-
-        // Cookie management
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
-        // Save and load user data
-        function saveUserData() {
-            setCookie('pflegeplanungUser', JSON.stringify(user), 30);
-        }
-
-        function loadUserData() {
-            const userData = getCookie('pflegeplanungUser');
-            if (userData) {
-                user = JSON.parse(userData);
-            }
-            updateUserStats();
-        }
-
-        // Update UI with user stats
-        function updateUserStats() {
-            document.getElementById('coins').textContent = user.coins;
-            document.getElementById('level').textContent = user.level;
-            document.getElementById('xp').textContent = user.xp;
-        }
-
-        // Calculate level based on XP
-        function calculateLevel() {
-            const newLevel = Math.floor(user.xp / 100) + 1;
-            if (newLevel > user.level) {
-                user.level = newLevel;
-                // Could add level up celebration here
-            }
-        }
-
-        // Add XP and coins
-        function addReward(coins, xp) {
-            user.coins += coins;
-            user.xp += xp;
-            calculateLevel();
-            updateUserStats();
-            saveUserData();
-        }
-
-        // Show confetti animation
-        function showConfetti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }
-
-        // ===============================
-        // NAVIGATION FUNCTIONALITY
-        // ===============================
-
-        function initializeNavigation() {
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('nav-menu');
-            
-            hamburger.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
-            
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                });
-            });
-        }
-
-        // ===============================
-        // DASHBOARD FUNCTIONALITY
-        // ===============================
-
-        let currentModule = '';
-
-        function initializeDashboard() {
-            loadUserData();
-            initializeNavigation();
-            renderModules();
-            
-            // Event listeners
-            document.getElementById('start-learning').addEventListener('click', () => {
-                document.getElementById('modules-grid').scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            // Back buttons
-            document.getElementById('back-to-modules-1').addEventListener('click', showDashboard);
-            document.getElementById('back-to-modules-2').addEventListener('click', showDashboard);
-            document.getElementById('back-to-modules-3').addEventListener('click', showDashboard);
-            
-            // Initialize module functionalities
-            initializeModule1();
-            initializeModule2();
-            initializeModule3();
-        }
-
-        function renderModules() {
-            const grid = document.getElementById('modules-grid');
-            grid.innerHTML = '';
-            
-            for (const [moduleId, moduleData] of Object.entries(modules)) {
-                const isUnlocked = user.unlockedModules.includes(moduleId);
-                const progress = user.progress[moduleId] || 0;
-                
-                const card = document.createElement('div');
-                card.className = `module-card ${isUnlocked ? '' : 'locked'}`;
-                card.style.borderLeftColor = moduleData.color;
-                
-                card.innerHTML = `
-                    <div class="module-header">
-                        <div class="module-icon" style="background: ${moduleData.color}20; color: ${moduleData.color}">
-                            <i class="${moduleData.icon}"></i>
-                        </div>
-                        ${!isUnlocked ? `
-                        <div class="module-cost">
-                            <i class="fas fa-coins"></i>
-                            <span>${moduleData.cost}</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                    <h3 class="module-title">${moduleData.title}</h3>
-                    <p class="module-description">${moduleData.description}</p>
-                    <div class="module-stats">
-                        <div class="stat">
-                            <span class="stat-value">${progress}%</span>
-                            <span class="stat-label">Fortschritt</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">${moduleId === 'module-1' ? '3' : moduleId === 'module-2' ? '5' : '4'}</span>
-                            <span class="stat-label">Lektionen</span>
-                        </div>
-                    </div>
-                    <button class="module-action ${isUnlocked ? (moduleData.completed ? 'continue' : 'start') : 'unlock'}" 
-                            data-module="${moduleId}">
-                        <i class="fas fa-${isUnlocked ? (moduleData.completed ? 'redo' : 'play') : 'lock'}"></i>
-                        ${isUnlocked ? (moduleData.completed ? 'Wiederholen' : 'Starten') : 'Freischalten'}
-                    </button>
-                `;
-                
-                grid.appendChild(card);
-            }
-            
-            // Add event listeners to module buttons
-            document.querySelectorAll('.module-action.unlock').forEach(button => {
-                button.addEventListener('click', function() {
-                    const moduleId = this.getAttribute('data-module');
-                    unlockModule(moduleId);
-                });
-            });
-            
-            document.querySelectorAll('.module-action.start, .module-action.continue').forEach(button => {
-                button.addEventListener('click', function() {
-                    const moduleId = this.getAttribute('data-module');
-                    selectModule(moduleId);
-                });
-            });
-        }
-
-        function unlockModule(moduleId) {
-            const module = modules[moduleId];
-            if (user.coins >= module.cost) {
-                user.coins -= module.cost;
-                user.unlockedModules.push(moduleId);
-                saveUserData();
-                updateUserStats();
-                renderModules();
-                
-                // Show success message
-                alert(`Glückwunsch! Du hast das Modul "${module.title}" freigeschaltet.`);
-            } else {
-                alert(`Du hast nicht genug Coins. Du benötigst ${module.cost} Coins.`);
-            }
-        }
-
-        function selectModule(moduleId) {
-            currentModule = moduleId;
-            showModule(moduleId);
-        }
-
-        function showDashboard() {
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('module-1').classList.remove('active');
-            document.getElementById('module-2').classList.remove('active');
-            document.getElementById('module-3').classList.remove('active');
-        }
-
-        function showModule(moduleId) {
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('module-1').classList.remove('active');
-            document.getElementById('module-2').classList.remove('active');
-            document.getElementById('module-3').classList.remove('active');
-            
-            document.getElementById(moduleId).classList.add('active');
-        }
-
-        // ===============================
-        // MODULE 1: DAS FUNDAMENT
-        // ===============================
-
-        function initializeModule1() {
-            // PESR Component Click Handlers
-            document.querySelectorAll('.pesr-component').forEach(component => {
-                component.addEventListener('click', function() {
-                    const componentType = this.getAttribute('data-component');
-                    showPESRDetails(componentType);
-                });
-            });
-            
-            // SMART Checker
-            document.getElementById('check-smart').addEventListener('click', checkSMARTGoal);
-            
-            // 7W Maßnahmen Builder
-            document.getElementById('generate-massnahme').addEventListener('click', generateMassnahme);
-        }
-
-        function showPESRDetails(componentType) {
-            const details = {
-                'problem': {
-                    title: 'P - Problem',
-                    rules: [
-                        'Muss ein Pflegeproblem sein (kein medizinisches Problem)',
-                        'Wird klar und einheitlich benannt',
-                        'Bezieht sich auf die aktuelle Situation',
-                        'Beispiele: "Sturzgefahr", "Selbstpflegedefizit", "Akute Schmerzen"'
-                    ]
-                },
-                'atiologie': {
-                    title: 'E - Ätiologie',
-                    rules: [
-                        'Beschreibt die Ursache(n) des Problems',
-                        'Muss logisch zum Problem passen',
-                        'Maßnahmen setzen an der Ätiologie an',
-                        'Beispiele: "Muskelschwäche", "Postoperativer Zustand", "Eingeschränkte Gelenkbeweglichkeit"'
-                    ]
-                },
-                'symptome': {
-                    title: 'S - Symptome',
-                    rules: [
-                        'Beobachtbare Anzeichen, die das Problem belegen',
-                        'Müssen validierbar sein ("Wenn Symptome weg, dann Problem weg")',
-                        'Können subjektive Äußerungen des Patienten sein',
-                        'Beispiele: "Unsicherer Gang", "Schonhaltung", "Gesichtsverzerrung"'
-                    ]
-                },
-                'ressourcen': {
-                    title: 'R - Ressourcen',
-                    rules: [
-                        'Fähigkeiten, Kenntnisse und Hilfsmittel der Person',
-                        'Müssen in die Planung einfließen',
-                        'Ressourcenorientierung ist Pflicht',
-                        'Beispiele: "Ist orientiert", "Motiviert", "Kann um Hilfe rufen"'
-                    ]
-                }
-            };
-            
-            const detail = details[componentType];
-            let message = `<strong>${detail.title}</strong>\n\n`;
-            message += detail.rules.join('\n• ');
-            
-            alert(message);
-        }
-
-        function checkSMARTGoal() {
-            const goal = document.getElementById('smart-input').value.trim();
-            const results = document.getElementById('smart-results');
-            const criteria = results.querySelectorAll('.smart-criterion');
-            
-            // Reset all criteria
-            criteria.forEach(criterion => {
-                criterion.classList.remove('valid', 'invalid');
-            });
-            
-            if (!goal) {
-                alert('Bitte gib ein Ziel zur Überprüfung ein.');
-                return;
-            }
-            
-            // Check each SMART criterion
-            const checks = {
-                'spezifisch': checkSpecific(goal),
-                'messbar': checkMeasurable(goal),
-                'attraktiv': checkAttractive(goal),
-                'realistisch': checkRealistic(goal),
-                'terminiert': checkTimebound(goal)
-            };
-            
-            // Update UI
-            Object.entries(checks).forEach(([criterion, isValid]) => {
-                const element = results.querySelector(`[data-criterion="${criterion}"]`);
-                if (isValid) {
-                    element.classList.add('valid');
-                } else {
-                    element.classList.add('invalid');
-                }
-            });
-            
-            // Calculate score
-            const validCount = Object.values(checks).filter(Boolean).length;
-            const score = (validCount / 5) * 100;
-            
-            // Provide feedback
-            let feedback = `Dein Ziel erreicht ${score}% der SMART-Kriterien.\n\n`;
-            if (score === 100) {
-                feedback += "Perfekt! Dein Ziel ist vollständig SMART formuliert.";
-                addReward(10, 20);
-            } else if (score >= 60) {
-                feedback += "Gut, aber es gibt noch Verbesserungspotenzial.";
-                addReward(5, 10);
-            } else {
-                feedback += "Überarbeite dein Ziel mit Hilfe der farbigen Kriterien.";
-            }
-            
-            alert(feedback);
-        }
-
-        function checkSpecific(text) {
-            return text.length > 20 && 
-                   !text.toLowerCase().includes('soll') && 
-                   !text.toLowerCase().includes('muss');
-        }
-
-        function checkMeasurable(text) {
-            const measurables = [/\d/, '%', 'selbstständig', 'ohne', 'mit', 'korrekt', 'Skala'];
-            return measurables.some(pattern => 
-                typeof pattern === 'string' ? text.includes(pattern) : pattern.test(text)
-            );
-        }
-
-        function checkAttractive(text) {
-            // This is harder to check automatically, so we'll be lenient
-            return text.length > 10 && 
-                   !text.toLowerCase().includes('nicht') &&
-                   !text.toLowerCase().includes('kein');
-        }
-
-        function checkRealistic(text) {
-            // Basic check - in real implementation, this would need more context
-            return text.length > 15 && 
-                   !text.toLowerCase().includes('sofort') &&
-                   !text.toLowerCase().includes('komplett');
-        }
-
-        function checkTimebound(text) {
-            const timePatterns = [/in \d+ (Tagen|Wochen|Stunden)/, /bis (\w+, )?\d{1,2}\.\d{1,2}/, /täglich|wöchentlich/];
-            return timePatterns.some(pattern => pattern.test(text));
-        }
-
-        function generateMassnahme() {
-            const elements = [
-                document.getElementById('builder-wer').value || 'Die Pflegekraft',
-                document.getElementById('builder-was').value || 'führt eine Maßnahme durch',
-                document.getElementById('builder-wann').value || 'bei Bedarf',
-                document.getElementById('builder-wie').value || 'sachgerecht',
-                document.getElementById('builder-wo').value || 'im Patientenzimmer',
-                document.getElementById('builder-wie-oft').value || 'regelmäßig',
-                document.getElementById('builder-womit').value || 'mit geeigneten Hilfsmitteln'
-            ];
-            
-            // Check if all 7W are filled
-            const filledElements = elements.filter(el => el && el.trim() !== '');
-            const completeness = (filledElements.length / 7) * 100;
-            
-            let massnahme = elements.join(' ');
-            massnahme = massnahme.charAt(0).toUpperCase() + massnage.slice(1) + '.';
-            
-            document.getElementById('massnahmen-preview').textContent = massnahme;
-            
-            // Provide feedback on completeness
-            if (completeness === 100) {
-                document.getElementById('massnahmen-preview').style.borderLeftColor = 'var(--success)';
-                addReward(5, 10);
-            } else if (completeness >= 50) {
-                document.getElementById('massnahmen-preview').style.borderLeftColor = 'var(--warning)';
-                addReward(2, 5);
-            } else {
-                document.getElementById('massnahmen-preview').style.borderLeftColor = 'var(--danger)';
-            }
-        }
-
-        // ===============================
-        // MODULE 2: BAUSTEIN TRAINER
-        // ===============================
-
-        function initializeModule2() {
-            // Trainer card click handlers
-            document.querySelectorAll('.trainer-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const trainer = this.getAttribute('data-trainer');
-                    startTrainer(trainer);
-                });
-            });
-            
-            // Initialize matching game
-            initializeMatchingGame();
-        }
-
-        function startTrainer(trainerType) {
-            switch(trainerType) {
-                case 'matching-game':
-                    document.getElementById('matching-game-content').style.display = 'block';
-                    break;
-                default:
-                    alert(`Trainer "${trainerType}" wird gestartet...`);
-                    // In a full implementation, each trainer would have its own UI
-                    break;
-            }
-        }
-
-        function initializeMatchingGame() {
-            const terms = document.querySelectorAll('.matching-item');
-            const targets = document.querySelectorAll('.matching-target');
-            
-            terms.forEach(term => {
-                term.addEventListener('dragstart', handleDragStart);
-                term.addEventListener('dragend', handleDragEnd);
-            });
-            
-            targets.forEach(target => {
-                target.addEventListener('dragover', handleDragOver);
-                target.addEventListener('dragenter', handleDragEnter);
-                target.addEventListener('dragleave', handleDragLeave);
-                target.addEventListener('drop', handleDrop);
-            });
-        }
-
-        function handleDragStart(e) {
-            e.dataTransfer.setData('text/plain', e.target.getAttribute('data-problem'));
-            e.target.classList.add('dragging');
-        }
-
-        function handleDragEnd(e) {
-            e.target.classList.remove('dragging');
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-        }
-
-        function handleDragEnter(e) {
-            e.preventDefault();
-            e.target.classList.add('hover');
-        }
-
-        function handleDragLeave(e) {
-            e.target.classList.remove('hover');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            e.target.classList.remove('hover');
-            
-            const problem = e.dataTransfer.getData('text/plain');
-            const correctProblem = e.target.getAttribute('data-correct');
-            
-            if (problem === correctProblem) {
-                e.target.classList.add('correct');
-                e.target.textContent = `✓ ${problem}`;
-                
-                // Find and hide the dragged term
-                const draggedTerm = document.querySelector(`.matching-item[data-problem="${problem}"]`);
-                draggedTerm.style.display = 'none';
-                
-                // Check if all matches are complete
-                const remainingTerms = document.querySelectorAll('.matching-item:not([style*="display: none"])');
-                if (remainingTerms.length === 0) {
-                    setTimeout(() => {
-                        alert('Glückwunsch! Alle Paare wurden korrekt zugeordnet.');
-                        addReward(15, 25);
-                    }, 500);
-                }
-            } else {
-                e.target.classList.add('incorrect');
-                setTimeout(() => {
-                    e.target.classList.remove('incorrect');
-                }, 1000);
-            }
-        }
-
-        // ===============================
-        // MODULE 3: SIMULATOR
-        // ===============================
-
-        function initializeModule3() {
-            // Step navigation
-            document.getElementById('next-step-1').addEventListener('click', () => navigateStep(1, 2));
-            document.getElementById('prev-step-2').addEventListener('click', () => navigateStep(2, 1));
-            document.getElementById('next-step-2').addEventListener('click', () => navigateStep(2, 3));
-            
-            // Form validation
-            document.getElementById('input-problem').addEventListener('blur', validatePESR);
-            document.getElementById('input-atiologie').addEventListener('blur', validatePESR);
-            document.getElementById('input-symptome').addEventListener('blur', validatePESR);
-            document.getElementById('input-ressourcen').addEventListener('blur', validatePESR);
-        }
-
-        function navigateStep(from, to) {
-            // Update steps visual
-            document.querySelector(`.step[data-step="${from}"]`).classList.remove('active');
-            document.querySelector(`.step[data-step="${to}"]`).classList.add('active');
-            
-            // Update content
-            document.querySelector(`.step-content[data-step="${from}"]`).classList.remove('active');
-            document.querySelector(`.step-content[data-step="${to}"]`).classList.add('active');
-        }
-
-        function validatePESR() {
-            const problem = document.getElementById('input-problem').value;
-            const atiologie = document.getElementById('input-atiologie').value;
-            const symptome = document.getElementById('input-symptome').value;
-            const ressourcen = document.getElementById('input-ressourcen').value;
-            
-            const feedback = document.getElementById('pesr-feedback');
-            
-            if (problem && atiologie && symptome && ressourcen) {
-                // Basic validation - in real implementation, this would be more sophisticated
-                feedback.textContent = '✓ PESR scheint logisch und vollständig. Gut gemacht!';
-                feedback.className = 'feedback-panel correct';
-                document.getElementById('next-step-1').disabled = false;
-            } else {
-                feedback.textContent = 'Bitte fülle alle PESR-Felder aus.';
-                feedback.className = 'feedback-panel incorrect';
-                document.getElementById('next-step-1').disabled = true;
-            }
-        }
-
-        // ===============================
-        // INITIALIZATION
-        // ===============================
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDashboard();
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
+
+        // Module button event listeners
+        moduleButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const moduleId = e.target.getAttribute('data-module');
+                loadModule(moduleId);
+            });
+        });
+
+        // Load a specific module
+        function loadModule(moduleId) {
+            const module = courseData.modules[moduleId];
+            if (!module) return;
+
+            // Hide course overview, show lesson container
+            courseOverview.style.display = 'none';
+            lessonContainer.style.display = 'block';
+
+            // Load first lesson of the module
+            loadLesson(module.lessons[0], module, 0);
+        }
+
+        // Load a specific lesson
+        function loadLesson(lesson, module, lessonIndex) {
+            const lessonHTML = `
+                <div class="lesson-header">
+                    <h2 class="lesson-title">${lesson.title}</h2>
+                    <div class="lesson-progress">
+                        <span>Modul ${Object.keys(courseData.modules).indexOf(module) + 1}, Lektion ${lessonIndex + 1} von ${module.lessons.length}</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${((lessonIndex + 1) / module.lessons.length) * 100}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lesson-content">
+                    ${lesson.content}
+                </div>
+                ${lesson.exercise ? renderExercise(lesson.exercise) : ''}
+                <div class="lesson-navigation">
+                    <button class="btn btn-secondary" id="back-to-overview">Zurück zur Kursübersicht</button>
+                    <button class="btn btn-primary" id="next-lesson">Nächste Lektion</button>
+                </div>
+            `;
+
+            lessonContainer.innerHTML = lessonHTML;
+
+            // Add event listeners
+            document.getElementById('back-to-overview').addEventListener('click', () => {
+                courseOverview.style.display = 'block';
+                lessonContainer.style.display = 'none';
+            });
+
+            if (lesson.exercise) {
+                setupExercise(lesson.exercise);
+            }
+        }
+
+        // Render exercise HTML
+        function renderExercise(exercise) {
+            let exerciseHTML = `
+                <div class="exercise">
+                    <h3 class="exercise-title">Übung</h3>
+                    <p class="exercise-instruction">${exercise.instruction}</p>
+                    <div class="exercise-content" id="exercise-content">
+            `;
+
+            exercise.questions.forEach((q, index) => {
+                if (q.type === 'text') {
+                    exerciseHTML += `
+                        <div class="form-group">
+                            <label class="form-label">${q.question}</label>
+                            <input type="text" class="form-input" id="answer-${index}" placeholder="Ihre Antwort...">
+                            <div class="feedback" id="feedback-${index}"></div>
+                        </div>
+                    `;
+                } else if (q.type === 'multiple') {
+                    exerciseHTML += `
+                        <div class="form-group">
+                            <label class="form-label">${q.question}</label>
+                            <div id="options-${index}">
+                                ${q.options.map((option, optIndex) => `
+                                    <div>
+                                        <input type="checkbox" id="option-${index}-${optIndex}" name="question-${index}" value="${optIndex}">
+                                        <label for="option-${index}-${optIndex}">${option}</label>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="feedback" id="feedback-${index}"></div>
+                        </div>
+                    `;
+                }
+            });
+
+            exerciseHTML += `
+                    </div>
+                    <div class="exercise-actions">
+                        <button class="btn btn-check" id="check-answers">Antworten überprüfen</button>
+                        <button class="btn btn-secondary" id="show-solution">Lösung anzeigen</button>
+                    </div>
+                    <div class="solution" id="solution">
+                        <div class="solution-title">Lösungen:</div>
+                        <div id="solution-content"></div>
+                    </div>
+                </div>
+            `;
+
+            return exerciseHTML;
+        }
+
+        // Setup exercise functionality
+        function setupExercise(exercise) {
+            const checkButton = document.getElementById('check-answers');
+            const showSolutionButton = document.getElementById('show-solution');
+            const solutionDiv = document.getElementById('solution');
+            const solutionContent = document.getElementById('solution-content');
+
+            // Check answers button
+            checkButton.addEventListener('click', () => {
+                let allCorrect = true;
+                
+                exercise.questions.forEach((q, index) => {
+                    const feedback = document.getElementById(`feedback-${index}`);
+                    
+                    if (q.type === 'text') {
+                        const answer = document.getElementById(`answer-${index}`).value.trim();
+                        if (answer.toLowerCase() === q.answer.toLowerCase()) {
+                            feedback.textContent = "Richtig! Gut gemacht.";
+                            feedback.className = "feedback correct";
+                        } else {
+                            feedback.textContent = `Noch nicht ganz richtig. Tipp: ${q.hint}`;
+                            feedback.className = "feedback incorrect";
+                            allCorrect = false;
+                        }
+                    } else if (q.type === 'multiple') {
+                        const selectedOptions = [];
+                        for (let i = 0; i < q.options.length; i++) {
+                            const checkbox = document.getElementById(`option-${index}-${i}`);
+                            if (checkbox.checked) {
+                                selectedOptions.push(i);
+                            }
+                        }
+                        
+                        // Check if selected options match correct answers
+                        const sortedSelected = selectedOptions.sort().join(',');
+                        const sortedCorrect = q.correct.sort().join(',');
+                        
+                        if (sortedSelected === sortedCorrect) {
+                            feedback.textContent = "Richtig! Alle korrekten Optionen ausgewählt.";
+                            feedback.className = "feedback correct";
+                        } else {
+                            feedback.textContent = "Noch nicht alle richtigen Optionen ausgewählt. Versuchen Sie es erneut oder schauen Sie sich die Lösung an.";
+                            feedback.className = "feedback incorrect";
+                            allCorrect = false;
+                        }
+                    }
+                });
+                
+                if (allCorrect) {
+                    const successFeedback = document.createElement('div');
+                    successFeedback.className = 'feedback correct';
+                    successFeedback.textContent = 'Herzlichen Glückwunsch! Sie haben alle Fragen richtig beantwortet.';
+                    document.getElementById('exercise-content').appendChild(successFeedback);
+                }
+            });
+
+            // Show solution button
+            showSolutionButton.addEventListener('click', () => {
+                let solutionHTML = '';
+                
+                exercise.questions.forEach((q, index) => {
+                    solutionHTML += `<p><strong>Frage ${index + 1}:</strong> ${q.question}</p>`;
+                    
+                    if (q.type === 'text') {
+                        solutionHTML += `<p><strong>Antwort:</strong> ${q.answer}</p>`;
+                    } else if (q.type === 'multiple') {
+                        solutionHTML += `<p><strong>Korrekte Antworten:</strong> ${q.correct.map(i => q.options[i]).join(', ')}</p>`;
+                    }
+                    
+                    if (q.explanation) {
+                        solutionHTML += `<p><strong>Erklärung:</strong> ${q.explanation}</p>`;
+                    }
+                    
+                    solutionHTML += '<hr>';
+                });
+                
+                solutionContent.innerHTML = solutionHTML;
+                solutionDiv.style.display = 'block';
+            });
+        }
+
+        // Initialize the course
+        function initCourse() {
+            // Load user progress from localStorage if available
+            const savedProgress = localStorage.getItem('pflegeplanung-progress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                overallProgress.textContent = `${progress}%`;
+                
+                // Update module buttons to show "Continue" if progress exists
+                // This would be more sophisticated in a real implementation
+            }
+        }
+
+        // Initialize the course when page loads
+        document.addEventListener('DOMContentLoaded', initCourse);
     </script>
 </body>
 </html>
