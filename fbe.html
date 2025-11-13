@@ -170,6 +170,19 @@
             border-radius: 2px;
         }
 
+        /* Active hamburger animation */
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
         /* ===== ECONOMY BAR ===== */
         .economy-bar {
             background: rgba(255, 255, 255, 0.1);
@@ -414,6 +427,7 @@
             border: 2px dashed var(--primary);
             cursor: grab;
             transition: all 0.3s;
+            user-select: none;
         }
 
         .data-item.dragging {
@@ -1400,8 +1414,6 @@
         // DOM Elements
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
-        const currentCaseElement = document.getElementById('current-case');
-        const totalCasesElement = document.getElementById('total-cases');
         const caseTitleElement = document.getElementById('case-title');
         const caseDescriptionElement = document.getElementById('case-description');
         const stepElements = document.querySelectorAll('.step');
@@ -1418,7 +1430,6 @@
 
         // Initialize the simulator
         function initSimulator() {
-            totalCasesElement.textContent = caseStudies.length;
             loadCaseStudy(currentCaseIndex);
             setupEventListeners();
             loadEconomy();
@@ -1429,7 +1440,6 @@
             const caseStudy = caseStudies[index];
             
             // Update case info
-            currentCaseElement.textContent = index + 1;
             caseTitleElement.textContent = caseStudy.title;
             caseDescriptionElement.textContent = caseStudy.description;
             
@@ -1462,6 +1472,7 @@
             resetStepNavigation();
             goToStep(1);
             resultsScreen.classList.remove('active');
+            document.querySelector('.simulator-container').style.display = 'block';
         }
 
         // Load data items for categorization
@@ -1515,20 +1526,20 @@
 
         function handleDragEnter(e) {
             e.preventDefault();
-            e.target.classList.add('hover');
+            e.target.closest('.category').classList.add('hover');
         }
 
         function handleDragLeave(e) {
-            e.target.classList.remove('hover');
+            e.target.closest('.category').classList.remove('hover');
         }
 
         function handleDrop(e) {
             e.preventDefault();
-            e.target.classList.remove('hover');
+            const category = e.target.closest('.category');
+            category.classList.remove('hover');
             
             const id = e.dataTransfer.getData('text/plain');
             const draggable = document.getElementById(id);
-            const category = e.target.closest('.category');
             
             if (category && draggable) {
                 const categoryType = category.dataset.category;
@@ -2027,7 +2038,6 @@
             // Mobile menu toggle
             hamburger.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
-                // Animate hamburger
                 hamburger.classList.toggle('active');
             });
             
