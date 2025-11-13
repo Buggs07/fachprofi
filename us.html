@@ -494,62 +494,153 @@
             font-weight: 500;
         }
 
-        /* Steps Navigation */
-        .simulator-steps {
+        /* Pflegeplanung Kreis Navigation */
+        .pflegeplanung-kreis {
             display: flex;
-            justify-content: space-between;
-            margin: var(--spacing-lg);
+            justify-content: center;
+            align-items: center;
+            margin: var(--spacing-xl) 0;
             position: relative;
+            height: 300px;
         }
 
-        .simulator-steps::before {
-            content: '';
+        .kreis-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+
+        .kreis-step {
             position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--border);
-            z-index: 1;
-        }
-
-        .step {
+            width: 80px;
+            height: 80px;
+            background: var(--surface);
+            border: 3px solid var(--border);
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
-            z-index: 2;
-            flex: 1;
-            max-width: 150px;
-        }
-
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--border);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: 700;
-            margin-bottom: var(--spacing-xs);
-            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: var(--shadow);
         }
 
-        .step.active .step-number {
-            background: var(--primary);
-            color: white;
+        .kreis-step.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: scale(1.1);
         }
 
-        .step.completed .step-number {
+        .kreis-step.completed {
+            border-color: var(--success);
             background: var(--success);
             color: white;
         }
 
-        .step-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-align: center;
+        .kreis-step i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* Position steps in a circle */
+        .kreis-step:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .kreis-step:nth-child(2) {
+            top: 25%;
+            right: 10%;
+        }
+
+        .kreis-step:nth-child(3) {
+            bottom: 25%;
+            right: 10%;
+        }
+
+        .kreis-step:nth-child(4) {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .kreis-step:nth-child(5) {
+            bottom: 25%;
+            left: 10%;
+        }
+
+        .kreis-step:nth-child(6) {
+            top: 25%;
+            left: 10%;
+        }
+
+        .kreis-arrows {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .kreis-arrow {
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+            transform-origin: 0 0;
+        }
+
+        .kreis-arrow::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid var(--primary);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .kreis-arrow-1 {
+            top: 40px;
+            left: 140px;
+            transform: rotate(60deg);
+        }
+
+        .kreis-arrow-2 {
+            top: 110px;
+            left: 175px;
+            transform: rotate(120deg);
+        }
+
+        .kreis-arrow-3 {
+            top: 175px;
+            left: 140px;
+            transform: rotate(180deg);
+        }
+
+        .kreis-arrow-4 {
+            top: 175px;
+            left: 60px;
+            transform: rotate(240deg);
+        }
+
+        .kreis-arrow-5 {
+            top: 110px;
+            left: 25px;
+            transform: rotate(300deg);
+        }
+
+        .kreis-arrow-6 {
+            top: 40px;
+            left: 60px;
+            transform: rotate(0deg);
         }
 
         /* Step Content */
@@ -945,18 +1036,23 @@
                 grid-template-columns: 1fr;
             }
             
-            .simulator-steps {
-                flex-wrap: wrap;
-                gap: var(--spacing-md);
+            .pflegeplanung-kreis {
+                height: 250px;
             }
             
-            .simulator-steps::before {
-                display: none;
+            .kreis-container {
+                width: 220px;
+                height: 220px;
             }
             
-            .step {
-                flex: 1;
-                min-width: 120px;
+            .kreis-step {
+                width: 60px;
+                height: 60px;
+                font-size: 0.7rem;
+            }
+            
+            .kreis-step i {
+                font-size: 1rem;
             }
             
             .navigation-buttons {
@@ -1214,33 +1310,48 @@
                         </div>
                     </div>
 
-                    <!-- Steps Navigation -->
-                    <div class="simulator-steps">
-                        <div class="step active" data-step="1">
-                            <div class="step-number">1</div>
-                            <div class="step-label">Daten kategorisieren</div>
-                        </div>
-                        <div class="step" data-step="2">
-                            <div class="step-number">2</div>
-                            <div class="step-label">Probleme identifizieren</div>
-                        </div>
-                        <div class="step" data-step="3">
-                            <div class="step-number">3</div>
-                            <div class="step-label">Ziele setzen</div>
-                        </div>
-                        <div class="step" data-step="4">
-                            <div class="step-number">4</div>
-                            <div class="step-label">Maßnahmen planen</div>
-                        </div>
-                        <div class="step" data-step="5">
-                            <div class="step-number">5</div>
-                            <div class="step-label">Evaluation</div>
+                    <!-- Pflegeplanung Kreis Navigation -->
+                    <div class="pflegeplanung-kreis">
+                        <div class="kreis-container">
+                            <div class="kreis-step active" data-step="1">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>Informations-sammlung</span>
+                            </div>
+                            <div class="kreis-step" data-step="2">
+                                <i class="fas fa-diagnoses"></i>
+                                <span>Probleme identifizieren</span>
+                            </div>
+                            <div class="kreis-step" data-step="3">
+                                <i class="fas fa-bullseye"></i>
+                                <span>Ziele setzen</span>
+                            </div>
+                            <div class="kreis-step" data-step="4">
+                                <i class="fas fa-tasks"></i>
+                                <span>Maßnahmen planen</span>
+                            </div>
+                            <div class="kreis-step" data-step="5">
+                                <i class="fas fa-play-circle"></i>
+                                <span>Maßnahmen durchführen</span>
+                            </div>
+                            <div class="kreis-step" data-step="6">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Evaluation</span>
+                            </div>
+                            
+                            <div class="kreis-arrows">
+                                <div class="kreis-arrow kreis-arrow-1"></div>
+                                <div class="kreis-arrow kreis-arrow-2"></div>
+                                <div class="kreis-arrow kreis-arrow-3"></div>
+                                <div class="kreis-arrow kreis-arrow-4"></div>
+                                <div class="kreis-arrow kreis-arrow-5"></div>
+                                <div class="kreis-arrow kreis-arrow-6"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Step 1: Data Categorization -->
+                    <!-- Step 1: Informationssammlung -->
                     <div class="step-content active" data-step="1">
-                        <h3 class="step-title">Daten kategorisieren</h3>
+                        <h3 class="step-title">Informationssammlung</h3>
                         <p class="step-description">
                             Ziehen Sie die Informationen aus dem Fallbeispiel in die richtigen Kategorien:
                         </p>
@@ -1305,9 +1416,9 @@
                         </div>
                         
                         <div class="navigation-buttons">
-                            <button class="btn btn-secondary" id="back-to-categorization">
+                            <button class="btn btn-secondary" id="back-to-informationssammlung">
                                 <i class="fas fa-arrow-left"></i>
-                                Zurück zur Kategorisierung
+                                Zurück zur Informationssammlung
                             </button>
                             <button class="btn btn-primary" id="next-to-ziele" disabled>
                                 Weiter zu Zielen
@@ -1355,18 +1466,18 @@
                                 <i class="fas fa-arrow-left"></i>
                                 Zurück zu Zielen
                             </button>
-                            <button class="btn btn-primary" id="next-to-evaluation">
-                                Auswerten
-                                <i class="fas fa-check-circle"></i>
+                            <button class="btn btn-primary" id="next-to-durchfuehrung">
+                                Weiter zu Durchführung & Evaluation
+                                <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Step 5: Evaluation -->
+                    <!-- Step 5 & 6: Durchführung und Evaluation -->
                     <div class="step-content" data-step="5">
-                        <h3 class="step-title">Evaluation</h3>
+                        <h3 class="step-title">Maßnahmen durchführen und Evaluation</h3>
                         <p class="step-description">
-                            Ihre Auswahl wird jetzt ausgewertet.
+                            Sie haben alle Pflegemaßnahmen geplant. Klicken Sie auf "Ergebnisse anzeigen", um Ihre Pflegeplanung zu bewerten.
                         </p>
                         
                         <div class="navigation-buttons">
@@ -1374,7 +1485,7 @@
                                 <i class="fas fa-arrow-left"></i>
                                 Zurück zu Maßnahmen
                             </button>
-                            <button class="btn btn-primary" id="evaluate-answers">
+                            <button class="btn btn-primary" id="show-results">
                                 Ergebnisse anzeigen
                                 <i class="fas fa-chart-bar"></i>
                             </button>
@@ -1921,7 +2032,6 @@
 
         // Current State
         let currentModuleId = null;
-        let currentCaseIndex = 0;
         let currentStep = 1;
         let userSelections = {
             categorization: {
@@ -1937,7 +2047,16 @@
         let selectedProblems = [];
         let isDragging = false;
         let scrollInterval;
-        let scrollDirection = 0; // -1 for up, 1 for down, 0 for none
+        let currentTouchY = 0;
+
+        // User State
+        let userState = {
+            coins: 150,
+            xp: 75,
+            level: 2,
+            unlockedModules: [],
+            completedModules: []
+        };
 
         // DOM Elements
         const hamburger = document.getElementById('hamburger');
@@ -1948,7 +2067,7 @@
         const simulatorContainer = document.getElementById('simulator-container');
         const caseTitleElement = document.getElementById('case-title');
         const caseDescriptionElement = document.getElementById('case-description');
-        const stepElements = document.querySelectorAll('.step');
+        const kreisSteps = document.querySelectorAll('.kreis-step');
         const stepContentElements = document.querySelectorAll('.step-content');
         const resultsScreen = document.getElementById('results-screen');
         const resultScoreElement = document.getElementById('result-score');
@@ -1961,18 +2080,6 @@
         const massnahme2ScoreElement = document.getElementById('massnahme2-score');
         const scrollIndicatorTop = document.getElementById('scroll-indicator-top');
         const scrollIndicatorBottom = document.getElementById('scroll-indicator-bottom');
-        const coinsDisplay = document.getElementById('coins-display');
-        const xpDisplay = document.getElementById('xp-display');
-        const levelDisplay = document.getElementById('level-display');
-
-        // User State
-        let userState = {
-            coins: 150,
-            xp: 75,
-            level: 2,
-            unlockedModules: [],
-            completedModules: []
-        };
 
         // Initialize the application
         function initApp() {
@@ -2156,7 +2263,7 @@
             selectedProblems = [];
             
             // Reset UI
-            resetStepNavigation();
+            resetKreisNavigation();
             goToStep(1);
             resultsScreen.classList.remove('active');
             simulatorContainer.classList.add('active');
@@ -2182,6 +2289,7 @@
                 
                 itemElement.addEventListener('dragstart', handleDragStart);
                 itemElement.addEventListener('dragend', handleDragEnd);
+                itemElement.addEventListener('touchstart', handleTouchStart, { passive: true });
                 
                 container.appendChild(itemElement);
             });
@@ -2214,8 +2322,19 @@
             }
         }
 
+        function handleTouchStart(e) {
+            isDragging = true;
+            currentTouchY = e.touches[0].clientY;
+            
+            // Start auto-scroll on mobile
+            if (window.innerWidth <= 768) {
+                startAutoScroll();
+            }
+        }
+
         function handleDragEnd() {
             isDragging = false;
+            currentTouchY = 0;
             
             // Stop auto-scroll
             stopAutoScroll();
@@ -2278,35 +2397,37 @@
             scrollIndicatorBottom.classList.remove('show');
         }
 
+        // Track touch position for bidirectional scrolling
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length > 0) {
+                currentTouchY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+
         // Auto-scroll functionality for mobile
         function startAutoScroll() {
-            scrollInterval = requestAnimationFrame(autoScroll);
-        }
-
-        function stopAutoScroll() {
-            cancelAnimationFrame(scrollInterval);
-            scrollDirection = 0;
-        }
-
-        function autoScroll() {
-            if (isDragging) {
+            scrollInterval = setInterval(() => {
+                if (!isDragging) {
+                    stopAutoScroll();
+                    return;
+                }
+                
                 const scrollY = window.scrollY || window.pageYOffset;
                 const windowHeight = window.innerHeight;
                 const documentHeight = document.documentElement.scrollHeight;
                 
-                // Get touch position for bidirectional scrolling
-                const touchY = window.touchY || windowHeight / 2;
-                
                 // Determine scroll direction based on touch position
-                const topThreshold = 100;
-                const bottomThreshold = windowHeight - 100;
+                const topThreshold = 100; // Pixels from top
+                const bottomThreshold = windowHeight - 100; // Pixels from bottom
                 
-                if (touchY < topThreshold) {
+                let scrollDirection = 0;
+                
+                if (currentTouchY < topThreshold) {
                     // Scroll up
                     scrollDirection = -1;
                     scrollIndicatorTop.classList.add('show');
                     scrollIndicatorBottom.classList.remove('show');
-                } else if (touchY > bottomThreshold) {
+                } else if (currentTouchY > bottomThreshold) {
                     // Scroll down
                     scrollDirection = 1;
                     scrollIndicatorTop.classList.remove('show');
@@ -2320,22 +2441,68 @@
                 
                 // Perform scrolling
                 if (scrollDirection === -1 && scrollY > 0) {
-                    window.scrollBy(0, -10);
+                    window.scrollBy(0, -15);
                 } else if (scrollDirection === 1 && scrollY + windowHeight < documentHeight - 10) {
-                    window.scrollBy(0, 10);
+                    window.scrollBy(0, 15);
                 }
-                
-                // Continue scrolling
-                scrollInterval = requestAnimationFrame(autoScroll);
+            }, 50);
+        }
+
+        function stopAutoScroll() {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
             }
         }
 
-        // Track touch position for bidirectional scrolling
-        document.addEventListener('touchmove', (e) => {
-            if (isDragging && e.touches.length > 0) {
-                window.touchY = e.touches[0].clientY;
+        // Reset Kreis navigation
+        function resetKreisNavigation() {
+            kreisSteps.forEach(step => {
+                step.classList.remove('active', 'completed');
+                if (parseInt(step.dataset.step) === 1) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        // Navigate to a specific step in the Pflegeplanungskreis
+        function goToStep(stepNumber) {
+            // Update kreis navigation
+            kreisSteps.forEach(step => {
+                step.classList.remove('active');
+                if (parseInt(step.dataset.step) === stepNumber) {
+                    step.classList.add('active');
+                }
+                
+                // Mark previous steps as completed
+                if (parseInt(step.dataset.step) < stepNumber) {
+                    step.classList.add('completed');
+                }
+            });
+            
+            // Update step content
+            stepContentElements.forEach(content => {
+                content.classList.remove('active');
+                if (parseInt(content.dataset.step) === stepNumber) {
+                    content.classList.add('active');
+                }
+            });
+            
+            currentStep = stepNumber;
+            
+            // Load dynamic content for steps 3 and 4
+            if (stepNumber === 3 && selectedProblems.length > 0) {
+                loadZieleOptions();
+            } else if (stepNumber === 4 && selectedProblems.length > 0) {
+                loadMassnahmenOptions();
             }
-        }, { passive: true });
+            
+            // Special handling for step 5 (Durchführung & Evaluation)
+            if (stepNumber === 5) {
+                // Automatically mark Durchführung as completed
+                document.querySelector('.kreis-step[data-step="5"]').classList.add('completed');
+            }
+        }
 
         // Load problem options
         function loadProblemOptions(problemsData) {
@@ -2550,61 +2717,7 @@
                 }
             });
             
-            document.getElementById('next-to-evaluation').disabled = !allProblemsHaveMeasures;
-        }
-
-        // Navigate to a specific step
-        function goToStep(stepNumber) {
-            // Update step navigation
-            stepElements.forEach(step => {
-                step.classList.remove('active');
-                if (parseInt(step.dataset.step) === stepNumber) {
-                    step.classList.add('active');
-                }
-                
-                // Mark previous steps as completed
-                if (parseInt(step.dataset.step) < stepNumber) {
-                    step.classList.add('completed');
-                } else {
-                    step.classList.remove('completed');
-                }
-            });
-            
-            // Update step content
-            stepContentElements.forEach(content => {
-                content.classList.remove('active');
-                if (parseInt(content.dataset.step) === stepNumber) {
-                    content.classList.add('active');
-                }
-            });
-            
-            currentStep = stepNumber;
-            
-            // Load dynamic content for steps 3 and 4
-            if (stepNumber === 3 && selectedProblems.length > 0) {
-                loadZieleOptions();
-            } else if (stepNumber === 4 && selectedProblems.length > 0) {
-                loadMassnahmenOptions();
-            }
-        }
-
-        // Reset step navigation
-        function resetStepNavigation() {
-            stepElements.forEach(step => {
-                step.classList.remove('active', 'completed');
-                if (parseInt(step.dataset.step) === 1) {
-                    step.classList.add('active');
-                }
-            });
-            
-            stepContentElements.forEach(content => {
-                content.classList.remove('active');
-                if (parseInt(content.dataset.step) === 1) {
-                    content.classList.add('active');
-                }
-            });
-            
-            currentStep = 1;
+            document.getElementById('next-to-durchfuehrung').disabled = !allProblemsHaveMeasures;
         }
 
         // Evaluate answers and show results
@@ -2706,8 +2819,10 @@
             // Update economy (coins and XP) and mark module as completed
             updateEconomy(percentage);
             
-            // Mark the evaluation step as completed
-            document.querySelector('.step[data-step="5"]').classList.add('completed');
+            // Mark all kreis steps as completed
+            kreisSteps.forEach(step => {
+                step.classList.add('completed');
+            });
             
             // Mark module as completed if not already
             if (!userState.completedModules.includes(currentModuleId)) {
@@ -2807,15 +2922,11 @@
             
             // Add particle effects for earned rewards
             if (coinsEarned > 0) {
-                createCoinParticles(coinsDisplay, coinsEarned);
+                createCoinParticles(document.getElementById('coins-display'), coinsEarned);
             }
             
             if (xpEarned > 0) {
-                createXpParticles(xpDisplay, xpEarned);
-            }
-            
-            if (userState.level > parseInt(levelElement.textContent)) {
-                createLevelParticles(levelDisplay);
+                createXpParticles(document.getElementById('xp-display'), xpEarned);
             }
         }
 
@@ -2876,36 +2987,6 @@
                 setTimeout(() => {
                     particle.remove();
                 }, 1000);
-            }
-        }
-
-        // Create level particles animation
-        function createLevelParticles(element) {
-            for (let i = 0; i < 10; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'coin-particle';
-                
-                // Random position and animation
-                const rect = element.getBoundingClientRect();
-                const startX = rect.left + rect.width / 2;
-                const startY = rect.top + rect.height / 2;
-                
-                particle.style.left = `${startX}px`;
-                particle.style.top = `${startY}px`;
-                
-                // Random movement
-                const tx = (Math.random() - 0.5) * 150;
-                const ty = -100 - Math.random() * 100;
-                
-                particle.style.setProperty('--tx', `${tx}px`);
-                particle.style.setProperty('--ty', `${ty}px`);
-                
-                document.body.appendChild(particle);
-                
-                // Remove particle after animation
-                setTimeout(() => {
-                    particle.remove();
-                }, 1500);
             }
         }
 
@@ -2982,14 +3063,14 @@
             
             // Simulator navigation buttons
             document.getElementById('next-to-probleme').addEventListener('click', () => goToStep(2));
-            document.getElementById('back-to-categorization').addEventListener('click', () => goToStep(1));
+            document.getElementById('back-to-informationssammlung').addEventListener('click', () => goToStep(1));
             document.getElementById('next-to-ziele').addEventListener('click', () => goToStep(3));
             document.getElementById('back-to-probleme').addEventListener('click', () => goToStep(2));
             document.getElementById('next-to-massnahmen').addEventListener('click', () => goToStep(4));
             document.getElementById('back-to-ziele').addEventListener('click', () => goToStep(3));
-            document.getElementById('next-to-evaluation').addEventListener('click', () => goToStep(5));
+            document.getElementById('next-to-durchfuehrung').addEventListener('click', () => goToStep(5));
             document.getElementById('back-to-massnahmen').addEventListener('click', () => goToStep(4));
-            document.getElementById('evaluate-answers').addEventListener('click', evaluateAnswers);
+            document.getElementById('show-results').addEventListener('click', evaluateAnswers);
             
             // Back to modules buttons
             document.getElementById('back-to-modules').addEventListener('click', showHomepage);
@@ -3000,6 +3081,17 @@
                 resultsScreen.classList.remove('active');
                 simulatorContainer.classList.add('active');
                 goToStep(1);
+            });
+            
+            // Kreis step navigation
+            kreisSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    const stepNumber = parseInt(step.dataset.step);
+                    // Only allow navigation to completed or active steps
+                    if (stepNumber <= currentStep || step.classList.contains('completed')) {
+                        goToStep(stepNumber);
+                    }
+                });
             });
         }
 
