@@ -1818,7 +1818,15 @@
                 };
                 localStorage.setItem('pflegefachprofi_progress', JSON.stringify(data));
             },
-            
+            scrollToTop() {
+
+window.scrollTo({
+
+top: 0,
+
+behavior: 'smooth'
+
+});
             // Set up event listeners
         /*    setupEventListeners() {
                 // Hamburger menu
@@ -2015,6 +2023,7 @@ startModule(moduleId) {
     
     this.loadLesson();
     this.updateProgressIndicator();
+    this.scrollToTop();
 },
 
 // Complete the module
@@ -2029,9 +2038,10 @@ completeModule() {
     this.moduleProgress[this.currentModule] = 100;
     this.saveProgress();
     this.updateModuleCards();
-    
+   this.scrollToTop(); 
     // Scroll to modules
-    document.getElementById('modules-container').scrollIntoView({ behavior: 'smooth' });
+   
+document.getElementById('modules-container').scrollIntoView({ behavior: 'smooth' });
 },
 
             
@@ -2063,7 +2073,7 @@ completeModule() {
                 } else if (lesson.type === 'quiz' || lesson.type === 'final-quiz') {
                     this.loadQuiz(lesson, lessonContainer, lesson.type === 'final-quiz');
                 }
-                
+               this.scrollToTop(); 
                 // Update step counter
                 document.getElementById('step-counter').textContent = `Schritt ${this.currentLesson + 1} von ${module.lessons.length}`;
             },
@@ -2084,7 +2094,8 @@ completeModule() {
                         </div>
                     `;
                 });
-                
+                //scroll
+                this.scrollToTop();
                 const feedback = userAnswers[currentQuestion] !== undefined ? 
                     `<div class="quiz-feedback ${userAnswers[currentQuestion] === question.correct ? 'correct' : 'incorrect'}">
                         <strong>${userAnswers[currentQuestion] === question.correct ? 'Richtig!' : 'Leider falsch.'}</strong>
@@ -2266,6 +2277,7 @@ completeModule() {
                         this.completeModule();
                     }
                 }
+                this.scrollToTop();
             },
             
             // Navigate to previous lesson
@@ -2276,7 +2288,7 @@ completeModule() {
                 // For quizzes, handle question navigation
                 if (currentLessonData.type === 'quiz' || currentLessonData.type === 'final-quiz') {
                     const currentQuestion = this.quizAnswers[this.currentLesson]?.currentQuestion || 0;
-                    
+                   this.scrollToTop(); 
                     if (currentQuestion > 0) {
                         // Go to previous question
                         this.quizAnswers[this.currentLesson].currentQuestion--;
