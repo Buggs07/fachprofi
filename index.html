@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PflegefachProfi - Revolutionäre Lernplattform</title>
+    <!-- PWA Meta Tags -->
+<meta name="theme-color" content="#4361ee">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PflegefachProfi">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+<link rel="manifest" href="manifest.json">
+
+<!-- Preload critical resources -->
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5919692751199146"
      crossorigin="anonymous"></script>
@@ -1157,6 +1167,174 @@
                 }, 5000);
             }
         }
+    </script>
+    <script>
+  // PWA Installation and Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          
+          // Check for updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            console.log('New service worker found...');
+            
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('New content is available; please refresh.');
+                // You can show an update notification here
+                showUpdateNotification();
+              }
+            });
+          });
+        })
+        .catch(function(error) {
+          console.log('ServiceWorker registration failed: ', error);
+        });
+    });
+
+    // Listen for claiming of service worker
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
+    });
+  }
+
+  // PWA Installation Prompt
+  let deferredPrompt;
+  const installButton = document.createElement('button');
+  
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    // Show install button
+    showInstallPromotion();
+  });
+
+  function showInstallPromotion() {
+    installButton.innerHTML = '<i class="fas fa-download"></i> App installieren';
+    installButton.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary-pink);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      animation: glow 2s infinite;
+    `;
+    
+    installButton.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      
+      // Show the install prompt
+      deferredPrompt.prompt();
+      
+      // Wait for the user to respond to the prompt
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+        installButton.style.display = 'none';
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      
+      // Clear the saved prompt since it can't be used again
+      deferredPrompt = null;
+    });
+    
+    document.body.appendChild(installButton);
+  }
+
+  function showUpdateNotification() {
+    const updateNotification = document.createElement('div');
+    updateNotification.innerHTML = `
+      <div style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--success);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      ">
+        <i class="fas fa-sync-alt"></i>
+        <span>Neue Version verfügbar!</span>
+        <button onclick="window.location.reload()" style="
+          background: rgba(255,255,255,0.2);
+          border: none;
+          color: white;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+          margin-left: 10px;
+        ">Aktualisieren</button>
+      </div>
+    `;
+    document.body.appendChild(updateNotification);
+    
+    // Auto remove after 10 seconds
+    setTimeout(() => {
+      if (updateNotification.parentNode) {
+        updateNotification.parentNode.removeChild(updateNotification);
+      }
+    }, 10000);
+  }
+
+  // Offline detection
+  window.addEventListener('online', () => {
+    document.body.classList.remove('offline');
+    showNotification('Verbindung wiederhergestellt', 'success');
+  });
+
+  window.addEventListener('offline', () => {
+    document.body.classList.add('offline');
+    showNotification('Sie sind offline', 'warning');
+  });
+
+  function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: ${type === 'success' ? 'var(--success)' : 'var(--warning)'};
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      font-weight: bold;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 3000);
+  }
     </script>
 </body>
 </html>
