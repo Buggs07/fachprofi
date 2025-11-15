@@ -2,12 +2,12 @@
   "name": "PflegefachProfi - Revolutionäre Lernplattform",
   "short_name": "PflegefachProfi",
   "description": "Interaktive Module, spielerisches Lernen und praxisnahe Fallbeispiele - dein Weg zur Prüfungsexpertise",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#4361ee",
   "theme_color": "#4361ee",
   "orientation": "portrait-primary",
-  "scope": "/lernspiele.html ",
+  "scope": "/lernspiele",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
