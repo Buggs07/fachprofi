@@ -76,13 +76,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--spacing-sm) 0;
+           /* padding: var(--spacing-sm) 0;*/
+            padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-xl);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-lg);
             font-weight: 800;
             font-size: 1.5rem;
             color: white;
@@ -90,19 +91,7 @@
         }
 
         .logo-icon {
-
-           
             width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            animation: pulse 2s infinite;
-           } 
-        /*    width: 40px;
             height: 40px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
@@ -111,7 +100,7 @@
             justify-content: center;
             color: white;
             animation: pulse 2s infinite;
-        }*/
+        }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
