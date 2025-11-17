@@ -316,37 +316,34 @@
             opacity: 0.8;
         }*/
 
+
         .hero-stats {
     display: flex;
     justify-content: center;
-    align-items: center; /* Add this to vertically align items */
+    align-items: center;
     gap: var(--space-xs);
     margin: var(--space-xl) 0;
     animation: slideInUp 0.8s ease 0.4s both;
-    flex-direction: row; /* Ensure this is row (default) */
 }
 
 .stat-bubble {
-    text-align: center;
-    display: flex; /* Add flex to stat-bubble */
-    flex-direction: column; /* Keep content stacked vertically within each bubble */
-    justify-content: center;
+    display: flex;
     align-items: center;
-    min-width: 60px; /* Add minimum width for consistent spacing */
+    gap: var(--space-xs); /* Space between value and label */
+    text-align: center;
 }
 
 .stat-value {
     font-size: 1rem;
     font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-xs);
-    line-height: 1; /* Ensure tight line height */
+    margin-bottom: 0; /* Remove the bottom margin */
 }
 
 .stat-label {
     font-size: 0.5rem;
     opacity: 0.8;
-    line-height: 1; /* Ensure tight line height */
 }
+        
 
         .cta-pulse {
             display: inline-flex;
