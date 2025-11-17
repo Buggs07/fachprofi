@@ -293,7 +293,7 @@
             animation: slideInUp 0.8s ease 0.2s both;
         }
 
-        .hero-stats {
+       /* .hero-stats {
             display: flex;
             justify-content: center;
             gap: var(--space-xs);
@@ -314,7 +314,39 @@
         .stat-label {
             font-size: 0.5rem;
             opacity: 0.8;
-        }
+        }*/
+
+        .hero-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Add this to vertically align items */
+    gap: var(--space-xs);
+    margin: var(--space-xl) 0;
+    animation: slideInUp 0.8s ease 0.4s both;
+    flex-direction: row; /* Ensure this is row (default) */
+}
+
+.stat-bubble {
+    text-align: center;
+    display: flex; /* Add flex to stat-bubble */
+    flex-direction: column; /* Keep content stacked vertically within each bubble */
+    justify-content: center;
+    align-items: center;
+    min-width: 60px; /* Add minimum width for consistent spacing */
+}
+
+.stat-value {
+    font-size: 1rem;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-xs);
+    line-height: 1; /* Ensure tight line height */
+}
+
+.stat-label {
+    font-size: 0.5rem;
+    opacity: 0.8;
+    line-height: 1; /* Ensure tight line height */
+}
 
         .cta-pulse {
             display: inline-flex;
