@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pflegepraxis: Vorbereitung auf den Praxisbesuch</title>
+    <title>Pflegeplanung - Praktische Prüfungen</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* === CSS VARIABLES from Original Design === */
+        /* ===== CSS VARIABLES from Original Swiss Design ===== */
         :root {
             --primary: #4361ee;
             --primary-dark: #3a56d4;
@@ -44,7 +44,6 @@
             color: var(--text-primary);
             background-color: var(--background);
             line-height: 1.6;
-            padding-bottom: 40px;
         }
 
         .container {
@@ -54,10 +53,10 @@
             padding: 0 var(--spacing-md);
         }
 
-        /* === NAVIGATION BAR === */
+        /* ===== ORIGINAL NAVIGATION BAR ===== */
         .navbar {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: var(--spacing-sm) 0;
+            padding: 0;
             box-shadow: var(--shadow-elevated);
             position: sticky;
             top: 0;
@@ -68,12 +67,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-xl);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-lg);
             font-weight: 800;
             font-size: 1.5rem;
             color: white;
@@ -88,6 +88,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
         }
 
         .nav-menu {
@@ -114,26 +115,33 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .nav-link i {
-            font-size: 1.1rem;
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: var(--spacing-xs);
+            z-index: 1001;
         }
 
-        .nav-cta {
-            background: var(--accent);
-            color: white;
-            padding: var(--spacing-xs) var(--spacing-lg);
-            border-radius: var(--radius-lg);
-            font-weight: 700;
-            transition: all 0.3s ease;
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
         }
 
-        /* === MAIN PAGE HEADER === */
-        .page-header {
-            text-align: center;
+        /* ===== HERO INTRODUCTION ===== */
+        .hero {
             padding: var(--spacing-xl) 0 var(--spacing-lg);
+            text-align: center;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
         }
 
-        .page-title {
+        .hero-title {
             font-size: 2.8rem;
             margin-bottom: var(--spacing-sm);
             color: var(--text-primary);
@@ -143,59 +151,44 @@
             color: transparent;
         }
 
-        .page-subtitle {
+        .hero-subtitle {
             font-size: 1.2rem;
             color: var(--text-secondary);
             max-width: 800px;
             margin: 0 auto var(--spacing-lg);
         }
 
-        /* === YEAR NAVIGATION TABS === */
-        .year-tabs-container {
-            margin-bottom: var(--spacing-xl);
+        .hero-highlight {
+            background: var(--primary-light);
+            padding: var(--spacing-md);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+            max-width: 800px;
+            margin: var(--spacing-lg) auto;
+            text-align: left;
         }
 
-        .year-tabs {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .year-tab {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-md) var(--spacing-lg);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .highlight-title {
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            min-width: 180px;
-            justify-content: center;
         }
 
-        .year-tab:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
+        /* ===== MODULES GRID ===== */
+        .modules-section {
+            padding: var(--spacing-xl) 0;
         }
 
-        .year-tab.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border-color: var(--primary);
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            font-size: 2rem;
+            color: var(--text-primary);
         }
 
-        .year-tab-icon {
-            font-size: 1.2rem;
-        }
-
-        /* === MODULES GRID === */
-        .modules-container {
+        .modules-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: var(--spacing-lg);
@@ -209,6 +202,7 @@
             overflow: hidden;
             transition: all 0.3s ease;
             border: 1px solid var(--border);
+            cursor: pointer;
         }
 
         .module-card:hover {
@@ -218,13 +212,12 @@
 
         .module-header {
             padding: var(--spacing-lg);
-            background: linear-gradient(135deg, var(--primary-light) 0%, #e6f7ff 100%);
-            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
         }
 
         .module-title {
             font-size: 1.5rem;
-            color: var(--primary);
             margin-bottom: var(--spacing-xs);
             display: flex;
             align-items: center;
@@ -234,8 +227,8 @@
         .module-difficulty {
             display: inline-block;
             padding: 4px 12px;
-            background: var(--primary-light);
-            color: var(--primary);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
@@ -248,7 +241,6 @@
         .module-description {
             color: var(--text-secondary);
             margin-bottom: var(--spacing-md);
-            line-height: 1.7;
         }
 
         .module-features {
@@ -268,10 +260,54 @@
             color: var(--success);
         }
 
+        /* ===== DETAILED MODULE VIEW ===== */
+        .module-detail-view {
+            display: none;
+            padding: var(--spacing-xl) 0;
+        }
+
+        .module-detail-view.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .detail-header {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            background: var(--primary);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: var(--spacing-lg);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== VIDEO SECTION ===== */
+        .video-section {
+            margin: var(--spacing-xl) 0;
+        }
+
         .video-container {
-            margin-top: var(--spacing-md);
             border-radius: var(--radius);
             overflow: hidden;
+            box-shadow: var(--shadow-elevated);
             background: #000;
         }
 
@@ -290,21 +326,35 @@
             border: none;
         }
 
-        /* === DETAILED STEPS SECTION === */
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+
+        /* ===== STEP-BY-STEP GUIDE ===== */
         .steps-section {
             background: var(--surface);
             border-radius: var(--radius-lg);
             padding: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
             box-shadow: var(--shadow);
         }
 
-        .section-title {
-            font-size: 1.5rem;
+        .section-subtitle {
+            font-size: 1.2rem;
             color: var(--primary);
-            margin-bottom: var(--spacing-md);
-            padding-bottom: var(--spacing-xs);
-            border-bottom: 2px solid var(--primary-light);
+            margin-bottom: var(--spacing-lg);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
@@ -317,7 +367,7 @@
 
         .step-item {
             counter-increment: step-counter;
-            padding: var(--spacing-md);
+            padding: var(--spacing-lg);
             margin-bottom: var(--spacing-md);
             background: var(--background);
             border-radius: var(--radius);
@@ -346,43 +396,57 @@
         .step-title {
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.1rem;
         }
 
         .step-details {
             color: var(--text-secondary);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
         }
 
-        .step-tips {
+        /* ===== TIPS & TRICKS ===== */
+        .tips-section {
             background: #fff8e1;
-            border-left: 3px solid var(--warning);
-            padding: var(--spacing-sm);
+            border-left: 4px solid var(--warning);
+            padding: var(--spacing-lg);
             border-radius: 0 var(--radius) var(--radius) 0;
-            font-size: 0.95rem;
+            margin: var(--spacing-lg) 0;
         }
 
-        .tip-title {
+        .tips-title {
             color: var(--warning);
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: var(--spacing-md);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: var(--spacing-sm);
         }
 
-        /* === MATERIALS & CHECKLIST === */
+        .tip-item {
+            padding: var(--spacing-sm);
+            background: white;
+            border-radius: var(--radius);
+            margin-bottom: var(--spacing-sm);
+            border: 1px solid #ffeaa7;
+        }
+
+        .tip-item strong {
+            color: var(--warning);
+        }
+
+        /* ===== MATERIALS CHECKLIST ===== */
         .materials-section {
             background: #f0f9ff;
             border-radius: var(--radius);
-            padding: var(--spacing-md);
-            margin: var(--spacing-md) 0;
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
         }
 
         .materials-title {
             color: var(--primary);
             font-weight: 600;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
@@ -398,65 +462,118 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            padding: 8px 12px;
+            padding: var(--spacing-sm);
             background: white;
             border-radius: var(--radius);
             font-size: 0.9rem;
         }
 
-        /* === COMMON PITFALLS === */
-        .pitfalls-section {
+        /* ===== COMMON MISTAKES ===== */
+        .mistakes-section {
             background: #fff5f5;
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
-            margin: var(--spacing-md) 0;
             border-left: 4px solid var(--danger);
+            padding: var(--spacing-lg);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: var(--spacing-lg) 0;
         }
 
-        .pitfalls-title {
+        .mistakes-title {
             color: var(--danger);
             font-weight: 600;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
         }
 
-        .pitfall-item {
-            padding: var(--spacing-xs) 0;
+        .mistake-item {
+            padding: var(--spacing-sm) 0;
             border-bottom: 1px dashed #ffcccc;
         }
 
-        /* === RESPONSIVE DESIGN === */
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
+            .hamburger {
+                display: flex;
             }
-            
-            .page-title {
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                flex-direction: column;
+                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+                width: 80%;
+                height: 100vh;
+                text-align: left;
+                transition: 0.3s;
+                box-shadow: var(--shadow-elevated);
+                padding: var(--spacing-xl) var(--spacing-lg);
+                gap: 0;
+                z-index: 999;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-link {
+                justify-content: flex-start;
+                padding: var(--spacing-md);
+                font-size: 1.1rem;
+            }
+
+            .hero-title {
                 font-size: 2rem;
             }
-            
-            .year-tabs {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .year-tab {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .modules-container {
+
+            .modules-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .materials-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* === FOOTER === */
+        /* ===== PROGRESS TRACKING ===== */
+        .progress-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, var(--primary) 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: right;
+        }
+
+        /* ===== FOOTER ===== */
         footer {
             background: var(--text-primary);
             color: white;
@@ -489,378 +606,690 @@
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar (Original Design) -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="/" class="logo">
+            <a href="/index" class="logo">
                 <div class="logo-icon">
-                    <i class="fas fa-hand-holding-medical"></i>
+                    <i class="fas fa-stethoscope"></i>
                 </div>
-                <span>Pflegepraxis</span>
+                <span>Pflegeplanung</span>
             </a>
-            <ul class="nav-menu">
-                <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Start</a></li>
-                <li><a href="#" class="nav-link"><i class="fas fa-book-medical"></i> Theorie</a></li>
-                <li><a href="#" class="nav-link active"><i class="fas fa-clipboard-check"></i> Praxisbesuch</a></li>
-                <li><a href="#" class="nav-link"><i class="fas fa-procedures"></i> Fallbeispiele</a></li>
-                <li><a href="#" class="nav-cta">Login</a></li>
+
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="/index" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Startseite
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lernspiele" class="nav-link">
+                        <i class="fas fa-book-medical"></i>
+                        Lernspiele
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/themen" class="nav-link">
+                        <i class="fas fa-gamepad"></i>
+                        Themen
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/fallbeispiele" class="nav-link">
+                        <i class="fas fa-procedures"></i>
+                        Fallbeispiele
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="/praktische-pruefungen" class="nav-link">
+                        <i class="fas fa-clipboard-check"></i>
+                        Praktische Prüfungen
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Page Header -->
-        <header class="page-header">
-            <h1 class="page-title">Vorbereitung auf den Praxisbesuch</h1>
-            <p class="page-subtitle">Mastere deine praktischen Prüfungen im Pflegestudium. Schritt-für-Schritt Anleitungen, Videos und Experten-Tipps für jedes Ausbildungsjahr - basierend auf den deutschen Pflegestandards und Lehrbüchern wie <em>Pflege Heute</em> und <em>iCare</em>.</p>
-        </header>
-
-        <!-- Year Navigation Tabs -->
-        <div class="year-tabs-container">
-            <div class="year-tabs" id="yearTabs">
-                <div class="year-tab active" data-year="1">
-                    <i class="fas fa-user-injured year-tab-icon"></i>
-                    <span>1. Jahr: Grundpflege & Assessment</span>
-                </div>
-                <div class="year-tab" data-year="2">
-                    <i class="fas fa-band-aid year-tab-icon"></i>
-                    <span>2. Jahr: Behandlung & Dokumentation</span>
-                </div>
-                <div class="year-tab" data-year="3">
-                    <i class="fas fa-comments-medical year-tab-icon"></i>
-                    <span>3. Jahr: Beratung & komplexe Pflege</span>
-                </div>
+    <!-- Hero Introduction -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Praktische Prüfungen Mastery</h1>
+            <p class="hero-subtitle">
+                Meistere deine praktischen Pflegeprüfungen mit detaillierten Schritt-für-Schritt Anleitungen, 
+                Video-Demonstrationen und Experten-Tipps. Vorbereite dich systematisch auf deinen Praxisbesuch.
+            </p>
+            
+            <div class="hero-highlight">
+                <h3 class="highlight-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Wie du diese Plattform optimal nutzt:
+                </h3>
+                <ul>
+                    <li>Wähle ein Prüfungsthema aus der Liste unten</li>
+                    <li>Studiere die Schritt-für-Schritt Anleitung genau</li>
+                    <li>Sieh dir die Video-Demonstration an</li>
+                    <li>Merke dir die wichtigsten Tipps & Tricks</li>
+                    <li>Vermeide die häufigsten Prüfungsfehler</li>
+                    <li>Übe regelmäßig und tracke deinen Fortschritt</li>
+                </ul>
             </div>
         </div>
+    </section>
 
-        <!-- Modules Grid (for Year 1 by default) -->
-        <div class="modules-container" id="modulesContainer">
-            <!-- Module 1: Vitalzeichenkontrolle -->
-            <div class="module-card">
-                <div class="module-header">
-                    <h3 class="module-title">
-                        <i class="fas fa-heartbeat"></i>
-                        Vitalzeichenkontrolle
-                    </h3>
-                    <span class="module-difficulty">Prüfungsrelevant</span>
-                </div>
-                <div class="module-body">
-                    <p class="module-description">Messung und korrekte Dokumentation aller Vitalparameter nach deutschen Pflegestandards. Inklusive Blutdruck, Puls, Atmung, Temperatur und Schmerzassessment.</p>
-                    <ul class="module-features">
-                        <li><i class="fas fa-check-circle"></i> Schritt-für-Schritt Anleitung mit Bildern</li>
-                        <li><i class="fas fa-check-circle"></i> Normwerte & Abweichungen erkennen</li>
-                        <li><i class="fas fa-check-circle"></i> Fehlerquellen und wie man sie vermeidet</li>
-                        <li><i class="fas fa-check-circle"></i> Korrekte Dokumentation nach DGKP</li>
-                    </ul>
-                    
-                    <!-- Video Section -->
-                    <div class="video-container">
-                        <div class="video-wrapper">
-                            <!-- Replace VIDEO_ID with your actual YouTube video ID -->
-                            <iframe src="https://www.youtube.com/embed/VIDEO_ID" 
-                                    title="Vitalzeichenkontrolle Demo" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen>
-                            </iframe>
-                        </div>
+    <!-- Modules Grid -->
+    <section class="modules-section">
+        <div class="container">
+            <h2 class="section-title">Praktische Prüfungsmodule</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                Wähle ein Modul, um die detaillierte Vorbereitung zu starten
+            </p>
+            
+            <div class="modules-grid" id="modulesGrid">
+                <!-- Module 1: Vitalzeichen -->
+                <div class="module-card" data-module="vitalzeichen">
+                    <div class="module-header">
+                        <h3 class="module-title">
+                            <i class="fas fa-heartbeat"></i>
+                            Vitalzeichen messen
+                        </h3>
+                        <span class="module-difficulty">Prüfungsrelevant</span>
                     </div>
-
-                    <!-- Detailed Steps -->
-                    <div class="steps-section">
-                        <h4 class="section-title"><i class="fas fa-list-ol"></i> Prüfungsablauf Schritt-für-Schritt</h4>
-                        <ol class="steps-list">
-                            <li class="step-item">
-                                <div class="step-title">Vorbereitung & Patientenaufklärung</div>
-                                <div class="step-details">Hände desinfizieren, Material bereitstellen, Patienten identifizieren und Verfahren erklären (Einwilligung).</div>
-                                <div class="step-tips">
-                                    <div class="tip-title"><i class="fas fa-lightbulb"></i> Prüfer-Tipp</div>
-                                    <p>Nennen Sie immer zuerst den Namen und die Geburtsdatum des Patienten laut zur Identifikation. Fragen Sie nach Allergien gegen Materialien (z.B. Latex).</p>
-                                </div>
-                            </li>
-                            <li class="step-item">
-                                <div class="step-title">Blutdruckmessung korrekt durchführen</div>
-                                <div class="step-details">Manschette in richtiger Größe und Position (2-3 cm über Ellbogen), Arm auf Herzhöhe, Stethoskop korrekt platzieren.</div>
-                                <div class="step-tips">
-                                    <div class="tip-title"><i class="fas fa-lightbulb"></i> Fehler vermeiden</div>
-                                    <p>Patient nicht während der Messung sprechen lassen. Manschettenbreite muss 40% des Armumfangs entsprechen (häufiger Fehler in Prüfungen!).</p>
-                                </div>
-                            </li>
-                            <li class="step-item">
-                                <div class="step-title">Puls- und Atemfrequenz</div>
-                                <div class="step-details">Radialispuls über 60 Sekunden, Atemfrequenz unbemerkt nach Pulsmessung (Patient soll nicht bewusst atmen).</div>
-                            </li>
-                            <li class="step-item">
-                                <div class="step-title">Temperaturmessung & Dokumentation</div>
-                                <div class="step-details">Methode benennen (oral, axillär, tympanisch), Messwert sofort dokumentieren mit Einheit und Messort.</div>
-                            </li>
-                        </ol>
-                    </div>
-
-                    <!-- Materials Checklist -->
-                    <div class="materials-section">
-                        <h5 class="materials-title"><i class="fas fa-tools"></i> Benötigtes Material für die Prüfung</h5>
-                        <div class="materials-grid">
-                            <div class="material-item"><i class="fas fa-check"></i> Blutdruckmessgerät</div>
-                            <div class="material-item"><i class="fas fa-check"></i> Stethoskop</div>
-                            <div class="material-item"><i class="fas fa-check"></i> Fieberthermometer</div>
-                            <div class="material-item"><i class="fas fa-check"></i> Stoppuhr</div>
-                            <div class="material-item"><i class="fas fa-check"></i> Händedesinfektionsmittel</div>
-                            <div class="material-item"><i class="fas fa-check"></i> Dokumentationsbogen</div>
-                        </div>
-                    </div>
-
-                    <!-- Common Pitfalls -->
-                    <div class="pitfalls-section">
-                        <h5 class="pitfalls-title"><i class="fas fa-exclamation-triangle"></i> Häufige Prüfungsfehler</h5>
-                        <div class="pitfall-item">• Händedesinfektion vor und nach der Messung vergessen</div>
-                        <div class="pitfall-item">• Patientenidentifikation nicht durchgeführt</div>
-                        <div class="pitfall-item">• Manschette über Kleidung angelegt</div>
-                        <div class="pitfall-item">• Dokumentation nicht unmittelbar nach Messung</div>
-                        <div class="pitfall-item">• Keine Aufklärung über Messergebnisse für Patient</div>
+                    <div class="module-body">
+                        <p class="module-description">
+                            Komplette Anleitung zur korrekten Messung und Dokumentation aller Vitalparameter 
+                            nach deutschen Pflegestandards. Inklusive Blutdruck, Puls, Atmung, Temperatur.
+                        </p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check-circle"></i> Schritt-für-Schritt Anleitung</li>
+                            <li><i class="fas fa-check-circle"></i> Video-Demonstration</li>
+                            <li><i class="fas fa-check-circle"></i> Fehlervermeidung</li>
+                            <li><i class="fas fa-check-circle"></i> Dokumentation nach DGKP</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-
-            <!-- Module 2: Körperpflege im Bett -->
-            <div class="module-card">
-                <div class="module-header">
-                    <h3 class="module-title">
-                        <i class="fas fa-shower"></i>
-                        Körperpflege & Bettwäschewechsel
-                    </h3>
-                    <span class="module-difficulty">Praktische Durchführung</span>
-                </div>
-                <div class="module-body">
-                    <p class="module-description">Grundpflege bei bettlägerigen Patienten mit Fokus auf Würde, Privatsphäre und Dekubitusprophylaxe. Inklusive professioneller Kommunikation während der Pflege.</p>
-                    <ul class="module-features">
-                        <li><i class="fas fa-check-circle"></i> Prinzip "von sauber nach schmutzig"</li>
-                        <li><i class="fas fa-check-circle"></i> Respekt der Intimsphäre</li>
-                        <li><i class="fas fa-check-circle"></i> Hautassessment und -schutz</li>
-                        <li><i class="fas fa-check-circle"></i> Kommunikation mit desorientierten Patienten</li>
-                    </ul>
-                    
-                    <!-- Video Placeholder -->
-                    <div class="video-container">
-                        <div class="video-wrapper">
-                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); display: flex; align-items: center; justify-content: center; color: white; flex-direction: column; padding: 20px; text-align: center;">
-                                <i class="fas fa-video" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.8;"></i>
-                                <p>Video-Demonstration</p>
-                                <small>YouTube-Link hier einfügen</small>
-                            </div>
-                        </div>
+                
+                <!-- Module 2: Körperpflege -->
+                <div class="module-card" data-module="koerperpflege">
+                    <div class="module-header">
+                        <h3 class="module-title">
+                            <i class="fas fa-shower"></i>
+                            Körperpflege im Bett
+                        </h3>
+                        <span class="module-difficulty">Praktische Durchführung</span>
                     </div>
-
-                    <!-- Tips & Tricks Section -->
-                    <div class="steps-section">
-                        <h4 class="section-title"><i class="fas fa-graduation-cap"></i> Experten-Tipps für die Prüfung</h4>
-                        <ol class="steps-list">
-                            <li class="step-item">
-                                <div class="step-title">Privatsphäre und Kommunikation</div>
-                                <div class="step-details">Immer Vorhang zuziehen/Tür schließen, Patienten mit Namen ansprechen, jeden Schritt ankündigen.</div>
-                                <div class="step-tips">
-                                    <div class="tip-title"><i class="fas fa-comment-medical"></i> Kommunikations-Beispiel</div>
-                                    <p>"Guten Morgen Frau Schmidt, ich bin [Name] und werde Sie heute bei der Morgentoilette unterstützen. Zuerde ziehe ich den Vorhang zu, damit Sie in Ruhe sind. Ich beginne mit dem Gesicht, ist das für Sie in Ordnung?"</p>
-                                </div>
-                            </li>
-                            <li class="step-item">
-                                <div class="step-title">Arbeitsökonomie und Ergonomie</div>
-                                <div class="step-details">Bett auf optimale Höhe einstellen, Material vorbereiten, eigenes Kreuz schonen durch richtige Körpermechanik.</div>
-                            </li>
-                            <li class="step-item">
-                                <div class="step-title">Hautbeurteilung und Prophylaxe</div>
-                                <div class="step-details">Bei jedem Waschen/Wenden auf Rötungen achten (besonders Kreuzbein, Fersen), Hautfalten gründlich trocknen.</div>
-                                <div class="step-tips">
-                                    <div class="tip-title"><i class="fas fa-lightbulb"></i> Prüfungsfrage erwartet</div>
-                                    <p>Seien Sie bereit, die <strong>Dekubitus-Risikoskala nach Braden</strong> zu erklären und Maßnahmen für Risikobereiche zu nennen.</p>
-                                </div>
-                            </li>
-                        </ol>
+                    <div class="module-body">
+                        <p class="module-description">
+                            Grundpflege bei bettlägerigen Patienten mit Fokus auf Würde, Privatsphäre 
+                            und Dekubitusprophylaxe. Inklusive professioneller Kommunikation.
+                        </p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check-circle"></i> Prinzip "von sauber nach schmutzig"</li>
+                            <li><i class="fas fa-check-circle"></i> Respekt der Intimsphäre</li>
+                            <li><i class="fas fa-check-circle"></i> Dekubitusprophylaxe</li>
+                            <li><i class="fas fa-check-circle"></i> Kommunikationstraining</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-
-            <!-- Module 3: Mobilitätsförderung -->
-            <div class="module-card">
-                <div class="module-header">
-                    <h3 class="module-title">
-                        <i class="fas fa-wheelchair"></i>
-                        Mobilisation & Transfer
-                    </h3>
-                    <span class="module-difficulty">Anwendung erforderlich</span>
-                </div>
-                <div class="module-body">
-                    <p class="module-description">Sichere Mobilisation und Transfertechniken unter Beachtung der eigenen und patienteneigenen Ergonomie. Inklusive Hilfsmitteleinsatz.</p>
-                    <ul class="module-features">
-                        <li><i class="fas fa-check-circle"></i> Transfer vom Bett in den Rollstuhl</li>
-                        <li><i class="fas fa-check-circle"></i> Gehen mit Gehhilfen (Rollator, Unterarmgehstützen)</li>
-                        <li><i class="fas fa-check-circle"></i> Lagerungstechniken zur Prophylaxe</li>
-                        <li><i class="fas fa-check-circle"></i> Sturzprophylaxe und -management</li>
-                    </ul>
-                    
-                    <div class="steps-section">
-                        <h4 class="section-title"><i class="fas fa-exclamation-circle"></i> Sicherheits-Checkliste vor jedem Transfer</h4>
-                        <ol class="steps-list">
-                            <li class="step-item">
-                                <div class="step-title">Patientenassessment</div>
-                                <div class="step-details">Körperliche Verfassung, kognitive Zustand, Gewicht, Kooperationsfähigkeit, Schmerzen.</div>
-                            </li>
-                            <li class="step-item">
-                                <div class="step-title">Umgebungscheck</div>
-                                <div class="step-details">Boden frei von Hindernissen, Hilfsmittel intakt und in Reichweite, Bettbremsen angezogen.</div>
-                            </li>
-                            <li class="step-item">
-                                <div class="step-title">Kommunikation und Anleitung</div>
-                                <div class="step-details">Jeden Schritt klar ankündigen, Patienten aktiv einbeziehen, Kommandos geben ("Auf drei stehen wir auf").</div>
-                                <div class="step-tips">
-                                    <div class="tip-title"><i class="fas fa-user-md"></i> Wichtiger Hinweis</div>
-                                    <p>Niemals alleine transferieren, wenn Patient als "2-Personen-Transfer" eingestuft ist. In der Prüfung darauf hinweisen und "zweite Person" (Prüfer) hinzuziehen.</p>
-                                </div>
-                            </li>
-                        </ol>
+                
+                <!-- Module 3: Blutdruckmessung -->
+                <div class="module-card" data-module="blutdruck">
+                    <div class="module-header">
+                        <h3 class="module-title">
+                            <i class="fas fa-tachometer-alt"></i>
+                            RR-Messung (Blutdruck)
+                        </h3>
+                        <span class="module-difficulty">Häufig geprüft</span>
                     </div>
-
-                    <!-- Common Pitfalls -->
-                    <div class="pitfalls-section">
-                        <h5 class="pitfalls-title"><i class="fas fa-times-circle"></i> Sofort durchgefallen bei...</h5>
-                        <div class="pitfall-item">• Eigengefährdung (falsche Körperhaltung, zu schwer gehoben)</div>
-                        <div class="pitfall-item">• Patienten nicht gesichert (z.B. Rollstuhlbremsen nicht angezogen)</div>
-                        <div class="pitfall-item">• Keine Vorbereitung der Umgebung (Stolperfallen)</div>
-                        <div class="pitfall-item">• Schmerzäußerungen des Patienten ignorieren</div>
+                    <div class="module-body">
+                        <p class="module-description">
+                            Korrekte Blutdruckmessung nach neuesten Richtlinien. Besonderer Fokus auf 
+                            häufige Fehlerquellen und korrekte Interpretation der Werte.
+                        </p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check-circle"></i> Korrekte Manschettenanlage</li>
+                            <li><i class="fas fa-check-circle"></i> Stethoskop-Positionierung</li>
+                            <li><i class="fas fa-check-circle"></i> Fehlerquellen erkennen</li>
+                            <li><i class="fas fa-check-circle"></i> Normwerte & Abweichungen</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Module 4: Medikamentengabe -->
+                <div class="module-card" data-module="medikamente">
+                    <div class="module-header">
+                        <h3 class="module-title">
+                            <i class="fas fa-pills"></i>
+                            Medikamentengabe
+                        </h3>
+                        <span class="module-difficulty">5-R-Prinzip</span>
+                    </div>
+                    <div class="module-body">
+                        <p class="module-description">
+                            Sichere Applikation von Medikamenten nach den 5 Recht: richtiger Patient, 
+                            Medikament, Dosis, Zeitpunkt, Applikationsweg.
+                        </p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check-circle"></i> 5-R-Prinzip anwenden</li>
+                            <li><i class="fas fa-check-circle"></i> Dokumentation</li>
+                            <li><i class="fas fa-check-circle"></i> Nebenwirkungen erkennen</li>
+                            <li><i class="fas fa-check-circle"></i> Patientenedukation</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Module 5: Wundversorgung -->
+                <div class="module-card" data-module="wundversorgung">
+                    <div class="module-header">
+                        <h3 class="module-title">
+                            <i class="fas fa-band-aid"></i>
+                            Wundversorgung
+                        </h3>
+                        <span class="module-difficulty">Aseptisches Arbeiten</span>
+                    </div>
+                    <div class="module-body">
+                        <p class="module-description">
+                            Steriler Verbandswechsel nach aktuellen Leitlinien. Inklusive Wundassessment, 
+                            Dokumentation und Patientenanleitung.
+                        </p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check-circle"></i> Aseptische Technik</li>
+                            <li><i class="fas fa-check-circle"></i> Wunddokumentation</li>
+                            <li><i class="fas fa-check-circle"></i> Materialkunde</li>
+                            <li><i class="fas fa-check-circle"></i> Infektionsprophylaxe</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Module 6: Mobilisation -->
+                <div class="module-card" data-module="mobilisation">
+                    <div class="module-header">
+                        <h3 class="module-title">
+                            <i class="fas fa-wheelchair"></i>
+                            Mobilisation & Transfer
+                        </h3>
+                        <span class="module-difficulty">Ergonomie wichtig</span>
+                    </div>
+                    <div class="module-body">
+                        <p class="module-description">
+                            Sichere Mobilisation und Transfertechniken unter Beachtung der eigenen und 
+                            patienteneigenen Ergonomie. Inklusive Hilfsmitteleinsatz.
+                        </p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check-circle"></i> Transfertechniken</li>
+                            <li><i class="fas fa-check-circle"></i> Sturzprophylaxe</li>
+                            <li><i class="fas fa-check-circle"></i> Hilfsmittel kennen</li>
+                            <li><i class="fas fa-check-circle"></i> Eigenschutz</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Detailed Module View (Hidden by default) -->
+    <section class="module-detail-view" id="moduleDetailView">
+        <div class="container">
+            <div class="detail-header">
+                <button class="back-button" id="backButton">
+                    <i class="fas fa-arrow-left"></i>
+                    Zurück zu allen Modulen
+                </button>
+                <h2 id="detailModuleTitle" class="section-title" style="text-align: left;">Vitalzeichen messen</h2>
+            </div>
+            
+            <!-- Progress Tracking -->
+            <div class="progress-section">
+                <div class="progress-title">Dein Lernfortschritt</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0% abgeschlossen</div>
+            </div>
+            
+            <!-- Video Section -->
+            <div class="video-section">
+                <h3 class="section-subtitle">
+                    <i class="fas fa-video"></i>
+                    Video-Demonstration
+                </h3>
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <div class="video-placeholder" id="videoPlaceholder">
+                            <i class="fas fa-video" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <p>Video-Demonstration</p>
+                            <small>YouTube-Link hier einfügen</small>
+                        </div>
+                        <iframe id="moduleVideo" style="display: none;"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step-by-Step Guide -->
+            <div class="steps-section">
+                <h3 class="section-subtitle">
+                    <i class="fas fa-list-ol"></i>
+                    Schritt-für-Schritt Anleitung
+                </h3>
+                <ol class="steps-list" id="stepsList">
+                    <!-- Steps will be loaded dynamically -->
+                </ol>
+            </div>
+            
+            <!-- Tips & Tricks -->
+            <div class="tips-section">
+                <h3 class="tips-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Tipps & Tricks für die Prüfung
+                </h3>
+                <div id="tipsContent">
+                    <!-- Tips will be loaded dynamically -->
+                </div>
+            </div>
+            
+            <!-- Materials Checklist -->
+            <div class="materials-section">
+                <h3 class="materials-title">
+                    <i class="fas fa-tools"></i>
+                    Benötigtes Material
+                </h3>
+                <div class="materials-grid" id="materialsGrid">
+                    <!-- Materials will be loaded dynamically -->
+                </div>
+            </div>
+            
+            <!-- Common Mistakes -->
+            <div class="mistakes-section">
+                <h3 class="mistakes-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Häufige Prüfungsfehler
+                </h3>
+                <div id="mistakesContent">
+                    <!-- Mistakes will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">Pflegepraxis Vorbereitung</div>
+                <div class="footer-logo">Pflegeplanung - Praktische Prüfungen</div>
                 <div class="footer-bottom">
-                    &copy; 2025 Vorbereitung auf den Praxisbesuch. Basierend auf den deutschen Pflegestandards und Lehrbüchern wie <em>Pflege Heute</em>, <em>iCare</em> und <em>Thiemes Pflege</em>.
+                    &copy; 2025 Vorbereitung auf den Praxisbesuch. Basierend auf deutschen Pflegestandards und Lehrbüchern wie <em>Pflege Heute</em>, <em>iCare</em> und <em>Thiemes Pflege</em>.
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Year Tab Switching Functionality
+        // Module Data with Detailed Content
+        const ModuleData = {
+            vitalzeichen: {
+                title: "Vitalzeichen messen",
+                icon: "fas fa-heartbeat",
+                videoId: "YOUR_VIDEO_ID_HERE", // Replace with your YouTube video ID
+                steps: [
+                    {
+                        title: "Vorbereitung & Hygiene",
+                        details: "Hände desinfizieren, Material bereitstellen, Patienten identifizieren und über das Verfahren aufklären. Für eine ruhige Umgebung sorgen.",
+                        tip: "Nennen Sie immer zuerst den Namen und das Geburtsdatum des Patienten laut zur Identifikation."
+                    },
+                    {
+                        title: "Temperaturmessung",
+                        details: "Digitales Thermometer desinfizieren. Bei oraler Messung: Thermometer unter die Zunge platzieren, Mund schließen lassen. Warten bis Signalton ertönt.",
+                        tip: "Methode (oral, axillär, tympanisch) immer dokumentieren!"
+                    },
+                    {
+                        title: "Pulsmessung",
+                        details: "Radialispuls an der Innenseite des Handgelenks mit Zeige- und Mittelfinger tasten. Über 60 Sekunden zählen (oder 15 Sekunden × 4).",
+                        tip: "Nicht mit dem Daumen tasten - eigener Puls ist spürbar!"
+                    },
+                    {
+                        title: "Atemfrequenz",
+                        details: "Unbemerkt nach der Pulsmessung weiterbeobachten. Atemzüge über 60 Sekunden zählen. Auf Atemmuster, -tiefe und Nebengeräusche achten.",
+                        tip: "Patienten nicht auf die Messung hinweisen - verfälscht die Werte!"
+                    },
+                    {
+                        title: "Blutdruckmessung",
+                        details: "Oberarm auf Herzhöhe lagern. Manschette anlegen (2-3 cm oberhalb der Ellenbeuge). Stethoskop auf Arteria brachialis platzieren.",
+                        tip: "Manschettenbreite muss 40% des Armumfangs entsprechen - häufiger Fehler!"
+                    },
+                    {
+                        title: "Dokumentation",
+                        details: "Alle Werte sofort dokumentieren. Normwerte: Temp 36,5-37,5°C, Puls 60-100/min, Atmung 12-20/min, RR 120/80 mmHg. Auffälligkeiten melden.",
+                        tip: "Dokumentation immer unmittelbar nach Messung durchführen!"
+                    }
+                ],
+                tips: [
+                    "<strong>Patientenkommunikation:</strong> Immer jeden Schritt ankündigen: 'Jetzt messe ich Ihre Temperatur...'",
+                    "<strong>Materialcheck:</strong> Vor Beginn alle Geräte auf Funktionsfähigkeit prüfen.",
+                    "<strong>Umgebungsfaktoren:</strong> Raumtemperatur beachten - beeinflusst die Messwerte.",
+                    "<strong>Zeitmanagement:</strong> Gesamte Messung sollte nicht länger als 10 Minuten dauern.",
+                    "<strong>Prüfungsgespräch:</strong> Bereit sein, Normwerte und Abweichungen zu erklären."
+                ],
+                materials: [
+                    "Blutdruckmessgerät",
+                    "Stethoskop",
+                    "Digitales Fieberthermometer",
+                    "Stoppuhr",
+                    "Händedesinfektionsmittel",
+                    "Dokumentationsbogen",
+                    "Einmalhandschuhe"
+                ],
+                mistakes: [
+                    "Händedesinfektion vor/nach Messung vergessen",
+                    "Patientenidentifikation nicht durchgeführt",
+                    "Manschette über Kleidung angelegt",
+                    "Dokumentation nicht sofort durchgeführt",
+                    "Aufklärung über Messergebnisse vergessen"
+                ]
+            },
+            koerperpflege: {
+                title: "Körperpflege im Bett",
+                icon: "fas fa-shower",
+                videoId: "",
+                steps: [
+                    {
+                        title: "Vorbereitung & Privatsphäre",
+                        details: "Material bereitlegen. Raumtemperatur angenehm einstellen. Patienten informieren und Privatsphäre gewährleisten (Vorhang zu, Tür schließen).",
+                        tip: "Immer zuerst um Erlaubnis bitten: 'Darf ich Sie bei der Körperpflege unterstützen?'"
+                    },
+                    {
+                        title: "Waschung - Prinzip einhalten",
+                        details: "Nach dem Prinzip 'von sauber nach schmutzig' vorgehen. Erst Gesicht, dann Arme, Brustkorb, Beine, zuletzt Intimbereich.",
+                        tip: "Immer von proximal nach distal waschen und von vorn nach hinten im Intimbereich!"
+                    },
+                    {
+                        title: "Hautbeurteilung",
+                        details: "Bei jedem Waschen/Wenden auf Rötungen achten (besonders Kreuzbein, Fersen). Hautfalten gründlich trocknen.",
+                        tip: "Dekubitus-Risikoskala nach Braden erklären können - Prüfungsfrage erwartet!"
+                    },
+                    {
+                        title: "Bettwäschewechsel",
+                        details: "Patienten vorsichtig auf die Seite drehen. Gebrauchte Laken zur Mitte hin zusammenrollen. Frische Laken ausbreiten.",
+                        tip: "Patienten während des Drehens immer sichern und stabilisieren."
+                    },
+                    {
+                        title: "Kommunikation & Würde",
+                        details: "Patienten mit Namen ansprechen. Jeden Schritt ankündigen. So viel Selbständigkeit wie möglich ermöglichen.",
+                        tip: "Niemals über Patienten hinweg reden - immer mit ihnen sprechen!"
+                    }
+                ],
+                tips: [
+                    "<strong>Arbeitsökonomie:</strong> Alle Materialien vorher bereitlegen - nicht während der Pflege suchen.",
+                    "<strong>Ergonomie:</strong> Bett auf optimale Höhe einstellen - eigenes Kreuz schonen!",
+                    "<strong>Temperaturkontrolle:</strong> Wasser regelmäßig wechseln, Temperatur kontrollieren (max. 40°C).",
+                    "<strong>Dokumentation:</strong> Hautzustand, Selbständigkeitsgrad und Besonderheiten dokumentieren.",
+                    "<strong>Zeitmanagement:</strong> Für komplette Grundpflege 20-30 Minuten einplanen."
+                ],
+                materials: [
+                    "Waschschüssel mit warmem Wasser",
+                    "Waschlappen & Handtücher",
+                    "Pflegeseife / Waschlotion",
+                    "Frische Bettwäsche",
+                    "Einmalhandschuhe",
+                    "Hautpflegeprodukte",
+                    "Müllbeutel für gebrauchte Wäsche"
+                ],
+                mistakes: [
+                    "Privatsphäre nicht gewährleistet (Vorhang offen)",
+                    "Prinzip 'von sauber nach schmutzig' nicht eingehalten",
+                    "Hautfalten nicht gründlich getrocknet",
+                    "Patienten nicht aktiv einbezogen",
+                    "Kommunikation während der Pflege vernachlässigt"
+                ]
+            },
+            blutdruck: {
+                title: "RR-Messung (Blutdruck)",
+                icon: "fas fa-tachometer-alt",
+                videoId: "",
+                steps: [
+                    {
+                        title: "Patientenvorbereitung",
+                        details: "Patienten 5 Minuten ruhen lassen. Arm freimachen, auf Herzhöhe lagern. Beine nicht überkreuzen.",
+                        tip: "Nie direkt nach körperlicher Anstrengung oder Kaffeegenuss messen!"
+                    },
+                    {
+                        title: "Manschettenanlage",
+                        details: "Manschette 2-3 cm oberhalb der Ellenbeuge anlegen. Unterkante sollte nicht auf die Arteria brachialis drücken.",
+                        tip: "Manschettenbreite = 40% des Armumfangs. Zu schmale Manschette zeigt zu hohe Werte an!"
+                    },
+                    {
+                        title: "Stethoskop-Positionierung",
+                        details: "Stethoskop direkt auf die Arteria brachialis platzieren, nicht unter die Manschette.",
+                        tip: "Stethoskop nicht zu fest aufdrücken - verzerrt die Geräusche!"
+                    },
+                    {
+                        title: "Messung durchführen",
+                        details: "Luft bis etwa 30 mmHg über dem erwarteten systolischen Wert aufpumpen. Langsam mit 2-3 mmHg/Sekunde ablassen.",
+                        tip: "Ersten Ton (Korotkoff I) = systolischer Wert. Verschwinden der Töne (Korotkoff V) = diastolischer Wert."
+                    },
+                    {
+                        title: "Dokumentation & Aufklärung",
+                        details: "Wert sofort dokumentieren mit Uhrzeit, Arm und Körperposition. Patienten über Ergebnis informieren.",
+                        tip: "Bei Auffälligkeiten sofort wiederholen und Vorgesetzten informieren!"
+                    }
+                ],
+                tips: [
+                    "<strong>Weißkitteleffekt:</strong> Erklären, dass viele Patienten beim Arzt erhöhte Werte haben.",
+                    "<strong>Seitenvergleich:</strong> Bei Erstmessung immer beide Seiten messen.",
+                    "<strong>Pausen:</strong> Bei Wiederholungsmessung mindestens 1 Minute warten.",
+                    "<strong>Gerätekalibrierung:</strong> Regelmäßige Wartung der Messgeräte erwähnen.",
+                    "<strong>Normwerte kennen:</strong> Optimal: <120/<80 mmHg. Hypertonie: >140/>90 mmHg."
+                ],
+                materials: [
+                    "Blutdruckmessgerät (Sphygmomanometer)",
+                    "Passende Manschette",
+                    "Stethoskop",
+                    "Händedesinfektionsmittel",
+                    "Dokumentationsbogen",
+                    "Stuhl für Patienten"
+                ],
+                mistakes: [
+                    "Manschette über Kleidung angelegt",
+                    "Arm nicht auf Herzhöhe gelagert",
+                    "Zu schnelles Ablassen der Luft",
+                    "Stethoskop unter Manschette platziert",
+                    "Keine Ruhephase vor Messung eingehalten"
+                ]
+            }
+            // Additional modules can be added here with the same structure
+        };
+
+        // Application State
+        const AppState = {
+            currentModule: null,
+            progress: {
+                vitalzeichen: 0,
+                koerperpflege: 0,
+                blutdruck: 0,
+                medikamente: 0,
+                wundversorgung: 0,
+                mobilisation: 0
+            },
+            
+            init() {
+                this.loadProgress();
+                this.setupEventListeners();
+                this.setupMobileMenu();
+            },
+            
+            loadProgress() {
+                const saved = localStorage.getItem('pflege_praktische_pruefungen');
+                if (saved) {
+                    this.progress = JSON.parse(saved);
+                }
+            },
+            
+            saveProgress() {
+                localStorage.setItem('pflege_praktische_pruefungen', JSON.stringify(this.progress));
+            },
+            
+            setupMobileMenu() {
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('nav-menu');
+                
+                hamburger.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                        navMenu.classList.remove('active');
+                    }
+                });
+            },
+            
+            setupEventListeners() {
+                // Module card clicks
+                document.querySelectorAll('.module-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        const moduleId = card.dataset.module;
+                        this.openModule(moduleId);
+                    });
+                });
+                
+                // Back button
+                document.getElementById('backButton').addEventListener('click', () => {
+                    this.closeModule();
+                });
+                
+                // Step completion (simulated - in real app would be interactive)
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('step-item')) {
+                        this.updateProgress();
+                    }
+                });
+            },
+            
+            openModule(moduleId) {
+                this.currentModule = moduleId;
+                
+                // Hide modules grid, show detail view
+                document.getElementById('modulesGrid').style.display = 'none';
+                document.querySelector('.modules-section .section-title').style.display = 'none';
+                document.querySelector('.modules-section p').style.display = 'none';
+                document.getElementById('moduleDetailView').classList.add('active');
+                
+                // Load module data
+                this.loadModuleData(moduleId);
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            
+            loadModuleData(moduleId) {
+                const module = ModuleData[moduleId];
+                if (!module) return;
+                
+                // Update title
+                document.getElementById('detailModuleTitle').textContent = module.title;
+                
+                // Load video if available
+                if (module.videoId) {
+                    document.getElementById('videoPlaceholder').style.display = 'none';
+                    document.getElementById('moduleVideo').style.display = 'block';
+                    document.getElementById('moduleVideo').src = `https://www.youtube.com/embed/${module.videoId}`;
+                } else {
+                    document.getElementById('videoPlaceholder').style.display = 'flex';
+                    document.getElementById('moduleVideo').style.display = 'none';
+                }
+                
+                // Load steps
+                const stepsList = document.getElementById('stepsList');
+                stepsList.innerHTML = '';
+                
+                module.steps.forEach((step, index) => {
+                    const stepItem = document.createElement('li');
+                    stepItem.className = 'step-item';
+                    stepItem.innerHTML = `
+                        <div class="step-title">${step.title}</div>
+                        <div class="step-details">${step.details}</div>
+                        ${step.tip ? `<div class="tip-item" style="margin-top: 10px; background: #e3f2fd; padding: 10px; border-radius: 8px; border-left: 3px solid var(--primary);"><strong>Tipp:</strong> ${step.tip}</div>` : ''}
+                    `;
+                    stepsList.appendChild(stepItem);
+                });
+                
+                // Load tips
+                const tipsContent = document.getElementById('tipsContent');
+                tipsContent.innerHTML = '';
+                
+                module.tips.forEach(tip => {
+                    const tipElement = document.createElement('div');
+                    tipElement.className = 'tip-item';
+                    tipElement.innerHTML = tip;
+                    tipsContent.appendChild(tipElement);
+                });
+                
+                // Load materials
+                const materialsGrid = document.getElementById('materialsGrid');
+                materialsGrid.innerHTML = '';
+                
+                module.materials.forEach(material => {
+                    const materialItem = document.createElement('div');
+                    materialItem.className = 'material-item';
+                    materialItem.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> ${material}`;
+                    materialsGrid.appendChild(materialItem);
+                });
+                
+                // Load mistakes
+                const mistakesContent = document.getElementById('mistakesContent');
+                mistakesContent.innerHTML = '';
+                
+                module.mistakes.forEach(mistake => {
+                    const mistakeElement = document.createElement('div');
+                    mistakeElement.className = 'mistake-item';
+                    mistakeElement.innerHTML = `• ${mistake}`;
+                    mistakesContent.appendChild(mistakeElement);
+                });
+                
+                // Update progress
+                this.updateProgressDisplay();
+            },
+            
+            updateProgress() {
+                if (!this.currentModule) return;
+                
+                // Simulate progress increase (in real app, track actual completion)
+                this.progress[this.currentModule] = Math.min(100, (this.progress[this.currentModule] || 0) + 20);
+                this.saveProgress();
+                this.updateProgressDisplay();
+            },
+            
+            updateProgressDisplay() {
+                if (!this.currentModule) return;
+                
+                const progress = this.progress[this.currentModule] || 0;
+                document.getElementById('progressFill').style.width = `${progress}%`;
+                document.getElementById('progressText').textContent = `${progress}% abgeschlossen`;
+            },
+            
+            closeModule() {
+                document.getElementById('modulesGrid').style.display = 'grid';
+                document.querySelector('.modules-section .section-title').style.display = 'block';
+                document.querySelector('.modules-section p').style.display = 'block';
+                document.getElementById('moduleDetailView').classList.remove('active');
+                
+                // Reset video
+                document.getElementById('moduleVideo').src = '';
+                
+                // Scroll to modules
+                document.getElementById('modulesGrid').scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            const yearTabs = document.querySelectorAll('.year-tab');
-            const modulesContainer = document.getElementById('modulesContainer');
-            
-            // Sample content for different years (in a real app, this would come from a database)
-            const yearContent = {
-                1: `<!-- Year 1 content is already loaded by default -->`,
-                2: `
-                    <div class="module-card">
-                        <div class="module-header">
-                            <h3 class="module-title"><i class="fas fa-band-aid"></i> Wundversorgung & Verbandswechsel</h3>
-                            <span class="module-difficulty">Aseptisches Arbeiten</span>
-                        </div>
-                        <div class="module-body">
-                            <p class="module-description">Steriler Verbandswechsel nach aktuellen Leitlinien. Inklusive Wundassessment, Dokumentation und Patientenanleitung.</p>
-                            <div class="steps-section">
-                                <h4 class="section-title"><i class="fas fa-skull-crossbones"></i> Asepsis ist NON-NEGOTIABLE</h4>
-                                <ol class="steps-list">
-                                    <li class="step-item">
-                                        <div class="step-title">Steriles Feld vorbereiten</div>
-                                        <div class="step-details">Arbeitsfläche desinfizieren, steriles Tuch, Material in richtiger Reihenfolge anordnen.</div>
-                                        <div class="step-tips">
-                                            <div class="tip-title"><i class="fas fa-bacteria"></i> Kritischer Punkt</div>
-                                            <p>Hände nach Anziehen der sterilen Handschuhe NICHTS Unsteriles mehr berühren. Oberkörper nicht über steriles Feld beugen.</p>
-                                        </div>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="module-card">
-                        <div class="module-header">
-                            <h3 class="module-title"><i class="fas fa-pills"></i> Medikamentengabe</h3>
-                            <span class="module-difficulty">5 Recht & Dokumentation</span>
-                        </div>
-                        <div class="module-body">
-                            <p class="module-description">Sichere Applikation von Medikamenten nach den 5 Recht: richtiger Patient, Medikament, Dosis, Zeitpunkt, Applikationsweg.</p>
-                        </div>
-                    </div>
-                `,
-                3: `
-                    <div class="module-card">
-                        <div class="module-header">
-                            <h3 class="module-title"><i class="fas fa-comments-medical"></i> Beratungsgespräch & Angehörigengespräch</h3>
-                            <span class="module-difficulty">Kommunikationsprüfung</span>
-                        </div>
-                        <div class="module-body">
-                            <p class="module-description">Strukturierte Gesprächsführung nach dem Berliner Modell oder SBAR. Inklusive schwierige Nachrichten überbringen.</p>
-                            <div class="steps-section">
-                                <h4 class="section-title"><i class="fas fa-heart"></i> Gesprächsstruktur nach SBAR</h4>
-                                <ol class="steps-list">
-                                    <li class="step-item">
-                                        <div class="step-title">Situation</div>
-                                        <div class="step-details">Kurze, prägnante Darstellung des aktuellen Anlasses.</div>
-                                    </li>
-                                    <li class="step-item">
-                                        <div class="step-title">Background</div>
-                                        <div class="step-details">Relevante Hintergrundinformationen (Diagnosen, Medikation).</div>
-                                    </li>
-                                    <li class="step-item">
-                                        <div class="step-title">Assessment</div>
-                                        <div class="step-details">Eigene Einschätzung der Situation.</div>
-                                    </li>
-                                    <li class="step-item">
-                                        <div class="step-title">Recommendation</div>
-                                        <div class="step-details">Konkrete Empfehlung oder Frage.</div>
-                                        <div class="step-tips">
-                                            <div class="tip-title"><i class="fas fa-microphone"></i> Prüfungs-Tipp</div>
-                                            <p>Üben Sie mit einem Kommilitonen! Nehmen Sie sich auf Video auf und analysieren Sie Ihre nonverbale Kommunikation.</p>
-                                        </div>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                `
-            };
-            
-            // Add click events to year tabs
-            yearTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    yearTabs.forEach(t => t.classList.remove('active'));
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    // Get selected year
-                    const selectedYear = this.getAttribute('data-year');
-                    
-                    // Update modules content
-                    if (yearContent[selectedYear]) {
-                        modulesContainer.innerHTML = yearContent[selectedYear];
-                    }
-                    
-                    // Scroll to modules
-                    modulesContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            });
-            
-            // Add interactivity to material checkboxes (simulated)
-            const materialItems = document.querySelectorAll('.material-item');
-            materialItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    this.classList.toggle('checked');
-                    const icon = this.querySelector('i');
-                    if (this.classList.contains('checked')) {
-                        icon.className = 'fas fa-check-double';
-                        icon.style.color = 'var(--success)';
-                    } else {
-                        icon.className = 'fas fa-check';
-                        icon.style.color = '';
-                    }
-                });
-            });
+            AppState.init();
         });
     </script>
 </body>
