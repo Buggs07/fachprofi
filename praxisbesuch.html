@@ -1,0 +1,1185 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktische Prüfungen Vorbereitung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* Inherit all CSS variables and base styles from existing page */
+        /* Only new or modified styles are shown below */
+        
+        /* Video Container Styles */
+        .video-container {
+            margin: var(--spacing-lg) 0;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-elevated);
+        }
+        
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: #000;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+        
+        .video-placeholder i {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.8;
+        }
+        
+        /* Year Navigation */
+        .year-navigation {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+        
+        .year-tab {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .year-tab:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .year-tab.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Step-by-Step Procedure Styles */
+        .procedure-step {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .procedure-step:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .step-title {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .step-content {
+            margin-left: 60px; /* Align with step number */
+        }
+        
+        .step-details {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .step-checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm);
+            background: var(--primary-light);
+            border-radius: var(--radius);
+        }
+        
+        .step-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .step-checkbox label {
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        /* Materials List */
+        .materials-list {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .materials-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--spacing-sm);
+        }
+        
+        .material-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: white;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+        
+        /* Critical Points Section */
+        .critical-points {
+            background: #fff8e1;
+            border-left: 4px solid var(--warning);
+            padding: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            border-radius: var(--radius);
+        }
+        
+        .critical-points h4 {
+            color: var(--warning);
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        /* Progress Tracking */
+        .procedure-progress {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, var(--xp) 100%);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Procedure Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .category-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-elevated);
+        }
+        
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .year-navigation {
+                flex-direction: column;
+            }
+            
+            .year-tab {
+                justify-content: center;
+            }
+            
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
+            
+            .step-content {
+                margin-left: 0;
+                margin-top: var(--spacing-sm);
+            }
+            
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar (Same as existing) -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/index" class="logo" id="home-link">
+                <div class="logo-icon">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <span>Praktische Prüfungen</span>
+            </a>
+
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="/index" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Startseite
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lernspiele" class="nav-link">
+                        <i class="fas fa-book-medical"></i>
+                        Lernspiele
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/themen" class="nav-link">
+                        <i class="fas fa-gamepad"></i>
+                        Themen
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/fallbeispiele" class="nav-link">
+                        <i class="fas fa-procedures"></i>
+                        Fallbeispiele
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="/praktische-pruefungen" class="nav-link">
+                        <i class="fas fa-clipboard-check"></i>
+                        Praktische Prüfungen
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Economy Bar (Same as existing) -->
+        <div class="economy-bar">
+            <div class="container">
+                <div class="economy-stats">
+                    <div class="economy-item coins" id="coins-display">
+                        <i class="fas fa-coins"></i>
+                        <span id="coins">150</span>
+                    </div>
+                    <div class="economy-item xp" id="xp-display">
+                        <i class="fas fa-fire"></i>
+                        <span id="xp">75</span> XP
+                        <div class="xp-progress">
+                            <div class="xp-progress-fill" id="xp-progress" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="economy-item level" id="level-display">
+                        <i class="fas fa-level-up-alt"></i>
+                        Level <span id="level">2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Economy Stats -->
+        <div class="mobile-economy">
+            <div class="economy-item coins">
+                <i class="fas fa-coins"></i>
+                <span id="mobile-coins">150</span>
+            </div>
+            <div class="economy-item xp">
+                <i class="fas fa-fire"></i>
+                <span id="mobile-xp">75</span>
+            </div>
+            <div class="economy-item level">
+                <i class="fas fa-level-up-alt"></i>
+                <span id="mobile-level">2</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Welcome Section -->
+            <div id="welcome-view">
+                <h1 class="section-title">Praktische Prüfungen Vorbereitung</h1>
+                <p class="section-subtitle">
+                    Mastere deine praktischen Pflegeprüfungen mit interaktiven Schritt-für-Schritt Anleitungen. 
+                    Übe Verfahren, sieh dir Demonstrationen an und überprüfe dein Wissen für die Abschlussprüfung zur Pflegefachkraft[citation:4][citation:9].
+                </p>
+
+                <!-- Year Navigation -->
+                <div class="year-navigation" id="year-navigation">
+                    <div class="year-tab active" data-year="1">
+                        <i class="fas fa-1"></i>
+                        1. Ausbildungsjahr
+                    </div>
+                    <div class="year-tab" data-year="2">
+                        <i class="fas fa-2"></i>
+                        2. Ausbildungsjahr
+                    </div>
+                    <div class="year-tab" data-year="3">
+                        <i class="fas fa-3"></i>
+                        3. Ausbildungsjahr
+                    </div>
+                    <div class="year-tab" data-year="kommunikation">
+                        <i class="fas fa-comments"></i>
+                        Beratungsgespräche
+                    </div>
+                </div>
+
+                <!-- Categories Grid -->
+                <div class="categories-grid" id="categories-container">
+                    <!-- Categories will be populated by JavaScript based on selected year -->
+                </div>
+            </div>
+
+            <!-- Procedure Detail View -->
+            <div id="procedure-view" style="display: none;">
+                <div class="procedure-container">
+                    <!-- Procedure Header -->
+                    <div class="case-study">
+                        <h2 class="case-title" id="procedure-title">Vitalzeichenkontrolle</h2>
+                        <div class="case-description" id="procedure-description">
+                            Die Kontrolle der Vitalzeichen ist eine grundlegende Pflegetätigkeit, die regelmäßig durchgeführt wird, 
+                            um den Gesundheitszustand eines Patienten zu überwachen[citation:1]. Dazu gehören Blutdruck, Puls, 
+                            Atemfrequenz und Temperatur.
+                        </div>
+                        <div class="case-info">
+                            <div class="info-item">
+                                <div class="info-label">Schwierigkeitsgrad</div>
+                                <div class="info-value">Grundlegend</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Dauer</div>
+                                <div class="info-value">10-15 Minuten</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Prüfungsrelevanz</div>
+                                <div class="info-value">Hoch</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Demonstration -->
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <div class="video-placeholder" id="video-placeholder">
+                                <i class="fas fa-video"></i>
+                                <p>Video-Demonstration wird geladen</p>
+                                <small>YouTube-Video-Link kann eingefügt werden</small>
+                            </div>
+                            <iframe id="procedure-video" 
+                                    src="" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen
+                                    style="display: none;">
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <!-- Materials Needed -->
+                    <div class="materials-list" id="materials-list">
+                        <h3 class="materials-title">
+                            <i class="fas fa-tools"></i>
+                            Benötigtes Material
+                        </h3>
+                        <div class="materials-grid" id="materials-grid">
+                            <!-- Materials will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Step-by-Step Procedure -->
+                    <div id="steps-container">
+                        <!-- Steps will be populated by JavaScript -->
+                    </div>
+
+                    <!-- Critical Points -->
+                    <div class="critical-points" id="critical-points">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Kritische Punkte & Fehlervermeidung</h4>
+                        <div id="critical-points-content">
+                            <!-- Critical points will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Progress Tracking -->
+                    <div class="procedure-progress">
+                        <div class="progress-header">
+                            <span>Dein Fortschritt</span>
+                            <span id="progress-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="step-checkbox">
+                            <input type="checkbox" id="mark-complete">
+                            <label for="mark-complete">Ich habe alle Schritte verstanden und geübt</label>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="navigation-buttons">
+                        <button class="btn btn-secondary" id="back-to-categories">
+                            <i class="fas fa-arrow-left"></i>
+                            Zurück zu Verfahren
+                        </button>
+                        <button class="btn btn-primary" id="practice-quiz">
+                            <i class="fas fa-question-circle"></i>
+                            Wissenstest starten
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz View -->
+            <div id="quiz-view" style="display: none;">
+                <div class="simulator-container">
+                    <!-- Quiz content will be dynamically generated -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (Same as existing) -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">Praktische Prüfungen Vorbereitung</div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Startseite</a>
+                    <a href="#" class="footer-link">Über dieses Projekt</a>
+                    <a href="#" class="footer-link">Kontakt</a>
+                </div>
+                <div class="footer-bottom">
+                    &copy; 2025 Praktische Prüfungen Vorbereitung. Entwickelt für die Pflegeausbildung in Deutschland.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Procedure Database based on Pflegefachmann Ausbildung curriculum
+        const proceduresDatabase = {
+            "year1": [
+                {
+                    id: "vital-signs",
+                    title: "Vitalzeichenkontrolle",
+                    description: "Grundlegende Messung und Dokumentation der Vitalparameter[citation:1][citation:6].",
+                    difficulty: "Grundlegend",
+                    duration: "10-15 Minuten",
+                    relevance: "Hoch",
+                    videoId: "dQw4w9WgXcQ", // Example YouTube video ID - can be replaced
+                    materials: [
+                        "Blutdruckmessgerät (Sphygmomanometer)[citation:6]",
+                        "Stethoskop[citation:6]",
+                        "Digitales Fieberthermometer[citation:1]",
+                        "Stoppuhr oder Uhr mit Sekundenzeiger",
+                        "Dokumentationsbogen",
+                        "Desinfektionsmittel",
+                        "Einmalhandschuhe"
+                    ],
+                    steps: [
+                        {
+                            number: 1,
+                            title: "Vorbereitung und Hygiene",
+                            content: "Hände waschen und desinfizieren. Patienten identifizieren und über das Verfahren informieren. Für eine ruhige Umgebung sorgen[citation:1].",
+                            keyPoint: "Patientenaufklärung und Einwilligung einholen"
+                        },
+                        {
+                            number: 2,
+                            title: "Temperaturmessung",
+                            content: "Digitales Thermometer desinfizieren. Bei oraler Messung: Thermometer unter die Zunge platzieren, Mund schließen lassen. Warten bis Signalton ertönt[citation:6].",
+                            keyPoint: "Methode (oral, axillär, tympanisch) dokumentieren"
+                        },
+                        {
+                            number: 3,
+                            title: "Pulsmessung",
+                            content: "Radialispuls an der Innenseite des Handgelenks mit Zeige- und Mittelfinger tasten. Über 60 Sekunden zählen (oder 15 Sekunden × 4)[citation:6]. Auf Rhythmus und Qualität achten.",
+                            keyPoint: "Nicht mit dem Daumen tasten (eigener Puls spürbar)"
+                        },
+                        {
+                            number: 4,
+                            title: "Atemfrequenz",
+                            content: "Unbemerkt nach der Pulsmessung weiterbeobachten. Atemzüge über 60 Sekunden zählen. Auf Atemmuster, -tiefe und Nebengeräusche achten[citation:1].",
+                            keyPoint: "Patienten nicht auf die Messung hinweisen (verfälscht Werte)"
+                        },
+                        {
+                            number: 5,
+                            title: "Blutdruckmessung",
+                            content: "Oberarm auf Herzhöhe lagern. Manschette anlegen (2-3 cm oberhalb der Ellenbeuge). Stethoskop auf Arteria brachialis platzieren. Systolischen und diastolischen Wert ermitteln[citation:6].",
+                            keyPoint: "Manschettenbreite muss zu Armumfang passen"
+                        },
+                        {
+                            number: 6,
+                            title: "Dokumentation",
+                            content: "Alle Werte sofort dokumentieren. Normwerte: Temperatur 36,5-37,5°C, Puls 60-100/min, Atmung 12-20/min, RR 120/80 mmHg[citation:1]. Auffälligkeiten melden.",
+                            keyPoint: "TIMING: Dokumentation unmittelbar nach Messung"
+                        }
+                    ],
+                    criticalPoints: [
+                        "Vor jeder Messung Hände desinfizieren",
+                        "Patienten immer zuerst identifizieren",
+                        "Geräte nach Herstelleranleitung kalibrieren und warten",
+                        "Bei Auffälligkeiten sofort Vorgesetzte informieren",
+                        "Messungen nicht unterbrechen oder abbrechen"
+                    ]
+                },
+                {
+                    id: "basic-hygiene",
+                    title: "Körperpflege & Bettwäschewechsel",
+                    description: "Unterstützung bei der Grundpflege und Wechsel der Bettwäsche bei bettlägerigen Patienten[citation:2].",
+                    difficulty: "Grundlegend",
+                    duration: "20-30 Minuten",
+                    relevance: "Hoch",
+                    videoId: "",
+                    materials: [
+                        "Waschschüssel mit warmem Wasser",
+                        "Waschlappen und Handtücher",
+                        "Pflegeseife oder Waschlotion",
+                        "Frische Bettwäsche",
+                        "Einmalhandschuhe",
+                        "Müllbeutel für gebrauchte Wäsche",
+                        "Hautpflegeprodukte"
+                    ],
+                    steps: [
+                        {
+                            number: 1,
+                            title: "Vorbereitung",
+                            content: "Material bereitlegen. Raumtemperatur angenehm einstellen. Patienten informieren und Privatsphäre gewährleisten (Vorhang zu, Tür schließen)[citation:2].",
+                            keyPoint: "Respekt vor der Intimsphäre des Patienten"
+                        },
+                        {
+                            number: 2,
+                            title: "Waschung",
+                            content: "Nach dem Prinzip 'von sauber nach schmutzig' vorgehen[citation:2]. Erst Gesicht, dann Arme, Brustkorb, Beine, zuletzt Intimbereich. Immer von proximal nach distal waschen.",
+                            keyPoint: "Wasser regelmäßig wechseln, Temperatur kontrollieren"
+                        },
+                        {
+                            number: 3,
+                            title: "Bettwäschewechsel",
+                            content: "Patienten vorsichtig auf die Seite drehen. Gebrauchte Laken zur Mitte hin zusammenrollen. Frische Laken ausbreiten und glatt streichen. Patienten zurückdrehen, Vorgang auf anderer Seite wiederholen.",
+                            keyPoint: "Patienten während des Drehens sichern und stabilisieren"
+                        },
+                        {
+                            number: 4,
+                            title: "Abschluss",
+                            content: "Patienten bequem lagern. Raum aufräumen. Gebrauchte Wäsche entsorgen. Hände desinfizieren.",
+                            keyPoint: "Patientenbedürfnisse erfragen (Decke, Getränk)"
+                        }
+                    ],
+                    criticalPoints: [
+                        "Immer von vorn nach hinten waschen (Infektionsprophylaxe)",
+                        "Hautfalten gründlich trocknen (Dekubitusprophylaxe)",
+                        "Patienten so viel wie möglich selbst machen lassen",
+                        "Auf Hautveränderungen achten und dokumentieren",
+                        "Wasser maximal handwarm (37-40°C)"
+                    ]
+                }
+            ],
+            "year2": [
+                {
+                    id: "wound-care",
+                    title: "Wundversorgung & Verbandswechsel",
+                    description: "Sachgerechte Versorgung von sauberen Wunden und regelmäßiger Verbandswechsel[citation:7].",
+                    difficulty: "Fortgeschritten",
+                    duration: "15-25 Minuten",
+                    relevance: "Hoch",
+                    videoId: "",
+                    materials: [
+                        "Steriler Verbandswechsel-Set",
+                        "Desinfektionslösung",
+                        "Sterile Kompressen und Wundauflagen",
+                        "Fixierpflaster oder Binden",
+                        "Sterile Einmalhandschuhe",
+                        "Wundabstrich-Material (falls nötig)",
+                        "Müllbeutel für infektiöse Abfälle"
+                    ],
+                    steps: [
+                        {
+                            number: 1,
+                            title: "Vorbereitung",
+                            content: "Steriles Feld vorbereiten. Hände desinfizieren, sterile Handschuhe anziehen. Patienten informieren und lagern[citation:7].",
+                            keyPoint: "Aseptisches Arbeiten einhalten"
+                        },
+                        {
+                            number: 2,
+                            title: "Alten Verband entfernen",
+                            content: "Verband vorsichtig abnehmen. Wundsekret, Geruch und Verbandsmaterial beurteilen. Gebrauchtes Material sofort entsorgen.",
+                            keyPoint: "Verband nicht über die Wunde ziehen"
+                        },
+                        {
+                            number: 3,
+                            title: "Wundbeurteilung",
+                            content: "Wundgröße, -tiefe, Exsudat, Geruch und Randbereich beurteilen. Auf Infektionszeichen (Rötung, Schwellung, Überwärmung) achten[citation:7].",
+                            keyPoint: "Wunddokumentation mit Skizze anfertigen"
+                        },
+                        {
+                            number: 4,
+                            title: "Reinigung",
+                            content: "Mit steriler Kochsalzlösung von innen nach außen reinigen. Bei Bedarf Wundspülung mit Spritze und Kanüle durchführen[citation:7].",
+                            keyPoint: "Niemals bereits verwendete Tupfer wieder in Lösung tauchen"
+                        },
+                        {
+                            number: 5,
+                            title: "Neuer Verband",
+                            content: "Passende Wundauflage auswählen. Steril auflegen und fixieren. Nicht zu straff, aber sicher befestigen.",
+                            keyPoint: "Verband darf nicht scheuern oder drücken"
+                        }
+                    ],
+                    criticalPoints: [
+                        "Strikte Einhaltung der Asepsis",
+                        "Bei Infektionsverdacht Abstrich nehmen",
+                        "Wundrand nicht mit Desinfektionsmittel benetzen",
+                        "Dokumentation: Farbe, Konsistenz, Menge des Exsudats",
+                        "Patienten über Wundheilungsprozess aufklären"
+                    ]
+                }
+            ],
+            "kommunikation": [
+                {
+                    id: "patient-consultation",
+                    title: "Beratungsgespräch & Angehörigengespräch",
+                    description: "Strukturierte Gesprächsführung in schwierigen Situationen und bei der Patientenberatung[citation:3][citation:8].",
+                    difficulty: "Fortgeschritten",
+                    duration: "20-30 Minuten",
+                    relevance: "Hoch",
+                    videoId: "",
+                    materials: [
+                        "Gesprächsleitfaden",
+                        "Informationsmaterial für Patienten",
+                        "Dokumentationsbogen",
+                        "Evtl. Dolmetscher (bei Sprachbarrieren)",
+                        "Uhr für Zeitmanagement"
+                    ],
+                    steps: [
+                        {
+                            number: 1,
+                            title: "Vorbereitung",
+                            content: "Gesprächsziel definieren. Raum vorbereiten (ruhig, privat, angenehme Temperatur). Alle nötigen Informationen bereithalten[citation:3].",
+                            keyPoint: "Ausreichend Zeit einplanen, nicht hetzen"
+                        },
+                        {
+                            number: 2,
+                            title: "Beziehungsaufbau",
+                            content: "Begrüßen, vorstellen, Gesprächsziel nennen. Nonverbale Signale beachten (Körpersprache, Augenkontakt, Distanzzone)[citation:3].",
+                            keyPoint: "Aktives Zuhören zeigen (nickend, bestätigend)"
+                        },
+                        {
+                            number: 3,
+                            title: "Gesprächsführung",
+                            content: "Offene Fragen stellen ('Wie geht es Ihnen damit?'). Bei schwierigen Themen 'Ich-Botschaften' verwenden[citation:3]. Emotionen zulassen und validieren.",
+                            keyPoint: "Schweigen aushalten können - nicht sofort füllen"
+                        },
+                        {
+                            number: 4,
+                            title: "Information & Beratung",
+                            content: "Verständliche Sprache, keine Fachbegriffe. Informationen portioniert geben. Auf Verständnis prüfen ('Können Sie mir das in Ihren Worten wiederholen?').",
+                            keyPoint: "Visuelle Hilfsmittel einsetzen (Skizzen, Modelle)"
+                        },
+                        {
+                            number: 5,
+                            title: "Abschluss & Dokumentation",
+                            content: "Zusammenfassung geben. Nächste Schritte vereinbaren. Nachfragen ermöglichen. Gesprächsinhalte sachlich dokumentieren.",
+                            keyPoint: "Realistische Zeitpläne vereinbaren, nicht überfordern"
+                        }
+                    ],
+                    criticalPoints: [
+                        "Keine Wertungen oder Vorurteile äußern",
+                        "Bei Sprachbarrieren professionellen Dolmetscher nutzen",
+                        "Eigene Grenzen kennen (wann Supervision holen?)",
+                        "In Krisengesprächen Sicherheit priorisieren",
+                        "Dokumentation: Sachlich, ohne emotionale Bewertung"
+                    ]
+                }
+            ]
+        };
+
+        // Application State
+        let currentYear = "year1";
+        let currentProcedure = null;
+        let completedSteps = {};
+        let userState = {
+            coins: 150,
+            xp: 75,
+            level: 2,
+            completedProcedures: []
+        };
+
+        // DOM Elements
+        const yearTabs = document.querySelectorAll('.year-tab');
+        const categoriesContainer = document.getElementById('categories-container');
+        const welcomeView = document.getElementById('welcome-view');
+        const procedureView = document.getElementById('procedure-view');
+        const quizView = document.getElementById('quiz-view');
+        const procedureTitle = document.getElementById('procedure-title');
+        const procedureDescription = document.getElementById('procedure-description');
+        const videoPlaceholder = document.getElementById('video-placeholder');
+        const procedureVideo = document.getElementById('procedure-video');
+        const materialsGrid = document.getElementById('materials-grid');
+        const stepsContainer = document.getElementById('steps-container');
+        const criticalPointsContent = document.getElementById('critical-points-content');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const markCompleteCheckbox = document.getElementById('mark-complete');
+
+        // Initialize Application
+        function initApp() {
+            loadUserState();
+            renderCategories();
+            setupEventListeners();
+            updateEconomyDisplay();
+        }
+
+        // Load user state from localStorage
+        function loadUserState() {
+            const savedState = localStorage.getItem('praktische-pruefungen-state');
+            if (savedState) {
+                userState = JSON.parse(savedState);
+                completedSteps = userState.completedSteps || {};
+            }
+        }
+
+        // Save user state to localStorage
+        function saveUserState() {
+            userState.completedSteps = completedSteps;
+            localStorage.setItem('praktische-pruefungen-state', JSON.stringify(userState));
+        }
+
+        // Render categories based on selected year
+        function renderCategories() {
+            categoriesContainer.innerHTML = '';
+            const procedures = proceduresDatabase[currentYear];
+            
+            procedures.forEach(procedure => {
+                const isCompleted = userState.completedProcedures.includes(procedure.id);
+                
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card';
+                categoryCard.dataset.id = procedure.id;
+                
+                // Determine icon based on procedure type
+                let icon = 'fa-clipboard-list';
+                if (procedure.id.includes('vital')) icon = 'fa-heartbeat';
+                if (procedure.id.includes('hygiene')) icon = 'fa-shower';
+                if (procedure.id.includes('wound')) icon = 'fa-band-aid';
+                if (procedure.id.includes('consultation')) icon = 'fa-comments';
+                
+                categoryCard.innerHTML = `
+                    <div class="category-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <h3>${procedure.title}</h3>
+                    <p>${procedure.description}</p>
+                    <div class="module-meta">
+                        <div class="module-difficulty">
+                            <i class="fas fa-star"></i>
+                            ${procedure.difficulty}
+                        </div>
+                        <div>
+                            <i class="fas fa-clock"></i>
+                            ${procedure.duration}
+                        </div>
+                    </div>
+                    <div class="module-actions">
+                        <button class="btn btn-primary start-procedure" data-id="${procedure.id}">
+                            <i class="fas fa-play"></i>
+                            ${isCompleted ? 'Wiederholen' : 'Starten'}
+                        </button>
+                    </div>
+                    ${isCompleted ? `
+                        <div class="badge" style="margin-top: 10px;">
+                            <i class="fas fa-check-circle"></i>
+                            Abgeschlossen
+                        </div>
+                    ` : ''}
+                `;
+                
+                categoriesContainer.appendChild(categoryCard);
+            });
+        }
+
+        // Load procedure details
+        function loadProcedure(procedureId) {
+            // Find procedure in database
+            let procedure = null;
+            for (const year in proceduresDatabase) {
+                const found = proceduresDatabase[year].find(p => p.id === procedureId);
+                if (found) {
+                    procedure = found;
+                    currentYear = year;
+                    break;
+                }
+            }
+            
+            if (!procedure) return;
+            
+            currentProcedure = procedure;
+            
+            // Update UI
+            procedureTitle.textContent = procedure.title;
+            procedureDescription.textContent = procedure.description;
+            
+            // Update case info
+            document.querySelector('.info-item:nth-child(1) .info-value').textContent = procedure.difficulty;
+            document.querySelector('.info-item:nth-child(2) .info-value').textContent = procedure.duration;
+            document.querySelector('.info-item:nth-child(3) .info-value').textContent = procedure.relevance;
+            
+            // Load video if available
+            if (procedure.videoId) {
+                videoPlaceholder.style.display = 'none';
+                procedureVideo.style.display = 'block';
+                procedureVideo.src = `https://www.youtube.com/embed/${procedure.videoId}`;
+            } else {
+                videoPlaceholder.style.display = 'flex';
+                procedureVideo.style.display = 'none';
+                videoPlaceholder.innerHTML = `
+                    <i class="fas fa-video-slash"></i>
+                    <p>Kein Video verfügbar</p>
+                    <small>YouTube-Link kann in den Einstellungen hinzugefügt werden</small>
+                `;
+            }
+            
+            // Load materials
+            materialsGrid.innerHTML = '';
+            procedure.materials.forEach(material => {
+                const materialItem = document.createElement('div');
+                materialItem.className = 'material-item';
+                materialItem.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> ${material}`;
+                materialsGrid.appendChild(materialItem);
+            });
+            
+            // Load steps
+            stepsContainer.innerHTML = '';
+            procedure.steps.forEach(step => {
+                const stepKey = `${procedureId}-step-${step.number}`;
+                const isChecked = completedSteps[stepKey] || false;
+                
+                const stepElement = document.createElement('div');
+                stepElement.className = 'procedure-step';
+                stepElement.innerHTML = `
+                    <div class="step-header">
+                        <div class="step-number">${step.number}</div>
+                        <div class="step-title">${step.title}</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-details">${step.content}</div>
+                        <div class="step-checkbox">
+                            <input type="checkbox" id="${stepKey}" ${isChecked ? 'checked' : ''}>
+                            <label for="${stepKey}">Diesen Schritt verstanden und geübt</label>
+                        </div>
+                    </div>
+                `;
+                stepsContainer.appendChild(stepElement);
+                
+                // Add event listener for checkbox
+                document.getElementById(stepKey).addEventListener('change', updateProgress);
+            });
+            
+            // Load critical points
+            criticalPointsContent.innerHTML = '';
+            procedure.criticalPoints.forEach(point => {
+                const pointElement = document.createElement('div');
+                pointElement.style.marginBottom = '5px';
+                pointElement.innerHTML = `<i class="fas fa-circle" style="font-size: 6px; color: var(--warning); margin-right: 10px;"></i> ${point}`;
+                criticalPointsContent.appendChild(pointElement);
+            });
+            
+            // Update progress
+            updateProgress();
+            
+            // Switch to procedure view
+            welcomeView.style.display = 'none';
+            procedureView.style.display = 'block';
+            quizView.style.display = 'none';
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            if (!currentProcedure) return;
+            
+            const totalSteps = currentProcedure.steps.length;
+            let completedCount = 0;
+            
+            currentProcedure.steps.forEach(step => {
+                const stepKey = `${currentProcedure.id}-step-${step.number}`;
+                const checkbox = document.getElementById(stepKey);
+                if (checkbox && checkbox.checked) {
+                    completedCount++;
+                    completedSteps[stepKey] = true;
+                } else {
+                    completedSteps[stepKey] = false;
+                }
+            });
+            
+            const percentage = totalSteps > 0 ? Math.round((completedCount / totalSteps) * 100) : 0;
+            progressFill.style.width = `${percentage}%`;
+            progressPercentage.textContent = `${percentage}%`;
+            
+            // Enable/disable mark complete checkbox
+            markCompleteCheckbox.checked = percentage === 100;
+            
+            saveUserState();
+            
+            // Award XP for progress
+            if (percentage === 100 && !userState.completedProcedures.includes(currentProcedure.id)) {
+                awardCompletionXP();
+            }
+        }
+
+        // Award XP for completing a procedure
+        function awardCompletionXP() {
+            if (!currentProcedure) return;
+            
+            // Calculate XP based on difficulty
+            let xpEarned = 10;
+            if (currentProcedure.difficulty === 'Fortgeschritten') xpEarned = 20;
+            
+            userState.xp += xpEarned;
+            userState.coins += 5;
+            
+            // Add to completed procedures if not already there
+            if (!userState.completedProcedures.includes(currentProcedure.id)) {
+                userState.completedProcedures.push(currentProcedure.id);
+            }
+            
+            // Check for level up
+            const newLevel = Math.floor(userState.xp / 100) + 1;
+            if (newLevel > userState.level) {
+                userState.level = newLevel;
+                showLevelUp(newLevel);
+            }
+            
+            saveUserState();
+            updateEconomyDisplay();
+            
+            // Show confetti
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Update economy display
+        function updateEconomyDisplay() {
+            document.getElementById('coins').textContent = userState.coins;
+            document.getElementById('xp').textContent = userState.xp;
+            document.getElementById('level').textContent = userState.level;
+            
+            // Update mobile display
+            document.getElementById('mobile-coins').textContent = userState.coins;
+            document.getElementById('mobile-xp').textContent = userState.xp;
+            document.getElementById('mobile-level').textContent = userState.level;
+            
+            // Update XP progress
+            const xpInCurrentLevel = userState.xp % 100;
+            const xpProgress = (xpInCurrentLevel / 100) * 100;
+            document.getElementById('xp-progress').style.width = `${xpProgress}%`;
+        }
+
+        // Show level up animation
+        function showLevelUp(newLevel) {
+            const levelUpDiv = document.createElement('div');
+            levelUpDiv.className = 'level-up';
+            levelUpDiv.innerHTML = `
+                <h2>Level Up!</h2>
+                <p>Herzlichen Glückwunsch! Sie haben Level ${newLevel} erreicht!</p>
+                <button class="btn btn-primary" id="close-level-up">
+                    Weiter
+                </button>
+            `;
+            
+            document.body.appendChild(levelUpDiv);
+            
+            // Add confetti
+            confetti({
+                particleCount: 200,
+                spread: 100
+            });
+            
+            // Close level up message
+            document.getElementById('close-level-up').addEventListener('click', () => {
+                levelUpDiv.remove();
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Year tab navigation
+            yearTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    yearTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentYear = tab.dataset.year;
+                    renderCategories();
+                });
+            });
+            
+            // Start procedure
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.start-procedure')) {
+                    const procedureId = e.target.closest('.start-procedure').dataset.id;
+                    loadProcedure(procedureId);
+                }
+            });
+            
+            // Back to categories
+            document.getElementById('back-to-categories').addEventListener('click', () => {
+                procedureView.style.display = 'none';
+                welcomeView.style.display = 'block';
+                renderCategories();
+            });
+            
+            // Mark complete checkbox
+            markCompleteCheckbox.addEventListener('change', function() {
+                if (this.checked && currentProcedure) {
+                    // Check all steps
+                    currentProcedure.steps.forEach(step => {
+                        const stepKey = `${currentProcedure.id}-step-${step.number}`;
+                        const checkbox = document.getElementById(stepKey);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            completedSteps[stepKey] = true;
+                        }
+                    });
+                    updateProgress();
+                }
+            });
+            
+            // Practice quiz button
+            document.getElementById('practice-quiz').addEventListener('click', () => {
+                // For now, show an alert. Can be extended to full quiz functionality.
+                alert('Quiz-Funktionalität wird in einer späteren Version implementiert. Für jetzt: Überprüfen Sie Ihr Wissen anhand der kritischen Punkte und Schritt-für-Schritt Anleitungen.');
+            });
+            
+            // Mobile menu toggle (from existing code)
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    hamburger.classList.toggle('active');
+                });
+            }
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (navMenu.classList.contains('active') && 
+                    !navMenu.contains(e.target) && 
+                    !hamburger.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize the application when page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
