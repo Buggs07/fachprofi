@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PflegefachProfi | Deine Prüfungsvorbereitung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== RESET & VARIABLEN ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #eef2ff;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --warning: #fca311;
+            --danger: #e63946;
+            --coin: #ffd166;
+            --text-primary: #1d3557;
+            --text-secondary: #457b9d;
+            --text-tertiary: #a8dadc;
+            --background: #f1faee;
+            --surface: #ffffff;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 32px;
+            --spacing-xl: 48px;
+            --spacing-xxl: 64px;
+            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background-color: var(--background);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        /* ===== TYPOGRAPHIE (SCHWEIZER STIL) ===== */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background-color: var(--surface);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--primary-light);
+            padding: 6px 10px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .stat-item i {
+            font-size: 0.9rem;
+        }
+
+        .coins {
+            background: linear-gradient(135deg, var(--coin) 0%, #ffb347 100%);
+            color: var(--text-primary);
+        }
+
+        .level {
+            background: var(--primary);
+            color: white;
+        }
+
+        .xp {
+            background: var(--success);
+            color: white;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: var(--spacing-xxl) 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            color: white;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--accent);
+            color: white;
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--radius);
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: var(--shadow-elevated);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(247,37,133,0.4);
+        }
+
+        /* ===== LEARNING PATH (MODULE) ===== */
+        .learning-path {
+            padding: var(--spacing-xl) 0;
+            background: var(--background);
+        }
+
+        .path-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        .path-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .path-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .path-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-elevated);
+            border-color: var(--primary-light);
+        }
+
+        .path-card.locked {
+            opacity: 0.7;
+            filter: grayscale(0.5);
+        }
+
+        .path-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .path-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .path-cost {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--coin);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .path-title {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .path-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            font-size: 0.9rem;
+        }
+
+        .path-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .path-action {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .path-action.unlock {
+            background: var(--primary);
+            color: white;
+        }
+
+        .path-action.unlock:hover {
+            background: var(--primary-dark);
+        }
+
+        .path-action.start {
+            background: var(--success);
+            color: white;
+        }
+
+        .path-action.start:hover {
+            background: #3ab0d9;
+        }
+
+        .path-action.continue {
+            background: var(--accent);
+            color: white;
+        }
+
+        .path-action.continue:hover {
+            background: #e1156d;
+        }
+
+        /* ===== LEARNING MODULE (DETAILANSICHT) ===== */
+        .learning-module {
+            display: none;
+            padding: var(--spacing-xl) 0;
+            background: var(--surface);
+            min-height: 100vh;
+        }
+
+        .learning-module.active {
+            display: block;
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .module-progress {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .module-steps {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .step.completed {
+            background: var(--success);
+        }
+
+        .lesson-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .lesson-card {
+            display: none;
+            padding: var(--spacing-xl);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-card.active {
+            display: block;
+        }
+
+        .lesson-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .key-point {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .key-point i {
+            color: var(--primary);
+            margin-right: var(--spacing-xs);
+        }
+
+        .example-box {
+            background: #fff9e6;
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-left: 4px solid var(--warning);
+        }
+
+        .example-title {
+            font-weight: 700;
+            color: var(--warning);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .interactive-element {
+            background: var(--background);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border: 2px dashed var(--primary);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-xl);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--primary);
+            color: white;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .nav-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .quiz-option {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(76,201,240,0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: rgba(230,57,70,0.1);
+        }
+
+        .option-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .quiz-option.correct .option-indicator {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .quiz-option.incorrect .option-indicator {
+            border-color: var(--danger);
+            background: var(--danger);
+            color: white;
+        }
+
+        .quiz-feedback {
+            padding: var(--spacing-md);
+            border-radius: var(--radius);
+            margin-top: var(--spacing-md);
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(76,201,240,0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(230,57,70,0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .quiz-results {
+            text-align: center;
+            padding: var(--spacing-xl);
+            display: none;
+        }
+
+        .quiz-results.active {
+            display: block;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .result-icon.correct {
+            color: var(--success);
+        }
+
+        .result-score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .result-score.good {
+            color: var(--success);
+        }
+
+        .result-score.average {
+            color: var(--warning);
+        }
+
+        .result-score.poor {
+            color: var(--danger);
+        }
+
+        .reward-animation {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .reward-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .reward-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .reward-icon.coins {
+            background: var(--coin);
+            color: var(--text-primary);
+        }
+
+        .reward-icon.xp {
+            background: var(--success);
+            color: white;
+        }
+
+        .reward-amount {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .countdown {
+            margin-top: var(--spacing-md);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* ===== MODAL (LOGIN) ===== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-elevated);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius);
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== ANIMATIONEN ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* ===== MOBILE OPTIMIERUNG ===== */
+        @media (max-width: 768px) {
+            .user-stats {
+                gap: 8px;
+            }
+            .stat-item {
+                padding: 4px 8px;
+                font-size: 0.75rem;
+            }
+            .stat-item i {
+                font-size: 0.7rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .path-container {
+                grid-template-columns: 1fr;
+            }
+            .module-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MODAL (LOGIN) -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Anmelden</h2>
+                <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">E-Mail</label>
+                    <input type="email" id="email" placeholder="deine@email.de" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Passwort</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary">Einloggen</button>
+                <p style="margin-top: var(--spacing-md); text-align: center; color: var(--text-secondary);">
+                    Noch kein Konto? <a href="#" style="color: var(--primary);">Registrieren</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <span>PflegefachProfi</span>
+            </div>
+            <div class="user-stats">
+                <div class="stat-item coins"><i class="fa-solid fa-coins"></i> 1.250</div>
+                <div class="stat-item xp"><i class="fa-solid fa-bolt"></i> 4.800 XP</div>
+                <div class="stat-item level"><i class="fa-solid fa-star"></i> Level 12</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Bestehe deine Pflegefachmann-Prüfung</h1>
+            <p>10 interaktive Module – entwickelt nach dem Schweizer Design-Prinzip: klar, fokussiert, effizient.</p>
+            <button class="cta-button" id="startLearning"><i class="fas fa-rocket"></i> Jetzt starten</button>
+        </div>
+    </section>
+
+    <!-- LEARNING PATH (MODULÜBERSICHT) -->
+    <section class="learning-path" id="learningPath">
+        <div class="container">
+            <h2>Dein Lernpfad</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">Schalte Module frei und sammle XP – für eine sichere Prüfungsvorbereitung.</p>
+            <div class="path-container" id="moduleContainer">
+                <!-- Module werden per JS generiert oder direkt eingefügt -->
+            </div>
+        </div>
+    </section>
+
+    <!-- LEARNING MODULE (DETAILANSICHT) -->
+    <section class="learning-module" id="learningModule">
+        <div class="container">
+            <div class="module-header">
+                <button class="nav-btn" id="backToPath"><i class="fas fa-arrow-left"></i> Zurück</button>
+                <div class="module-progress">
+                    <span id="moduleTitle">Modul 1: Pflegeprozess</span>
+                    <div class="module-steps" id="stepIndicators">
+                        <!-- Steps werden dynamisch erzeugt -->
+                    </div>
+                </div>
+            </div>
+            <div class="lesson-content" id="lessonContent">
+                <!-- Lektionen und Quiz werden per JS eingefügt -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (einfach) -->
+    <footer style="background: var(--surface); padding: var(--spacing-lg) 0; border-top: 1px solid var(--border); margin-top: var(--spacing-xl);">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
+            <div>© 2026 PflegefachProfi – Prüfungsvorbereitung für Pflegefachfrau/-mann</div>
+            <div style="display: flex; gap: var(--spacing-md);">
+                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            // ---------- MODULDATEN ----------
+            const modules = [
+                { id: 1, title: 'Pflegeprozess & SIS', icon: 'fa-notes-medical', desc: 'Grundlagen des Pflegeprozesses, strukturierte Informationssammlung (SIS®).', lessons: 4, quiz: 1, time: '45 min', cost: 0, unlocked: true },
+                { id: 2, title: 'Kommunikation & Beratung', icon: 'fa-comments', desc: 'Therapeutische Kommunikation, Beratungsgespräche führen.', lessons: 3, quiz: 1, time: '30 min', cost: 0, unlocked: true },
+                { id: 3, title: 'Recht in der Pflege', icon: 'fa-gavel', desc: 'Einwilligung, Betreuungsrecht, Haftung – die wichtigsten Paragrafen.', lessons: 5, quiz: 1, time: '60 min', cost: 0, unlocked: true },
+                { id: 4, title: 'Ethik & Werte', icon: 'fa-scale-balanced', desc: 'Ethische Prinzipien, Dilemmata, Berufsethos.', lessons: 3, quiz: 1, time: '40 min', cost: 50, unlocked: false },
+                { id: 5, title: 'Interprofessionelles Handeln', icon: 'fa-handshake', desc: 'Zusammenarbeit im Team, Schnittstellen, Delegation.', lessons: 4, quiz: 1, time: '50 min', cost: 50, unlocked: false },
+                { id: 6, title: 'Pflegewissenschaft & EBN', icon: 'fa-flask', desc: 'Evidenzbasierte Pflege, Studien verstehen, Leitlinien.', lessons: 4, quiz: 1, time: '55 min', cost: 75, unlocked: false },
+                { id: 7, title: 'Hygiene & Infektionsschutz', icon: 'fa-hand-sparkles', desc: 'Asepsis, MRSA, Händehygiene, Desinfektion.', lessons: 3, quiz: 1, time: '35 min', cost: 75, unlocked: false },
+                { id: 8, title: 'Krankheitslehre (Grundlagen)', icon: 'fa-heart-pulse', desc: 'Wichtige Krankheitsbilder: Diabetes, Demenz, Herzinsuffizienz.', lessons: 6, quiz: 1, time: '70 min', cost: 100, unlocked: false },
+                { id: 9, title: 'Arzneimittelkunde', icon: 'fa-pills', desc: 'Medikamentengruppen, Applikation, Wechselwirkungen.', lessons: 5, quiz: 1, time: '65 min', cost: 100, unlocked: false },
+                { id: 10, title: 'Prüfungssimulation', icon: 'fa-file-pen', desc: 'Komplexer Fall mit allen Kompetenzbereichen – wie in der echten Prüfung.', lessons: 2, quiz: 2, time: '120 min', cost: 150, unlocked: false }
+            ];
+
+            // ---------- SIMULIERTE BENUTZERDATEN ----------
+            let userCoins = 1250;
+            let unlockedModules = modules.filter(m => m.unlocked).map(m => m.id);
+            let currentModuleId = 1;
+            let currentLessonIndex = 0;
+
+            // ---------- DOM-ELEMENTE ----------
+            const moduleContainer = document.getElementById('moduleContainer');
+            const learningPath = document.getElementById('learningPath');
+            const learningModule = document.getElementById('learningModule');
+            const backToPathBtn = document.getElementById('backToPath');
+            const moduleTitleSpan = document.getElementById('moduleTitle');
+            const stepIndicators = document.getElementById('stepIndicators');
+            const lessonContentDiv = document.getElementById('lessonContent');
+            const startLearningBtn = document.getElementById('startLearning');
+            const loginModal = document.getElementById('loginModal');
+            const closeModal = document.getElementById('closeModal');
+
+            // ---------- HILFSFUNKTIONEN ----------
+            function renderModules() {
+                moduleContainer.innerHTML = '';
+                modules.forEach(mod => {
+                    const isUnlocked = unlockedModules.includes(mod.id);
+                    const card = document.createElement('div');
+                    card.className = `path-card ${!isUnlocked ? 'locked' : ''}`;
+                    card.dataset.id = mod.id;
+                    card.innerHTML = `
+                        <div class="path-header">
+                            <div class="path-icon"><i class="fas ${mod.icon}"></i></div>
+                            <div class="path-cost"><i class="fa-solid fa-coins"></i> ${mod.cost}</div>
+                        </div>
+                        <h3 class="path-title">${mod.title}</h3>
+                        <p class="path-description">${mod.desc}</p>
+                        <div class="path-stats">
+                            <div class="stat"><span class="stat-value">${mod.lessons}</span><span class="stat-label">Lektionen</span></div>
+                            <div class="stat"><span class="stat-value">${mod.quiz}</span><span class="stat-label">Quiz</span></div>
+                            <div class="stat"><span class="stat-value">${mod.time}</span><span class="stat-label">Dauer</span></div>
+                        </div>
+                        <button class="path-action ${isUnlocked ? 'start' : 'unlock'}" data-id="${mod.id}">
+                            ${isUnlocked ? '<i class="fas fa-play"></i> Starten' : '<i class="fas fa-lock-open"></i> Freischalten'}
+                        </button>
+                    `;
+                    moduleContainer.appendChild(card);
+                });
+            }
+
+            // Modul freischalten
+            function unlockModule(moduleId) {
+                const mod = modules.find(m => m.id === moduleId);
+                if (!mod) return;
+                if (userCoins >= mod.cost) {
+                    userCoins -= mod.cost;
+                    unlockedModules.push(moduleId);
+                    updateUserStats();
+                    renderModules();
+                    alert(`Modul "${mod.title}" freigeschaltet!`);
+                } else {
+                    alert('Nicht genügend Coins!');
+                }
+            }
+
+            // Modul öffnen
+            function openModule(moduleId) {
+                const mod = modules.find(m => m.id === moduleId);
+                if (!mod) return;
+                if (!unlockedModules.includes(moduleId)) {
+                    alert('Bitte schalte das Modul zuerst frei.');
+                    return;
+                }
+                currentModuleId = moduleId;
+                currentLessonIndex = 0;
+                learningPath.style.display = 'none';
+                learningModule.classList.add('active');
+                moduleTitleSpan.textContent = `${mod.title} – Lektion ${currentLessonIndex+1} von ${mod.lessons + mod.quiz}`;
+                renderLessonContent(moduleId);
+            }
+
+            // Lektionsinhalte rendern (Beispielhaft – hier könnten echte Lerninhalte stehen)
+            function renderLessonContent(moduleId) {
+                const mod = modules.find(m => m.id === moduleId);
+                if (!mod) return;
+
+                // Schritt-Indikatoren
+                const totalSteps = mod.lessons + mod.quiz;
+                stepIndicators.innerHTML = '';
+                for (let i = 0; i < totalSteps; i++) {
+                    const step = document.createElement('div');
+                    step.className = `step ${i === currentLessonIndex ? 'active' : ''}`;
+                    stepIndicators.appendChild(step);
+                }
+
+                // Inhalt der aktuellen Lektion / Quiz
+                if (currentLessonIndex < mod.lessons) {
+                    // Lektion anzeigen
+                    lessonContentDiv.innerHTML = `
+                        <div class="lesson-card active">
+                            <div class="lesson-icon"><i class="fas ${mod.icon}"></i></div>
+                            <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">${mod.title} – Teil ${currentLessonIndex+1}</h2>
+                            <div class="key-point">
+                                <i class="fas fa-lightbulb"></i> <strong>Key Point:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </div>
+                            <p>Hier stehen die Lerninhalte der Lektion. Im echten Projekt werden sie aus einer Datenbank geladen.</p>
+                            <div class="example-box">
+                                <div class="example-title"><i class="fas fa-stethoscope"></i> Pflegebeispiel</div>
+                                <p>Frau Meier, 78 J., Zustand nach Hüft-OP. Welche Prophylaxen sind prioritär?</p>
+                            </div>
+                            <div class="interactive-element">
+                                <p><i class="fas fa-hand-pointer"></i> Interaktive Übung: Ordne die Pflegemaßnahmen den richtigen Prophylaxen zu. (Demo)</p>
+                            </div>
+                            <div class="navigation">
+                                <button class="nav-btn" id="prevLesson" ${currentLessonIndex === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Zurück</button>
+                                <button class="nav-btn" id="nextLesson">Weiter <i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Quiz anzeigen (nur ein Quiz pro Modul – hier als Beispiel)
+                    const quizIndex = currentLessonIndex - mod.lessons;
+                    lessonContentDiv.innerHTML = `
+                        <div class="quiz-container">
+                            <div class="quiz-header">
+                                <h3>Quiz: ${mod.title}</h3>
+                            </div>
+                            <div class="quiz-progress">
+                                <span>Frage ${quizIndex+1} von ${mod.quiz}</span>
+                            </div>
+                            <div class="quiz-question">Was versteht man unter dem Pflegeprozess?</div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-correct="false"><span class="option-indicator">A</span> Eine gesetzliche Vorschrift</div>
+                                <div class="quiz-option" data-correct="true"><span class="option-indicator">B</span> Eine systematische Problemlösungsmethode</div>
+                                <div class="quiz-option" data-correct="false"><span class="option-indicator">C</span> Ein ärztliches Anordnungsformular</div>
+                                <div class="quiz-option" data-correct="false"><span class="option-indicator">D</span> Ein Abrechnungsinstrument</div>
+                            </div>
+                            <div class="quiz-feedback" id="quizFeedback"></div>
+                            <div class="navigation">
+                                <button class="nav-btn" id="prevLesson"><i class="fas fa-chevron-left"></i> Zurück</button>
+                                <button class="nav-btn" id="checkQuiz">Antwort prüfen</button>
+                            </div>
+                            <div class="quiz-results" id="quizResults"></div>
+                        </div>
+                    `;
+
+                    // Quiz-Interaktion
+                    setTimeout(() => {
+                        const options = document.querySelectorAll('.quiz-option');
+                        const feedbackDiv = document.getElementById('quizFeedback');
+                        const checkBtn = document.getElementById('checkQuiz');
+                        let selectedOption = null;
+
+                        options.forEach(opt => {
+                            opt.addEventListener('click', () => {
+                                options.forEach(o => o.classList.remove('correct', 'incorrect'));
+                                opt.classList.add('correct'); // nur visuell, die Korrektheit wird erst beim Prüfen bewertet
+                                selectedOption = opt;
+                            });
+                        });
+
+                        checkBtn.addEventListener('click', () => {
+                            if (!selectedOption) {
+                                feedbackDiv.textContent = 'Bitte wähle eine Antwort aus.';
+                                feedbackDiv.style.display = 'block';
+                                feedbackDiv.className = 'quiz-feedback incorrect';
+                                return;
+                            }
+                            const isCorrect = selectedOption.dataset.correct === 'true';
+                            if (isCorrect) {
+                                selectedOption.classList.add('correct');
+                                feedbackDiv.textContent = '✅ Richtig! Gut gemacht.';
+                                feedbackDiv.className = 'quiz-feedback correct';
+                                feedbackDiv.style.display = 'block';
+                                // Nach richtiger Antwort Weiterleitung zur nächsten Lektion (simuliert)
+                                setTimeout(() => {
+                                    if (currentLessonIndex < modules.find(m => m.id === currentModuleId).lessons + modules.find(m => m.id === currentModuleId).quiz - 1) {
+                                        currentLessonIndex++;
+                                        renderLessonContent(currentModuleId);
+                                    } else {
+                                        // Modul abgeschlossen – Belohnung
+                                        showCompletionReward();
+                                    }
+                                }, 1500);
+                            } else {
+                                selectedOption.classList.add('incorrect');
+                                feedbackDiv.textContent = '❌ Leider falsch. Versuche es nochmal.';
+                                feedbackDiv.className = 'quiz-feedback incorrect';
+                                feedbackDiv.style.display = 'block';
+                            }
+                        });
+                    }, 0);
+                }
+
+                // Navigation-Buttons Events (nach dem Rendern)
+                const prevBtn = document.getElementById('prevLesson');
+                const nextBtn = document.getElementById('nextLesson');
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        if (currentLessonIndex > 0) {
+                            currentLessonIndex--;
+                            renderLessonContent(currentModuleId);
+                        }
+                    });
+                }
+                if (nextBtn && !nextBtn.disabled) {
+                    nextBtn.addEventListener('click', () => {
+                        const mod = modules.find(m => m.id === currentModuleId);
+                        if (currentLessonIndex < mod.lessons + mod.quiz - 1) {
+                            currentLessonIndex++;
+                            renderLessonContent(currentModuleId);
+                        } else {
+                            // letzte Lektion/Quiz -> Abschluss
+                            showCompletionReward();
+                        }
+                    });
+                }
+            }
+
+            function showCompletionReward() {
+                // Coins und XP erhöhen
+                userCoins += 50;
+                updateUserStats();
+                lessonContentDiv.innerHTML = `
+                    <div class="quiz-results active">
+                        <div class="result-icon correct"><i class="fas fa-trophy"></i></div>
+                        <div class="result-score good">Modul abgeschlossen!</div>
+                        <div class="reward-animation">
+                            <div class="reward-item">
+                                <div class="reward-icon coins"><i class="fa-solid fa-coins"></i></div>
+                                <span class="reward-amount">+50</span>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-icon xp"><i class="fa-solid fa-bolt"></i></div>
+                                <span class="reward-amount">+150 XP</span>
+                            </div>
+                        </div>
+                        <div class="countdown">Weiter geht's in 3 Sekunden ...</div>
+                    </div>
+                `;
+                setTimeout(() => {
+                    learningModule.classList.remove('active');
+                    learningPath.style.display = 'block';
+                }, 3000);
+            }
+
+            function updateUserStats() {
+                // In einer echten App würde man hier die Anzeige aktualisieren
+                const coinStat = document.querySelector('.stat-item.coins');
+                if (coinStat) coinStat.innerHTML = `<i class="fa-solid fa-coins"></i> ${userCoins}`;
+            }
+
+            // Event-Listener für Modulkarten (Delegation)
+            moduleContainer.addEventListener('click', (e) => {
+                const button = e.target.closest('.path-action');
+                if (!button) return;
+                const card = button.closest('.path-card');
+                if (!card) return;
+                const moduleId = parseInt(card.dataset.id);
+                if (button.classList.contains('unlock')) {
+                    unlockModule(moduleId);
+                } else if (button.classList.contains('start')) {
+                    openModule(moduleId);
+                }
+            });
+
+            // Zurück zur Übersicht
+            backToPathBtn.addEventListener('click', () => {
+                learningModule.classList.remove('active');
+                learningPath.style.display = 'block';
+            });
+
+            // Hero-Button "Jetzt starten" scrollt zur Modulübersicht
+            startLearningBtn.addEventListener('click', () => {
+                learningPath.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Login-Modal (nur als Demo)
+            document.querySelector('.logo').addEventListener('click', () => {
+                loginModal.classList.add('active');
+            });
+
+            closeModal.addEventListener('click', () => {
+                loginModal.classList.remove('active');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    loginModal.classList.remove('active');
+                }
+            });
+
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Demo: Anmeldung erfolgreich (simuliert)');
+                loginModal.classList.remove('active');
+            });
+
+            // Initialisierung
+            renderModules();
+        })();
+    </script>
+</body>
+</html>
