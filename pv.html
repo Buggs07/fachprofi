@@ -535,6 +535,24 @@
             border: 2px dashed var(--primary);
         }
 
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .bullet-list li {
+            padding: 8px 0 8px 24px;
+            position: relative;
+        }
+
+        .bullet-list li:before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 8px;
+        }
+
         /* Quiz Styles */
         .quiz-container {
             max-width: 800px;
@@ -625,6 +643,31 @@
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Confetti Animation */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            opacity: 0.7;
+            animation: confettiFall 3s linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
         }
 
         .completion-screen {
@@ -726,6 +769,9 @@
     </style>
 </head>
 <body>
+    <!-- Confetti Container -->
+    <div id="confettiContainer" class="confetti-container" style="display: none;"></div>
+
     <!-- Header -->
     <header class="header">
         <div class="container header-content">
@@ -741,7 +787,7 @@
                     <div class="progress-bar-bg">
                         <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
                     </div>
-                    <span class="progress-text" id="progressText">0/10</span>
+                    <span class="progress-text" id="progressText">0/3</span>
                 </div>
             </div>
         </div>
@@ -799,78 +845,123 @@
 
     <script>
         (function() {
-            // ========== MODUL-DEFINITIONEN (LEICHT ERWEITERBAR) ==========
-            // Hier können einfach neue Module hinzugefügt werden
+            // ========== MODUL-DEFINITIONEN ==========
             const MODULES = [
                 {
                     id: 1,
                     title: 'Kompetenzbereiche & Prüfungstage',
                     icon: 'fa-clipboard-list',
                     description: 'Lerne die 5 Kompetenzbereiche und welche an welchem Prüfungstag geprüft werden.',
-                    lessons: 3,
-                    time: '25 min',
+                    lessons: 4,
+                    time: '30 min',
                     keyCost: 0,
-                    requiredKeys: 0,
                     content: [
                         {
                             type: 'lesson',
-                            title: 'Die 5 Kompetenzbereiche',
+                            title: 'Die 5 Kompetenzbereiche (KB)',
                             content: `
                                 <div class="info-card">
-                                    <h3><i class="fas fa-check-circle" style="color: var(--primary);"></i> KB I: Pflegeprozess gestalten</h3>
-                                    <p>Pflegeplanung, Diagnostik, Evaluation, Dokumentation. Der Kern deiner Arbeit.</p>
+                                    <h3><i class="fas fa-check-circle" style="color: var(--primary);"></i> KB I: Pflegeprozess und Pflegediagnostik gestalten</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>I.1:</strong> Pflegeprozess planen</li>
+                                        <li><strong>I.2:</strong> Pflegediagnostik & Ressourcen</li>
+                                        <li><strong>I.3:</strong> Lebensgestaltung & Entwicklung</li>
+                                        <li><strong>I.4:</strong> Mobilisation & Sicherheit</li>
+                                        <li><strong>I.5:</strong> Pflegehandeln evaluieren</li>
+                                        <li><strong>I.6:</strong> Pflegeprozess dokumentieren</li>
+                                    </ul>
                                 </div>
                                 <div class="info-card">
-                                    <h3><i class="fas fa-comments" style="color: var(--primary);"></i> KB II: Kommunikation & Beratung</h3>
-                                    <p>Beziehungsgestaltung, Information, interkulturelle Kommunikation.</p>
+                                    <h3><i class="fas fa-comments" style="color: var(--primary);"></i> KB II: Kommunikation und Beratung gestalten</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>II.1:</strong> Beziehungsgestaltung</li>
+                                        <li><strong>II.2:</strong> Information & Beratung</li>
+                                        <li><strong>II.3:</strong> Interkulturelle Kommunikation</li>
+                                    </ul>
                                 </div>
                                 <div class="info-card">
-                                    <h3><i class="fas fa-handshake" style="color: var(--primary);"></i> KB III: Interprofessionelles Handeln</h3>
-                                    <p>Teamarbeit, ärztliche Anordnungen, Schnittstellenmanagement.</p>
+                                    <h3><i class="fas fa-handshake" style="color: var(--primary);"></i> KB III: Intra- und interprofessionelles Handeln</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>III.1:</strong> Teamarbeit</li>
+                                        <li><strong>III.2:</strong> Ärztliche Anordnungen durchführen</li>
+                                        <li><strong>III.3:</strong> Schnittstellenmanagement</li>
+                                    </ul>
                                 </div>
                                 <div class="info-card">
-                                    <h3><i class="fas fa-gavel" style="color: var(--primary);"></i> KB IV: Recht & Ethik</h3>
-                                    <p>Rechtsgrundlagen, ethische Leitlinien, berufsethische Werthaltungen.</p>
+                                    <h3><i class="fas fa-gavel" style="color: var(--primary);"></i> KB IV: Rechtliche und ethische Rahmenbedingungen</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>IV.1:</strong> Rechtsgrundlagen</li>
+                                        <li><strong>IV.2:</strong> Ethische Leitlinien</li>
+                                        <li><strong>IV.3:</strong> Berufsethische Werthaltungen</li>
+                                    </ul>
                                 </div>
                                 <div class="info-card">
-                                    <h3><i class="fas fa-flask" style="color: var(--primary);"></i> KB V: Wissenschaft & Reflexion</h3>
-                                    <p>Evidenzbasierte Pflege, Qualitätsentwicklung, Reflexion.</p>
+                                    <h3><i class="fas fa-flask" style="color: var(--primary);"></i> KB V: Wissenschaftliche Fundierung und Reflexion</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>V.1:</strong> Evidenzbasierte Pflege</li>
+                                        <li><strong>V.2:</strong> Berufsethos reflektieren</li>
+                                        <li><strong>V.3:</strong> Qualitätsentwicklung</li>
+                                    </ul>
                                 </div>
                             `
                         },
                         {
                             type: 'lesson',
-                            title: 'Prüfungszuordnung',
+                            title: 'Prüfungstag 1 - Schriftlich',
                             content: `
                                 <div class="highlight-box">
-                                    <h3><i class="fas fa-calendar-alt"></i> Schriftliche Prüfung</h3>
-                                    <p><strong>Tag 1:</strong> I.1, II.1, I.5, I.6 (+ KB IV Kontext)</p>
-                                    <p><strong>Tag 2:</strong> I.2, II.2, V.1</p>
-                                    <p><strong>Tag 3:</strong> I.3, I.4, III.2, II.3</p>
+                                    <h3><i class="fas fa-calendar-alt"></i> Tag 1: Pflegeprozess planen und Beziehung gestalten</h3>
+                                    <p><strong>Geprüfte Kompetenzschwerpunkte:</strong></p>
+                                    <ul class="bullet-list">
+                                        <li><strong>I.1:</strong> Pflegeprozess planen – SIS, Pflegeplanung erstellen</li>
+                                        <li><strong>II.1:</strong> Beziehungsgestaltung – Kommunikation mit Patienten</li>
+                                        <li><strong>I.5:</strong> Pflegehandeln evaluieren – Ziele überprüfen</li>
+                                        <li><strong>I.6:</strong> Dokumentieren – rechtssichere Dokumentation</li>
+                                    </ul>
+                                    <p><strong>Prüfungsfragen:</strong> Fallbeispiel: Sie erstellen eine Pflegeplanung für einen Patienten mit Diabetes und beginnender Demenz. Welche Ressourcen erkennen Sie? Formulieren Sie SMARTE Ziele.</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Prüfungstag 2 - Schriftlich',
+                            content: `
+                                <div class="highlight-box">
+                                    <h3><i class="fas fa-calendar-alt"></i> Tag 2: Pflegediagnostik, Beratung und Evidenz</h3>
+                                    <p><strong>Geprüfte Kompetenzschwerpunkte:</strong></p>
+                                    <ul class="bullet-list">
+                                        <li><strong>I.2:</strong> Pflegediagnostik & Ressourcen – Pflegeprobleme identifizieren</li>
+                                        <li><strong>II.2:</strong> Information & Beratung – Patientenschulung, Angehörigenberatung</li>
+                                        <li><strong>V.1:</strong> Evidenzbasierte Pflege – Leitlinien anwenden, Studien verstehen</li>
+                                    </ul>
+                                    <p><strong>Prüfungsfragen:</strong> Ein Patient mit Sturzrisiko soll beraten werden. Welche evidenzbasierten Maßnahmen empfehlen Sie? Führen Sie ein Beratungsgespräch.</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Prüfungstag 3 & Mündlich/Praktisch',
+                            content: `
+                                <div class="highlight-box">
+                                    <h3><i class="fas fa-calendar-alt"></i> Tag 3: Sicherheit, Entwicklung und ärztliche Anordnungen</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>I.3:</strong> Lebensgestaltung & Entwicklung – Biografiearbeit</li>
+                                        <li><strong>I.4:</strong> Mobilisation & Sicherheit – Prophylaxen</li>
+                                        <li><strong>III.2:</strong> Ärztliche Anordnungen durchführen – Delegation</li>
+                                        <li><strong>II.3:</strong> Interkulturelle Kommunikation – kulturelle Unterschiede</li>
+                                    </ul>
                                 </div>
                                 <div class="highlight-box">
                                     <h3><i class="fas fa-comments"></i> Mündliche Prüfung</h3>
-                                    <p>KB III (Team), KB IV (Recht/Ethik), KB V (Wissenschaft)</p>
+                                    <ul class="bullet-list">
+                                        <li><strong>KB III:</strong> Teamarbeit, interprofessionelles Handeln</li>
+                                        <li><strong>KB IV:</strong> Recht und Ethik – Begründung des Handelns</li>
+                                        <li><strong>KB V:</strong> Wissenschaftliche Reflexion</li>
+                                    </ul>
                                 </div>
                                 <div class="highlight-box">
                                     <h3><i class="fas fa-hands"></i> Praktische Prüfung</h3>
-                                    <p>Alle KB I-V werden in Handlung und Reflexion geprüft.</p>
-                                </div>
-                            `
-                        },
-                        {
-                            type: 'lesson',
-                            title: 'Lernstrategien',
-                            content: `
-                                <div class="example-card">
-                                    <div class="example-title"><i class="fas fa-lightbulb"></i> Merkhilfe</div>
-                                    <p><strong>P</strong>flegen - <strong>R</strong>eden - <strong>H</strong>elfen - <strong>D</strong>enken - <strong>W</strong>issen</p>
-                                    <p>Für KB I bis V.</p>
-                                </div>
-                                <div class="info-card">
-                                    <p>In der schriftlichen Prüfung: Fokus auf Pflegeprozess.<br>
-                                    In der praktischen: Zeige Handlungskompetenz.<br>
-                                    In der mündlichen: Begründe mit Recht und Wissenschaft.</p>
+                                    <p><strong>Alle KB I-V</strong> werden in Handlung und Reflexion geprüft.</p>
                                 </div>
                             `
                         }
@@ -881,48 +972,68 @@
                     title: 'Kommunikationsmodelle in der Pflege',
                     icon: 'fa-message',
                     description: 'Wichtige Modelle, praktische Anwendung und Beispiele für die Prüfung.',
-                    lessons: 3,
-                    time: '30 min',
+                    lessons: 4,
+                    time: '35 min',
                     keyCost: 1,
-                    requiredKeys: 1,
                     content: [
                         {
                             type: 'lesson',
-                            title: 'Das 4-Ohren-Modell (Schulz von Thun)',
+                            title: 'Vier-Ohren-Modell (Schulz von Thun)',
                             content: `
                                 <div class="info-card">
-                                    <h3><i class="fas fa-ear-listen"></i> Vier Ebenen einer Nachricht</h3>
-                                    <ul style="margin-left: 20px;">
-                                        <li><strong>Sachebene:</strong> Worüber ich informiere</li>
-                                        <li><strong>Selbstoffenbarung:</strong> Was ich von mir preisgebe</li>
-                                        <li><strong>Beziehungsebene:</strong> Was ich von dir halte</li>
-                                        <li><strong>Appellebene:</strong> Wozu ich dich bewegen möchte</li>
+                                    <h3><i class="fas fa-ear-listen"></i> Das Vier-Ohren-Modell</h3>
+                                    <p><strong>Jede Nachricht hat vier Ebenen:</strong></p>
+                                    <ul class="bullet-list">
+                                        <li><strong>Sachebene:</strong> Worüber ich informiere (Daten, Fakten)</li>
+                                        <li><strong>Selbstoffenbarung:</strong> Was ich von mir preisgebe (Gefühle, Werte)</li>
+                                        <li><strong>Beziehungsebene:</strong> Was ich von dir halte (Tonfall, Mimik)</li>
+                                        <li><strong>Appellebene:</strong> Wozu ich dich bewegen möchte (Wunsch, Bitte)</li>
                                     </ul>
                                 </div>
                                 <div class="example-card">
-                                    <div class="example-title"><i class="fas fa-hospital-user"></i> Pflegebeispiel</div>
-                                    <p>Patient sagt: "Ist heute schon wieder diese Schwester da?"</p>
-                                    <p><strong>Sachebene:</strong> Frage nach Dienstplan<br>
-                                    <strong>Selbstoffenbarung:</strong> Ich bin unzufrieden<br>
-                                    <strong>Beziehung:</strong> Ich mag diese Schwester nicht<br>
-                                    <strong>Appell:</strong> Sorg dafür, dass eine andere kommt</p>
+                                    <div class="example-title"><i class="fas fa-hospital-user"></i> Pflegebeispiel 1</div>
+                                    <p><strong>Patient:</strong> "Ist heute schon wieder diese Schwester da?"</p>
+                                    <ul class="bullet-list">
+                                        <li><strong>Sachebene:</strong> Frage nach Dienstplan</li>
+                                        <li><strong>Selbstoffenbarung:</strong> Ich bin unzufrieden / habe Angst</li>
+                                        <li><strong>Beziehung:</strong> Du bestimmst, wer kommt – ich habe keine Wahl</li>
+                                        <li><strong>Appell:</strong> Sorg dafür, dass eine andere Schwester kommt</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Pflegebeispiel 2</div>
+                                    <p><strong>Angehörige:</strong> "Sie waschen meine Mutter immer so früh!"</p>
+                                    <ul class="bullet-list">
+                                        <li><strong>Sachebene:</strong> Waschung findet früh statt</li>
+                                        <li><strong>Selbstoffenbarung:</strong> Ich fühle mich ohnmächtig</li>
+                                        <li><strong>Beziehung:</strong> Sie nehmen keine Rücksicht</li>
+                                        <li><strong>Appell:</strong> Waschen Sie später!</li>
+                                    </ul>
                                 </div>
                             `
                         },
                         {
                             type: 'lesson',
-                            title: 'Das Pflegetheoretische Modell nach Peplau',
+                            title: 'Pflegetheorie nach Peplau',
                             content: `
                                 <div class="info-card">
-                                    <h3><i class="fas fa-hand-holding-heart"></i> Zwischenmenschliche Beziehung in der Pflege</h3>
-                                    <p><strong>Phasen:</strong> Orientierung, Identifikation, Nutzung, Auflösung</p>
+                                    <h3><i class="fas fa-hand-holding-heart"></i> Zwischenmenschliche Beziehung in der Pflege (Peplau)</h3>
+                                    <p><strong>4 Phasen der Pflegebeziehung:</strong></p>
+                                    <ul class="bullet-list">
+                                        <li><strong>1. Orientierungsphase:</strong> Kennenlernen, Bedürfnisse erfragen, Vertrauen aufbauen</li>
+                                        <li><strong>2. Identifikationsphase:</strong> Patient nutzt Pflegeangebote, identifiziert sich mit der Pflegekraft</li>
+                                        <li><strong>3. Nutzungsphase:</strong> Patient setzt Ziele um, wird selbstständiger</li>
+                                        <li><strong>4. Auflösungsphase:</strong> Beziehung endet (Entlassung), Patient ist unabhängig</li>
+                                    </ul>
                                 </div>
                                 <div class="example-card">
-                                    <div class="example-title">Praxisbeispiel</div>
-                                    <p><strong>Orientierung:</strong> Aufnahmegespräch, Bedürfnisse klären<br>
-                                    <strong>Identifikation:</strong> Patient vertraut, Pflegekraft unterstützt<br>
-                                    <strong>Nutzung:</strong> Patient nutzt Angebote, lernt selbstständig<br>
-                                    <strong>Auflösung:</strong> Entlassung, Beziehung endet</p>
+                                    <div class="example-title">Praxisbeispiel: Aufnahme einer Patientin mit Angst</div>
+                                    <ul class="bullet-list">
+                                        <li><strong>Orientierung:</strong> "Frau Schmidt, ich bin Schwester Anna. Haben Sie Angst vor dem Eingriff?"</li>
+                                        <li><strong>Identifikation:</strong> Patientin vertraut, fragt nach Anna, lässt sich helfen</li>
+                                        <li><strong>Nutzung:</strong> Patientin atmet selbstständig, nutzt Schmerzmittel</li>
+                                        <li><strong>Auflösung:</strong> "Sie sind jetzt gut vorbereitet für die Verlegung."</li>
+                                    </ul>
                                 </div>
                             `
                         },
@@ -931,17 +1042,64 @@
                             title: 'Gewaltfreie Kommunikation (Rosenberg)',
                             content: `
                                 <div class="info-card">
-                                    <h3><i class="fas fa-dove"></i> Vier Schritte</h3>
-                                    <ol>
-                                        <li>Beobachtung (ohne Bewertung)</li>
-                                        <li>Gefühl (Ich fühle...)</li>
-                                        <li>Bedürfnis (Weil ich brauche...)</li>
-                                        <li>Bitte (Möchtest du...)</li>
-                                    </ol>
+                                    <h3><i class="fas fa-dove"></i> 4 Schritte der Gewaltfreien Kommunikation</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>1. Beobachtung:</strong> Konkret, ohne Bewertung – "Ich sehe, dass..."</li>
+                                        <li><strong>2. Gefühl:</strong> Eigene Gefühle ausdrücken – "Ich fühle mich..."</li>
+                                        <li><strong>3. Bedürfnis:</strong> Dahinterliegendes Bedürfnis – "Weil ich brauche..."</li>
+                                        <li><strong>4. Bitte:</strong> Konkrete, erfüllbare Bitte – "Wären Sie bereit zu...?"</li>
+                                    </ul>
                                 </div>
                                 <div class="example-card">
                                     <div class="example-title">Konflikt mit Angehörigen</div>
-                                    <p>"Wenn Sie so laut sprechen (Beobachtung), fühle ich mich unsicher (Gefühl), weil ich eine ruhige Atmosphäre für alle Patienten brauche (Bedürfnis). Könnten wir leiser sprechen? (Bitte)"</p>
+                                    <p><strong>Situation:</strong> Tochter beschwert sich laut über die Pflege.</p>
+                                    <p><strong>GFK-Reaktion:</strong></p>
+                                    <ul class="bullet-list">
+                                        <li><strong>Beobachtung:</strong> "Ich höre, dass Sie lauter sprechen."</li>
+                                        <li><strong>Gefühl:</strong> "Ich fühle mich angespannt."</li>
+                                        <li><strong>Bedürfnis:</strong> "Weil ich eine ruhige Atmosphäre für alle Patienten brauche."</li>
+                                        <li><strong>Bitte:</strong> "Könnten wir leiser sprechen oder ins Besprechungszimmer gehen?"</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Patient verweigert Medikamente</div>
+                                    <ul class="bullet-list">
+                                        <li><strong>Beobachtung:</strong> "Ich sehe, dass Sie die Tabletten nicht nehmen."</li>
+                                        <li><strong>Gefühl:</strong> "Ich mache mir Sorgen."</li>
+                                        <li><strong>Bedürfnis:</strong> "Weil mir Ihre Gesundheit wichtig ist."</li>
+                                        <li><strong>Bitte:</strong> "Können Sie mir sagen, was Sie daran hindert?"</li>
+                                    </ul>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Weitere Modelle & Prüfungstipps',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-comment-dots"></i> Ich-Botschaften</h3>
+                                    <ul class="bullet-list">
+                                        <li>Statt "Sie sind ungeduldig" → "Ich habe das Gefühl, Sie sind ungeduldig"</li>
+                                        <li>Statt "Sie müssen warten" → "Ich bitte Sie um etwas Geduld"</li>
+                                    </ul>
+                                </div>
+                                <div class="info-card">
+                                    <h3><i class="fas fa-question-circle"></i> Fragetechniken</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>Offene Fragen:</strong> "Was möchten Sie heute erreichen?"</li>
+                                        <li><strong>Geschlossene Fragen:</strong> "Haben Sie Schmerzen?"</li>
+                                        <li><strong>Paraphrasieren:</strong> "Verstehe ich richtig, dass..."</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Prüfungssituation: Angehörigengespräch</div>
+                                    <p>Tochter: "Ich habe das Gefühl, meine Mutter wird hier nicht richtig versorgt."</p>
+                                    <p><strong>Ihre Reaktion (Modell-Mix):</strong></p>
+                                    <ul class="bullet-list">
+                                        <li>Paraphrasieren: "Sie machen sich Sorgen um die Versorgung Ihrer Mutter?"</li>
+                                        <li>Ich-Botschaft: "Ich kann verstehen, dass Ihnen das wichtig ist."</li>
+                                        <li>Offene Frage: "Was genau beunruhigt Sie?"</li>
+                                    </ul>
                                 </div>
                             `
                         }
@@ -952,10 +1110,9 @@
                     title: 'Recht in der Pflege',
                     icon: 'fa-gavel',
                     description: 'Die wichtigsten Rechtsgrundlagen für die Prüfung mit Fallbeispielen.',
-                    lessons: 3,
-                    time: '35 min',
+                    lessons: 4,
+                    time: '40 min',
                     keyCost: 1,
-                    requiredKeys: 1,
                     content: [
                         {
                             type: 'lesson',
@@ -963,41 +1120,57 @@
                             content: `
                                 <div class="info-card">
                                     <h3><i class="fas fa-file-signature"></i> Rechtsgrundlagen</h3>
-                                    <p><strong>§ 630d BGB:</strong> Einwilligung des Patienten erforderlich<br>
-                                    <strong>§ 630e BGB:</strong> Aufklärungspflicht (durch Arzt!)</p>
+                                    <ul class="bullet-list">
+                                        <li><strong>§ 630d BGB:</strong> Einwilligung des Patienten erforderlich</li>
+                                        <li><strong>§ 630e BGB:</strong> Aufklärungspflicht (durch Arzt!)</li>
+                                        <li><strong>Art. 2 GG:</strong> Allgemeines Persönlichkeitsrecht</li>
+                                    </ul>
                                 </div>
                                 <div class="info-card">
                                     <h3>Voraussetzungen der Einwilligung</h3>
-                                    <ul>
-                                        <li>Einsichtsfähigkeit</li>
-                                        <li>Ausreichende Aufklärung</li>
-                                        <li>Freiwilligkeit</li>
+                                    <ul class="bullet-list">
+                                        <li><strong>Einsichtsfähigkeit:</strong> Patient kann Art und Bedeutung verstehen</li>
+                                        <li><strong>Aufklärung:</strong> Verständlich, rechtzeitig, durch Arzt</li>
+                                        <li><strong>Freiwilligkeit:</strong> Kein Druck, keine Täuschung</li>
                                     </ul>
                                 </div>
                                 <div class="example-card">
-                                    <div class="example-title">Fallbeispiel</div>
-                                    <p>Eine Patientin mit Demenz (mittleres Stadium) soll eine Magensonde bekommen. Die Tochter stimmt zu, die Patientin wehrt sich.</p>
-                                    <p><strong>Problem:</strong> Liegt eine wirksame Einwilligung vor? Nein, weil die Patientin sich wehrt (natürlicher Wille).</p>
+                                    <div class="example-title">Fallbeispiel 1: Demenz und Einwilligung</div>
+                                    <p><strong>Situation:</strong> Frau Meier (82, mittelschwere Demenz) soll eine PEG-Sonde bekommen. Die Tochter stimmt zu, Frau Meier wehrt sich und sagt "Nein".</p>
+                                    <p><strong>Rechtliche Bewertung:</strong> Die Einwilligung ist unwirksam, da der natürliche Wille der Patientin erkennbar ist. Es liegt eine Körperverletzung vor, wenn trotzdem sondiert wird.</p>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Fallbeispiel 2: Aufklärung durch Pflegekraft</div>
+                                    <p><strong>Situation:</strong> Eine Ärztin sagt: "Klären Sie den Patienten über die Risiken der OP auf."</p>
+                                    <p><strong>Rechtliche Bewertung:</strong> Pflegekräfte dürfen nicht aufklären! Das ist ausschließlich Aufgabe des Arztes. Sie können nur informieren, aber nicht rechtlich aufklären.</p>
                                 </div>
                             `
                         },
                         {
                             type: 'lesson',
-                            title: 'Unterbringung und Zwangsmaßnahmen',
+                            title: 'Unterbringung und Freiheitsentziehung',
                             content: `
                                 <div class="info-card">
-                                    <h3><i class="fas fa-handcuffs"></i> Voraussetzungen</h3>
-                                    <ul>
+                                    <h3><i class="fas fa-handcuffs"></i> Voraussetzungen für Unterbringung</h3>
+                                    <ul class="bullet-list">
                                         <li>Psychische Krankheit oder geistige Behinderung</li>
                                         <li>Erhebliche Eigen- oder Fremdgefährdung</li>
                                         <li>Keine weniger einschneidende Maßnahme</li>
-                                        <li>Richterliche Genehmigung</li>
+                                        <li><strong>Richterliche Genehmigung</strong> (Betreuungsgericht)</li>
+                                    </ul>
+                                </div>
+                                <div class="info-card">
+                                    <h3>Fixierung = Freiheitsentziehung</h3>
+                                    <ul class="bullet-list">
+                                        <li>Bettseitenteile hoch (bei einsichtsfähigen Patienten) = Freiheitsentziehung</li>
+                                        <li>Gurte, Bauchgurt = immer genehmigungspflichtig</li>
+                                        <li>Ausnahme: Akute Eigengefahr (Sturz), dann sofort richterliche Genehmigung einholen</li>
                                     </ul>
                                 </div>
                                 <div class="example-card">
-                                    <div class="example-title">Fixierung</div>
-                                    <p>Eine bettlägerige Patientin klettert nachts aus dem Bett und stürzt. Darf man sie fixieren?</p>
-                                    <p><strong>Nein,</strong> ohne richterliche Genehmigung nur bei akuter Eigengefahr und als letztes Mittel. Vorher: Niedrigbett, Wechseldruckmatratze, Betreuung.</p>
+                                    <div class="example-title">Fallbeispiel: Nächtliche Fixierung</div>
+                                    <p><strong>Situation:</strong> Ein Patient mit Demenz klettert nachts aus dem Bett und ist gestürzt. Die Pflegekraft fixiert ihn mit einem Bauchgurt "zur Sicherheit".</p>
+                                    <p><strong>Rechtlich:</strong> Das ist eine Freiheitsentziehung ohne richterliche Genehmigung und damit rechtswidrig. Alternative: Niedrigbett, Wechseldruckmatratze, Licht an, Toilettengänge anbieten.</p>
                                 </div>
                             `
                         },
@@ -1006,21 +1179,57 @@
                             title: 'Haftung und Delegation',
                             content: `
                                 <div class="info-card">
-                                    <h3><i class="fas fa-balance-scale"></i> Wer haftet bei Fehlern?</h3>
-                                    <p><strong>§ 823 BGB:</strong> Schadensersatzpflicht bei schuldhafter Pflichtverletzung</p>
+                                    <h3><i class="fas fa-balance-scale"></i> Haftungsgrundlagen</h3>
+                                    <ul class="bullet-list">
+                                        <li><strong>§ 823 BGB:</strong> Schadensersatzpflicht bei schuldhafter Pflichtverletzung</li>
+                                        <li><strong>Strafrecht:</strong> Fahrlässige Körperverletzung (§ 229 StGB)</li>
+                                        <li><strong>Arbeitsrecht:</strong> Disziplinarmaßnahmen möglich</li>
+                                    </ul>
                                 </div>
                                 <div class="info-card">
                                     <h3>Delegation ärztlicher Aufgaben</h3>
-                                    <ul>
-                                        <li>Anordnung muss konkret sein</li>
-                                        <li>Pflegekraft muss fachlich befähigt sein</li>
-                                        <li>Durchführungsverantwortung bleibt bei Pflegekraft</li>
+                                    <ul class="bullet-list">
+                                        <li><strong>Anordnungsverantwortung:</strong> Arzt muss konkret anordnen</li>
+                                        <li><strong>Durchführungsverantwortung:</strong> Pflegekraft muss fachlich befähigt sein</li>
+                                        <li><strong>Übernahmeverantwortung:</strong> Pflegekraft darf nur übernehmen, was sie kann</li>
                                     </ul>
                                 </div>
                                 <div class="example-card">
-                                    <div class="example-title">i.v. Antibiotika</div>
-                                    <p>Eine Ärztin sagt: "Kümmern Sie sich um die Infusion bei Zimmer 4." Die Pflegekraft hat noch nie i.v. gegeben und spritzt falsch.</p>
-                                    <p><strong>Haftung:</strong> Die Pflegekraft haftet, weil sie die Aufgabe hätte ablehnen müssen (Übernahmeverantwortung).</p>
+                                    <div class="example-title">Fallbeispiel: i.v.-Injektion</div>
+                                    <p><strong>Situation:</strong> Ärztin: "Machen Sie mal die i.v.-Spritze bei Zimmer 4." Die Pflegekraft hat noch nie i.v. gespritzt, macht es aber trotzdem. Es kommt zu einer Luftembolie.</p>
+                                    <p><strong>Haftung:</strong> Die Pflegekraft haftet wegen Übernahmeverantwortung. Sie hätte ablehnen müssen. Die Ärztin haftet wegen Anordnungsverantwortung (hätte überprüfen müssen).</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Schweigepflicht und Datenschutz',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-shield-alt"></i> Schweigepflicht (§ 203 StGB)</h3>
+                                    <ul class="bullet-list">
+                                        <li>Alle Informationen über Patienten sind geheim</li>
+                                        <li>Auch gegenüber Angehörigen: nur mit Einwilligung</li>
+                                        <li>Durchbrechung nur bei: Gefahr im Verzug, gesetzlicher Meldepflicht</li>
+                                    </ul>
+                                </div>
+                                <div class="info-card">
+                                    <h3>DSGVO in der Pflege</h3>
+                                    <ul class="bullet-list">
+                                        <li>Patientendaten sind besonders schützenswert</li>
+                                        <li>Dokumentation nicht offen herumliegen lassen</li>
+                                        <li>Kurvenblätter verdecken, Dienstcomputer sperren</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Fallbeispiel: Auskunft an Ehemann</div>
+                                    <p><strong>Situation:</strong> Der Ehemann fragt: "Was hat meine Frau eigentlich für eine Diagnose? Sie sagt es mir nicht."</p>
+                                    <p><strong>Richtiges Handeln:</strong> "Ich darf ohne Einwilligung Ihrer Frau keine Auskunft geben. Fragen Sie sie direkt oder lassen Sie sich von ihr schriftlich von der Schweigepflicht entbinden."</p>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Fallbeispiel: Visite im Mehrbettzimmer</div>
+                                    <p><strong>Situation:</strong> Beim Arztgespräch im 4-Bett-Zimmer hören die anderen Patienten mit.</p>
+                                    <p><strong>Lösung:</strong> Diskret sprechen, Vorhang zu, oder: "Können wir ins Besprechungszimmer gehen?"</p>
                                 </div>
                             `
                         }
@@ -1029,7 +1238,7 @@
             ];
 
             // ========== GLOBALE VARIABLEN ==========
-            let userKeys = 3;
+            let userKeys = 1; // Start mit 1 Schlüssel
             let completedModules = [];
             let currentModuleId = 1;
             let currentLessonIndex = 0;
@@ -1037,22 +1246,30 @@
 
             // ========== COOKIE FUNKTIONEN ==========
             function setCookie(name, value, days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                document.cookie = name + "=" + JSON.stringify(value) + ";expires=" + date.toUTCString() + ";path=/";
+                try {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    document.cookie = name + "=" + JSON.stringify(value) + ";expires=" + date.toUTCString() + ";path=/;SameSite=Lax";
+                } catch (e) {
+                    console.error("Cookie set error:", e);
+                }
             }
 
             function getCookie(name) {
-                const cookies = document.cookie.split(';');
-                for (let cookie of cookies) {
-                    const [cName, cValue] = cookie.trim().split('=');
-                    if (cName === name) {
-                        try {
-                            return JSON.parse(cValue);
-                        } catch {
-                            return cValue;
+                try {
+                    const cookies = document.cookie.split(';');
+                    for (let cookie of cookies) {
+                        const [cName, cValue] = cookie.trim().split('=');
+                        if (cName === name) {
+                            try {
+                                return JSON.parse(cValue);
+                            } catch {
+                                return cValue;
+                            }
                         }
                     }
+                } catch (e) {
+                    console.error("Cookie get error:", e);
                 }
                 return null;
             }
@@ -1062,13 +1279,10 @@
                 const savedKeys = getCookie('userKeys');
                 const savedCompleted = getCookie('completedModules');
                 
-                userKeys = savedKeys !== null ? parseInt(savedKeys) : 0;
+                userKeys = savedKeys !== null ? parseInt(savedKeys) : 1; // Start mit 1
                 completedModules = savedCompleted !== null ? savedCompleted : [];
                 
-                // Modul 1 ist immer kostenlos und verfügbar
-                if (!completedModules.includes(1) && MODULES[0].keyCost === 0) {
-                    // Modul 1 ist automatisch verfügbar, aber nicht "abgeschlossen"
-                }
+                updateUI();
             }
 
             function saveProgress() {
@@ -1087,6 +1301,28 @@
                 document.getElementById('progressText').textContent = `${completedCount}/${totalModules}`;
                 
                 renderModules();
+            }
+
+            // ========== CONFETTI ANIMATION ==========
+            function showConfetti() {
+                const container = document.getElementById('confettiContainer');
+                container.style.display = 'block';
+                
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = confetti.style.width;
+                    container.appendChild(confetti);
+                }
+                
+                setTimeout(() => {
+                    container.innerHTML = '';
+                    container.style.display = 'none';
+                }, 4000);
             }
 
             // ========== MODULE RENDERN ==========
@@ -1120,7 +1356,7 @@
                             ${isCompleted ? '<div class="completed-badge"><i class="fas fa-check"></i> Abgeschlossen</div>' : ''}
                         </div>
                         <button class="module-status ${effectivelyLocked ? 'locked' : 'unlocked'}" data-id="${mod.id}" ${effectivelyLocked ? 'disabled' : ''}>
-                            ${isCompleted ? 'Wiederholen' : (effectivelyLocked ? '🔒 Schlüssel benötigt' : '📖 Lernen')}
+                            ${isCompleted ? '🔄 Wiederholen' : (effectivelyLocked ? '🔒 ' + mod.keyCost + ' Schlüssel benötigt' : '📖 Lernen')}
                         </button>
                     `;
                     
@@ -1174,25 +1410,21 @@
                 const currentContent = mod.content[currentLessonIndex];
                 const container = document.getElementById('lessonContainer');
                 
-                if (currentContent.type === 'lesson') {
-                    container.innerHTML = `
-                        <div class="lesson-section">
-                            <div class="lesson-icon-large"><i class="fas ${mod.icon}"></i></div>
-                            <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">${currentContent.title}</h2>
-                            ${currentContent.content}
-                            <div class="nav-buttons">
-                                <button class="nav-btn" id="prevBtn" ${currentLessonIndex === 0 ? 'disabled' : ''}>
-                                    <i class="fas fa-chevron-left"></i> Zurück
-                                </button>
-                                ${currentLessonIndex < mod.content.length - 1 ? 
-                                    '<button class="nav-btn" id="nextBtn">Weiter <i class="fas fa-chevron-right"></i></button>' : 
-                                    '<button class="nav-btn" id="quizBtn">Abschluss-Quiz <i class="fas fa-question"></i></button>'}
-                            </div>
+                container.innerHTML = `
+                    <div class="lesson-section">
+                        <div class="lesson-icon-large"><i class="fas ${mod.icon}"></i></div>
+                        <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">${currentContent.title}</h2>
+                        ${currentContent.content}
+                        <div class="nav-buttons">
+                            <button class="nav-btn" id="prevBtn" ${currentLessonIndex === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-chevron-left"></i> Zurück
+                            </button>
+                            ${currentLessonIndex < mod.content.length - 1 ? 
+                                '<button class="nav-btn" id="nextBtn">Weiter <i class="fas fa-chevron-right"></i></button>' : 
+                                '<button class="nav-btn" id="quizBtn">Abschluss-Quiz <i class="fas fa-question"></i></button>'}
                         </div>
-                    `;
-                } else if (currentContent.type === 'quiz') {
-                    renderQuiz(currentContent);
-                }
+                    </div>
+                `;
                 
                 // Event-Listener für Navigation
                 document.getElementById('prevBtn')?.addEventListener('click', () => {
@@ -1210,7 +1442,6 @@
                 });
                 
                 document.getElementById('quizBtn')?.addEventListener('click', () => {
-                    // Quiz starten (letzte Lektion)
                     startQuiz();
                 });
             }
@@ -1219,7 +1450,6 @@
             function startQuiz() {
                 const mod = MODULES.find(m => m.id === currentModuleId);
                 
-                // Einfaches Quiz mit 3 Fragen (für jedes Modul individuell anpassbar)
                 let quizHTML = `
                     <div class="quiz-container">
                         <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">Abschluss-Quiz: ${mod.title}</h2>
@@ -1234,7 +1464,6 @@
                 
                 document.getElementById('lessonContainer').innerHTML = quizHTML;
                 
-                // Modulspezifische Quizfragen
                 const questions = getQuizQuestions(currentModuleId);
                 const qContainer = document.getElementById('quizQuestions');
                 
@@ -1258,7 +1487,6 @@
                 document.querySelectorAll('.quiz-option').forEach(opt => {
                     opt.addEventListener('click', function() {
                         const questionIdx = this.dataset.question;
-                        // Entferne vorherige Auswahl bei dieser Frage
                         document.querySelectorAll(`[data-question="${questionIdx}"]`).forEach(el => {
                             el.classList.remove('correct', 'incorrect');
                         });
@@ -1272,11 +1500,11 @@
                 });
                 
                 document.getElementById('submitQuiz').addEventListener('click', () => {
-                    evaluateQuiz(questions);
+                    evaluateQuiz(questions, mod);
                 });
             }
 
-            // ========== QUIZ-FRAGEN (MODULSPEZIFISCH) ==========
+            // ========== QUIZ-FRAGEN ==========
             function getQuizQuestions(moduleId) {
                 if (moduleId === 1) {
                     return [
@@ -1290,19 +1518,19 @@
                             ]
                         },
                         {
-                            question: 'An welchem Prüfungstag wird KB III (Teamarbeit) hauptsächlich geprüft?',
+                            question: 'An welchem Prüfungstag wird KB II (Kommunikation) hauptsächlich geprüft?',
                             options: [
-                                { text: 'Schriftlich Tag 1', correct: false },
-                                { text: 'Schriftlich Tag 2', correct: false },
-                                { text: 'Mündlich und Praktisch', correct: true },
-                                { text: 'Nur schriftlich', correct: false }
+                                { text: 'Nur schriftlich Tag 1', correct: false },
+                                { text: 'Schriftlich Tag 1 und Tag 2', correct: true },
+                                { text: 'Nur mündlich', correct: false },
+                                { text: 'Nur praktisch', correct: false }
                             ]
                         },
                         {
                             question: 'Was ist der Schwerpunkt der mündlichen Prüfung?',
                             options: [
                                 { text: 'Praktische Pflegehandlung', correct: false },
-                                { text: 'Reflexion mit Recht, Ethik und Wissenschaft', correct: true },
+                                { text: 'Reflexion mit Recht, Ethik und Wissenschaft (KB III, IV, V)', correct: true },
                                 { text: 'Medikamentenberechnung', correct: false },
                                 { text: 'Dokumentation', correct: false }
                             ]
@@ -1311,10 +1539,10 @@
                 } else if (moduleId === 2) {
                     return [
                         {
-                            question: 'Welche Ebenen umfasst das 4-Ohren-Modell?',
+                            question: 'Welche vier Ebenen hat das Vier-Ohren-Modell?',
                             options: [
-                                { text: 'Sachebene, Selbstoffenbarung, Beziehung, Appell', correct: true },
                                 { text: 'Sender, Empfänger, Botschaft, Kanal', correct: false },
+                                { text: 'Sachebene, Selbstoffenbarung, Beziehung, Appell', correct: true },
                                 { text: 'Orientierung, Identifikation, Nutzung, Auflösung', correct: false },
                                 { text: 'Beobachtung, Gefühl, Bedürfnis, Bitte', correct: false }
                             ]
@@ -1322,10 +1550,10 @@
                         {
                             question: 'Nach Peplau: In welcher Phase entsteht Vertrauen zwischen Patient und Pflegekraft?',
                             options: [
-                                { text: 'Orientierung', correct: false },
-                                { text: 'Identifikation', correct: true },
-                                { text: 'Nutzung', correct: false },
-                                { text: 'Auflösung', correct: false }
+                                { text: 'Orientierungsphase', correct: false },
+                                { text: 'Identifikationsphase', correct: true },
+                                { text: 'Nutzungsphase', correct: false },
+                                { text: 'Auflösungsphase', correct: false }
                             ]
                         },
                         {
@@ -1353,7 +1581,7 @@
                             question: 'Wann ist eine Fixierung ohne richterliche Genehmigung erlaubt?',
                             options: [
                                 { text: 'Bei Personalmangel', correct: false },
-                                { text: 'Bei akuter Eigengefahr als letztes Mittel', correct: true },
+                                { text: 'Bei akuter Eigengefahr als letztes Mittel (dann sofort Genehmigung einholen)', correct: true },
                                 { text: 'Wenn der Patient unruhig ist', correct: false },
                                 { text: 'Nach Rücksprache mit Angehörigen', correct: false }
                             ]
@@ -1362,8 +1590,8 @@
                             question: 'Was bedeutet Übernahmeverantwortung?',
                             options: [
                                 { text: 'Die Pflegekraft muss jede ärztliche Anordnung ausführen', correct: false },
-                                { text: 'Die Pflegekraft haftet für eigene Fehler, auch bei Delegation', correct: true },
-                                { text: 'Der Arzt übernimmt die Verantwortung', correct: false },
+                                { text: 'Die Pflegekraft haftet für eigene Fehler und darf nur übernehmen, was sie kann', correct: true },
+                                { text: 'Der Arzt übernimmt die volle Verantwortung', correct: false },
                                 { text: 'Die Einrichtung haftet immer', correct: false }
                             ]
                         }
@@ -1372,19 +1600,19 @@
             }
 
             // ========== QUIZ AUSWERTEN ==========
-            function evaluateQuiz(questions) {
+            function evaluateQuiz(questions, mod) {
                 let correctCount = 0;
                 const total = questions.length;
+                let allAnswered = true;
                 
                 questions.forEach((q, qIdx) => {
                     const selected = document.querySelector(`[data-question="${qIdx}"].correct`);
-                    if (selected) {
+                    if (!selected) {
+                        allAnswered = false;
+                    } else {
                         const isCorrect = selected.dataset.correct === 'true';
                         if (isCorrect) {
                             correctCount++;
-                            selected.classList.add('correct');
-                        } else {
-                            selected.classList.add('incorrect');
                         }
                     }
                 });
@@ -1392,18 +1620,25 @@
                 const feedback = document.getElementById('quizFeedback');
                 feedback.style.display = 'block';
                 
+                if (!allAnswered) {
+                    feedback.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Bitte beantworte alle Fragen!';
+                    feedback.className = 'quiz-feedback incorrect';
+                    return;
+                }
+                
                 if (correctCount === total) {
                     feedback.innerHTML = '<i class="fas fa-trophy"></i> Perfekt! Alle Fragen richtig. Du bekommst einen Schlüssel!';
                     feedback.className = 'quiz-feedback correct';
+                    
+                    // Confetti anzeigen
+                    showConfetti();
                     
                     // Modul als abgeschlossen markieren, falls noch nicht
                     if (!completedModules.includes(currentModuleId)) {
                         completedModules.push(currentModuleId);
                         
-                        // Einen Schlüssel als Belohnung (außer bei Modul 1)
-                        if (currentModuleId !== 1) {
-                            userKeys += 1;
-                        }
+                        // Einen Schlüssel als Belohnung (bei jedem Modul, auch Modul 1)
+                        userKeys += 1;
                         
                         saveProgress();
                         
@@ -1417,7 +1652,7 @@
                                         <div class="key-icon" style="background: var(--success);"><i class="fa-solid fa-check"></i></div>
                                     </div>
                                     <h2>Modul abgeschlossen!</h2>
-                                    <p>Du hast einen Schlüssel verdient. Sammle weiter, um neue Module freizuschalten.</p>
+                                    <p>Du hast einen Schlüssel verdient. Jetzt hast du ${userKeys} Schlüssel.</p>
                                     <button class="nav-btn" id="finalBack" style="margin-top: var(--spacing-lg);">
                                         Zurück zur Übersicht
                                     </button>
@@ -1428,7 +1663,26 @@
                                 document.getElementById('moduleDetail').classList.remove('active');
                                 document.getElementById('moduleSection').style.display = 'block';
                             });
-                        }, 1500);
+                        }, 2000);
+                    } else {
+                        // Modul wurde wiederholt
+                        setTimeout(() => {
+                            document.getElementById('lessonContainer').innerHTML = `
+                                <div class="completion-screen">
+                                    <div class="key-icon" style="background: var(--success);"><i class="fa-solid fa-check"></i></div>
+                                    <h2>Quiz bestanden!</h2>
+                                    <p>Du hast das Modul bereits abgeschlossen, aber gut wiederholt!</p>
+                                    <button class="nav-btn" id="finalBack" style="margin-top: var(--spacing-lg);">
+                                        Zurück zur Übersicht
+                                    </button>
+                                </div>
+                            `;
+                            
+                            document.getElementById('finalBack').addEventListener('click', () => {
+                                document.getElementById('moduleDetail').classList.remove('active');
+                                document.getElementById('moduleSection').style.display = 'block';
+                            });
+                        }, 2000);
                     }
                 } else {
                     feedback.innerHTML = `❌ Du hast ${correctCount} von ${total} richtig. Versuche es noch einmal!`;
@@ -1468,7 +1722,14 @@
 
             // ========== INITIALISIERUNG ==========
             loadProgress();
-            updateUI();
+            
+            // Cookie-Reset-Funktion für Entwicklung (optional)
+            window.resetProgress = function() {
+                userKeys = 1;
+                completedModules = [];
+                saveProgress();
+                alert('Fortschritt zurückgesetzt!');
+            };
         })();
     </script>
 </body>
