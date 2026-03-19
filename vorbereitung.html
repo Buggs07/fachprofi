@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PflegeLernPro | Anorexia Nervosa</title>
+    <title>PflegefachProfi | Deine Prüfungsvorbereitung</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #4361ee;
             --primary-dark: #3a56d4;
@@ -16,7 +21,7 @@
             --success: #4cc9f0;
             --warning: #fca311;
             --danger: #e63946;
-            --coin: #ffd166;
+            --key: #ffd166;
             --text-primary: #1d3557;
             --text-secondary: #457b9d;
             --text-tertiary: #a8dadc;
@@ -36,21 +41,12 @@
             --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: var(--font-primary);
             color: var(--text-primary);
             background-color: var(--background);
             line-height: 1.6;
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
 
         .container {
@@ -60,20 +56,32 @@
             padding: 0 var(--spacing-md);
         }
 
-        /* Navigation */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: var(--spacing-sm) 0;
-            box-shadow: var(--shadow-elevated);
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; margin-bottom: var(--spacing-sm); }
+        h3 { font-size: 1.5rem; margin-bottom: var(--spacing-xs); }
+
+        /* Header */
+        .header {
+            background-color: var(--surface);
+            box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
+            backdrop-filter: blur(10px);
         }
 
-        .nav-container {
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: var(--spacing-sm) 0;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
         }
 
         .logo {
@@ -82,61 +90,75 @@
             gap: var(--spacing-sm);
             font-weight: 800;
             font-size: 1.5rem;
-            color: white;
-            text-decoration: none;
+            color: var(--primary);
+            cursor: pointer;
         }
 
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
 
         .user-stats {
             display: flex;
-            gap: var(--spacing-lg);
+            gap: var(--spacing-md);
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 7px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 15px;
+            gap: 8px;
+            background: var(--primary-light);
+            padding: 8px 16px;
             border-radius: var(--radius);
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: white;
-            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
-        .coins {
-            background: rgba(255, 209, 102, 0.3);
+        .keys {
+            background: linear-gradient(135deg, var(--key) 0%, #ffb347 100%);
+            color: var(--text-primary);
         }
 
-        .level {
-            background: rgba(67, 97, 238, 0.4);
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 200px;
         }
 
-        .xp {
-            background: rgba(76, 201, 240, 0.4);
+        .progress-bar-bg {
+            flex: 1;
+            height: 12px;
+            background: var(--border);
+            border-radius: 20px;
+            overflow: hidden;
         }
 
-        /* Hero Section */
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 60px;
+        }
+
+        /* Hero */
         .hero {
-            padding: var(--spacing-xl) 0;
+            padding: var(--spacing-xxl) 0;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
             position: relative;
@@ -151,8 +173,8 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
             z-index: 1;
         }
 
@@ -167,297 +189,506 @@
         .hero h1 {
             color: white;
             margin-bottom: var(--spacing-md);
-            font-size: 2.5rem;
         }
 
         .hero p {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255,255,255,0.9);
             font-size: 1.25rem;
             margin-bottom: var(--spacing-xl);
         }
 
-        .module-selector {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-xl);
-            flex-wrap: wrap;
-        }
-
-        .module-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            width: 280px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-        }
-
-        .module-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: var(--shadow-elevated);
-        }
-
-        .module-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            margin: 0 auto var(--spacing-md);
-        }
-
-        .module-title {
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-sm);
-            color: white;
-        }
-
-        .module-description {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: var(--spacing-md);
-            font-size: 0.9rem;
-        }
-
-        .module-reward {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-md);
-        }
-
-        .reward-badge {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Reading Module */
-        .reading-module {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .reading-module.active {
-            display: block;
-        }
-
-        .back-button {
-            display: flex;
+        .cta-button {
+            display: inline-flex;
             align-items: center;
             gap: var(--spacing-xs);
-            background: var(--primary);
+            background: var(--accent);
             color: white;
-            padding: var(--spacing-sm) var(--spacing-lg);
-            border: none;
+            padding: var(--spacing-md) var(--spacing-xl);
             border-radius: var(--radius);
-            font-weight: 600;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: var(--shadow-elevated);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .back-button:hover {
-            background: var(--primary-dark);
-        }
-
-        .reading-header {
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .reading-title {
-            font-size: 2rem;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .reading-subtitle {
-            color: var(--text-secondary);
             font-size: 1.1rem;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--primary-light);
-            border-radius: 4px;
-            margin: var(--spacing-lg) 0;
-            overflow: hidden;
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(247,37,133,0.4);
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 4px;
-            transition: width 0.5s ease;
+        /* Module Grid */
+        .learning-path {
+            padding: var(--spacing-xl) 0;
         }
 
-        .content-card {
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        .module-card {
             background: var(--surface);
             border-radius: var(--radius-lg);
             padding: var(--spacing-lg);
             box-shadow: var(--shadow);
-            margin-bottom: var(--spacing-lg);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            animation: cardAppear 0.6s ease;
         }
 
-        .content-card.active {
-            border-left: 5px solid var(--primary);
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .content-header {
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-elevated);
+            border-color: var(--primary-light);
+        }
+
+        .module-card.locked {
+            opacity: 0.7;
+            filter: grayscale(0.5);
+            pointer-events: none;
+        }
+
+        .module-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: var(--spacing-md);
         }
 
-        .content-title {
+        .module-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
             font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .module-card:hover .module-icon {
+            transform: rotate(5deg) scale(1.1);
+            background: var(--primary);
+            color: white;
+        }
+
+        .module-key-cost {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--key);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
             color: var(--text-primary);
+        }
+
+        .module-title {
+            font-size: 1.25rem;
             margin-bottom: var(--spacing-sm);
         }
 
-        .content-badge {
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 5px 10px;
+        .module-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            font-size: 0.9rem;
+        }
+
+        .module-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .meta-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .module-status {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .module-status.unlocked {
+            background: var(--success);
+            color: white;
+        }
+
+        .module-status.unlocked:hover {
+            background: #3ab0d9;
+            transform: scale(1.02);
+        }
+
+        .module-status.locked {
+            background: var(--border);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .completed-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
         }
 
-        .content-body {
+        /* Learning Module View */
+        .learning-module {
+            display: none;
+            padding: var(--spacing-xl) 0;
+            background: var(--surface);
+            min-height: 100vh;
+        }
+
+        .learning-module.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .module-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
             color: var(--text-secondary);
-            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            transition: all 0.2s;
         }
 
-        .content-body ul, .content-body ol {
-            margin-left: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
+        .back-button:hover {
+            background: var(--primary-light);
+            color: var(--primary);
         }
 
-        .content-body li {
+        .lesson-progress {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .step-indicators {
+            display: flex;
+            gap: 8px;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .step-dot.completed {
+            background: var(--success);
+        }
+
+        /* Lesson Content */
+        .lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--background);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow);
+        }
+
+        .lesson-section {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lesson-icon-large {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-lg);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .info-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .example-card {
+            background: #fff9e6;
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-left: 4px solid var(--warning);
+            transition: all 0.3s;
+        }
+
+        .example-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .example-title {
+            font-weight: 700;
+            color: var(--warning);
             margin-bottom: var(--spacing-xs);
         }
 
-        .content-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: var(--spacing-md) 0;
-        }
-
-        .content-table th, .content-table td {
-            padding: var(--spacing-sm);
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .content-table th {
-            background: var(--primary-light);
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .content-table tr:hover {
-            background: var(--primary-light);
-        }
-
-        .recall-question {
-            background: var(--primary-light);
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary-light), #ffffff);
             border-radius: var(--radius);
             padding: var(--spacing-md);
-            margin-top: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border: 2px dashed var(--primary);
         }
 
-        .question-text {
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
             color: var(--text-primary);
         }
 
-        .options-container {
+        .quiz-options {
             display: grid;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
         }
 
-        .option {
+        .quiz-option {
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: var(--radius);
-            padding: var(--spacing-sm);
+            padding: var(--spacing-md);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            animation: optionAppear 0.5s ease;
         }
 
-        .option:hover {
+        @keyframes optionAppear {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .quiz-option:hover {
             border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
 
-        .option.correct {
+        .quiz-option.correct {
             border-color: var(--success);
-            background: rgba(76, 201, 240, 0.1);
+            background: rgba(76,201,240,0.1);
+            animation: correctPulse 0.5s ease;
         }
 
-        .option.incorrect {
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .quiz-option.incorrect {
             border-color: var(--danger);
-            background: rgba(230, 57, 70, 0.1);
+            background: rgba(230,57,70,0.1);
+            animation: shake 0.5s ease;
         }
 
-        .feedback {
-            padding: var(--spacing-sm);
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .option-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .quiz-feedback {
+            padding: var(--spacing-md);
             border-radius: var(--radius);
-            margin-top: var(--spacing-sm);
+            margin-top: var(--spacing-md);
             display: none;
+            animation: slideUp 0.3s ease;
         }
 
-        .feedback.correct {
-            background: rgba(76, 201, 240, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .feedback.incorrect {
-            background: rgba(230, 57, 70, 0.1);
-            border: 1px solid var(--danger);
-            color: var(--danger);
+        .completion-screen {
+            text-align: center;
+            padding: var(--spacing-xl);
+            animation: celebration 1s ease;
         }
 
-        .navigation-buttons {
+        @keyframes celebration {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .key-reward {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .key-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--key);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            animation: keyJingle 1s infinite;
+        }
+
+        @keyframes keyJingle {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
         }
 
         .nav-btn {
             display: flex;
             align-items: center;
-            gap: var(--spacing-xs);
+            gap: 8px;
             background: var(--primary);
             color: white;
-            padding: var(--spacing-md) var(--spacing-lg);
+            padding: 12px 24px;
             border: none;
             border-radius: var(--radius);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover:not(:disabled) {
             background: var(--primary-dark);
+            transform: translateX(5px);
         }
 
         .nav-btn:disabled {
@@ -465,1717 +696,780 @@
             cursor: not-allowed;
         }
 
-        .nav-btn.secondary {
-            background: var(--text-tertiary);
-            color: var(--text-primary);
-        }
-
-        .nav-btn.secondary:hover {
-            background: var(--text-secondary);
-            color: white;
-        }
-
-        /* Games Module */
-        .games-module {
-            display: none;
-            padding: var(--spacing-xl) 0;
+        /* Footer */
+        footer {
             background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .games-module.active {
-            display: block;
-        }
-
-        .games-header {
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .games-title {
-            font-size: 2rem;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .games-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
-        }
-
-        .game-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-            border: 2px solid transparent;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-elevated);
-            border-color: var(--primary-light);
-        }
-
-        .game-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 2rem;
-            margin: 0 auto var(--spacing-md);
-        }
-
-        .game-title {
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .game-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-md);
-            font-size: 0.9rem;
-        }
-
-        .game-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-        }
-
-        /* Flashcard Game */
-        .flashcard-game {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .flashcard-game.active {
-            display: block;
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-            flex-wrap: wrap;
-            gap: var(--spacing-md);
-        }
-
-        .game-progress {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .game-stats {
-            display: flex;
-            gap: var(--spacing-md);
-        }
-
-        .flashcard {
-            width: 100%;
-            max-width: 600px;
-            height: 400px;
-            margin: 0 auto;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-
-        .flashcard-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .flashcard.flipped .flashcard-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-front, .flashcard-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: var(--radius-lg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: var(--spacing-xl);
-            box-shadow: var(--shadow-elevated);
-        }
-
-        .flashcard-front {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-        }
-
-        .flashcard-back {
-            background: var(--surface);
-            color: var(--text-primary);
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-term {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .flashcard-hint {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .flashcard-definition {
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .flashcard-example {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            font-style: italic;
-            margin-top: var(--spacing-md);
-        }
-
-        .flashcard-category {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        .flashcard-back .flashcard-category {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .game-actions {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-md);
+            padding: var(--spacing-lg) 0;
+            border-top: 1px solid var(--border);
             margin-top: var(--spacing-xl);
         }
 
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--surface);
-            color: var(--text-primary);
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .action-btn.difficult {
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        .action-btn.medium {
-            border-color: var(--warning);
-            color: var(--warning);
-        }
-
-        .action-btn.easy {
-            border-color: var(--success);
-            color: var(--success);
-        }
-
-        /* Memory Game */
-        .memory-game {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .memory-game.active {
-            display: block;
-        }
-
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--spacing-md);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        @media (min-width: 768px) {
-            .memory-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        .memory-card {
-            height: 120px;
-            background: var(--primary);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-            cursor: pointer;
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-            position: relative;
-        }
-
-        .memory-card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .memory-card.matched {
-            border: 3px solid var(--success);
-            animation: pulse 1s;
-        }
-
-        .memory-card-front, .memory-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-md);
-        }
-
-        .memory-card-front {
-            background: var(--primary);
-            color: white;
-        }
-
-        .memory-card-back {
-            background: var(--surface);
-            color: var(--text-primary);
-            transform: rotateY(180deg);
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        /* Results Screen */
-        .results-screen {
-            display: none;
-            text-align: center;
-            padding: var(--spacing-xl);
-            animation: fadeIn 0.8s ease;
-        }
-
-        .results-screen.active {
-            display: block;
-        }
-
-        .result-icon {
-            font-size: 4rem;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-icon.correct {
-            color: var(--success);
-        }
-
-        .result-score {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-score.good {
-            color: var(--success);
-        }
-
-        .result-score.average {
-            color: var(--warning);
-        }
-
-        .result-score.poor {
-            color: var(--danger);
-        }
-
-        .reward-animation {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-lg);
-            margin: var(--spacing-lg) 0;
-        }
-
-        .reward-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .reward-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        .reward-icon.coins {
-            background: var(--coin);
-            color: var(--text-primary);
-        }
-
-        .reward-icon.xp {
-            background: var(--success);
-            color: white;
-        }
-
-        .reward-amount {
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes correct {
-            0% { background-color: var(--surface); }
-            50% { background-color: var(--success); }
-            100% { background-color: var(--surface); }
-        }
-
-        @keyframes incorrect {
-            0% { background-color: var(--surface); }
-            50% { background-color: var(--danger); }
-            100% { background-color: var(--surface); }
-        }
-
-        .correct-animation {
-            animation: correct 0.5s ease;
-        }
-
-        .incorrect-animation {
-            animation: incorrect 0.5s ease;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--text-primary);
-            color: white;
-            padding: var(--spacing-lg) 0;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: var(--spacing-md);
-        }
-
-        .footer-logo {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: var(--spacing-lg);
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: white;
-        }
-
-        .footer-copyright {
-            width: 100%;
-            text-align: center;
-            margin-top: var(--spacing-md);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.875rem;
-        }
-
-        /* Responsive Design */
+        /* Mobile */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
             }
             
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .module-selector {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .module-card {
-                width: 100%;
-                max-width: 350px;
-            }
-
             .user-stats {
-                gap: var(--spacing-sm);
-            }
-
-            .stat-item {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-
-            .flashcard {
-                height: 350px;
-            }
-
-            .flashcard-term {
-                font-size: 1.75rem;
-            }
-
-            .flashcard-definition {
-                font-size: 1.25rem;
-            }
-
-            .memory-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .game-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .action-btn {
-                width: 100%;
-                max-width: 250px;
-                justify-content: center;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-links {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero {
-                padding: var(--spacing-lg) 0;
+                justify-content: space-between;
             }
             
-            .hero h1 {
-                font-size: 1.75rem;
+            .progress-container {
+                width: 100%;
             }
             
-            .reading-title, .games-title {
-                font-size: 1.5rem;
-            }
-
-            .content-card {
-                padding: var(--spacing-md);
-            }
-
-            .flashcard {
-                height: 300px;
-            }
-
-            .flashcard-term {
-                font-size: 1.5rem;
-            }
-
-            .memory-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .navigation-buttons {
-                flex-direction: column;
-                gap: var(--spacing-sm);
-            }
-
-            .nav-btn {
-                width: 100%;
-                justify-content: center;
+            .module-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#" class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-stethoscope"></i>
-                </div>
-                <span>PflegeLernPro</span>
-            </a>
-            
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo" id="homeLogo">
+                <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <span>PflegefachProfi</span>
+            </div>
             <div class="user-stats">
-                <div class="stat-item coins">
-                    <i class="fas fa-coins"></i>
-                    <span id="coins">100</span>
+                <div class="stat-item keys" id="keyDisplay">
+                    <i class="fa-solid fa-key"></i> <span id="keyCount">0</span>
                 </div>
-                <div class="stat-item level">
-                    <i class="fas fa-level-up-alt"></i>
-                    <span id="level">1</span>
-                </div>
-                <div class="stat-item xp">
-                    <i class="fas fa-fire"></i>
-                    <span id="xp">0</span>
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0/10</span>
                 </div>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
+        <div class="container hero-content">
+            <h1>Bestehe deine Pflegefachmann-Prüfung</h1>
+            <p>Interaktive Module, spielerisch lernen, Schlüssel sammeln – für eine sichere Vorbereitung.</p>
+            <button class="cta-button" id="startExploring"><i class="fas fa-compass"></i> Module entdecken</button>
+        </div>
+    </section>
+
+    <!-- Module Grid -->
+    <section class="learning-path" id="moduleSection">
         <div class="container">
-            <div class="hero-content">
-                <h1>Anorexia Nervosa - Lernmodul</h1>
-                <p>Lerne alles über Magersucht für deine Prüfung zum Pflegefachmann mit wissenschaftlich fundierten Methoden!</p>
-                
-                <div class="module-selector">
-                    <div class="module-card" id="reading-module-btn">
-                        <div class="module-icon">
-                            <i class="fas fa-book-open"></i>
-                        </div>
-                        <h3 class="module-title">Lernmodul</h3>
-                        <p class="module-description">Lerne Schritt für Schritt mit aktiven Abfragen und wissenschaftlichen Methoden</p>
-                        <div class="module-reward">
-                            <div class="reward-badge">
-                                <i class="fas fa-coins"></i>
-                                <span>+50 Coins</span>
-                            </div>
-                            <div class="reward-badge">
-                                <i class="fas fa-fire"></i>
-                                <span>+100 XP</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="module-card" id="games-module-btn">
-                        <div class="module-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <h3 class="module-title">Spielemodul</h3>
-                        <p class="module-description">Festige dein Wissen mit unterhaltsamen Spielen und Spaced Repetition</p>
-                        <div class="module-reward">
-                            <div class="reward-badge">
-                                <i class="fas fa-coins"></i>
-                                <span>+100 Coins</span>
-                            </div>
-                            <div class="reward-badge">
-                                <i class="fas fa-fire"></i>
-                                <span>+200 XP</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <h2>Deine Lernmodule</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">Schalte Module mit Schlüsseln frei und arbeite dich Schritt für Schritt zur Prüfung.</p>
+            <div class="module-grid" id="moduleGrid">
+                <!-- Module werden per JS generiert -->
             </div>
         </div>
     </section>
 
-    <!-- Reading Module -->
-    <section class="reading-module" id="reading-module">
+    <!-- Learning Module Detail View -->
+    <section class="learning-module" id="moduleDetail">
         <div class="container">
-            <button class="back-button" id="back-from-reading">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zur Hauptseite
-            </button>
-            
-            <div class="reading-header">
-                <h1 class="reading-title">Anorexia Nervosa - Lernmodul</h1>
-                <p class="reading-subtitle">Lerne Schritt für Schritt mit aktiven Abfragen</p>
-            </div>
-            
-            <div class="progress-bar">
-                <div class="progress-fill" id="reading-progress" style="width: 0%"></div>
-            </div>
-            
-            <div class="content-container" id="content-container">
-                <!-- Content will be loaded dynamically by JavaScript -->
-            </div>
-            
-            <div class="navigation-buttons">
-                <button class="nav-btn secondary" id="prev-btn" disabled>
-                    <i class="fas fa-arrow-left"></i>
-                    Zurück
+            <div class="module-header-bar">
+                <button class="back-button" id="backToModules">
+                    <i class="fas fa-arrow-left"></i> Zurück zur Übersicht
                 </button>
-                <button class="nav-btn" id="next-btn">
-                    Weiter
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Games Module -->
-    <section class="games-module" id="games-module">
-        <div class="container">
-            <button class="back-button" id="back-from-games">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zur Hauptseite
-            </button>
-            
-            <div class="games-header">
-                <h1 class="games-title">Spielemodul - Anorexia Nervosa</h1>
-                <p class="games-subtitle">Festige dein Wissen mit unterhaltsamen Spielen</p>
-            </div>
-            
-            <div class="games-grid">
-                <div class="game-card" data-game="flashcards">
-                    <div class="game-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3 class="game-title">Karteikarten</h3>
-                    <p class="game-description">Lerne mit intelligenten Karteikarten und Spaced Repetition für maximale Merkfähigkeit.</p>
-                    <div class="game-stats">
-                        <div class="stat">
-                            <span class="stat-value" id="flashcards-progress">0%</span>
-                            <span class="stat-label">Fortschritt</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">+25</span>
-                            <span class="stat-label">Coins</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="game-card" data-game="memory">
-                    <div class="game-icon">
-                        <i class="fas fa-puzzle-piece"></i>
-                    </div>
-                    <h3 class="game-title">Memory Spiel</h3>
-                    <p class="game-description">Verbinde Begriffe mit ihren Definitionen in einem unterhaltsamen Memory-Spiel.</p>
-                    <div class="game-stats">
-                        <div class="stat">
-                            <span class="stat-value" id="memory-progress">0%</span>
-                            <span class="stat-label">Fortschritt</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">+30</span>
-                            <span class="stat-label">Coins</span>
-                        </div>
-                    </div>
+                <div class="lesson-progress">
+                    <span id="currentModuleTitle"></span>
+                    <div class="step-indicators" id="stepIndicators"></div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Flashcard Game -->
-    <section class="flashcard-game" id="flashcard-game">
-        <div class="container">
-            <button class="back-button" id="back-from-flashcards">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Spielen
-            </button>
-            
-            <div class="game-header">
-                <h2>Karteikarten - Anorexia Nervosa</h2>
-                <div class="game-progress">
-                    <span>Fortschritt: <strong id="flashcard-progress">0/0</strong></span>
-                    <div class="game-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
-                            <span id="flashcard-correct">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-times-circle" style="color: var(--danger);"></i>
-                            <span id="flashcard-incorrect">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flashcard" id="flashcard">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <div class="flashcard-category">Anorexia Nervosa</div>
-                        <div class="flashcard-term" id="flashcard-term">Begriff</div>
-                        <div class="flashcard-hint">Klicken zum Umdrehen</div>
-                    </div>
-                    <div class="flashcard-back">
-                        <div class="flashcard-category">Anorexia Nervosa</div>
-                        <div class="flashcard-definition" id="flashcard-definition">Definition</div>
-                        <div class="flashcard-example" id="flashcard-example">Beispiel</div>
-                        <div class="flashcard-hint">Wie gut kennst du dieses Wort?</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="game-actions">
-                <button class="action-btn difficult" id="btn-difficult">
-                    <i class="fas fa-times-circle"></i>
-                    Schwer
-                </button>
-                <button class="action-btn medium" id="btn-medium">
-                    <i class="fas fa-minus-circle"></i>
-                    Mittel
-                </button>
-                <button class="action-btn easy" id="btn-easy">
-                    <i class="fas fa-check-circle"></i>
-                    Einfach
-                </button>
-            </div>
-
-            <div class="results-screen" id="flashcard-results">
-                <div class="result-icon correct">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="result-score good" id="flashcard-final-score">100%</div>
-                <p>Herzlichen Glückwunsch! Du hast alle Karteikarten bearbeitet.</p>
-                
-                <div class="reward-animation">
-                    <div class="reward-item">
-                        <div class="reward-icon coins">
-                            <i class="fas fa-coins"></i>
-                        </div>
-                        <div class="reward-amount" id="flashcard-coins-reward">+0</div>
-                        <div class="stat-label">Coins</div>
-                    </div>
-                    <div class="reward-item">
-                        <div class="reward-icon xp">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="reward-amount" id="flashcard-xp-reward">+0</div>
-                        <div class="stat-label">XP</div>
-                    </div>
-                </div>
-                
-                <div class="game-actions">
-                    <button class="action-btn" id="flashcard-restart">
-                        <i class="fas fa-redo"></i>
-                        Nochmal spielen
-                    </button>
-                    <button class="action-btn easy" id="flashcard-back-to-games">
-                        <i class="fas fa-home"></i>
-                        Zurück zu Spielen
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Memory Game -->
-    <section class="memory-game" id="memory-game">
-        <div class="container">
-            <button class="back-button" id="back-from-memory">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Spielen
-            </button>
-            
-            <div class="game-header">
-                <h2>Memory Spiel - Anorexia Nervosa</h2>
-                <div class="game-progress">
-                    <span>Paare: <strong id="memory-progress-text">0/0</strong></span>
-                    <div class="game-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-redo"></i>
-                            <span id="memory-moves">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="memory-grid" id="memory-grid">
-                <!-- Memory cards will be generated by JavaScript -->
-            </div>
-
-            <div class="results-screen" id="memory-results">
-                <div class="result-icon correct">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="result-score good" id="memory-final-score">100%</div>
-                <p>Glückwunsch! Du hast alle Paare gefunden.</p>
-                
-                <div class="reward-animation">
-                    <div class="reward-item">
-                        <div class="reward-icon coins">
-                            <i class="fas fa-coins"></i>
-                        </div>
-                        <div class="reward-amount" id="memory-coins-reward">+0</div>
-                        <div class="stat-label">Coins</div>
-                    </div>
-                    <div class="reward-item">
-                        <div class="reward-icon xp">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="reward-amount" id="memory-xp-reward">+0</div>
-                        <div class="stat-label">XP</div>
-                    </div>
-                </div>
-                
-                <div class="game-actions">
-                    <button class="action-btn" id="memory-restart">
-                        <i class="fas fa-redo"></i>
-                        Nochmal spielen
-                    </button>
-                    <button class="action-btn easy" id="memory-back-to-games">
-                        <i class="fas fa-home"></i>
-                        Zurück zu Spielen
-                    </button>
-                </div>
+            <div class="lesson-container" id="lessonContainer">
+                <!-- Dynamischer Inhalt -->
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">PflegeLernPro - Wissenschaftliches Lernen für Pflegefachpersonen</div>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">Datenschutz</a>
-                    <a href="#" class="footer-link">Impressum</a>
-                    <a href="#" class="footer-link">Kontakt</a>
-                </div>
-                <div class="footer-copyright">
-                    &copy; 2023 PflegeLernPro. Alle Rechte vorbehalten.
-                </div>
+    <footer>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
+            <div>© 2026 PflegefachProfi – Für Auszubildende in der Pflege</div>
+            <div style="display: flex; gap: var(--spacing-md);">
+                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
     </footer>
 
     <script>
-        // ===============================
-        // DATA STRUCTURES & INITIALIZATION
-        // ===============================
-
-        // User data structure
-        let user = {
-            coins: 100,
-            xp: 0,
-            level: 1,
-            progress: {
-                reading: {
-                    currentStep: 0,
-                    completed: false
+        (function() {
+            // ========== MODUL-DEFINITIONEN (LEICHT ERWEITERBAR) ==========
+            // Hier können einfach neue Module hinzugefügt werden
+            const MODULES = [
+                {
+                    id: 1,
+                    title: 'Kompetenzbereiche & Prüfungstage',
+                    icon: 'fa-clipboard-list',
+                    description: 'Lerne die 5 Kompetenzbereiche und welche an welchem Prüfungstag geprüft werden.',
+                    lessons: 3,
+                    time: '25 min',
+                    keyCost: 0,
+                    requiredKeys: 0,
+                    content: [
+                        {
+                            type: 'lesson',
+                            title: 'Die 5 Kompetenzbereiche',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-check-circle" style="color: var(--primary);"></i> KB I: Pflegeprozess gestalten</h3>
+                                    <p>Pflegeplanung, Diagnostik, Evaluation, Dokumentation. Der Kern deiner Arbeit.</p>
+                                </div>
+                                <div class="info-card">
+                                    <h3><i class="fas fa-comments" style="color: var(--primary);"></i> KB II: Kommunikation & Beratung</h3>
+                                    <p>Beziehungsgestaltung, Information, interkulturelle Kommunikation.</p>
+                                </div>
+                                <div class="info-card">
+                                    <h3><i class="fas fa-handshake" style="color: var(--primary);"></i> KB III: Interprofessionelles Handeln</h3>
+                                    <p>Teamarbeit, ärztliche Anordnungen, Schnittstellenmanagement.</p>
+                                </div>
+                                <div class="info-card">
+                                    <h3><i class="fas fa-gavel" style="color: var(--primary);"></i> KB IV: Recht & Ethik</h3>
+                                    <p>Rechtsgrundlagen, ethische Leitlinien, berufsethische Werthaltungen.</p>
+                                </div>
+                                <div class="info-card">
+                                    <h3><i class="fas fa-flask" style="color: var(--primary);"></i> KB V: Wissenschaft & Reflexion</h3>
+                                    <p>Evidenzbasierte Pflege, Qualitätsentwicklung, Reflexion.</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Prüfungszuordnung',
+                            content: `
+                                <div class="highlight-box">
+                                    <h3><i class="fas fa-calendar-alt"></i> Schriftliche Prüfung</h3>
+                                    <p><strong>Tag 1:</strong> I.1, II.1, I.5, I.6 (+ KB IV Kontext)</p>
+                                    <p><strong>Tag 2:</strong> I.2, II.2, V.1</p>
+                                    <p><strong>Tag 3:</strong> I.3, I.4, III.2, II.3</p>
+                                </div>
+                                <div class="highlight-box">
+                                    <h3><i class="fas fa-comments"></i> Mündliche Prüfung</h3>
+                                    <p>KB III (Team), KB IV (Recht/Ethik), KB V (Wissenschaft)</p>
+                                </div>
+                                <div class="highlight-box">
+                                    <h3><i class="fas fa-hands"></i> Praktische Prüfung</h3>
+                                    <p>Alle KB I-V werden in Handlung und Reflexion geprüft.</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Lernstrategien',
+                            content: `
+                                <div class="example-card">
+                                    <div class="example-title"><i class="fas fa-lightbulb"></i> Merkhilfe</div>
+                                    <p><strong>P</strong>flegen - <strong>R</strong>eden - <strong>H</strong>elfen - <strong>D</strong>enken - <strong>W</strong>issen</p>
+                                    <p>Für KB I bis V.</p>
+                                </div>
+                                <div class="info-card">
+                                    <p>In der schriftlichen Prüfung: Fokus auf Pflegeprozess.<br>
+                                    In der praktischen: Zeige Handlungskompetenz.<br>
+                                    In der mündlichen: Begründe mit Recht und Wissenschaft.</p>
+                                </div>
+                            `
+                        }
+                    ]
                 },
-                flashcards: {
-                    completed: false,
-                    correct: 0,
-                    total: 0
+                {
+                    id: 2,
+                    title: 'Kommunikationsmodelle in der Pflege',
+                    icon: 'fa-message',
+                    description: 'Wichtige Modelle, praktische Anwendung und Beispiele für die Prüfung.',
+                    lessons: 3,
+                    time: '30 min',
+                    keyCost: 1,
+                    requiredKeys: 1,
+                    content: [
+                        {
+                            type: 'lesson',
+                            title: 'Das 4-Ohren-Modell (Schulz von Thun)',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-ear-listen"></i> Vier Ebenen einer Nachricht</h3>
+                                    <ul style="margin-left: 20px;">
+                                        <li><strong>Sachebene:</strong> Worüber ich informiere</li>
+                                        <li><strong>Selbstoffenbarung:</strong> Was ich von mir preisgebe</li>
+                                        <li><strong>Beziehungsebene:</strong> Was ich von dir halte</li>
+                                        <li><strong>Appellebene:</strong> Wozu ich dich bewegen möchte</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title"><i class="fas fa-hospital-user"></i> Pflegebeispiel</div>
+                                    <p>Patient sagt: "Ist heute schon wieder diese Schwester da?"</p>
+                                    <p><strong>Sachebene:</strong> Frage nach Dienstplan<br>
+                                    <strong>Selbstoffenbarung:</strong> Ich bin unzufrieden<br>
+                                    <strong>Beziehung:</strong> Ich mag diese Schwester nicht<br>
+                                    <strong>Appell:</strong> Sorg dafür, dass eine andere kommt</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Das Pflegetheoretische Modell nach Peplau',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-hand-holding-heart"></i> Zwischenmenschliche Beziehung in der Pflege</h3>
+                                    <p><strong>Phasen:</strong> Orientierung, Identifikation, Nutzung, Auflösung</p>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Praxisbeispiel</div>
+                                    <p><strong>Orientierung:</strong> Aufnahmegespräch, Bedürfnisse klären<br>
+                                    <strong>Identifikation:</strong> Patient vertraut, Pflegekraft unterstützt<br>
+                                    <strong>Nutzung:</strong> Patient nutzt Angebote, lernt selbstständig<br>
+                                    <strong>Auflösung:</strong> Entlassung, Beziehung endet</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Gewaltfreie Kommunikation (Rosenberg)',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-dove"></i> Vier Schritte</h3>
+                                    <ol>
+                                        <li>Beobachtung (ohne Bewertung)</li>
+                                        <li>Gefühl (Ich fühle...)</li>
+                                        <li>Bedürfnis (Weil ich brauche...)</li>
+                                        <li>Bitte (Möchtest du...)</li>
+                                    </ol>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Konflikt mit Angehörigen</div>
+                                    <p>"Wenn Sie so laut sprechen (Beobachtung), fühle ich mich unsicher (Gefühl), weil ich eine ruhige Atmosphäre für alle Patienten brauche (Bedürfnis). Könnten wir leiser sprechen? (Bitte)"</p>
+                                </div>
+                            `
+                        }
+                    ]
                 },
-                memory: {
-                    completed: false,
-                    moves: 0
+                {
+                    id: 3,
+                    title: 'Recht in der Pflege',
+                    icon: 'fa-gavel',
+                    description: 'Die wichtigsten Rechtsgrundlagen für die Prüfung mit Fallbeispielen.',
+                    lessons: 3,
+                    time: '35 min',
+                    keyCost: 1,
+                    requiredKeys: 1,
+                    content: [
+                        {
+                            type: 'lesson',
+                            title: 'Einwilligung und Aufklärung',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-file-signature"></i> Rechtsgrundlagen</h3>
+                                    <p><strong>§ 630d BGB:</strong> Einwilligung des Patienten erforderlich<br>
+                                    <strong>§ 630e BGB:</strong> Aufklärungspflicht (durch Arzt!)</p>
+                                </div>
+                                <div class="info-card">
+                                    <h3>Voraussetzungen der Einwilligung</h3>
+                                    <ul>
+                                        <li>Einsichtsfähigkeit</li>
+                                        <li>Ausreichende Aufklärung</li>
+                                        <li>Freiwilligkeit</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Fallbeispiel</div>
+                                    <p>Eine Patientin mit Demenz (mittleres Stadium) soll eine Magensonde bekommen. Die Tochter stimmt zu, die Patientin wehrt sich.</p>
+                                    <p><strong>Problem:</strong> Liegt eine wirksame Einwilligung vor? Nein, weil die Patientin sich wehrt (natürlicher Wille).</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Unterbringung und Zwangsmaßnahmen',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-handcuffs"></i> Voraussetzungen</h3>
+                                    <ul>
+                                        <li>Psychische Krankheit oder geistige Behinderung</li>
+                                        <li>Erhebliche Eigen- oder Fremdgefährdung</li>
+                                        <li>Keine weniger einschneidende Maßnahme</li>
+                                        <li>Richterliche Genehmigung</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">Fixierung</div>
+                                    <p>Eine bettlägerige Patientin klettert nachts aus dem Bett und stürzt. Darf man sie fixieren?</p>
+                                    <p><strong>Nein,</strong> ohne richterliche Genehmigung nur bei akuter Eigengefahr und als letztes Mittel. Vorher: Niedrigbett, Wechseldruckmatratze, Betreuung.</p>
+                                </div>
+                            `
+                        },
+                        {
+                            type: 'lesson',
+                            title: 'Haftung und Delegation',
+                            content: `
+                                <div class="info-card">
+                                    <h3><i class="fas fa-balance-scale"></i> Wer haftet bei Fehlern?</h3>
+                                    <p><strong>§ 823 BGB:</strong> Schadensersatzpflicht bei schuldhafter Pflichtverletzung</p>
+                                </div>
+                                <div class="info-card">
+                                    <h3>Delegation ärztlicher Aufgaben</h3>
+                                    <ul>
+                                        <li>Anordnung muss konkret sein</li>
+                                        <li>Pflegekraft muss fachlich befähigt sein</li>
+                                        <li>Durchführungsverantwortung bleibt bei Pflegekraft</li>
+                                    </ul>
+                                </div>
+                                <div class="example-card">
+                                    <div class="example-title">i.v. Antibiotika</div>
+                                    <p>Eine Ärztin sagt: "Kümmern Sie sich um die Infusion bei Zimmer 4." Die Pflegekraft hat noch nie i.v. gegeben und spritzt falsch.</p>
+                                    <p><strong>Haftung:</strong> Die Pflegekraft haftet, weil sie die Aufgabe hätte ablehnen müssen (Übernahmeverantwortung).</p>
+                                </div>
+                            `
+                        }
+                    ]
                 }
-            }
-        };
+            ];
 
-        // Reading module content - Structured for Anorexia Nervosa
-        const readingContent = [
-            {
-                title: "Anorexia Nervosa - Grundlagen",
-                badge: "Grundwissen",
-                content: `
-                    <h3>Was ist Anorexia Nervosa?</h3>
-                    <p>Anorexia Nervosa (Magersucht) ist eine psychische Erkrankung, die durch folgende Kernmerkmale gekennzeichnet ist:</p>
-                    <ul>
-                        <li><strong>Gewichtsverlust:</strong> Selbst herbeigeführt durch Vermeidung von hochkalorischen Speisen, übertriebene körperliche Aktivität, selbstinduziertes Erbrechen oder Abführmittelmissbrauch</li>
-                        <li><strong>Körperbildstörung:</strong> Eine tiefverwurzelte, unangemessene Angst davor, zu dick zu sein oder zu werden. Die eigene Wahrnehmung des Körpers ist verzerrt.</li>
-                        <li><strong>Endokrine Störungen:</strong> Bei Frauen: <strong>Amenorrhoe</strong> (Ausbleiben der Menstruation). Bei Männern: Libido- und Potenzverlust.</li>
-                    </ul>
-                    
-                    <div class="recall-question">
-                        <div class="question-text">Welches ist KEIN Kernmerkmal der Anorexia nervosa?</div>
-                        <div class="options-container">
-                            <div class="option" data-correct="false">Extreme Gewichtsabnahme</div>
-                            <div class="option" data-correct="false">Körperbildstörung</div>
-                            <div class="option" data-correct="true">Übermäßige Freude am Essen</div>
-                            <div class="option" data-correct="false">Amenorrhoe bei Frauen</div>
-                        </div>
-                        <div class="feedback"></div>
-                    </div>
-                `
-            },
-            {
-                title: "Peplaus Pflegetheorie bei Anorexia Nervosa",
-                badge: "Pflegetheorie",
-                content: `
-                    <h3>Anwendung der Peplau-Theorie</h3>
-                    <p>Peplaus Pflegetheorie sieht Pflege als eine <strong>therapeutische zwischenmenschliche Beziehung</strong>. Hier ist die Anwendung bei einer Patientin mit Anorexia nervosa:</p>
-                    
-                    <table class="content-table">
-                        <thead>
-                            <tr>
-                                <th>Phase</th>
-                                <th>Pflegerische Ziele & Handlungen</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Orientierungsphase</strong><br>(Vertrauen aufbauen)</td>
-                                <td>Zeige Empathie, kein Druck beim Essen! Sprich über Ängste und Gefühle, NICHT über Gewicht oder Kalorien. Frage: "Wie geht es Ihnen damit, dass Sie hier sind?"</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Identifikationsphase</strong><br>(Probleme erkennen)</td>
-                                <td>Hilf der Patientin zu erkennen, wie das Verhalten (Nicht-Essen) mit ihren Gefühlen (z.B. Kontrollverlust, Angst) zusammenhängt.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Ausnutzungsphase</strong><br>(Ressourcen nutzen)</td>
-                                <td>Die Patientin nutzt die therapeutische Beziehung, um neue Verhaltensweisen zu lernen. Bestärke sie positiv bei kleinen Schritten.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Lösungsphase</strong><br>(Selbstständigkeit fördern)</td>
-                                <td>Die Patientin übernimmt mehr Verantwortung für ihre Gesundheit. Fokus auf Zukunft und Stabilisierung des Erreichten.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="recall-question">
-                        <div class="question-text">In welcher Phase der Peplau-Theorie baut man primär Vertrauen auf?</div>
-                        <div class="options-container">
-                            <div class="option" data-correct="true">Orientierungsphase</div>
-                            <div class="option" data-correct="false">Identifikationsphase</div>
-                            <div class="option" data-correct="false">Ausnutzungsphase</div>
-                            <div class="option" data-correct="false">Lösungsphase</div>
-                        </div>
-                        <div class="feedback"></div>
-                    </div>
-                `
-            },
-            {
-                title: "Zwangsernährung - Rechtliche Grundlagen",
-                badge: "Rechtliches",
-                content: `
-                    <h3>Zwangsernährung nach § 1906 BGB</h3>
-                    <p>Eine künstliche Ernährung gegen den natürlichen Willen des Patienten (meist via Sonde) ist nur unter strengen Voraussetzungen rechtlich zulässig:</p>
-                    
-                    <ol>
-                        <li><strong>Einwilligungsunfähigkeit</strong> des Patienten liegt vor (z.B. durch die krankheitsbedingte Einsichtsunfähigkeit der Magersucht)</li>
-                        <li>Die Zwangsernährung ist <strong>notwendig</strong>, um eine erhebliche Gefahr für Leben oder Gesundheit abzuwenden</li>
-                        <li>Es liegt ein <strong>richterlicher Beschluss</strong> vor (§ 1906 BGB). Dieser muss für einen begrenzten Zeitraum beantragt werden.</li>
-                    </ol>
-                    
-                    <h4>Ethische Spannung:</h4>
-                    <ul>
-                        <li><strong>Für:</strong> Lebenserhaltung, Verhinderung von irreversiblen Organschäden</li>
-                        <li><strong>Gegen:</strong> Massive Verletzung des Selbstbestimmungsrechts und der körperlichen Integrität</li>
-                    </ul>
-                    
-                    <div class="recall-question">
-                        <div class="question-text">Welche Voraussetzung ist für eine Zwangsernährung NICHT erforderlich?</div>
-                        <div class="options-container">
-                            <div class="option" data-correct="false">Einwilligungsunfähigkeit des Patienten</div>
-                            <div class="option" data-correct="false">Richterlicher Beschluss</div>
-                            <div class="option" data-correct="true">Zustimmung der Angehörigen</div>
-                            <div class="option" data-correct="false">Abwendung einer erheblichen Gefahr für Leben/Gesundheit</div>
-                        </div>
-                        <div class="feedback"></div>
-                    </div>
-                `
-            },
-            {
-                title: "Sorgerecht bei Minderjährigen",
-                badge: "Rechtliches",
-                content: `
-                    <h3>Sorgerecht bei minderjährigen Patientinnen</h3>
-                    <p>Bei minderjährigen Patientinnen mit Anorexia nervosa ist das Sorgerecht von besonderer Bedeutung:</p>
-                    
-                    <ul>
-                        <li><strong>Sorgerecht (für Minderjährige < 18):</strong> Liegt in der Regel bei den <strong>Eltern</strong>. Sie treffen die grundlegenden Entscheidungen (z.B. Einwilligung in eine Therapie).</li>
-                        <li><strong>Problem:</strong> Was, wenn die Eltern eine notwendige Behandlung nicht wollen oder die Tochter sich gegen die Eltern stellt?
-                            <ul>
-                                <li>Dann kann das <strong>Familiengericht</strong> eingreifen und Teile des Sorgerechts entziehen (z.B. das Aufenthaltsbestimmungsrecht für den Klinikaufenthalt).</li>
-                            </ul>
-                        </li>
-                        <li><strong>Betreuungsrecht (für Erwachsene ≥ 18):</strong> Ab der Volljährigkeit sind die Eltern nicht mehr automatisch berechtigt. Ist der Patient aufgrund seiner Krankheit nicht in der Lage, seine Angelegenheiten zu regeln, wird vom Betreuungsgericht ein rechtlicher Betreuer bestellt.</li>
-                    </ul>
-                    
-                    <div class="recall-question">
-                        <div class="question-text">Wer trifft bei einer 16-jährigen Patientin mit Anorexia nervosa in der Regel die Entscheidungen über ihre Behandlung?</div>
-                        <div class="options-container">
-                            <div class="option" data-correct="true">Die Eltern</div>
-                            <div class="option" data-correct="false">Die Patientin selbst</div>
-                            <div class="option" data-correct="false">Das Pflegepersonal</div>
-                            <div class="option" data-correct="false">Der behandelnde Arzt allein</div>
-                        </div>
-                        <div class="feedback"></div>
-                    </div>
-                `
-            },
-            {
-                title: "Prüfungsfall - Zusammenfassung",
-                badge: "Fallbeispiel",
-                content: `
-                    <h3>Prüfungsfall: Junge Frau, 16 Jahre, mit Anorexia nervosa</h3>
-                    <p>Stelle dir diese Prüfungssituation vor und wende dein Wissen an:</p>
-                    
-                    <div class="recall-question">
-                        <div class="question-text">Die 16-jährige Patientin ist hochgradig untergewichtig und verweigert das Essen. Der Arzt sieht eine akute Lebensgefahr. Was muss vor einer Zwangsernährung rechtlich beachtet werden?</div>
-                        <div class="options-container">
-                            <div class="option" data-correct="false">Die Patientin muss zustimmen, unabhängig von ihrem Zustand</div>
-                            <div class="option" data-correct="true">Es muss ein richterlicher Beschluss nach § 1906 BGB vorliegen</div>
-                            <div class="option" data-correct="false">Die Zwangsernährung kann sofort durchgeführt werden, da Lebensgefahr besteht</div>
-                            <div class="option" data-correct="false">Das Pflegepersonal kann eigenständig entscheiden</div>
-                        </div>
-                        <div class="feedback"></div>
-                    </div>
-                    
-                    <div class="recall-question">
-                        <div class="question-text">In welcher Phase der Peplau-Theorie würdest du zunächst mit der Patientin arbeiten?</div>
-                        <div class="options-container">
-                            <div class="option" data-correct="true">Orientierungsphase: Vertrauen aufbauen ohne Druck</div>
-                            <div class="option" data-correct="false">Lösungsphase: Selbstständigkeit fördern</div>
-                            <div class="option" data-correct="false">Ausnutzungsphase: Ressourcen nutzen</div>
-                            <div class="option" data-correct="false">Identifikationsphase: Probleme erkennen</div>
-                        </div>
-                        <div class="feedback"></div>
-                    </div>
-                `
-            }
-        ];
+            // ========== GLOBALE VARIABLEN ==========
+            let userKeys = 0;
+            let completedModules = [];
+            let currentModuleId = 1;
+            let currentLessonIndex = 0;
+            const totalModules = MODULES.length;
 
-        // Vocabulary for games
-        const gameVocabulary = [
-            { term: "Anorexia nervosa", definition: "Psychische Erkrankung mit selbst herbeigeführtem Gewichtsverlust und Körperbildstörung", example: "Magersucht" },
-            { term: "Körperbildstörung", definition: "Verzerrte Wahrnehmung des eigenen Körpers", example: "Patientin fühlt sich trotz Untergewicht zu dick" },
-            { term: "Amenorrhoe", definition: "Ausbleiben der Menstruation", example: "Häufiges Symptom bei Anorexia nervosa" },
-            { term: "Peplau-Theorie", definition: "Pflegetheorie mit Fokus auf therapeutischer zwischenmenschlicher Beziehung", example: "4 Phasen: Orientierung, Identifikation, Ausnutzung, Lösung" },
-            { term: "Orientierungsphase", definition: "Erste Phase nach Peplau: Vertrauen aufbauen", example: "Empathie zeigen, keine Druck beim Essen" },
-            { term: "Zwangsernährung", definition: "Künstliche Ernährung gegen den natürlichen Willen des Patienten", example: "Nur mit richterlichem Beschluss nach § 1906 BGB zulässig" },
-            { term: "Sorgerecht", definition: "Recht der Eltern, für ihr minderjähriges Kind zu entscheiden", example: "Bei einer 16-Jährigen mit Anorexia nervosa" },
-            { term: "Betreuungsrecht", definition: "Rechtliche Vertretung für einwilligungsunfähige Erwachsene", example: "Ab 18 Jahren bei Patienten mit Anorexia nervosa" }
-        ];
-
-        // ===============================
-        // UTILITY FUNCTIONS
-        // ===============================
-
-        // Cookie management for data persistence
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
+            // ========== COOKIE FUNKTIONEN ==========
+            function setCookie(name, value, days) {
                 const date = new Date();
                 date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
+                document.cookie = name + "=" + JSON.stringify(value) + ";expires=" + date.toUTCString() + ";path=/";
             }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
 
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
-        // Save and load user data
-        function saveUserData() {
-            setCookie('pflegeUser', JSON.stringify(user), 30);
-        }
-
-        function loadUserData() {
-            const userData = getCookie('pflegeUser');
-            if (userData) {
-                user = JSON.parse(userData);
-            }
-            updateUserStats();
-        }
-
-        // Update UI with user stats
-        function updateUserStats() {
-            document.getElementById('coins').textContent = user.coins;
-            document.getElementById('level').textContent = user.level;
-            document.getElementById('xp').textContent = user.xp;
-        }
-
-        // Calculate level based on XP
-        function calculateLevel() {
-            const newLevel = Math.floor(user.xp / 100) + 1;
-            if (newLevel > user.level) {
-                user.level = newLevel;
-                // Level up celebration
-                showConfetti();
-                alert(`Glückwunsch! Du bist jetzt Level ${user.level}!`);
-            }
-        }
-
-        // Add XP and coins with animation
-        function addReward(coins, xp) {
-            user.coins += coins;
-            user.xp += xp;
-            calculateLevel();
-            updateUserStats();
-            saveUserData();
-            
-            // Visual feedback for rewards
-            if (coins > 0 || xp > 0) {
-                // Could add animation here
-            }
-        }
-
-        // Show confetti animation
-        function showConfetti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }
-
-        // Shuffle array (Fisher-Yates algorithm)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // ===============================
-        // READING MODULE FUNCTIONALITY
-        // ===============================
-
-        let currentReadingStep = 0;
-
-        function initializeReadingModule() {
-            currentReadingStep = user.progress.reading.currentStep || 0;
-            renderReadingStep();
-            updateReadingProgress();
-            
-            // Add event listeners for navigation
-            document.getElementById('prev-btn').addEventListener('click', prevReadingStep);
-            document.getElementById('next-btn').addEventListener('click', nextReadingStep);
-            
-            // Add event listeners for question options
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('option')) {
-                    handleOptionClick(e.target);
+            function getCookie(name) {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    const [cName, cValue] = cookie.trim().split('=');
+                    if (cName === name) {
+                        try {
+                            return JSON.parse(cValue);
+                        } catch {
+                            return cValue;
+                        }
+                    }
                 }
-            });
-        }
-
-        function renderReadingStep() {
-            const container = document.getElementById('content-container');
-            const step = readingContent[currentReadingStep];
-            
-            container.innerHTML = `
-                <div class="content-card active">
-                    <div class="content-header">
-                        <h2 class="content-title">${step.title}</h2>
-                        <div class="content-badge">${step.badge}</div>
-                    </div>
-                    <div class="content-body">
-                        ${step.content}
-                    </div>
-                </div>
-            `;
-            
-            // Update navigation buttons
-            document.getElementById('prev-btn').disabled = currentReadingStep === 0;
-            
-            if (currentReadingStep === readingContent.length - 1) {
-                document.getElementById('next-btn').innerHTML = 'Abschließen <i class="fas fa-check"></i>';
-            } else {
-                document.getElementById('next-btn').innerHTML = 'Weiter <i class="fas fa-arrow-right"></i>';
+                return null;
             }
-        }
 
-        function updateReadingProgress() {
-            const progress = (currentReadingStep / (readingContent.length - 1)) * 100;
-            document.getElementById('reading-progress').style.width = `${progress}%`;
-        }
-
-        function handleOptionClick(option) {
-            const optionsContainer = option.parentElement;
-            const feedback = optionsContainer.nextElementSibling;
-            const isCorrect = option.getAttribute('data-correct') === 'true';
-            
-            // Disable all options
-            const options = optionsContainer.querySelectorAll('.option');
-            options.forEach(opt => {
-                opt.style.pointerEvents = 'none';
-            });
-            
-            // Mark correct/incorrect
-            if (isCorrect) {
-                option.classList.add('correct');
-                feedback.textContent = 'Richtig! Gut gemacht.';
-                feedback.className = 'feedback correct';
+            // ========== FORTSCHRITT LADEN/SPEICHERN ==========
+            function loadProgress() {
+                const savedKeys = getCookie('userKeys');
+                const savedCompleted = getCookie('completedModules');
                 
-                // Add small reward for correct answer
-                addReward(5, 10);
-            } else {
-                option.classList.add('incorrect');
-                feedback.textContent = 'Leider falsch. Überprüfe deine Antwort.';
-                feedback.className = 'feedback incorrect';
+                userKeys = savedKeys !== null ? parseInt(savedKeys) : 0;
+                completedModules = savedCompleted !== null ? savedCompleted : [];
                 
-                // Find and highlight correct answer
-                const correctOption = optionsContainer.querySelector('.option[data-correct="true"]');
-                correctOption.classList.add('correct');
+                // Modul 1 ist immer kostenlos und verfügbar
+                if (!completedModules.includes(1) && MODULES[0].keyCost === 0) {
+                    // Modul 1 ist automatisch verfügbar, aber nicht "abgeschlossen"
+                }
             }
-            
-            feedback.style.display = 'block';
-        }
 
-        function prevReadingStep() {
-            if (currentReadingStep > 0) {
-                currentReadingStep--;
-                user.progress.reading.currentStep = currentReadingStep;
-                saveUserData();
-                renderReadingStep();
-                updateReadingProgress();
+            function saveProgress() {
+                setCookie('userKeys', userKeys, 30);
+                setCookie('completedModules', completedModules, 30);
+                updateUI();
             }
-        }
 
-        function nextReadingStep() {
-            if (currentReadingStep < readingContent.length - 1) {
-                currentReadingStep++;
-                user.progress.reading.currentStep = currentReadingStep;
-                saveUserData();
-                renderReadingStep();
-                updateReadingProgress();
-            } else {
-                // Complete the reading module
-                user.progress.reading.completed = true;
-                addReward(50, 100);
-                saveUserData();
-                alert('Glückwunsch! Du hast das Lernmodul abgeschlossen und 50 Coins + 100 XP erhalten!');
-                showMainPage();
+            // ========== UI AKTUALISIEREN ==========
+            function updateUI() {
+                document.getElementById('keyCount').textContent = userKeys;
+                
+                const completedCount = completedModules.length;
+                const progressPercent = (completedCount / totalModules) * 100;
+                document.getElementById('progressFill').style.width = progressPercent + '%';
+                document.getElementById('progressText').textContent = `${completedCount}/${totalModules}`;
+                
+                renderModules();
             }
-        }
 
-        // ===============================
-        // GAMES MODULE FUNCTIONALITY
-        // ===============================
+            // ========== MODULE RENDERN ==========
+            function renderModules() {
+                const grid = document.getElementById('moduleGrid');
+                grid.innerHTML = '';
 
-        function initializeGamesModule() {
-            // Add event listeners to game cards
-            const gameCards = document.querySelectorAll('.game-card');
-            gameCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const game = this.getAttribute('data-game');
-                    startGame(game);
+                MODULES.forEach(mod => {
+                    const isCompleted = completedModules.includes(mod.id);
+                    const isLocked = mod.keyCost > 0 && !isCompleted && userKeys < mod.keyCost && mod.id !== 1;
+                    
+                    // Modul 1 ist immer entsperrt
+                    const effectivelyLocked = mod.id === 1 ? false : isLocked;
+                    
+                    const card = document.createElement('div');
+                    card.className = `module-card ${effectivelyLocked ? 'locked' : ''}`;
+                    card.dataset.id = mod.id;
+                    
+                    card.innerHTML = `
+                        <div class="module-header">
+                            <div class="module-icon"><i class="fas ${mod.icon}"></i></div>
+                            <div class="module-key-cost">
+                                <i class="fa-solid fa-key"></i> ${mod.keyCost}
+                            </div>
+                        </div>
+                        <h3 class="module-title">${mod.title}</h3>
+                        <p class="module-description">${mod.description}</p>
+                        <div class="module-meta">
+                            <div class="meta-item"><span class="meta-value">${mod.lessons}</span><span class="meta-label">Lektionen</span></div>
+                            <div class="meta-item"><span class="meta-value">${mod.time}</span><span class="meta-label">Dauer</span></div>
+                            ${isCompleted ? '<div class="completed-badge"><i class="fas fa-check"></i> Abgeschlossen</div>' : ''}
+                        </div>
+                        <button class="module-status ${effectivelyLocked ? 'locked' : 'unlocked'}" data-id="${mod.id}" ${effectivelyLocked ? 'disabled' : ''}>
+                            ${isCompleted ? 'Wiederholen' : (effectivelyLocked ? '🔒 Schlüssel benötigt' : '📖 Lernen')}
+                        </button>
+                    `;
+                    
+                    grid.appendChild(card);
                 });
-            });
-            
-            // Update game progress indicators
-            updateGameProgress();
-        }
-
-        function updateGameProgress() {
-            // Update flashcards progress
-            const flashcardsProgress = user.progress.flashcards.completed ? 100 : 0;
-            document.getElementById('flashcards-progress').textContent = `${flashcardsProgress}%`;
-            
-            // Update memory progress
-            const memoryProgress = user.progress.memory.completed ? 100 : 0;
-            document.getElementById('memory-progress').textContent = `${memoryProgress}%`;
-        }
-
-        function startGame(gameType) {
-            document.getElementById('games-module').classList.remove('active');
-            
-            switch(gameType) {
-                case 'flashcards':
-                    initializeFlashcards();
-                    document.getElementById('flashcard-game').classList.add('active');
-                    break;
-                case 'memory':
-                    initializeMemoryGame();
-                    document.getElementById('memory-game').classList.add('active');
-                    break;
             }
-        }
 
-        // ===============================
-        // FLASHCARD GAME
-        // ===============================
-
-        let flashcardIndex = 0;
-        let flashcardCorrect = 0;
-        let flashcardIncorrect = 0;
-        let flashcardDeck = [];
-
-        function initializeFlashcards() {
-            document.getElementById('flashcard-results').classList.remove('active');
-            
-            // Reset stats
-            flashcardIndex = 0;
-            flashcardCorrect = 0;
-            flashcardIncorrect = 0;
-            
-            // Create shuffled deck
-            flashcardDeck = shuffleArray([...gameVocabulary]);
-            
-            // Update UI
-            updateFlashcardStats();
-            loadFlashcard();
-            
-            // Add event listeners
-            document.getElementById('flashcard').addEventListener('click', flipFlashcard);
-            document.getElementById('btn-difficult').addEventListener('click', () => rateFlashcard('difficult'));
-            document.getElementById('btn-medium').addEventListener('click', () => rateFlashcard('medium'));
-            document.getElementById('btn-easy').addEventListener('click', () => rateFlashcard('easy'));
-            
-            // Results screen buttons
-            document.getElementById('flashcard-restart').addEventListener('click', initializeFlashcards);
-            document.getElementById('flashcard-back-to-games').addEventListener('click', () => {
-                document.getElementById('flashcard-game').classList.remove('active');
-                document.getElementById('games-module').classList.add('active');
-            });
-        }
-
-        function flipFlashcard() {
-            document.getElementById('flashcard').classList.toggle('flipped');
-        }
-
-        function loadFlashcard() {
-            const card = flashcardDeck[flashcardIndex];
-            document.getElementById('flashcard-term').textContent = card.term;
-            document.getElementById('flashcard-definition').textContent = card.definition;
-            document.getElementById('flashcard-example').textContent = card.example;
-            document.getElementById('flashcard').classList.remove('flipped');
-        }
-
-        function updateFlashcardStats() {
-            document.getElementById('flashcard-progress').textContent = `${flashcardIndex + 1}/${flashcardDeck.length}`;
-            document.getElementById('flashcard-correct').textContent = flashcardCorrect;
-            document.getElementById('flashcard-incorrect').textContent = flashcardIncorrect;
-        }
-
-        function rateFlashcard(difficulty) {
-            // Update stats based on difficulty
-            if (difficulty === 'easy') {
-                flashcardCorrect++;
-            } else if (difficulty === 'difficult') {
-                flashcardIncorrect++;
-                // Add card to the end of the deck for repetition
-                flashcardDeck.push(flashcardDeck[flashcardIndex]);
+            // ========== MODUL ÖFFNEN ==========
+            function openModule(moduleId) {
+                const mod = MODULES.find(m => m.id === moduleId);
+                if (!mod) return;
+                
+                if (moduleId !== 1 && !completedModules.includes(moduleId) && userKeys < mod.keyCost) {
+                    alert(`Du benötigst ${mod.keyCost} Schlüssel, um dieses Modul freizuschalten.`);
+                    return;
+                }
+                
+                // Schlüssel abziehen, wenn nicht bereits abgeschlossen
+                if (!completedModules.includes(moduleId) && mod.keyCost > 0 && moduleId !== 1) {
+                    userKeys -= mod.keyCost;
+                    saveProgress();
+                }
+                
+                currentModuleId = moduleId;
+                currentLessonIndex = 0;
+                
+                document.getElementById('moduleSection').style.display = 'none';
+                document.getElementById('moduleDetail').classList.add('active');
+                document.getElementById('currentModuleTitle').textContent = mod.title;
+                
+                renderLesson();
             }
-            // Medium doesn't affect stats
-            
-            // Move to next card
-            flashcardIndex++;
-            
-            if (flashcardIndex < flashcardDeck.length) {
-                loadFlashcard();
-                updateFlashcardStats();
-            } else {
-                finishFlashcards();
-            }
-        }
 
-        function finishFlashcards() {
-            // Calculate score and rewards
-            const score = Math.round((flashcardCorrect / flashcardDeck.length) * 100);
-            const coinsReward = Math.max(10, Math.floor(score / 10) * 5);
-            const xpReward = Math.max(20, Math.floor(score / 5) * 5);
-            
-            // Update UI
-            document.getElementById('flashcard-final-score').textContent = `${score}%`;
-            document.getElementById('flashcard-final-score').className = `result-score ${
-                score >= 80 ? 'good' : score >= 60 ? 'average' : 'poor'
-            }`;
-            document.getElementById('flashcard-coins-reward').textContent = `+${coinsReward}`;
-            document.getElementById('flashcard-xp-reward').textContent = `+${xpReward}`;
-            
-            // Show results
-            document.getElementById('flashcard-results').classList.add('active');
-            
-            // Update user progress
-            user.progress.flashcards = {
-                completed: true,
-                correct: flashcardCorrect,
-                total: flashcardDeck.length,
-                score: score
-            };
-            
-            // Add rewards
-            addReward(coinsReward, xpReward);
-            
-            // Show confetti for good scores
-            if (score >= 80) {
-                showConfetti();
-            }
-            
-            saveUserData();
-        }
-
-        // ===============================
-        // MEMORY GAME
-        // ===============================
-
-        let memoryCards = [];
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let memoryMoves = 0;
-
-        function initializeMemoryGame() {
-            document.getElementById('memory-results').classList.remove('active');
-            
-            // Reset stats
-            flippedCards = [];
-            matchedPairs = 0;
-            memoryMoves = 0;
-            
-            // Create card pairs - using 6 pairs for better gameplay
-            memoryCards = [];
-            
-            // Use first 6 terms for memory game (12 cards)
-            const gameVocabularySubset = gameVocabulary.slice(0, 6);
-            
-            gameVocabularySubset.forEach((item, index) => {
-                // Term card
-                memoryCards.push({
-                    id: index,
-                    type: 'term',
-                    content: item.term,
-                    matched: false
+            // ========== LEKTION RENDERN ==========
+            function renderLesson() {
+                const mod = MODULES.find(m => m.id === currentModuleId);
+                if (!mod) return;
+                
+                // Step-Indikatoren
+                const steps = mod.content.length;
+                const stepContainer = document.getElementById('stepIndicators');
+                stepContainer.innerHTML = '';
+                
+                for (let i = 0; i < steps; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = `step-dot ${i === currentLessonIndex ? 'active' : ''} ${i < currentLessonIndex ? 'completed' : ''}`;
+                    stepContainer.appendChild(dot);
+                }
+                
+                // Lektionsinhalt
+                const currentContent = mod.content[currentLessonIndex];
+                const container = document.getElementById('lessonContainer');
+                
+                if (currentContent.type === 'lesson') {
+                    container.innerHTML = `
+                        <div class="lesson-section">
+                            <div class="lesson-icon-large"><i class="fas ${mod.icon}"></i></div>
+                            <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">${currentContent.title}</h2>
+                            ${currentContent.content}
+                            <div class="nav-buttons">
+                                <button class="nav-btn" id="prevBtn" ${currentLessonIndex === 0 ? 'disabled' : ''}>
+                                    <i class="fas fa-chevron-left"></i> Zurück
+                                </button>
+                                ${currentLessonIndex < mod.content.length - 1 ? 
+                                    '<button class="nav-btn" id="nextBtn">Weiter <i class="fas fa-chevron-right"></i></button>' : 
+                                    '<button class="nav-btn" id="quizBtn">Abschluss-Quiz <i class="fas fa-question"></i></button>'}
+                            </div>
+                        </div>
+                    `;
+                } else if (currentContent.type === 'quiz') {
+                    renderQuiz(currentContent);
+                }
+                
+                // Event-Listener für Navigation
+                document.getElementById('prevBtn')?.addEventListener('click', () => {
+                    if (currentLessonIndex > 0) {
+                        currentLessonIndex--;
+                        renderLesson();
+                    }
                 });
                 
-                // Definition card
-                memoryCards.push({
-                    id: index,
-                    type: 'definition',
-                    content: item.definition,
-                    matched: false
+                document.getElementById('nextBtn')?.addEventListener('click', () => {
+                    if (currentLessonIndex < mod.content.length - 1) {
+                        currentLessonIndex++;
+                        renderLesson();
+                    }
                 });
-            });
-            
-            // Shuffle cards
-            memoryCards = shuffleArray(memoryCards);
-            
-            // Render cards
-            renderMemoryCards();
-            updateMemoryStats();
-            
-            // Results screen buttons
-            document.getElementById('memory-restart').addEventListener('click', initializeMemoryGame);
-            document.getElementById('memory-back-to-games').addEventListener('click', () => {
-                document.getElementById('memory-game').classList.remove('active');
-                document.getElementById('games-module').classList.add('active');
-            });
-        }
-
-        function renderMemoryCards() {
-            const grid = document.getElementById('memory-grid');
-            grid.innerHTML = '';
-            
-            memoryCards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'memory-card';
-                if (card.matched) cardElement.classList.add('matched');
-                cardElement.setAttribute('data-index', index);
                 
-                cardElement.innerHTML = `
-                    <div class="memory-card-front">
-                        <i class="fas fa-question"></i>
-                    </div>
-                    <div class="memory-card-back">
-                        ${card.content}
+                document.getElementById('quizBtn')?.addEventListener('click', () => {
+                    // Quiz starten (letzte Lektion)
+                    startQuiz();
+                });
+            }
+
+            // ========== QUIZ STARTEN ==========
+            function startQuiz() {
+                const mod = MODULES.find(m => m.id === currentModuleId);
+                
+                // Einfaches Quiz mit 3 Fragen (für jedes Modul individuell anpassbar)
+                let quizHTML = `
+                    <div class="quiz-container">
+                        <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">Abschluss-Quiz: ${mod.title}</h2>
+                        <div id="quizQuestions"></div>
+                        <div class="quiz-feedback" id="quizFeedback"></div>
+                        <div class="nav-buttons">
+                            <button class="nav-btn" id="backFromQuiz"><i class="fas fa-arrow-left"></i> Zurück</button>
+                            <button class="nav-btn" id="submitQuiz">Quiz auswerten</button>
+                        </div>
                     </div>
                 `;
                 
-                cardElement.addEventListener('click', () => flipMemoryCard(index));
-                grid.appendChild(cardElement);
-            });
-        }
-
-        function flipMemoryCard(index) {
-            const card = memoryCards[index];
-            const cardElement = document.querySelector(`.memory-card[data-index="${index}"]`);
-            
-            // Ignore if card is already flipped, matched, or two cards are already flipped
-            if (card.matched || cardElement.classList.contains('flipped') || flippedCards.length >= 2) {
-                return;
+                document.getElementById('lessonContainer').innerHTML = quizHTML;
+                
+                // Modulspezifische Quizfragen
+                const questions = getQuizQuestions(currentModuleId);
+                const qContainer = document.getElementById('quizQuestions');
+                
+                questions.forEach((q, idx) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.innerHTML = `
+                        <div class="quiz-question">${idx+1}. ${q.question}</div>
+                        <div class="quiz-options" id="q${idx}">
+                            ${q.options.map((opt, optIdx) => `
+                                <div class="quiz-option" data-question="${idx}" data-opt="${optIdx}" data-correct="${opt.correct}">
+                                    <span class="option-indicator">${String.fromCharCode(65 + optIdx)}</span>
+                                    ${opt.text}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    qContainer.appendChild(qDiv);
+                });
+                
+                // Quiz-Interaktion
+                document.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.addEventListener('click', function() {
+                        const questionIdx = this.dataset.question;
+                        // Entferne vorherige Auswahl bei dieser Frage
+                        document.querySelectorAll(`[data-question="${questionIdx}"]`).forEach(el => {
+                            el.classList.remove('correct', 'incorrect');
+                        });
+                        this.classList.add('correct');
+                    });
+                });
+                
+                document.getElementById('backFromQuiz').addEventListener('click', () => {
+                    currentLessonIndex = mod.content.length - 1;
+                    renderLesson();
+                });
+                
+                document.getElementById('submitQuiz').addEventListener('click', () => {
+                    evaluateQuiz(questions);
+                });
             }
-            
-            // Flip the card
-            cardElement.classList.add('flipped');
-            flippedCards.push({ index, card });
-            
-            // Check for match if two cards are flipped
-            if (flippedCards.length === 2) {
-                memoryMoves++;
-                updateMemoryStats();
-                
-                const card1 = flippedCards[0];
-                const card2 = flippedCards[1];
-                
-                // Check if cards match (same id, different types)
-                if (card1.card.id === card2.card.id && card1.card.type !== card2.card.type) {
-                    // Match found
-                    memoryCards[card1.index].matched = true;
-                    memoryCards[card2.index].matched = true;
-                    matchedPairs++;
-                    
-                    document.querySelector(`.memory-card[data-index="${card1.index}"]`).classList.add('matched');
-                    document.querySelector(`.memory-card[data-index="${card2.index}"]`).classList.add('matched');
-                    
-                    flippedCards = [];
-                    
-                    // Check if game is complete
-                    if (matchedPairs === 6) {
-                        setTimeout(finishMemoryGame, 500);
-                    }
+
+            // ========== QUIZ-FRAGEN (MODULSPEZIFISCH) ==========
+            function getQuizQuestions(moduleId) {
+                if (moduleId === 1) {
+                    return [
+                        {
+                            question: 'Welcher Kompetenzbereich umfasst die Pflegeprozessplanung?',
+                            options: [
+                                { text: 'KB I – Pflegeprozess', correct: true },
+                                { text: 'KB II – Kommunikation', correct: false },
+                                { text: 'KB III – Teamarbeit', correct: false },
+                                { text: 'KB IV – Recht', correct: false }
+                            ]
+                        },
+                        {
+                            question: 'An welchem Prüfungstag wird KB III (Teamarbeit) hauptsächlich geprüft?',
+                            options: [
+                                { text: 'Schriftlich Tag 1', correct: false },
+                                { text: 'Schriftlich Tag 2', correct: false },
+                                { text: 'Mündlich und Praktisch', correct: true },
+                                { text: 'Nur schriftlich', correct: false }
+                            ]
+                        },
+                        {
+                            question: 'Was ist der Schwerpunkt der mündlichen Prüfung?',
+                            options: [
+                                { text: 'Praktische Pflegehandlung', correct: false },
+                                { text: 'Reflexion mit Recht, Ethik und Wissenschaft', correct: true },
+                                { text: 'Medikamentenberechnung', correct: false },
+                                { text: 'Dokumentation', correct: false }
+                            ]
+                        }
+                    ];
+                } else if (moduleId === 2) {
+                    return [
+                        {
+                            question: 'Welche Ebenen umfasst das 4-Ohren-Modell?',
+                            options: [
+                                { text: 'Sachebene, Selbstoffenbarung, Beziehung, Appell', correct: true },
+                                { text: 'Sender, Empfänger, Botschaft, Kanal', correct: false },
+                                { text: 'Orientierung, Identifikation, Nutzung, Auflösung', correct: false },
+                                { text: 'Beobachtung, Gefühl, Bedürfnis, Bitte', correct: false }
+                            ]
+                        },
+                        {
+                            question: 'Nach Peplau: In welcher Phase entsteht Vertrauen zwischen Patient und Pflegekraft?',
+                            options: [
+                                { text: 'Orientierung', correct: false },
+                                { text: 'Identifikation', correct: true },
+                                { text: 'Nutzung', correct: false },
+                                { text: 'Auflösung', correct: false }
+                            ]
+                        },
+                        {
+                            question: 'Was ist der erste Schritt der Gewaltfreien Kommunikation?',
+                            options: [
+                                { text: 'Bedürfnis äußern', correct: false },
+                                { text: 'Beobachtung ohne Bewertung', correct: true },
+                                { text: 'Bitte formulieren', correct: false },
+                                { text: 'Gefühl benennen', correct: false }
+                            ]
+                        }
+                    ];
                 } else {
-                    // No match, flip back after delay
-                    setTimeout(() => {
-                        document.querySelector(`.memory-card[data-index="${card1.index}"]`).classList.remove('flipped');
-                        document.querySelector(`.memory-card[data-index="${card2.index}"]`).classList.remove('flipped');
-                        flippedCards = [];
-                    }, 1000);
+                    return [
+                        {
+                            question: 'Wer muss die Aufklärung vor einem medizinischen Eingriff durchführen?',
+                            options: [
+                                { text: 'Die Pflegekraft', correct: false },
+                                { text: 'Der Arzt', correct: true },
+                                { text: 'Der Patient selbst', correct: false },
+                                { text: 'Ein Angehöriger', correct: false }
+                            ]
+                        },
+                        {
+                            question: 'Wann ist eine Fixierung ohne richterliche Genehmigung erlaubt?',
+                            options: [
+                                { text: 'Bei Personalmangel', correct: false },
+                                { text: 'Bei akuter Eigengefahr als letztes Mittel', correct: true },
+                                { text: 'Wenn der Patient unruhig ist', correct: false },
+                                { text: 'Nach Rücksprache mit Angehörigen', correct: false }
+                            ]
+                        },
+                        {
+                            question: 'Was bedeutet Übernahmeverantwortung?',
+                            options: [
+                                { text: 'Die Pflegekraft muss jede ärztliche Anordnung ausführen', correct: false },
+                                { text: 'Die Pflegekraft haftet für eigene Fehler, auch bei Delegation', correct: true },
+                                { text: 'Der Arzt übernimmt die Verantwortung', correct: false },
+                                { text: 'Die Einrichtung haftet immer', correct: false }
+                            ]
+                        }
+                    ];
                 }
             }
-        }
 
-        function updateMemoryStats() {
-            document.getElementById('memory-progress-text').textContent = `${matchedPairs}/6`;
-            document.getElementById('memory-moves').textContent = memoryMoves;
-        }
-
-        function finishMemoryGame() {
-            // Calculate rewards based on moves (fewer moves = better reward)
-            const maxMoves = 20;
-            const efficiency = Math.max(0.4, (maxMoves - memoryMoves) / maxMoves);
-            const coinsReward = Math.max(20, Math.floor(40 * efficiency));
-            const xpReward = Math.max(30, Math.floor(60 * efficiency));
-            
-            // Update UI
-            document.getElementById('memory-final-score').textContent = `${Math.round(efficiency * 100)}%`;
-            document.getElementById('memory-coins-reward').textContent = `+${coinsReward}`;
-            document.getElementById('memory-xp-reward').textContent = `+${xpReward}`;
-            
-            // Show results
-            document.getElementById('memory-results').classList.add('active');
-            
-            // Update user progress
-            user.progress.memory = {
-                completed: true,
-                moves: memoryMoves,
-                efficiency: Math.round(efficiency * 100)
-            };
-            
-            // Add rewards
-            addReward(coinsReward, xpReward);
-            
-            // Show confetti for good efficiency
-            if (efficiency >= 0.6) {
-                showConfetti();
+            // ========== QUIZ AUSWERTEN ==========
+            function evaluateQuiz(questions) {
+                let correctCount = 0;
+                const total = questions.length;
+                
+                questions.forEach((q, qIdx) => {
+                    const selected = document.querySelector(`[data-question="${qIdx}"].correct`);
+                    if (selected) {
+                        const isCorrect = selected.dataset.correct === 'true';
+                        if (isCorrect) {
+                            correctCount++;
+                            selected.classList.add('correct');
+                        } else {
+                            selected.classList.add('incorrect');
+                        }
+                    }
+                });
+                
+                const feedback = document.getElementById('quizFeedback');
+                feedback.style.display = 'block';
+                
+                if (correctCount === total) {
+                    feedback.innerHTML = '<i class="fas fa-trophy"></i> Perfekt! Alle Fragen richtig. Du bekommst einen Schlüssel!';
+                    feedback.className = 'quiz-feedback correct';
+                    
+                    // Modul als abgeschlossen markieren, falls noch nicht
+                    if (!completedModules.includes(currentModuleId)) {
+                        completedModules.push(currentModuleId);
+                        
+                        // Einen Schlüssel als Belohnung (außer bei Modul 1)
+                        if (currentModuleId !== 1) {
+                            userKeys += 1;
+                        }
+                        
+                        saveProgress();
+                        
+                        // Animation anzeigen
+                        setTimeout(() => {
+                            document.getElementById('lessonContainer').innerHTML = `
+                                <div class="completion-screen">
+                                    <div class="key-reward">
+                                        <div class="key-icon"><i class="fa-solid fa-key"></i></div>
+                                        <div style="font-size: 3rem;">+</div>
+                                        <div class="key-icon" style="background: var(--success);"><i class="fa-solid fa-check"></i></div>
+                                    </div>
+                                    <h2>Modul abgeschlossen!</h2>
+                                    <p>Du hast einen Schlüssel verdient. Sammle weiter, um neue Module freizuschalten.</p>
+                                    <button class="nav-btn" id="finalBack" style="margin-top: var(--spacing-lg);">
+                                        Zurück zur Übersicht
+                                    </button>
+                                </div>
+                            `;
+                            
+                            document.getElementById('finalBack').addEventListener('click', () => {
+                                document.getElementById('moduleDetail').classList.remove('active');
+                                document.getElementById('moduleSection').style.display = 'block';
+                            });
+                        }, 1500);
+                    }
+                } else {
+                    feedback.innerHTML = `❌ Du hast ${correctCount} von ${total} richtig. Versuche es noch einmal!`;
+                    feedback.className = 'quiz-feedback incorrect';
+                }
             }
-            
-            saveUserData();
-        }
 
-        // ===============================
-        // NAVIGATION & INITIALIZATION
-        // ===============================
-
-        function showMainPage() {
-            document.getElementById('reading-module').classList.remove('active');
-            document.getElementById('games-module').classList.remove('active');
-            document.getElementById('flashcard-game').classList.remove('active');
-            document.getElementById('memory-game').classList.remove('active');
-        }
-
-        function showReadingModule() {
-            showMainPage();
-            document.getElementById('reading-module').classList.add('active');
-            initializeReadingModule();
-        }
-
-        function showGamesModule() {
-            showMainPage();
-            document.getElementById('games-module').classList.add('active');
-            initializeGamesModule();
-        }
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load user data
-            loadUserData();
-            
-            // Set up navigation
-            document.getElementById('reading-module-btn').addEventListener('click', showReadingModule);
-            document.getElementById('games-module-btn').addEventListener('click', showGamesModule);
-            
-            document.getElementById('back-from-reading').addEventListener('click', showMainPage);
-            document.getElementById('back-from-games').addEventListener('click', showMainPage);
-            document.getElementById('back-from-flashcards').addEventListener('click', () => {
-                document.getElementById('flashcard-game').classList.remove('active');
-                document.getElementById('games-module').classList.add('active');
+            // ========== EVENT LISTENER ==========
+            document.getElementById('homeLogo').addEventListener('click', () => {
+                document.getElementById('moduleDetail').classList.remove('active');
+                document.getElementById('moduleSection').style.display = 'block';
             });
-            document.getElementById('back-from-memory').addEventListener('click', () => {
-                document.getElementById('memory-game').classList.remove('active');
-                document.getElementById('games-module').classList.add('active');
+
+            document.getElementById('startExploring').addEventListener('click', () => {
+                document.getElementById('moduleSection').scrollIntoView({ behavior: 'smooth' });
             });
-        });
+
+            document.getElementById('backToModules').addEventListener('click', () => {
+                document.getElementById('moduleDetail').classList.remove('active');
+                document.getElementById('moduleSection').style.display = 'block';
+            });
+
+            // Modulkarten-Interaktion
+            document.getElementById('moduleGrid').addEventListener('click', (e) => {
+                const button = e.target.closest('.module-status');
+                if (!button) return;
+                
+                const card = button.closest('.module-card');
+                if (!card) return;
+                
+                const moduleId = parseInt(card.dataset.id);
+                
+                if (button.classList.contains('unlocked') && !button.disabled) {
+                    openModule(moduleId);
+                }
+            });
+
+            // ========== INITIALISIERUNG ==========
+            loadProgress();
+            updateUI();
+        })();
     </script>
 </body>
 </html>
