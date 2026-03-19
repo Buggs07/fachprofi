@@ -2,8 +2,8 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PflegefachProfi | Deine Prüfungsvorbereitung</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>PflegefachProfi • Lernen mit Flow</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,254 +14,171 @@
 
         :root {
             --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --primary-light: #eef2ff;
+            --primary-soft: #eef2ff;
             --secondary: #7209b7;
             --accent: #f72585;
             --success: #4cc9f0;
             --warning: #fca311;
             --danger: #e63946;
             --key: #ffd166;
-            --text-primary: #1d3557;
-            --text-secondary: #457b9d;
-            --text-tertiary: #a8dadc;
-            --background: #f1faee;
             --surface: #ffffff;
-            --border: #e0e0e0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --radius: 12px;
-            --radius-lg: 20px;
-            --spacing-xs: 8px;
-            --spacing-sm: 16px;
-            --spacing-md: 24px;
-            --spacing-lg: 32px;
-            --spacing-xl: 48px;
-            --spacing-xxl: 64px;
-            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --background: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+            --radius-card: 24px;
+            --radius-btn: 40px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: var(--font-primary);
-            color: var(--text-primary);
-            background-color: var(--background);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: var(--font);
+            background: var(--background);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1024px;
             margin: 0 auto;
-            padding: 0 var(--spacing-md);
+            padding: 0 20px;
         }
-
-        h1, h2, h3 {
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        h1 { font-size: 2.5rem; }
-        h2 { font-size: 2rem; margin-bottom: var(--spacing-sm); }
-        h3 { font-size: 1.5rem; margin-bottom: var(--spacing-xs); }
 
         /* Header */
         .header {
-            background-color: var(--surface);
-            box-shadow: var(--shadow);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
+            z-index: 30;
         }
 
         .header-content {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: var(--spacing-sm) 0;
-            flex-wrap: wrap;
-            gap: var(--spacing-sm);
+            justify-content: space-between;
+            height: 70px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-            font-weight: 800;
-            font-size: 1.5rem;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.4rem;
             color: var(--primary);
-            cursor: pointer;
+            letter-spacing: -0.02em;
         }
 
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 10px;
+            background: linear-gradient(145deg, var(--primary), var(--secondary));
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow-sm);
         }
 
         .user-stats {
             display: flex;
-            gap: var(--spacing-md);
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--primary-light);
-            padding: 8px 16px;
-            border-radius: var(--radius);
-            font-weight: 600;
-        }
-
-        .keys {
-            background: linear-gradient(135deg, var(--key) 0%, #ffb347 100%);
-            color: var(--text-primary);
-        }
-
-        .progress-container {
-            display: flex;
             align-items: center;
             gap: 12px;
-            min-width: 200px;
+        }
+
+        .key-badge {
+            background: var(--key);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 4px 14px 4px 8px;
+            border-radius: 40px;
+            box-shadow: var(--shadow-sm);
         }
 
         .progress-bar-bg {
-            flex: 1;
-            height: 12px;
-            background: var(--border);
-            border-radius: 20px;
+            width: 80px;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 40px;
             overflow: hidden;
         }
 
-        .progress-bar-fill {
+        .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--success), var(--primary));
-            border-radius: 20px;
-            width: 0%;
-            transition: width 0.5s ease;
+            border-radius: 40px;
+            transition: width 0.4s ease;
         }
 
         .progress-text {
+            font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-secondary);
-            min-width: 60px;
+            color: var(--text-muted);
         }
 
-        /* Hero */
-        .hero {
-            padding: var(--spacing-xxl) 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
+        /* Main sections */
+        .section {
+            padding: 32px 0;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            text-align: center;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            color: white;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .hero p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--accent);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: var(--radius);
+        .section-title {
+            font-size: 1.8rem;
             font-weight: 700;
-            text-decoration: none;
-            box-shadow: var(--shadow-elevated);
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
 
-        .cta-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(247,37,133,0.4);
+        .section-sub {
+            color: var(--text-muted);
+            margin-bottom: 24px;
         }
 
-        /* Module Grid */
-        .learning-path {
-            padding: var(--spacing-xl) 0;
-        }
-
+        /* Module grid */
         .module-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
         }
 
         .module-card {
             background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--border-light);
+            cursor: pointer;
             position: relative;
             overflow: hidden;
-            border: 2px solid transparent;
-            animation: cardAppear 0.6s ease;
-        }
-
-        @keyframes cardAppear {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
         }
 
         .module-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-elevated);
-            border-color: var(--primary-light);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-soft);
         }
 
         .module-card.locked {
@@ -270,269 +187,181 @@
             pointer-events: none;
         }
 
-        .module-header {
+        .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--spacing-md);
+            align-items: center;
+            margin-bottom: 16px;
         }
 
-        .module-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-light);
-            border-radius: 50%;
+        .icon-circle {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-soft);
+            border-radius: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary);
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
+            font-size: 1.8rem;
         }
 
-        .module-card:hover .module-icon {
-            transform: rotate(5deg) scale(1.1);
-            background: var(--primary);
-            color: white;
-        }
-
-        .module-key-cost {
+        .key-cost {
+            background: var(--key);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 4px;
-            background: var(--key);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
         }
 
         .module-title {
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-sm);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
-        .module-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            font-size: 0.9rem;
+        .module-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
         }
 
         .module-meta {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .meta-value {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .meta-label {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-        }
-
-        .module-status {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            gap: 16px;
+            margin-bottom: 20px;
             font-size: 0.9rem;
+            color: var(--text-muted);
         }
 
-        .module-status.unlocked {
-            background: var(--success);
-            color: white;
-        }
-
-        .module-status.unlocked:hover {
-            background: #3ab0d9;
-            transform: scale(1.02);
-        }
-
-        .module-status.locked {
-            background: var(--border);
-            color: var(--text-secondary);
-            cursor: not-allowed;
-        }
-
-        .completed-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--success);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* Learning Module View */
-        .learning-module {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .learning-module.active {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .module-header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-            flex-wrap: wrap;
-            gap: var(--spacing-md);
-        }
-
-        .back-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            padding: 8px 16px;
-            border-radius: var(--radius);
-            transition: all 0.2s;
-        }
-
-        .back-button:hover {
-            background: var(--primary-light);
+        .module-meta i {
+            margin-right: 4px;
             color: var(--primary);
         }
 
-        .lesson-progress {
-            display: flex;
+        .completed-badge {
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
             align-items: center;
-            gap: var(--spacing-md);
+            gap: 4px;
         }
 
-        .step-indicators {
+        /* Module detail view */
+        .detail-view {
+            display: none;
+            padding: 24px 0 40px;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px 16px 8px 8px;
+            border-radius: 40px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .step-indicator {
             display: flex;
             gap: 8px;
+            margin-left: auto;
         }
 
         .step-dot {
             width: 12px;
             height: 12px;
-            border-radius: 50%;
-            background: var(--border);
-            transition: all 0.3s ease;
+            border-radius: 20px;
+            background: var(--border-light);
+            transition: var(--transition);
         }
 
         .step-dot.active {
             background: var(--primary);
-            transform: scale(1.2);
-            box-shadow: 0 0 10px var(--primary);
+            width: 28px;
         }
 
         .step-dot.completed {
             background: var(--success);
         }
 
-        /* Lesson Content */
-        .lesson-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--background);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            box-shadow: var(--shadow);
+        /* Lesson card */
+        .lesson-card {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            margin-bottom: 24px;
         }
 
-        .lesson-section {
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .lesson-icon-large {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-light);
-            border-radius: 50%;
+        .lesson-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--primary-soft);
+            border-radius: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary);
-            font-size: 2rem;
-            margin: 0 auto var(--spacing-lg);
-            animation: pulse 2s infinite;
+            font-size: 2.2rem;
+            margin: 0 auto 24px;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .info-card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
-            margin: var(--spacing-md) 0;
-            border-left: 4px solid var(--primary);
-            transition: all 0.3s;
-        }
-
-        .info-card:hover {
-            transform: translateX(5px);
-            box-shadow: var(--shadow);
-        }
-
-        .example-card {
-            background: #fff9e6;
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
-            margin: var(--spacing-md) 0;
-            border-left: 4px solid var(--warning);
-            transition: all 0.3s;
-        }
-
-        .example-card:hover {
-            transform: translateX(5px);
-            box-shadow: var(--shadow);
-        }
-
-        .example-title {
+        .lesson-title {
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--warning);
-            margin-bottom: var(--spacing-xs);
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
         }
 
-        .highlight-box {
-            background: linear-gradient(135deg, var(--primary-light), #ffffff);
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
-            margin: var(--spacing-md) 0;
-            border: 2px dashed var(--primary);
+        .content-block {
+            margin: 24px 0;
+        }
+
+        .info-chip {
+            background: var(--primary-soft);
+            border-radius: 40px;
+            padding: 8px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .example-box {
+            background: #fff7ed;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--warning);
         }
 
         .bullet-list {
@@ -541,251 +370,264 @@
         }
 
         .bullet-list li {
-            padding: 8px 0 8px 24px;
+            padding: 8px 0 8px 28px;
             position: relative;
         }
 
-        .bullet-list li:before {
+        .bullet-list li::before {
             content: "•";
             color: var(--primary);
-            font-weight: bold;
+            font-size: 1.5rem;
             position: absolute;
             left: 8px;
+            top: -2px;
         }
 
-        /* Quiz Styles */
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
+        /* Notes section */
+        .notes-section {
+            background: #fef9e7;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 30px 0 20px;
+            border: 2px dashed var(--key);
         }
 
-        .quiz-question {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-lg);
-            color: var(--text-primary);
-        }
-
-        .quiz-options {
-            display: grid;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .quiz-option {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .notes-header {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
-            animation: optionAppear 0.5s ease;
+            gap: 8px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #b45309;
         }
 
-        @keyframes optionAppear {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
+        .notes-textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            background: white;
+        }
+
+        .notes-save {
+            background: var(--key);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            margin-top: 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .notes-save:hover {
+            background: #e9b949;
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--radius-btn);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-btn:disabled {
+            background: var(--border-light);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .nav-btn.secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Quiz */
+        .quiz-option {
+            background: white;
+            border: 2px solid var(--border-light);
+            border-radius: 60px;
+            padding: 16px 24px;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .quiz-option:hover {
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            background: var(--primary-soft);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: var(--primary-soft);
         }
 
         .quiz-option.correct {
             border-color: var(--success);
-            background: rgba(76,201,240,0.1);
-            animation: correctPulse 0.5s ease;
-        }
-
-        @keyframes correctPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+            background: #e0f7fa;
         }
 
         .quiz-option.incorrect {
             border-color: var(--danger);
-            background: rgba(230,57,70,0.1);
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .option-indicator {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.875rem;
+            background: #ffe6e6;
         }
 
         .quiz-feedback {
-            padding: var(--spacing-md);
-            border-radius: var(--radius);
-            margin-top: var(--spacing-md);
+            padding: 20px;
+            border-radius: 20px;
+            margin: 20px 0;
+            font-weight: 500;
             display: none;
-            animation: slideUp 0.3s ease;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Game */
+        .game-area {
+            background: linear-gradient(145deg, #f1f5f9, #ffffff);
+            border-radius: 40px;
+            padding: 24px;
+            text-align: center;
+            margin: 30px 0;
         }
 
-        /* Confetti Animation */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .pairs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .pair-card {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .pair-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .pair-card.matched {
+            background: var(--success);
+            color: white;
+            opacity: 0.6;
             pointer-events: none;
-            z-index: 9999;
         }
 
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            opacity: 0.7;
-            animation: confettiFall 3s linear forwards;
-        }
-
-        @keyframes confettiFall {
-            0% { transform: translateY(-100px) rotate(0deg); }
-            100% { transform: translateY(100vh) rotate(720deg); }
-        }
-
+        /* Completion */
         .completion-screen {
             text-align: center;
-            padding: var(--spacing-xl);
-            animation: celebration 1s ease;
-        }
-
-        @keyframes celebration {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            padding: 40px 20px;
         }
 
         .key-reward {
             display: flex;
             justify-content: center;
-            align-items: center;
-            gap: var(--spacing-lg);
-            margin: var(--spacing-lg) 0;
+            gap: 20px;
+            margin: 30px 0;
         }
 
-        .key-icon {
+        .big-icon {
             width: 80px;
             height: 80px;
-            background: var(--key);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.5rem;
-            color: var(--text-primary);
-            animation: keyJingle 1s infinite;
+            animation: bounce 1s infinite;
         }
 
-        @keyframes keyJingle {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            75% { transform: rotate(-10deg); }
-            100% { transform: rotate(0deg); }
+        @keyframes bounce {
+            0%,100%{ transform: translateY(0); }
+            50%{ transform: translateY(-10px); }
         }
 
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: var(--spacing-xl);
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            top: -10px;
+            z-index: 9999;
+            animation: confetti-fall 3s linear forwards;
         }
 
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--primary);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+        @keyframes confetti-fall {
+            to { transform: translateY(100vh) rotate(720deg); }
         }
 
-        .nav-btn:hover:not(:disabled) {
-            background: var(--primary-dark);
-            transform: translateX(5px);
-        }
-
-        .nav-btn:disabled {
-            background: var(--border);
-            cursor: not-allowed;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--surface);
-            padding: var(--spacing-lg) 0;
-            border-top: 1px solid var(--border);
-            margin-top: var(--spacing-xl);
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
+        /* Mobile tweaks */
+        @media (max-width: 640px) {
             .header-content {
-                flex-direction: column;
-                align-items: stretch;
+                height: 60px;
             }
-            
-            .user-stats {
-                justify-content: space-between;
+            .logo span {
+                display: none;
             }
-            
-            .progress-container {
-                width: 100%;
+            .progress-wrap {
+                padding: 4px 8px;
             }
-            
+            .progress-bar-bg {
+                width: 60px;
+            }
             .module-grid {
                 grid-template-columns: 1fr;
+            }
+            .lesson-card {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Confetti Container -->
-    <div id="confettiContainer" class="confetti-container" style="display: none;"></div>
-
-    <!-- Header -->
     <header class="header">
         <div class="container header-content">
-            <div class="logo" id="homeLogo">
+            <div class="logo" id="homeBtn">
                 <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
                 <span>PflegefachProfi</span>
             </div>
             <div class="user-stats">
-                <div class="stat-item keys" id="keyDisplay">
-                    <i class="fa-solid fa-key"></i> <span id="keyCount">0</span>
+                <div class="key-badge" id="keyDisplay">
+                    <i class="fa-solid fa-key"></i> <span id="keyCount">1</span>
                 </div>
-                <div class="progress-container">
+                <div class="progress-wrap">
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
                     </div>
                     <span class="progress-text" id="progressText">0/3</span>
                 </div>
@@ -793,175 +635,86 @@
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="container hero-content">
-            <h1>Bestehe deine Pflegefachmann-Prüfung</h1>
-            <p>Interaktive Module, spielerisch lernen, Schlüssel sammeln – für eine sichere Vorbereitung.</p>
-            <button class="cta-button" id="startExploring"><i class="fas fa-compass"></i> Module entdecken</button>
-        </div>
-    </section>
-
-    <!-- Module Grid -->
-    <section class="learning-path" id="moduleSection">
-        <div class="container">
-            <h2>Deine Lernmodule</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">Schalte Module mit Schlüsseln frei und arbeite dich Schritt für Schritt zur Prüfung.</p>
-            <div class="module-grid" id="moduleGrid">
-                <!-- Module werden per JS generiert -->
+    <main>
+        <!-- Module Overview -->
+        <section id="moduleOverview" class="section">
+            <div class="container">
+                <h1 class="section-title">Deine Lernpfade</h1>
+                <p class="section-sub">Wähle ein Modul und sammle Schlüssel für neue Inhalte.</p>
+                <div class="module-grid" id="moduleGrid"></div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Learning Module Detail View -->
-    <section class="learning-module" id="moduleDetail">
-        <div class="container">
-            <div class="module-header-bar">
-                <button class="back-button" id="backToModules">
-                    <i class="fas fa-arrow-left"></i> Zurück zur Übersicht
-                </button>
-                <div class="lesson-progress">
-                    <span id="currentModuleTitle"></span>
-                    <div class="step-indicators" id="stepIndicators"></div>
+        <!-- Module Detail View -->
+        <section id="moduleDetail" class="detail-view">
+            <div class="container">
+                <div class="detail-header">
+                    <button class="back-btn" id="backToOverview"><i class="fas fa-arrow-left"></i> Übersicht</button>
+                    <div class="step-indicator" id="stepIndicator"></div>
                 </div>
-            </div>
-            <div class="lesson-container" id="lessonContainer">
-                <!-- Dynamischer Inhalt -->
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
-            <div>© 2026 PflegefachProfi – Für Auszubildende in der Pflege</div>
-            <div style="display: flex; gap: var(--spacing-md);">
-                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-instagram"></i></a>
-                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-facebook"></i></a>
-                <a href="#" style="color: var(--text-secondary);"><i class="fab fa-youtube"></i></a>
+                <!-- Dynamic content -->
+                <div id="lessonContainer"></div>
             </div>
-        </div>
-    </footer>
+        </section>
+    </main>
+
+    <!-- Hidden confetti container -->
+    <div id="confettiContainer" style="position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 9999;"></div>
 
     <script>
         (function() {
-            // ========== MODUL-DEFINITIONEN ==========
+            // ---------- MODULE DATA ----------
             const MODULES = [
                 {
                     id: 1,
                     title: 'Kompetenzbereiche & Prüfungstage',
                     icon: 'fa-clipboard-list',
-                    description: 'Lerne die 5 Kompetenzbereiche und welche an welchem Prüfungstag geprüft werden.',
+                    desc: 'Lerne die 5 Kompetenzbereiche und deren Prüfungszuordnung.',
                     lessons: 4,
-                    time: '30 min',
+                    time: '25 min',
                     keyCost: 0,
                     content: [
                         {
-                            type: 'lesson',
-                            title: 'Die 5 Kompetenzbereiche (KB)',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-check-circle" style="color: var(--primary);"></i> KB I: Pflegeprozess und Pflegediagnostik gestalten</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>I.1:</strong> Pflegeprozess planen</li>
-                                        <li><strong>I.2:</strong> Pflegediagnostik & Ressourcen</li>
-                                        <li><strong>I.3:</strong> Lebensgestaltung & Entwicklung</li>
-                                        <li><strong>I.4:</strong> Mobilisation & Sicherheit</li>
-                                        <li><strong>I.5:</strong> Pflegehandeln evaluieren</li>
-                                        <li><strong>I.6:</strong> Pflegeprozess dokumentieren</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3><i class="fas fa-comments" style="color: var(--primary);"></i> KB II: Kommunikation und Beratung gestalten</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>II.1:</strong> Beziehungsgestaltung</li>
-                                        <li><strong>II.2:</strong> Information & Beratung</li>
-                                        <li><strong>II.3:</strong> Interkulturelle Kommunikation</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3><i class="fas fa-handshake" style="color: var(--primary);"></i> KB III: Intra- und interprofessionelles Handeln</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>III.1:</strong> Teamarbeit</li>
-                                        <li><strong>III.2:</strong> Ärztliche Anordnungen durchführen</li>
-                                        <li><strong>III.3:</strong> Schnittstellenmanagement</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3><i class="fas fa-gavel" style="color: var(--primary);"></i> KB IV: Rechtliche und ethische Rahmenbedingungen</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>IV.1:</strong> Rechtsgrundlagen</li>
-                                        <li><strong>IV.2:</strong> Ethische Leitlinien</li>
-                                        <li><strong>IV.3:</strong> Berufsethische Werthaltungen</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3><i class="fas fa-flask" style="color: var(--primary);"></i> KB V: Wissenschaftliche Fundierung und Reflexion</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>V.1:</strong> Evidenzbasierte Pflege</li>
-                                        <li><strong>V.2:</strong> Berufsethos reflektieren</li>
-                                        <li><strong>V.3:</strong> Qualitätsentwicklung</li>
-                                    </ul>
+                            title: 'Die fünf Kompetenzbereiche',
+                            body: `
+                                <div class="info-chip"><i class="fas fa-check-circle"></i> KB I: Pflegeprozess</div>
+                                <p>I.1 Pflegeprozess planen, I.2 Pflegediagnostik, I.3 Lebensgestaltung, I.4 Mobilisation, I.5 Evaluieren, I.6 Dokumentieren</p>
+                                <div class="info-chip"><i class="fas fa-comments"></i> KB II: Kommunikation</div>
+                                <p>II.1 Beziehungsgestaltung, II.2 Beratung, II.3 Interkulturelle Kommunikation</p>
+                                <div class="info-chip"><i class="fas fa-handshake"></i> KB III: Interprofessionelles Handeln</div>
+                                <p>III.1 Team, III.2 Ärztliche Anordnungen, III.3 Schnittstellen</p>
+                                <div class="info-chip"><i class="fas fa-gavel"></i> KB IV: Recht & Ethik</div>
+                                <p>IV.1 Rechtsgrundlagen, IV.2 Ethische Leitlinien, IV.3 Berufsethos</p>
+                                <div class="info-chip"><i class="fas fa-flask"></i> KB V: Wissenschaft</div>
+                                <p>V.1 Evidenzbasierte Pflege, V.2 Reflexion, V.3 Qualitätsentwicklung</p>
+                            `
+                        },
+                        {
+                            title: 'Prüfungstag 1 (schriftlich)',
+                            body: `
+                                <div class="example-box">
+                                    <strong>Geprüft:</strong> I.1, II.1, I.5, I.6<br>
+                                    <em>Fallbeispiel:</em> Pflegeplanung für einen Patienten mit Diabetes und Demenz – Ziele SMART formulieren.
                                 </div>
                             `
                         },
                         {
-                            type: 'lesson',
-                            title: 'Prüfungstag 1 - Schriftlich',
-                            content: `
-                                <div class="highlight-box">
-                                    <h3><i class="fas fa-calendar-alt"></i> Tag 1: Pflegeprozess planen und Beziehung gestalten</h3>
-                                    <p><strong>Geprüfte Kompetenzschwerpunkte:</strong></p>
-                                    <ul class="bullet-list">
-                                        <li><strong>I.1:</strong> Pflegeprozess planen – SIS, Pflegeplanung erstellen</li>
-                                        <li><strong>II.1:</strong> Beziehungsgestaltung – Kommunikation mit Patienten</li>
-                                        <li><strong>I.5:</strong> Pflegehandeln evaluieren – Ziele überprüfen</li>
-                                        <li><strong>I.6:</strong> Dokumentieren – rechtssichere Dokumentation</li>
-                                    </ul>
-                                    <p><strong>Prüfungsfragen:</strong> Fallbeispiel: Sie erstellen eine Pflegeplanung für einen Patienten mit Diabetes und beginnender Demenz. Welche Ressourcen erkennen Sie? Formulieren Sie SMARTE Ziele.</p>
+                            title: 'Prüfungstag 2 (schriftlich)',
+                            body: `
+                                <div class="example-box">
+                                    <strong>Geprüft:</strong> I.2, II.2, V.1<br>
+                                    <em>Fallbeispiel:</em> Beratung eines Patienten mit Sturzrisiko – evidenzbasierte Maßnahmen.
                                 </div>
                             `
                         },
                         {
-                            type: 'lesson',
-                            title: 'Prüfungstag 2 - Schriftlich',
-                            content: `
-                                <div class="highlight-box">
-                                    <h3><i class="fas fa-calendar-alt"></i> Tag 2: Pflegediagnostik, Beratung und Evidenz</h3>
-                                    <p><strong>Geprüfte Kompetenzschwerpunkte:</strong></p>
-                                    <ul class="bullet-list">
-                                        <li><strong>I.2:</strong> Pflegediagnostik & Ressourcen – Pflegeprobleme identifizieren</li>
-                                        <li><strong>II.2:</strong> Information & Beratung – Patientenschulung, Angehörigenberatung</li>
-                                        <li><strong>V.1:</strong> Evidenzbasierte Pflege – Leitlinien anwenden, Studien verstehen</li>
-                                    </ul>
-                                    <p><strong>Prüfungsfragen:</strong> Ein Patient mit Sturzrisiko soll beraten werden. Welche evidenzbasierten Maßnahmen empfehlen Sie? Führen Sie ein Beratungsgespräch.</p>
-                                </div>
-                            `
-                        },
-                        {
-                            type: 'lesson',
-                            title: 'Prüfungstag 3 & Mündlich/Praktisch',
-                            content: `
-                                <div class="highlight-box">
-                                    <h3><i class="fas fa-calendar-alt"></i> Tag 3: Sicherheit, Entwicklung und ärztliche Anordnungen</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>I.3:</strong> Lebensgestaltung & Entwicklung – Biografiearbeit</li>
-                                        <li><strong>I.4:</strong> Mobilisation & Sicherheit – Prophylaxen</li>
-                                        <li><strong>III.2:</strong> Ärztliche Anordnungen durchführen – Delegation</li>
-                                        <li><strong>II.3:</strong> Interkulturelle Kommunikation – kulturelle Unterschiede</li>
-                                    </ul>
-                                </div>
-                                <div class="highlight-box">
-                                    <h3><i class="fas fa-comments"></i> Mündliche Prüfung</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>KB III:</strong> Teamarbeit, interprofessionelles Handeln</li>
-                                        <li><strong>KB IV:</strong> Recht und Ethik – Begründung des Handelns</li>
-                                        <li><strong>KB V:</strong> Wissenschaftliche Reflexion</li>
-                                    </ul>
-                                </div>
-                                <div class="highlight-box">
-                                    <h3><i class="fas fa-hands"></i> Praktische Prüfung</h3>
-                                    <p><strong>Alle KB I-V</strong> werden in Handlung und Reflexion geprüft.</p>
+                            title: 'Tag 3 & mündlich/praktisch',
+                            body: `
+                                <div class="example-box">
+                                    <strong>Tag 3:</strong> I.3, I.4, III.2, II.3<br>
+                                    <strong>Mündlich:</strong> KB III, IV, V – Reflexion mit Recht und Ethik.<br>
+                                    <strong>Praktisch:</strong> Alle KB I-V in Handlung & Reflexion.
                                 </div>
                             `
                         }
@@ -969,138 +722,57 @@
                 },
                 {
                     id: 2,
-                    title: 'Kommunikationsmodelle in der Pflege',
+                    title: 'Kommunikationsmodelle',
                     icon: 'fa-message',
-                    description: 'Wichtige Modelle, praktische Anwendung und Beispiele für die Prüfung.',
+                    desc: 'Vier-Ohren, Peplau, GFK – mit Beispielen aus der Pflege.',
                     lessons: 4,
-                    time: '35 min',
+                    time: '30 min',
                     keyCost: 1,
                     content: [
                         {
-                            type: 'lesson',
                             title: 'Vier-Ohren-Modell (Schulz von Thun)',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-ear-listen"></i> Das Vier-Ohren-Modell</h3>
-                                    <p><strong>Jede Nachricht hat vier Ebenen:</strong></p>
-                                    <ul class="bullet-list">
-                                        <li><strong>Sachebene:</strong> Worüber ich informiere (Daten, Fakten)</li>
-                                        <li><strong>Selbstoffenbarung:</strong> Was ich von mir preisgebe (Gefühle, Werte)</li>
-                                        <li><strong>Beziehungsebene:</strong> Was ich von dir halte (Tonfall, Mimik)</li>
-                                        <li><strong>Appellebene:</strong> Wozu ich dich bewegen möchte (Wunsch, Bitte)</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title"><i class="fas fa-hospital-user"></i> Pflegebeispiel 1</div>
-                                    <p><strong>Patient:</strong> "Ist heute schon wieder diese Schwester da?"</p>
-                                    <ul class="bullet-list">
-                                        <li><strong>Sachebene:</strong> Frage nach Dienstplan</li>
-                                        <li><strong>Selbstoffenbarung:</strong> Ich bin unzufrieden / habe Angst</li>
-                                        <li><strong>Beziehung:</strong> Du bestimmst, wer kommt – ich habe keine Wahl</li>
-                                        <li><strong>Appell:</strong> Sorg dafür, dass eine andere Schwester kommt</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Pflegebeispiel 2</div>
-                                    <p><strong>Angehörige:</strong> "Sie waschen meine Mutter immer so früh!"</p>
-                                    <ul class="bullet-list">
-                                        <li><strong>Sachebene:</strong> Waschung findet früh statt</li>
-                                        <li><strong>Selbstoffenbarung:</strong> Ich fühle mich ohnmächtig</li>
-                                        <li><strong>Beziehung:</strong> Sie nehmen keine Rücksicht</li>
-                                        <li><strong>Appell:</strong> Waschen Sie später!</li>
-                                    </ul>
+                            body: `
+                                <ul class="bullet-list">
+                                    <li><strong>Sachebene:</strong> Worüber ich informiere (Fakten)</li>
+                                    <li><strong>Selbstoffenbarung:</strong> Was ich von mir zeige (Gefühle)</li>
+                                    <li><strong>Beziehungsebene:</strong> Was ich vom Empfänger halte (Tonfall)</li>
+                                    <li><strong>Appellebene:</strong> Wozu ich bewegen will (Wunsch)</li>
+                                </ul>
+                                <div class="example-box">
+                                    <strong>Beispiel:</strong> "Ist heute schon wieder diese Schwester da?" – Appell: Andere Schwester schicken.
                                 </div>
                             `
                         },
                         {
-                            type: 'lesson',
-                            title: 'Pflegetheorie nach Peplau',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-hand-holding-heart"></i> Zwischenmenschliche Beziehung in der Pflege (Peplau)</h3>
-                                    <p><strong>4 Phasen der Pflegebeziehung:</strong></p>
-                                    <ul class="bullet-list">
-                                        <li><strong>1. Orientierungsphase:</strong> Kennenlernen, Bedürfnisse erfragen, Vertrauen aufbauen</li>
-                                        <li><strong>2. Identifikationsphase:</strong> Patient nutzt Pflegeangebote, identifiziert sich mit der Pflegekraft</li>
-                                        <li><strong>3. Nutzungsphase:</strong> Patient setzt Ziele um, wird selbstständiger</li>
-                                        <li><strong>4. Auflösungsphase:</strong> Beziehung endet (Entlassung), Patient ist unabhängig</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Praxisbeispiel: Aufnahme einer Patientin mit Angst</div>
-                                    <ul class="bullet-list">
-                                        <li><strong>Orientierung:</strong> "Frau Schmidt, ich bin Schwester Anna. Haben Sie Angst vor dem Eingriff?"</li>
-                                        <li><strong>Identifikation:</strong> Patientin vertraut, fragt nach Anna, lässt sich helfen</li>
-                                        <li><strong>Nutzung:</strong> Patientin atmet selbstständig, nutzt Schmerzmittel</li>
-                                        <li><strong>Auflösung:</strong> "Sie sind jetzt gut vorbereitet für die Verlegung."</li>
-                                    </ul>
-                                </div>
+                            title: 'Pflegetheorie Peplau',
+                            body: `
+                                <ul class="bullet-list">
+                                    <li><strong>Orientierung:</strong> Kennenlernen, Vertrauen</li>
+                                    <li><strong>Identifikation:</strong> Patient nutzt Angebote</li>
+                                    <li><strong>Nutzung:</strong> Selbstständigkeit</li>
+                                    <li><strong>Auflösung:</strong> Beziehung endet</li>
+                                </ul>
+                                <div class="example-box">Beispiel: Aufnahmegespräch – "Was brauchen Sie?"</div>
                             `
                         },
                         {
-                            type: 'lesson',
                             title: 'Gewaltfreie Kommunikation (Rosenberg)',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-dove"></i> 4 Schritte der Gewaltfreien Kommunikation</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>1. Beobachtung:</strong> Konkret, ohne Bewertung – "Ich sehe, dass..."</li>
-                                        <li><strong>2. Gefühl:</strong> Eigene Gefühle ausdrücken – "Ich fühle mich..."</li>
-                                        <li><strong>3. Bedürfnis:</strong> Dahinterliegendes Bedürfnis – "Weil ich brauche..."</li>
-                                        <li><strong>4. Bitte:</strong> Konkrete, erfüllbare Bitte – "Wären Sie bereit zu...?"</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Konflikt mit Angehörigen</div>
-                                    <p><strong>Situation:</strong> Tochter beschwert sich laut über die Pflege.</p>
-                                    <p><strong>GFK-Reaktion:</strong></p>
-                                    <ul class="bullet-list">
-                                        <li><strong>Beobachtung:</strong> "Ich höre, dass Sie lauter sprechen."</li>
-                                        <li><strong>Gefühl:</strong> "Ich fühle mich angespannt."</li>
-                                        <li><strong>Bedürfnis:</strong> "Weil ich eine ruhige Atmosphäre für alle Patienten brauche."</li>
-                                        <li><strong>Bitte:</strong> "Könnten wir leiser sprechen oder ins Besprechungszimmer gehen?"</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Patient verweigert Medikamente</div>
-                                    <ul class="bullet-list">
-                                        <li><strong>Beobachtung:</strong> "Ich sehe, dass Sie die Tabletten nicht nehmen."</li>
-                                        <li><strong>Gefühl:</strong> "Ich mache mir Sorgen."</li>
-                                        <li><strong>Bedürfnis:</strong> "Weil mir Ihre Gesundheit wichtig ist."</li>
-                                        <li><strong>Bitte:</strong> "Können Sie mir sagen, was Sie daran hindert?"</li>
-                                    </ul>
-                                </div>
+                            body: `
+                                <ol class="bullet-list" style="list-style:decimal; padding-left:20px;">
+                                    <li>Beobachtung (ohne Bewertung)</li>
+                                    <li>Gefühl (Ich fühle...)</li>
+                                    <li>Bedürfnis (weil ich brauche...)</li>
+                                    <li>Bitte (konkret, erfüllbar)</li>
+                                </ol>
+                                <div class="example-box">"Ich sehe Sie weinen, ich fühle mich betroffen, weil mir Ihr Wohl wichtig ist. Möchten Sie reden?"</div>
                             `
                         },
                         {
-                            type: 'lesson',
-                            title: 'Weitere Modelle & Prüfungstipps',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-comment-dots"></i> Ich-Botschaften</h3>
-                                    <ul class="bullet-list">
-                                        <li>Statt "Sie sind ungeduldig" → "Ich habe das Gefühl, Sie sind ungeduldig"</li>
-                                        <li>Statt "Sie müssen warten" → "Ich bitte Sie um etwas Geduld"</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3><i class="fas fa-question-circle"></i> Fragetechniken</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>Offene Fragen:</strong> "Was möchten Sie heute erreichen?"</li>
-                                        <li><strong>Geschlossene Fragen:</strong> "Haben Sie Schmerzen?"</li>
-                                        <li><strong>Paraphrasieren:</strong> "Verstehe ich richtig, dass..."</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Prüfungssituation: Angehörigengespräch</div>
-                                    <p>Tochter: "Ich habe das Gefühl, meine Mutter wird hier nicht richtig versorgt."</p>
-                                    <p><strong>Ihre Reaktion (Modell-Mix):</strong></p>
-                                    <ul class="bullet-list">
-                                        <li>Paraphrasieren: "Sie machen sich Sorgen um die Versorgung Ihrer Mutter?"</li>
-                                        <li>Ich-Botschaft: "Ich kann verstehen, dass Ihnen das wichtig ist."</li>
-                                        <li>Offene Frage: "Was genau beunruhigt Sie?"</li>
-                                    </ul>
-                                </div>
+                            title: 'Ich-Botschaften & Fragetechniken',
+                            body: `
+                                <p><strong>Ich-Botschaft:</strong> "Ich habe das Gefühl, Sie sind ungeduldig" statt "Sie sind ungeduldig".</p>
+                                <p><strong>Offene Frage:</strong> "Was beschäftigt Sie?"</p>
+                                <p><strong>Paraphrasieren:</strong> "Verstehe ich richtig, dass ...?"</p>
                             `
                         }
                     ]
@@ -1109,627 +781,382 @@
                     id: 3,
                     title: 'Recht in der Pflege',
                     icon: 'fa-gavel',
-                    description: 'Die wichtigsten Rechtsgrundlagen für die Prüfung mit Fallbeispielen.',
+                    desc: 'Einwilligung, Fixierung, Haftung – fallbasiert lernen.',
                     lessons: 4,
-                    time: '40 min',
+                    time: '35 min',
                     keyCost: 1,
                     content: [
                         {
-                            type: 'lesson',
-                            title: 'Einwilligung und Aufklärung',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-file-signature"></i> Rechtsgrundlagen</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>§ 630d BGB:</strong> Einwilligung des Patienten erforderlich</li>
-                                        <li><strong>§ 630e BGB:</strong> Aufklärungspflicht (durch Arzt!)</li>
-                                        <li><strong>Art. 2 GG:</strong> Allgemeines Persönlichkeitsrecht</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3>Voraussetzungen der Einwilligung</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>Einsichtsfähigkeit:</strong> Patient kann Art und Bedeutung verstehen</li>
-                                        <li><strong>Aufklärung:</strong> Verständlich, rechtzeitig, durch Arzt</li>
-                                        <li><strong>Freiwilligkeit:</strong> Kein Druck, keine Täuschung</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Fallbeispiel 1: Demenz und Einwilligung</div>
-                                    <p><strong>Situation:</strong> Frau Meier (82, mittelschwere Demenz) soll eine PEG-Sonde bekommen. Die Tochter stimmt zu, Frau Meier wehrt sich und sagt "Nein".</p>
-                                    <p><strong>Rechtliche Bewertung:</strong> Die Einwilligung ist unwirksam, da der natürliche Wille der Patientin erkennbar ist. Es liegt eine Körperverletzung vor, wenn trotzdem sondiert wird.</p>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Fallbeispiel 2: Aufklärung durch Pflegekraft</div>
-                                    <p><strong>Situation:</strong> Eine Ärztin sagt: "Klären Sie den Patienten über die Risiken der OP auf."</p>
-                                    <p><strong>Rechtliche Bewertung:</strong> Pflegekräfte dürfen nicht aufklären! Das ist ausschließlich Aufgabe des Arztes. Sie können nur informieren, aber nicht rechtlich aufklären.</p>
-                                </div>
+                            title: 'Einwilligung & Aufklärung',
+                            body: `
+                                <p><strong>§ 630d BGB:</strong> Einwilligung nötig, <strong>§ 630e:</strong> Aufklärung durch Arzt.</p>
+                                <p>Voraussetzungen: Einsichtsfähigkeit, Aufklärung, Freiwilligkeit.</p>
+                                <div class="example-box">Demenz-Patientin wehrt sich gegen PEG – keine wirksame Einwilligung (natürlicher Wille).</div>
                             `
                         },
                         {
-                            type: 'lesson',
-                            title: 'Unterbringung und Freiheitsentziehung',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-handcuffs"></i> Voraussetzungen für Unterbringung</h3>
-                                    <ul class="bullet-list">
-                                        <li>Psychische Krankheit oder geistige Behinderung</li>
-                                        <li>Erhebliche Eigen- oder Fremdgefährdung</li>
-                                        <li>Keine weniger einschneidende Maßnahme</li>
-                                        <li><strong>Richterliche Genehmigung</strong> (Betreuungsgericht)</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3>Fixierung = Freiheitsentziehung</h3>
-                                    <ul class="bullet-list">
-                                        <li>Bettseitenteile hoch (bei einsichtsfähigen Patienten) = Freiheitsentziehung</li>
-                                        <li>Gurte, Bauchgurt = immer genehmigungspflichtig</li>
-                                        <li>Ausnahme: Akute Eigengefahr (Sturz), dann sofort richterliche Genehmigung einholen</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Fallbeispiel: Nächtliche Fixierung</div>
-                                    <p><strong>Situation:</strong> Ein Patient mit Demenz klettert nachts aus dem Bett und ist gestürzt. Die Pflegekraft fixiert ihn mit einem Bauchgurt "zur Sicherheit".</p>
-                                    <p><strong>Rechtlich:</strong> Das ist eine Freiheitsentziehung ohne richterliche Genehmigung und damit rechtswidrig. Alternative: Niedrigbett, Wechseldruckmatratze, Licht an, Toilettengänge anbieten.</p>
-                                </div>
+                            title: 'Unterbringung / Fixierung',
+                            body: `
+                                <p>Freiheitsentziehung nur mit richterlicher Genehmigung, außer bei akuter Eigengefahr (dann sofort nachholen).</p>
+                                <div class="example-box">Fixierung mit Bauchgurt ohne Beschluss = rechtswidrig. Alternativen: Niedrigbett, Wechseldruckmatratze.</div>
                             `
                         },
                         {
-                            type: 'lesson',
-                            title: 'Haftung und Delegation',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-balance-scale"></i> Haftungsgrundlagen</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>§ 823 BGB:</strong> Schadensersatzpflicht bei schuldhafter Pflichtverletzung</li>
-                                        <li><strong>Strafrecht:</strong> Fahrlässige Körperverletzung (§ 229 StGB)</li>
-                                        <li><strong>Arbeitsrecht:</strong> Disziplinarmaßnahmen möglich</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3>Delegation ärztlicher Aufgaben</h3>
-                                    <ul class="bullet-list">
-                                        <li><strong>Anordnungsverantwortung:</strong> Arzt muss konkret anordnen</li>
-                                        <li><strong>Durchführungsverantwortung:</strong> Pflegekraft muss fachlich befähigt sein</li>
-                                        <li><strong>Übernahmeverantwortung:</strong> Pflegekraft darf nur übernehmen, was sie kann</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Fallbeispiel: i.v.-Injektion</div>
-                                    <p><strong>Situation:</strong> Ärztin: "Machen Sie mal die i.v.-Spritze bei Zimmer 4." Die Pflegekraft hat noch nie i.v. gespritzt, macht es aber trotzdem. Es kommt zu einer Luftembolie.</p>
-                                    <p><strong>Haftung:</strong> Die Pflegekraft haftet wegen Übernahmeverantwortung. Sie hätte ablehnen müssen. Die Ärztin haftet wegen Anordnungsverantwortung (hätte überprüfen müssen).</p>
-                                </div>
+                            title: 'Haftung & Delegation',
+                            body: `
+                                <p><strong>§ 823 BGB:</strong> Schadensersatz bei schuldhafter Pflichtverletzung.</p>
+                                <p>Übernahmeverantwortung: Nur Aufgaben übernehmen, die man beherrscht.</p>
+                                <div class="example-box">i.v.-Injektion ohne Ausbildung: Pflegekraft haftet (Übernahmeverantwortung).</div>
                             `
                         },
                         {
-                            type: 'lesson',
-                            title: 'Schweigepflicht und Datenschutz',
-                            content: `
-                                <div class="info-card">
-                                    <h3><i class="fas fa-shield-alt"></i> Schweigepflicht (§ 203 StGB)</h3>
-                                    <ul class="bullet-list">
-                                        <li>Alle Informationen über Patienten sind geheim</li>
-                                        <li>Auch gegenüber Angehörigen: nur mit Einwilligung</li>
-                                        <li>Durchbrechung nur bei: Gefahr im Verzug, gesetzlicher Meldepflicht</li>
-                                    </ul>
-                                </div>
-                                <div class="info-card">
-                                    <h3>DSGVO in der Pflege</h3>
-                                    <ul class="bullet-list">
-                                        <li>Patientendaten sind besonders schützenswert</li>
-                                        <li>Dokumentation nicht offen herumliegen lassen</li>
-                                        <li>Kurvenblätter verdecken, Dienstcomputer sperren</li>
-                                    </ul>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Fallbeispiel: Auskunft an Ehemann</div>
-                                    <p><strong>Situation:</strong> Der Ehemann fragt: "Was hat meine Frau eigentlich für eine Diagnose? Sie sagt es mir nicht."</p>
-                                    <p><strong>Richtiges Handeln:</strong> "Ich darf ohne Einwilligung Ihrer Frau keine Auskunft geben. Fragen Sie sie direkt oder lassen Sie sich von ihr schriftlich von der Schweigepflicht entbinden."</p>
-                                </div>
-                                <div class="example-card">
-                                    <div class="example-title">Fallbeispiel: Visite im Mehrbettzimmer</div>
-                                    <p><strong>Situation:</strong> Beim Arztgespräch im 4-Bett-Zimmer hören die anderen Patienten mit.</p>
-                                    <p><strong>Lösung:</strong> Diskret sprechen, Vorhang zu, oder: "Können wir ins Besprechungszimmer gehen?"</p>
-                                </div>
+                            title: 'Schweigepflicht & Datenschutz',
+                            body: `
+                                <p><strong>§ 203 StGB:</strong> Strafrechtliche Schweigepflicht. Auskunft nur mit Einwilligung.</p>
+                                <div class="example-box">Ehemann fragt nach Diagnose: "Fragen Sie Ihre Frau, sie muss mich entbinden."</div>
                             `
                         }
                     ]
                 }
             ];
 
-            // ========== GLOBALE VARIABLEN ==========
-            let userKeys = 1; // Start mit 1 Schlüssel
+            // ---------- GLOBALS ----------
+            let userKeys = 1;
             let completedModules = [];
             let currentModuleId = 1;
-            let currentLessonIndex = 0;
-            const totalModules = MODULES.length;
+            let currentStep = 0;
+            let notes = {}; // { moduleId: "note text" }
 
-            // ========== COOKIE FUNKTIONEN ==========
-            function setCookie(name, value, days) {
-                try {
-                    const date = new Date();
-                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                    document.cookie = name + "=" + JSON.stringify(value) + ";expires=" + date.toUTCString() + ";path=/;SameSite=Lax";
-                } catch (e) {
-                    console.error("Cookie set error:", e);
-                }
+            // ---------- COOKIE HELPERS ----------
+            function setCookie(name, val, days) {
+                const d = new Date();
+                d.setTime(d.getTime() + days*86400000);
+                document.cookie = name + "=" + JSON.stringify(val) + ";expires=" + d.toUTCString() + ";path=/";
             }
-
             function getCookie(name) {
-                try {
-                    const cookies = document.cookie.split(';');
-                    for (let cookie of cookies) {
-                        const [cName, cValue] = cookie.trim().split('=');
-                        if (cName === name) {
-                            try {
-                                return JSON.parse(cValue);
-                            } catch {
-                                return cValue;
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.error("Cookie get error:", e);
+                const cookies = document.cookie.split('; ');
+                for (let c of cookies) {
+                    const [n, v] = c.split('=');
+                    if (n === name) try { return JSON.parse(v); } catch { return v; }
                 }
                 return null;
             }
 
-            // ========== FORTSCHRITT LADEN/SPEICHERN ==========
+            // ---------- LOAD / SAVE ----------
             function loadProgress() {
-                const savedKeys = getCookie('userKeys');
-                const savedCompleted = getCookie('completedModules');
-                
-                userKeys = savedKeys !== null ? parseInt(savedKeys) : 1; // Start mit 1
-                completedModules = savedCompleted !== null ? savedCompleted : [];
-                
+                const k = getCookie('userKeys');
+                if (k !== null) userKeys = parseInt(k);
+                else userKeys = 1;
+                const cm = getCookie('completedModules');
+                if (cm) completedModules = cm;
+                const nt = getCookie('notes');
+                if (nt) notes = nt;
                 updateUI();
             }
-
             function saveProgress() {
                 setCookie('userKeys', userKeys, 30);
                 setCookie('completedModules', completedModules, 30);
+                setCookie('notes', notes, 30);
                 updateUI();
             }
 
-            // ========== UI AKTUALISIEREN ==========
+            // ---------- UI UPDATE ----------
             function updateUI() {
-                document.getElementById('keyCount').textContent = userKeys;
-                
-                const completedCount = completedModules.length;
-                const progressPercent = (completedCount / totalModules) * 100;
-                document.getElementById('progressFill').style.width = progressPercent + '%';
-                document.getElementById('progressText').textContent = `${completedCount}/${totalModules}`;
-                
+                document.getElementById('keyCount').innerText = userKeys;
+                const total = MODULES.length;
+                const completed = completedModules.length;
+                document.getElementById('progressFill').style.width = (completed/total*100)+'%';
+                document.getElementById('progressText').innerText = `${completed}/${total}`;
                 renderModules();
             }
 
-            // ========== CONFETTI ANIMATION ==========
-            function showConfetti() {
-                const container = document.getElementById('confettiContainer');
-                container.style.display = 'block';
-                
-                for (let i = 0; i < 100; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                    confetti.style.animationDelay = Math.random() * 2 + 's';
-                    confetti.style.width = Math.random() * 10 + 5 + 'px';
-                    confetti.style.height = confetti.style.width;
-                    container.appendChild(confetti);
-                }
-                
-                setTimeout(() => {
-                    container.innerHTML = '';
-                    container.style.display = 'none';
-                }, 4000);
-            }
-
-            // ========== MODULE RENDERN ==========
+            // ---------- RENDER MODULES ----------
             function renderModules() {
                 const grid = document.getElementById('moduleGrid');
                 grid.innerHTML = '';
-
                 MODULES.forEach(mod => {
                     const isCompleted = completedModules.includes(mod.id);
                     const isLocked = mod.keyCost > 0 && !isCompleted && userKeys < mod.keyCost && mod.id !== 1;
-                    
-                    // Modul 1 ist immer entsperrt
-                    const effectivelyLocked = mod.id === 1 ? false : isLocked;
-                    
                     const card = document.createElement('div');
-                    card.className = `module-card ${effectivelyLocked ? 'locked' : ''}`;
+                    card.className = `module-card ${isLocked ? 'locked' : ''}`;
                     card.dataset.id = mod.id;
-                    
                     card.innerHTML = `
-                        <div class="module-header">
-                            <div class="module-icon"><i class="fas ${mod.icon}"></i></div>
-                            <div class="module-key-cost">
-                                <i class="fa-solid fa-key"></i> ${mod.keyCost}
-                            </div>
+                        <div class="card-header">
+                            <div class="icon-circle"><i class="fas ${mod.icon}"></i></div>
+                            <span class="key-cost"><i class="fa-solid fa-key"></i> ${mod.keyCost}</span>
                         </div>
                         <h3 class="module-title">${mod.title}</h3>
-                        <p class="module-description">${mod.description}</p>
+                        <p class="module-desc">${mod.desc}</p>
                         <div class="module-meta">
-                            <div class="meta-item"><span class="meta-value">${mod.lessons}</span><span class="meta-label">Lektionen</span></div>
-                            <div class="meta-item"><span class="meta-value">${mod.time}</span><span class="meta-label">Dauer</span></div>
-                            ${isCompleted ? '<div class="completed-badge"><i class="fas fa-check"></i> Abgeschlossen</div>' : ''}
+                            <span><i class="fas fa-book-open"></i> ${mod.lessons}</span>
+                            <span><i class="fas fa-clock"></i> ${mod.time}</span>
                         </div>
-                        <button class="module-status ${effectivelyLocked ? 'locked' : 'unlocked'}" data-id="${mod.id}" ${effectivelyLocked ? 'disabled' : ''}>
-                            ${isCompleted ? '🔄 Wiederholen' : (effectivelyLocked ? '🔒 ' + mod.keyCost + ' Schlüssel benötigt' : '📖 Lernen')}
-                        </button>
+                        ${isCompleted ? '<span class="completed-badge"><i class="fas fa-check"></i> Abgeschlossen</span>' : ''}
                     `;
-                    
                     grid.appendChild(card);
                 });
             }
 
-            // ========== MODUL ÖFFNEN ==========
-            function openModule(moduleId) {
-                const mod = MODULES.find(m => m.id === moduleId);
+            // ---------- OPEN MODULE ----------
+            function openModule(id) {
+                const mod = MODULES.find(m => m.id === id);
                 if (!mod) return;
-                
-                if (moduleId !== 1 && !completedModules.includes(moduleId) && userKeys < mod.keyCost) {
-                    alert(`Du benötigst ${mod.keyCost} Schlüssel, um dieses Modul freizuschalten.`);
+                if (id !== 1 && !completedModules.includes(id) && userKeys < mod.keyCost) {
+                    alert(`🔒 Du brauchst ${mod.keyCost} Schlüssel.`);
                     return;
                 }
-                
-                // Schlüssel abziehen, wenn nicht bereits abgeschlossen
-                if (!completedModules.includes(moduleId) && mod.keyCost > 0 && moduleId !== 1) {
+                if (!completedModules.includes(id) && mod.keyCost > 0 && id !== 1) {
                     userKeys -= mod.keyCost;
                     saveProgress();
                 }
-                
-                currentModuleId = moduleId;
-                currentLessonIndex = 0;
-                
-                document.getElementById('moduleSection').style.display = 'none';
-                document.getElementById('moduleDetail').classList.add('active');
-                document.getElementById('currentModuleTitle').textContent = mod.title;
-                
+                currentModuleId = id;
+                currentStep = 0;
+                document.getElementById('moduleOverview').style.display = 'none';
+                document.getElementById('moduleDetail').style.display = 'block';
                 renderLesson();
             }
 
-            // ========== LEKTION RENDERN ==========
+            // ---------- RENDER LESSON ----------
             function renderLesson() {
                 const mod = MODULES.find(m => m.id === currentModuleId);
-                if (!mod) return;
-                
-                // Step-Indikatoren
                 const steps = mod.content.length;
-                const stepContainer = document.getElementById('stepIndicators');
-                stepContainer.innerHTML = '';
-                
-                for (let i = 0; i < steps; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = `step-dot ${i === currentLessonIndex ? 'active' : ''} ${i < currentLessonIndex ? 'completed' : ''}`;
-                    stepContainer.appendChild(dot);
+                // Step indicators
+                let stepsHtml = '';
+                for (let i=0; i<steps; i++) {
+                    let cls = 'step-dot';
+                    if (i === currentStep) cls += ' active';
+                    else if (i < currentStep) cls += ' completed';
+                    stepsHtml += `<div class="${cls}"></div>`;
                 }
-                
-                // Lektionsinhalt
-                const currentContent = mod.content[currentLessonIndex];
+                document.getElementById('stepIndicator').innerHTML = stepsHtml;
+
+                const lesson = mod.content[currentStep];
+                const noteText = notes[currentModuleId] || '';
                 const container = document.getElementById('lessonContainer');
-                
                 container.innerHTML = `
-                    <div class="lesson-section">
-                        <div class="lesson-icon-large"><i class="fas ${mod.icon}"></i></div>
-                        <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">${currentContent.title}</h2>
-                        ${currentContent.content}
+                    <div class="lesson-card">
+                        <div class="lesson-icon"><i class="fas ${mod.icon}"></i></div>
+                        <h2 class="lesson-title">${lesson.title}</h2>
+                        <div class="content-block">${lesson.body}</div>
+
+                        <!-- Personal Notes -->
+                        <div class="notes-section">
+                            <div class="notes-header"><i class="fas fa-pen"></i> Meine Notizen</div>
+                            <textarea id="moduleNote" class="notes-textarea" rows="3" placeholder="Hier kannst du eigene Notizen ergänzen...">${noteText.replace(/</g, '&lt;')}</textarea>
+                            <button class="notes-save" id="saveNote"><i class="fas fa-save"></i> Notiz speichern</button>
+                        </div>
+
                         <div class="nav-buttons">
-                            <button class="nav-btn" id="prevBtn" ${currentLessonIndex === 0 ? 'disabled' : ''}>
-                                <i class="fas fa-chevron-left"></i> Zurück
-                            </button>
-                            ${currentLessonIndex < mod.content.length - 1 ? 
+                            <button class="nav-btn secondary" id="prevBtn" ${currentStep === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Zurück</button>
+                            ${currentStep < steps-1 ? 
                                 '<button class="nav-btn" id="nextBtn">Weiter <i class="fas fa-chevron-right"></i></button>' : 
-                                '<button class="nav-btn" id="quizBtn">Abschluss-Quiz <i class="fas fa-question"></i></button>'}
+                                '<button class="nav-btn" id="quizBtn">Zum Quiz <i class="fas fa-question"></i></button>'}
                         </div>
                     </div>
                 `;
-                
-                // Event-Listener für Navigation
+
+                document.getElementById('saveNote')?.addEventListener('click', () => {
+                    const note = document.getElementById('moduleNote').value;
+                    notes[currentModuleId] = note;
+                    saveProgress();
+                    alert('Notiz gespeichert!');
+                });
+
                 document.getElementById('prevBtn')?.addEventListener('click', () => {
-                    if (currentLessonIndex > 0) {
-                        currentLessonIndex--;
-                        renderLesson();
-                    }
+                    if (currentStep > 0) { currentStep--; renderLesson(); }
                 });
-                
                 document.getElementById('nextBtn')?.addEventListener('click', () => {
-                    if (currentLessonIndex < mod.content.length - 1) {
-                        currentLessonIndex++;
-                        renderLesson();
-                    }
+                    if (currentStep < steps-1) { currentStep++; renderLesson(); }
                 });
-                
-                document.getElementById('quizBtn')?.addEventListener('click', () => {
-                    startQuiz();
-                });
+                document.getElementById('quizBtn')?.addEventListener('click', showQuiz);
             }
 
-            // ========== QUIZ STARTEN ==========
-            function startQuiz() {
+            // ---------- QUIZ ----------
+            function showQuiz() {
                 const mod = MODULES.find(m => m.id === currentModuleId);
-                
-                let quizHTML = `
-                    <div class="quiz-container">
-                        <h2 style="text-align: center; margin-bottom: var(--spacing-lg);">Abschluss-Quiz: ${mod.title}</h2>
-                        <div id="quizQuestions"></div>
-                        <div class="quiz-feedback" id="quizFeedback"></div>
-                        <div class="nav-buttons">
-                            <button class="nav-btn" id="backFromQuiz"><i class="fas fa-arrow-left"></i> Zurück</button>
-                            <button class="nav-btn" id="submitQuiz">Quiz auswerten</button>
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('lessonContainer').innerHTML = quizHTML;
-                
-                const questions = getQuizQuestions(currentModuleId);
-                const qContainer = document.getElementById('quizQuestions');
-                
+                const questions = getQuestions(currentModuleId);
+                let html = `<div class="lesson-card"><h2 class="lesson-title">Quiz: ${mod.title}</h2>`;
                 questions.forEach((q, idx) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.innerHTML = `
-                        <div class="quiz-question">${idx+1}. ${q.question}</div>
-                        <div class="quiz-options" id="q${idx}">
-                            ${q.options.map((opt, optIdx) => `
-                                <div class="quiz-option" data-question="${idx}" data-opt="${optIdx}" data-correct="${opt.correct}">
-                                    <span class="option-indicator">${String.fromCharCode(65 + optIdx)}</span>
-                                    ${opt.text}
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                    qContainer.appendChild(qDiv);
-                });
-                
-                // Quiz-Interaktion
-                document.querySelectorAll('.quiz-option').forEach(opt => {
-                    opt.addEventListener('click', function() {
-                        const questionIdx = this.dataset.question;
-                        document.querySelectorAll(`[data-question="${questionIdx}"]`).forEach(el => {
-                            el.classList.remove('correct', 'incorrect');
-                        });
-                        this.classList.add('correct');
+                    html += `<div class="quiz-question" data-q="${idx}">${idx+1}. ${q.q}</div>`;
+                    q.options.forEach((opt, optIdx) => {
+                        html += `<div class="quiz-option" data-q="${idx}" data-opt="${optIdx}" data-correct="${opt.correct}"><span class="option-letter">${String.fromCharCode(65+optIdx)}</span> ${opt.text}</div>`;
                     });
                 });
-                
+                html += `<div class="quiz-feedback" id="quizFeedback"></div>`;
+                html += `<div class="nav-buttons"><button class="nav-btn secondary" id="backFromQuiz"><i class="fas fa-arrow-left"></i> Lektionen</button><button class="nav-btn" id="submitQuiz">Auswerten</button></div>`;
+                html += `</div>`;
+                document.getElementById('lessonContainer').innerHTML = html;
+
+                // Option selection
+                document.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.addEventListener('click', function() {
+                        const q = this.dataset.q;
+                        document.querySelectorAll(`[data-q="${q}"]`).forEach(el => el.classList.remove('selected'));
+                        this.classList.add('selected');
+                    });
+                });
+
                 document.getElementById('backFromQuiz').addEventListener('click', () => {
-                    currentLessonIndex = mod.content.length - 1;
+                    currentStep = mod.content.length-1;
                     renderLesson();
                 });
-                
+
                 document.getElementById('submitQuiz').addEventListener('click', () => {
-                    evaluateQuiz(questions, mod);
+                    evaluateQuiz(questions);
                 });
             }
 
-            // ========== QUIZ-FRAGEN ==========
-            function getQuizQuestions(moduleId) {
-                if (moduleId === 1) {
-                    return [
-                        {
-                            question: 'Welcher Kompetenzbereich umfasst die Pflegeprozessplanung?',
-                            options: [
-                                { text: 'KB I – Pflegeprozess', correct: true },
-                                { text: 'KB II – Kommunikation', correct: false },
-                                { text: 'KB III – Teamarbeit', correct: false },
-                                { text: 'KB IV – Recht', correct: false }
-                            ]
-                        },
-                        {
-                            question: 'An welchem Prüfungstag wird KB II (Kommunikation) hauptsächlich geprüft?',
-                            options: [
-                                { text: 'Nur schriftlich Tag 1', correct: false },
-                                { text: 'Schriftlich Tag 1 und Tag 2', correct: true },
-                                { text: 'Nur mündlich', correct: false },
-                                { text: 'Nur praktisch', correct: false }
-                            ]
-                        },
-                        {
-                            question: 'Was ist der Schwerpunkt der mündlichen Prüfung?',
-                            options: [
-                                { text: 'Praktische Pflegehandlung', correct: false },
-                                { text: 'Reflexion mit Recht, Ethik und Wissenschaft (KB III, IV, V)', correct: true },
-                                { text: 'Medikamentenberechnung', correct: false },
-                                { text: 'Dokumentation', correct: false }
-                            ]
-                        }
-                    ];
-                } else if (moduleId === 2) {
-                    return [
-                        {
-                            question: 'Welche vier Ebenen hat das Vier-Ohren-Modell?',
-                            options: [
-                                { text: 'Sender, Empfänger, Botschaft, Kanal', correct: false },
-                                { text: 'Sachebene, Selbstoffenbarung, Beziehung, Appell', correct: true },
-                                { text: 'Orientierung, Identifikation, Nutzung, Auflösung', correct: false },
-                                { text: 'Beobachtung, Gefühl, Bedürfnis, Bitte', correct: false }
-                            ]
-                        },
-                        {
-                            question: 'Nach Peplau: In welcher Phase entsteht Vertrauen zwischen Patient und Pflegekraft?',
-                            options: [
-                                { text: 'Orientierungsphase', correct: false },
-                                { text: 'Identifikationsphase', correct: true },
-                                { text: 'Nutzungsphase', correct: false },
-                                { text: 'Auflösungsphase', correct: false }
-                            ]
-                        },
-                        {
-                            question: 'Was ist der erste Schritt der Gewaltfreien Kommunikation?',
-                            options: [
-                                { text: 'Bedürfnis äußern', correct: false },
-                                { text: 'Beobachtung ohne Bewertung', correct: true },
-                                { text: 'Bitte formulieren', correct: false },
-                                { text: 'Gefühl benennen', correct: false }
-                            ]
-                        }
-                    ];
-                } else {
-                    return [
-                        {
-                            question: 'Wer muss die Aufklärung vor einem medizinischen Eingriff durchführen?',
-                            options: [
-                                { text: 'Die Pflegekraft', correct: false },
-                                { text: 'Der Arzt', correct: true },
-                                { text: 'Der Patient selbst', correct: false },
-                                { text: 'Ein Angehöriger', correct: false }
-                            ]
-                        },
-                        {
-                            question: 'Wann ist eine Fixierung ohne richterliche Genehmigung erlaubt?',
-                            options: [
-                                { text: 'Bei Personalmangel', correct: false },
-                                { text: 'Bei akuter Eigengefahr als letztes Mittel (dann sofort Genehmigung einholen)', correct: true },
-                                { text: 'Wenn der Patient unruhig ist', correct: false },
-                                { text: 'Nach Rücksprache mit Angehörigen', correct: false }
-                            ]
-                        },
-                        {
-                            question: 'Was bedeutet Übernahmeverantwortung?',
-                            options: [
-                                { text: 'Die Pflegekraft muss jede ärztliche Anordnung ausführen', correct: false },
-                                { text: 'Die Pflegekraft haftet für eigene Fehler und darf nur übernehmen, was sie kann', correct: true },
-                                { text: 'Der Arzt übernimmt die volle Verantwortung', correct: false },
-                                { text: 'Die Einrichtung haftet immer', correct: false }
-                            ]
-                        }
-                    ];
-                }
+            function getQuestions(moduleId) {
+                if (moduleId === 1) return [
+                    { q: 'Welcher KB umfasst die Pflegeprozessplanung?', options: [{text:'KB I',correct:true},{text:'KB II',correct:false},{text:'KB III',correct:false},{text:'KB IV',correct:false}] },
+                    { q: 'An welchem Tag wird Kommunikation (KB II) geprüft?', options: [{text:'Nur Tag 1',correct:false},{text:'Tag 1 und 2',correct:true},{text:'Nur mündlich',correct:false},{text:'Nur praktisch',correct:false}] },
+                    { q: 'Was ist Schwerpunkt der mündlichen Prüfung?', options: [{text:'Praktische Pflege',correct:false},{text:'Reflexion mit Recht, Ethik, Wissenschaft',correct:true},{text:'Dokumentation',correct:false},{text:'Medikamente',correct:false}] }
+                ];
+                if (moduleId === 2) return [
+                    { q: 'Vier-Ohren-Modell: Welche Ebene fehlt? (Sache, Selbstoffenbarung, Beziehung, ?)', options: [{text:'Appell',correct:true},{text:'Kanal',correct:false},{text:'Rauschen',correct:false},{text:'Feedback',correct:false}] },
+                    { q: 'Peplau: In welcher Phase entsteht Vertrauen?', options: [{text:'Orientierung',correct:false},{text:'Identifikation',correct:true},{text:'Nutzung',correct:false},{text:'Auflösung',correct:false}] },
+                    { q: 'Erster Schritt der GFK?', options: [{text:'Gefühl',correct:false},{text:'Bedürfnis',correct:false},{text:'Beobachtung',correct:true},{text:'Bitte',correct:false}] }
+                ];
+                return [
+                    { q: 'Wer klärt auf?', options: [{text:'Arzt',correct:true},{text:'Pflegekraft',correct:false},{text:'Angehörige',correct:false},{text:'Patient',correct:false}] },
+                    { q: 'Fixierung ohne Beschluss erlaubt?', options: [{text:'Nie',correct:false},{text:'Bei akuter Eigengefahr (dann sofort Genehmigung)',correct:true},{text:'Immer mit Einwilligung',correct:false},{text:'Nach Rücksprache mit Angehörigen',correct:false}] },
+                    { q: 'Übernahmeverantwortung bedeutet:', options: [{text:'Alles ausführen',correct:false},{text:'Nur übernehmen, was man kann',correct:true},{text:'Arzt haftet immer',correct:false},{text:'Patient haftet',correct:false}] }
+                ];
             }
 
-            // ========== QUIZ AUSWERTEN ==========
-            function evaluateQuiz(questions, mod) {
-                let correctCount = 0;
-                const total = questions.length;
-                let allAnswered = true;
-                
-                questions.forEach((q, qIdx) => {
-                    const selected = document.querySelector(`[data-question="${qIdx}"].correct`);
-                    if (!selected) {
-                        allAnswered = false;
-                    } else {
-                        const isCorrect = selected.dataset.correct === 'true';
-                        if (isCorrect) {
-                            correctCount++;
-                        }
-                    }
+            function evaluateQuiz(questions) {
+                let correct = 0;
+                questions.forEach((q, idx) => {
+                    const selected = document.querySelector(`.quiz-option.selected[data-q="${idx}"]`);
+                    if (selected && selected.dataset.correct === 'true') correct++;
                 });
-                
-                const feedback = document.getElementById('quizFeedback');
-                feedback.style.display = 'block';
-                
-                if (!allAnswered) {
-                    feedback.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Bitte beantworte alle Fragen!';
-                    feedback.className = 'quiz-feedback incorrect';
-                    return;
-                }
-                
-                if (correctCount === total) {
-                    feedback.innerHTML = '<i class="fas fa-trophy"></i> Perfekt! Alle Fragen richtig. Du bekommst einen Schlüssel!';
-                    feedback.className = 'quiz-feedback correct';
-                    
-                    // Confetti anzeigen
+                const fb = document.getElementById('quizFeedback');
+                fb.style.display = 'block';
+                if (correct === questions.length) {
+                    fb.innerHTML = '🎉 Perfekt! Du bekommst einen Schlüssel.';
+                    fb.style.background = '#d1fae5';
+                    fb.style.color = '#065f46';
                     showConfetti();
-                    
-                    // Modul als abgeschlossen markieren, falls noch nicht
+                    // Belohnung nur bei erstmaligem Abschluss
                     if (!completedModules.includes(currentModuleId)) {
                         completedModules.push(currentModuleId);
-                        
-                        // Einen Schlüssel als Belohnung (bei jedem Modul, auch Modul 1)
                         userKeys += 1;
-                        
                         saveProgress();
-                        
-                        // Animation anzeigen
-                        setTimeout(() => {
-                            document.getElementById('lessonContainer').innerHTML = `
-                                <div class="completion-screen">
-                                    <div class="key-reward">
-                                        <div class="key-icon"><i class="fa-solid fa-key"></i></div>
-                                        <div style="font-size: 3rem;">+</div>
-                                        <div class="key-icon" style="background: var(--success);"><i class="fa-solid fa-check"></i></div>
-                                    </div>
-                                    <h2>Modul abgeschlossen!</h2>
-                                    <p>Du hast einen Schlüssel verdient. Jetzt hast du ${userKeys} Schlüssel.</p>
-                                    <button class="nav-btn" id="finalBack" style="margin-top: var(--spacing-lg);">
-                                        Zurück zur Übersicht
-                                    </button>
-                                </div>
-                            `;
-                            
-                            document.getElementById('finalBack').addEventListener('click', () => {
-                                document.getElementById('moduleDetail').classList.remove('active');
-                                document.getElementById('moduleSection').style.display = 'block';
-                            });
-                        }, 2000);
+                        // Nach 2 Sekunden zum Game weiterleiten
+                        setTimeout(() => showGame(), 2000);
                     } else {
-                        // Modul wurde wiederholt
-                        setTimeout(() => {
-                            document.getElementById('lessonContainer').innerHTML = `
-                                <div class="completion-screen">
-                                    <div class="key-icon" style="background: var(--success);"><i class="fa-solid fa-check"></i></div>
-                                    <h2>Quiz bestanden!</h2>
-                                    <p>Du hast das Modul bereits abgeschlossen, aber gut wiederholt!</p>
-                                    <button class="nav-btn" id="finalBack" style="margin-top: var(--spacing-lg);">
-                                        Zurück zur Übersicht
-                                    </button>
-                                </div>
-                            `;
-                            
-                            document.getElementById('finalBack').addEventListener('click', () => {
-                                document.getElementById('moduleDetail').classList.remove('active');
-                                document.getElementById('moduleSection').style.display = 'block';
-                            });
-                        }, 2000);
+                        setTimeout(() => showGame(), 1500);
                     }
                 } else {
-                    feedback.innerHTML = `❌ Du hast ${correctCount} von ${total} richtig. Versuche es noch einmal!`;
-                    feedback.className = 'quiz-feedback incorrect';
+                    fb.innerHTML = `❌ ${correct}/${questions.length} richtig. Versuch's nochmal.`;
+                    fb.style.background = '#fee2e2';
+                    fb.style.color = '#991b1b';
                 }
             }
 
-            // ========== EVENT LISTENER ==========
-            document.getElementById('homeLogo').addEventListener('click', () => {
-                document.getElementById('moduleDetail').classList.remove('active');
-                document.getElementById('moduleSection').style.display = 'block';
-            });
+            // ---------- MINI-GAME (Memory) ----------
+            function showGame() {
+                const mod = MODULES.find(m => m.id === currentModuleId);
+                const pairs = [
+                    { left: 'KB I', right: 'Pflegeprozess' },
+                    { left: 'KB II', right: 'Kommunikation' },
+                    { left: 'KB III', right: 'Team' },
+                    { left: 'KB IV', right: 'Recht/Ethik' },
+                    { left: 'KB V', right: 'Wissenschaft' }
+                ]; // Beispiel-Paare – könnte modulspezifisch sein
+                let gameHtml = `
+                    <div class="lesson-card">
+                        <h2 class="lesson-title">🧩 Mini-Game: Finde die Paare</h2>
+                        <div class="game-area">
+                            <p>Klicke auf zwei Karten, die zusammengehören.</p>
+                            <div class="pairs-grid" id="pairsGrid"></div>
+                            <div id="gameMessage" style="margin:15px 0; min-height:30px;"></div>
+                            <button class="nav-btn" id="finishGame">Weiter</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('lessonContainer').innerHTML = gameHtml;
+                const grid = document.getElementById('pairsGrid');
+                let cards = [];
+                pairs.forEach((p, idx) => {
+                    cards.push({ id: 'l'+idx, text: p.left, pairId: idx, matched: false });
+                    cards.push({ id: 'r'+idx, text: p.right, pairId: idx, matched: false });
+                });
+                cards = cards.sort(() => Math.random() - 0.5);
+                cards.forEach(c => {
+                    const div = document.createElement('div');
+                    div.className = 'pair-card';
+                    div.dataset.pairId = c.pairId;
+                    div.dataset.cardId = c.id;
+                    div.innerText = c.text;
+                    grid.appendChild(div);
+                });
 
-            document.getElementById('startExploring').addEventListener('click', () => {
-                document.getElementById('moduleSection').scrollIntoView({ behavior: 'smooth' });
-            });
+                let selected = null;
+                const message = document.getElementById('gameMessage');
+                grid.addEventListener('click', (e) => {
+                    const card = e.target.closest('.pair-card');
+                    if (!card || card.classList.contains('matched')) return;
+                    if (!selected) {
+                        selected = card;
+                        card.classList.add('selected');
+                    } else if (selected === card) {
+                        selected.classList.remove('selected');
+                        selected = null;
+                    } else {
+                        const pair1 = selected.dataset.pairId;
+                        const pair2 = card.dataset.pairId;
+                        if (pair1 === pair2) {
+                            selected.classList.add('matched');
+                            card.classList.add('matched');
+                            message.innerText = '✅ Richtig!';
+                            selected.classList.remove('selected');
+                        } else {
+                            message.innerText = '❌ Leider falsch.';
+                            selected.classList.remove('selected');
+                        }
+                        selected = null;
+                    }
+                });
 
-            document.getElementById('backToModules').addEventListener('click', () => {
-                document.getElementById('moduleDetail').classList.remove('active');
-                document.getElementById('moduleSection').style.display = 'block';
-            });
+                document.getElementById('finishGame').addEventListener('click', () => {
+                    document.getElementById('moduleDetail').style.display = 'none';
+                    document.getElementById('moduleOverview').style.display = 'block';
+                });
+            }
 
-            // Modulkarten-Interaktion
-            document.getElementById('moduleGrid').addEventListener('click', (e) => {
-                const button = e.target.closest('.module-status');
-                if (!button) return;
-                
-                const card = button.closest('.module-card');
-                if (!card) return;
-                
-                const moduleId = parseInt(card.dataset.id);
-                
-                if (button.classList.contains('unlocked') && !button.disabled) {
-                    openModule(moduleId);
+            // ---------- CONFETTI ----------
+            function showConfetti() {
+                const container = document.getElementById('confettiContainer');
+                for (let i=0; i<60; i++) {
+                    const conf = document.createElement('div');
+                    conf.className = 'confetti';
+                    conf.style.left = Math.random()*100+'%';
+                    conf.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
+                    conf.style.animationDelay = Math.random()*2+'s';
+                    container.appendChild(conf);
                 }
+                setTimeout(() => container.innerHTML = '', 3000);
+            }
+
+            // ---------- EVENT LISTENERS ----------
+            document.getElementById('homeBtn').addEventListener('click', () => {
+                document.getElementById('moduleDetail').style.display = 'none';
+                document.getElementById('moduleOverview').style.display = 'block';
             });
 
-            // ========== INITIALISIERUNG ==========
+            document.getElementById('backToOverview').addEventListener('click', () => {
+                document.getElementById('moduleDetail').style.display = 'none';
+                document.getElementById('moduleOverview').style.display = 'block';
+            });
+
+            document.getElementById('moduleGrid').addEventListener('click', (e) => {
+                const card = e.target.closest('.module-card');
+                if (card) openModule(parseInt(card.dataset.id));
+            });
+
+            // ---------- INIT ----------
             loadProgress();
-            
-            // Cookie-Reset-Funktion für Entwicklung (optional)
-            window.resetProgress = function() {
-                userKeys = 1;
-                completedModules = [];
-                saveProgress();
-                alert('Fortschritt zurückgesetzt!');
-            };
         })();
     </script>
 </body>
