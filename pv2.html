@@ -6,6 +6,7 @@
     <title>PflegefachProfi • Prüfungsvorbereitung</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ---------- GLOBAL RESET & VARIABLES ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -13,376 +14,355 @@
         }
 
         :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
+            --primary: #2b3b8c;
+            --primary-dark: #1f2b66;
             --primary-light: #eef2ff;
-            --secondary: #7209b7;
-            --accent: #f72585;
-            --success: #4cc9f0;
-            --warning: #fca311;
-            --danger: #e63946;
-            --key: #ffd166;
-            --text-primary: #1d3557;
-            --text-secondary: #457b9d;
-            --text-tertiary: #a8dadc;
-            --background: #f1faee;
+            --secondary: #5e2a84;
+            --accent: #e85d04;
+            --success: #2b9348;
+            --warning: #f4a261;
+            --danger: #e76f51;
+            --key: #ffb703;
+            --text-primary: #1e2a3e;
+            --text-secondary: #334e68;
+            --text-muted: #62748c;
+            --background: #f8fafc;
             --surface: #ffffff;
-            --border: #e0e0e0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --radius: 12px;
-            --radius-lg: 20px;
-            --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 1rem;
+            --radius-lg: 1.5rem;
+            --font-sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
         }
 
         body {
-            font-family: var(--font);
+            font-family: var(--font-sans);
             background: var(--background);
             color: var(--text-primary);
             line-height: 1.5;
+            scroll-behavior: smooth;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 1.5rem;
         }
 
-        /* ===== HEADER (einfach, keine Hamburger) ===== */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
+        /* ---------- TYPOGRAPHY ---------- */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* ---------- MODERN HEADER / NAVBAR ---------- */
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--border);
         }
 
-        .header-content {
+        .nav-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            gap: 15px;
+            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 800;
-            font-size: 1.4rem;
-            color: var(--primary);
+            gap: 0.75rem;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
+        .logo:hover { opacity: 0.85; }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(145deg, var(--primary), var(--secondary));
-            border-radius: 12px;
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-sm);
         }
 
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.35rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* nav links (classic navbar) */
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .nav-link {
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* stats area */
         .stats-group {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 1rem;
         }
-
         .key-badge {
-            background: var(--key);
-            padding: 6px 14px;
+            background: #fff3d1;
+            padding: 0.5rem 1rem;
             border-radius: 40px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 6px;
-            box-shadow: var(--shadow);
-            color: var(--text-primary);
-            font-size: 0.95rem;
+            gap: 0.5rem;
+            color: #b45309;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
         }
-
-        .progress-wrap {
+        .progress-chip {
+            background: var(--surface);
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: white;
-            padding: 4px 14px 4px 8px;
+            gap: 0.75rem;
+            padding: 0.4rem 1rem 0.4rem 0.75rem;
             border-radius: 40px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
         }
-
         .progress-bar-bg {
-            width: 80px;
-            height: 10px;
-            background: var(--border);
+            width: 90px;
+            height: 8px;
+            background: #e2e8f0;
             border-radius: 20px;
             overflow: hidden;
         }
-
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--success), var(--primary));
             border-radius: 20px;
-            transition: width 0.4s;
+            transition: width 0.3s ease;
         }
-
         .progress-text {
             font-weight: 600;
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
         }
 
-        /* ===== BANNER (farbenfroh) ===== */
-        .hero-banner {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 32px;
-            padding: 40px 30px;
-            margin: 30px 0 20px;
-            box-shadow: var(--shadow-elevated);
-            position: relative;
-            overflow: hidden;
+        /* ---------- HERO SECTION ---------- */
+        .hero {
+            background: linear-gradient(125deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            margin: 2rem 0 2rem;
             color: white;
-        }
-
-        .hero-banner::before {
-            content: "📚✨";
-            position: absolute;
-            bottom: 10px;
-            right: 20px;
-            font-size: 6rem;
-            opacity: 0.1;
-            transform: rotate(-5deg);
-        }
-
-        .hero-banner h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 12px;
-            line-height: 1.2;
-        }
-
-        .hero-banner p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            margin-bottom: 24px;
-            max-width: 70%;
-        }
-
-        .hero-banner .badge {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(4px);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        /* ===== MODUL GRID ===== */
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin: 30px 0 40px;
-        }
-
-        .module-card {
-            background: var(--surface);
-            border-radius: 28px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            transition: transform 0.25s ease, box-shadow 0.25s;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-lg);
         }
-
-        .module-card::after {
-            content: '';
+        .hero::after {
+            content: "📘🩺";
+            font-size: 8rem;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: translateY(-100%);
-            transition: transform 0.3s;
-        }
-
-        .module-card:hover::after {
-            transform: translateY(0);
-        }
-
-        .module-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-elevated);
-        }
-
-        .module-card.locked {
-            opacity: 0.6;
-            filter: grayscale(0.3);
+            bottom: -20px;
+            right: 0;
+            opacity: 0.08;
             pointer-events: none;
         }
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 70%;
+            margin-bottom: 1.5rem;
+        }
+        .hero-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            gap: 0.6rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 40px;
+            font-weight: 500;
+        }
 
+        /* ---------- MODULE GRID (cards) ---------- */
+        .section-title {
+            font-size: 1.75rem;
+            margin: 2rem 0 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 1.75rem;
+            margin-bottom: 3rem;
+        }
+        .module-card {
+            background: var(--surface);
+            border-radius: 1.75rem;
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+        .module-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+        .module-card.locked {
+            opacity: 0.7;
+            filter: grayscale(0.15);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
         .card-icon {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             background: var(--primary-light);
-            border-radius: 32px;
+            border-radius: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary);
-            font-size: 2rem;
-            margin-bottom: 20px;
-            transition: 0.2s;
+            font-size: 1.8rem;
+            margin-bottom: 1.25rem;
         }
-
-        .module-card:hover .card-icon {
-            transform: scale(1.05);
-        }
-
         .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            align-items: baseline;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-
         .card-title {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1.2;
         }
-
         .key-cost {
-            background: var(--key);
-            padding: 4px 12px;
-            border-radius: 40px;
+            background: #fef3c7;
+            padding: 0.25rem 0.75rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
             font-weight: 700;
-            font-size: 0.85rem;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 0.3rem;
         }
-
         .card-desc {
             color: var(--text-secondary);
-            margin: 8px 0 16px;
-            flex: 1;
-            font-size: 0.95rem;
+            margin: 0.5rem 0 1rem;
+            font-size: 0.9rem;
         }
-
         .meta-row {
             display: flex;
-            gap: 18px;
-            font-size: 0.85rem;
-            color: var(--text-tertiary);
-            margin-bottom: 20px;
+            gap: 1.2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
         }
-
-        .meta-row i {
-            color: var(--primary);
-            width: 18px;
-        }
-
         .completed-stamp {
             background: var(--success);
             color: white;
-            padding: 5px 14px;
-            border-radius: 40px;
+            border-radius: 30px;
+            padding: 0.3rem 1rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            font-size: 0.75rem;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 0.4rem;
             width: fit-content;
         }
 
-        /* ===== DETAILANSICHT ===== */
+        /* ---------- DETAIL VIEW (LESSONS) ---------- */
         .detail-view {
             display: none;
-            padding: 20px 0 40px;
+            padding: 1rem 0 3rem;
         }
-
         .detail-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 24px;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
         }
-
         .back-btn {
             background: none;
             border: none;
-            color: var(--text-secondary);
             font-weight: 600;
+            color: var(--text-secondary);
             cursor: pointer;
-            padding: 8px 18px;
-            border-radius: 40px;
-            display: flex;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            transition: all 0.2s;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
-            transition: 0.2s;
+            gap: 0.5rem;
         }
-
         .back-btn:hover {
             background: var(--primary-light);
             color: var(--primary);
         }
-
         .step-indicator {
             display: flex;
-            gap: 8px;
+            gap: 0.6rem;
         }
-
         .step-dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 20px;
             background: var(--border);
-            transition: 0.2s;
+            transition: all 0.2s;
         }
-
         .step-dot.active {
             background: var(--primary);
             width: 28px;
         }
-
         .step-dot.completed {
             background: var(--success);
         }
 
-        /* Lektion Cards */
         .lesson-card {
             background: var(--surface);
-            border-radius: 32px;
-            padding: 30px 28px;
-            box-shadow: var(--shadow);
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
             border: 1px solid var(--border);
-            margin-bottom: 20px;
         }
-
         .lesson-icon {
             width: 80px;
             height: 80px;
@@ -391,696 +371,634 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0 auto 1rem;
             color: var(--primary);
-            font-size: 2.4rem;
-            margin: 0 auto 20px;
+            font-size: 2.2rem;
         }
-
         .lesson-title {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 1.8rem;
             text-align: center;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
         }
-
-        .chart-placeholder {
-            background: #e2e8f0;
-            border-radius: 24px;
-            padding: 30px 20px;
-            text-align: center;
-            margin: 25px 0;
-            border: 2px dashed var(--primary);
-            color: var(--text-secondary);
-        }
-
         .expert-note {
-            background: #fff8e7;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 25px 0 15px;
+            background: #fffbeb;
             border-left: 6px solid var(--warning);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
         }
-
         .user-note {
-            background: #e6f3ff;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 20px 0;
-            border-left: 6px solid var(--primary);
+            background: #f1f5f9;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
         }
-
         .user-note textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid var(--border);
-            border-radius: 18px;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 1rem;
             font-family: inherit;
-            font-size: 1rem;
             resize: vertical;
         }
-
-        .user-note button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            margin-top: 12px;
-            cursor: pointer;
-        }
-
-        /* Spiel */
         .game-area {
-            background: linear-gradient(145deg, #f9f9f9, white);
-            border-radius: 28px;
-            padding: 24px;
-            margin: 30px 0;
-            border: 1px solid var(--border);
+            background: #fef9e6;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
-
         .pairs-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.8rem;
+            margin: 1rem 0;
         }
-
         .pair-card {
             background: white;
-            border-radius: 20px;
-            padding: 16px 8px;
+            border-radius: 1rem;
+            padding: 0.8rem;
             text-align: center;
             font-weight: 600;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
             border: 2px solid transparent;
-            transition: 0.2s;
+            transition: 0.15s;
             cursor: pointer;
         }
-
         .pair-card.selected {
             border-color: var(--primary);
             background: var(--primary-light);
         }
-
         .pair-card.matched {
             background: var(--success);
             color: white;
-            opacity: 0.6;
+            opacity: 0.7;
+            cursor: default;
             pointer-events: none;
+            text-decoration: line-through;
         }
-
-        /* Quiz */
         .quiz-question {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            margin: 25px 0 15px;
+            margin: 1.5rem 0 1rem;
         }
-
         .quiz-option {
-            background: white;
+            background: var(--surface);
             border: 2px solid var(--border);
             border-radius: 60px;
-            padding: 14px 20px;
-            margin: 10px 0;
+            padding: 0.8rem 1.2rem;
+            margin: 0.6rem 0;
             cursor: pointer;
-            transition: 0.2s;
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 1rem;
+            transition: 0.2s;
         }
-
-        .quiz-option:hover {
+        .quiz-option:hover, .quiz-option.selected {
             border-color: var(--primary);
             background: var(--primary-light);
         }
-
-        .quiz-option.selected {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
         .option-letter {
-            width: 32px;
-            height: 32px;
-            background: var(--primary-light);
+            width: 30px;
+            height: 30px;
+            background: #e9ecef;
             border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: var(--primary);
         }
-
         .quiz-feedback {
-            padding: 20px;
-            border-radius: 30px;
-            margin: 20px 0;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
             display: none;
-            font-weight: 600;
         }
-
-        /* Buttons */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 1rem;
+            margin-top: 2rem;
         }
-
-        .nav-btn {
-            background: var(--primary);
-            color: white;
+        .btn {
             border: none;
-            padding: 14px 28px;
+            padding: 0.75rem 1.6rem;
             border-radius: 60px;
             font-weight: 700;
-            font-size: 1rem;
             cursor: pointer;
             transition: 0.2s;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            font-size: 0.9rem;
         }
-
-        .nav-btn.secondary {
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: scale(0.97);
+        }
+        .btn-secondary {
             background: white;
-            color: var(--primary);
             border: 1px solid var(--border);
+            color: var(--text-primary);
         }
-
-        .nav-btn:disabled {
-            background: var(--border);
-            color: var(--text-tertiary);
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
+        .btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
-        /* Confetti */
+        /* confetti */
         .confetti {
             position: fixed;
-            width: 12px;
-            height: 12px;
-            background: var(--accent);
+            width: 10px;
+            height: 10px;
+            background: gold;
             top: -20px;
             z-index: 9999;
             animation: fall 3s linear forwards;
         }
-
         @keyframes fall {
-            to { transform: translateY(110vh) rotate(720deg); }
+            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Responsive */
-        @media (max-width: 640px) {
-            .header-content {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
-            .stats-group {
-                gap: 10px;
-            }
-            .hero-banner p {
-                max-width: 100%;
-            }
-            .hero-banner h2 {
-                font-size: 1.8rem;
-            }
-            .module-grid {
-                grid-template-columns: 1fr;
-            }
-            .lesson-title {
-                font-size: 1.6rem;
-            }
-            .pairs-grid {
-                grid-template-columns: 1fr;
-            }
-            .nav-btn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-            .progress-wrap {
-                padding: 4px 8px;
-            }
-            .progress-bar-bg {
-                width: 60px;
-            }
+        @media (max-width: 680px) {
+            .nav-container { flex-direction: column; align-items: stretch; }
+            .nav-links { justify-content: center; }
+            .stats-group { justify-content: space-between; }
+            .hero h1 { font-size: 1.6rem; }
+            .hero p { max-width: 100%; }
+            .lesson-title { font-size: 1.4rem; }
+            .pairs-grid { grid-template-columns: 1fr; }
         }
 
-        /* Helper */
-        .bullet-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .bullet-list li {
-            padding-left: 24px;
-            position: relative;
-            margin-bottom: 6px;
-        }
-        .bullet-list li::before {
-            content: "•";
-            color: var(--primary);
-            font-size: 1.4rem;
-            position: absolute;
-            left: 4px;
-            top: -6px;
-        }
-        .example-box {
-            background: #fff0d9;
-            padding: 15px;
-            border-radius: 20px;
-            margin: 15px 0;
-        }
+        .bullet-list { list-style: none; padding-left: 0; }
+        .bullet-list li { padding-left: 1.5rem; position: relative; margin-bottom: 0.4rem; }
+        .bullet-list li::before { content: "•"; color: var(--primary); font-weight: bold; position: absolute; left: 0; }
+        .example-box { background: #fff0db; padding: 1rem; border-radius: 1rem; margin: 1rem 0; }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container header-content">
-            <div class="logo" id="homeBtn">
-                <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                <span>PflegefachProfi</span>
-            </div>
-            <div class="stats-group">
-                <div class="key-badge"><i class="fa-solid fa-key"></i> <span id="keyCount">1</span></div>
-                <div class="progress-wrap">
-                    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-                    <span class="progress-text" id="progressText">0/3</span>
-                </div>
+
+<header class="navbar">
+    <div class="nav-container container">
+        <div class="logo" id="homeBtn">
+            <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
+            <span class="logo-text">PflegefachProfi</span>
+        </div>
+        <div class="nav-links">
+            <span class="nav-link active" data-nav="modules">📚 Module</span>
+            <span class="nav-link" data-nav="about">ℹ️ Über</span>
+        </div>
+        <div class="stats-group">
+            <div class="key-badge"><i class="fa-solid fa-key"></i> <span id="keyCount">1</span></div>
+            <div class="progress-chip">
+                <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+                <span class="progress-text" id="progressText">0/3</span>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <main>
-        <section id="moduleOverview" class="container">
-            <div class="hero-banner">
-                <h2>Meistere die Pflegefachmann‑Prüfung</h2>
-                <p>Mit spielerischen Modulen, Experten‑Tipps und persönlichen Notizen zum Erfolg.</p>
-                <div class="badge"><i class="fas fa-star"></i> 3 Module – starte kostenlos</div>
-            </div>
-            <div class="module-grid" id="moduleGrid"></div>
-        </section>
+<main>
+    <!-- Module overview section -->
+    <section id="moduleOverview" class="container">
+        <div class="hero">
+            <h1>Meistere die Pflegefachmann‑Prüfung</h1>
+            <p>Interaktive Module, Experten-Tipps, Lernspiele & persönliche Notizen – bestehe sicher!</p>
+            <div class="hero-badge"><i class="fas fa-star"></i> 3 professionelle Module</div>
+        </div>
+        <h2 class="section-title">📖 Lernmodule</h2>
+        <div class="module-grid" id="moduleGrid"></div>
+    </section>
 
-        <section id="moduleDetail" class="detail-view container">
-            <div class="detail-header">
-                <button class="back-btn" id="backToOverview"><i class="fas fa-arrow-left"></i> alle Module</button>
-                <div class="step-indicator" id="stepIndicator"></div>
-            </div>
-            <div id="lessonContainer"></div>
-        </section>
-    </main>
+    <!-- Module detail view -->
+    <section id="moduleDetail" class="detail-view container">
+        <div class="detail-header">
+            <button class="back-btn" id="backToOverview"><i class="fas fa-arrow-left"></i> Übersicht</button>
+            <div class="step-indicator" id="stepIndicator"></div>
+        </div>
+        <div id="lessonContainer"></div>
+    </section>
 
-    <div id="confettiContainer" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;"></div>
+    <!-- About section (simple) -->
+    <section id="aboutSection" class="container" style="display: none; padding: 2rem 0;">
+        <div class="lesson-card" style="text-align: center;">
+            <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h2>PflegefachProfi – Prüfungsvorbereitung</h2>
+            <p style="max-width: 600px; margin: 1rem auto;">Interaktive Lernplattform für die generalistische Pflegeausbildung. Basierend auf aktuellen Prüfungsanforderungen. Mit Spielen, Quiz und Expertenwissen.</p>
+            <p>© 2025 PflegefachProfi | Version 2.0</p>
+        </div>
+    </section>
+</main>
 
-    <script>
-        (function() {
-            // ----- MODULE DATA (vollständig) -----
-            const MODULES = [
-                {
-                    id: 1,
-                    title: 'Kompetenzbereiche & Prüfungstage',
-                    icon: 'fa-clipboard-list',
-                    desc: 'Welcher KB wird wann geprüft? Lerne die 5 Bereiche und ihre Schwerpunkte.',
-                    keyCost: 0,
-                    lessons: [
-                        { title: 'Die 5 Kompetenzbereiche', body: '<p><strong>KB I Pflegeprozess</strong> (I.1–I.6)<br><strong>KB II Kommunikation</strong> (II.1–II.3)<br><strong>KB III Team</strong> (III.1–III.3)<br><strong>KB IV Recht/Ethik</strong> (IV.1–IV.3)<br><strong>KB V Wissenschaft</strong> (V.1–V.3)</p>' +
-                            '<div class="chart-placeholder"><i class="fas fa-chart-pie"></i><p>📊 Platzhalter: Diagramm der Kompetenzbereiche.</p><p style="font-size:0.9rem;">(Blog: Die fünf Säulen der Pflegeprüfung)</p></div>' },
-                        { title: 'Prüfungstag 1 (schriftlich)', body: '<p><span style="background:var(--primary-light); padding:4px 12px; border-radius:40px;">I.1, II.1, I.5, I.6</span> – Pflegeprozess planen, Beziehungsgestaltung, evaluieren, dokumentieren.</p><div class="example-box">🔍 <strong>Fallbeispiel:</strong> Herr Meier, Diabetes & Demenz – Pflegeplanung mit SMARTen Zielen.</div>' },
-                        { title: 'Prüfungstag 2 (schriftlich)', body: '<p><span style="background:var(--primary-light); padding:4px 12px; border-radius:40px;">I.2, II.2, V.1</span> – Pflegediagnostik, Beratung, Evidenz.</p><div class="example-box">🔍 Beratung eines Patienten mit Sturzrisiko – evidenzbasierte Massnahmen nennen.</div>' },
-                        { title: 'Tag 3, mündlich & praktisch', body: '<p><span style="background:var(--primary-light); padding:4px 12px; border-radius:40px;">I.3, I.4, III.2, II.3</span> sowie <strong>mündlich:</strong> KB III, IV, V (Reflexion).</p>' }
-                    ],
-                    expertNote: '<strong>💡 Merkhilfe:</strong> Die Abkürzung <em>P-R-H-D-W</em> hilft: Pflegen, Reden, Helfen, Denken, Wissen.',
-                    gamePairs: [
-                        { left: 'KB I', right: 'Pflegeprozess' },
-                        { left: 'KB II', right: 'Kommunikation' },
-                        { left: 'KB III', right: 'Team' },
-                        { left: 'KB IV', right: 'Recht/Ethik' },
-                        { left: 'KB V', right: 'Wissenschaft' }
-                    ],
-                    quiz: [
-                        { q: 'Welcher Kompetenzbereich umfasst die Pflegeprozessplanung?', options: ['KB I', 'KB II', 'KB III', 'KB IV'], correct: 0 },
-                        { q: 'An welchem Prüfungstag wird Kommunikation (KB II) geprüft?', options: ['Nur Tag 1', 'Tag 1 und 2', 'Nur mündlich', 'Nur praktisch'], correct: 1 },
-                        { q: 'Was ist Schwerpunkt der mündlichen Prüfung?', options: ['Praktische Pflege', 'Reflexion mit Recht, Ethik, Wissenschaft', 'Dokumentation', 'Medikamente'], correct: 1 }
-                    ]
-                },
-                {
-                    id: 2,
-                    title: 'Kommunikationsmodelle',
-                    icon: 'fa-message',
-                    desc: 'Vier‑Ohren, Peplau, GFK – mit Beispielen aus dem Pflegealltag.',
-                    keyCost: 1,
-                    lessons: [
-                        { title: 'Vier‑Ohren‑Modell (Schulz von Thun)', body: '<ul class="bullet-list"><li><strong>Sachebene:</strong> Worüber ich informiere</li><li><strong>Selbstoffenbarung:</strong> Was ich von mir zeige</li><li><strong>Beziehungsebene:</strong> Was ich vom anderen halte</li><li><strong>Appellebene:</strong> Wozu ich bewegen will</li></ul><div class="example-box">🫂 Patient: „Ist heute schon wieder diese Schwester da?“ → Appell: andere Schwester schicken.</div>' },
-                        { title: 'Pflegetheorie Peplau', body: '<ul><li><strong>Orientierung:</strong> Kennenlernen</li><li><strong>Identifikation:</strong> Vertrauen</li><li><strong>Nutzung:</strong> Selbstständigkeit</li><li><strong>Auflösung:</strong> Beziehung endet</li></ul><div class="example-box">👵 Aufnahmegespräch: „Was brauchen Sie?“</div>' },
-                        { title: 'Gewaltfreie Kommunikation (GFK)', body: '<ol><li>Beobachtung (ohne Wertung)</li><li>Gefühl („Ich fühle …“)</li><li>Bedürfnis („weil ich brauche …“)</li><li>Bitte (konkret, erfüllbar)</li></ol><div class="example-box">„Ich sehe Sie weinen, ich fühle mich betroffen, weil mir Ihr Wohl wichtig ist. Möchten Sie reden?“</div>' },
-                        { title: 'Ich‑Botschaften & Fragetechniken', body: '<p><strong>Ich‑Botschaft:</strong> „Ich habe das Gefühl, Sie sind ungeduldig“ statt Vorwurf.<br><strong>Offene Frage:</strong> „Was beschäftigt Sie?“<br><strong>Paraphrasieren:</strong> „Verstehe ich richtig, dass …?“</p>' }
-                    ],
-                    expertNote: '<strong>👩‍🏫 Expertentipp:</strong> In der Prüfung immer das Modell benennen und dann auf das Beispiel anwenden – das bringt Punkte.',
-                    gamePairs: [
-                        { left: 'Sachebene', right: 'Fakten' },
-                        { left: 'Selbstoffenbarung', right: 'Gefühle' },
-                        { left: 'Beziehungsebene', right: 'Tonfall' },
-                        { left: 'Appellebene', right: 'Wunsch' }
-                    ],
-                    quiz: [
-                        { q: 'Vier-Ohren-Modell: Welche Ebene fehlt? (Sache, Selbstoffenbarung, Beziehung, ?)', options: ['Appell', 'Kanal', 'Rauschen', 'Feedback'], correct: 0 },
-                        { q: 'Peplau: In welcher Phase entsteht Vertrauen?', options: ['Orientierung', 'Identifikation', 'Nutzung', 'Auflösung'], correct: 1 },
-                        { q: 'Erster Schritt der GFK?', options: ['Gefühl', 'Bedürfnis', 'Beobachtung', 'Bitte'], correct: 2 }
-                    ]
-                },
-                {
-                    id: 3,
-                    title: 'Recht in der Pflege',
-                    icon: 'fa-gavel',
-                    desc: 'Einwilligung, Fixierung, Haftung – fallbasiert verstehen.',
-                    keyCost: 1,
-                    lessons: [
-                        { title: 'Einwilligung & Aufklärung', body: '<p><strong>§630d BGB:</strong> Einwilligung nötig<br><strong>§630e:</strong> Aufklärung durch Arzt</p><div class="example-box">Demenz-Patientin wehrt sich gegen PEG → keine wirksame Einwilligung (natürlicher Wille).</div>' },
-                        { title: 'Unterbringung / Fixierung', body: '<p>Freiheitsentziehung nur mit richterlicher Genehmigung, ausser bei akuter Eigengefahr (dann sofort nachholen).</p><div class="example-box">Fixierung mit Bauchgurt ohne Beschluss = rechtswidrig. Alternativen: Niedrigbett, Wechseldruckmatratze.</div>' },
-                        { title: 'Haftung & Delegation', body: '<p><strong>§823 BGB:</strong> Schadensersatz bei schuldhafter Pflichtverletzung.<br><strong>Übernahmeverantwortung:</strong> Nur Aufgaben übernehmen, die man beherrscht.</p><div class="example-box">i.v.-Injektion ohne Ausbildung → Pflegekraft haftet.</div>' },
-                        { title: 'Schweigepflicht & Datenschutz', body: '<p><strong>§203 StGB:</strong> Strafrechtliche Schweigepflicht. Auskunft nur mit Einwilligung.</p><div class="example-box">Ehemann fragt nach Diagnose: „Bitten Sie Ihre Frau, mich zu entbinden.“</div>' }
-                    ],
-                    expertNote: '<strong>⚖️ Wichtig:</strong> In der mündlichen Prüfung immer zuerst den Paragrafen nennen, dann erklären – das zeigt Kompetenz.',
-                    gamePairs: [
-                        { left: '§630d', right: 'Einwilligung' },
-                        { left: '§823', right: 'Schadensersatz' },
-                        { left: 'Fixierung', right: 'Freiheitsentziehung' },
-                        { left: 'Übernahme', right: 'Verantwortung' }
-                    ],
-                    quiz: [
-                        { q: 'Wer klärt über einen Eingriff auf?', options: ['Arzt', 'Pflegekraft', 'Angehörige', 'Patient'], correct: 0 },
-                        { q: 'Fixierung ohne richterliche Genehmigung ist erlaubt …', options: ['nie', 'bei akuter Eigengefahr (dann sofort beantragen)', 'immer mit Einwilligung', 'nach Rücksprache mit Angehörigen'], correct: 1 },
-                        { q: 'Übernahmeverantwortung bedeutet:', options: ['Alles ausführen, was der Arzt sagt', 'Nur übernehmen, was man kann', 'Der Arzt haftet immer', 'Der Patient haftet mit'], correct: 1 }
-                    ]
-                }
-            ];
+<div id="confettiContainer" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;"></div>
 
-            // ----- STATE -----
-            let userKeys = 1;
-            let completedModules = [];
-            let userNotes = {};
-            let currentModuleId = 1;
-            let currentStep = 0;
-
-            // ----- COOKIE HELPERS -----
-            function setCookie(name, val, days) {
-                let d = new Date();
-                d.setTime(d.getTime() + days * 86400000);
-                document.cookie = name + "=" + JSON.stringify(val) + ";expires=" + d.toUTCString() + ";path=/";
+<script>
+    (function() {
+        // ---------- MODULE DATABASE ----------
+        const MODULES = [
+            {
+                id: 1,
+                title: 'Kompetenzbereiche & Prüfungstage',
+                icon: 'fa-clipboard-list',
+                desc: 'Die 5 Kompetenzbereiche und Prüfungsablauf – strukturiert und klar.',
+                keyCost: 0,
+                lessons: [
+                    { title: 'Die 5 Kompetenzbereiche', body: `<p><strong>KB I Pflegeprozess</strong> (I.1–I.6)<br><strong>KB II Kommunikation</strong> (II.1–II.3)<br><strong>KB III Team & Organisation</strong> (III.1–III.3)<br><strong>KB IV Recht/Ethik</strong> (IV.1–IV.3)<br><strong>KB V Wissenschaft & Reflexion</strong> (V.1–V.3)</p><div class="chart-placeholder" style="background:#eef2ff; border-radius:1rem; padding:1rem; text-align:center;"><i class="fas fa-chart-pie"></i> <span>Prüfungsrelevanz: 80% KB I & II</span></div>` },
+                    { title: 'Prüfungstag 1 (schriftlich)', body: '<p><span style="background:var(--primary-light); padding:0.2rem 0.6rem; border-radius:2rem;">I.1, II.1, I.5, I.6</span> – Pflegeprozess planen, Kommunikation, evaluieren, dokumentieren.</p><div class="example-box">📋 Fall: Herr Maier (Diabetes, Demenz) → Pflegeplanung mit SMART-Zielen.</div>' },
+                    { title: 'Prüfungstag 2 (schriftlich)', body: '<p><span style="background:var(--primary-light); padding:0.2rem 0.6rem; border-radius:2rem;">I.2, II.2, V.1</span> – Pflegediagnostik, Beratung, Evidenzbasierung.</p><div class="example-box">📘 Beratung bei Sturzrisiko – evidenzbasierte Maßnahmen nennen.</div>' },
+                    { title: 'Tag 3 (mündlich & praktisch)', body: '<p><span style="background:var(--primary-light); padding:0.2rem 0.6rem;">I.3, I.4, III.2, II.3</span> + mündliche Reflexion (KB III, IV, V).</p>' }
+                ],
+                expertNote: '💡 Merkhilfe: "P-R-H-D-W" = Pflegen, Reden, Helfen, Denken, Wissen.',
+                gamePairs: [
+                    { left: 'KB I', right: 'Pflegeprozess' },
+                    { left: 'KB II', right: 'Kommunikation' },
+                    { left: 'KB III', right: 'Teamarbeit' },
+                    { left: 'KB IV', right: 'Recht/Ethik' },
+                    { left: 'KB V', right: 'Wissenschaft' }
+                ],
+                quiz: [
+                    { q: 'Welcher Kompetenzbereich umfasst die Pflegeprozessplanung?', options: ['KB I', 'KB II', 'KB III', 'KB IV'], correct: 0 },
+                    { q: 'An welchem Prüfungstag wird Kommunikation (KB II) geprüft?', options: ['Nur Tag 1', 'Tag 1 und 2', 'Nur mündlich', 'Nur praktisch'], correct: 1 },
+                    { q: 'Schwerpunkt der mündlichen Prüfung?', options: ['Praktische Pflege', 'Reflexion mit Recht, Ethik, Wissenschaft', 'Dokumentation', 'Medikamentenlehre'], correct: 1 }
+                ]
+            },
+            {
+                id: 2,
+                title: 'Kommunikationsmodelle',
+                icon: 'fa-message',
+                desc: 'Vier‑Ohren, Peplau, GFK – praxisnah für die Prüfung.',
+                keyCost: 1,
+                lessons: [
+                    { title: 'Vier‑Ohren‑Modell', body: `<ul class="bullet-list"><li><strong>Sachebene:</strong> Information</li><li><strong>Selbstoffenbarung:</strong> eigene Gefühle</li><li><strong>Beziehungsebene:</strong> Haltung</li><li><strong>Appellebene:</strong> Handlungsaufforderung</li></ul><div class="example-box">🫂 Patient: „Ist heute wieder diese Schwester da?“ → Appell: andere Schwester schicken.</div>` },
+                    { title: 'Peplau & GFK', body: '<p><strong>Peplau Phasen:</strong> Orientierung → Identifikation → Nutzung → Auflösung.<br><strong>GFK:</strong> Beobachtung, Gefühl, Bedürfnis, Bitte.</p><div class="example-box">„Ich sehe Sie sind unruhig, ich mache mir Sorgen. Möchten Sie reden?“</div>' }
+                ],
+                expertNote: '👩‍🏫 In der Prüfung immer Modell benennen + auf Beispiel anwenden.',
+                gamePairs: [
+                    { left: 'Sachebene', right: 'Fakten' },
+                    { left: 'Selbstoffenbarung', right: 'Gefühle' },
+                    { left: 'Beziehungsebene', right: 'Tonfall' },
+                    { left: 'Appellebene', right: 'Wunsch' }
+                ],
+                quiz: [
+                    { q: 'Vier-Ohren-Modell: welche Ebene fehlt? (Sache, Selbstoffenbarung, Beziehung, ?)', options: ['Appell', 'Kanal', 'Rauschen', 'Feedback'], correct: 0 },
+                    { q: 'Peplau: In welcher Phase entsteht Vertrauen?', options: ['Orientierung', 'Identifikation', 'Nutzung', 'Auflösung'], correct: 1 },
+                    { q: 'Erster Schritt der GFK?', options: ['Gefühl', 'Bedürfnis', 'Beobachtung', 'Bitte'], correct: 2 }
+                ]
+            },
+            {
+                id: 3,
+                title: 'Recht in der Pflege',
+                icon: 'fa-gavel',
+                desc: 'Einwilligung, Fixierung, Haftung – fallbasiert.',
+                keyCost: 1,
+                lessons: [
+                    { title: 'Einwilligung & Aufklärung', body: '<p><strong>§630d BGB:</strong> Einwilligung nötig, <strong>§630e:</strong> Aufklärung durch Arzt.</p><div class="example-box">Demenz-Patientin wehrt sich gegen PEG → natürlicher Wille beachtet.</div>' },
+                    { title: 'Fixierung & Haftung', body: '<p>Freiheitsentziehung nur mit richterlichem Beschluss. §823 BGB: Schadensersatz bei Pflichtverletzung.</p><div class="example-box">Fixierung ohne Beschluss = rechtswidrig. Alternativen: Niedrigbett.</div>' }
+                ],
+                expertNote: '⚖️ In der mündlichen Prüfung Paragraf nennen + erklären – das zeigt Kompetenz.',
+                gamePairs: [
+                    { left: '§630d', right: 'Einwilligung' },
+                    { left: '§823', right: 'Schadensersatz' },
+                    { left: 'Fixierung', right: 'Freiheitsentziehung' }
+                ],
+                quiz: [
+                    { q: 'Wer klärt über einen Eingriff auf?', options: ['Arzt', 'Pflegekraft', 'Angehörige', 'Patient'], correct: 0 },
+                    { q: 'Fixierung ohne richterliche Genehmigung ist erlaubt …', options: ['nie', 'bei akuter Eigengefahr (dann sofort beantragen)', 'immer mit Einwilligung', 'nach Rücksprache'], correct: 1 },
+                    { q: 'Übernahmeverantwortung bedeutet:', options: ['Alles ausführen', 'Nur übernehmen, was man beherrscht', 'Arzt haftet immer', 'Patient haftet mit'], correct: 1 }
+                ]
             }
-            function getCookie(name) {
-                let cookies = document.cookie.split('; ');
-                for (let c of cookies) {
-                    let [n, v] = c.split('=');
-                    if (n === name) try { return JSON.parse(v); } catch { return v; }
-                }
-                return null;
-            }
+        ];
 
-            function loadProgress() {
-                let k = getCookie('userKeys');
-                if (k !== null) userKeys = parseInt(k);
-                else userKeys = 1;
-                let cm = getCookie('completedModules');
-                completedModules = cm ? cm : [];
-                let un = getCookie('userNotes');
-                userNotes = un ? un : {};
-                updateUI();
-            }
-            function saveProgress() {
-                setCookie('userKeys', userKeys, 30);
-                setCookie('completedModules', completedModules, 30);
-                setCookie('userNotes', userNotes, 30);
-                updateUI();
-            }
+        // ---------- STATE ----------
+        let userKeys = 1;
+        let completedModules = [];
+        let userNotes = {};
+        let currentModuleId = 1;
+        let currentStep = 0;
 
-            function updateUI() {
-                document.getElementById('keyCount').innerText = userKeys;
-                const total = MODULES.length;
-                const comp = completedModules.length;
-                const percent = (comp / total * 100) + '%';
-                document.getElementById('progressFill').style.width = percent;
-                document.getElementById('progressText').innerText = comp + '/' + total;
-                renderModules();
-            }
+        // ---------- PERSISTENCE (localStorage) ----------
+        function persist() {
+            localStorage.setItem('pflege_keys', userKeys);
+            localStorage.setItem('pflege_completed', JSON.stringify(completedModules));
+            localStorage.setItem('pflege_notes', JSON.stringify(userNotes));
+        }
+        function loadPersisted() {
+            const keys = localStorage.getItem('pflege_keys');
+            if (keys !== null) userKeys = parseInt(keys, 10);
+            const comp = localStorage.getItem('pflege_completed');
+            if (comp) completedModules = JSON.parse(comp);
+            const notes = localStorage.getItem('pflege_notes');
+            if (notes) userNotes = JSON.parse(notes);
+            if (isNaN(userKeys) || userKeys < 1) userKeys = 1;
+        }
 
-            // ----- MODULE RENDERING -----
-            function renderModules() {
-                const grid = document.getElementById('moduleGrid');
-                grid.innerHTML = '';
-                MODULES.forEach(m => {
-                    const completed = completedModules.includes(m.id);
-                    const locked = m.keyCost > 0 && !completed && userKeys < m.keyCost && m.id !== 1;
-                    const card = document.createElement('div');
-                    card.className = `module-card ${locked ? 'locked' : ''}`;
-                    card.dataset.id = m.id;
-                    card.innerHTML = `
-                        <div class="card-icon"><i class="fas ${m.icon}"></i></div>
-                        <div class="card-header">
-                            <span class="card-title">${m.title}</span>
-                            <span class="key-cost"><i class="fa-solid fa-key"></i> ${m.keyCost}</span>
-                        </div>
-                        <p class="card-desc">${m.desc}</p>
-                        <div class="meta-row">
-                            <span><i class="fas fa-book-open"></i> ${m.lessons.length}</span>
-                            <span><i class="fas fa-puzzle-piece"></i> Spiel</span>
-                        </div>
-                        ${completed ? '<div class="completed-stamp"><i class="fas fa-check-circle"></i> abgeschlossen</div>' : ''}
-                    `;
-                    grid.appendChild(card);
-                });
-            }
+        // UI updates
+        function updateGlobalUI() {
+            document.getElementById('keyCount').innerText = userKeys;
+            const total = MODULES.length;
+            const compLen = completedModules.length;
+            const percent = (compLen / total) * 100;
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('progressText').innerText = `${compLen}/${total}`;
+            renderModuleGrid();
+        }
 
-            function openModule(id) {
-                const mod = MODULES.find(m => m.id === id);
-                if (!mod) return;
-                if (id !== 1 && !completedModules.includes(id) && userKeys < mod.keyCost) {
-                    alert(`🔒 Du brauchst ${mod.keyCost} Schlüssel.`);
-                    return;
-                }
-                if (!completedModules.includes(id) && mod.keyCost > 0 && id !== 1) {
-                    userKeys -= mod.keyCost;
-                    saveProgress();
-                }
-                currentModuleId = id;
-                currentStep = 0;
-                document.getElementById('moduleOverview').style.display = 'none';
-                document.getElementById('moduleDetail').style.display = 'block';
-                renderLesson();
-            }
-
-            function renderLesson() {
-                const mod = MODULES.find(m => m.id === currentModuleId);
-                const stepCount = mod.lessons.length;
-                let stepsHtml = '';
-                for (let i = 0; i < stepCount; i++) {
-                    let cls = 'step-dot';
-                    if (i === currentStep) cls += ' active';
-                    else if (i < currentStep) cls += ' completed';
-                    stepsHtml += `<div class="${cls}"></div>`;
-                }
-                document.getElementById('stepIndicator').innerHTML = stepsHtml;
-
-                const lesson = mod.lessons[currentStep];
-                const savedNote = userNotes[currentModuleId] || '';
-
-                let html = `
-                    <div class="lesson-card">
-                        <div class="lesson-icon"><i class="fas ${mod.icon}"></i></div>
-                        <h2 class="lesson-title">${lesson.title}</h2>
-                        <div class="content">${lesson.body}</div>
-                        <div class="expert-note">
-                            <h4><i class="fas fa-lightbulb"></i> Experten‑Tipp</h4>
-                            <p>${mod.expertNote}</p>
-                        </div>
-                        <div class="user-note">
-                            <h4><i class="fas fa-pencil-alt"></i> Meine Notizen</h4>
-                            <textarea id="userNoteArea" rows="3" placeholder="eigene Gedanken, Merksätze …">${savedNote.replace(/</g, '&lt;')}</textarea>
-                            <button id="saveUserNote"><i class="fas fa-save"></i> Notiz speichern</button>
-                        </div>
-                        ${currentStep === stepCount-1 ? `
-                            <div class="game-area">
-                                <h3><i class="fas fa-gamepad"></i> Lernspiel – finde die Paare</h3>
-                                <div class="pairs-grid" id="gameGrid"></div>
-                                <div id="gameMessage" style="margin:15px 0;"></div>
-                                <button class="nav-btn secondary" id="resetGame"><i class="fas fa-redo-alt"></i> neu mischen</button>
-                            </div>
-                        ` : ''}
-                        <div class="nav-buttons">
-                            <button class="nav-btn secondary" id="prevBtn" ${currentStep === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> zurück</button>
-                            ${currentStep < stepCount-1 ? 
-                                '<button class="nav-btn" id="nextBtn">weiter <i class="fas fa-chevron-right"></i></button>' : 
-                                '<button class="nav-btn" id="startQuizBtn">🚀 Modul Abschluss</button>'}
-                        </div>
+        function renderModuleGrid() {
+            const grid = document.getElementById('moduleGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            MODULES.forEach(mod => {
+                const completed = completedModules.includes(mod.id);
+                const locked = (mod.keyCost > 0 && !completed && userKeys < mod.keyCost && mod.id !== 1);
+                const card = document.createElement('div');
+                card.className = `module-card ${locked ? 'locked' : ''}`;
+                card.dataset.id = mod.id;
+                card.innerHTML = `
+                    <div class="card-icon"><i class="fas ${mod.icon}"></i></div>
+                    <div class="card-header">
+                        <span class="card-title">${mod.title}</span>
+                        <span class="key-cost"><i class="fa-solid fa-key"></i> ${mod.keyCost}</span>
                     </div>
+                    <p class="card-desc">${mod.desc}</p>
+                    <div class="meta-row">
+                        <span><i class="fas fa-book-open"></i> ${mod.lessons.length}</span>
+                        <span><i class="fas fa-gamepad"></i> Spiel</span>
+                    </div>
+                    ${completed ? '<div class="completed-stamp"><i class="fas fa-check-circle"></i> abgeschlossen</div>' : ''}
                 `;
+                grid.appendChild(card);
+            });
+        }
 
-                document.getElementById('lessonContainer').innerHTML = html;
-
-                document.getElementById('prevBtn')?.addEventListener('click', () => { if (currentStep > 0) { currentStep--; renderLesson(); } });
-                document.getElementById('nextBtn')?.addEventListener('click', () => { if (currentStep < stepCount-1) { currentStep++; renderLesson(); } });
-                document.getElementById('startQuizBtn')?.addEventListener('click', () => showQuiz());
-                document.getElementById('saveUserNote')?.addEventListener('click', () => {
-                    const note = document.getElementById('userNoteArea').value;
-                    userNotes[currentModuleId] = note;
-                    saveProgress();
-                    alert('Notiz gespeichert!');
-                });
-                if (currentStep === stepCount-1) initGame(mod.gamePairs);
+        function openModule(id) {
+            const mod = MODULES.find(m => m.id === id);
+            if (!mod) return;
+            const alreadyCompleted = completedModules.includes(id);
+            if (!alreadyCompleted && mod.keyCost > 0 && userKeys < mod.keyCost) {
+                alert(`🔒 Du benötigst ${mod.keyCost} Schlüssel, um dieses Modul freizuschalten.`);
+                return;
             }
+            // only deduct keys if not completed and has cost
+            if (!alreadyCompleted && mod.keyCost > 0 && id !== 1) {
+                userKeys -= mod.keyCost;
+                persist();
+                updateGlobalUI();
+            }
+            currentModuleId = id;
+            currentStep = 0;
+            document.getElementById('moduleOverview').style.display = 'none';
+            document.getElementById('moduleDetail').style.display = 'block';
+            document.getElementById('aboutSection').style.display = 'none';
+            renderLessonView();
+        }
 
-            function initGame(pairs) {
-                if (!pairs) return;
-                const grid = document.getElementById('gameGrid');
-                let cards = [];
-                pairs.forEach((p, idx) => {
-                    cards.push({ id: 'l'+idx, text: p.left, pairId: idx, matched: false });
-                    cards.push({ id: 'r'+idx, text: p.right, pairId: idx, matched: false });
-                });
-                cards = cards.sort(() => Math.random() - 0.5);
-                grid.innerHTML = '';
-                cards.forEach(c => {
-                    const div = document.createElement('div');
-                    div.className = 'pair-card';
-                    div.dataset.pairId = c.pairId;
-                    div.innerText = c.text;
-                    grid.appendChild(div);
-                });
-                let selected = null;
-                const msg = document.getElementById('gameMessage');
-                const handler = (e) => {
-                    const card = e.target.closest('.pair-card');
-                    if (!card || card.classList.contains('matched')) return;
-                    if (!selected) {
-                        selected = card;
-                        card.classList.add('selected');
-                    } else if (selected === card) {
-                        selected.classList.remove('selected');
-                        selected = null;
-                    } else {
-                        if (selected.dataset.pairId === card.dataset.pairId) {
-                            selected.classList.add('matched');
-                            card.classList.add('matched');
-                            msg.innerHTML = '✅ Richtig – Paar gefunden!';
-                            selected.classList.remove('selected');
-                        } else {
-                            msg.innerHTML = '❌ Leider falsch. Versuch’s nochmal.';
-                            selected.classList.remove('selected');
+        function renderLessonView() {
+            const mod = MODULES.find(m => m.id === currentModuleId);
+            if (!mod) return;
+            const stepsCount = mod.lessons.length;
+            let stepsHtml = '';
+            for (let i = 0; i < stepsCount; i++) {
+                let cls = 'step-dot';
+                if (i === currentStep) cls += ' active';
+                else if (i < currentStep) cls += ' completed';
+                stepsHtml += `<div class="${cls}"></div>`;
+            }
+            document.getElementById('stepIndicator').innerHTML = stepsHtml;
+
+            const lesson = mod.lessons[currentStep];
+            const savedNote = userNotes[currentModuleId] || '';
+            const isLastLesson = currentStep === stepsCount - 1;
+
+            let html = `
+                <div class="lesson-card">
+                    <div class="lesson-icon"><i class="fas ${mod.icon}"></i></div>
+                    <h2 class="lesson-title">${escapeHtml(lesson.title)}</h2>
+                    <div class="content">${lesson.body}</div>
+                    <div class="expert-note"><i class="fas fa-lightbulb"></i> ${mod.expertNote}</div>
+                    <div class="user-note">
+                        <h4><i class="fas fa-pencil-alt"></i> Meine Notizen</h4>
+                        <textarea id="userNoteArea" rows="3" placeholder="Notizen, Merksätze ...">${escapeHtml(savedNote)}</textarea>
+                        <button class="btn btn-secondary" id="saveUserNote" style="margin-top:0.7rem;"><i class="fas fa-save"></i> Notiz speichern</button>
+                    </div>
+                    ${isLastLesson ? `
+                        <div class="game-area">
+                            <h3><i class="fas fa-gamepad"></i> Memory-Paare – finde die richtigen Kombis</h3>
+                            <div class="pairs-grid" id="gameGrid"></div>
+                            <div id="gameMessage" style="margin: 10px 0; font-weight:500;"></div>
+                            <button class="btn btn-secondary" id="resetGame"><i class="fas fa-redo-alt"></i> neu mischen</button>
+                        </div>
+                    ` : ''}
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary" id="prevBtn" ${currentStep === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> zurück</button>
+                        ${!isLastLesson ? 
+                            `<button class="btn btn-primary" id="nextBtn">weiter <i class="fas fa-chevron-right"></i></button>` : 
+                            `<button class="btn btn-primary" id="startQuizBtn">📝 Modul abschließen & Quiz</button>`
                         }
-                        selected = null;
-                    }
-                };
-                grid.removeEventListener('click', handler);
-                grid.addEventListener('click', handler);
-                document.getElementById('resetGame')?.addEventListener('click', () => initGame(pairs));
-            }
-
-            function showQuiz() {
-                const mod = MODULES.find(m => m.id === currentModuleId);
-                const questions = mod.quiz;
-                let html = `
-                    <div class="lesson-card">
-                        <h2 class="lesson-title"><i class="fas fa-clipboard-check"></i> Modul Abschluss</h2>
-                        <div class="quiz-container" id="quizContainer"></div>
-                        <div class="quiz-feedback" id="quizFeedback"></div>
-                        <div class="nav-buttons">
-                            <button class="nav-btn secondary" id="backFromQuiz"><i class="fas fa-arrow-left"></i> Lektionen</button>
-                            <button class="nav-btn" id="submitQuiz">Auswerten</button>
-                        </div>
                     </div>
-                `;
-                document.getElementById('lessonContainer').innerHTML = html;
+                </div>
+            `;
+            document.getElementById('lessonContainer').innerHTML = html;
 
-                const qContainer = document.getElementById('quizContainer');
-                questions.forEach((q, idx) => {
-                    const qDiv = document.createElement('div');
-                    qDiv.innerHTML = `<div class="quiz-question">${idx+1}. ${q.q}</div>`;
-                    q.options.forEach((opt, optIdx) => {
-                        qDiv.innerHTML += `
-                            <div class="quiz-option" data-q="${idx}" data-opt="${optIdx}">
-                                <span class="option-letter">${String.fromCharCode(65+optIdx)}</span> ${opt}
-                            </div>
-                        `;
-                    });
-                    qContainer.appendChild(qDiv);
-                });
+            document.getElementById('prevBtn')?.addEventListener('click', () => { if(currentStep > 0) { currentStep--; renderLessonView(); } });
+            document.getElementById('nextBtn')?.addEventListener('click', () => { if(currentStep < stepsCount-1) { currentStep++; renderLessonView(); } });
+            document.getElementById('startQuizBtn')?.addEventListener('click', () => showQuiz(mod));
+            document.getElementById('saveUserNote')?.addEventListener('click', () => {
+                const note = document.getElementById('userNoteArea').value;
+                userNotes[currentModuleId] = note;
+                persist();
+                alert('✅ Notiz gespeichert');
+            });
+            if (isLastLesson) initGame(mod.gamePairs);
+        }
 
-                document.querySelectorAll('.quiz-option').forEach(opt => {
-                    opt.addEventListener('click', function() {
-                        const qIdx = this.dataset.q;
-                        document.querySelectorAll(`[data-q="${qIdx}"]`).forEach(el => el.classList.remove('selected'));
-                        this.classList.add('selected');
-                    });
-                });
-
-                document.getElementById('backFromQuiz').addEventListener('click', () => {
-                    currentStep = mod.lessons.length-1;
-                    renderLesson();
-                });
-                document.getElementById('submitQuiz').addEventListener('click', () => evaluateQuiz(questions));
-            }
-
-            function evaluateQuiz(questions) {
-                let correct = 0;
-                questions.forEach((q, idx) => {
-                    const selected = document.querySelector(`.quiz-option.selected[data-q="${idx}"]`);
-                    if (selected && parseInt(selected.dataset.opt) === q.correct) correct++;
-                });
-                const fb = document.getElementById('quizFeedback');
-                fb.style.display = 'block';
-                if (correct === questions.length) {
-                    fb.innerHTML = '🎉 Glückwunsch! Alle Antworten richtig.';
-                    fb.style.background = '#d1fae5';
-                    fb.style.color = '#065f46';
-                    showConfetti();
-                    if (!completedModules.includes(currentModuleId)) {
-                        completedModules.push(currentModuleId);
-                        userKeys += 1;
-                        saveProgress();
-                    } else {
-                        saveProgress();
-                    }
-                    setTimeout(() => {
-                        document.getElementById('moduleDetail').style.display = 'none';
-                        document.getElementById('moduleOverview').style.display = 'block';
-                    }, 3000);
+        function initGame(pairs) {
+            if (!pairs) return;
+            const grid = document.getElementById('gameGrid');
+            if (!grid) return;
+            let cards = [];
+            pairs.forEach((p, idx) => {
+                cards.push({ id: `l${idx}`, text: p.left, pairId: idx, matched: false });
+                cards.push({ id: `r${idx}`, text: p.right, pairId: idx, matched: false });
+            });
+            cards = shuffleArray(cards);
+            grid.innerHTML = '';
+            cards.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'pair-card';
+                div.dataset.pairId = c.pairId;
+                div.innerText = c.text;
+                grid.appendChild(div);
+            });
+            let selectedCard = null;
+            const msgDiv = document.getElementById('gameMessage');
+            const handler = (e) => {
+                const cardDiv = e.target.closest('.pair-card');
+                if (!cardDiv || cardDiv.classList.contains('matched')) return;
+                if (!selectedCard) {
+                    selectedCard = cardDiv;
+                    cardDiv.classList.add('selected');
+                } else if (selectedCard === cardDiv) {
+                    selectedCard.classList.remove('selected');
+                    selectedCard = null;
                 } else {
-                    fb.innerHTML = `❌ Leider nur ${correct}/${questions.length} richtig. Versuch’s nochmal!`;
-                    fb.style.background = '#fee2e2';
-                    fb.style.color = '#991b1b';
+                    const pair1 = selectedCard.dataset.pairId;
+                    const pair2 = cardDiv.dataset.pairId;
+                    if (pair1 === pair2) {
+                        selectedCard.classList.add('matched');
+                        cardDiv.classList.add('matched');
+                        if(msgDiv) msgDiv.innerHTML = '✅ Richtig! Paar gefunden.';
+                        selectedCard.classList.remove('selected');
+                    } else {
+                        if(msgDiv) msgDiv.innerHTML = '❌ Falsch, versuche es erneut.';
+                        selectedCard.classList.remove('selected');
+                    }
+                    selectedCard = null;
                 }
+            };
+            grid.removeEventListener('click', handler);
+            grid.addEventListener('click', handler);
+            const resetBtn = document.getElementById('resetGame');
+            if (resetBtn) resetBtn.onclick = () => initGame(pairs);
+        }
+
+        function showQuiz(mod) {
+            const questions = mod.quiz;
+            let quizHtml = `
+                <div class="lesson-card">
+                    <h2 class="lesson-title"><i class="fas fa-clipboard-check"></i> Modulabschluss – Quiz</h2>
+                    <div id="quizContainer"></div>
+                    <div class="quiz-feedback" id="quizFeedback"></div>
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary" id="backFromQuiz"><i class="fas fa-arrow-left"></i> zurück zu Lektionen</button>
+                        <button class="btn btn-primary" id="submitQuiz">📊 Auswerten & abschließen</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('lessonContainer').innerHTML = quizHtml;
+            const qContainer = document.getElementById('quizContainer');
+            questions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.innerHTML = `<div class="quiz-question">${idx+1}. ${q.q}</div>`;
+                q.options.forEach((opt, optIdx) => {
+                    qDiv.innerHTML += `
+                        <div class="quiz-option" data-q="${idx}" data-opt="${optIdx}">
+                            <span class="option-letter">${String.fromCharCode(65+optIdx)}</span> ${escapeHtml(opt)}
+                        </div>
+                    `;
+                });
+                qContainer.appendChild(qDiv);
+            });
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const qIdx = this.dataset.q;
+                    document.querySelectorAll(`.quiz-option[data-q="${qIdx}"]`).forEach(el => el.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            document.getElementById('backFromQuiz').addEventListener('click', () => {
+                currentStep = mod.lessons.length-1;
+                renderLessonView();
+            });
+            document.getElementById('submitQuiz').addEventListener('click', () => evaluateQuiz(questions, mod));
+        }
+
+        function evaluateQuiz(questions, mod) {
+            let correctCount = 0;
+            questions.forEach((_, idx) => {
+                const selected = document.querySelector(`.quiz-option.selected[data-q="${idx}"]`);
+                if (selected && parseInt(selected.dataset.opt) === questions[idx].correct) correctCount++;
+            });
+            const fbDiv = document.getElementById('quizFeedback');
+            fbDiv.style.display = 'block';
+            if (correctCount === questions.length) {
+                fbDiv.innerHTML = '🎉🏆 Ausgezeichnet! Modul erfolgreich bestanden. +1 Schlüssel erhalten!';
+                fbDiv.style.background = '#d1fae5';
+                fbDiv.style.color = '#065f46';
+                showConfetti();
+                if (!completedModules.includes(mod.id)) {
+                    completedModules.push(mod.id);
+                    userKeys += 1;
+                    persist();
+                    updateGlobalUI();
+                } else persist();
+                setTimeout(() => {
+                    document.getElementById('moduleDetail').style.display = 'none';
+                    document.getElementById('moduleOverview').style.display = 'block';
+                }, 2500);
+            } else {
+                fbDiv.innerHTML = `❌ ${correctCount}/${questions.length} richtig. Versuche es erneut!`;
+                fbDiv.style.background = '#fee2e2';
+                fbDiv.style.color = '#991b1b';
             }
+        }
 
-            function showConfetti() {
-                const container = document.getElementById('confettiContainer');
-                for (let i = 0; i < 70; i++) {
-                    const conf = document.createElement('div');
-                    conf.className = 'confetti';
-                    conf.style.left = Math.random() * 100 + '%';
-                    conf.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
-                    conf.style.animationDelay = Math.random() * 2 + 's';
-                    container.appendChild(conf);
-                }
-                setTimeout(() => container.innerHTML = '', 3500);
+        // helpers
+        function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+        function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m;}); }
+        function showConfetti() {
+            const container = document.getElementById('confettiContainer');
+            for (let i=0;i<80;i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.background = `hsl(${Math.random() * 360}, 80%, 60%)`;
+                conf.style.width = `${6+Math.random()*8}px`;
+                conf.style.height = conf.style.width;
+                conf.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(conf);
             }
+            setTimeout(() => container.innerHTML = '', 3200);
+        }
 
-            // ----- EVENT LISTENERS -----
-            document.getElementById('homeBtn').addEventListener('click', () => {
-                document.getElementById('moduleDetail').style.display = 'none';
-                document.getElementById('moduleOverview').style.display = 'block';
-            });
-            document.getElementById('backToOverview').addEventListener('click', () => {
-                document.getElementById('moduleDetail').style.display = 'none';
-                document.getElementById('moduleOverview').style.display = 'block';
-            });
-            document.getElementById('moduleGrid').addEventListener('click', (e) => {
-                const card = e.target.closest('.module-card');
-                if (card) openModule(parseInt(card.dataset.id));
-            });
+        // navigation & section toggles
+        function setActiveNav(active) {
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            if (active === 'modules') document.querySelector('[data-nav="modules"]').classList.add('active');
+            else document.querySelector('[data-nav="about"]').classList.add('active');
+        }
+        document.querySelector('[data-nav="modules"]').addEventListener('click', () => {
+            setActiveNav('modules');
+            document.getElementById('moduleDetail').style.display = 'none';
+            document.getElementById('moduleOverview').style.display = 'block';
+            document.getElementById('aboutSection').style.display = 'none';
+            renderModuleGrid();
+        });
+        document.querySelector('[data-nav="about"]').addEventListener('click', () => {
+            setActiveNav('about');
+            document.getElementById('moduleDetail').style.display = 'none';
+            document.getElementById('moduleOverview').style.display = 'none';
+            document.getElementById('aboutSection').style.display = 'block';
+        });
+        document.getElementById('homeBtn').addEventListener('click', () => {
+            setActiveNav('modules');
+            document.getElementById('moduleDetail').style.display = 'none';
+            document.getElementById('moduleOverview').style.display = 'block';
+            document.getElementById('aboutSection').style.display = 'none';
+            renderModuleGrid();
+        });
+        document.getElementById('backToOverview').addEventListener('click', () => {
+            document.getElementById('moduleDetail').style.display = 'none';
+            document.getElementById('moduleOverview').style.display = 'block';
+            document.getElementById('aboutSection').style.display = 'none';
+            setActiveNav('modules');
+        });
+        document.getElementById('moduleGrid').addEventListener('click', (e) => {
+            const card = e.target.closest('.module-card');
+            if (card && !card.classList.contains('locked')) openModule(parseInt(card.dataset.id));
+        });
 
-            loadProgress();
-        })();
-    </script>
+        // initial load
+        loadPersisted();
+        updateGlobalUI();
+        renderModuleGrid();
+    })();
+</script>
 </body>
 </html>
