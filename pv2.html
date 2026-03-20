@@ -48,7 +48,7 @@
             padding: 0 20px;
         }
 
-        /* ===== HEADER ===== */
+        /* ===== HEADER (einfach, keine Hamburger) ===== */
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
@@ -62,16 +62,11 @@
 
         .header-content {
             display: flex;
-            flex-direction: column;
-            padding: 12px 0;
-        }
-
-        /* First row: logo + placeholder nav */
-        .header-row {
-            display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            padding: 12px 0;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -96,24 +91,8 @@
             font-size: 1.4rem;
         }
 
-        .nav-placeholder {
+        .stats-group {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-        }
-
-        .nav-placeholder i {
-            font-size: 1.4rem;
-            color: var(--primary);
-            opacity: 0.7;
-        }
-
-        /* Second row: stats (key + progress) */
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
             gap: 15px;
         }
@@ -129,7 +108,6 @@
             box-shadow: var(--shadow);
             color: var(--text-primary);
             font-size: 0.95rem;
-            width: fit-content;
         }
 
         .progress-wrap {
@@ -140,8 +118,6 @@
             padding: 4px 14px 4px 8px;
             border-radius: 40px;
             box-shadow: var(--shadow);
-            flex: 1;
-            justify-content: flex-end;
         }
 
         .progress-bar-bg {
@@ -165,9 +141,9 @@
             font-size: 0.9rem;
         }
 
-        /* ===== BANNER (Premium) ===== */
+        /* ===== BANNER (farbenfroh) ===== */
         .hero-banner {
-            background: linear-gradient(135deg, #1e2a3a 0%, #0f172a 100%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 32px;
             padding: 40px 30px;
             margin: 30px 0 20px;
@@ -178,13 +154,13 @@
         }
 
         .hero-banner::before {
-            content: "✨";
+            content: "📚✨";
             position: absolute;
-            top: -20px;
-            right: -20px;
-            font-size: 10rem;
-            opacity: 0.08;
-            transform: rotate(15deg);
+            bottom: 10px;
+            right: 20px;
+            font-size: 6rem;
+            opacity: 0.1;
+            transform: rotate(-5deg);
         }
 
         .hero-banner h2 {
@@ -193,15 +169,11 @@
             letter-spacing: -0.02em;
             margin-bottom: 12px;
             line-height: 1.2;
-            background: linear-gradient(120deg, #fff, #a5f3fc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
         }
 
         .hero-banner p {
             font-size: 1.2rem;
-            opacity: 0.9;
+            opacity: 0.95;
             margin-bottom: 24px;
             max-width: 70%;
         }
@@ -218,7 +190,7 @@
             font-size: 1rem;
         }
 
-        /* ===== MODUL GRID (attraktiv) ===== */
+        /* ===== MODUL GRID ===== */
         .module-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -621,26 +593,15 @@
         }
 
         /* Responsive */
-        @media (min-width: 768px) {
+        @media (max-width: 640px) {
             .header-content {
                 flex-direction: row;
+                flex-wrap: wrap;
                 justify-content: space-between;
-                align-items: center;
             }
-            .header-row {
-                margin-bottom: 0;
-                flex: 1;
+            .stats-group {
+                gap: 10px;
             }
-            .stats-row {
-                flex: 1;
-                justify-content: flex-end;
-            }
-            .nav-placeholder {
-                display: none; /* auf Desktop kein Platzhalter nötig */
-            }
-        }
-
-        @media (max-width: 767px) {
             .hero-banner p {
                 max-width: 100%;
             }
@@ -659,6 +620,12 @@
             .nav-btn {
                 padding: 10px 20px;
                 font-size: 0.9rem;
+            }
+            .progress-wrap {
+                padding: 4px 8px;
+            }
+            .progress-bar-bg {
+                width: 60px;
             }
         }
 
@@ -691,17 +658,11 @@
 <body>
     <header class="header">
         <div class="container header-content">
-            <div class="header-row">
-                <div class="logo" id="homeBtn">
-                    <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                    <span>PflegefachProfi</span>
-                </div>
-                <div class="nav-placeholder">
-                    <i class="fas fa-bars"></i>
-                    <span>Menü</span>
-                </div>
+            <div class="logo" id="homeBtn">
+                <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <span>PflegefachProfi</span>
             </div>
-            <div class="stats-row">
+            <div class="stats-group">
                 <div class="key-badge"><i class="fa-solid fa-key"></i> <span id="keyCount">1</span></div>
                 <div class="progress-wrap">
                     <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
@@ -714,8 +675,8 @@
     <main>
         <section id="moduleOverview" class="container">
             <div class="hero-banner">
-                <h2>Meistere die Pflegefachmann-Prüfung</h2>
-                <p>Mit spielerischen Modulen, Experten-Tipps und persönlichen Notizen zum Erfolg.</p>
+                <h2>Meistere die Pflegefachmann‑Prüfung</h2>
+                <p>Mit spielerischen Modulen, Experten‑Tipps und persönlichen Notizen zum Erfolg.</p>
                 <div class="badge"><i class="fas fa-star"></i> 3 Module – starte kostenlos</div>
             </div>
             <div class="module-grid" id="moduleGrid"></div>
@@ -734,7 +695,7 @@
 
     <script>
         (function() {
-            // ----- MODULE -----
+            // ----- MODULE DATA (vollständig) -----
             const MODULES = [
                 {
                     id: 1,
@@ -822,7 +783,7 @@
             let currentModuleId = 1;
             let currentStep = 0;
 
-            // ----- COOKIES -----
+            // ----- COOKIE HELPERS -----
             function setCookie(name, val, days) {
                 let d = new Date();
                 d.setTime(d.getTime() + days * 86400000);
