@@ -1,13 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>PflegefachProfi • Prüfungsheld</title>
-    <!-- Font Awesome (Icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ----- VARIABLEN (wie ursprünglich) ----- */
+        /* ----- VARIABLEN (original) ----- */
         :root {
             --primary: #4361ee;
             --primary-dark: #3a56d4;
@@ -28,10 +28,6 @@
             --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
             --radius: 12px;
             --radius-lg: 20px;
-            --spacing-xs: 8px;
-            --spacing-sm: 16px;
-            --spacing-md: 24px;
-            --spacing-lg: 32px;
             --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
@@ -54,7 +50,7 @@
             padding: 0 20px;
         }
 
-        /* ----- HEADER (sticky) ----- */
+        /* ----- HEADER (sticky) mit Hamburger ----- */
         .header {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -71,7 +67,6 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 0;
-            gap: 12px;
         }
 
         .logo {
@@ -96,12 +91,11 @@
             font-size: 1.4rem;
         }
 
+        /* Desktop navigation (user-stats) */
         .user-stats {
             display: flex;
             align-items: center;
             gap: 15px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
         }
 
         .key-badge {
@@ -146,6 +140,48 @@
             font-weight: 600;
             color: var(--text-secondary);
             font-size: 0.9rem;
+        }
+
+        /* Hamburger button (mobile) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Mobile menu (hidden by default) */
+        .mobile-menu {
+            display: none;
+            background: white;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            left: 20px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-elevated);
+            padding: 20px;
+            z-index: 99;
+            border: 1px solid var(--border);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu .user-stats {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+
+        .mobile-menu .key-badge,
+        .mobile-menu .progress-wrap {
+            justify-content: center;
+            width: 100%;
         }
 
         /* ----- BANNER (kein Modul) ----- */
@@ -195,7 +231,7 @@
             font-size: 1rem;
         }
 
-        /* ----- MODUL GRID (optimiert für mobile) ----- */
+        /* ----- MODUL GRID (optimiert) ----- */
         .module-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -302,7 +338,7 @@
             width: fit-content;
         }
 
-        /* ----- DETAILANSICHT MODUL ----- */
+        /* ----- DETAILANSICHT ----- */
         .detail-view {
             display: none;
             padding: 20px 0 40px;
@@ -358,7 +394,7 @@
             background: var(--success);
         }
 
-        /* ----- KARTEN FÜR LEKTIONEN, EXPERTENNOTIZ, SPIEL, QUIZ ----- */
+        /* ----- KARTEN FÜR LEKTIONEN ----- */
         .lesson-card {
             background: var(--surface);
             border-radius: 32px;
@@ -390,7 +426,6 @@
             word-break: break-word;
         }
 
-        /* Platzhalter für Diagramm / Blog */
         .chart-placeholder {
             background: #e2e8f0;
             border-radius: 24px;
@@ -399,12 +434,6 @@
             margin: 25px 0;
             border: 2px dashed var(--primary);
             color: var(--text-secondary);
-        }
-
-        .chart-placeholder i {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 10px;
         }
 
         .expert-note {
@@ -416,28 +445,12 @@
             box-shadow: var(--shadow);
         }
 
-        .expert-note h4 {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #b45309;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
         .user-note {
             background: #e6f3ff;
             border-radius: 20px;
             padding: 20px;
             margin: 20px 0;
             border-left: 6px solid var(--primary);
-        }
-
-        .user-note h4 {
-            display: flex;
-            gap: 8px;
-            color: var(--primary-dark);
-            margin-bottom: 12px;
         }
 
         .user-note textarea {
@@ -461,13 +474,6 @@
             margin-top: 12px;
             cursor: pointer;
             transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .user-note button:hover {
-            background: var(--primary-dark);
         }
 
         /* ----- SPIEL (Memory) ----- */
@@ -496,7 +502,6 @@
             border: 2px solid transparent;
             transition: 0.2s;
             cursor: pointer;
-            font-size: 0.95rem;
         }
 
         .pair-card.selected {
@@ -511,11 +516,7 @@
             pointer-events: none;
         }
 
-        /* ----- QUIZ (Modul Abschluss) ----- */
-        .quiz-container {
-            margin: 30px 0;
-        }
-
+        /* ----- QUIZ ----- */
         .quiz-question {
             font-size: 1.3rem;
             font-weight: 700;
@@ -544,16 +545,6 @@
         .quiz-option.selected {
             border-color: var(--primary);
             background: var(--primary-light);
-        }
-
-        .quiz-option.correct {
-            border-color: var(--success);
-            background: #e0f2fe;
-        }
-
-        .quiz-option.incorrect {
-            border-color: var(--danger);
-            background: #fee2e2;
         }
 
         .option-letter {
@@ -598,7 +589,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: var(--shadow);
         }
 
         .nav-btn.secondary {
@@ -613,41 +603,7 @@
             pointer-events: none;
         }
 
-        .nav-btn:hover:not(:disabled) {
-            background: var(--primary-dark);
-            transform: scale(1.02);
-        }
-
-        .nav-btn.secondary:hover {
-            background: var(--primary-light);
-        }
-
-        /* ----- ABSCHLUSS / CONFETTI ----- */
-        .completion-screen {
-            text-align: center;
-            padding: 30px 20px;
-        }
-
-        .key-reward {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .big-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.8rem;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-10px); } }
-
+        /* ----- CONFETTI ----- */
         .confetti {
             position: fixed;
             width: 12px;
@@ -658,57 +614,45 @@
             animation: fall 3s linear forwards;
         }
 
-        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+            }
+        }
 
-        /* ----- MOBILE OPTIMIERUNG (speziell) ----- */
-        @media (max-width: 640px) {
-            .hero-banner {
-                padding: 25px 20px;
+        /* ----- MOBILE ANPASSUNGEN (inkl. Hamburger) ----- */
+        @media (max-width: 768px) {
+            .user-stats {
+                display: none; /* Desktop-Version verstecken */
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .hero-banner p {
+                max-width: 100%;
             }
             .hero-banner h2 {
                 font-size: 1.8rem;
             }
-            .hero-banner p {
-                font-size: 1rem;
-                max-width: 100%;
-            }
-            .hero-banner .badge {
-                font-size: 0.9rem;
-                padding: 6px 18px;
-            }
-
             .module-grid {
                 grid-template-columns: 1fr;
             }
-
             .card-title {
                 font-size: 1.4rem;
             }
-
-            .key-cost {
-                font-size: 0.8rem;
-                padding: 3px 8px;
-            }
-
             .lesson-title {
                 font-size: 1.6rem;
             }
-
             .pairs-grid {
                 grid-template-columns: 1fr;
             }
-
             .nav-btn {
                 padding: 12px 20px;
                 font-size: 0.9rem;
             }
-
-            .step-indicator {
-                gap: 5px;
-            }
         }
 
-        /* Helfer */
+        /* Hilfsklassen */
         .bullet-list {
             list-style: none;
             padding-left: 0;
@@ -741,18 +685,31 @@
                 <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
                 <span>PflegefachProfi</span>
             </div>
-            <div class="user-stats">
-                <div class="key-badge"><i class="fa-solid fa-key"></i> <span id="keyCount">1</span></div>
+            <!-- Desktop Stats -->
+            <div class="user-stats" id="desktopStats">
+                <div class="key-badge"><i class="fa-solid fa-key"></i> <span id="keyCountDesktop">1</span></div>
                 <div class="progress-wrap">
-                    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-                    <span class="progress-text" id="progressText">0/3</span>
+                    <div class="progress-bar-bg"><div class="progress-fill" id="progressFillDesktop" style="width:0%"></div></div>
+                    <span class="progress-text" id="progressTextDesktop">0/3</span>
+                </div>
+            </div>
+            <!-- Hamburger Button -->
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        </div>
+        <!-- Mobile Menu (hidden initially) -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="user-stats" id="mobileStats">
+                <div class="key-badge"><i class="fa-solid fa-key"></i> <span id="keyCountMobile">1</span></div>
+                <div class="progress-wrap">
+                    <div class="progress-bar-bg"><div class="progress-fill" id="progressFillMobile" style="width:0%"></div></div>
+                    <span class="progress-text" id="progressTextMobile">0/3</span>
                 </div>
             </div>
         </div>
     </header>
 
     <main>
-        <!-- MODULÜBERSICHT mit BANNER (jetzt eigenständig) -->
+        <!-- Modulübersicht mit Banner -->
         <section id="moduleOverview" class="container">
             <div class="hero-banner">
                 <h2>Bereit für die Prüfung?</h2>
@@ -762,7 +719,7 @@
             <div class="module-grid" id="moduleGrid"></div>
         </section>
 
-        <!-- DETAILANSICHT MODUL -->
+        <!-- Detailansicht Modul -->
         <section id="moduleDetail" class="detail-view container">
             <div class="detail-header">
                 <button class="back-btn" id="backToOverview"><i class="fas fa-arrow-left"></i> alle Module</button>
@@ -772,12 +729,11 @@
         </section>
     </main>
 
-    <!-- Confetti-Container -->
     <div id="confettiContainer" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;"></div>
 
     <script>
         (function(){
-            // ---------- MODUL-DATEN (leicht erweiterbar) ----------
+            // ---------- MODUL-DATEN (wie gehabt) ----------
             const MODULES = [
                 {
                     id: 1,
@@ -787,7 +743,7 @@
                     keyCost: 0,
                     lessons: [
                         { title: 'Die 5 Kompetenzbereiche', body: '<p><strong>KB I Pflegeprozess</strong> (I.1–I.6)<br><strong>KB II Kommunikation</strong> (II.1–II.3)<br><strong>KB III Team</strong> (III.1–III.3)<br><strong>KB IV Recht/Ethik</strong> (IV.1–IV.3)<br><strong>KB V Wissenschaft</strong> (V.1–V.3)</p>' +
-                            '<div class="chart-placeholder"><i class="fas fa-chart-pie"></i><p>📊 Platzhalter: Hier erscheint ein Diagramm der Kompetenzbereiche.</p><p style="font-size:0.9rem;">(Blog: Die fünf Säulen der Pflegeprüfung – mehr in Kürze)</p></div>' },
+                            '<div class="chart-placeholder"><i class="fas fa-chart-pie"></i><p>📊 Platzhalter: Diagramm der Kompetenzbereiche.</p><p style="font-size:0.9rem;">(Blog: Die fünf Säulen der Pflegeprüfung)</p></div>' },
                         { title: 'Prüfungstag 1 (schriftlich)', body: '<p><span style="background:var(--primary-light); padding:4px 12px; border-radius:40px;">I.1, II.1, I.5, I.6</span> – Pflegeprozess planen, Beziehungsgestaltung, evaluieren, dokumentieren.</p><div class="example-box">🔍 <strong>Fallbeispiel:</strong> Herr Meier, Diabetes & Demenz – Pflegeplanung mit SMARTen Zielen.</div>' },
                         { title: 'Prüfungstag 2 (schriftlich)', body: '<p><span style="background:var(--primary-light); padding:4px 12px; border-radius:40px;">I.2, II.2, V.1</span> – Pflegediagnostik, Beratung, Evidenz.</p><div class="example-box">🔍 Beratung eines Patienten mit Sturzrisiko – evidenzbasierte Massnahmen nennen.</div>' },
                         { title: 'Tag 3, mündlich & praktisch', body: '<p><span style="background:var(--primary-light); padding:4px 12px; border-radius:40px;">I.3, I.4, III.2, II.3</span> sowie <strong>mündlich:</strong> KB III, IV, V (Reflexion).</p>' }
@@ -858,12 +814,12 @@
                 }
             ];
 
-            // ---------- GLOBALE ZUSTÄNDE ----------
-            let userKeys = 1;                // Start mit 1 Schlüssel (Default)
+            // ---------- Globale Zustände ----------
+            let userKeys = 1;          // Start mit 1 Schlüssel
             let completedModules = [];
-            let userNotes = {};               // { modulId: "notiz" }
+            let userNotes = {};
 
-            // ---------- COOKIE HELFER ----------
+            // ---------- Cookie-Helfer ----------
             function setCookie(name, val, days) {
                 let d = new Date();
                 d.setTime(d.getTime() + days * 86400000);
@@ -878,7 +834,7 @@
                 return null;
             }
 
-            // ---------- FORTSCHRITT LADEN / SPEICHERN ----------
+            // ---------- Fortschritt laden/speichern ----------
             function loadProgress() {
                 let k = getCookie('userKeys');
                 userKeys = (k !== null) ? parseInt(k) : 1;
@@ -895,24 +851,29 @@
                 updateUI();
             }
 
-            // ---------- UI (Header + Modul-Grid) ----------
+            // ---------- UI-Update (Header, Module) ----------
             function updateUI() {
-                document.getElementById('keyCount').innerText = userKeys;
-                let total = MODULES.length;
-                let comp = completedModules.length;
-                document.getElementById('progressFill').style.width = (comp / total * 100) + '%';
-                document.getElementById('progressText').innerText = comp + '/' + total;
+                // Alle Key-Anzeigen aktualisieren
+                const keysSpans = document.querySelectorAll('#keyCountDesktop, #keyCountMobile');
+                keysSpans.forEach(span => span.innerText = userKeys);
+                const total = MODULES.length;
+                const comp = completedModules.length;
+                const progressPercent = (comp / total * 100) + '%';
+                const fills = document.querySelectorAll('#progressFillDesktop, #progressFillMobile');
+                fills.forEach(fill => fill.style.width = progressPercent);
+                const texts = document.querySelectorAll('#progressTextDesktop, #progressTextMobile');
+                texts.forEach(text => text.innerText = comp + '/' + total);
                 renderModules();
             }
 
-            // ---------- MODULE ÜBERSICHT ZEICHNEN ----------
+            // ---------- Modul-Übersicht rendern ----------
             function renderModules() {
-                let grid = document.getElementById('moduleGrid');
+                const grid = document.getElementById('moduleGrid');
                 grid.innerHTML = '';
                 MODULES.forEach(m => {
-                    let completed = completedModules.includes(m.id);
-                    let locked = m.keyCost > 0 && !completed && userKeys < m.keyCost && m.id !== 1;
-                    let card = document.createElement('div');
+                    const completed = completedModules.includes(m.id);
+                    const locked = m.keyCost > 0 && !completed && userKeys < m.keyCost && m.id !== 1;
+                    const card = document.createElement('div');
                     card.className = `module-card ${locked ? 'locked' : ''}`;
                     card.dataset.id = m.id;
                     card.innerHTML = `
@@ -932,24 +893,23 @@
                 });
             }
 
-            // ---------- MODUL ÖFFNEN ----------
+            // ---------- Modul öffnen ----------
             let currentModuleId = 1;
             let currentStep = 0;
 
             function openModule(id) {
-                let mod = MODULES.find(m => m.id === id);
+                const mod = MODULES.find(m => m.id === id);
                 if (!mod) return;
                 // Prüfen ob Schlüssel benötigt (ausser Modul 1)
                 if (id !== 1 && !completedModules.includes(id) && userKeys < mod.keyCost) {
                     alert(`🔒 Du brauchst ${mod.keyCost} Schlüssel.`);
                     return;
                 }
-                // Schlüssel abziehen (nur einmal, wenn nicht bereits abgeschlossen)
+                // Schlüssel abziehen (nur wenn noch nicht abgeschlossen)
                 if (!completedModules.includes(id) && mod.keyCost > 0 && id !== 1) {
                     userKeys -= mod.keyCost;
                     saveProgress();
                 }
-
                 currentModuleId = id;
                 currentStep = 0;
                 document.getElementById('moduleOverview').style.display = 'none';
@@ -957,10 +917,10 @@
                 renderLesson();
             }
 
-            // ---------- LEKTION RENDERN (inkl. Spiel) ----------
+            // ---------- Lektion rendern (inkl. Spiel) ----------
             function renderLesson() {
-                let mod = MODULES.find(m => m.id === currentModuleId);
-                let stepCount = mod.lessons.length;
+                const mod = MODULES.find(m => m.id === currentModuleId);
+                const stepCount = mod.lessons.length;
                 // Schritt-Indikatoren
                 let stepsHtml = '';
                 for (let i = 0; i < stepCount; i++) {
@@ -971,39 +931,31 @@
                 }
                 document.getElementById('stepIndicator').innerHTML = stepsHtml;
 
-                let lesson = mod.lessons[currentStep];
-                let savedNote = userNotes[currentModuleId] || '';
+                const lesson = mod.lessons[currentStep];
+                const savedNote = userNotes[currentModuleId] || '';
 
                 let html = `
                     <div class="lesson-card">
                         <div class="lesson-icon"><i class="fas ${mod.icon}"></i></div>
                         <h2 class="lesson-title">${lesson.title}</h2>
                         <div class="content">${lesson.body}</div>
-
-                        <!-- EXPERTENNOTIZ (fest vom Experten) -->
                         <div class="expert-note">
                             <h4><i class="fas fa-lightbulb"></i> Experten‑Tipp</h4>
                             <p>${mod.expertNote || 'Hier kommt ein wertvoller Hinweis.'}</p>
                         </div>
-
-                        <!-- BENUTZERNOTIZ (individuell) -->
                         <div class="user-note">
                             <h4><i class="fas fa-pencil-alt"></i> Meine Notizen</h4>
                             <textarea id="userNoteArea" rows="3" placeholder="eigene Gedanken, Merksätze …">${savedNote.replace(/</g, '&lt;')}</textarea>
                             <button id="saveUserNote"><i class="fas fa-save"></i> Notiz speichern</button>
                         </div>
-
-                        <!-- SPIEL (nur in der letzten Lektion vor dem Quiz) -->
                         ${currentStep === stepCount-1 ? `
                             <div class="game-area">
                                 <h3 style="margin-bottom:15px;"><i class="fas fa-gamepad"></i> Lernspiel – finde die Paare</h3>
                                 <div class="pairs-grid" id="gameGrid"></div>
-                                <div id="gameMessage" style="margin:15px 0; min-height:24px;"></div>
+                                <div id="gameMessage" style="margin:15px 0;"></div>
                                 <button class="nav-btn secondary" id="resetGame" style="margin-top:10px;"><i class="fas fa-redo-alt"></i> neu mischen</button>
                             </div>
                         ` : ''}
-
-                        <!-- NAVIGATIONSBUTTONS -->
                         <div class="nav-buttons">
                             <button class="nav-btn secondary" id="prevBtn" ${currentStep === 0 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> zurück</button>
                             ${currentStep < stepCount-1 ? 
@@ -1022,26 +974,21 @@
                 document.getElementById('nextBtn')?.addEventListener('click', () => {
                     if (currentStep < stepCount-1) { currentStep++; renderLesson(); }
                 });
-                document.getElementById('startQuizBtn')?.addEventListener('click', () => {
-                    showQuiz();
-                });
+                document.getElementById('startQuizBtn')?.addEventListener('click', () => showQuiz());
                 document.getElementById('saveUserNote')?.addEventListener('click', () => {
-                    let note = document.getElementById('userNoteArea').value;
+                    const note = document.getElementById('userNoteArea').value;
                     userNotes[currentModuleId] = note;
                     saveProgress();
                     alert('Notiz gespeichert!');
                 });
 
-                // Spiel initialisieren falls vorhanden
-                if (currentStep === stepCount-1) {
-                    initGame(mod.gamePairs);
-                }
+                if (currentStep === stepCount-1) initGame(mod.gamePairs);
             }
 
-            // ---------- SPIEL (MEMORY) ----------
+            // ---------- Spiel (Memory) ----------
             function initGame(pairs) {
                 if (!pairs) return;
-                let grid = document.getElementById('gameGrid');
+                const grid = document.getElementById('gameGrid');
                 let cards = [];
                 pairs.forEach((p, idx) => {
                     cards.push({ id: 'l'+idx, text: p.left, pairId: idx, matched: false });
@@ -1050,7 +997,7 @@
                 cards = cards.sort(() => Math.random() - 0.5);
                 grid.innerHTML = '';
                 cards.forEach(c => {
-                    let div = document.createElement('div');
+                    const div = document.createElement('div');
                     div.className = 'pair-card';
                     div.dataset.pairId = c.pairId;
                     div.dataset.cardId = c.id;
@@ -1059,9 +1006,9 @@
                 });
 
                 let selected = null;
-                let msg = document.getElementById('gameMessage');
-                grid.addEventListener('click', (e) => {
-                    let card = e.target.closest('.pair-card');
+                const msg = document.getElementById('gameMessage');
+                const handler = (e) => {
+                    const card = e.target.closest('.pair-card');
                     if (!card || card.classList.contains('matched')) return;
                     if (!selected) {
                         selected = card;
@@ -1081,18 +1028,19 @@
                         }
                         selected = null;
                     }
-                });
-
+                };
+                grid.removeEventListener('click', handler);
+                grid.addEventListener('click', handler);
                 document.getElementById('resetGame')?.addEventListener('click', () => {
                     initGame(pairs);
                     msg.innerHTML = '';
                 });
             }
 
-            // ---------- QUIZ (Modul Abschluss) ----------
+            // ---------- Quiz ----------
             function showQuiz() {
-                let mod = MODULES.find(m => m.id === currentModuleId);
-                let questions = mod.quiz;
+                const mod = MODULES.find(m => m.id === currentModuleId);
+                const questions = mod.quiz;
                 let html = `
                     <div class="lesson-card">
                         <h2 class="lesson-title"><i class="fas fa-clipboard-check"></i> Modul Abschluss</h2>
@@ -1106,9 +1054,9 @@
                 `;
                 document.getElementById('lessonContainer').innerHTML = html;
 
-                let qContainer = document.getElementById('quizContainer');
+                const qContainer = document.getElementById('quizContainer');
                 questions.forEach((q, idx) => {
-                    let qDiv = document.createElement('div');
+                    const qDiv = document.createElement('div');
                     qDiv.innerHTML = `<div class="quiz-question">${idx+1}. ${q.q}</div>`;
                     q.options.forEach((opt, optIdx) => {
                         qDiv.innerHTML += `
@@ -1123,7 +1071,7 @@
                 // Auswahl
                 document.querySelectorAll('.quiz-option').forEach(opt => {
                     opt.addEventListener('click', function() {
-                        let qIdx = this.dataset.q;
+                        const qIdx = this.dataset.q;
                         document.querySelectorAll(`[data-q="${qIdx}"]`).forEach(el => el.classList.remove('selected'));
                         this.classList.add('selected');
                     });
@@ -1134,19 +1082,16 @@
                     renderLesson();
                 });
 
-                document.getElementById('submitQuiz').addEventListener('click', () => {
-                    evaluateQuiz(questions);
-                });
+                document.getElementById('submitQuiz').addEventListener('click', () => evaluateQuiz(questions));
             }
 
-            // ---------- QUIZ AUSWERTUNG + BELOHNUNG ----------
             function evaluateQuiz(questions) {
                 let correctCount = 0;
                 questions.forEach((q, idx) => {
-                    let selected = document.querySelector(`.quiz-option.selected[data-q="${idx}"]`);
+                    const selected = document.querySelector(`.quiz-option.selected[data-q="${idx}"]`);
                     if (selected && parseInt(selected.dataset.opt) === q.correct) correctCount++;
                 });
-                let fb = document.getElementById('quizFeedback');
+                const fb = document.getElementById('quizFeedback');
                 fb.style.display = 'block';
                 if (correctCount === questions.length) {
                     fb.innerHTML = '🎉 Glückwunsch! Alle Antworten richtig.';
@@ -1154,17 +1099,16 @@
                     fb.style.color = '#065f46';
                     showConfetti();
 
-                    // Nur wenn Modul noch nicht abgeschlossen: Schlüssel + 1
+                    // Nur wenn Modul noch nicht abgeschlossen: Schlüssel +1
                     if (!completedModules.includes(currentModuleId)) {
                         completedModules.push(currentModuleId);
                         userKeys += 1;
                         saveProgress();
+                        console.log("Schlüssel hinzugefügt, jetzt:", userKeys);
                     } else {
-                        // Bei Wiederholung trotzdem speichern (kein neuer Schlüssel)
-                        saveProgress();
+                        saveProgress(); // trotzdem speichern
                     }
 
-                    // Kurz warten, dann zurück zur Übersicht
                     setTimeout(() => {
                         document.getElementById('moduleDetail').style.display = 'none';
                         document.getElementById('moduleOverview').style.display = 'block';
@@ -1176,11 +1120,10 @@
                 }
             }
 
-            // ---------- CONFETTI ----------
             function showConfetti() {
-                let container = document.getElementById('confettiContainer');
+                const container = document.getElementById('confettiContainer');
                 for (let i = 0; i < 70; i++) {
-                    let conf = document.createElement('div');
+                    const conf = document.createElement('div');
                     conf.className = 'confetti';
                     conf.style.left = Math.random() * 100 + '%';
                     conf.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
@@ -1190,7 +1133,7 @@
                 setTimeout(() => container.innerHTML = '', 3500);
             }
 
-            // ---------- EVENT LISTENER ----------
+            // ---------- Event Listener & Mobile Menu ----------
             document.getElementById('homeBtn').addEventListener('click', () => {
                 document.getElementById('moduleDetail').style.display = 'none';
                 document.getElementById('moduleOverview').style.display = 'block';
@@ -1200,11 +1143,24 @@
                 document.getElementById('moduleOverview').style.display = 'block';
             });
             document.getElementById('moduleGrid').addEventListener('click', (e) => {
-                let card = e.target.closest('.module-card');
+                const card = e.target.closest('.module-card');
                 if (card) openModule(parseInt(card.dataset.id));
             });
 
-            // ---------- INIT ----------
+            // Hamburger Menu
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+            // Bei Klick außerhalb schließen (optional)
+            document.addEventListener('click', (e) => {
+                if (!menuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+
+            // ---------- Start ----------
             loadProgress();
         })();
     </script>
