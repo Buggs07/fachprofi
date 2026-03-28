@@ -665,12 +665,159 @@
       .exam-strip { grid-template-columns: 1fr; }
       .header-stats .stat-pill.xp { display: none; }
     }
+
+
+/* Hamburger button */
+.hamburger {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all .2s;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.hamburger:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+/* Mobile overlay & drawer */
+.mobile-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0s 0.25s;
+}
+.mobile-overlay.open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease, visibility 0s 0s;
+}
+.mobile-drawer {
+  position: fixed;
+  top: 0; right: -85%;
+  width: 80%;
+  max-width: 320px;
+  height: 100%;
+  background: var(--surface);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.2);
+  z-index: 1001;
+  transition: right 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px;
+  gap: 24px;
+  border-left: 2px solid var(--primary-light);
+}
+.mobile-drawer.open {
+  right: 0;
+}
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 16px;
+}
+.drawer-header h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--primary);
+}
+.close-drawer {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+.drawer-stats {
+  background: var(--surface2);
+  border-radius: var(--r);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.drawer-stat-item {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.drawer-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface2);
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 800;
+  color: var(--text-primary);
+  transition: all .2s;
+  border: 1px solid var(--border);
+}
+.drawer-nav a i {
+  width: 26px;
+  color: var(--primary);
+}
+.drawer-nav a:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  transform: translateX(4px);
+}
+.drawer-footer {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding-top: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .header-stats .stat-pill.streak,
+  .header-stats .stat-pill.keys {
+    display: none;
+  }
+  .progress-pill .progress-bar-bg {
+    width: 60px;
+  }
+  .logo span {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 480px) {
+  .header-stats .stat-pill.xp {
+    display: none;
+  }
+}
+
+    
   </style>
 </head>
 <body>
 
 <!-- ═══ HEADER ═══ -->
-<header class="header">
+<!-- <header class="header">
   <div class="container header-inner">
     <a class="logo" id="logoLink" href="javascript:void(0)">
       <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
@@ -686,7 +833,52 @@
       </div>
     </div>
   </div>
+</header>-->
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" id="logoLink" href="javascript:void(0)">
+      <div class="logo-icon"><i class="fas fa-hand-holding-heart"></i></div>
+      <span>PflegefachProfi</span>
+    </a>
+    <div class="header-stats">
+      <div class="stat-pill streak"><i class="fas fa-fire"></i> <span id="streakNum">3</span></div>
+      <div class="stat-pill xp"><i class="fas fa-bolt"></i> <span id="xpNum">0</span> XP</div>
+      <div class="stat-pill keys"><i class="fas fa-key"></i> <span id="keyNum">1</span></div>
+      <div class="progress-pill">
+        <div class="progress-bar-bg"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+        <span class="progress-label" id="progLabel">0/9</span>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menü öffnen">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
 </header>
+
+<!-- Mobile Drawer (add this right after the header, before any .view container) -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-header">
+    <h3><i class="fas fa-graduation-cap"></i> Menü</h3>
+    <button class="close-drawer" id="closeDrawerBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-stats">
+    <div class="drawer-stat-item"><span><i class="fas fa-bolt"></i> Erfahrungspunkte</span><strong id="drawerXP">0</strong></div>
+    <div class="drawer-stat-item"><span><i class="fas fa-key"></i> Schlüssel</span><strong id="drawerKeys">1</strong></div>
+    <div class="drawer-stat-item"><span><i class="fas fa-fire"></i> Lernstreak</span><strong id="drawerStreak">3</strong></div>
+    <div class="drawer-stat-item"><span><i class="fas fa-check-circle"></i> Module abgeschlossen</span><strong id="drawerCompleted">0/9</strong></div>
+  </div>
+  <div class="drawer-nav">
+    <a href="#" id="drawerHome"><i class="fas fa-home"></i> Startseite</a>
+    <a href="#" id="drawerModules"><i class="fas fa-cubes"></i> Alle Module</a>
+    <a href="#" id="drawerProgress"><i class="fas fa-chart-line"></i> Mein Fortschritt</a>
+    <a href="#" id="drawerInfo"><i class="fas fa-info-circle"></i> Prüfungsinfos</a>
+  </div>
+  <div class="drawer-footer">
+    <i class="fas fa-heart"></i> PflegefachProfi
+  </div>
+</div>
 
 <!-- ═══ HOME VIEW ═══ -->
 <div id="view-home" class="view active">
@@ -1653,6 +1845,83 @@ document.getElementById('quizBackBtn').addEventListener('click', () => {
 });
 
 })();
+
+  // Add this function to update drawer stats
+function updateDrawerStats() {
+  document.getElementById('drawerXP').textContent = state.xp;
+  document.getElementById('drawerKeys').textContent = state.keys;
+  document.getElementById('drawerStreak').textContent = state.streak;
+  document.getElementById('drawerCompleted').textContent = state.completed.length + '/9';
+}
+
+// Override or extend updateHeader to also update drawer
+const originalUpdateHeader = updateHeader;
+window.updateHeader = function() {
+  originalUpdateHeader();
+  updateDrawerStats();
+};
+
+// Drawer controls
+function openDrawer() {
+  document.getElementById('mobileOverlay').classList.add('open');
+  document.getElementById('mobileDrawer').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('mobileOverlay').classList.remove('open');
+  document.getElementById('mobileDrawer').classList.remove('open');
+}
+
+// Attach event listeners after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  const hamburger = document.getElementById('hamburgerBtn');
+  const closeBtn = document.getElementById('closeDrawerBtn');
+  const overlay = document.getElementById('mobileOverlay');
+  if (hamburger) hamburger.addEventListener('click', openDrawer);
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if (overlay) overlay.addEventListener('click', closeDrawer);
+
+  // Drawer navigation links
+  const drawerHome = document.getElementById('drawerHome');
+  const drawerModules = document.getElementById('drawerModules');
+  const drawerProgress = document.getElementById('drawerProgress');
+  const drawerInfo = document.getElementById('drawerInfo');
+
+  if (drawerHome) drawerHome.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (typeof renderHome === 'function') renderHome();
+    if (typeof showView === 'function') showView('home');
+    closeDrawer();
+  });
+  if (drawerModules) drawerModules.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (typeof renderHome === 'function') renderHome();
+    if (typeof showView === 'function') showView('home');
+    // scroll to module section
+    setTimeout(() => document.querySelector('.module-grid')?.scrollIntoView({ behavior: 'smooth' }), 100);
+    closeDrawer();
+  });
+  if (drawerProgress) drawerProgress.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Show progress info
+    const done = state.completed.length;
+    const total = 9;
+    const msg = `📊 Fortschritt: ${done}/${total} Module abgeschlossen · ${state.xp} XP · ${state.keys} Schlüssel`;
+    if (typeof showToast === 'function') showToast(msg, 'info');
+    else alert(msg);
+    closeDrawer();
+  });
+  if (drawerInfo) drawerInfo.addEventListener('click', (e) => {
+    e.preventDefault();
+    const info = '📝 Prüfung: 4 Tage (schriftlich, mündlich, praktisch) – Module decken alle KB ab.';
+    if (typeof showToast === 'function') showToast(info, 'info');
+    else alert(info);
+    closeDrawer();
+  });
+});
+
+// Call updateDrawerStats after loading state (place after load() call)
+// Add this line right after load() in your existing init:
+// updateDrawerStats();
 </script>
 </body>
 </html>
