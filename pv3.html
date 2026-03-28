@@ -267,7 +267,7 @@
     .hero-cta {
       background: #fff; color: var(--primary); font-weight: 800;
       padding: 12px 24px; border-radius: 99px; border: none; cursor: pointer;
-    }
+    }/*
     .module-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -278,7 +278,64 @@
       padding: 20px; border: 2px solid var(--border);
       cursor: pointer;
       transition: transform .2s, box-shadow .2s;
-    }
+    }*/
+    /* Fix for module cards bleeding on mobile */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow-x: hidden;
+  }
+
+  .module-grid {
+    grid-template-columns: 1fr;   /* force single column */
+    gap: 16px;
+  }
+
+  .module-card {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .hero {
+    padding: 24px 20px;
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero p {
+    max-width: 100%;
+  }
+
+  .exam-strip {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .header-stats {
+    gap: 6px;
+  }
+
+  .stat-pill {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .exam-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-pill.xp, 
+  .stat-pill.streak {
+    display: none;  /* hide less important stats on very small screens */
+  }
+}
     .module-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
     .module-card.locked { opacity: .55; pointer-events: none; filter: grayscale(.4); }
     .badge-pill { font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; }
