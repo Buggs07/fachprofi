@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assessmentinstrumente • PflegefachProfi</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    body{
+      font-family:Helvetica,Arial,"Nimbus Sans L","Liberation Sans",sans-serif;
+      background:#f5f7fa;
+      color:#111827;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    :root{
+      --bg:#f5f7fa;
+      --card:#ffffff;
+      --ink:#111827;
+      --ink2:#374151;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --line2:#d1d5db;
+
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --blueSoft:#eff6ff;
+
+      --green:#059669;
+      --greenSoft:#ecfdf5;
+
+      --amber:#d97706;
+      --amberSoft:#fffbeb;
+
+      --rose:#e11d48;
+      --roseSoft:#fff1f2;
+
+      --shadow:0 1px 2px rgba(0,0,0,.03),0 10px 30px rgba(0,0,0,.04);
+      --radius:20px;
+      --navH:68px;
+    }
+
+    .wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+    @media(max-width:480px){.wrap{padding:0 12px}}
+
+    .skip{
+      position:absolute;left:-999px;top:10px;z-index:9999;
+      background:var(--blue);color:#fff;text-decoration:none;
+      padding:10px 14px;border-radius:12px;font-weight:700;
+    }
+    .skip:focus{left:12px}
+
+    .topbar{
+      position:sticky;top:0;z-index:700;height:var(--navH);
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar.scrolled{box-shadow:var(--shadow)}
+    .topbar-in{
+      height:100%;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;align-items:center;
+    }
+
+    .brand{
+      display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;
+      min-width:0;
+    }
+    .brand-mark{
+      width:40px;height:40px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--ink);color:#fff;flex-shrink:0;
+      font-size:.95rem;font-weight:700;
+    }
+    .brand-text{
+      font-size:1rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap;
+    }
+    .brand-text span{color:var(--blue)}
+
+    .navlinks{
+      justify-self:center;
+      display:flex;align-items:center;gap:4px;list-style:none;
+    }
+    .navlinks a{
+      text-decoration:none;color:var(--muted);
+      padding:10px 14px;border-radius:12px;
+      font-size:.84rem;font-weight:700;
+      transition:.16s;
+      display:flex;align-items:center;gap:8px;
+    }
+    .navlinks a:hover{background:#f9fafb;color:var(--ink)}
+    .navlinks a.active{background:var(--blueSoft);color:var(--blue)}
+
+    .topbar-r{
+      display:flex;align-items:center;gap:8px;justify-self:end;
+    }
+    .mini-pill{
+      display:flex;align-items:center;gap:7px;
+      padding:7px 12px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);
+      font-size:.76rem;font-weight:700;color:var(--ink2);
+      white-space:nowrap;
+      text-decoration:none;
+    }
+    .mini-pill i{color:var(--blue)}
+    .mini-prog{
+      display:flex;align-items:center;gap:10px;
+      padding:7px 12px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);
+    }
+    .mini-bar{
+      width:82px;height:7px;border-radius:999px;
+      background:#e5e7eb;overflow:hidden;
+    }
+    .mini-fill{
+      width:0%;height:100%;border-radius:999px;
+      background:linear-gradient(90deg,var(--green),var(--blue));
+      transition:width .25s;
+    }
+    .mini-txt{font-size:.74rem;font-weight:700;color:var(--muted)}
+
+    .burger{
+      display:none;
+      width:40px;height:40px;border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;cursor:pointer;position:relative;
+    }
+    .burger span{
+      position:absolute;left:10px;right:10px;height:2px;background:var(--ink);
+      border-radius:999px;transition:.2s;
+    }
+    .burger span:nth-child(1){top:13px}
+    .burger span:nth-child(2){top:19px}
+    .burger span:nth-child(3){top:25px}
+    .burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .burger.open span:nth-child(2){opacity:0}
+    .burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+    .drawer-overlay{
+      position:fixed;inset:0;background:rgba(17,24,39,.35);
+      z-index:740;opacity:0;pointer-events:none;transition:.2s;
+    }
+    .drawer-overlay.open{opacity:1;pointer-events:auto}
+    .drawer{
+      position:fixed;top:0;right:0;bottom:0;width:min(380px,92vw);
+      background:#fff;border-left:1px solid var(--line);
+      transform:translateX(100%);transition:.22s;z-index:750;
+      display:flex;flex-direction:column;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer-head{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px;border-bottom:1px solid var(--line);
+    }
+    .drawer-title{font-size:1rem;font-weight:800;letter-spacing:-.02em}
+    .drawer-close{
+      width:40px;height:40px;border-radius:12px;border:1px solid var(--line);
+      background:#fff;cursor:pointer;
+    }
+    .drawer-body{padding:16px;overflow:auto}
+    .drawer-stats{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;
+    }
+    .drawer-stat{
+      border:1px solid var(--line);border-radius:16px;padding:14px;background:#fafafa;
+    }
+    .drawer-stat .k{font-size:.72rem;font-weight:700;color:var(--muted);margin-bottom:4px}
+    .drawer-stat .v{font-size:1.25rem;font-weight:800}
+    .drawer-links{list-style:none;display:grid;gap:8px}
+    .drawer-links a{
+      display:flex;align-items:center;gap:10px;
+      text-decoration:none;color:var(--ink2);font-weight:700;
+      border:1px solid var(--line);border-radius:14px;padding:12px 14px;
+    }
+    .drawer-links a:hover{background:var(--blueSoft);color:var(--blue)}
+    .drawer-danger{
+      margin-top:14px;width:100%;border:none;border-radius:14px;
+      padding:12px 14px;background:var(--roseSoft);color:var(--rose);
+      font-weight:700;cursor:pointer;
+    }
+
+    .hero{padding:22px 0 16px}
+    .hero-shell{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
+    @media(max-width:980px){.hero-shell{grid-template-columns:1fr}}
+    .card{
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--radius);box-shadow:var(--shadow);
+    }
+    .hero-main{padding:24px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 12px;border-radius:999px;
+      border:1px solid #bfdbfe;background:var(--blueSoft);color:var(--blue);
+      font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+      margin-bottom:12px;
+    }
+    .hero-main h1{
+      font-size:2.6rem;line-height:1.03;font-weight:800;letter-spacing:-.04em;
+      margin-bottom:12px;
+      max-width:780px;
+    }
+    .hero-main h1 em{font-style:normal;color:var(--blue)}
+    .hero-sub{
+      font-size:.96rem;line-height:1.75;color:var(--ink2);max-width:760px;
+    }
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      text-decoration:none;border:none;cursor:pointer;
+      border-radius:14px;padding:12px 16px;
+      font-weight:700;font-size:.86rem;
+      transition:.15s;
+    }
+    .btn-primary{background:var(--ink);color:#fff}
+    .btn-primary:hover{background:#000}
+    .btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line2)}
+    .btn-secondary:hover{background:#f9fafb}
+
+    .hero-side{padding:20px}
+    .hero-side h2{font-size:1rem;font-weight:800;margin-bottom:12px;letter-spacing:-.02em}
+    .metric-grid{display:grid;gap:10px}
+    .metric{
+      border:1px solid var(--line);border-radius:16px;padding:14px;background:#fafafa;
+    }
+    .metric .k{font-size:.72rem;font-weight:700;color:var(--muted);margin-bottom:4px}
+    .metric .v{font-size:.94rem;font-weight:700;color:var(--ink)}
+    .metric .v span{color:var(--blue)}
+
+    .main-grid{
+      display:grid;grid-template-columns:290px 1fr;gap:14px;padding-bottom:54px;
+    }
+    @media(max-width:980px){.main-grid{grid-template-columns:1fr}}
+    .aside{
+      display:grid;gap:14px;height:max-content;position:sticky;top:84px;
+    }
+    @media(max-width:980px){.aside{position:static}}
+
+    .toc,.notes,.rating,.focus-session{padding:16px}
+    .section-title{
+      font-size:1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:10px;
+    }
+    .toc ul{list-style:none;display:grid;gap:6px}
+    .toc a{
+      text-decoration:none;color:var(--ink2);font-weight:700;font-size:.84rem;
+      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+    }
+    .toc a:hover{background:var(--blueSoft);color:var(--blue)}
+
+    .notes textarea{
+      width:100%;min-height:130px;resize:vertical;
+      border:1.5px solid var(--line2);border-radius:14px;padding:12px;
+      font:inherit;outline:none;
+    }
+    .notes textarea:focus{border-color:var(--blue)}
+    .save-btn{
+      width:100%;margin-top:10px;border:none;border-radius:14px;
+      background:var(--ink);color:#fff;font-weight:700;cursor:pointer;padding:11px 14px;
+    }
+
+    .rating-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .rate-btn{
+      border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 10px;
+      font-weight:700;cursor:pointer;color:var(--muted)
+    }
+    .rate-btn.active-e{background:var(--greenSoft);border-color:#a7f3d0;color:var(--green)}
+    .rate-btn.active-l{background:var(--blueSoft);border-color:#bfdbfe;color:var(--blue)}
+    .rate-btn.active-h{background:var(--roseSoft);border-color:#fecdd3;color:var(--rose)}
+
+    .focus-session .row{
+      display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line);
+    }
+    .focus-session .row:first-of-type{border-top:none;padding-top:0}
+    .focus-session .n{
+      width:28px;height:28px;border-radius:10px;flex-shrink:0;
+      background:var(--blueSoft);color:var(--blue);
+      display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;
+    }
+    .focus-session p{font-size:.84rem;color:var(--ink2);line-height:1.62}
+
+    .content{display:grid;gap:14px}
+    .section{padding:22px}
+    .section-head{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .section-head h2{
+      font-size:1.45rem;font-weight:800;letter-spacing:-.03em;
+    }
+    .section-head p{
+      max-width:580px;font-size:.84rem;line-height:1.68;color:var(--muted);
+    }
+
+    .badges{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;border-radius:999px;border:1px solid;
+      font-size:.71rem;font-weight:800;
+    }
+    .badge.blue{background:var(--blueSoft);color:var(--blue);border-color:#bfdbfe}
+    .badge.green{background:var(--greenSoft);color:var(--green);border-color:#a7f3d0}
+    .badge.amber{background:var(--amberSoft);color:var(--amber);border-color:#fde68a}
+
+    .info-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+    }
+    @media(max-width:800px){.info-grid{grid-template-columns:1fr}}
+    .info{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff;
+    }
+    .info .icon{
+      width:42px;height:42px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--blueSoft);font-size:1.1rem;margin-bottom:10px;
+    }
+    .info h3{font-size:.95rem;font-weight:800;margin-bottom:6px}
+    .info p{font-size:.84rem;line-height:1.66;color:var(--ink2)}
+
+    .grid2,.grid3{
+      display:grid;gap:12px;
+    }
+    .grid2{grid-template-columns:1fr 1fr}
+    .grid3{grid-template-columns:repeat(3,1fr)}
+    @media(max-width:860px){
+      .grid2,.grid3{grid-template-columns:1fr}
+    }
+
+    .panel{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff;
+    }
+    .panel h3{font-size:.98rem;font-weight:800;margin-bottom:8px}
+    .panel p,.panel li{font-size:.84rem;line-height:1.68;color:var(--ink2)}
+    .panel ul{padding-left:1.1rem;margin-top:8px}
+    .panel li{margin-bottom:6px}
+    .code{
+      margin-top:10px;border-radius:14px;padding:14px;
+      background:#111827;color:#f3f4f6;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.8rem;line-height:1.6;overflow:auto;
+    }
+
+    .mistakes{display:grid;gap:10px}
+    .mistake{
+      border:1px solid #fecdd3;background:var(--roseSoft);
+      border-radius:16px;padding:14px 16px;
+    }
+    .mistake strong{display:block;margin-bottom:4px}
+    .mistake span{font-size:.84rem;color:var(--ink2);line-height:1.62}
+
+    .checklist{display:grid;gap:8px}
+    .check{
+      display:flex;align-items:flex-start;gap:10px;
+      border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;
+    }
+    .check input{margin-top:3px;transform:scale(1.15)}
+    .check span{font-size:.84rem;line-height:1.6;color:var(--ink2)}
+
+    .retrieval-box{
+      border:1px solid #bfdbfe;background:#f8fbff;
+      border-radius:18px;padding:16px;
+    }
+    .retrieval-box h3{font-size:1rem;font-weight:800;margin-bottom:8px}
+    .retrieval-box p{font-size:.84rem;line-height:1.66;color:var(--ink2)}
+
+    .quiz-item{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff;margin-top:12px;
+    }
+    .quiz-item h3{font-size:.95rem;font-weight:800;margin-bottom:10px}
+    .opts{display:grid;gap:8px}
+    .opt{
+      border:2px solid var(--line);border-radius:14px;background:#fff;
+      padding:11px 13px;cursor:pointer;text-align:left;
+      font-size:.84rem;font-weight:700;transition:.15s;
+    }
+    .opt:hover{border-color:#93c5fd}
+    .opt.good{border-color:#86efac;background:var(--greenSoft);color:var(--green)}
+    .opt.bad{border-color:#fda4af;background:var(--roseSoft);color:var(--rose)}
+    .quiz-fb{
+      display:none;margin-top:10px;padding:12px 14px;border-radius:14px;
+      font-size:.84rem;font-weight:700;line-height:1.62;
+    }
+    .quiz-fb.show{display:block}
+    .quiz-fb.ok{background:var(--greenSoft);color:#065f46}
+    .quiz-fb.no{background:var(--roseSoft);color:#9f1239}
+
+    .case-shell{
+      border:1px solid #dbeafe;background:#f8fbff;
+      border-radius:20px;padding:18px;
+    }
+    .case-shell h3{font-size:1rem;font-weight:800;margin-bottom:8px}
+    .case-shell p{font-size:.86rem;line-height:1.7;color:var(--ink2)}
+    .case-qs{display:grid;gap:12px;margin-top:16px}
+    .case-q label{display:block;font-size:.82rem;font-weight:800;color:var(--muted);margin-bottom:6px}
+    .case-q textarea{
+      width:100%;min-height:90px;resize:vertical;
+      border:1.5px solid var(--line2);border-radius:14px;padding:12px;
+      font:inherit;outline:none;background:#fff;
+    }
+    .case-q textarea:focus{border-color:var(--blue)}
+    .ans-btn{
+      margin-top:8px;border:none;border-radius:999px;padding:8px 14px;
+      background:var(--ink);color:#fff;font-weight:700;cursor:pointer;
+    }
+    .ans{
+      display:none;margin-top:8px;border:1px solid #a7f3d0;background:var(--greenSoft);
+      border-radius:14px;padding:12px 14px;font-size:.83rem;line-height:1.65;color:#065f46;
+    }
+    .ans.show{display:block}
+
+    .footer{
+      border-top:1px solid var(--line);padding:24px 0;text-align:center;
+      font-size:.75rem;color:var(--muted);margin-top:8px;
+    }
+
+    @media(max-width:960px){
+      .navlinks{display:none}
+      .burger{display:block}
+      .mini-pill.hide-mobile{display:none}
+    }
+    @media(max-width:560px){
+      .hero-main h1{font-size:2rem}
+      .mini-prog .mini-bar{width:58px}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt</a>
+
+  <header class="topbar" id="topbar">
+    <div class="wrap topbar-in">
+      <a class="brand" href="../lernkatalog.html">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">Pflege<span>fach</span>Profi</div>
+      </a>
+
+      <nav aria-label="Hauptnavigation">
+        <ul class="navlinks">
+          <li><a href="../index.html">Start</a></li>
+          <li><a class="active" href="../lernkatalog.html">Lernkatalog</a></li>
+          <li><a href="../pruefungsinfos.html">Prüfungsinfos</a></li>
+        </ul>
+      </nav>
+
+      <div class="topbar-r">
+        <a class="mini-pill hide-mobile" href="../lernkatalog.html">
+          <i class="fas fa-arrow-left"></i> Zurück
+        </a>
+        <div class="mini-pill hide-mobile">
+          <i class="fas fa-layer-group"></i> W1 · W2
+        </div>
+        <div class="mini-prog" aria-label="Seitenfortschritt">
+          <div class="mini-bar"><div class="mini-fill" id="navProgress"></div></div>
+          <div class="mini-txt" id="navProgressText">0%</div>
+        </div>
+        <button class="burger" id="burgerBtn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="drawer">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-title">Menü</div>
+      <button class="drawer-close" id="drawerClose" aria-label="Menü schließen">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-stats">
+        <div class="drawer-stat">
+          <div class="k">Seitenfortschritt</div>
+          <div class="v" id="drawerPct">0%</div>
+        </div>
+        <div class="drawer-stat">
+          <div class="k">Selbstrating</div>
+          <div class="v" id="drawerLevel">Offen</div>
+        </div>
+      </div>
+
+      <ul class="drawer-links">
+        <li><a href="../lernkatalog.html">← Zurück zum Lernkatalog</a></li>
+        <li><a href="#grundlagen">Grundlagen</a></li>
+        <li><a href="#instrumente">Wichtige Instrumente</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#fall">Fallbeispiel</a></li>
+      </ul>
+
+      <button class="drawer-danger" id="resetBtn">Lernstatus dieser Seite löschen</button>
+    </div>
+  </aside>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-shell">
+          <div class="card hero-main">
+            <div class="eyebrow">Assessmentinstrumente</div>
+            <h1>Assessments <em>sicher</em> auswählen, lesen und im Fall begründen</h1>
+            <p class="hero-sub">
+              Diese Seite baut auf den I care Inhalten zu Pflegestandards und Assessments auf. Fokus auf Sinn, Auswahl und Anwendung von Assessments sowie auf die in der Prüfung oft gefragten Instrumente wie Barthel-Index, NRS, VAS, Braden, Norton, MNA und geriatrische Assessments.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#grundlagen">Direkt anfangen</a>
+              <a class="btn btn-secondary" href="#quiz">Quiz</a>
+              <a class="btn btn-secondary" href="#fall">Fall</a>
+            </div>
+          </div>
+
+          <div class="card hero-side">
+            <h2>Heute sicher können</h2>
+            <div class="metric-grid">
+              <div class="metric">
+                <div class="k">Ziel</div>
+                <div class="v"><span>Passendes Assessment</span> zum Problem auswählen</div>
+              </div>
+              <div class="metric">
+                <div class="k">Prüfung</div>
+                <div class="v">Wert richtig deuten und pflegerische Konsequenz ableiten</div>
+              </div>
+              <div class="metric">
+                <div class="k">Punktesicher</div>
+                <div class="v">Nicht nur Skala nennen, sondern Nutzen und Maßnahme begründen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="main-grid">
+        <aside class="aside">
+          <div class="card toc">
+            <div class="section-title">Inhalt</div>
+            <ul>
+              <li><a href="#grundlagen">Grundlagen</a></li>
+              <li><a href="#nutzen">Warum Assessments</a></li>
+              <li><a href="#instrumente">Wichtige Instrumente</a></li>
+              <li><a href="#auswahl">Auswahl im Fall</a></li>
+              <li><a href="#fehler">Fehler vermeiden</a></li>
+              <li><a href="#checklist">Checkliste</a></li>
+              <li><a href="#quiz">Quiz</a></li>
+              <li><a href="#fall">Fallbeispiel</a></li>
+            </ul>
+          </div>
+
+          <div class="card notes">
+            <div class="section-title">Eigene Kurznotiz</div>
+            <textarea id="noteBox" placeholder="Schreib hier deine wichtigsten Grenzwerte, Zuordnungen oder Merksätze rein."></textarea>
+            <button class="save-btn" id="saveNoteBtn">Notiz speichern</button>
+          </div>
+
+          <div class="card rating">
+            <div class="section-title">Selbstrating</div>
+            <div class="rating-row">
+              <button class="rate-btn" data-rate="easy">Sicher</button>
+              <button class="rate-btn" data-rate="learn">Lernen</button>
+              <button class="rate-btn" data-rate="hard">Schwer</button>
+            </div>
+          </div>
+
+          <div class="card focus-session">
+            <div class="section-title">20 Minuten Lernlauf</div>
+            <div class="row">
+              <div class="n">1</div>
+              <p>Zu jedem Problem sofort ein passendes Assessment nennen.</p>
+            </div>
+            <div class="row">
+              <div class="n">2</div>
+              <p>Wert oder Ergebnis kurz deuten und Konsequenz ableiten.</p>
+            </div>
+            <div class="row">
+              <div class="n">3</div>
+              <p>Quiz ohne Spicken lösen.</p>
+            </div>
+            <div class="row">
+              <div class="n">4</div>
+              <p>Fallbeispiel beantworten wie in der Prüfung, kurz und präzise.</p>
+            </div>
+          </div>
+        </aside>
+
+        <div class="content">
+          <section class="card section" id="grundlagen">
+            <div class="section-head">
+              <div>
+                <h2>Grundlagen</h2>
+                <p>Assessments sind strukturierte Einschätzungshilfen. In I care werden sie als Hilfsmittel beschrieben, die dabei helfen, pflegerelevante Probleme systematisch zu erkennen, einzuschätzen und zu dokumentieren.</p>
+              </div>
+              <div class="badges">
+                <span class="badge blue">W1</span>
+                <span class="badge blue">W2</span>
+                <span class="badge green">Pflegeprozess</span>
+              </div>
+            </div>
+
+            <div class="info-grid">
+              <div class="info">
+                <div class="icon">📋</div>
+                <h3>Was ist ein Assessment</h3>
+                <p>Ein Assessment erfasst Informationen strukturiert. Es hilft, Probleme, Risiken oder Ressourcen vergleichbar und nachvollziehbar festzuhalten.</p>
+              </div>
+              <div class="info">
+                <div class="icon">🎯</div>
+                <h3>Wozu dient es</h3>
+                <p>Es unterstützt Priorisierung, Zielplanung, Maßnahmenwahl und Evaluation. Es ersetzt aber nicht die pflegefachliche Beobachtung.</p>
+              </div>
+              <div class="info">
+                <div class="icon">🧠</div>
+                <h3>Was Prüfer sehen wollen</h3>
+                <p>Du sollst wissen, wann welches Instrument sinnvoll ist und was du aus dem Ergebnis pflegerisch ableitest.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="nutzen">
+            <div class="section-head">
+              <div>
+                <h2>Warum Assessments in der Prüfung wichtig sind</h2>
+                <p>Viele Schüler nennen nur den Namen einer Skala. Das reicht oft nicht. Du brauchst drei Schritte: auswählen, Ergebnis deuten, Handlung ableiten.</p>
+              </div>
+            </div>
+
+            <div class="grid3">
+              <div class="panel">
+                <h3>1. Problem erkennen</h3>
+                <p>Zum Beispiel Sturzrisiko, Dekubitusgefahr, Mangelernährung, Schmerz, eingeschränkte Selbstständigkeit oder kognitive Einbußen.</p>
+              </div>
+              <div class="panel">
+                <h3>2. Instrument passend wählen</h3>
+                <p>Zum Beispiel Braden bei Dekubitusrisiko, Barthel bei Selbstständigkeit, NRS oder VAS bei Schmerz, MNA bei Ernährung.</p>
+              </div>
+              <div class="panel">
+                <h3>3. Konsequenz ziehen</h3>
+                <p>Aus dem Ergebnis folgen Priorität, Maßnahmen und Verlaufskontrolle. Genau das bringt Punkte.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="instrumente">
+            <div class="section-head">
+              <div>
+                <h2>Wichtige Instrumente</h2>
+                <p>Diese Instrumente oder Gruppen werden im I care Zusammenhang direkt erwähnt oder passen unmittelbar in den Prüfungsrahmen.</p>
+              </div>
+            </div>
+
+            <div class="grid2">
+              <div class="panel">
+                <h3>Barthel-Index</h3>
+                <p>Misst die Selbstständigkeit bei Aktivitäten des täglichen Lebens. Er hilft einzuschätzen, wie viel Unterstützung eine Person braucht und ob sich funktionelle Fähigkeiten verändern.</p>
+                <ul>
+                  <li>relevant bei Mobilität und Selbstpflege</li>
+                  <li>wichtig für Pflegeplanung und Reha</li>
+                  <li>nicht nur Zahl nennen, sondern Unterstützungsbedarf ableiten</li>
+                </ul>
+              </div>
+
+              <div class="panel">
+                <h3>NRS und VAS</h3>
+                <p>Werden zur Schmerzeinschätzung genutzt. Die NRS ist meist alltagstauglicher. Die VAS setzt mehr Verständnis und Feinmotorik voraus.</p>
+                <ul>
+                  <li>NRS oft 0 bis 10</li>
+                  <li>geeignet zur Verlaufsbeobachtung</li>
+                  <li>Ergebnis immer mit Handlung verbinden, z. B. Analgesie und Re-Evaluation</li>
+                </ul>
+              </div>
+
+              <div class="panel">
+                <h3>Braden-Skala</h3>
+                <p>Dient zur Einschätzung des Dekubitusrisikos. Prüft Bereiche wie sensorische Wahrnehmung, Feuchtigkeit, Aktivität, Mobilität, Ernährung und Reibung oder Scherkräfte.</p>
+                <ul>
+                  <li>hilft bei Dekubitusprophylaxe</li>
+                  <li>muss mit Hautbeobachtung kombiniert werden</li>
+                  <li>führt zu Lagerung, Druckentlastung, Hautkontrolle, Ernährung im Plan</li>
+                </ul>
+              </div>
+
+              <div class="panel">
+                <h3>Norton-Skala</h3>
+                <p>Ebenfalls zur Einschätzung eines Dekubitusrisikos genutzt. In Prüfungen reicht meist, dass du sie als Risiko-Assessment für Druckulzera sicher zuordnen kannst.</p>
+                <ul>
+                  <li>Alternative zur Braden</li>
+                  <li>wichtig ist die richtige Problemzuordnung</li>
+                </ul>
+              </div>
+
+              <div class="panel">
+                <h3>MNA, Mini Nutritional Assessment</h3>
+                <p>Dient zur Einschätzung von Mangelernährung oder Mangelernährungsrisiko. Besonders relevant im geriatrischen Bereich.</p>
+                <ul>
+                  <li>bei Gewichtsverlust, wenig Appetit, Gebrechlichkeit</li>
+                  <li>führt zu Ernährungsanamnese, Trinkprotokoll, Essunterstützung, Konsistenzanpassung</li>
+                </ul>
+              </div>
+
+              <div class="panel">
+                <h3>Geriatrisches Assessment</h3>
+                <p>Ein umfassender Ansatz zur Einschätzung älterer Menschen. Er betrachtet nicht nur ein Problem, sondern mehrere Bereiche wie Mobilität, Kognition, Stimmung, Ernährung und Selbstständigkeit.</p>
+                <ul>
+                  <li>besonders sinnvoll bei multimorbiden älteren Menschen</li>
+                  <li>zeigt Gesamtbild statt Einzelproblem</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="retrieval-box" style="margin-top:12px;">
+              <h3>Mini Abrufübung</h3>
+              <p>Nenne jetzt ohne hinzuschauen: Schmerz, Dekubitus, Selbstständigkeit, Ernährung, ältere multimorbide Person. Ordne jedem Problem sofort ein Assessment zu.</p>
+            </div>
+          </section>
+
+          <section class="card section" id="auswahl">
+            <div class="section-head">
+              <div>
+                <h2>Assessment im Fall passend auswählen</h2>
+                <p>In der Prüfung geht es selten darum, möglichst viele Skalen aufzuzählen. Besser sind 1 bis 2 passende Instrumente mit kurzer Begründung.</p>
+              </div>
+            </div>
+
+            <div class="grid2">
+              <div class="panel">
+                <h3>Wenn das Problem Schmerz ist</h3>
+                <div class="code">Assessment: NRS oder VAS
+Begründung: Schmerzintensität erfassen und Verlauf vergleichen
+Konsequenz: Schmerzlinderung, Wirkung kontrollieren</div>
+              </div>
+              <div class="panel">
+                <h3>Wenn das Problem Dekubitusrisiko ist</h3>
+                <div class="code">Assessment: Braden oder Norton
+Begründung: Risiko systematisch einschätzen
+Konsequenz: Lagerung, Druckentlastung, Hautkontrolle, Mobilisation</div>
+              </div>
+              <div class="panel">
+                <h3>Wenn das Problem eingeschränkte Selbstständigkeit ist</h3>
+                <div class="code">Assessment: Barthel-Index
+Begründung: Unterstützungsbedarf in den ATL einschätzen
+Konsequenz: Hilfegrad planen, Reha-Ziele formulieren</div>
+              </div>
+              <div class="panel">
+                <h3>Wenn das Problem Mangelernährung ist</h3>
+                <div class="code">Assessment: MNA
+Begründung: Ernährungsrisiko strukturiert erfassen
+Konsequenz: Ess- und Trinkförderung, Bilanz, Beratung, Arztinfo</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="fehler">
+            <div class="section-head">
+              <div>
+                <h2>Fehler, die oft Punkte kosten</h2>
+                <p>Das sind die typischen Schwächen in schriftlichen Aufgaben.</p>
+              </div>
+            </div>
+
+            <div class="mistakes">
+              <div class="mistake">
+                <strong>Falsches Instrument zum Problem</strong>
+                <span>Zum Beispiel Barthel-Index statt Schmerzerfassung bei akuten Schmerzen.</span>
+              </div>
+              <div class="mistake">
+                <strong>Nur Namen aufzählen</strong>
+                <span>Ein reines Nennen von Skalen ohne Nutzen und Konsequenz bringt oft wenig.</span>
+              </div>
+              <div class="mistake">
+                <strong>Ergebnis nicht deuten</strong>
+                <span>Ein Assessmentwert muss in eine pflegerische Handlung übersetzt werden.</span>
+              </div>
+              <div class="mistake">
+                <strong>Assessment ersetzt Beobachtung</strong>
+                <span>Nein. Es ergänzt die pflegefachliche Einschätzung, ersetzt sie aber nicht.</span>
+              </div>
+              <div class="mistake">
+                <strong>Keine Verlaufskontrolle</strong>
+                <span>Assessments sind auch für Re-Evaluation und Wirksamkeitskontrolle da.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="checklist">
+            <div class="section-head">
+              <div>
+                <h2>Prüfungscheckliste</h2>
+                <p>Abhaken, speichern, Fortschritt oben sehen.</p>
+              </div>
+              <div class="badges">
+                <span class="badge amber">Cookie gespeichert</span>
+              </div>
+            </div>
+
+            <div class="checklist">
+              <label class="check"><input type="checkbox" data-track="1"><span>Ich kann erklären, was ein Assessment ist.</span></label>
+              <label class="check"><input type="checkbox" data-track="2"><span>Ich kann Schmerz sicher mit NRS oder VAS verbinden.</span></label>
+              <label class="check"><input type="checkbox" data-track="3"><span>Ich kann Braden oder Norton dem Dekubitusrisiko zuordnen.</span></label>
+              <label class="check"><input type="checkbox" data-track="4"><span>Ich kann den Barthel-Index mit Selbstständigkeit verbinden.</span></label>
+              <label class="check"><input type="checkbox" data-track="5"><span>Ich kann MNA mit Mangelernährungsrisiko verbinden.</span></label>
+              <label class="check"><input type="checkbox" data-track="6"><span>Ich kann aus einem Assessment eine pflegerische Maßnahme ableiten.</span></label>
+            </div>
+          </section>
+
+          <section class="card section" id="quiz">
+            <div class="section-head">
+              <div>
+                <h2>Selbsttest</h2>
+                <p>Erst lösen. Dann prüfen. Nicht vorher spicken.</p>
+              </div>
+            </div>
+
+            <div class="quiz-item" data-q="0" data-correct="1">
+              <h3>1. Welches Instrument passt am besten zu Selbstständigkeit im Alltag?</h3>
+              <div class="opts">
+                <button class="opt">Braden-Skala</button>
+                <button class="opt">Barthel-Index</button>
+                <button class="opt">NRS</button>
+              </div>
+              <div class="quiz-fb">Richtig. Der Barthel-Index schätzt die Selbstständigkeit in alltäglichen Aktivitäten ein.</div>
+            </div>
+
+            <div class="quiz-item" data-q="1" data-correct="2">
+              <h3>2. Wofür nutzt du NRS oder VAS?</h3>
+              <div class="opts">
+                <button class="opt">Ernährungsstatus</button>
+                <button class="opt">Dekubitusrisiko</button>
+                <button class="opt">Schmerzeinschätzung</button>
+              </div>
+              <div class="quiz-fb">Genau. NRS und VAS dienen der Schmerzerfassung und Verlaufsbeobachtung.</div>
+            </div>
+
+            <div class="quiz-item" data-q="2" data-correct="0">
+              <h3>3. Was ist bei einer Braden-Skala pflegerisch wichtig?</h3>
+              <div class="opts">
+                <button class="opt">Ergebnis deuten und Prophylaxe ableiten</button>
+                <button class="opt">Nur dokumentieren und nichts ändern</button>
+                <button class="opt">Sie nur bei Kindern nutzen</button>
+              </div>
+              <div class="quiz-fb">Richtig. Assessment ohne Konsequenz bringt wenig.</div>
+            </div>
+
+            <div class="quiz-item" data-q="3" data-correct="1">
+              <h3>4. Welches Instrument passt am besten bei Mangelernährungsrisiko?</h3>
+              <div class="opts">
+                <button class="opt">Norton</button>
+                <button class="opt">MNA</button>
+                <button class="opt">VAS</button>
+              </div>
+              <div class="quiz-fb">Genau. Das MNA ist für Ernährungsrisiken gedacht.</div>
+            </div>
+
+            <div class="quiz-item" data-q="4" data-correct="2">
+              <h3>5. Was ist die beste Prüfungsantwort zu einem Assessment?</h3>
+              <div class="opts">
+                <button class="opt">Nur den Namen der Skala nennen</button>
+                <button class="opt">Nur die Zahl hinschreiben</button>
+                <button class="opt">Instrument wählen, Ergebnis deuten und Maßnahme ableiten</button>
+              </div>
+              <div class="quiz-fb">Genau. Das zeigt pflegefachliches Denken.</div>
+            </div>
+          </section>
+
+          <section class="card section" id="fall">
+            <div class="section-head">
+              <div>
+                <h2>Fallbeispiel, prüfungsnah</h2>
+                <p>Kurz, strukturiert, wie in der Klausur.</p>
+              </div>
+            </div>
+
+            <div class="case-shell">
+              <h3>Herr M., 84 Jahre, geriatrische Station</h3>
+              <p>
+                Herr M. ist nach einem Sturz aufgenommen worden. Er isst wenig, hat in den letzten Wochen Gewicht verloren und wirkt insgesamt kraftlos. Beim Umlagern klagt er über Schmerzen im Beckenbereich. Er braucht Hilfe beim Ankleiden und bei der Körperpflege. Aufgrund seiner Schwäche verbringt er viel Zeit im Bett.
+              </p>
+
+              <div class="case-qs">
+                <div class="case-q">
+                  <label>1. Nenne 3 passende Assessmentinstrumente.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">Barthel-Index zur Einschätzung der Selbstständigkeit, NRS oder VAS zur Schmerzeinschätzung, MNA zur Einschätzung eines Mangelernährungsrisikos. Zusätzlich wäre Braden oder Norton wegen des Dekubitusrisikos sinnvoll.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>2. Begründe kurz 1 Instrument deiner Wahl.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">Das MNA ist sinnvoll, weil Herr M. wenig isst, Gewicht verloren hat und kraftlos wirkt. Damit lässt sich das Risiko einer Mangelernährung strukturiert erfassen und pflegerische Maßnahmen besser planen.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>3. Welche pflegerische Konsequenz leitest du aus dem Dekubitusrisiko ab.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">Bei erhöhtem Dekubitusrisiko sind druckentlastende Maßnahmen, regelmäßige Hautkontrolle, Mobilisationsförderung, ausreichende Flüssigkeits- und Nahrungszufuhr sowie eine genaue Dokumentation wichtig.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>4. Formuliere eine kurze prüfungstaugliche Antwort in 3 Sätzen.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">Bei Herrn M. sind vor allem Schmerz, Mangelernährungsrisiko, Dekubitusrisiko und eingeschränkte Selbstständigkeit pflegerelevant. Geeignet sind NRS oder VAS, MNA, Barthel-Index sowie Braden oder Norton. Die Ergebnisse dienen als Grundlage für Schmerzmanagement, Dekubitusprophylaxe, Ernährungsförderung und die Planung des Unterstützungsbedarfs.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="wrap">Assessmentinstrumente Lernseite · Notizen, Fortschritt, Quiz und Selbstrating werden lokal per Cookie gespeichert</div>
+    </footer>
+  </main>
+
+  <script>
+    (function(){
+      'use strict';
+
+      const COOKIE_NAME = 'pfp_page_assessment_v1';
+      const DEFAULT_STATE = {
+        checks:{},
+        note:'',
+        quiz:{},
+        rating:''
+      };
+
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => document.querySelectorAll(s);
+
+      function setCookie(name, value, days){
+        const exp = new Date(Date.now() + days * 86400000).toUTCString();
+        document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(JSON.stringify(value)) + ';expires=' + exp + ';path=/;SameSite=Lax';
+      }
+
+      function getCookie(name){
+        const key = encodeURIComponent(name) + '=';
+        for(const part of document.cookie.split(';')){
+          const p = part.trim();
+          if(p.startsWith(key)){
+            try { return JSON.parse(decodeURIComponent(p.slice(key.length))); }
+            catch(e){ return null; }
+          }
+        }
+        return null;
+      }
+
+      let state = getCookie(COOKIE_NAME) || DEFAULT_STATE;
+
+      function ratingLabel(val){
+        if(val === 'easy') return 'Sicher';
+        if(val === 'learn') return 'Lernen';
+        if(val === 'hard') return 'Schwer';
+        return 'Offen';
+      }
+
+      function save(){
+        setCookie(COOKIE_NAME, state, 180);
+        syncUI();
+      }
+
+      function syncUI(){
+        const checks = $$('[data-track]');
+        let done = 0;
+
+        checks.forEach(el => {
+          const key = el.dataset.track;
+          el.checked = !!state.checks[key];
+          if(el.checked) done++;
+        });
+
+        $('#noteBox').value = state.note || '';
+
+        const pct = checks.length ? Math.round(done / checks.length * 100) : 0;
+        $('#navProgress').style.width = pct + '%';
+        $('#navProgressText').textContent = pct + '%';
+        $('#drawerPct').textContent = pct + '%';
+        $('#drawerLevel').textContent = ratingLabel(state.rating);
+
+        $$('.rate-btn').forEach(btn => {
+          btn.classList.remove('active-e','active-l','active-h');
+          if(btn.dataset.rate === state.rating){
+            if(state.rating === 'easy') btn.classList.add('active-e');
+            if(state.rating === 'learn') btn.classList.add('active-l');
+            if(state.rating === 'hard') btn.classList.add('active-h');
+          }
+        });
+      }
+
+      $$('[data-track]').forEach(el => {
+        el.addEventListener('change', function(){
+          state.checks[this.dataset.track] = this.checked;
+          save();
+        });
+      });
+
+      $('#saveNoteBtn').addEventListener('click', function(){
+        state.note = $('#noteBox').value || '';
+        save();
+        this.textContent = 'Gespeichert';
+        setTimeout(() => {
+          this.textContent = 'Notiz speichern';
+        }, 1200);
+      });
+
+      $$('.rate-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const val = this.dataset.rate;
+          state.rating = state.rating === val ? '' : val;
+          save();
+        });
+      });
+
+      $$('.quiz-item').forEach((box, qi) => {
+        const correct = parseInt(box.dataset.correct, 10);
+        const opts = box.querySelectorAll('.opt');
+        const fb = box.querySelector('.quiz-fb');
+
+        function applyResult(chosen){
+          opts.forEach(o => {
+            o.disabled = true;
+            o.style.pointerEvents = 'none';
+          });
+
+          if(chosen === correct){
+            opts[chosen].classList.add('good');
+            fb.classList.add('show','ok');
+          } else {
+            if(opts[chosen]) opts[chosen].classList.add('bad');
+            opts[correct].classList.add('good');
+            fb.classList.add('show','no');
+          }
+        }
+
+        opts.forEach((btn, idx) => {
+          btn.addEventListener('click', () => {
+            state.quiz[qi] = idx;
+            applyResult(idx);
+            save();
+          });
+        });
+
+        if(state.quiz[qi] !== undefined){
+          applyResult(state.quiz[qi]);
+        }
+      });
+
+      $$('.ans-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const ans = this.nextElementSibling;
+          ans.classList.toggle('show');
+          this.textContent = ans.classList.contains('show') ? 'Musterlösung ausblenden' : 'Musterlösung';
+        });
+      });
+
+      const burgerBtn = $('#burgerBtn');
+      const drawer = $('#drawer');
+      const overlay = $('#drawerOverlay');
+      const closeBtn = $('#drawerClose');
+
+      function openDrawer(){
+        burgerBtn.classList.add('open');
+        burgerBtn.setAttribute('aria-expanded','true');
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden','false');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer(){
+        burgerBtn.classList.remove('open');
+        burgerBtn.setAttribute('aria-expanded','false');
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden','true');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      burgerBtn.addEventListener('click', () => {
+        if(drawer.classList.contains('open')) closeDrawer();
+        else openDrawer();
+      });
+
+      closeBtn.addEventListener('click', closeDrawer);
+      overlay.addEventListener('click', closeDrawer);
+
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+      });
+
+      $('#resetBtn').addEventListener('click', () => {
+        if(!confirm('Lernstatus dieser Seite wirklich löschen?')) return;
+        state = {
+          checks:{},
+          note:'',
+          quiz:{},
+          rating:''
+        };
+        save();
+        location.reload();
+      });
+
+      window.addEventListener('scroll', () => {
+        $('#topbar').classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive:true });
+
+      syncUI();
+    })();
+  </script>
+</body>
+</html>
