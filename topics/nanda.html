@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NANDA und Pflegediagnosen • PflegefachProfi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    body{
+      font-family:'Inter',sans-serif;
+      background:#f6f8fb;
+      color:#0f172a;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --ink:#0f172a;
+      --ink2:#334155;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --line2:#cbd5e1;
+
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --blueSoft:#eff6ff;
+      --violet:#7c3aed;
+      --green:#059669;
+      --greenSoft:#ecfdf5;
+      --amber:#d97706;
+      --amberSoft:#fffbeb;
+      --rose:#e11d48;
+      --roseSoft:#fff1f2;
+
+      --shadow1:0 1px 2px rgba(15,23,42,.05),0 8px 24px rgba(15,23,42,.06);
+      --shadow2:0 12px 32px rgba(15,23,42,.08);
+      --radius:22px;
+      --radius2:16px;
+      --navH:68px;
+      --ease:cubic-bezier(.4,0,.2,1);
+    }
+
+    .wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+    @media(max-width:480px){.wrap{padding:0 12px}}
+
+    .skip{
+      position:absolute;left:-999px;top:10px;background:var(--blue);color:#fff;
+      padding:10px 14px;border-radius:12px;font-weight:800;text-decoration:none;z-index:9999;
+    }
+    .skip:focus{left:12px}
+
+    .topbar{
+      position:sticky;top:0;z-index:600;height:var(--navH);
+      background:rgba(255,255,255,.84);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(226,232,240,.9);
+      transition:box-shadow .2s var(--ease);
+    }
+    .topbar.scrolled{box-shadow:var(--shadow1)}
+    .topbar-in{
+      height:100%;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;
+      min-width:0;
+    }
+    .brand-mark{
+      width:40px;height:40px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      color:#fff;
+      box-shadow:0 10px 20px rgba(37,99,235,.22);
+    }
+    .brand-text{
+      font-family:'Fraunces',serif;font-size:1.04rem;font-weight:900;white-space:nowrap;
+    }
+    .brand-text span{color:var(--blue)}
+
+    .navlinks{
+      justify-self:center;
+      display:flex;align-items:center;gap:6px;list-style:none;
+    }
+    .navlinks a{
+      text-decoration:none;color:var(--muted);
+      font-weight:700;font-size:.86rem;
+      padding:10px 14px;border-radius:12px;
+      transition:.16s var(--ease);
+      display:flex;align-items:center;gap:8px;
+    }
+    .navlinks a:hover{background:#f8fafc;color:var(--ink)}
+    .navlinks a.active{background:var(--blueSoft);color:var(--blue)}
+
+    .topbar-r{
+      display:flex;align-items:center;gap:8px;justify-self:end;
+    }
+    .mini-pill{
+      display:flex;align-items:center;gap:7px;
+      padding:7px 12px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);
+      font-size:.77rem;font-weight:800;color:var(--ink2);
+      white-space:nowrap;
+    }
+    .mini-pill i{color:var(--blue)}
+    .mini-prog{
+      display:flex;align-items:center;gap:10px;
+      padding:7px 12px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);
+    }
+    .mini-bar{
+      width:82px;height:7px;border-radius:999px;background:#e5e7eb;overflow:hidden;
+    }
+    .mini-fill{
+      width:0%;height:100%;border-radius:999px;
+      background:linear-gradient(90deg,var(--green),var(--blue));
+      transition:width .3s var(--ease);
+    }
+    .mini-txt{font-size:.75rem;font-weight:800;color:var(--muted)}
+
+    .burger{
+      display:none;
+      width:40px;height:40px;border-radius:14px;
+      border:1px solid var(--line);background:#fff;cursor:pointer;
+      align-items:center;justify-content:center;
+      position:relative;
+    }
+    .burger span{
+      position:absolute;width:18px;height:2px;border-radius:999px;background:var(--ink);
+      transition:.2s var(--ease);
+    }
+    .burger span:nth-child(1){transform:translateY(-6px)}
+    .burger span:nth-child(3){transform:translateY(6px)}
+    .burger.open span:nth-child(1){transform:rotate(45deg)}
+    .burger.open span:nth-child(2){opacity:0}
+    .burger.open span:nth-child(3){transform:rotate(-45deg)}
+
+    .drawer{
+      position:fixed;inset:0 0 0 auto;width:min(380px,92vw);
+      background:#fff;z-index:700;transform:translateX(100%);
+      transition:transform .22s var(--ease);
+      border-left:1px solid var(--line);
+      display:flex;flex-direction:column;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer-overlay{
+      position:fixed;inset:0;background:rgba(15,23,42,.36);
+      z-index:650;opacity:0;pointer-events:none;transition:.2s var(--ease);
+    }
+    .drawer-overlay.open{opacity:1;pointer-events:auto}
+    .drawer-head{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:16px;border-bottom:1px solid var(--line);
+    }
+    .drawer-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem}
+    .drawer-close{
+      width:40px;height:40px;border-radius:14px;border:1px solid var(--line);
+      background:#fff;cursor:pointer;
+    }
+    .drawer-body{padding:16px;overflow:auto}
+    .drawer-stats{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;
+    }
+    .drawer-stat{
+      border:1px solid var(--line);border-radius:16px;padding:14px;background:#fafcff;
+    }
+    .drawer-stat .k{font-size:.72rem;font-weight:800;color:var(--muted);margin-bottom:4px}
+    .drawer-stat .v{font-size:1.35rem;font-weight:900;color:var(--ink)}
+    .drawer-links{list-style:none;display:grid;gap:8px}
+    .drawer-links a{
+      display:flex;align-items:center;gap:10px;text-decoration:none;
+      padding:12px 14px;border-radius:14px;border:1px solid var(--line);
+      color:var(--ink2);font-weight:800;
+    }
+    .drawer-links a:hover{background:var(--blueSoft);color:var(--blue);border-color:#bfdbfe}
+    .drawer-danger{
+      margin-top:14px;width:100%;
+      border:none;border-radius:14px;padding:12px 14px;
+      background:var(--roseSoft);color:var(--rose);font-weight:900;cursor:pointer;
+    }
+
+    .hero{padding:22px 0 16px}
+    .hero-shell{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+    @media(max-width:980px){.hero-shell{grid-template-columns:1fr}}
+    .card{
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--radius);box-shadow:var(--shadow1);
+    }
+    .hero-main{
+      padding:24px;position:relative;overflow:hidden;
+      background:
+        radial-gradient(circle at top right, rgba(37,99,235,.08), transparent 35%),
+        radial-gradient(circle at left bottom, rgba(124,58,237,.06), transparent 35%),
+        #fff;
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--blueSoft);color:var(--blue);
+      border:1px solid #bfdbfe;border-radius:999px;
+      padding:6px 13px;font-size:.73rem;font-weight:900;letter-spacing:.05em;
+      text-transform:uppercase;margin-bottom:12px;
+    }
+    .hero-main h1{
+      font-family:'Fraunces',serif;font-weight:900;
+      font-size:2.55rem;line-height:1.05;letter-spacing:-.03em;
+      margin-bottom:12px;max-width:780px;
+    }
+    .hero-main h1 em{font-style:italic;color:var(--blue)}
+    .hero-sub{
+      font-size:.96rem;line-height:1.72;color:var(--ink2);max-width:760px;
+    }
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      text-decoration:none;border:none;cursor:pointer;
+      border-radius:14px;padding:12px 16px;
+      font-weight:800;font-size:.86rem;transition:.16s var(--ease);
+    }
+    .btn-primary{background:var(--blue);color:#fff}
+    .btn-primary:hover{background:var(--blue2)}
+    .btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line2)}
+    .btn-secondary:hover{background:#f8fafc;border-color:#94a3b8}
+    .hero-side{padding:20px}
+    .hero-side h2{
+      font-family:'Fraunces',serif;font-size:1.08rem;font-weight:900;margin-bottom:12px;
+    }
+    .metric-grid{display:grid;gap:10px}
+    .metric{
+      border:1px solid var(--line);border-radius:18px;padding:14px;background:#fafcff;
+    }
+    .metric .k{font-size:.73rem;font-weight:800;color:var(--muted);margin-bottom:4px}
+    .metric .v{font-size:.95rem;font-weight:800;color:var(--ink)}
+    .metric .v span{color:var(--blue)}
+
+    .main-grid{
+      display:grid;grid-template-columns:290px 1fr;gap:14px;padding-bottom:54px;
+    }
+    @media(max-width:980px){.main-grid{grid-template-columns:1fr}}
+
+    .aside{
+      display:grid;gap:14px;height:max-content;position:sticky;top:84px;
+    }
+    @media(max-width:980px){.aside{position:static}}
+
+    .toc,.notes,.focus-session,.rating{
+      padding:16px;
+    }
+    .section-title{
+      font-family:'Fraunces',serif;font-size:1rem;font-weight:900;margin-bottom:10px;
+    }
+    .toc ul{list-style:none;display:grid;gap:6px}
+    .toc a{
+      text-decoration:none;color:var(--ink2);font-weight:800;font-size:.84rem;
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:12px;transition:.15s var(--ease);
+    }
+    .toc a:hover{background:var(--blueSoft);color:var(--blue)}
+    .notes textarea{
+      width:100%;min-height:130px;resize:vertical;
+      border:1.5px solid var(--line2);border-radius:14px;
+      padding:12px;font:inherit;outline:none;
+    }
+    .notes textarea:focus{border-color:var(--blue)}
+    .save-btn{
+      width:100%;margin-top:10px;border:none;border-radius:14px;
+      background:var(--blue);color:#fff;font-weight:900;cursor:pointer;padding:11px 14px;
+    }
+    .focus-session .row{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:10px 0;border-top:1px solid var(--line);
+    }
+    .focus-session .row:first-of-type{border-top:none;padding-top:0}
+    .focus-session .n{
+      width:28px;height:28px;border-radius:10px;flex-shrink:0;
+      background:var(--blueSoft);color:var(--blue);
+      display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;
+    }
+    .focus-session p{font-size:.84rem;color:var(--ink2);line-height:1.6}
+
+    .rating-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .rate-btn{
+      border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 10px;
+      font-weight:900;cursor:pointer;color:var(--muted);transition:.15s var(--ease)
+    }
+    .rate-btn.active-e{background:var(--greenSoft);border-color:#a7f3d0;color:var(--green)}
+    .rate-btn.active-l{background:var(--blueSoft);border-color:#bfdbfe;color:var(--blue)}
+    .rate-btn.active-h{background:var(--roseSoft);border-color:#fecdd3;color:var(--rose)}
+
+    .content{display:grid;gap:14px}
+    .section{padding:22px}
+    .section-head{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .section-head h2{
+      font-family:'Fraunces',serif;font-size:1.45rem;font-weight:900;letter-spacing:-.02em;
+    }
+    .section-head p{
+      max-width:560px;font-size:.84rem;line-height:1.65;color:var(--muted);
+    }
+    .badges{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;border-radius:999px;border:1px solid;
+      font-size:.71rem;font-weight:900;
+    }
+    .badge.blue{background:var(--blueSoft);color:var(--blue);border-color:#bfdbfe}
+    .badge.green{background:var(--greenSoft);color:var(--green);border-color:#a7f3d0}
+    .badge.amber{background:var(--amberSoft);color:var(--amber);border-color:#fde68a}
+
+    .info-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+    }
+    @media(max-width:800px){.info-grid{grid-template-columns:1fr}}
+    .info{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff;
+    }
+    .info .icon{
+      width:42px;height:42px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--blueSoft);font-size:1.1rem;margin-bottom:10px;
+    }
+    .info h3{font-size:.95rem;font-weight:900;margin-bottom:6px}
+    .info p{font-size:.84rem;line-height:1.65;color:var(--ink2)}
+
+    .compare-grid,.type-grid,.formula-grid,.priority-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:12px;
+    }
+    @media(max-width:800px){
+      .compare-grid,.type-grid,.formula-grid,.priority-grid{grid-template-columns:1fr}
+    }
+    .panel{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff;
+    }
+    .panel h3{font-size:.98rem;font-weight:900;margin-bottom:8px}
+    .panel p,.panel li{font-size:.84rem;line-height:1.66;color:var(--ink2)}
+    .panel ul{padding-left:1.1rem;margin-top:8px}
+    .panel li{margin-bottom:6px}
+    .code{
+      margin-top:10px;border-radius:14px;padding:14px;
+      background:#0f172a;color:#e5e7eb;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.8rem;line-height:1.62;overflow:auto;
+    }
+
+    .mistakes{display:grid;gap:10px}
+    .mistake{
+      border:1px solid #fecdd3;background:var(--roseSoft);
+      border-radius:16px;padding:14px 16px;
+    }
+    .mistake strong{display:block;margin-bottom:4px}
+    .mistake span{font-size:.84rem;color:var(--ink2);line-height:1.62}
+
+    .checklist{display:grid;gap:8px}
+    .check{
+      display:flex;align-items:flex-start;gap:10px;
+      border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;
+    }
+    .check input{margin-top:3px;transform:scale(1.15)}
+    .check span{font-size:.84rem;line-height:1.6;color:var(--ink2)}
+
+    .retrieval-box{
+      border:1px solid #bfdbfe;background:linear-gradient(135deg,#f8fbff,#eff6ff);
+      border-radius:18px;padding:16px;
+    }
+    .retrieval-box h3{font-size:1rem;font-weight:900;margin-bottom:8px}
+    .retrieval-box p{font-size:.84rem;line-height:1.66;color:var(--ink2)}
+
+    .quiz-item{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff;margin-top:12px;
+    }
+    .quiz-item h3{font-size:.95rem;font-weight:900;margin-bottom:10px}
+    .opts{display:grid;gap:8px}
+    .opt{
+      border:2px solid var(--line);border-radius:14px;background:#fff;
+      padding:11px 13px;cursor:pointer;text-align:left;
+      font-size:.84rem;font-weight:800;transition:.15s var(--ease);
+    }
+    .opt:hover{border-color:#93c5fd}
+    .opt.good{border-color:#86efac;background:var(--greenSoft);color:var(--green)}
+    .opt.bad{border-color:#fda4af;background:var(--roseSoft);color:var(--rose)}
+    .quiz-fb{
+      display:none;margin-top:10px;padding:12px 14px;border-radius:14px;
+      font-size:.84rem;font-weight:800;line-height:1.62;
+    }
+    .quiz-fb.show{display:block}
+    .quiz-fb.ok{background:var(--greenSoft);color:#065f46}
+    .quiz-fb.no{background:var(--roseSoft);color:#9f1239}
+
+    .case-shell{
+      border:1px solid #c4b5fd;background:linear-gradient(135deg,#faf7ff,#eff6ff);
+      border-radius:20px;padding:18px;
+    }
+    .case-shell h3{font-size:1rem;font-weight:900;margin-bottom:8px}
+    .case-shell p{font-size:.86rem;line-height:1.7;color:var(--ink2)}
+    .case-qs{display:grid;gap:12px;margin-top:16px}
+    .case-q label{display:block;font-size:.82rem;font-weight:900;color:var(--muted);margin-bottom:6px}
+    .case-q textarea{
+      width:100%;min-height:86px;resize:vertical;
+      border:1.5px solid var(--line2);border-radius:14px;
+      padding:12px;font:inherit;outline:none;background:#fff;
+    }
+    .case-q textarea:focus{border-color:var(--blue)}
+    .ans-btn{
+      margin-top:8px;border:none;border-radius:999px;padding:8px 14px;
+      background:var(--violet);color:#fff;font-weight:900;cursor:pointer;
+    }
+    .ans{
+      display:none;margin-top:8px;
+      border:1px solid #a7f3d0;background:var(--greenSoft);
+      border-radius:14px;padding:12px 14px;font-size:.83rem;line-height:1.65;color:#065f46;
+    }
+    .ans.show{display:block}
+
+    .footer{
+      border-top:1px solid var(--line);padding:24px 0;text-align:center;
+      font-size:.75rem;color:var(--muted);margin-top:8px;
+    }
+
+    @media(max-width:960px){
+      .navlinks{display:none}
+      .burger{display:flex}
+      .mini-pill.hide-mobile{display:none}
+    }
+    @media(max-width:560px){
+      .hero-main h1{font-size:2rem}
+      .mini-prog .mini-bar{width:58px}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt</a>
+
+  <header class="topbar" id="topbar">
+    <div class="wrap topbar-in">
+      <a class="brand" href="../lernkatalog.html">
+        <div class="brand-mark"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="brand-text">Pflege<span>fach</span>Profi</div>
+      </a>
+
+      <nav aria-label="Hauptnavigation">
+        <ul class="navlinks">
+          <li><a href="../index.html"><i class="fas fa-home"></i> Start</a></li>
+          <li><a class="active" href="../lernkatalog.html"><i class="fas fa-book"></i> Lernkatalog</a></li>
+          <li><a href="../pruefungsinfos.html"><i class="fas fa-graduation-cap"></i> Prüfungsinfos</a></li>
+        </ul>
+      </nav>
+
+      <div class="topbar-r">
+        <a class="mini-pill hide-mobile" href="../lernkatalog.html" style="text-decoration:none;color:inherit;">
+          <i class="fas fa-arrow-left"></i> Zurück
+        </a>
+        <div class="mini-pill hide-mobile">
+          <i class="fas fa-layer-group"></i> W1 · W2
+        </div>
+        <div class="mini-prog" aria-label="Seitenfortschritt">
+          <div class="mini-bar"><div class="mini-fill" id="navProgress"></div></div>
+          <div class="mini-txt" id="navProgressText">0%</div>
+        </div>
+        <button class="burger" id="burgerBtn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="drawer">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-title">Menü</div>
+      <button class="drawer-close" id="drawerClose" aria-label="Menü schließen">
+        <i class="fas fa-xmark"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-stats">
+        <div class="drawer-stat">
+          <div class="k">Seitenfortschritt</div>
+          <div class="v" id="drawerPct">0%</div>
+        </div>
+        <div class="drawer-stat">
+          <div class="k">Selbstrating</div>
+          <div class="v" id="drawerLevel">Offen</div>
+        </div>
+      </div>
+
+      <ul class="drawer-links">
+        <li><a href="../index.html"><i class="fas fa-home"></i> Start</a></li>
+        <li><a href="../lernkatalog.html"><i class="fas fa-book"></i> Lernkatalog</a></li>
+        <li><a href="#grundlagen"><i class="fas fa-circle-info"></i> Grundlagen</a></li>
+        <li><a href="#formen"><i class="fas fa-layer-group"></i> Diagnoseformen</a></li>
+        <li><a href="#quiz"><i class="fas fa-brain"></i> Quiz</a></li>
+        <li><a href="#fall"><i class="fas fa-file-medical"></i> Fallbeispiel</a></li>
+      </ul>
+
+      <button class="drawer-danger" id="resetBtn"><i class="fas fa-rotate-left"></i> Lernstatus dieser Seite löschen</button>
+    </div>
+  </aside>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-shell">
+          <div class="card hero-main">
+            <div class="eyebrow"><i class="fas fa-tags"></i> NANDA und Pflegediagnosen</div>
+            <h1>NANDA <em>sicher</em> formulieren und im Fall anwenden</h1>
+            <p class="hero-sub">
+              Diese Seite bringt dich vom Fall zur sauberen Pflegediagnose. Fokus auf Unterschied zur medizinischen Diagnose, PÄS Aufbau, Risikodiagnosen, Priorisierung, typische Formulierungsfehler und prüfungsnahe Anwendung.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#grundlagen"><i class="fas fa-play"></i> Direkt anfangen</a>
+              <a class="btn btn-secondary" href="#quiz"><i class="fas fa-brain"></i> Quiz</a>
+              <a class="btn btn-secondary" href="#fall"><i class="fas fa-file-medical"></i> Fall</a>
+            </div>
+          </div>
+
+          <div class="card hero-side">
+            <h2>Heute sicher können</h2>
+            <div class="metric-grid">
+              <div class="metric">
+                <div class="k">Prüfungsfokus</div>
+                <div class="v"><span>Pflegeproblem</span> fachlich benennen, medizinische und pflegerische Sicht trennen</div>
+              </div>
+              <div class="metric">
+                <div class="k">Struktur</div>
+                <div class="v">PÄS für aktuelle Diagnosen, Risikoformulierung ohne Symptome</div>
+              </div>
+              <div class="metric">
+                <div class="k">Punktesicher</div>
+                <div class="v">Kurz, präzise, fallbezogen, nicht nur Krankheiten aufzählen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="main-grid">
+        <aside class="aside">
+          <div class="card toc">
+            <div class="section-title">Inhalt</div>
+            <ul>
+              <li><a href="#grundlagen"><i class="fas fa-circle-info"></i> Grundlagen</a></li>
+              <li><a href="#vergleich"><i class="fas fa-code-compare"></i> Medizinisch vs pflegerisch</a></li>
+              <li><a href="#formen"><i class="fas fa-layer-group"></i> Diagnoseformen</a></li>
+              <li><a href="#pas"><i class="fas fa-pen-ruler"></i> PÄS und Formulierung</a></li>
+              <li><a href="#priorisieren"><i class="fas fa-ranking-star"></i> Priorisieren</a></li>
+              <li><a href="#fehler"><i class="fas fa-triangle-exclamation"></i> Fehler vermeiden</a></li>
+              <li><a href="#checklist"><i class="fas fa-list-check"></i> Checkliste</a></li>
+              <li><a href="#quiz"><i class="fas fa-brain"></i> Quiz</a></li>
+              <li><a href="#fall"><i class="fas fa-file-medical"></i> Fallbeispiel</a></li>
+            </ul>
+          </div>
+
+          <div class="card notes">
+            <div class="section-title">Eigene Kurznotiz</div>
+            <textarea id="noteBox" placeholder="Schreib hier deine Diagnose-Satzbausteine oder typische Fehler rein."></textarea>
+            <button class="save-btn" id="saveNoteBtn"><i class="fas fa-save"></i> Notiz speichern</button>
+          </div>
+
+          <div class="card rating">
+            <div class="section-title">Selbstrating</div>
+            <div class="rating-row">
+              <button class="rate-btn" data-rate="easy">Sicher</button>
+              <button class="rate-btn" data-rate="learn">Lernen</button>
+              <button class="rate-btn" data-rate="hard">Schwer</button>
+            </div>
+          </div>
+
+          <div class="card focus-session">
+            <div class="section-title">20 Minuten Lernlauf</div>
+            <div class="row">
+              <div class="n">1</div>
+              <p>Unterschied zwischen medizinischer Diagnose und Pflegediagnose laut erklären.</p>
+            </div>
+            <div class="row">
+              <div class="n">2</div>
+              <p>3 PÄS Diagnosen und 2 Risikodiagnosen selbst formulieren.</p>
+            </div>
+            <div class="row">
+              <div class="n">3</div>
+              <p>Priorität begründen. Was ist akut. Was ist Risiko. Was ist Ressourcenbezug.</p>
+            </div>
+            <div class="row">
+              <div class="n">4</div>
+              <p>Quiz und Fall ohne Spicken lösen.</p>
+            </div>
+          </div>
+        </aside>
+
+        <div class="content">
+          <section class="card section" id="grundlagen">
+            <div class="section-head">
+              <div>
+                <h2>Grundlagen</h2>
+                <p>NANDA Diagnosen helfen dir, pflegerische Probleme fachlich sauber zu benennen. In der Prüfung zeigt das, dass du Daten nicht nur sammelst, sondern auch pflegefachlich deutest.</p>
+              </div>
+              <div class="badges">
+                <span class="badge blue"><i class="fas fa-calendar-day"></i> W1</span>
+                <span class="badge blue"><i class="fas fa-calendar-day"></i> W2</span>
+                <span class="badge green"><i class="fas fa-check-circle"></i> Pflegeprozess Kernstück</span>
+              </div>
+            </div>
+
+            <div class="info-grid">
+              <div class="info">
+                <div class="icon">🏷️</div>
+                <h3>Was ist eine Pflegediagnose</h3>
+                <p>Eine Pflegediagnose beschreibt eine menschliche Reaktion oder ein pflegerelevantes Problem, das Pflegefachpersonen erkennen und beeinflussen können.</p>
+              </div>
+              <div class="info">
+                <div class="icon">🧠</div>
+                <h3>Warum wichtig</h3>
+                <p>Sie verbindet Assessment mit Zielen und Maßnahmen. Ohne gute Diagnose werden Ziele unklar und Maßnahmen unscharf.</p>
+              </div>
+              <div class="info">
+                <div class="icon">📋</div>
+                <h3>Was Prüfer sehen wollen</h3>
+                <p>Nicht nur Diagnosenamen. Sie wollen erkennen, ob du Problem, Ursache, Symptome, Ressourcen und Priorität logisch verknüpfen kannst.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="vergleich">
+            <div class="section-head">
+              <div>
+                <h2>Medizinische Diagnose gegen Pflegediagnose</h2>
+                <p>Das ist einer der häufigsten Prüfungsfehler. Viele schreiben Krankheiten hin, obwohl ein pflegerisches Problem gefragt ist.</p>
+              </div>
+            </div>
+
+            <div class="compare-grid">
+              <div class="panel">
+                <h3>Medizinische Diagnose</h3>
+                <p>Beschreibt Krankheit, Ursache oder pathologisches Geschehen.</p>
+                <ul>
+                  <li>Diabetes mellitus Typ 2</li>
+                  <li>Apoplex</li>
+                  <li>Herzinsuffizienz</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h3>Pflegediagnose</h3>
+                <p>Beschreibt pflegerelevante Reaktion, Beeinträchtigung oder Risiko.</p>
+                <ul>
+                  <li>Instabiler Blutzucker</li>
+                  <li>Beeinträchtigte Mobilität</li>
+                  <li>Risiko für Sturz</li>
+                  <li>Angst</li>
+                  <li>Wissensdefizit</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="formen">
+            <div class="section-head">
+              <div>
+                <h2>Wichtige Diagnoseformen</h2>
+                <p>Für die Prüfung reichen meist diese Typen. Wenn du sie sicher trennst, wirkt deine Lösung sofort strukturierter.</p>
+              </div>
+            </div>
+
+            <div class="type-grid">
+              <div class="panel">
+                <h3>Aktuelle, problemorientierte Diagnose</h3>
+                <p>Ein Problem ist bereits vorhanden und zeigt sich durch Symptome oder Hinweise.</p>
+                <div class="code">Beeinträchtigte Mobilität
+bezogen auf Schmerzen
+sichtbar durch unsicheren Transfer</div>
+              </div>
+              <div class="panel">
+                <h3>Risikodiagnose</h3>
+                <p>Ein Problem ist noch nicht eingetreten, aber die Person hat deutliche Risikofaktoren. Hier werden keine aktuellen Symptome genannt.</p>
+                <div class="code">Risiko für Sturz
+bezogen auf Gangunsicherheit, Sedierung und Schwäche</div>
+              </div>
+              <div class="panel">
+                <h3>Gesundheitsfördernde Diagnose</h3>
+                <p>Die Person zeigt Bereitschaft, Gesundheitsverhalten zu verbessern. Eher seltener in kurzen Klausurantworten, aber prüfbar.</p>
+                <div class="code">Bereitschaft für verbessertes Gesundheitsmanagement</div>
+              </div>
+              <div class="panel">
+                <h3>Syndromdiagnose</h3>
+                <p>Mehrere Probleme treten typischerweise gemeinsam auf. Für Abschlussprüfungen weniger häufig, aber als Begriff wichtig.</p>
+                <div class="code">Posttraumatisches Syndrom, Frailty Syndrome, Disuse Syndrome</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="pas">
+            <div class="section-head">
+              <div>
+                <h2>PÄS und Formulierungslogik</h2>
+                <p>Mit dieser Struktur kannst du aus fast jeder Fallsituation eine saubere Antwort bauen.</p>
+              </div>
+            </div>
+
+            <div class="formula-grid">
+              <div class="panel">
+                <h3>PÄS für aktuelle Diagnosen</h3>
+                <p>P steht für Problem. Ä für Ätiologie. S für Symptome oder erkennbare Hinweise.</p>
+                <div class="code">Beeinträchtigte Hautintegrität
+bezogen auf Druck und eingeschränkte Mobilität
+sichtbar durch Rötung sakral und Schmerzangabe</div>
+              </div>
+              <div class="panel">
+                <h3>Risikodiagnose ohne S</h3>
+                <p>Bei Risiken gibt es noch keine Symptome des Problems. Darum formuliere Problem plus Risikofaktoren.</p>
+                <div class="code">Risiko für Aspiration
+bezogen auf Dysphagie und eingeschränkten Hustenstoß</div>
+              </div>
+            </div>
+
+            <div class="panel" style="margin-top:12px;">
+              <h3>Gute Formulierungsstarter</h3>
+              <ul>
+                <li>Beeinträchtigt</li>
+                <li>Unwirksam</li>
+                <li>Risiko für</li>
+                <li>Bereitschaft für verbessert</li>
+                <li>Wissensdefizit</li>
+                <li>Akuter Schmerz</li>
+              </ul>
+            </div>
+
+            <div class="retrieval-box" style="margin-top:12px;">
+              <h3>Mini Abrufübung</h3>
+              <p>Sprich jetzt laut aus: Unterschied medizinische Diagnose und Pflegediagnose. Danach formuliere auswendig 1 aktuelle Diagnose und 1 Risikodiagnose. Erst danach wieder auf die Seite schauen.</p>
+            </div>
+          </section>
+
+          <section class="card section" id="priorisieren">
+            <div class="section-head">
+              <div>
+                <h2>Diagnosen priorisieren</h2>
+                <p>Im Fall gibt es oft mehrere Probleme. Nicht alle sind gleich dringend. Die Reihenfolge muss begründbar sein.</p>
+              </div>
+            </div>
+
+            <div class="priority-grid">
+              <div class="panel">
+                <h3>Hoch priorisieren</h3>
+                <ul>
+                  <li>Atemweg, Atmung, Kreislauf</li>
+                  <li>Akuter Schmerz</li>
+                  <li>Akute Verwirrtheit</li>
+                  <li>Sturzrisiko in akuter Situation</li>
+                  <li>Aspirationsgefahr</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h3>Danach</h3>
+                <ul>
+                  <li>Wissensdefizit</li>
+                  <li>Langfristige Selbstpflegeprobleme</li>
+                  <li>Motivation, Gesundheitsverhalten</li>
+                  <li>Schlaf, Wohlbefinden, Edukation</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="panel" style="margin-top:12px;">
+              <h3>Merksatz</h3>
+              <p>Erst akut gefährlich, dann funktionell einschränkend, dann langfristig entwicklungsrelevant.</p>
+            </div>
+          </section>
+
+          <section class="card section" id="fehler">
+            <div class="section-head">
+              <div>
+                <h2>Fehler, die oft Punkte kosten</h2>
+                <p>Diese Fehler tauchen in Klausuren ständig auf.</p>
+              </div>
+            </div>
+
+            <div class="mistakes">
+              <div class="mistake">
+                <strong>Nur die Krankheit hinschreiben</strong>
+                <span>Zum Beispiel “Apoplex” statt “Beeinträchtigte verbale Kommunikation” oder “Risiko für Aspiration”.</span>
+              </div>
+              <div class="mistake">
+                <strong>Risikodiagnose mit Symptomen schreiben</strong>
+                <span>Bei Risiko gibt es das Problem noch nicht. Also keine Symptome des Problems nennen.</span>
+              </div>
+              <div class="mistake">
+                <strong>Zu allgemein formulieren</strong>
+                <span>“Pflegeproblem vorhanden” bringt nichts. Die Diagnose muss fachlich benennbar sein.</span>
+              </div>
+              <div class="mistake">
+                <strong>Ätiologie falsch setzen</strong>
+                <span>Die Ursache muss pflegerelevant und zum Fall passend sein. Nicht blind irgendetwas ergänzen.</span>
+              </div>
+              <div class="mistake">
+                <strong>Ressourcen vergessen</strong>
+                <span>Ressourcen helfen dir bei der Ziel- und Maßnahmenplanung. Sie fehlen oft in schlechten Lösungen.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card section" id="checklist">
+            <div class="section-head">
+              <div>
+                <h2>Prüfungscheckliste</h2>
+                <p>Abhaken, speichern, Fortschritt oben sehen.</p>
+              </div>
+              <div class="badges">
+                <span class="badge amber"><i class="fas fa-cookie-bite"></i> Cookie gespeichert</span>
+              </div>
+            </div>
+
+            <div class="checklist">
+              <label class="check"><input type="checkbox" data-track="1"><span>Ich kann medizinische Diagnose und Pflegediagnose klar unterscheiden.</span></label>
+              <label class="check"><input type="checkbox" data-track="2"><span>Ich kann eine aktuelle Pflegediagnose im PÄS Aufbau formulieren.</span></label>
+              <label class="check"><input type="checkbox" data-track="3"><span>Ich kann eine Risikodiagnose ohne Symptome formulieren.</span></label>
+              <label class="check"><input type="checkbox" data-track="4"><span>Ich kann aus einem Fall mindestens 2 passende Pflegediagnosen ableiten.</span></label>
+              <label class="check"><input type="checkbox" data-track="5"><span>Ich kann begründen, welche Diagnose Priorität hat.</span></label>
+              <label class="check"><input type="checkbox" data-track="6"><span>Ich kann Ressourcen im Fall benennen.</span></label>
+            </div>
+          </section>
+
+          <section class="card section" id="quiz">
+            <div class="section-head">
+              <div>
+                <h2>Selbsttest</h2>
+                <p>Erst lösen. Dann prüfen. Aktives Abrufen stärkt spätere Erinnerung besser als nur Wiederlesen.</p>
+              </div>
+            </div>
+
+            <div class="quiz-item" data-q="0" data-correct="2">
+              <h3>1. Welche Aussage ist am ehesten eine Pflegediagnose?</h3>
+              <div class="opts">
+                <button class="opt">Pneumonie</button>
+                <button class="opt">Herzinsuffizienz</button>
+                <button class="opt">Beeinträchtigter Gasaustausch</button>
+              </div>
+              <div class="quiz-fb">Richtig. Pneumonie und Herzinsuffizienz sind medizinische Diagnosen. Beeinträchtigter Gasaustausch ist pflegerisch.</div>
+            </div>
+
+            <div class="quiz-item" data-q="1" data-correct="0">
+              <h3>2. Wofür steht das Ä im PÄS Aufbau?</h3>
+              <div class="opts">
+                <button class="opt">Ätiologie</button>
+                <button class="opt">Änderung</button>
+                <button class="opt">Ärger</button>
+              </div>
+              <div class="quiz-fb">Genau. Gemeint ist Ursache oder Einflussfaktor.</div>
+            </div>
+
+            <div class="quiz-item" data-q="2" data-correct="1">
+              <h3>3. Was ist bei einer Risikodiagnose wichtig?</h3>
+              <div class="opts">
+                <button class="opt">Viele Symptome nennen</button>
+                <button class="opt">Risikofaktoren nennen, aber keine Symptome des Problems</button>
+                <button class="opt">Nur die Krankheit nennen</button>
+              </div>
+              <div class="quiz-fb">Richtig. Das Problem ist noch nicht eingetreten, deshalb keine aktuellen Symptome des Problems.</div>
+            </div>
+
+            <div class="quiz-item" data-q="3" data-correct="2">
+              <h3>4. Was ist in einer Klausur meist höher zu priorisieren?</h3>
+              <div class="opts">
+                <button class="opt">Wissensdefizit über Ernährung</button>
+                <button class="opt">Bereitschaft für verbessertes Gesundheitsmanagement</button>
+                <button class="opt">Risiko für Aspiration</button>
+              </div>
+              <div class="quiz-fb">Genau. Aspirationsgefahr ist akuter und potenziell lebensbedrohlich.</div>
+            </div>
+
+            <div class="quiz-item" data-q="4" data-correct="1">
+              <h3>5. Welche Formulierung ist die bessere Pflegediagnose?</h3>
+              <div class="opts">
+                <button class="opt">Patient hat Schlaganfall</button>
+                <button class="opt">Beeinträchtigte verbale Kommunikation bezogen auf neurologische Ausfälle sichtbar durch Wortfindungsstörungen</button>
+                <button class="opt">Patient spricht schlecht</button>
+              </div>
+              <div class="quiz-fb">Richtig. Diese Version ist fachlich, präzise und fallbezogen.</div>
+            </div>
+          </section>
+
+          <section class="card section" id="fall">
+            <div class="section-head">
+              <div>
+                <h2>Fallbeispiel</h2>
+                <p>Jetzt vom Fall zur sauberen Diagnose.</p>
+              </div>
+            </div>
+
+            <div class="case-shell">
+              <h3>Herr M., 68 Jahre, nach Schlaganfall</h3>
+              <p>
+                Herr M. ist wach und orientiert. Er hat eine ausgeprägte rechtsseitige Schwäche. Beim Trinken hustet er, spricht verlangsamt und wirkt frustriert. Beim Aufstehen ist er unsicher. Seine Ehefrau ist motiviert und möchte in die Pflege einbezogen werden.
+              </p>
+
+              <div class="case-qs">
+                <div class="case-q">
+                  <label>1. Formuliere 2 passende Pflegediagnosen.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">1. Risiko für Aspiration bezogen auf Dysphagie und Husten beim Trinken. 2. Beeinträchtigte Mobilität bezogen auf rechtsseitige Schwäche sichtbar durch unsicheres Aufstehen.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>2. Welche Diagnose hat zuerst Priorität und warum.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">Risiko für Aspiration hat Priorität, weil eine akute Gefährdung von Atmung und Sicherheit besteht. Mobilität ist ebenfalls wichtig, aber in dieser Situation nachgeordnet.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>3. Welche Ressource ist im Fall erkennbar.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">Herr M. ist orientiert. Zusätzlich ist die Ehefrau motiviert und kann in Anleitung und Unterstützung einbezogen werden.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>4. Formuliere eine passende SMART Zielidee zu einer der Diagnosen.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="ans-btn">Musterlösung</button>
+                  <div class="ans">Herr M. nimmt bis heute Abend Getränke nur in angepasster Position und unter angeleiteter Schluckunterstützung ohne Hustenepisoden ein.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="wrap">NANDA Lernseite · Notizen, Fortschritt, Quiz und Selbstrating werden lokal per Cookie gespeichert</div>
+    </footer>
+  </main>
+
+  <script>
+    (function(){
+      'use strict';
+
+      const COOKIE_NAME = 'pfp_page_nanda_v1';
+      const DEFAULT_STATE = {
+        checks:{},
+        note:'',
+        quiz:{},
+        rating:''
+      };
+
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => document.querySelectorAll(s);
+
+      function setCookie(name, value, days){
+        const exp = new Date(Date.now() + days * 86400000).toUTCString();
+        document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(JSON.stringify(value)) + ';expires=' + exp + ';path=/;SameSite=Lax';
+      }
+
+      function getCookie(name){
+        const key = encodeURIComponent(name) + '=';
+        for(const part of document.cookie.split(';')){
+          const p = part.trim();
+          if(p.startsWith(key)){
+            try { return JSON.parse(decodeURIComponent(p.slice(key.length))); }
+            catch(e){ return null; }
+          }
+        }
+        return null;
+      }
+
+      let state = getCookie(COOKIE_NAME) || DEFAULT_STATE;
+
+      function ratingLabel(val){
+        if(val === 'easy') return 'Sicher';
+        if(val === 'learn') return 'Lernen';
+        if(val === 'hard') return 'Schwer';
+        return 'Offen';
+      }
+
+      function save(){
+        setCookie(COOKIE_NAME, state, 180);
+        syncUI();
+      }
+
+      function syncUI(){
+        const checks = $$('[data-track]');
+        let done = 0;
+
+        checks.forEach(el => {
+          const key = el.dataset.track;
+          el.checked = !!state.checks[key];
+          if(el.checked) done++;
+        });
+
+        $('#noteBox').value = state.note || '';
+
+        const pct = checks.length ? Math.round(done / checks.length * 100) : 0;
+        $('#navProgress').style.width = pct + '%';
+        $('#navProgressText').textContent = pct + '%';
+        $('#drawerPct').textContent = pct + '%';
+        $('#drawerLevel').textContent = ratingLabel(state.rating);
+
+        $$('.rate-btn').forEach(btn => {
+          btn.classList.remove('active-e','active-l','active-h');
+          if(btn.dataset.rate === state.rating){
+            if(state.rating === 'easy') btn.classList.add('active-e');
+            if(state.rating === 'learn') btn.classList.add('active-l');
+            if(state.rating === 'hard') btn.classList.add('active-h');
+          }
+        });
+      }
+
+      $$('[data-track]').forEach(el => {
+        el.addEventListener('change', function(){
+          state.checks[this.dataset.track] = this.checked;
+          save();
+        });
+      });
+
+      $('#saveNoteBtn').addEventListener('click', function(){
+        state.note = $('#noteBox').value || '';
+        save();
+        this.innerHTML = '<i class="fas fa-check"></i> Gespeichert';
+        setTimeout(() => {
+          this.innerHTML = '<i class="fas fa-save"></i> Notiz speichern';
+        }, 1200);
+      });
+
+      $$('.rate-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const val = this.dataset.rate;
+          state.rating = state.rating === val ? '' : val;
+          save();
+        });
+      });
+
+      $$('.quiz-item').forEach((box, qi) => {
+        const correct = parseInt(box.dataset.correct, 10);
+        const opts = box.querySelectorAll('.opt');
+        const fb = box.querySelector('.quiz-fb');
+
+        function applyResult(chosen){
+          opts.forEach(o => {
+            o.disabled = true;
+            o.style.pointerEvents = 'none';
+          });
+
+          if(chosen === correct){
+            opts[chosen].classList.add('good');
+            fb.classList.add('show','ok');
+          } else {
+            if(opts[chosen]) opts[chosen].classList.add('bad');
+            opts[correct].classList.add('good');
+            fb.classList.add('show','no');
+          }
+        }
+
+        opts.forEach((btn, idx) => {
+          btn.addEventListener('click', () => {
+            state.quiz[qi] = idx;
+            applyResult(idx);
+            save();
+          });
+        });
+
+        if(state.quiz[qi] !== undefined){
+          applyResult(state.quiz[qi]);
+        }
+      });
+
+      $$('.ans-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const ans = this.nextElementSibling;
+          ans.classList.toggle('show');
+          this.textContent = ans.classList.contains('show') ? 'Musterlösung ausblenden' : 'Musterlösung';
+        });
+      });
+
+      const burgerBtn = $('#burgerBtn');
+      const drawer = $('#drawer');
+      const overlay = $('#drawerOverlay');
+      const closeBtn = $('#drawerClose');
+
+      function openDrawer(){
+        burgerBtn.classList.add('open');
+        burgerBtn.setAttribute('aria-expanded','true');
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden','false');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer(){
+        burgerBtn.classList.remove('open');
+        burgerBtn.setAttribute('aria-expanded','false');
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden','true');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      burgerBtn.addEventListener('click', () => {
+        if(drawer.classList.contains('open')) closeDrawer();
+        else openDrawer();
+      });
+
+      closeBtn.addEventListener('click', closeDrawer);
+      overlay.addEventListener('click', closeDrawer);
+
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+      });
+
+      $('#resetBtn').addEventListener('click', () => {
+        if(!confirm('Lernstatus dieser Seite wirklich löschen?')) return;
+        state = {
+          checks:{},
+          note:'',
+          quiz:{},
+          rating:''
+        };
+        save();
+        location.reload();
+      });
+
+      window.addEventListener('scroll', () => {
+        $('#topbar').classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive:true });
+
+      syncUI();
+    })();
+  </script>
+</body>
+</html>
