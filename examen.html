@@ -1202,6 +1202,265 @@ const MODS=[
     {q:'Welche Aussage beschreibt Bagatellisieren?',opts:['„Sie müssen aufstehen!"','„Das ist doch nicht so schlimm!"','„Sie wollen Aufmerksamkeit."','„Trinken Sie mehr."'],c:1,expl:'Bagatellisieren verharmlost das Erleben des Patienten und zerstört Vertrauen.'},
   ]
 },
+  {
+  id:7,title:'Ethik & Pflegecodex',
+  icon:'🕊️',grad:'linear-gradient(135deg,#7c3aed,#4338ca)',
+  ibg:'#f5f3ff',cat:'KB IV',cost:2,tag:'coming',
+  lessons:[
+    {
+      tit:'Ethische Prinzipien',
+      emi:'⚖️',
+      sub:'Grundlagen für Entscheidungen',
+      html:`<div class="lbody">
+      <p>Vier zentrale Prinzipien:</p>
+      <div class="ib info"><div class="ib-ico">📌</div><div class="ib-b">
+      <p>Autonomie · Fürsorge · Nicht-Schaden · Gerechtigkeit</p>
+      </div></div>
+      </div>`,
+      match:{
+        ins:'Ordne zu:',
+        pairs:[
+          {l:'Autonomie',r:'Selbstbestimmung respektieren'},
+          {l:'Fürsorge',r:'Wohl fördern'},
+          {l:'Nicht-Schaden',r:'Schaden vermeiden'},
+          {l:'Gerechtigkeit',r:'Faire Behandlung'}
+        ]
+      },
+      tip:'Autonomie steht oft im Konflikt mit Fürsorge.'
+    },
+
+    {
+      tit:'ICN Ethikkodex',
+      emi:'📜',
+      sub:'Berufsethik Pflege',
+      html:`<div class="lbody">
+      <p>Der <strong>ICN Kodex</strong> beschreibt Pflichten der Pflege.</p>
+      <div class="exbox"><strong>4 Bereiche:</strong> Patient · Pflegepraxis · Beruf · Gesellschaft</div>
+      </div>`,
+      blanks:{
+        ins:'Die 4 Bereiche:',
+        parts:[
+          {t:'',b:{a:'patient',h:'P------'}},
+          {t:' · ',b:null},
+          {t:'',b:{a:'pflegepraxis',h:'P-----------'}},
+          {t:' · ',b:null},
+          {t:'',b:{a:'beruf',h:'B----'}},
+          {t:' · ',b:null},
+          {t:'',b:{a:'gesellschaft',h:'G------------'}}
+        ]
+      },
+      tip:'Kommt oft 1:1 in der Prüfung.'
+    },
+
+    {
+      tit:'Ethisches Dilemma',
+      emi:'⚡',
+      sub:'Konflikt zwischen Werten',
+      html:`<div class="lbody">
+      <p>Dilemma = zwei richtige Optionen im Konflikt.</p>
+      <div class="ib wr"><div class="ib-ico">⚠️</div><div class="ib-b">
+      <p>Keine perfekte Lösung möglich</p>
+      </div></div>
+      </div>`,
+      sort:{
+        ins:'Entscheidungsprozess:',
+        items:[
+          'Situation analysieren',
+          'Werte erkennen',
+          'Optionen abwägen',
+          'Entscheidung treffen',
+          'Reflektieren'
+        ]
+      },
+      tip:'Struktur zählt mehr als „richtige" Antwort.'
+    },
+
+    {
+      tit:'Patientenautonomie vs Fürsorge',
+      emi:'⚖️',
+      sub:'Klassischer Prüfungsfall',
+      html:`<div class="lbody">
+      <p>Patient lehnt Behandlung ab.</p>
+      <div class="exbox"><strong>Frage:</strong> Respektieren oder eingreifen?</div>
+      </div>`,
+      match:{
+        ins:'Ordne korrekt:',
+        pairs:[
+          {l:'Autonomie',r:'Patient entscheidet selbst'},
+          {l:'Fürsorge',r:'Pflege schützt Gesundheit'},
+          {l:'Konflikt',r:'Patient lehnt lebensrettende Maßnahme ab'},
+          {l:'Lösung',r:'Aufklärung + Entscheidung respektieren'}
+        ]
+      },
+      tip:'Einwilligungsfähigkeit prüfen.'
+    },
+
+    {
+      tit:'Fallstudie: Frau Meier',
+      emi:'👵',
+      sub:'Ethik anwenden',
+      html:'',
+      scenario:{
+        txt:'Frau Meier verweigert Essen trotz Untergewicht.',
+        qs:[
+          {
+            l:'Welches Dilemma?',
+            a:'Autonomie vs Fürsorge.'
+          },
+          {
+            l:'Was tun?',
+            a:'Aufklären, Ursachen klären, Entscheidung respektieren.'
+          },
+          {
+            l:'Wann eingreifen?',
+            a:'Bei fehlender Einwilligungsfähigkeit.'
+          }
+        ]
+      },
+      tip:'Immer erst Gespräch, dann Handlung.'
+    }
+  ],
+  quiz:[
+    {q:'Was gehört zu ethischen Prinzipien?',opts:['Autonomie','Tempo','Technik','Dokumentation'],c:0,expl:'Autonomie ist ein Grundprinzip.'},
+    {q:'ICN Kodex umfasst?',opts:['2 Bereiche','3 Bereiche','4 Bereiche','5 Bereiche'],c:2,expl:'Vier Bereiche.'},
+    {q:'Dilemma bedeutet:',opts:['Klare Lösung','Konflikt','Fehler','Regel'],c:1,expl:'Zwei Werte im Konflikt.'},
+    {q:'Autonomie heißt:',opts:['Pflege entscheidet','Arzt entscheidet','Patient entscheidet','Familie entscheidet'],c:2,expl:'Selbstbestimmung.'},
+    {q:'Erster Schritt bei Dilemma?',opts:['Handeln','Analysieren','Dokumentieren','Ignorieren'],c:1,expl:'Analyse zuerst.'}
+  ]
+  }
+
+  {
+  id:4,title:'Rechtliche Grundlagen',
+  icon:'⚖️',grad:'linear-gradient(135deg,#0891b2,#2563eb)',
+  ibg:'#eff6ff',cat:'KB IV',cost:1,tag:'new',
+  lessons:[
+    {
+      tit:'Einwilligung & Aufklärung (§630d BGB)',
+      emi:'📝',
+      sub:'Rechtmäßigkeit jeder Maßnahme',
+      html:`<div class="lbody">
+      <p>Jede pflegerische Maßnahme ist eine <strong>Körperverletzung</strong>, wenn keine Einwilligung vorliegt.</p>
+      <div class="ib info"><div class="ib-ico">⚖️</div><div class="ib-b">
+      <h4>Voraussetzungen</h4>
+      <p>Einwilligung + Aufklärung + Einwilligungsfähigkeit</p>
+      </div></div>
+      <div class="exbox"><strong>Prüfung:</strong> PEG legen ohne Aufklärung → strafbar</div>
+      </div>`,
+      blanks:{
+        ins:'Voraussetzungen der Einwilligung:',
+        parts:[
+          {t:'',b:{a:'einwilligung',h:'E---------'}},
+          {t:' + ',b:null},
+          {t:'',b:{a:'aufklärung',h:'A----------'}},
+          {t:' + ',b:null},
+          {t:'',b:{a:'einwilligungsfähigkeit',h:'E---------------------'}}
+        ]
+      },
+      tip:'Immer prüfen: Kann Patient verstehen, entscheiden und äußern?'
+    },
+
+    {
+      tit:'Schweigepflicht (§203 StGB)',
+      emi:'🤐',
+      sub:'Was darfst du weitergeben?',
+      html:`<div class="lbody">
+      <p>Pflegekräfte unterliegen der <strong>Schweigepflicht</strong>.</p>
+      <div class="ib wr"><div class="ib-ico">⛔</div><div class="ib-b">
+      <h4>Verstoß</h4>
+      <p>Weitergabe ohne Einwilligung → strafbar</p>
+      </div></div>
+      </div>`,
+      match:{
+        ins:'Ordne korrekt zu:',
+        pairs:[
+          {l:'Erlaubt',r:'Mit Einwilligung des Patienten'},
+          {l:'Verboten',r:'Gespräch im Aufzug über Patient'},
+          {l:'Erlaubt',r:'Teaminterne Übergabe'},
+          {l:'Verboten',r:'Infos an Nachbarn'}
+        ]
+      },
+      tip:'Immer prüfen: Wer braucht die Info beruflich?'
+    },
+
+    {
+      tit:'Delegation & Durchführungsverantwortung',
+      emi:'📋',
+      sub:'Wer haftet wofür?',
+      html:`<div class="lbody">
+      <p>Arzt delegiert → Pflege führt aus.</p>
+      <div class="ib info"><div class="ib-ico">⚠️</div><div class="ib-b">
+      <h4>Wichtig</h4>
+      <p>Du bist verantwortlich für korrekte Durchführung</p>
+      </div></div>
+      </div>`,
+      sort:{
+        ins:'Richtige Reihenfolge:',
+        items:[
+          'Anordnung prüfen',
+          'Durchführbarkeit prüfen',
+          'Maßnahme durchführen',
+          'Beobachten',
+          'Dokumentieren'
+        ]
+      },
+      tip:'Du darfst ablehnen, wenn unsicher oder nicht qualifiziert.'
+    },
+
+    {
+      tit:'Fixierung & Freiheitsentzug',
+      emi:'⛓️',
+      sub:'Wann erlaubt?',
+      html:`<div class="lbody">
+      <p>Fixierung = <strong>Freiheitsentziehende Maßnahme</strong></p>
+      <div class="ib wr"><div class="ib-ico">⚠️</div><div class="ib-b">
+      <h4>Nur erlaubt bei</h4>
+      <p>richterlicher Genehmigung oder akuter Gefahr</p>
+      </div></div>
+      </div>`,
+      blanks:{
+        ins:'Fixierung braucht:',
+        parts:[
+          {t:'',b:{a:'richterliche genehmigung',h:'R------------------------'}},
+          {t:' oder ',b:null},
+          {t:'',b:{a:'akute gefahr',h:'A----------'}}
+        ]
+      },
+      tip:'Immer dokumentieren + Alternative prüfen.'
+    },
+
+    {
+      tit:'Fallstudie: Herr Weber',
+      emi:'👨‍⚕️',
+      sub:'Recht anwenden',
+      html:'',
+      scenario:{
+        txt:'Herr Weber, dement, will Station verlassen. Du fixierst ihn ohne Rücksprache.',
+        qs:[
+          {
+            l:'Was ist das rechtlich?',
+            a:'Freiheitsentziehende Maßnahme ohne Genehmigung → rechtswidrig.'
+          },
+          {
+            l:'Was wäre korrekt?',
+            a:'Arzt informieren + richterliche Genehmigung + Alternativen prüfen.'
+          },
+          {
+            l:'Welche Alternative?',
+            a:'1:1 Betreuung, Umfeld sichern, Angehörige einbeziehen.'
+          }
+        ]
+      },
+      tip:'Immer mildestes Mittel zuerst.'
+    }
+  ],
+  quiz:[
+    {q:'Was ist Voraussetzung für eine Maßnahme?',opts:['Nur Arztanordnung','Einwilligung','Dokumentation','Zeit'],c:1,expl:'Ohne Einwilligung = Körperverletzung.'},
+    {q:'Schweigepflicht gilt gegenüber:',opts:['Freunden','Kollegen','Unbeteiligten','Familie'],c:2,expl:'Unbefugte dürfen nichts wissen.'},
+    {q:'Wer trägt Durchführungsverantwortung?',opts:['Arzt','Pflege','Patient','Angehörige'],c:1,expl:'Du führst aus → du haftest.'},
+    {q:'Fixierung ohne Genehmigung?',opts:['Erlaubt','Verboten','Optional','Egal'],c:1,expl:'Nur bei akuter Gefahr erlaubt.'},
+    {q:'§203 StGB regelt:',opts:['Einwilligung','Schweigepflicht','Haftung','Fixierung'],c:1,expl:'Schweigepflicht.'}
+  ]
+}
 {id:3,title:'Assessmentinstrumente',icon:'📊',grad:'linear-gradient(135deg,#e11d48,#d97706)',ibg:'#fff0f8',cat:'KB I',cost:1,tag:'new',ph:true,desc:'Braden, Barthel, Norton, NRS, MMSE — Skalen sicher anwenden & auswerten'},
 {id:4,title:'Rechtliche Grundlagen',icon:'⚖️',grad:'linear-gradient(135deg,#0891b2,#2563eb)',ibg:'#eff6ff',cat:'KB IV',cost:1,tag:'new',ph:true,desc:'§630d, §823 BGB, Fixierung, Delegation & Schweigepflicht §203 StGB'},
 {id:5,title:'Wundversorgung & Dekubitus',icon:'🩹',grad:'linear-gradient(135deg,#059669,#2563eb)',ibg:'#f0fdf4',cat:'KB I',cost:1,tag:'coming',ph:true,desc:'Wundklassifikation, Phasen der Wundheilung, Dekubitusprophylaxe'},
