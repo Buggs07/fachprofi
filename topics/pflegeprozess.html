@@ -1,0 +1,936 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pflegeprozess • PflegefachProfi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    body{
+      font-family:'Plus Jakarta Sans',sans-serif;
+      background:#f8fafc;
+      color:#0d1117;
+      overflow-x:hidden;
+      min-height:100vh;
+    }
+
+    :root{
+      --ink:#0d1117;
+      --ink2:#1c2333;
+      --ink3:#374151;
+      --muted:#6b7280;
+      --faint:#f3f4f6;
+      --white:#ffffff;
+      --border:#e5e7eb;
+      --border2:#d1d5db;
+
+      --blue:#2563eb;
+      --blue-d:#1d4ed8;
+      --blue-l:#dbeafe;
+      --blue-xl:#eff6ff;
+
+      --purple:#7c3aed;
+      --purple-l:#ede9fe;
+
+      --green:#059669;
+      --green-l:#d1fae5;
+
+      --amber:#d97706;
+      --amber-l:#fef3c7;
+
+      --rose:#e11d48;
+      --rose-l:#ffe4e6;
+
+      --s1:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+      --s2:0 4px 16px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.06);
+      --s3:0 16px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);
+
+      --nh:64px;
+      --ease:cubic-bezier(.4,0,.2,1);
+    }
+
+    .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+    @media(max-width:420px){.wrap{padding:0 12px}}
+
+    .hdr{
+      position:sticky;top:0;z-index:500;height:var(--nh);
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      transition:box-shadow .2s var(--ease);
+    }
+    .hdr.scrolled{box-shadow:var(--s2)}
+    .hdr-in{
+      height:100%;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .logo{
+      display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;
+    }
+    .logo-mark{
+      width:38px;height:38px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.35);
+      flex-shrink:0;
+    }
+    .logo-text{font-family:'Fraunces',serif;font-weight:700;font-size:1.02rem}
+    .logo-text span{color:var(--blue)}
+    .hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .pill{
+      display:flex;align-items:center;gap:7px;
+      padding:6px 12px;border-radius:999px;
+      border:1.5px solid var(--border);
+      background:var(--white);
+      font-weight:900;font-size:.78rem;
+      white-space:nowrap;
+    }
+    .pill i{color:var(--blue)}
+    .prog{
+      display:flex;align-items:center;gap:10px;
+      padding:6px 12px;border-radius:999px;
+      border:1.5px solid var(--border);
+      background:var(--white);
+    }
+    .prog-bar{width:72px;height:7px;background:var(--border);border-radius:999px;overflow:hidden}
+    .prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;transition:width .35s var(--ease)}
+    .prog-txt{font-weight:900;font-size:.75rem;color:var(--muted)}
+
+    .hero{padding:28px 0 16px}
+    .hero-grid{
+      display:grid;grid-template-columns:1.25fr .75fr;gap:16px;align-items:stretch;
+    }
+    @media(max-width:980px){.hero-grid{grid-template-columns:1fr}}
+
+    .card{
+      background:var(--white);
+      border:1.5px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--s1);
+    }
+
+    .hero-card{
+      padding:24px;position:relative;overflow:hidden;
+    }
+    .hero-card::before{
+      content:'';
+      position:absolute;top:-150px;right:-150px;
+      width:380px;height:380px;
+      background:radial-gradient(circle,rgba(37,99,235,.09) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 14px;border-radius:999px;
+      background:var(--blue-xl);border:1px solid var(--blue-l);
+      color:var(--blue);font-weight:900;font-size:.74rem;
+      text-transform:uppercase;letter-spacing:.05em;
+      margin-bottom:12px;
+      position:relative;z-index:1;
+    }
+    h1{
+      font-family:'Fraunces',serif;
+      font-size:2.3rem;font-weight:900;line-height:1.08;
+      letter-spacing:-.03em;margin-bottom:12px;
+      position:relative;z-index:1;
+    }
+    h1 em{font-style:italic;color:var(--blue)}
+    .hero-sub{
+      font-size:.95rem;line-height:1.7;color:var(--ink3);
+      max-width:760px;position:relative;z-index:1;
+    }
+    .hero-actions{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:1;
+    }
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:11px 16px;border-radius:12px;
+      font-weight:900;font-size:.86rem;text-decoration:none;
+      border:none;cursor:pointer;transition:.18s;
+    }
+    .btn-primary{background:var(--blue);color:#fff}
+    .btn-primary:hover{background:var(--blue-d)}
+    .btn-outline{
+      background:#fff;color:var(--ink);
+      border:1.5px solid var(--border2);
+    }
+    .btn-outline:hover{border-color:var(--blue);background:var(--blue-xl);color:var(--blue)}
+
+    .score-card{padding:20px}
+    .score-head{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;
+    }
+    .score-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.02rem}
+    .score-badge{
+      background:var(--green-l);color:var(--green);
+      border-radius:999px;padding:5px 10px;font-size:.72rem;font-weight:900;
+    }
+    .mini-stack{display:grid;gap:10px}
+    .mini{
+      border:1.5px solid var(--border);
+      border-radius:16px;padding:12px 14px;background:#fafafa;
+    }
+    .mini .k{font-size:.72rem;font-weight:900;color:var(--muted);margin-bottom:4px}
+    .mini .v{font-size:.92rem;font-weight:800;color:var(--ink)}
+    .mini .v span{color:var(--blue)}
+
+    .layout{
+      display:grid;grid-template-columns:280px 1fr;gap:16px;padding:8px 0 52px;
+    }
+    @media(max-width:980px){.layout{grid-template-columns:1fr}}
+
+    .side{
+      position:sticky;top:84px;height:max-content;
+      display:grid;gap:14px;
+    }
+    @media(max-width:980px){.side{position:static}}
+
+    .nav-card,.note-card,.sprint-card,.content-card,.quiz-card,.case-card{
+      background:var(--white);border:1.5px solid var(--border);border-radius:22px;box-shadow:var(--s1);
+    }
+
+    .nav-card{padding:16px}
+    .nav-title,.note-title,.sprint-title{
+      font-family:'Fraunces',serif;font-size:1rem;font-weight:900;margin-bottom:10px;
+    }
+    .snav{list-style:none;display:grid;gap:6px}
+    .snav a{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:12px;text-decoration:none;
+      color:var(--ink3);font-weight:800;font-size:.84rem;
+      border:1px solid transparent;transition:.15s;
+    }
+    .snav a:hover{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue)}
+
+    .note-card{padding:16px}
+    .note-card textarea{
+      width:100%;min-height:120px;resize:vertical;
+      border:2px solid var(--border);border-radius:14px;
+      padding:12px;font:inherit;outline:none;
+    }
+    .note-card textarea:focus{border-color:var(--blue)}
+    .save-note{
+      margin-top:10px;width:100%;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      padding:10px 14px;border:none;border-radius:12px;
+      background:var(--blue);color:#fff;font-weight:900;cursor:pointer;
+    }
+
+    .sprint-card{padding:16px}
+    .sprint-list{display:grid;gap:8px;font-size:.84rem;color:var(--ink3)}
+    .sprint-step{
+      display:flex;gap:10px;align-items:flex-start;
+      border:1px solid var(--border);border-radius:14px;padding:10px;background:#fafafa;
+    }
+    .sprint-step strong{
+      width:28px;height:28px;border-radius:10px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--blue-xl);color:var(--blue);font-size:.78rem;
+    }
+
+    .content{display:grid;gap:16px}
+    .content-card{padding:22px}
+    .section-top{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .section-top h2{
+      font-family:'Fraunces',serif;font-size:1.45rem;font-weight:900;letter-spacing:-.02em;
+    }
+    .section-top p{font-size:.84rem;color:var(--muted);max-width:520px;line-height:1.6}
+
+    .tag-row{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;border-radius:999px;
+      border:1px solid;font-size:.7rem;font-weight:900;
+      white-space:nowrap;
+    }
+    .tag.blue{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue)}
+    .tag.green{background:var(--green-l);border-color:#a7f3d0;color:var(--green)}
+    .tag.amber{background:var(--amber-l);border-color:rgba(217,119,6,.25);color:#92400e}
+
+    .focus-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+    }
+    @media(max-width:780px){.focus-grid{grid-template-columns:1fr}}
+    .focus{
+      border:1.5px solid var(--border);border-radius:18px;padding:16px;background:#fff;
+    }
+    .focus .icon{
+      width:42px;height:42px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--blue-xl);font-size:1.15rem;margin-bottom:10px;
+    }
+    .focus h3{font-size:.92rem;font-weight:900;margin-bottom:6px}
+    .focus p{font-size:.82rem;color:var(--muted);line-height:1.6}
+
+    .steps-grid{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+    }
+    @media(max-width:780px){.steps-grid{grid-template-columns:1fr}}
+    .step{
+      border:1.5px solid var(--border);border-radius:18px;padding:16px;
+      background:linear-gradient(145deg,#fff 0%,#fafafa 100%);
+    }
+    .step-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .step-num{
+      width:34px;height:34px;border-radius:12px;
+      background:var(--blue);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:.88rem;flex-shrink:0;
+    }
+    .step h3{font-size:1rem;font-weight:900}
+    .step p{font-size:.84rem;color:var(--ink3);line-height:1.65}
+    .step ul{margin-top:10px;padding-left:1.1rem}
+    .step li{margin-bottom:6px;font-size:.82rem;color:var(--ink3)}
+
+    .formula-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:12px;
+    }
+    @media(max-width:780px){.formula-grid{grid-template-columns:1fr}}
+    .formula{
+      border:1.5px solid var(--border);border-radius:18px;padding:16px;background:#fff;
+    }
+    .formula h3{font-size:.95rem;font-weight:900;margin-bottom:8px}
+    .formula p{font-size:.84rem;line-height:1.7;color:var(--ink3)}
+    .formula code{
+      display:block;margin-top:10px;padding:12px 14px;border-radius:14px;
+      background:#0f172a;color:#e2e8f0;font-size:.82rem;line-height:1.6;
+      overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    }
+
+    .mistakes{
+      display:grid;gap:10px;
+    }
+    .mistake{
+      border-left:4px solid var(--rose);
+      background:var(--rose-l);
+      border-radius:14px;padding:14px 16px;
+    }
+    .mistake strong{display:block;margin-bottom:4px}
+    .mistake span{font-size:.84rem;color:var(--ink3);line-height:1.6}
+
+    .checklist{
+      display:grid;gap:8px;
+    }
+    .check{
+      display:flex;align-items:flex-start;gap:10px;
+      border:1.5px solid var(--border);border-radius:14px;padding:12px;background:#fff;
+    }
+    .check input{margin-top:3px;transform:scale(1.15)}
+    .check span{font-size:.84rem;line-height:1.55;color:var(--ink3)}
+
+    .quiz-card,.case-card{padding:22px}
+    .quiz-q{
+      border:1.5px solid var(--border);border-radius:18px;padding:16px;margin-top:12px;
+    }
+    .quiz-q h3{font-size:.95rem;font-weight:900;margin-bottom:10px}
+    .opts{display:grid;gap:8px}
+    .opt{
+      border:2px solid var(--border);border-radius:14px;background:#fff;
+      padding:11px 13px;cursor:pointer;font-weight:800;font-size:.84rem;text-align:left;
+      transition:.15s;
+    }
+    .opt:hover{border-color:var(--blue)}
+    .opt.good{border-color:#86efac;background:var(--green-l);color:var(--green)}
+    .opt.bad{border-color:#fda4af;background:var(--rose-l);color:var(--rose)}
+    .quiz-fb{
+      margin-top:10px;font-size:.84rem;font-weight:800;display:none;
+      border-radius:14px;padding:12px 14px;line-height:1.6;
+    }
+    .quiz-fb.show{display:block}
+    .quiz-fb.ok{background:var(--green-l);color:#065f46}
+    .quiz-fb.no{background:var(--rose-l);color:#9f1239}
+
+    .case-box{
+      background:linear-gradient(135deg,#f8f4ff,#eff6ff);
+      border:1.5px solid #c4b5fd;border-radius:18px;padding:18px;
+    }
+    .case-box h3{font-size:1rem;font-weight:900;margin-bottom:8px}
+    .case-box p{font-size:.86rem;line-height:1.7;color:var(--ink3)}
+    .case-qs{display:grid;gap:12px;margin-top:16px}
+    .case-q label{display:block;font-size:.82rem;font-weight:900;color:var(--muted);margin-bottom:6px}
+    .case-q textarea{
+      width:100%;min-height:78px;resize:vertical;
+      border:2px solid var(--border);border-radius:14px;padding:12px;
+      font:inherit;outline:none;background:#fff;
+    }
+    .case-q textarea:focus{border-color:var(--blue)}
+    .show-ans{
+      margin-top:8px;border:none;border-radius:999px;
+      padding:8px 14px;background:var(--purple);color:#fff;font-weight:900;cursor:pointer;
+    }
+    .ans{
+      display:none;margin-top:8px;background:var(--green-l);
+      border:1px solid rgba(5,150,105,.25);border-radius:14px;padding:12px 14px;
+      font-size:.83rem;line-height:1.65;color:#065f46;
+    }
+    .ans.show{display:block}
+
+    .footer{
+      border-top:1px solid var(--border);padding:24px 0;
+      text-align:center;font-size:.75rem;color:var(--muted);margin-top:20px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hdr" id="hdr">
+    <div class="wrap hdr-in">
+      <a class="logo" href="../lernkatalog.html">
+        <div class="logo-mark"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="logo-text">Pflege<span>fach</span>Profi</div>
+      </a>
+
+      <div class="hdr-r">
+        <a class="pill" href="../lernkatalog.html" style="text-decoration:none;color:inherit;">
+          <i class="fas fa-arrow-left"></i>
+          Zurück
+        </a>
+        <div class="pill">
+          <i class="fas fa-layer-group"></i>
+          W1 · W2
+        </div>
+        <div class="prog" aria-label="Seitenfortschritt">
+          <div class="prog-bar"><div class="prog-fill" id="pageProgress"></div></div>
+          <span class="prog-txt" id="pageProgressText">0%</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div class="card hero-card">
+            <div class="eyebrow"><i class="fas fa-sitemap"></i> Pflegeprozess kompakt</div>
+            <h1>Lerne den <em>Pflegeprozess</em> so, wie er in der Prüfung zählt</h1>
+            <p class="hero-sub">
+              Diese Seite ist auf schnelles Verstehen, aktives Abrufen und sauberes Formulieren gebaut. Fokus auf Schritte, NANDA, SMART-Ziele, typische Fehler und eine prüfungsnahe Fallaufgabe.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#prozess"><i class="fas fa-play"></i> Direkt starten</a>
+              <a class="btn btn-outline" href="#quiz"><i class="fas fa-brain"></i> Selbsttest</a>
+              <a class="btn btn-outline" href="#fall"><i class="fas fa-file-medical"></i> Fallbeispiel</a>
+            </div>
+          </div>
+
+          <div class="card score-card">
+            <div class="score-head">
+              <div class="score-title">Lernstatus</div>
+              <div class="score-badge" id="masteryBadge">Offen</div>
+            </div>
+            <div class="mini-stack">
+              <div class="mini">
+                <div class="k">Prüfungsfokus</div>
+                <div class="v"><span>Pflegeprozessgestaltung</span>, Interaktion, Problemlagen, Begründung</div>
+              </div>
+              <div class="mini">
+                <div class="k">Heute schaffen</div>
+                <div class="v">6 Schritte, PÄS, SMART, 1 Fall, 5 Quizfragen</div>
+              </div>
+              <div class="mini">
+                <div class="k">Merksatz</div>
+                <div class="v">Erheben, erkennen, planen, machen, prüfen, anpassen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="layout">
+        <aside class="side">
+          <div class="nav-card">
+            <div class="nav-title">Inhalt</div>
+            <ul class="snav">
+              <li><a href="#exam"><i class="fas fa-bullseye"></i> Prüfungsfokus</a></li>
+              <li><a href="#prozess"><i class="fas fa-diagram-project"></i> 6 Schritte</a></li>
+              <li><a href="#formeln"><i class="fas fa-pen-ruler"></i> PÄS und SMART</a></li>
+              <li><a href="#fehler"><i class="fas fa-triangle-exclamation"></i> Typische Fehler</a></li>
+              <li><a href="#checklist"><i class="fas fa-list-check"></i> Prüfungscheckliste</a></li>
+              <li><a href="#quiz"><i class="fas fa-brain"></i> Selbsttest</a></li>
+              <li><a href="#fall"><i class="fas fa-file-medical"></i> Fallbeispiel</a></li>
+            </ul>
+          </div>
+
+          <div class="note-card">
+            <div class="note-title">Meine Kurznotiz</div>
+            <textarea id="noteBox" placeholder="Schreibe hier deinen Merksatz oder die Fehler, die du oft machst."></textarea>
+            <button class="save-note" id="saveNoteBtn"><i class="fas fa-save"></i> Notiz speichern</button>
+          </div>
+
+          <div class="sprint-card">
+            <div class="sprint-title">30 Minuten Sprint</div>
+            <div class="sprint-list">
+              <div class="sprint-step"><strong>1</strong><div>Erst 6 Schritte lesen und laut wiedergeben.</div></div>
+              <div class="sprint-step"><strong>2</strong><div>Dann PÄS und SMART mit eigenem Beispiel üben.</div></div>
+              <div class="sprint-step"><strong>3</strong><div>Danach Quiz ohne Spicken lösen.</div></div>
+              <div class="sprint-step"><strong>4</strong><div>Zum Schluss den Fall kurz schriftlich beantworten.</div></div>
+            </div>
+          </div>
+        </aside>
+
+        <div class="content">
+          <section class="content-card" id="exam">
+            <div class="section-top">
+              <div>
+                <h2>Warum das prüfungsrelevant ist</h2>
+                <p>Hier musst du nicht alles wissen. Du musst das Richtige sicher anwenden und sauber formulieren.</p>
+              </div>
+              <div class="tag-row">
+                <span class="tag blue"><i class="fas fa-calendar-day"></i> W1</span>
+                <span class="tag blue"><i class="fas fa-calendar-day"></i> W2</span>
+                <span class="tag green"><i class="fas fa-check-circle"></i> Kernkompetenz</span>
+              </div>
+            </div>
+
+            <div class="focus-grid">
+              <div class="focus">
+                <div class="icon">📝</div>
+                <h3>Schriftlich</h3>
+                <p>Du musst den Pflegeprozess in Fallsituationen erkennen, strukturieren und auf Pflegediagnosen, Ziele und Maßnahmen anwenden.</p>
+              </div>
+              <div class="focus">
+                <div class="icon">🧠</div>
+                <h3>Begründung</h3>
+                <p>Du brauchst nicht nur Maßnahmen, sondern auch Begründungen. Warum genau diese Pflegehandlung. Warum jetzt. Warum passend.</p>
+              </div>
+              <div class="focus">
+                <div class="icon">📋</div>
+                <h3>Formulierung</h3>
+                <p>Typisch abgefragt werden PÄS, SMART-Ziele, Ressourcen, Evaluation und die Fähigkeit, Fehler im Plan zu erkennen.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="content-card" id="prozess">
+            <div class="section-top">
+              <div>
+                <h2>Der 6 Schritte Aufbau</h2>
+                <p>Wenn du nur eine Sache sicher kannst, dann diese Reihenfolge.</p>
+              </div>
+            </div>
+
+            <div class="steps-grid">
+              <div class="step">
+                <div class="step-head">
+                  <div class="step-num">1</div>
+                  <h3>Assessment</h3>
+                </div>
+                <p>Du erhebst Informationen. Beobachtung, Anamnese, Messwerte, Ressourcen, Risiken, Bedürfnisse.</p>
+                <ul>
+                  <li>Was ist das Problem</li>
+                  <li>Was kann die Person noch selbst</li>
+                  <li>Welche Daten sind wichtig</li>
+                </ul>
+              </div>
+
+              <div class="step">
+                <div class="step-head">
+                  <div class="step-num">2</div>
+                  <h3>Pflegediagnose</h3>
+                </div>
+                <p>Du benennst das pflegerische Problem fachlich, am besten strukturiert mit PÄS.</p>
+                <ul>
+                  <li>Problem</li>
+                  <li>Ursache oder Einflussfaktor</li>
+                  <li>Symptome oder Hinweise</li>
+                </ul>
+              </div>
+
+              <div class="step">
+                <div class="step-head">
+                  <div class="step-num">3</div>
+                  <h3>Zielplanung</h3>
+                </div>
+                <p>Du formulierst das Pflegeziel so, dass man später wirklich prüfen kann, ob es erreicht wurde.</p>
+                <ul>
+                  <li>Spezifisch</li>
+                  <li>Messbar</li>
+                  <li>Terminiert</li>
+                </ul>
+              </div>
+
+              <div class="step">
+                <div class="step-head">
+                  <div class="step-num">4</div>
+                  <h3>Maßnahmenplanung</h3>
+                </div>
+                <p>Du legst fest, wer was wie oft wann macht. Maßnahmen müssen zum Ziel und zum Problem passen.</p>
+                <ul>
+                  <li>konkret</li>
+                  <li>realistisch</li>
+                  <li>patientenbezogen</li>
+                </ul>
+              </div>
+
+              <div class="step">
+                <div class="step-head">
+                  <div class="step-num">5</div>
+                  <h3>Durchführung</h3>
+                </div>
+                <p>Die geplanten Maßnahmen werden umgesetzt. Wichtig ist dabei die Beobachtung während der Pflege.</p>
+                <ul>
+                  <li>Handeln nach Plan</li>
+                  <li>Abweichungen erkennen</li>
+                  <li>Dokumentation nicht vergessen</li>
+                </ul>
+              </div>
+
+              <div class="step">
+                <div class="step-head">
+                  <div class="step-num">6</div>
+                  <h3>Evaluation</h3>
+                </div>
+                <p>Du prüfst, ob das Ziel erreicht wurde. Wenn nicht, wird der Plan angepasst.</p>
+                <ul>
+                  <li>Soll und Ist vergleichen</li>
+                  <li>Ziel erreicht oder nicht</li>
+                  <li>Pflegeplan anpassen</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="content-card" id="formeln">
+            <div class="section-top">
+              <div>
+                <h2>PÄS und SMART</h2>
+                <p>Diese zwei Formeln geben dir in der Prüfung sofort Struktur.</p>
+              </div>
+            </div>
+
+            <div class="formula-grid">
+              <div class="formula">
+                <h3>PÄS für Pflegediagnosen</h3>
+                <p>
+                  P steht für Problem. Ä steht für Ätiologie. S steht für Symptome.
+                  Damit formulierst du klar, was pflegerisch relevant ist.
+                </p>
+                <code>Beeinträchtigte Mobilität
+bezogen auf postoperative Schmerzen
+sichtbar durch unsicheren Transfer und verkürzte Gehstrecke</code>
+              </div>
+
+              <div class="formula">
+                <h3>SMART für Pflegeziele</h3>
+                <p>
+                  Ein Ziel muss konkret und überprüfbar sein. Sonst kannst du es nicht evaluieren.
+                </p>
+                <code>Der Patient transferiert bis morgen Früh
+mit 1 Person Unterstützung
+sicher vom Bett in den Stuhl.</code>
+              </div>
+            </div>
+          </section>
+
+          <section class="content-card" id="fehler">
+            <div class="section-top">
+              <div>
+                <h2>Typische Fehler in der Prüfung</h2>
+                <p>Diese Fehler kosten oft einfache Punkte.</p>
+              </div>
+            </div>
+
+            <div class="mistakes">
+              <div class="mistake">
+                <strong>Problem und Krankheit verwechseln</strong>
+                <span>Nicht nur Diagnose wie Diabetes nennen. Du brauchst das pflegerische Problem, zum Beispiel instabiler Blutzucker oder Wissensdefizit.</span>
+              </div>
+              <div class="mistake">
+                <strong>Ziele zu ungenau formulieren</strong>
+                <span>“Mobilität verbessern” ist zu unklar. Besser ist: “Patient steht bis heute Abend mit Unterstützung einmal sicher am Bett auf.”</span>
+              </div>
+              <div class="mistake">
+                <strong>Maßnahmen ohne Bezug</strong>
+                <span>Maßnahmen müssen zu Diagnose und Ziel passen. Nicht einfach Standardmaßnahmen aufzählen.</span>
+              </div>
+              <div class="mistake">
+                <strong>Ressourcen vergessen</strong>
+                <span>Prüfungen mögen ressourcenorientiertes Denken. Also nicht nur Defizite nennen.</span>
+              </div>
+              <div class="mistake">
+                <strong>Evaluation auslassen</strong>
+                <span>Ohne Evaluation ist der Pflegeprozess nicht vollständig.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="content-card" id="checklist">
+            <div class="section-top">
+              <div>
+                <h2>Prüfungscheckliste</h2>
+                <p>Hake ab, was du heute sicher kannst. Der Fortschritt wird gespeichert.</p>
+              </div>
+            </div>
+
+            <div class="checklist">
+              <label class="check"><input type="checkbox" data-track="1"><span>Ich kann die 6 Schritte des Pflegeprozesses in richtiger Reihenfolge nennen.</span></label>
+              <label class="check"><input type="checkbox" data-track="2"><span>Ich kann eine Pflegediagnose im PÄS Aufbau formulieren.</span></label>
+              <label class="check"><input type="checkbox" data-track="3"><span>Ich kann aus einem Problem ein SMART Ziel formulieren.</span></label>
+              <label class="check"><input type="checkbox" data-track="4"><span>Ich kann passende Maßnahmen begründen.</span></label>
+              <label class="check"><input type="checkbox" data-track="5"><span>Ich kann erklären, was Evaluation bedeutet.</span></label>
+            </div>
+          </section>
+
+          <section class="quiz-card" id="quiz">
+            <div class="section-top">
+              <div>
+                <h2>Selbsttest</h2>
+                <p>Erst beantworten. Dann prüfen. Nicht vorher spicken.</p>
+              </div>
+            </div>
+
+            <div class="quiz-q" data-q="0" data-correct="1">
+              <h3>1. Welche Phase folgt direkt auf das Assessment?</h3>
+              <div class="opts">
+                <button class="opt">Zielplanung</button>
+                <button class="opt">Pflegediagnose</button>
+                <button class="opt">Evaluation</button>
+              </div>
+              <div class="quiz-fb">Die richtige Antwort ist Pflegediagnose, weil du nach dem Erheben der Daten das pflegerische Problem benennst.</div>
+            </div>
+
+            <div class="quiz-q" data-q="1" data-correct="2">
+              <h3>2. Was ist das Hauptproblem an diesem Ziel: “Patient fühlt sich bald besser”?</h3>
+              <div class="opts">
+                <button class="opt">Es ist zu lang</button>
+                <button class="opt">Es enthält keine Maßnahme</button>
+                <button class="opt">Es ist nicht messbar</button>
+              </div>
+              <div class="quiz-fb">Genau. Das Ziel ist nicht messbar und nicht terminiert.</div>
+            </div>
+
+            <div class="quiz-q" data-q="2" data-correct="0">
+              <h3>3. Wofür steht das S im PÄS Aufbau?</h3>
+              <div class="opts">
+                <button class="opt">Symptome</button>
+                <button class="opt">Sicherheit</button>
+                <button class="opt">Situation</button>
+              </div>
+              <div class="quiz-fb">Richtig. Symptome zeigen, woran sich das Problem erkennen lässt.</div>
+            </div>
+
+            <div class="quiz-q" data-q="3" data-correct="2">
+              <h3>4. Wann wird der Pflegeplan angepasst?</h3>
+              <div class="opts">
+                <button class="opt">Nie, wenn er einmal geschrieben ist</button>
+                <button class="opt">Nur auf ärztliche Anordnung</button>
+                <button class="opt">Wenn die Evaluation zeigt, dass das Ziel nicht erreicht wurde</button>
+              </div>
+              <div class="quiz-fb">Genau. Evaluation führt bei Bedarf zur Anpassung.</div>
+            </div>
+
+            <div class="quiz-q" data-q="4" data-correct="1">
+              <h3>5. Welche Aussage ist am ehesten eine Ressource?</h3>
+              <div class="opts">
+                <button class="opt">Patient ist sturzgefährdet</button>
+                <button class="opt">Patient ist motiviert und ansprechbar</button>
+                <button class="opt">Patient hat starke Schmerzen</button>
+              </div>
+              <div class="quiz-fb">Richtig. Motivation und Ansprechbarkeit sind nutzbare Ressourcen.</div>
+            </div>
+          </section>
+
+          <section class="case-card" id="fall">
+            <div class="section-top">
+              <div>
+                <h2>Fallbeispiel</h2>
+                <p>Schreibe kurz. Strukturiert. Prüfungsnah.</p>
+              </div>
+            </div>
+
+            <div class="case-box">
+              <h3>Frau S., 79 Jahre</h3>
+              <p>
+                Frau S. wurde nach einer Schenkelhalsfraktur operiert. Sie klagt über Schmerzen bei Bewegung, wirkt ängstlich und möchte nicht aufstehen. Beim Transfer braucht sie viel Unterstützung. Sie ist aber orientiert und kooperativ.
+              </p>
+
+              <div class="case-qs">
+                <div class="case-q">
+                  <label>1. Formuliere eine Pflegediagnose im PÄS Stil.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="show-ans">Musterlösung</button>
+                  <div class="ans">Beeinträchtigte Mobilität, bezogen auf postoperative Schmerzen und Unsicherheit, sichtbar durch hohen Unterstützungsbedarf beim Transfer und Vermeidung des Aufstehens.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>2. Formuliere ein SMART Ziel.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="show-ans">Musterlösung</button>
+                  <div class="ans">Frau S. steht bis morgen Früh mit 1 Person Unterstützung einmal sicher vom Bett auf und transferiert in den Stuhl.</div>
+                </div>
+
+                <div class="case-q">
+                  <label>3. Nenne 2 passende Maßnahmen.</label>
+                  <textarea placeholder="Deine Antwort"></textarea>
+                  <button class="show-ans">Musterlösung</button>
+                  <div class="ans">Schmerzlage vor Mobilisation erfassen und angeordnete Analgesie rechtzeitig berücksichtigen. Transfer schrittweise anleiten, Sicherheit geben und vorhandene Ressourcen gezielt nutzen.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="wrap">Pflegeprozess Lernseite · lokal gespeichert per Cookie</div>
+    </footer>
+  </main>
+
+  <script>
+    (function(){
+      'use strict';
+
+      const COOKIE_NAME = 'pfp_pflegeprozess_v1';
+
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => document.querySelectorAll(sel);
+
+      function setCookie(name, value, days){
+        const exp = new Date(Date.now() + days * 86400000).toUTCString();
+        document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(JSON.stringify(value)) + ';expires=' + exp + ';path=/;SameSite=Lax';
+      }
+
+      function getCookie(name){
+        const key = encodeURIComponent(name) + '=';
+        for(const part of document.cookie.split(';')){
+          const p = part.trim();
+          if(p.startsWith(key)){
+            try { return JSON.parse(decodeURIComponent(p.slice(key.length))); }
+            catch(e){ return null; }
+          }
+        }
+        return null;
+      }
+
+      let state = getCookie(COOKIE_NAME) || {
+        checks:{},
+        note:'',
+        quiz:{}
+      };
+
+      function save(){
+        setCookie(COOKIE_NAME, state, 180);
+        updateProgress();
+      }
+
+      function updateProgress(){
+        const checks = $$('[data-track]');
+        let done = 0;
+
+        checks.forEach(cb => {
+          const k = cb.dataset.track;
+          cb.checked = !!state.checks[k];
+          if(cb.checked) done++;
+        });
+
+        $('#noteBox').value = state.note || '';
+
+        const pct = checks.length ? Math.round((done / checks.length) * 100) : 0;
+        $('#pageProgress').style.width = pct + '%';
+        $('#pageProgressText').textContent = pct + '%';
+
+        const badge = $('#masteryBadge');
+        if(pct === 100){
+          badge.textContent = 'Sicher';
+          badge.style.background = 'var(--green-l)';
+          badge.style.color = 'var(--green)';
+        } else if(pct >= 60){
+          badge.textContent = 'Fast sicher';
+          badge.style.background = 'var(--blue-xl)';
+          badge.style.color = 'var(--blue)';
+        } else {
+          badge.textContent = 'Offen';
+          badge.style.background = 'var(--amber-l)';
+          badge.style.color = '#92400e';
+        }
+      }
+
+      $$('[data-track]').forEach(cb => {
+        cb.addEventListener('change', function(){
+          state.checks[this.dataset.track] = this.checked;
+          save();
+        });
+      });
+
+      $('#saveNoteBtn').addEventListener('click', function(){
+        state.note = $('#noteBox').value || '';
+        save();
+        this.innerHTML = '<i class="fas fa-check"></i> Gespeichert';
+        setTimeout(() => {
+          this.innerHTML = '<i class="fas fa-save"></i> Notiz speichern';
+        }, 1200);
+      });
+
+      $$('.quiz-q').forEach((box, qi) => {
+        const correct = parseInt(box.dataset.correct, 10);
+        const opts = box.querySelectorAll('.opt');
+        const fb = box.querySelector('.quiz-fb');
+
+        opts.forEach((btn, idx) => {
+          btn.addEventListener('click', () => {
+            opts.forEach(o => {
+              o.disabled = true;
+              o.style.pointerEvents = 'none';
+            });
+
+            if(idx === correct){
+              btn.classList.add('good');
+              fb.classList.add('show','ok');
+            } else {
+              btn.classList.add('bad');
+              opts[correct].classList.add('good');
+              fb.classList.add('show','no');
+            }
+
+            state.quiz[qi] = idx;
+            save();
+          });
+        });
+
+        if(state.quiz[qi] !== undefined){
+          const chosen = state.quiz[qi];
+          opts.forEach(o => {
+            o.disabled = true;
+            o.style.pointerEvents = 'none';
+          });
+          if(chosen === correct){
+            opts[chosen].classList.add('good');
+            fb.classList.add('show','ok');
+          } else {
+            if(opts[chosen]) opts[chosen].classList.add('bad');
+            opts[correct].classList.add('good');
+            fb.classList.add('show','no');
+          }
+        }
+      });
+
+      $$('.show-ans').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const ans = this.nextElementSibling;
+          ans.classList.toggle('show');
+          this.textContent = ans.classList.contains('show') ? 'Musterlösung ausblenden' : 'Musterlösung';
+        });
+      });
+
+      window.addEventListener('scroll', () => {
+        $('#hdr').classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive:true });
+
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>
