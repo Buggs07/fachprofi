@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PflegefachProfi • Abschlussprüfung Pflegefachmann</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+/* ═══════════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden;width:100%;min-height:100vh;}
+
+:root{
+  /* Core palette */
+  --ink:#0d1117;
+  --ink2:#1c2333;
+  --ink3:#374151;
+  --muted:#6b7280;
+  --faint:#f3f4f6;
+  --white:#ffffff;
+  --border:#e5e7eb;
+  --border2:#d1d5db;
+
+  /* Brand */
+  --blue:#2563eb;
+  --blue-d:#1d4ed8;
+  --blue-l:#dbeafe;
+  --blue-xl:#eff6ff;
+  --purple:#7c3aed;
+  --purple-l:#ede9fe;
+  --green:#059669;
+  --green-l:#d1fae5;
+  --amber:#d97706;
+  --amber-l:#fef3c7;
+  --rose:#e11d48;
+  --rose-l:#ffe4e6;
+  --teal:#0891b2;
+  --teal-l:#cffafe;
+  --orange:#ea580c;
+  --orange-l:#fed7aa;
+
+  /* Shadows */
+  --s1:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --s2:0 4px 16px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.06);
+  --s3:0 16px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);
+  --s4:0 32px 64px rgba(0,0,0,.15),0 8px 24px rgba(0,0,0,.08);
+
+  /* Layout */
+  --r:10px;--rl:16px;--rxl:24px;
+  --nh:64px;
+
+  /* Transitions */
+  --ease:cubic-bezier(.4,0,.2,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+body{background:#f8fafc;color:var(--ink);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:#f1f5f9;}
+::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:99px;}
+
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px;width:100%;}
+
+/* ═══════════════════════════════════════
+   VIEWS
+═══════════════════════════════════════ */
+.view{display:none;}
+.view.active{display:block;}
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.hdr{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:500;
+  height:var(--nh);
+  transition:box-shadow .2s;
+}
+.hdr.scrolled{box-shadow:var(--s2);}
+.hdr-in{display:flex;align-items:center;justify-content:space-between;height:100%;gap:12px;}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;cursor:pointer;}
+.logo-mark{
+  width:38px;height:38px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1rem;
+  box-shadow:0 4px 12px rgba(37,99,235,.35);
+}
+.logo-text{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;color:var(--ink);letter-spacing:-.01em;line-height:1;}
+.logo-text span{color:var(--blue);}
+
+/* Desktop nav */
+.dnav{display:flex;align-items:center;gap:2px;list-style:none;margin-left:4px;}
+.dnav li button{
+  display:flex;align-items:center;gap:5px;padding:7px 14px;
+  border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+  font-size:.83rem;color:var(--muted);border:none;background:transparent;
+  cursor:pointer;transition:all .18s var(--ease);
+}
+.dnav li button:hover{background:var(--faint);color:var(--ink);}
+.dnav li button.act{background:var(--blue-xl);color:var(--blue);font-weight:700;}
+.dnav li button i{font-size:.75rem;}
+
+/* Header right */
+.hdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+
+/* Stats pills */
+.stat-pill{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 11px;border-radius:99px;
+  font-weight:700;font-size:.78rem;
+  border:1.5px solid;transition:transform .15s var(--spring);
+  cursor:default;white-space:nowrap;
+}
+.stat-pill:hover{transform:scale(1.05);}
+.stat-fire{background:#fff7ed;border-color:#fed7aa;color:#c2410c;}
+.stat-xp{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue-d);}
+.stat-key{background:#fefce8;border-color:#fef08a;color:#854d0e;}
+.stat-progress{
+  display:flex;align-items:center;gap:8px;padding:5px 12px 5px 8px;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:99px;
+}
+.prog-bar{width:56px;height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px;transition:width .5s var(--ease);}
+.prog-lbl{font-weight:700;font-size:.75rem;color:var(--muted);}
+
+/* Burger */
+.burger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:38px;height:38px;border:1.5px solid var(--border);background:var(--white);
+  border-radius:10px;cursor:pointer;padding:9px;flex-shrink:0;transition:all .2s;
+}
+.burger span{display:block;width:100%;height:2px;background:var(--ink);border-radius:99px;transition:transform .25s,opacity .2s;}
+.burger.open{background:var(--blue-xl);border-color:var(--blue-l);}
+.burger.open span{background:var(--blue);}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* Mobile drawer */
+.mnav{
+  position:fixed;top:var(--nh);left:0;right:0;bottom:0;
+  background:var(--white);z-index:499;
+  transform:translateX(100%);opacity:0;
+  transition:transform .28s var(--ease),opacity .28s;
+  pointer-events:none;overflow-y:auto;
+  padding:16px 16px 32px;
+}
+.mnav.open{transform:translateX(0);opacity:1;pointer-events:all;}
+.mnav-inner{display:flex;flex-direction:column;gap:4px;}
+.mnav-sect{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:12px 12px 4px;}
+.mnav ul{list-style:none;display:flex;flex-direction:column;gap:2px;}
+.mnav ul li button{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:600;font-size:.9rem;color:var(--ink3);
+  border:none;background:transparent;cursor:pointer;width:100%;transition:all .15s;
+}
+.mnav ul li button:hover,.mnav ul li button.act{background:var(--blue-xl);color:var(--blue);}
+.mnav ul li button i{width:20px;text-align:center;color:var(--blue);font-size:.9rem;}
+.mnav-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 8px;}
+.mnav-stat{background:var(--faint);border-radius:12px;padding:12px;text-align:center;}
+.mnav-stat .val{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;color:var(--ink);line-height:1;}
+.mnav-stat .lbl{font-size:.68rem;font-weight:600;color:var(--muted);margin-top:3px;}
+.ndiv{height:1px;background:var(--border);margin:8px 12px;}
+
+/* ═══════════════════════════════════════
+   HOME — HERO
+═══════════════════════════════════════ */
+.home-wrap{padding-bottom:60px;}
+
+/* Top announcement bar */
+.ann-bar{
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  color:#fff;text-align:center;padding:10px 20px;
+  font-size:.78rem;font-weight:600;letter-spacing:.01em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.ann-bar a{color:#fff;text-decoration:underline;cursor:pointer;font-weight:700;}
+
+/* Hero section */
+.hero-section{
+  padding:52px 0 0;
+  position:relative;overflow:hidden;
+}
+.hero-section::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(37,99,235,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-section::after{
+  content:'';position:absolute;bottom:-100px;left:-150px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(124,58,237,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.hero-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:48px;align-items:center;position:relative;z-index:1;
+}
+
+/* Hero left */
+.hero-left{}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--blue-xl);color:var(--blue);
+  padding:6px 14px;border-radius:99px;
+  font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  margin-bottom:20px;border:1px solid var(--blue-l);
+}
+.hero-h1{
+  font-family:'Fraunces',serif;font-size:3rem;font-weight:900;
+  line-height:1.08;letter-spacing:-.03em;color:var(--ink);
+  margin-bottom:18px;
+}
+.hero-h1 em{font-style:italic;color:var(--blue);}
+.hero-h1 .line2{color:var(--purple);}
+.hero-sub{
+  font-size:1rem;color:var(--ink3);line-height:1.65;
+  margin-bottom:28px;max-width:420px;
+}
+.hero-ctas{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:12px 22px;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:700;font-size:.9rem;border:none;cursor:pointer;
+  transition:all .2s var(--ease);text-decoration:none;
+}
+.btn-primary{
+  background:var(--blue);color:#fff;
+  box-shadow:0 4px 16px rgba(37,99,235,.35);
+}
+.btn-primary:hover{background:var(--blue-d);box-shadow:0 6px 20px rgba(37,99,235,.45);transform:translateY(-1px);}
+.btn-primary:active{transform:translateY(0);}
+.btn-lg{padding:14px 28px;font-size:.95rem;border-radius:14px;}
+.btn-outline{
+  background:var(--white);color:var(--ink);
+  border:1.5px solid var(--border2);
+  box-shadow:var(--s1);
+}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-xl);transform:translateY(-1px);}
+
+/* Trust row */
+.hero-trust{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:.78rem;color:var(--muted);font-weight:600;}
+.trust-item i{color:var(--green);}
+.trust-div{width:1px;height:14px;background:var(--border2);}
+
+/* Hero right — visual card */
+.hero-right{position:relative;}
+.hero-card{
+  background:var(--white);border-radius:24px;padding:28px;
+  border:1.5px solid var(--border);box-shadow:var(--s4);
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--blue),var(--purple),var(--rose));
+}
+.hcard-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.hcard-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--ink);}
+.hcard-badge{
+  display:flex;align-items:center;gap:4px;
+  background:var(--green-l);color:var(--green);
+  padding:4px 10px;border-radius:99px;font-size:.7rem;font-weight:700;
+}
+
+/* Progress steps */
+.hcard-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hstep{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:12px;
+  border:1.5px solid var(--border);background:#fafafa;
+  transition:all .2s;
+}
+.hstep.done{border-color:var(--green-l);background:var(--green-l);}
+.hstep.active{border-color:var(--blue-l);background:var(--blue-xl);box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.hstep-ico{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+}
+.hstep.done .hstep-ico{background:var(--green);color:#fff;}
+.hstep.active .hstep-ico{background:var(--blue);color:#fff;}
+.hstep:not(.done):not(.active) .hstep-ico{background:var(--faint);}
+.hstep-info{flex:1;min-width:0;}
+.hstep-label{font-weight:700;font-size:.83rem;color:var(--ink);line-height:1;}
+.hstep-sub{font-size:.72rem;color:var(--muted);margin-top:2px;}
+.hstep-check{color:var(--green);font-size:.85rem;}
+
+/* XP bar */
+.hcard-xp{background:var(--faint);border-radius:12px;padding:12px 14px;}
+.hcard-xp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.xp-label{font-size:.75rem;font-weight:700;color:var(--muted);}
+.xp-val{font-size:.75rem;font-weight:700;color:var(--blue);}
+.xp-bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden;}
+.xp-fill{height:100%;width:28%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:99px;position:relative;animation:xpPulse 2s infinite;}
+@keyframes xpPulse{0%,100%{opacity:1}50%{opacity:.8}}
+
+/* Floating badges on hero card */
+.float-badge{
+  position:absolute;background:var(--white);
+  border-radius:12px;padding:8px 12px;
+  box-shadow:var(--s3);border:1.5px solid var(--border);
+  display:flex;align-items:center;gap:7px;
+  font-size:.73rem;font-weight:700;color:var(--ink);
+  animation:floatBob 3s ease-in-out infinite;
+  pointer-events:none;white-space:nowrap;
+}
+.float-badge:nth-child(2){animation-delay:.8s;}
+.float-badge:nth-child(3){animation-delay:1.6s;}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.fb-top{top:-18px;right:20px;}
+.fb-bot{bottom:-18px;left:10px;}
+
+/* ═══════════════════════════════════════
+   EXAM INFO STRIP
+═══════════════════════════════════════ */
+.exam-section{padding:36px 0 0;}
+.section-label{
+  font-size:.72rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.exam-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.exam-card{
+  background:var(--white);border-radius:14px;padding:16px;
+  border:1.5px solid var(--border);
+  display:flex;flex-direction:column;gap:8px;
+  transition:all .2s var(--ease);cursor:default;
+}
+.exam-card:hover{border-color:var(--blue-l);box-shadow:var(--s2);transform:translateY(-2px);}
+.exam-card-top{display:flex;align-items:center;justify-content:space-between;}
+.exam-ico{font-size:1.5rem;}
+.exam-day{
+  font-size:.66rem;font-weight:700;color:var(--muted);
+  background:var(--faint);border-radius:99px;padding:2px 8px;letter-spacing:.04em;text-transform:uppercase;
+}
+.exam-title{font-weight:800;font-size:.85rem;color:var(--ink);line-height:1.2;}
+.exam-detail{font-size:.75rem;color:var(--muted);font-weight:500;}
+.exam-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 9px;border-radius:99px;font-size:.65rem;font-weight:700;
+}
+
+/* ═══════════════════════════════════════
+   MODULES SECTION
+═══════════════════════════════════════ */
+.modules-section{padding:40px 0 0;}
+.modules-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap;}
+.modules-hl{
+  font-family:'Fraunces',serif;font-size:1.6rem;font-weight:900;
+  color:var(--ink);letter-spacing:-.02em;line-height:1.1;
+}
+.modules-hl span{color:var(--blue);}
+.modules-sub{font-size:.85rem;color:var(--muted);margin-top:4px;}
+.modules-actions{display:flex;align-items:center;gap:8px;}
+
+/* Filter tabs */
+.filter-tabs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.ftab{
+  padding:6px 14px;border-radius:99px;font-size:.78rem;font-weight:700;
+  border:1.5px solid var(--border);background:var(--white);color:var(--muted);
+  cursor:pointer;transition:all .15s var(--ease);
+}
+.ftab:hover{border-color:var(--blue);color:var(--blue);}
+.ftab.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.3);}
+
+/* Module grid */
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+/* Module card */
+.mcard{
+  background:var(--white);border-radius:18px;padding:20px;
+  border:1.5px solid var(--border);
+  cursor:pointer;transition:all .22s var(--ease);
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+  box-shadow:var(--s1);
+}
+.mcard::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--card-grad,linear-gradient(90deg,var(--blue),var(--purple)));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .25s var(--ease);
+}
+.mcard:hover{transform:translateY(-4px);box-shadow:var(--s3);border-color:transparent;}
+.mcard:hover::after{transform:scaleX(1);}
+.mcard.locked{opacity:.55;pointer-events:none;filter:grayscale(.4);}
+.mcard.done{border-color:rgba(5,150,105,.25);}
+.mcard.done::after{transform:scaleX(1);background:linear-gradient(90deg,var(--green),#34d399);}
+
+/* Featured card — first unlock */
+.mcard.featured{
+  border-color:var(--blue-l);
+  background:linear-gradient(145deg,var(--white) 0%,var(--blue-xl) 100%);
+}
+.mcard.featured::after{transform:scaleX(1);}
+
+.mc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:14px;}
+.mc-icon{
+  width:44px;height:44px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;flex-shrink:0;
+}
+.mc-tags{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:99px;font-size:.63rem;font-weight:700;white-space:nowrap;}
+.tag-free{background:var(--green-l);color:var(--green);}
+.tag-new{background:var(--purple-l);color:var(--purple);}
+.tag-coming{background:var(--faint);color:var(--muted);}
+.tag-done{background:var(--green-l);color:var(--green);}
+.tag-locked{background:var(--amber-l);color:var(--amber);}
+.tag-cat{background:var(--blue-xl);color:var(--blue);}
+.tag-featured{background:linear-gradient(90deg,var(--blue),var(--purple));color:#fff;}
+
+.mc-title{font-weight:800;font-size:.93rem;color:var(--ink);line-height:1.25;margin-bottom:5px;}
+.mc-desc{font-size:.78rem;color:var(--muted);line-height:1.55;flex:1;margin-bottom:12px;}
+.mc-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:.71rem;color:var(--muted);margin-bottom:12px;}
+.mc-meta span{display:flex;align-items:center;gap:3px;}
+.mc-meta i{color:var(--blue);font-size:.65rem;}
+.mc-progress{height:4px;background:var(--faint);border-radius:99px;overflow:hidden;}
+.mc-pfill{height:100%;border-radius:99px;transition:width .4s;}
+.mc-cta{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--border);
+}
+.mc-cta-text{font-size:.77rem;font-weight:700;color:var(--blue);}
+.mc-cta-icon{
+  width:28px;height:28px;border-radius:8px;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:.75rem;
+  transition:transform .2s var(--spring);
+}
+.mcard:hover .mc-cta-icon{transform:scale(1.15) rotate(-10deg);}
+.mcard.done .mc-cta-text{color:var(--green);}
+.mcard.done .mc-cta-icon{background:var(--green);}
+.mcard.locked .mc-cta-text{color:var(--muted);}
+.mcard.locked .mc-cta-icon{background:var(--border2);}
+
+/* ═══════════════════════════════════════
+   HOW IT WORKS
+═══════════════════════════════════════ */
+.how-section{padding:48px 0 0;}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;}
+.how-card{
+  background:var(--white);border-radius:18px;padding:24px;
+  border:1.5px solid var(--border);text-align:left;
+}
+.how-num{
+  font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;
+  color:var(--blue);opacity:.15;line-height:1;margin-bottom:10px;
+}
+.how-icon{font-size:1.6rem;margin-bottom:10px;display:block;}
+.how-title{font-weight:800;font-size:.92rem;margin-bottom:6px;}
+.how-desc{font-size:.8rem;color:var(--muted);line-height:1.6;}
+
+/* ═══════════════════════════════════════
+   EXAM PREP BANNER
+═══════════════════════════════════════ */
+.prep-section{padding:48px 0 0;}
+.prep-banner{
+  background:linear-gradient(135deg,var(--ink) 0%,var(--ink2) 100%);
+  border-radius:24px;padding:36px;
+  display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.prep-banner::before{
+  content:'🎓';position:absolute;right:200px;bottom:-20px;
+  font-size:8rem;opacity:.05;pointer-events:none;line-height:1;
+}
+.prep-eyebrow{
+  font-size:.72rem;font-weight:700;color:rgba(255,255,255,.5);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;
+}
+.prep-title{
+  font-family:'Fraunces',serif;font-size:1.7rem;font-weight:900;
+  color:#fff;line-height:1.15;letter-spacing:-.02em;margin-bottom:10px;
+}
+.prep-title em{font-style:italic;color:#93c5fd;}
+.prep-desc{font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.6;max-width:480px;margin-bottom:20px;}
+.prep-features{display:flex;flex-wrap:wrap;gap:16px;}
+.prep-feat{display:flex;align-items:center;gap:7px;font-size:.8rem;color:rgba(255,255,255,.75);font-weight:600;}
+.prep-feat i{color:#93c5fd;}
+.prep-cta-side{display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;}
+.prep-score{
+  text-align:center;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);border-radius:16px;
+  padding:20px 28px;
+}
+.prep-score-num{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:900;color:#fff;line-height:1;}
+.prep-score-lbl{font-size:.72rem;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:4px;}
+
+/* ═══════════════════════════════════════
+   STATS ROW
+═══════════════════════════════════════ */
+.stats-section{padding:40px 0 0;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.stat-card{
+  background:var(--white);border-radius:16px;padding:20px;
+  border:1.5px solid var(--border);text-align:center;
+}
+.stat-card-num{
+  font-family:'Fraunces',serif;font-size:2rem;font-weight:900;
+  color:var(--blue);line-height:1;margin-bottom:4px;
+}
+.stat-card-lbl{font-size:.78rem;color:var(--muted);font-weight:600;}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.site-footer{
+  margin-top:56px;padding:24px 0;
+  border-top:1px solid var(--border);
+  text-align:center;font-size:.75rem;color:var(--muted);
+}
+
+/* ═══════════════════════════════════════
+   DETAIL VIEW (lesson)
+═══════════════════════════════════════ */
+.dtop{display:flex;align-items:center;justify-content:space-between;padding:14px 0 0;gap:10px;flex-wrap:wrap;}
+.bk-btn{
+  display:flex;align-items:center;gap:6px;padding:8px 16px;
+  border-radius:99px;border:1.5px solid var(--border);background:var(--white);
+  color:var(--muted);font-weight:700;font-size:.82rem;cursor:pointer;
+  transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;
+}
+.bk-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-xl);}
+.sdots{display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+.sd{width:8px;height:8px;border-radius:99px;background:var(--border2);transition:all .3s var(--ease);flex-shrink:0;}
+.sd.on{width:22px;background:var(--blue);}
+.sd.dn{background:var(--green);}
+
+.lcard{
+  background:var(--white);border-radius:20px;padding:28px 24px;
+  border:1.5px solid var(--border);box-shadow:var(--s2);
+  margin:14px 0 20px;animation:sUp .3s ease;min-width:0;overflow:hidden;
+}
+@keyframes sUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.lhdr{text-align:center;margin-bottom:20px;}
+.lemi{font-size:2.6rem;margin-bottom:10px;display:block;}
+.ltit{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;letter-spacing:-.02em;line-height:1.2;}
+.lsub{color:var(--muted);font-size:.85rem;margin-top:5px;}
+.lbody{line-height:1.75;}
+.lbody p{margin-bottom:12px;}
+.lbody ul,.lbody ol{padding-left:1.4em;margin-bottom:12px;}
+.lbody li{margin-bottom:5px;}
+.lbody strong{color:var(--blue);}
+
+/* info boxes */
+.ib{border-radius:12px;padding:14px 16px;margin:14px 0;display:flex;gap:11px;align-items:flex-start;}
+.ib.tip{background:#fffbeb;border-left:4px solid var(--amber);}
+.ib.info{background:var(--blue-xl);border-left:4px solid var(--blue);}
+.ib.wr{background:#fff1f2;border-left:4px solid var(--rose);}
+.ib.ok{background:var(--green-l);border-left:4px solid var(--green);}
+.ib-ico{font-size:1.1rem;flex-shrink:0;margin-top:2px;}
+.ib-b h4{font-weight:800;margin-bottom:3px;font-size:.85rem;}
+.ib-b p{font-size:.83rem;color:var(--ink3);margin:0;}
+
+.exbox{background:#fff8f0;border:1.5px dashed var(--amber);border-radius:12px;padding:13px 15px;margin:13px 0;font-size:.85rem;}
+.exbox strong{color:#92400e;}
+
+/* Flashcards */
+.fcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin:14px 0;}
+.fc{perspective:800px;height:115px;cursor:pointer;}
+.fc-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s var(--ease);}
+.fc.flipped .fc-in{transform:rotateY(180deg);}
+.fc-f,.fc-b{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:11px;text-align:center;}
+.fc-f{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;font-weight:800;font-size:.85rem;}
+.fc-f small{opacity:.65;font-size:.6rem;margin-top:4px;}
+.fc-b{background:var(--white);border:2px solid var(--green-l);color:var(--ink);font-size:.78rem;line-height:1.35;transform:rotateY(180deg);}
+.fc-ans{font-weight:700;color:var(--green);font-size:.82rem;margin-bottom:2px;}
+
+/* Fill blanks */
+.bwrap{margin:14px 0;}
+.bwrap>p{margin-bottom:9px;font-size:.88rem;color:var(--muted);font-weight:700;}
+.bsen{font-size:.92rem;line-height:2.6;word-break:break-word;}
+.binp{border:none;border-bottom:2.5px solid var(--blue);background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:.92rem;font-weight:700;color:var(--blue);outline:none;width:115px;text-align:center;transition:border-color .2s;}
+.binp:focus{border-color:var(--purple);}
+.binp.ok{border-color:var(--green);color:var(--green);}
+.binp.bad{border-color:var(--rose);color:var(--rose);}
+.cbtn{padding:9px 22px;border-radius:99px;border:none;cursor:pointer;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;color:#fff;margin-top:10px;transition:all .2s;background:var(--blue);}
+.cbtn:hover{opacity:.88;transform:translateY(-1px);}
+.cbtn.sec{background:var(--purple);}
+.fbtxt{font-size:.83rem;font-weight:700;margin-top:8px;}
+
+/* Sort */
+.swrap{margin:14px 0;}
+.swrap>p{margin-bottom:10px;font-size:.88rem;color:var(--muted);font-weight:700;}
+.slist{list-style:none;}
+.sitem{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:7px;cursor:grab;display:flex;align-items:center;gap:9px;transition:all .2s;font-weight:700;font-size:.85rem;box-shadow:var(--s1);user-select:none;min-width:0;}
+.sitem:hover{border-color:var(--blue);}
+.sitem.dragging{opacity:.35;cursor:grabbing;}
+.sitem.over{border-color:var(--rose);background:#fff0f8;}
+.dh{color:var(--muted);flex-shrink:0;}
+.inum{width:24px;height:24px;border-radius:8px;background:var(--blue-xl);color:var(--blue);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;}
+
+/* Matching */
+.mwrap{margin:14px 0;}
+.mwrap>p{margin-bottom:11px;font-size:.88rem;color:var(--muted);font-weight:700;}
+.mcols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.mcol h5{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.mit{background:var(--white);border:2px solid var(--border);border-radius:10px;padding:10px 13px;margin-bottom:7px;cursor:pointer;transition:all .2s;font-weight:700;font-size:.82rem;text-align:center;min-width:0;word-break:break-word;}
+.mit:hover{border-color:var(--blue);background:var(--blue-xl);}
+.mit.sel{border-color:var(--blue);background:var(--blue-xl);color:var(--blue);}
+.mit.ok{border-color:var(--green-l);background:var(--green-l);color:var(--green);pointer-events:none;}
+.mit.bad{border-color:var(--rose-l);background:var(--rose-l);animation:shk .4s;}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* Scenario */
+.scbox{background:linear-gradient(135deg,#f8f4ff,#eff6ff);border:2px solid #c4b5fd;border-radius:16px;padding:18px 20px;margin:14px 0;}
+.scbox h4{color:var(--purple);font-weight:800;margin-bottom:8px;font-size:.9rem;display:flex;align-items:center;gap:6px;}
+.scbox p{font-size:.85rem;line-height:1.65;}
+.scqs{margin-top:14px;}
+.scq{margin-bottom:13px;}
+.scq label{font-size:.8rem;font-weight:700;color:var(--muted);display:block;margin-bottom:5px;}
+.scq textarea{width:100%;border:2px solid var(--border);border-radius:11px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;resize:vertical;outline:none;transition:border-color .2s;min-height:66px;background:#fff;}
+.scq textarea:focus{border-color:var(--blue);}
+.rvbtn{background:var(--purple);color:#fff;border:none;padding:7px 17px;border-radius:99px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;margin-top:7px;transition:all .2s;}
+.rvbtn:hover{opacity:.88;}
+.scans{background:var(--green-l);border:1.5px solid rgba(5,150,105,.3);border-radius:11px;padding:11px 14px;margin-top:8px;font-size:.82rem;line-height:1.65;display:none;}
+.scans.vis{display:block;animation:sUp .3s ease;}
+
+/* Notes */
+.enote{background:#fffbeb;border-left:4px solid var(--amber);border-radius:12px;padding:14px 16px;margin:18px 0;}
+.enote h4{font-weight:800;margin-bottom:5px;font-size:.84rem;display:flex;align-items:center;gap:5px;}
+.enote p{font-size:.83rem;color:var(--ink3);}
+.unote{background:var(--blue-xl);border-left:4px solid var(--blue);border-radius:12px;padding:14px 16px;margin:10px 0 18px;}
+.unote h4{font-weight:800;margin-bottom:7px;font-size:.84rem;display:flex;align-items:center;gap:5px;}
+.unote textarea{width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;resize:vertical;outline:none;background:#fff;transition:border-color .2s;}
+.unote textarea:focus{border-color:var(--blue);}
+.snbtn{background:var(--blue);color:#fff;border:none;padding:8px 20px;border-radius:99px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.82rem;margin-top:9px;transition:all .2s;}
+.snbtn:hover{background:var(--blue-d);}
+.snbtn.saved{background:var(--green);}
+
+/* nav buttons */
+.lnav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px;flex-wrap:wrap;}
+.nbtn{display:flex;align-items:center;gap:6px;padding:11px 22px;border-radius:99px;font-weight:800;font-size:.88rem;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;flex-shrink:0;}
+.nbp{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.3);}
+.nbp:hover{background:var(--blue-d);transform:translateY(-1px);}
+.nbs{background:var(--white);color:var(--muted);border:1.5px solid var(--border);}
+.nbs:hover{border-color:var(--blue);color:var(--blue);}
+.nbg{background:linear-gradient(135deg,var(--green),#34d399);color:#fff;box-shadow:0 4px 14px rgba(5,150,105,.3);}
+.nbtn:disabled{background:var(--faint);color:var(--muted);cursor:not-allowed;box-shadow:none;transform:none!important;}
+
+/* ═══════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════ */
+.qcard{background:var(--white);border-radius:20px;padding:28px 24px;border:1.5px solid var(--border);box-shadow:var(--s2);margin:14px 0;animation:sUp .3s ease;min-width:0;}
+.qpbg{height:8px;background:var(--faint);border-radius:99px;overflow:hidden;margin-bottom:7px;}
+.qpf{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:99px;transition:width .4s;}
+.qplbl{font-size:.76rem;color:var(--muted);font-weight:700;margin-bottom:18px;}
+.qtxt{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;line-height:1.3;margin-bottom:18px;color:var(--ink);}
+.qopts{display:flex;flex-direction:column;gap:9px;}
+.qopt{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:12px;border:2px solid var(--border);cursor:pointer;transition:all .2s;background:var(--white);font-weight:700;font-size:.85rem;min-width:0;}
+.qopt:hover{border-color:var(--blue);background:var(--blue-xl);}
+.qopt.sel{border-color:var(--blue);background:var(--blue-xl);}
+.qopt.rit{border-color:var(--green-l);background:var(--green-l);color:var(--green);pointer-events:none;}
+.qopt.wrg{border-color:var(--rose-l);background:var(--rose-l);color:var(--rose);pointer-events:none;}
+.qopt.rev{border-color:var(--green-l);background:var(--green-l);color:var(--green);pointer-events:none;}
+.qltr{width:30px;height:30px;border-radius:9px;background:var(--faint);color:var(--muted);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.78rem;flex-shrink:0;transition:all .2s;}
+.qopt.rit .qltr{background:var(--green);color:#fff;}
+.qopt.wrg .qltr{background:var(--rose);color:#fff;}
+.qopt.rev .qltr{background:var(--green);color:#fff;}
+.qopt.sel .qltr{background:var(--blue);color:#fff;}
+.qfb{border-radius:12px;padding:12px 15px;margin-top:15px;font-weight:700;font-size:.85rem;display:none;align-items:center;gap:9px;}
+.qfb.show{display:flex;animation:sUp .3s ease;}
+.qfb.ok{background:var(--green-l);color:#065f46;border:1.5px solid rgba(5,150,105,.3);}
+.qfb.bad{background:var(--rose-l);color:#9f1239;border:1.5px solid rgba(225,29,72,.2);}
+
+/* Result */
+.qres{background:var(--white);border-radius:20px;padding:36px 24px;border:1.5px solid var(--border);box-shadow:var(--s2);text-align:center;margin:14px 0;animation:sUp .35s ease;}
+.rtrop{font-size:4.5rem;margin-bottom:14px;display:block;}
+.rstars{margin:10px 0;font-size:1.9rem;}
+.rtit{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;margin-bottom:8px;color:var(--ink);}
+.rmsg{color:var(--muted);font-size:.88rem;margin-bottom:22px;}
+.rscore{display:inline-block;padding:14px 30px;border-radius:16px;font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;margin-bottom:24px;}
+.rscore.pass{background:var(--green-l);color:#065f46;}
+.rscore.fail{background:var(--rose-l);color:#9f1239;}
+.racts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+/* Confetti */
+#cfh{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;}
+.cf{position:absolute;width:9px;height:9px;top:-20px;border-radius:2px;animation:cfFall linear forwards;}
+@keyframes cfFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* Toast */
+.toast{position:fixed;bottom:22px;right:16px;z-index:9998;padding:11px 20px;border-radius:12px;font-weight:700;font-size:.85rem;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.14);animation:sUp .3s ease;color:#fff;max-width:calc(100vw - 32px);}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:960px){
+  .dnav{display:none;}
+  .burger{display:flex;}
+  .stat-pill.stat-fire,.stat-pill.stat-key{display:none;}
+  .hero-inner{grid-template-columns:1fr;gap:32px;}
+  .hero-right{display:none;}
+  .hero-h1{font-size:2.4rem;}
+  .mgrid{grid-template-columns:repeat(2,1fr);}
+  .exam-strip{grid-template-columns:repeat(2,1fr);}
+  .how-grid{grid-template-columns:1fr 1fr;}
+  .prep-banner{grid-template-columns:1fr;gap:20px;}
+  .prep-cta-side{flex-direction:row;align-items:center;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .prep-banner::before{display:none;}
+}
+
+@media(max-width:600px){
+  :root{--nh:60px;}
+  .hero-section{padding:32px 0 0;}
+  .hero-h1{font-size:1.9rem;}
+  .hero-eyebrow{font-size:.68rem;}
+  .hero-sub{font-size:.88rem;}
+  .hero-ctas{flex-direction:column;align-items:stretch;}
+  .hero-ctas .btn{justify-content:center;}
+  .mgrid{grid-template-columns:1fr;}
+  .exam-strip{grid-template-columns:1fr;}
+  .how-grid{grid-template-columns:1fr;}
+  .filter-tabs{gap:5px;}
+  .ftab{font-size:.72rem;padding:5px 11px;}
+  .lcard{padding:18px 14px;}
+  .ltit{font-size:1.3rem;}
+  .qtxt{font-size:1.05rem;}
+  .lnav{flex-direction:column-reverse;align-items:stretch;}
+  .lnav .nbtn{justify-content:center;}
+  .mcols{grid-template-columns:1fr;}
+  .fcgrid{grid-template-columns:1fr 1fr;}
+  .prep-banner{padding:24px 20px;}
+  .prep-title{font-size:1.4rem;}
+  .prep-cta-side{flex-direction:column;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .hero-trust{gap:10px;}
+  .prog-bar{width:44px;}
+  .stat-pill.stat-xp{display:none;}
+}
+
+@media(max-width:400px){
+  .wrap{padding:0 12px;}
+  .logo-text{display:none;}
+  .hero-h1{font-size:1.65rem;}
+  .mgrid{grid-template-columns:1fr;}
+}
+
+/* Entry animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.anim-1{animation:fadeUp .5s var(--ease) .1s both;}
+.anim-2{animation:fadeUp .5s var(--ease) .2s both;}
+.anim-3{animation:fadeUp .5s var(--ease) .3s both;}
+.anim-4{animation:fadeUp .5s var(--ease) .4s both;}
+.anim-5{animation:fadeUp .5s var(--ease) .5s both;}
+  </style>
+</head>
+<body>
+
+<!-- ═══ ANNOUNCEMENT BAR ═══ -->
+<div class="ann-bar" id="annBar">
+  🎓 Prüfungssaison 2025 — Jetzt mit Modul 1 & 2 kostenlos starten! &nbsp;
+  <a onclick="document.getElementById('startNowBtn').click();document.getElementById('annBar').style.display='none'">Los geht's →</a>
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<header class="hdr" id="mainHdr">
+  <div class="wrap hdr-in">
+    <!-- Logo -->
+    <a class="logo" id="logoBtn" href="javascript:void(0)">
+      <div class="logo-mark"><i class="fas fa-hand-holding-heart"></i></div>
+      <div class="logo-text">Pflege<span>fach</span>Profi</div>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav aria-label="Hauptnavigation">
+      <ul class="dnav" id="desktopNav">
+        <li><button class="dnb act" data-goto="home"><i class="fas fa-home"></i> Start</button></li>
+        <li><button class="dnb" data-goto="home"><i class="fas fa-cubes"></i> Module</button></li>
+        <li><button class="dnb" data-goto="home"><i class="fas fa-chart-bar"></i> Fortschritt</button></li>
+        <li><button class="dnb" data-goto="home"><i class="fas fa-info-circle"></i> Prüfungsinfos</button></li>
+      </ul>
+    </nav>
+
+    <!-- Right side -->
+    <div class="hdr-r">
+      <div class="stat-pill stat-fire"><i class="fas fa-fire"></i><span id="strN">3</span></div>
+      <div class="stat-pill stat-xp"><i class="fas fa-bolt"></i><span id="xpN">0</span>&nbsp;XP</div>
+      <div class="stat-pill stat-key"><i class="fas fa-key"></i><span id="keyN">1</span></div>
+      <div class="stat-progress">
+        <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+        <span class="prog-lbl" id="pLbl">0/9</span>
+      </div>
+      <button class="burger" id="burgerBtn" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ MOBILE DRAWER ═══ -->
+<nav class="mnav" id="mobileNav" aria-label="Mobile Navigation">
+  <div class="mnav-inner">
+    <!-- Mini stats -->
+    <div class="mnav-stats">
+      <div class="mnav-stat"><div class="val" id="mStr">3</div><div class="lbl">🔥 Streak</div></div>
+      <div class="mnav-stat"><div class="val" id="mXp">0</div><div class="lbl">⚡ XP</div></div>
+      <div class="mnav-stat"><div class="val" id="mKey">1</div><div class="lbl">🗝 Schlüssel</div></div>
+    </div>
+    <div class="ndiv"></div>
+    <div class="mnav-sect">Navigation</div>
+    <ul>
+      <li><button class="mnb" data-goto="home"><i class="fas fa-home"></i> Start / Home</button></li>
+      <li><button class="mnb" data-goto="home"><i class="fas fa-cubes"></i> Alle Module</button></li>
+      <li><button class="mnb" data-goto="home"><i class="fas fa-chart-line"></i> Mein Fortschritt</button></li>
+      <li><button class="mnb" data-goto="home"><i class="fas fa-graduation-cap"></i> Prüfungsinfos</button></li>
+    </ul>
+    <div class="ndiv"></div>
+    <div class="mnav-sect">Einstellungen</div>
+    <ul>
+      <li><button class="mnb" id="resetBtn"><i class="fas fa-rotate-left"></i> Fortschritt zurücksetzen</button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══════════════════
+     HOME VIEW
+═══════════════════ -->
+<div id="view-home" class="view active">
+
+  <div class="home-wrap">
+    <div class="wrap">
+
+      <!-- HERO -->
+      <section class="hero-section">
+        <div class="hero-inner">
+
+          <!-- Left -->
+          <div class="hero-left">
+            <div class="hero-eyebrow anim-1">
+              <i class="fas fa-graduation-cap"></i>&nbsp; Pflegefachmann Abschlussprüfung
+            </div>
+            <h1 class="hero-h1 anim-2">
+              Bestehe deine<br>
+              <em>Prüfung</em> mit<br>
+              <span class="line2">Vertrauen.</span>
+            </h1>
+            <p class="hero-sub anim-3">
+              Der einzige interaktive Kurs, der dich für <strong>KB I–V</strong> vorbereitet — mit Quizzen, Fallstudien, Flashcards und Lernziele-Tracking.
+            </p>
+            <div class="hero-ctas anim-4">
+              <button class="btn btn-primary btn-lg" id="startNowBtn">
+                <i class="fas fa-play"></i> Jetzt kostenlos starten
+              </button>
+              <button class="btn btn-outline" id="seeModulesBtn">
+                <i class="fas fa-cubes"></i> Alle Module
+              </button>
+            </div>
+            <div class="hero-trust anim-5">
+              <div class="trust-item"><i class="fas fa-check-circle"></i> Kostenlos starten</div>
+              <div class="trust-div"></div>
+              <div class="trust-item"><i class="fas fa-check-circle"></i> Keine Anmeldung</div>
+              <div class="trust-div"></div>
+              <div class="trust-item"><i class="fas fa-check-circle"></i> KB I–V abgedeckt</div>
+            </div>
+          </div>
+
+          <!-- Right — preview card -->
+          <div class="hero-right anim-3">
+            <div class="float-badge fb-top">
+              <span>⭐</span> Frage richtig beantwortet!
+            </div>
+            <div class="hero-card">
+              <div class="hcard-head">
+                <div class="hcard-title">🔄 Pflegeprozess</div>
+                <div class="hcard-badge"><i class="fas fa-circle" style="font-size:.5rem;"></i> Aktiv</div>
+              </div>
+              <div class="hcard-steps">
+                <div class="hstep done">
+                  <div class="hstep-ico"><i class="fas fa-check"></i></div>
+                  <div class="hstep-info">
+                    <div class="hstep-label">Assessment & NANDA</div>
+                    <div class="hstep-sub">Lektion abgeschlossen</div>
+                  </div>
+                  <i class="fas fa-check hstep-check"></i>
+                </div>
+                <div class="hstep done">
+                  <div class="hstep-ico"><i class="fas fa-check"></i></div>
+                  <div class="hstep-info">
+                    <div class="hstep-label">SMART-Ziele</div>
+                    <div class="hstep-sub">Lektion abgeschlossen</div>
+                  </div>
+                  <i class="fas fa-check hstep-check"></i>
+                </div>
+                <div class="hstep active">
+                  <div class="hstep-ico">📋</div>
+                  <div class="hstep-info">
+                    <div class="hstep-label">Fallstudie: Frau Lehmann</div>
+                    <div class="hstep-sub">In Bearbeitung…</div>
+                  </div>
+                </div>
+                <div class="hstep">
+                  <div class="hstep-ico">🧩</div>
+                  <div class="hstep-info">
+                    <div class="hstep-label">Pflegemodelle</div>
+                    <div class="hstep-sub">Noch gesperrt</div>
+                  </div>
+                </div>
+              </div>
+              <div class="hcard-xp">
+                <div class="hcard-xp-top">
+                  <span class="xp-label">⚡ XP Fortschritt</span>
+                  <span class="xp-val">280 / 1000 XP</span>
+                </div>
+                <div class="xp-bar"><div class="xp-fill"></div></div>
+              </div>
+            </div>
+            <div class="float-badge fb-bot">
+              🗝 Schlüssel freigeschaltet! +1
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- EXAM INFO -->
+      <section class="exam-section">
+        <div class="section-label">Prüfungsaufbau Pflegefachmann</div>
+        <div class="exam-strip">
+          <div class="exam-card">
+            <div class="exam-card-top">
+              <span class="exam-ico">📝</span>
+              <span class="exam-day">Tag 1</span>
+            </div>
+            <div class="exam-title">Schriftliche Prüfung</div>
+            <div class="exam-detail">KB I + II · 4,5 Stunden</div>
+            <span class="exam-tag tag-free">Pflegeprozess & Kommunikation</span>
+          </div>
+          <div class="exam-card">
+            <div class="exam-card-top">
+              <span class="exam-ico">📋</span>
+              <span class="exam-day">Tag 2</span>
+            </div>
+            <div class="exam-title">Schriftliche Prüfung</div>
+            <div class="exam-detail">KB III + IV · 3 Stunden</div>
+            <span class="exam-tag tag-new">Rechtliches & Ethik</span>
+          </div>
+          <div class="exam-card">
+            <div class="exam-card-top">
+              <span class="exam-ico">🗣️</span>
+              <span class="exam-day">Tag 3</span>
+            </div>
+            <div class="exam-title">Mündliche Prüfung</div>
+            <div class="exam-detail">KB V · 20 Minuten</div>
+            <span class="exam-tag tag-coming">Reflexion & Praxis</span>
+          </div>
+          <div class="exam-card">
+            <div class="exam-card-top">
+              <span class="exam-ico">🏥</span>
+              <span class="exam-day">Tag 4</span>
+            </div>
+            <div class="exam-title">Praktische Prüfung</div>
+            <div class="exam-detail">Reale Pflegesituation</div>
+            <span class="exam-tag" style="background:var(--rose-l);color:var(--rose);">Skills & Handlung</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section class="how-section">
+        <div class="section-label">So funktioniert's</div>
+        <div class="how-grid">
+          <div class="how-card">
+            <div class="how-num">01</div>
+            <span class="how-icon">🎯</span>
+            <div class="how-title">Modul wählen</div>
+            <div class="how-desc">Starte mit KB I & II kostenlos. Wähle das Thema, das du heute üben willst — Pflegeprozess, Kommunikation oder Assessmentskalen.</div>
+          </div>
+          <div class="how-card">
+            <div class="how-num">02</div>
+            <span class="how-icon">📚</span>
+            <div class="how-title">Interaktiv lernen</div>
+            <div class="how-desc">Jede Lektion hat Flashcards, Lückentexte, Sortierspiele, Matchingübungen und echte Fallstudien aus der Praxis.</div>
+          </div>
+          <div class="how-card">
+            <div class="how-num">03</div>
+            <span class="how-icon">🏆</span>
+            <div class="how-title">Quiz bestehen</div>
+            <div class="how-desc">Schließe jedes Modul mit einem Quiz ab. Erreiche 70%+ und schalte neue Schlüssel frei — genau wie im Duolingo-Prinzip.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULES -->
+      <section class="modules-section" id="modulesSection">
+        <div class="modules-header">
+          <div>
+            <div class="modules-hl">Alle <span>9 Module</span></div>
+            <div class="modules-sub">Von KB I bis KB V — vollständig für deine Prüfung</div>
+          </div>
+          <div class="modules-actions">
+            <button class="btn btn-outline" style="font-size:.8rem;padding:9px 16px;" id="startFreeBtn">
+              <i class="fas fa-star"></i> Kostenlose Module
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filter-tabs" id="filterTabs">
+          <button class="ftab active" data-filter="all">Alle Module</button>
+          <button class="ftab" data-filter="free">🆓 Kostenlos</button>
+          <button class="ftab" data-filter="kb1">KB I</button>
+          <button class="ftab" data-filter="kb2">KB II</button>
+          <button class="ftab" data-filter="kb3">KB III</button>
+          <button class="ftab" data-filter="kb4">KB IV</button>
+          <button class="ftab" data-filter="kb5">KB V</button>
+        </div>
+
+        <div class="mgrid" id="mgrid"></div>
+      </section>
+
+      <!-- EXAM PREP BANNER -->
+      <section class="prep-section">
+        <div class="prep-banner">
+          <div>
+            <div class="prep-eyebrow">Prüfungsvorbereitung</div>
+            <div class="prep-title">Bereit für die<br><em>Abschlussprüfung?</em></div>
+            <div class="prep-desc">Unser strukturierter Lernpfad führt dich Schritt für Schritt durch alle vier Prüfungstage — mit gezieltem Feedback, Musterlösungen und Zeitsimulationen.</div>
+            <div class="prep-features">
+              <div class="prep-feat"><i class="fas fa-check-circle"></i> 63+ Prüfungsfragen</div>
+              <div class="prep-feat"><i class="fas fa-check-circle"></i> Echte Fallstudien</div>
+              <div class="prep-feat"><i class="fas fa-check-circle"></i> Musterlösungen</div>
+              <div class="prep-feat"><i class="fas fa-check-circle"></i> KB I–V abgedeckt</div>
+            </div>
+            <div style="margin-top:22px;">
+              <button class="btn btn-primary btn-lg" id="prepStartBtn">
+                <i class="fas fa-rocket"></i> Prüfungsvorbereitung starten
+              </button>
+            </div>
+          </div>
+          <div class="prep-cta-side">
+            <div class="prep-score">
+              <div class="prep-score-num">9</div>
+              <div class="prep-score-lbl">Module</div>
+            </div>
+            <div class="prep-score">
+              <div class="prep-score-num">63+</div>
+              <div class="prep-score-lbl">Fragen</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATS -->
+      <section class="stats-section">
+        <div class="section-label">Das sagen die Zahlen</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-num">9</div>
+            <div class="stat-card-lbl">Lernmodule</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">63+</div>
+            <div class="stat-card-lbl">Quizfragen</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">100%</div>
+            <div class="stat-card-lbl">Prüfungsrelevant</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">KB I–V</div>
+            <div class="stat-card-lbl">Vollständig</div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /.wrap -->
+  </div><!-- /.home-wrap -->
+
+  <footer class="site-footer">
+    <div class="wrap">
+      PflegefachProfi · Dein Prüfungscoach · Für Azubis in der Pflegeausbildung · © 2025
+    </div>
+  </footer>
+</div><!-- /#view-home -->
+
+<!-- ═══ DETAIL ═══ -->
+<div id="view-detail" class="view">
+  <div class="wrap">
+    <div class="dtop">
+      <button class="bk-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Alle Module</button>
+      <div class="sdots" id="sdots"></div>
+    </div>
+    <div id="larea"></div>
+  </div>
+</div>
+
+<!-- ═══ QUIZ ═══ -->
+<div id="view-quiz" class="view">
+  <div class="wrap">
+    <div class="dtop">
+      <button class="bk-btn" id="qBackBtn"><i class="fas fa-arrow-left"></i> Zurück</button>
+      <span id="qModTit" style="font-weight:700;color:var(--muted);font-size:.8rem;"></span>
+    </div>
+    <div id="qarea"></div>
+  </div>
+</div>
+
+<div id="cfh"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ── COOKIES ── */
+function setCk(n,v,d){const e=new Date();e.setTime(e.getTime()+d*86400000);document.cookie=encodeURIComponent(n)+'='+encodeURIComponent(JSON.stringify(v))+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+function getCk(n){const k=encodeURIComponent(n)+'=';for(const c of document.cookie.split(';')){const t=c.trim();if(t.startsWith(k)){try{return JSON.parse(decodeURIComponent(t.slice(k.length)));}catch{return null;}}}return null;}
+function delCk(n){document.cookie=encodeURIComponent(n)+'=;expires=Thu,01 Jan 1970 00:00:00 UTC;path=/';}
+
+/* ── STATE ── */
+let S={xp:0,keys:1,streak:3,done:[],notes:{},mod:null,step:0};
+function save(){setCk('pfp4',S,60);hdrUpdate();}
+function load(){const c=getCk('pfp4');if(c&&typeof c==='object')Object.assign(S,c);hdrUpdate();}
+
+/* ── DATA ── */
+const MODS=[
+{
+  id:1,title:'Pflegeprozess & NANDA-Diagnosen',
+  icon:'🔄',grad:'linear-gradient(135deg,#2563eb,#7c3aed)',
+  ibg:'#eff6ff',cat:'KB I',cost:0,tag:'free',
+  lessons:[
+    {tit:'Der Pflegeprozess im Überblick',emi:'🔄',sub:'Das Herzstück pflegerischen Handelns',
+      html:`<div class="lbody"><p>Der <strong>Pflegeprozess</strong> ist ein systematisches, zyklisches Modell zur individuellen Pflegeplanung.</p><div class="ib info"><div class="ib-ico">ℹ️</div><div class="ib-b"><h4>6-stufiges Modell (WHO/ANA)</h4><p>Assessment → Diagnose → Planung → Durchführung → Evaluation → Modifikation</p></div></div><p>Jede Phase ist <strong>dokumentationspflichtig</strong> gemäß §113 SGB XI.</p></div><div class="fcgrid" id="fc-mod1"></div><p style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px;">👆 Karte antippen zum Umdrehen</p>`,
+      fc:[{f:'Assessment',b:'Bedürfnisse erheben · Anamnese · Beobachtung'},{f:'Diagnose',b:'NANDA-Pflegediagnose im PÄS-Format'},{f:'Planung',b:'SMART-Ziele + Maßnahmen festlegen'},{f:'Durchführung',b:'Maßnahmen ressourcenorientiert umsetzen'},{f:'Evaluation',b:'Zielerreichung prüfen, Soll-Ist-Vergleich'},{f:'Modifikation',b:'Plan anpassen bei Zielverfehlung'}],
+      tip:'💡 Merkhilfe: <strong>A-D-P-D-E-M</strong> = „Alle Dolmetscher planen den einzelnen Menschen"'},
+    {tit:'NANDA-Diagnosen formulieren',emi:'🏷️',sub:'Problem – Ätiologie – Symptom (PÄS)',
+      html:`<div class="lbody"><p>Eine NANDA-Pflegediagnose folgt dem <strong>PÄS-Format</strong>: Problem bezogen auf Ätiologie, angezeigt durch Symptome.</p><div class="exbox"><strong>Beispiel:</strong> „Beeinträchtigte körperliche Mobilität, <em>b.a.</em> Schmerzen nach TEP, <em>a.d.</em> Gehstrecke &lt; 10m."</div></div>`,
+      blanks:{ins:'Vervollständige die PÄS-Formel:',parts:[{t:'PÄS =&nbsp;',b:null},{t:'',b:{a:'problem',h:'P------'}},{t:'&nbsp;– bezogen auf&nbsp;',b:null},{t:'',b:{a:'ätiologie',h:'Ä--------'}},{t:'&nbsp;– angezeigt durch&nbsp;',b:null},{t:'',b:{a:'symptom',h:'S------'}}]},
+      tip:'⚖️ Alle drei Elemente nennen — Teilpunkte gibt es nur für vollständige Diagnosen!'},
+    {tit:'SMART-Ziele richtig formulieren',emi:'🎯',sub:'Spezifisch · Messbar · Akzeptiert · Realistisch · Terminiert',
+      html:`<div class="lbody"><p><strong>Pflegeziele</strong> müssen SMART sein, damit eine Evaluation möglich ist.</p><div class="ib tip"><div class="ib-ico">⚡</div><div class="ib-b"><h4>Häufiger Fehler</h4><p>„Patient schläft gut" ist KEIN SMART-Ziel. Besser: „schläft bis 30.06. min. 6 Std. am Stück (Schlafprotokoll)."</p></div></div></div>`,
+      sort:{ins:'Bringe die Planungsschritte in die richtige Reihenfolge:',items:['Ressourcen des Patienten erheben','Pflegeproblem / NANDA-Diagnose festlegen','SMART-Ziel formulieren','Maßnahmen auswählen & begründen','Maßnahmen dokumentieren & durchführen','Zielerreichung evaluieren']},
+      tip:'📋 Prüfungstipp: Erst Ressourcen nennen, dann Probleme formulieren!'},
+    {tit:'Pflegemodelle zuordnen',emi:'🧩',sub:'Welches Modell passt zu welcher Philosophie?',
+      html:`<div class="lbody"><p>Verschiedene <strong>Pflegetheoretiker</strong> werden in der Prüfung abgefragt — Modell und Kernaussage müssen sicher benannt werden.</p></div>`,
+      match:{ins:'Verbinde Theoretikerin ↔ Kernkonzept:',pairs:[{l:'Virginia Henderson',r:'14 grundlegende Bedürfnisse'},{l:'Dorothea Orem',r:'Selbstpflegedefizit-Theorie'},{l:'Hildegard Peplau',r:'Phasen der Pflegebeziehung'},{l:'Madeleine Leininger',r:'Transkulturelle Pflege'}]},
+      tip:'🌍 Leininger: besonders relevant für mündliche Prüfung bei Migration und kultursensibler Pflege.'},
+    {tit:'Fallstudie: Frau Lehmann',emi:'👩‍⚕️',sub:'Pflegeprozess am realen Fall anwenden',html:'',
+      scenario:{txt:'Frau Lehmann, 78 J., nach Schenkelhalsfraktur links (TEP). NRS 7/10, bettlägerig, Diabetes Typ 2, BZ 220 mg/dl. Sagt: „Ich will nicht mehr aufstehen."',qs:[{l:'Formuliere 2 NANDA-Diagnosen (PÄS):',a:'1. Beeinträchtigte körperl. Mobilität, b.a. postop. Schmerzen NRS 7, a.d. Bettlägerigkeit.\n2. Risiko instabiler Blutzucker, b.a. Diabetes + Stress, a.d. BZ 220 mg/dl.'},{l:'SMART-Pflegeziel für Mobilität:',a:'Frau Lehmann steht bis 3. postop. Tag mit 2 PK täglich min. einmal auf (Dokumentation: Pflegebericht).'},{l:'Welche Ressource nutzt du?',a:'Kognitive Klarheit → Ziele mitgestalten. Schmerzmittel akzeptiert → Schmerzkontrolle verbessern → Mobilisationsbereitschaft steigern.'}]},
+      tip:'✅ Goldene Regel: Erst lesen, markieren, dann strukturiert antworten: Diagnose → Ziel → Maßnahme.'},
+  ],
+  quiz:[
+    {q:'Welche Phase folgt auf das Assessment im 6-stufigen Pflegeprozess?',opts:['Durchführung','Pflegediagnose','Planung','Evaluation'],c:1,expl:'Nach dem Assessment werden Pflegeprobleme als NANDA-Diagnosen formuliert.'},
+    {q:'Was bedeutet das „M" bei SMART-Zielen?',opts:['Menschlich','Messbar','Modifizierbar','Machbar'],c:1,expl:'Messbar = das Ziel muss mit klaren Kriterien überprüfbar sein.'},
+    {q:'Welche Theoretikerin beschreibt 14 grundlegende Bedürfnisse?',opts:['Orem','Peplau','Henderson','Roy'],c:2,expl:'Virginia Henderson formulierte 14 grundlegende Pflegebedürfnisse.'},
+    {q:'Im PÄS-Format steht „Ä" für:',opts:['Auswirkung','Ätiologie','Aktivität','Anzeichen'],c:1,expl:'Ätiologie = die Ursache des Pflegeproblems.'},
+    {q:'Welches Gesetz schreibt die Pflegedokumentation vor?',opts:['§630d BGB','§113 SGB XI','§203 StGB','§823 BGB'],c:1,expl:'§113 SGB XI verpflichtet zur Dokumentation des Pflegeprozesses.'},
+    {q:'Was ist eine Ressource bei Frau Lehmann?',opts:['Bettlägerigkeit','Schmerzen NRS 7','Kognitive Klarheit','Diabetes'],c:2,expl:'Kognitive Klarheit ist eine Stärke, die die Pflege unterstützt.'},
+    {q:'Wann wird der Pflegeplan modifiziert?',opts:['Nach jeder Maßnahme','Wenn Ziele nicht erreicht werden','Jeden Montag','Nur beim Arztbesuch'],c:1,expl:'Modifikation erfolgt wenn die Evaluation zeigt, dass das Ziel verfehlt wurde.'},
+  ]
+},
+{
+  id:2,title:'Kommunikation & Peplau-Modell',
+  icon:'💬',grad:'linear-gradient(135deg,#7c3aed,#e11d48)',
+  ibg:'#fdf4ff',cat:'KB II',cost:0,tag:'free',
+  lessons:[
+    {tit:'Das Vier-Ohren-Modell',emi:'👂',sub:'Schulz von Thun — vier Ebenen jeder Botschaft',
+      html:`<div class="lbody"><p>Jede Nachricht hat laut <strong>Schulz von Thun</strong> vier Seiten. Missverständnisse entstehen, wenn Sender und Empfänger auf verschiedenen Ebenen kommunizieren.</p><div class="ib info"><div class="ib-ico">📡</div><div class="ib-b"><h4>Die vier Ebenen</h4><p>Sachebene · Selbstoffenbarung · Beziehungsebene · Appellebene</p></div></div><div class="exbox"><strong>Pflegebeispiel:</strong> Patient sagt: „Ist heute schon wieder diese Schwester da?"<br>→ <em>Appell:</em> andere PK schicken · <em>Beziehung:</em> Ablehnung signalisieren</div></div><div class="fcgrid" id="fc-mod2"></div><p style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px;">👆 Karte antippen zum Umdrehen</p>`,
+      fc:[{f:'Sachebene',b:'Worüber ich informiere — der reine Inhalt der Botschaft'},{f:'Selbstoffenbarung',b:'Was ich von mir preisgebe — Gefühle, Werte, Stimmung'},{f:'Beziehungsebene',b:'Was ich vom Empfänger halte — Wie ich ihn behandle'},{f:'Appellebene',b:'Was ich beim Empfänger erreichen will — Aufforderung'},{f:'Aktives Zuhören',b:'Paraphrasieren, verbalisieren, Blickkontakt, Körpersprache'},{f:'Kongruenz',b:'Übereinstimmung verbaler & nonverbaler Kommunikation'}],
+      tip:'💡 In der Prüfung immer alle vier Ebenen benennen und am Pflegebeispiel erklären!'},
+    {tit:'Peplau-Phasen der Pflegebeziehung',emi:'🤝',sub:'Hildegard Peplau — Interaktionstheorie',
+      html:`<div class="lbody"><p><strong>Hildegard Peplau</strong> beschreibt die Pflegebeziehung als Prozess in vier Phasen mit klaren Aufgaben für Pflegende und Patient.</p><div class="ib ok"><div class="ib-ico">✅</div><div class="ib-b"><h4>Häufig in KB-II-Prüfungen!</h4><p>Peplau ist das am häufigsten geprüfte Modell im Bereich Beziehungsgestaltung.</p></div></div></div>`,
+      sort:{ins:'Sortiere die vier Peplau-Phasen in die richtige Reihenfolge:',items:['1. Orientierung — Patient lernt Pflegende kennen, Vertrauen aufbauen','2. Identifikation — Patient nimmt Hilfe an, Beziehung festigt sich','3. Nutzung — Patient nutzt Ressourcen aktiv, Selbstständigkeit wächst','4. Ablösung — Pflegebeziehung endet, Patient löst sich']},
+      tip:'🔄 Die Phasen sind nicht immer linear — bei chronisch Kranken kann es Überschneidungen geben!'},
+    {tit:'Gewaltfreie Kommunikation (GFK)',emi:'🕊️',sub:'Marshall Rosenberg — 4 Schritte',
+      html:`<div class="lbody"><p>Die <strong>GFK nach Rosenberg</strong> vermeidet Bewertungen und fördert empathische Kommunikation — essenziell in Konfliktsituationen der Pflege.</p><div class="exbox"><strong>Statt:</strong> „Sie sind schon wieder unkooperativ!"<br><strong>Mit GFK:</strong> „Ich sehe, Sie haben den Verband abgenommen (Beob.). Ich mache mir Sorgen (Gef.), weil mir Ihre Heilung wichtig ist (Bed.). Können wir gemeinsam schauen, was Sie belastet? (Bitte)"</div></div>`,
+      blanks:{ins:'Vervollständige die 4 GFK-Schritte:',parts:[{t:'Schritt 1:&nbsp;',b:null},{t:'',b:{a:'beobachtung',h:'B----------'}},{t:'&nbsp;|&nbsp;Schritt 2:&nbsp;',b:null},{t:'',b:{a:'gefühl',h:'G-----'}},{t:'&nbsp;|&nbsp;Schritt 3:&nbsp;',b:null},{t:'',b:{a:'bedürfnis',h:'B--------'}},{t:'&nbsp;|&nbsp;Schritt 4:&nbsp;',b:null},{t:'',b:{a:'bitte',h:'B----'}}]},
+      tip:'🗣️ GFK-Starter: „Ich sehe… Ich fühle… weil ich brauche… Wärst du bereit…?"'},
+    {tit:'Kommunikationssperren erkennen',emi:'🚫',sub:'Gordons Kommunikationssperren in der Pflege',
+      html:`<div class="lbody"><p><strong>Kommunikationssperren</strong> (Thomas Gordon) sind Aussagen, die das Gespräch blockieren und Patientenvertrauen zerstören.</p><div class="ib wr"><div class="ib-ico">⛔</div><div class="ib-b"><h4>Häufig in Prüfungsfällen!</h4><p>Fehler erkennen und konstruktive Alternativen formulieren können.</p></div></div></div>`,
+      match:{ins:'Ordne Kommunikationssperre dem passenden Beispiel zu:',pairs:[{l:'Bagatellisieren',r:'„Das ist doch nicht so schlimm!"'},{l:'Ratschläge geben',r:'„Sie sollten einfach mehr trinken."'},{l:'Diagnostizieren',r:'„Sie wollen nur Aufmerksamkeit."'},{l:'Befehlen',r:'„Sie müssen jetzt aufstehen!"'}]},
+      tip:'💬 Alternative: Validieren statt bewerten — „Ich höre, dass Sie das belastet. Erzählen Sie mehr."'},
+    {tit:'Fallstudie: Herr Kaya',emi:'🧑‍⚕️',sub:'Kommunikation in einer schwierigen Situation',html:'',
+      scenario:{txt:'Herr Kaya, 65 J., türkischstämmig, nach Schlaganfall. Wenig Deutsch, wirkt ängstlich, verweigert Schlucktests, zeigt auf Mund und weint. Tochter abends nicht erreichbar.',qs:[{l:'Welche Kommunikationsebenen (Schulz von Thun) erkennst du?',a:'Sachebene: Zeigt auf Mund → Schmerz/Hunger. Selbstoffenbarung: Weint → Angst, Hilflosigkeit. Appell: Möchte Hilfe. Beziehungsebene: Vertrauen ansatzweise vorhanden.'},{l:'Formuliere einen GFK-Satz für diese Situation:',a:'„Ich sehe, dass Sie weinen und auf Ihren Mund zeigen. (Beob.) Ich mache mir Sorgen (Gef.), weil mir wichtig ist, dass Sie keine Schmerzen haben. (Bed.) Können Sie mir mit einer Geste zeigen, ob Schmerzen da sind?" (Bitte)'},{l:'Welche kulturellen & sprachlichen Barrieren beachtest du?',a:'Sprachbarriere → Bildkarten, einfache Sprache, professionellen Dolmetscherdienst beauftragen. Kulturelle Sensibilität → religiöse Bedürfnisse, ggf. Präferenz für gleichgeschlechtliche PK. Keine Maßnahmen ohne Einwilligung — auch ohne Sprache!'}]},
+      tip:'🌍 Praxistipp: Professionelle Dolmetscher beauftragen — Angehörige als Übersetzer bei medizinischen Inhalten problematisch.'},
+  ],
+  quiz:[
+    {q:'Welche Ebene des Vier-Ohren-Modells trägt die reine Information?',opts:['Appellebene','Beziehungsebene','Sachebene','Selbstoffenbarung'],c:2,expl:'Die Sachebene enthält den reinen Informationsgehalt der Botschaft.'},
+    {q:'In welcher Peplau-Phase nimmt der Patient Hilfe aktiv an und nutzt Ressourcen?',opts:['Orientierung','Identifikation','Nutzung','Ablösung'],c:2,expl:'In der Nutzungsphase macht der Patient Pflegeinterventionen aktiv nutzbar.'},
+    {q:'Was ist der erste Schritt der GFK?',opts:['Bitte äußern','Gefühl benennen','Bedürfnis nennen','Beobachtung ohne Wertung'],c:3,expl:'GFK beginnt mit einer wertungsfreien Beobachtung der Situation.'},
+    {q:'„Sie sollten einfach mehr trinken" ist ein Beispiel für:',opts:['Aktives Zuhören','GFK','Ratschläge geben','Appellebene nutzen'],c:2,expl:'Ungebetene Ratschläge sind eine klassische Kommunikationssperre nach Gordon.'},
+    {q:'Welches Modell entwickelte Marshall Rosenberg?',opts:['Vier-Ohren-Modell','Gewaltfreie Kommunikation','Peplau-Interaktionstheorie','Selbstpflegedefizit'],c:1,expl:'Die Gewaltfreie Kommunikation (GFK) wurde von Marshall Rosenberg entwickelt.'},
+    {q:'Welche Phase beendet die Peplau-Pflegebeziehung?',opts:['Nutzung','Identifikation','Orientierung','Ablösung'],c:3,expl:'In der Ablösungsphase endet die therapeutische Pflegebeziehung.'},
+    {q:'Welche Aussage beschreibt Bagatellisieren?',opts:['„Sie müssen aufstehen!"','„Das ist doch nicht so schlimm!"','„Sie wollen Aufmerksamkeit."','„Trinken Sie mehr."'],c:1,expl:'Bagatellisieren verharmlost das Erleben des Patienten und zerstört Vertrauen.'},
+  ]
+},
+{id:3,title:'Assessmentinstrumente',icon:'📊',grad:'linear-gradient(135deg,#e11d48,#d97706)',ibg:'#fff0f8',cat:'KB I',cost:1,tag:'new',ph:true,desc:'Braden, Barthel, Norton, NRS, MMSE — Skalen sicher anwenden & auswerten'},
+{id:4,title:'Rechtliche Grundlagen',icon:'⚖️',grad:'linear-gradient(135deg,#0891b2,#2563eb)',ibg:'#eff6ff',cat:'KB IV',cost:1,tag:'new',ph:true,desc:'§630d, §823 BGB, Fixierung, Delegation & Schweigepflicht §203 StGB'},
+{id:5,title:'Wundversorgung & Dekubitus',icon:'🩹',grad:'linear-gradient(135deg,#059669,#2563eb)',ibg:'#f0fdf4',cat:'KB I',cost:1,tag:'coming',ph:true,desc:'Wundklassifikation, Phasen der Wundheilung, Dekubitusprophylaxe'},
+{id:6,title:'Arzneimittellehre & Pharmakologie',icon:'💊',grad:'linear-gradient(135deg,#d97706,#e11d48)',ibg:'#fffbeb',cat:'KB I',cost:2,tag:'coming',ph:true,desc:'Applikationswege, Interaktionen, 6-R-Regel, BtMG, Nebenwirkungen'},
+{id:7,title:'Ethik & Palliative Care',icon:'🕊️',grad:'linear-gradient(135deg,#7c3aed,#4338ca)',ibg:'#f5f3ff',cat:'KB IV',cost:2,tag:'coming',ph:true,desc:'Prinzipienethik, Patientenautonomie, Sterbebegleitung'},
+{id:8,title:'Teamarbeit & Delegation',icon:'🤝',grad:'linear-gradient(135deg,#ea580c,#d97706)',ibg:'#fff7ed',cat:'KB III',cost:2,tag:'coming',ph:true,desc:'Interprofessionelle Zusammenarbeit, Übergabe, Konfliktmanagement'},
+{id:9,title:'Wissenschaft & EBP',icon:'🔬',grad:'linear-gradient(135deg,#0891b2,#059669)',ibg:'#f0fdf4',cat:'KB V',cost:3,tag:'coming',ph:true,desc:'Evidenzbasierte Pflege, Studiendesigns, Expertenstandards'},
+];
+
+/* tag label map */
+const TAG_LABEL={free:'Kostenlos',new:'Neu',coming:'Bald',done:'✅ Abgeschlossen',locked:'🔒 Gesperrt'};
+const KBmap={1:'kb1',2:'kb2',3:'kb1',4:'kb4',5:'kb1',6:'kb1',7:'kb4',8:'kb3',9:'kb5'};
+
+/* ── HEADER UPDATE ── */
+function hdrUpdate(){
+  document.getElementById('xpN').textContent=S.xp;
+  document.getElementById('keyN').textContent=S.keys;
+  document.getElementById('strN').textContent=S.streak;
+  const mStr=document.getElementById('mStr');const mXp=document.getElementById('mXp');const mKey=document.getElementById('mKey');
+  if(mStr)mStr.textContent=S.streak;if(mXp)mXp.textContent=S.xp;if(mKey)mKey.textContent=S.keys;
+  const pct=(S.done.length/MODS.length*100).toFixed(0);
+  document.getElementById('pFill').style.width=pct+'%';
+  document.getElementById('pLbl').textContent=S.done.length+'/'+MODS.length;
+}
+
+/* ── VIEWS ── */
+function showV(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  closeNav();
+}
+
+/* ── RENDER HOME ── */
+let activeFilter='all';
+function renderHome(){
+  const g=document.getElementById('mgrid');g.innerHTML='';
+  MODS.forEach(m=>{
+    const dn=S.done.includes(m.id);
+    const lk=m.cost>0&&!dn&&S.keys<m.cost&&m.id>2;
+    const isFeatured=m.id===1&&!dn;
+    const tagType=dn?'done':lk?'locked':m.tag;
+
+    // filter
+    const kb=KBmap[m.id]||'';
+    const tagStr=m.tag==='free'?'free':'';
+    if(activeFilter!=='all'){
+      if(activeFilter==='free'&&m.tag!=='free')return;
+      if(activeFilter.startsWith('kb')&&kb!==activeFilter)return;
+    }
+
+    const c=document.createElement('div');
+    c.className='mcard'+(lk?' locked':'')+(dn?' done':'')+(isFeatured?' featured':'');
+    c.style.setProperty('--card-grad',m.grad);
+    c.dataset.id=m.id;
+
+    const ctaText=dn?'Erneut üben':lk?`${m.cost} 🗝 benötigt`:m.ph?'Bald verfügbar':'Jetzt starten';
+    const ctaIcon=dn?'fas fa-redo':lk?'fas fa-lock':m.ph?'fas fa-clock':'fas fa-arrow-right';
+
+    c.innerHTML=`
+      <div class="mc-top">
+        <div class="mc-icon" style="background:${m.ibg};font-size:1.4rem;">${m.icon}</div>
+        <div class="mc-tags">
+          ${isFeatured?'<span class="tag tag-featured">⭐ Start hier</span>':''}
+          <span class="tag tag-${tagType}">${TAG_LABEL[tagType]||tagType}</span>
+          <span class="tag tag-cat">${m.cat}</span>
+        </div>
+      </div>
+      <div class="mc-title">${m.title}</div>
+      <div class="mc-desc">${m.ph?m.desc:(m.lessons.length+' Lektionen · Flashcards · Quiz · Fallstudien')}</div>
+      <div class="mc-meta">
+        ${m.lessons&&m.lessons.length?`<span><i class="fas fa-book-open"></i>${m.lessons.length} Lektionen</span>`:'<span><i class="fas fa-clock"></i>Demnächst</span>'}
+        <span><i class="fas fa-question-circle"></i>${m.quiz?m.quiz.length:0} Fragen</span>
+        ${m.cost>0&&!dn?`<span><i class="fas fa-key"></i>${m.cost} Schlüssel</span>`:''}
+      </div>
+      <div class="mc-progress"><div class="mc-pfill" style="width:${dn?100:0}%;background:${dn?'var(--green)':'var(--blue)'}"></div></div>
+      <div class="mc-cta">
+        <span class="mc-cta-text">${ctaText}</span>
+        <div class="mc-cta-icon"><i class="${ctaIcon}"></i></div>
+      </div>`;
+    c.addEventListener('click',()=>openMod(m.id));
+    g.appendChild(c);
+  });
+}
+
+/* ── FILTER TABS ── */
+document.getElementById('filterTabs').addEventListener('click',e=>{
+  const tab=e.target.closest('.ftab');if(!tab)return;
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  activeFilter=tab.dataset.filter;
+  renderHome();
+});
+
+/* ── OPEN MODULE ── */
+function openMod(id){
+  const m=MODS.find(x=>x.id===id);if(!m)return;
+  if(m.ph){toast('🚧 Dieses Modul kommt bald!','info');return;}
+  const dn=S.done.includes(id);
+  const lk=m.cost>0&&!dn&&S.keys<m.cost&&id>2;
+  if(lk){toast(`🔒 Du brauchst ${m.cost} Schlüssel für dieses Modul.`,'warn');return;}
+  if(!dn&&m.cost>0&&id>2){S.keys-=m.cost;save();}
+  S.mod=id;S.step=0;showV('detail');renderLesson();
+}
+
+/* ── DOTS ── */
+function renderDots(tot,cur){
+  const w=document.getElementById('sdots');w.innerHTML='';
+  for(let i=0;i<tot;i++){const d=document.createElement('div');d.className='sd'+(i===cur?' on':i<cur?' dn':'');w.appendChild(d);}
+}
+
+/* ── RENDER LESSON ── */
+function renderLesson(){
+  const m=MODS.find(x=>x.id===S.mod),l=m.lessons[S.step],tot=m.lessons.length;
+  renderDots(tot,S.step);
+  let ih='';
+  if(l.blanks){
+    let s='<div class="bsen">';
+    l.blanks.parts.forEach((p,i)=>{s+=p.b?`<input class="binp" data-a="${p.b.a}" placeholder="${p.b.h}" id="b${i}" autocomplete="off">`:`<span>${p.t}</span>`;});
+    s+='</div>';
+    ih=`<div class="bwrap"><p>${l.blanks.ins}</p>${s}<br><button class="cbtn" id="chkB">Überprüfen ✓</button><div class="fbtxt" id="bFb"></div></div>`;
+  }
+  if(l.sort){
+    const sh=shuf([...l.sort.items]);
+    ih=`<div class="swrap"><p>${l.sort.ins}</p><ul class="slist" id="slist">${sh.map((t,i)=>`<li class="sitem" draggable="true"><span class="dh"><i class="fas fa-grip-vertical"></i></span><span class="inum">${i+1}</span><span>${t}</span></li>`).join('')}</ul><button class="cbtn sec" id="chkS">Reihenfolge prüfen ✓</button><div class="fbtxt" id="sFb"></div></div>`;
+  }
+  if(l.match){
+    const sr=shuf(l.match.pairs.map((p,i)=>({t:p.r,i})));
+    ih=`<div class="mwrap"><p>${l.match.ins}</p><div class="mcols"><div><h5>Begriff</h5>${l.match.pairs.map((p,i)=>`<div class="mit" data-s="L" data-i="${i}">${p.l}</div>`).join('')}</div><div><h5>Definition</h5>${sr.map(s=>`<div class="mit" data-s="R" data-i="${s.i}">${s.t}</div>`).join('')}</div></div><div class="fbtxt" id="mFb"></div></div>`;
+  }
+  if(l.scenario){
+    ih=`<div class="scbox"><h4>📋 Fallstudie</h4><p>${l.scenario.txt}</p><div class="scqs">${l.scenario.qs.map((q,i)=>`<div class="scq"><label>${q.l}</label><textarea id="sq${i}" rows="3" placeholder="Deine Antwort…"></textarea><button class="rvbtn" data-qi="${i}">Musterlösung anzeigen</button><div class="scans" id="sa${i}"><strong>✅ Musterlösung:</strong><br>${q.a.replace(/\n/g,'<br>')}</div></div>`).join('')}</div></div>`;
+  }
+  const nk=`n${S.mod}`;const sn=S.notes[nk]||'';const isLast=S.step===tot-1;
+  document.getElementById('larea').innerHTML=`
+    <div class="lcard">
+      <div class="lhdr"><span class="lemi">${l.emi}</span><div class="ltit">${l.tit}</div><div class="lsub">${l.sub||''}</div></div>
+      ${l.html||''}${ih}
+      <div class="enote"><h4>💡 Experten-Tipp</h4><p>${l.tip}</p></div>
+      <div class="unote"><h4><i class="fas fa-pencil-alt"></i> Meine Notizen</h4><textarea id="uN" rows="2" placeholder="Eigene Gedanken…">${esc(sn)}</textarea><button class="snbtn" id="snBtn"><i class="fas fa-save"></i> Speichern</button></div>
+      <div class="lnav">
+        <button class="nbtn nbs" id="pBtn" ${S.step===0?'disabled':''}><i class="fas fa-chevron-left"></i> Zurück</button>
+        ${isLast?`<button class="nbtn nbg" id="qBtn">🚀 Abschlusstest</button>`:`<button class="nbtn nbp" id="nBtn">Weiter <i class="fas fa-chevron-right"></i></button>`}
+      </div>
+    </div>`;
+
+  /* Flashcards */
+  if(l.fc){const el=document.getElementById('fc-mod'+S.mod);if(el){el.innerHTML=l.fc.map((c,i)=>`<div class="fc" id="fc${i}"><div class="fc-in"><div class="fc-f">${c.f}<small>Antippen</small></div><div class="fc-b"><div class="fc-ans">${c.b}</div></div></div></div>`).join('');el.querySelectorAll('.fc').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('flipped')));}}
+  /* Blanks */
+  if(l.blanks){document.getElementById('chkB').addEventListener('click',()=>{const ins=document.querySelectorAll('.binp');let ok=0;ins.forEach(i=>{const v=i.value.trim().toLowerCase(),a=i.dataset.a.toLowerCase();i.classList.toggle('ok',v===a);i.classList.toggle('bad',v!==a);if(v===a)ok++;});const fb=document.getElementById('bFb');if(ok===ins.length){fb.style.color='var(--green)';fb.textContent='✅ Perfekt! Alle richtig!';addXP(15);}else{fb.style.color='var(--rose)';fb.textContent=`❌ ${ok}/${ins.length} richtig — nochmal versuchen!`;}});}
+  /* Sort */
+  if(l.sort){initSort('slist',l.sort.items);}
+  /* Match */
+  if(l.match){initMatch(l.match.pairs);}
+  /* Scenario */
+  if(l.scenario){document.querySelectorAll('.rvbtn').forEach(b=>{b.addEventListener('click',function(){document.getElementById('sa'+this.dataset.qi).classList.add('vis');this.style.display='none';});});}
+  /* Note */
+  document.getElementById('snBtn').addEventListener('click',function(){S.notes[nk]=document.getElementById('uN').value;save();this.textContent='✅ Gespeichert!';this.classList.add('saved');setTimeout(()=>{this.innerHTML='<i class="fas fa-save"></i> Speichern';this.classList.remove('saved');},1500);});
+  /* Nav */
+  document.getElementById('pBtn')?.addEventListener('click',()=>{if(S.step>0){S.step--;renderLesson();}});
+  document.getElementById('nBtn')?.addEventListener('click',()=>{if(S.step<tot-1){S.step++;renderLesson();}});
+  document.getElementById('qBtn')?.addEventListener('click',startQuiz);
+}
+
+/* ── SORT ── */
+function initSort(lid,correct){
+  const list=document.getElementById(lid);if(!list)return;
+  let dragged=null;
+  list.querySelectorAll('.sitem').forEach(it=>{
+    it.addEventListener('dragstart',()=>{dragged=it;setTimeout(()=>it.classList.add('dragging'),0);});
+    it.addEventListener('dragend',()=>{it.classList.remove('dragging');dragged=null;});
+    it.addEventListener('dragover',e=>{e.preventDefault();it.classList.add('over');});
+    it.addEventListener('dragleave',()=>it.classList.remove('over'));
+    it.addEventListener('drop',e=>{e.preventDefault();it.classList.remove('over');if(dragged&&dragged!==it)list.insertBefore(dragged,it);list.querySelectorAll('.sitem').forEach((x,i)=>x.querySelector('.inum').textContent=i+1);});
+  });
+  document.getElementById('chkS')?.addEventListener('click',()=>{
+    const cur=[...list.querySelectorAll('.sitem')].map(x=>x.querySelector('span:last-child').textContent);
+    const fb=document.getElementById('sFb');
+    if(JSON.stringify(cur)===JSON.stringify(correct)){fb.style.color='var(--green)';fb.textContent='✅ Perfekte Reihenfolge!';addXP(20);}
+    else{fb.style.color='var(--muted)';fb.textContent='💡 Noch nicht ganz — überleg nochmal und ziehe neu!';}
+  });
+}
+
+/* ── MATCH ── */
+function initMatch(pairs){
+  let sL=null,sR=null;const done=new Set();
+  document.querySelectorAll('.mit').forEach(el=>{
+    el.addEventListener('click',function(){
+      if(this.classList.contains('ok'))return;
+      const sd=this.dataset.s,idx=parseInt(this.dataset.i);
+      if(sd==='L'){if(sL)sL.classList.remove('sel');sL=this;this.classList.add('sel');}
+      else{if(sR)sR.classList.remove('sel');sR=this;this.classList.add('sel');}
+      if(sL&&sR){
+        const li=parseInt(sL.dataset.i),ri=parseInt(sR.dataset.i);
+        if(li===ri){sL.classList.replace('sel','ok');sR.classList.replace('sel','ok');done.add(li);const fb=document.getElementById('mFb');fb.style.color='var(--green)';fb.textContent=`✅ Richtig! (${done.size}/${pairs.length} Paare)`;if(done.size===pairs.length)addXP(25);}
+        else{const a=sL,b=sR;a.classList.add('bad');b.classList.add('bad');setTimeout(()=>{a.classList.remove('sel','bad');b.classList.remove('sel','bad');},700);}
+        sL=null;sR=null;
+      }
+    });
+  });
+}
+
+/* ── QUIZ ── */
+let QS={idx:0,score:0,ans:false};
+function startQuiz(){const m=MODS.find(x=>x.id===S.mod);QS={idx:0,score:0,ans:false};document.getElementById('qModTit').textContent=m.title;showV('quiz');renderQ(m);}
+function renderQ(m){
+  const q=m.quiz[QS.idx],tot=m.quiz.length,pct=QS.idx/tot*100;
+  document.getElementById('qarea').innerHTML=`
+    <div class="qcard">
+      <div class="qpbg"><div class="qpf" style="width:${pct}%"></div></div>
+      <div class="qplbl">Frage ${QS.idx+1} von ${tot}</div>
+      <div class="qtxt">${q.q}</div>
+      <div class="qopts">${q.opts.map((o,i)=>`<div class="qopt" data-i="${i}"><div class="qltr">${String.fromCharCode(65+i)}</div><span>${o}</span></div>`).join('')}</div>
+      <div class="qfb" id="qfb"></div>
+      <div class="lnav" style="margin-top:18px;"><div></div><button class="nbtn nbp" id="qnxt" style="display:none;">${QS.idx<tot-1?'Nächste Frage <i class="fas fa-chevron-right"></i>':'🏁 Ergebnis'}</button></div>
+    </div>`;
+  QS.ans=false;
+  document.querySelectorAll('.qopt').forEach(o=>{
+    o.addEventListener('click',function(){
+      if(QS.ans)return;QS.ans=true;const ch=parseInt(this.dataset.i);
+      document.querySelectorAll('.qopt').forEach((x,i)=>{if(i===q.c)x.classList.add('rit');else if(i===ch&&ch!==q.c)x.classList.add('wrg');});
+      const fb=document.getElementById('qfb');
+      if(ch===q.c){QS.score++;fb.className='qfb show ok';fb.innerHTML='<span>✅</span> Richtig! '+q.expl;}
+      else{fb.className='qfb show bad';fb.innerHTML='<span>❌</span> Falsch. '+q.expl;}
+      document.getElementById('qnxt').style.display='flex';
+    });
+  });
+  document.getElementById('qnxt').addEventListener('click',()=>{QS.idx++;if(QS.idx<m.quiz.length)renderQ(m);else showResult(m);});
+}
+function showResult(m){
+  const sc=QS.score,tot=m.quiz.length,pct=Math.round(sc/tot*100),pass=pct>=70;
+  const stars=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':'⭐';
+  document.getElementById('qarea').innerHTML=`
+    <div class="qres">
+      <span class="rtrop">${pass?'🏆':'📚'}</span>
+      <div class="rtit">${pass?'Bestanden! Glückwunsch!':'Noch nicht bestanden'}</div>
+      <div class="rstars">${stars}</div>
+      <div class="rscore ${pass?'pass':'fail'}">${sc}/${tot} · ${pct}%</div>
+      <div class="rmsg">${pass?'Fantastisch! Modul abgeschlossen 🎉 Du erhältst einen 🗝 Schlüssel!':'Mindestens 70% nötig. Wiederhole die Lektionen!'}</div>
+      <div class="racts">
+        <button class="nbtn nbs" id="retryBtn"><i class="fas fa-redo"></i> Wiederholen</button>
+        <button class="nbtn nbp" id="homeBtn"><i class="fas fa-home"></i> Alle Module</button>
+      </div>
+    </div>`;
+  if(pass){addXP(50+sc*10);if(!S.done.includes(m.id)){S.done.push(m.id);S.keys+=1;}save();setTimeout(confetti,250);}
+  document.getElementById('retryBtn').addEventListener('click',startQuiz);
+  document.getElementById('homeBtn').addEventListener('click',()=>{renderHome();showV('home');});
+}
+
+/* ── XP / TOAST ── */
+function addXP(n){S.xp+=n;save();toast(`+${n} XP 🌟`,'xp');}
+function toast(msg,type='info'){
+  const old=document.querySelector('.toast');if(old)old.remove();
+  const t=document.createElement('div');t.className='toast';
+  const colors={xp:'var(--blue)',warn:'#b45309',info:'var(--ink)'};
+  t.style.background=colors[type]||colors.info;
+  t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);
+}
+
+/* ── CONFETTI ── */
+function confetti(){
+  const h=document.getElementById('cfh');
+  for(let i=0;i<90;i++){const c=document.createElement('div');c.className='cf';c.style.left=Math.random()*100+'vw';c.style.background=`hsl(${Math.random()*360},75%,60%)`;c.style.width=(7+Math.random()*8)+'px';c.style.height=(7+Math.random()*8)+'px';c.style.borderRadius=Math.random()>.5?'50%':'2px';c.style.animationDuration=(2+Math.random()*1.5)+'s';c.style.animationDelay=(Math.random()*.8)+'s';h.appendChild(c);}
+  setTimeout(()=>h.innerHTML='',4500);
+}
+
+/* ── SCROLL header shadow ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainHdr').classList.toggle('scrolled',window.scrollY>10);
+},{ passive:true });
+
+/* ── BURGER / NAV ── */
+const burgerBtn=document.getElementById('burgerBtn');
+const mNav=document.getElementById('mobileNav');
+function closeNav(){burgerBtn.classList.remove('open');mNav.classList.remove('open');document.body.style.overflow='';burgerBtn.setAttribute('aria-expanded','false');}
+burgerBtn.addEventListener('click',()=>{const o=mNav.classList.toggle('open');burgerBtn.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';burgerBtn.setAttribute('aria-expanded',String(o));});
+document.addEventListener('click',e=>{if(!mNav.contains(e.target)&&!burgerBtn.contains(e.target))closeNav();});
+
+/* Mobile nav */
+document.querySelectorAll('.mnb').forEach(b=>{b.addEventListener('click',function(){const v=this.dataset.goto;if(v){renderHome();showV(v);}closeNav();});});
+document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Fortschritt wirklich zurücksetzen?')){delCk('pfp4');S={xp:0,keys:1,streak:3,done:[],notes:{},mod:null,step:0};hdrUpdate();renderHome();showV('home');toast('Fortschritt zurückgesetzt.','warn');}closeNav();});
+
+/* Desktop nav */
+document.querySelectorAll('.dnb').forEach(b=>{b.addEventListener('click',function(){renderHome();showV('home');document.querySelectorAll('.dnb').forEach(x=>x.classList.remove('act'));this.classList.add('act');});});
+
+/* ── CTAs ── */
+document.getElementById('logoBtn').addEventListener('click',()=>{renderHome();showV('home');});
+document.getElementById('startNowBtn').addEventListener('click',()=>openMod(1));
+document.getElementById('seeModulesBtn').addEventListener('click',()=>{document.getElementById('modulesSection').scrollIntoView({behavior:'smooth'});});
+document.getElementById('startFreeBtn').addEventListener('click',()=>{document.querySelector('.ftab[data-filter="free"]').click();});
+document.getElementById('prepStartBtn').addEventListener('click',()=>openMod(1));
+document.getElementById('backBtn').addEventListener('click',()=>{renderHome();showV('home');});
+document.getElementById('qBackBtn').addEventListener('click',()=>{showV('detail');renderLesson();});
+
+/* ── UTILS ── */
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ── BOOT ── */
+load();renderHome();
+
+})();
+</script>
+</body>
+</html>
