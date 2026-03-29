@@ -2,866 +2,1446 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>PflegefachProfi • Lernkatalog KB I–V</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
   <style>
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-    html{scroll-behavior:smooth;overflow-x:hidden;}
-    body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc;color:#0d1117;overflow-x:hidden;}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc;color:#0d1117;overflow-x:hidden;min-height:100vh}
     :root{
       --ink:#0d1117;
-      --ink2:#1c2333;
       --ink3:#374151;
       --muted:#6b7280;
       --faint:#f3f4f6;
       --white:#ffffff;
       --border:#e5e7eb;
       --border2:#d1d5db;
+
       --blue:#2563eb;
       --blue-d:#1d4ed8;
       --blue-l:#dbeafe;
       --blue-xl:#eff6ff;
+
       --purple:#7c3aed;
-      --purple-l:#ede9fe;
+
       --green:#059669;
       --green-l:#d1fae5;
+
       --amber:#d97706;
       --amber-l:#fef3c7;
+
       --rose:#e11d48;
       --rose-l:#ffe4e6;
-      --teal:#0891b2;
-      --teal-l:#cffafe;
-      --orange:#ea580c;
-      --orange-l:#fed7aa;
+
       --s1:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
       --s2:0 4px 16px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.06);
-      --s3:0 16px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);
+
       --nh:64px;
+      --ease:cubic-bezier(.4,0,.2,1);
+      --spring:cubic-bezier(.34,1.56,.64,1);
     }
 
-    .wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+    .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+    @media(max-width:420px){.wrap{padding:0 12px}}
+
+    .skip{
+      position:absolute;left:-999px;top:10px;
+      background:var(--blue);color:#fff;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;text-decoration:none;
+      z-index:9999;
+    }
+    .skip:focus{left:12px}
+
     .hdr{
-      position:sticky;top:0;z-index:100;
-      height:var(--nh);
+      position:sticky;top:0;z-index:500;height:var(--nh);
       background:rgba(255,255,255,.92);
       backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
       border-bottom:1px solid var(--border);
+      transition:box-shadow .2s var(--ease);
     }
-    .hdr-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+    .hdr.scrolled{box-shadow:var(--s2)}
+    .hdr-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0}
     .logo-mark{
       width:38px;height:38px;border-radius:12px;
       display:flex;align-items:center;justify-content:center;
       background:linear-gradient(135deg,var(--blue),var(--purple));
       color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.35);
     }
-    .logo-text{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;}
-    .logo-text span{color:var(--blue);}
-    .hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-    .stat-pill{
-      display:flex;align-items:center;gap:6px;
-      padding:7px 12px;border-radius:999px;
-      font-size:.78rem;font-weight:800;border:1.5px solid;
-      background:var(--white);
-    }
-    .stat-blue{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue-d);}
-    .stat-green{background:var(--green-l);border-color:#a7f3d0;color:var(--green);}
-    .stat-amber{background:#fff7ed;border-color:#fed7aa;color:#c2410c;}
+    .logo-text{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;letter-spacing:-.01em}
+    .logo-text span{color:var(--blue)}
+    @media(max-width:420px){.logo-text{display:none}}
 
-    .hero{
-      padding:42px 0 20px;
-      position:relative;overflow:hidden;
+    .dnav{display:flex;align-items:center;gap:4px;list-style:none}
+    .dnav a{
+      display:flex;align-items:center;gap:7px;
+      padding:8px 14px;border-radius:10px;
+      text-decoration:none;font-weight:900;font-size:.83rem;
+      color:var(--muted);
+      transition:all .18s var(--ease);
     }
-    .hero::before{
+    .dnav a:hover{background:var(--faint);color:var(--ink)}
+    .dnav a.active{background:var(--blue-xl);color:var(--blue);border:1px solid var(--blue-l)}
+    .dnav i{font-size:.82rem}
+    @media(max-width:960px){.dnav{display:none}}
+
+    .hdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .pill{
+      display:flex;align-items:center;gap:7px;
+      padding:6px 12px;border-radius:999px;
+      border:1.5px solid var(--border);
+      background:var(--white);
+      font-weight:900;font-size:.78rem;
+      white-space:nowrap;
+    }
+    .pill i{color:var(--blue)}
+    .prog{
+      display:flex;align-items:center;gap:10px;
+      padding:6px 12px;border-radius:999px;
+      border:1.5px solid var(--border);
+      background:var(--white);
+      white-space:nowrap;
+    }
+    .prog-bar{width:74px;height:7px;background:var(--border);border-radius:999px;overflow:hidden}
+    .prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;transition:width .35s var(--ease)}
+    .prog-txt{font-weight:900;font-size:.75rem;color:var(--muted)}
+    @media(max-width:600px){
+      :root{--nh:60px}
+      .pill{display:none}
+      .prog-bar{width:56px}
+    }
+
+    .burger{
+      display:none;flex-direction:column;justify-content:center;gap:5px;
+      width:38px;height:38px;border:1.5px solid var(--border);
+      background:var(--white);border-radius:12px;
+      cursor:pointer;padding:9px;flex-shrink:0;transition:all .2s var(--ease);
+    }
+    .burger span{display:block;width:100%;height:2px;background:var(--ink);border-radius:999px;transition:transform .25s,opacity .2s}
+    .burger.open{background:var(--blue-xl);border-color:var(--blue-l)}
+    .burger.open span{background:var(--blue)}
+    .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .burger.open span:nth-child(2){opacity:0}
+    .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    @media(max-width:960px){.burger{display:flex}}
+
+    .overlay{
+      position:fixed;inset:0;
+      background:rgba(13,17,23,.38);
+      opacity:0;pointer-events:none;
+      transition:opacity .2s var(--ease);
+      z-index:498;
+    }
+    .overlay.open{opacity:1;pointer-events:auto}
+
+    .drawer{
+      position:fixed;top:0;right:0;bottom:0;
+      width:min(380px,92vw);
+      background:var(--white);
+      border-left:1px solid var(--border);
+      transform:translateX(100%);
+      transition:transform .24s var(--ease);
+      z-index:499;
+      display:flex;flex-direction:column;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer-head{
+      padding:14px 14px 10px;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    .drawer-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem}
+    .drawer-close{
+      width:40px;height:40px;border-radius:12px;
+      border:1.5px solid var(--border);
+      background:var(--white);
+      cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .18s var(--ease);
+    }
+    .drawer-close:hover{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue)}
+    .drawer-body{padding:14px;overflow:auto}
+
+    .drawer-block{
+      background:var(--faint);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;margin-bottom:12px;
+    }
+    .drawer-metrics{display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .mcol .k{font-weight:900;font-size:.76rem;color:var(--muted)}
+    .mcol .v{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;line-height:1}
+
+    .drawer-links{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:12px}
+    .drawer-links a{
+      display:flex;align-items:center;gap:10px;
+      padding:12px 14px;border-radius:14px;
+      text-decoration:none;font-weight:900;font-size:.92rem;
+      color:var(--ink3);
+      transition:all .15s var(--ease);
+      border:1px solid var(--border);
+      background:#fff;
+    }
+    .drawer-links a:hover{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue)}
+    .drawer-links i{width:20px;text-align:center;color:var(--blue)}
+
+    .danger{
+      width:100%;
+      display:flex;align-items:center;justify-content:center;gap:9px;
+      padding:12px 14px;border-radius:14px;
+      border:1.5px solid rgba(225,29,72,.25);
+      background:var(--rose-l);
+      color:var(--rose);
+      font-weight:900;
+      cursor:pointer;
+      transition:transform .15s var(--spring);
+      margin-top:12px;
+    }
+    .danger:hover{transform:scale(1.02)}
+
+    main{padding-bottom:54px}
+
+    .hero{padding:26px 0 12px}
+    .hero-card{
+      background:var(--white);
+      border:1.5px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--s1);
+      padding:22px;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-card::before{
       content:'';
-      position:absolute;top:-160px;right:-160px;width:520px;height:520px;
+      position:absolute;top:-160px;right:-160px;
+      width:420px;height:420px;
       background:radial-gradient(circle,rgba(37,99,235,.09) 0%,transparent 70%);
       pointer-events:none;
     }
-    .hero-grid{
-      display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:stretch;
-    }
-    .hero-card,.side-card,.kb-card,.topic-card,.tools-bar{
-      background:var(--white);border:1.5px solid var(--border);border-radius:22px;
-      box-shadow:var(--s1);
-    }
-    .hero-card{padding:30px;}
     .eyebrow{
-      display:inline-flex;align-items:center;gap:7px;
+      display:inline-flex;align-items:center;gap:8px;
       padding:6px 14px;border-radius:999px;
-      background:var(--blue-xl);border:1px solid var(--blue-l);
-      color:var(--blue);font-size:.74rem;font-weight:800;
-      text-transform:uppercase;letter-spacing:.05em;margin-bottom:18px;
+      background:var(--blue-xl);
+      border:1px solid var(--blue-l);
+      color:var(--blue);
+      font-weight:900;font-size:.74rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      margin-bottom:10px;
+      position:relative;z-index:1;
     }
     .hero h1{
-      font-family:'Fraunces',serif;font-size:2.65rem;line-height:1.08;
-      letter-spacing:-.03em;margin-bottom:14px;
+      font-family:'Fraunces',serif;font-weight:900;
+      font-size:2.05rem;letter-spacing:-.03em;line-height:1.12;
+      margin-bottom:10px;position:relative;z-index:1;
     }
-    .hero h1 em{font-style:italic;color:var(--blue);}
     .hero p{
-      color:var(--ink3);font-size:.98rem;line-height:1.7;max-width:720px;
+      color:var(--ink3);
+      font-size:.92rem;line-height:1.65;
+      max-width:920px;position:relative;z-index:1;
     }
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1}
     .btn{
-      display:inline-flex;align-items:center;gap:8px;text-decoration:none;
-      padding:12px 18px;border-radius:12px;font-weight:800;font-size:.88rem;
-      border:none;cursor:pointer;transition:.18s;
-    }
-    .btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(37,99,235,.25);}
-    .btn-primary:hover{background:var(--blue-d);}
-    .btn-outline{background:var(--white);color:var(--ink);border:1.5px solid var(--border2);}
-    .btn-outline:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-xl);}
-    .side-card{padding:24px;}
-    .side-card h3{
-      font-family:'Fraunces',serif;font-size:1.1rem;margin-bottom:14px;
-    }
-    .mini-list{display:grid;gap:10px;}
-    .mini-item{
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
-      border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;
-      background:#fafafa;
-    }
-    .mini-item strong{font-size:.9rem;}
-    .mini-item span{font-size:.76rem;color:var(--muted);}
-    .badge{
-      display:inline-flex;align-items:center;gap:5px;
-      padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:800;
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 16px;border-radius:12px;
+      font-weight:900;font-size:.86rem;
+      cursor:pointer;border:none;text-decoration:none;
+      transition:all .18s var(--ease);
       white-space:nowrap;
     }
-    .b-blue{background:var(--blue-xl);color:var(--blue);}
-    .b-purple{background:var(--purple-l);color:var(--purple);}
-    .b-green{background:var(--green-l);color:var(--green);}
-    .b-amber{background:var(--amber-l);color:#92400e;}
-    .b-rose{background:var(--rose-l);color:var(--rose);}
+    .btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(37,99,235,.28)}
+    .btn-primary:hover{background:var(--blue-d)}
+    .btn-ghost{background:var(--white);border:1.5px solid var(--border2);color:var(--ink)}
+    .btn-ghost:hover{border-color:var(--blue);background:var(--blue-xl);color:var(--blue)}
 
-    .tools{padding:22px 0 10px;}
-    .tools-bar{
-      padding:16px;
-      display:grid;grid-template-columns:1.3fr .8fr .6fr;gap:12px;
+    .filters{padding:12px 0 12px}
+    .filter-card{
+      background:var(--white);
+      border:1.5px solid var(--border);
+      border-radius:18px;
+      box-shadow:var(--s1);
+      padding:14px;
+      display:grid;
+      grid-template-columns:1.6fr .9fr .9fr .9fr 1fr;
+      gap:10px;
       align-items:center;
     }
-    .search-box,.filter-box{
+    @media(max-width:1024px){
+      .filter-card{grid-template-columns:1fr 1fr 1fr;gap:10px}
+      .slot-wide{grid-column:1/-1}
+    }
+    @media(max-width:600px){
+      .filter-card{grid-template-columns:1fr;gap:10px}
+      .slot-wide{grid-column:auto}
+    }
+    .ibox{
       display:flex;align-items:center;gap:10px;
-      background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;
+      border:1.5px solid var(--border);
+      border-radius:14px;
+      padding:11px 12px;
+      background:#fff;
+      min-width:0;
     }
-    .search-box i,.filter-box i{color:var(--muted);}
-    .search-box input,.filter-box select{
-      width:100%;border:none;outline:none;background:transparent;
+    .ibox i{color:var(--muted)}
+    .ibox input,.ibox select{
+      width:100%;
+      border:none;outline:none;
+      background:transparent;
       font:inherit;color:var(--ink);
-    }
-    .filter-box select{cursor:pointer;}
-    .tools-right{
-      display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;
+      min-width:0;
     }
 
-    .overview{padding:18px 0 8px;}
-    .overview-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
-    .ov-card{
-      background:var(--white);border:1.5px solid var(--border);border-radius:18px;
-      padding:18px;text-align:center;
+    .seg{
+      display:flex;
+      border:1.5px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
     }
-    .ov-card .n{
-      font-family:'Fraunces',serif;font-size:1.9rem;font-weight:900;
-      color:var(--blue);line-height:1;margin-bottom:6px;
+    .seg button{
+      flex:1;border:none;background:transparent;
+      padding:11px 10px;
+      font-weight:900;font-size:.82rem;
+      color:var(--muted);
+      cursor:pointer;
+      transition:background .15s var(--ease),color .15s var(--ease);
     }
-    .ov-card .t{font-size:.78rem;color:var(--muted);font-weight:700;}
+    .seg button.on{background:var(--blue-xl);color:var(--blue)}
+    .seg button:focus{outline:2px solid rgba(37,99,235,.25);outline-offset:-2px}
 
-    .section-head{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      margin:30px 0 16px;flex-wrap:wrap;
-    }
-    .section-head h2{
-      font-family:'Fraunces',serif;font-size:1.7rem;letter-spacing:-.02em;
-    }
-    .section-head p{color:var(--muted);font-size:.88rem;}
+    .catalog{padding:10px 0 0}
+    .kbs{display:grid;gap:14px}
 
-    .kb-list{display:grid;gap:18px;padding-bottom:60px;}
-    .kb-card{overflow:hidden;}
-    .kb-top{
-      display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
-      padding:20px 22px;border-bottom:1px solid var(--border);flex-wrap:wrap;
+    .kb{
+      background:var(--white);
+      border:1.5px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--s1);
+      overflow:hidden;
     }
-    .kb-title-wrap{display:flex;gap:14px;align-items:flex-start;}
-    .kb-icon{
-      width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-      font-size:1.35rem;color:#fff;flex-shrink:0;
+    .kb-head{
+      width:100%;
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+      padding:18px 18px 14px;
+      border:none;background:transparent;text-align:left;
+      cursor:pointer;
     }
-    .kb-title{
-      font-family:'Fraunces',serif;font-size:1.18rem;line-height:1.15;margin-bottom:4px;
+    .kb-l{display:flex;align-items:flex-start;gap:12px;min-width:0}
+    .kb-ico{
+      width:46px;height:46px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-size:1.25rem;flex-shrink:0;
     }
-    .kb-desc{color:var(--muted);font-size:.84rem;line-height:1.5;max-width:780px;}
-    .kb-progress{
-      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    .kb-t{min-width:0}
+    .kb-t h2{
+      font-family:'Fraunces',serif;
+      font-weight:900;font-size:1.15rem;
+      letter-spacing:-.02em;line-height:1.15;margin-bottom:4px;
     }
-    .prog-shell{
-      width:140px;height:8px;background:var(--border);border-radius:999px;overflow:hidden;
+    .kb-t p{font-size:.84rem;color:var(--muted);line-height:1.45}
+    .kb-r{display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+    .kb-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 10px;border-radius:999px;
+      border:1.5px solid var(--border);
+      background:var(--white);
+      font-weight:900;font-size:.75rem;color:var(--muted);
+      white-space:nowrap;
     }
-    .prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;}
-    .prog-txt{font-size:.76rem;font-weight:800;color:var(--muted);}
+    .kb-badge i{color:var(--green)}
+    .kb-chev{
+      width:38px;height:38px;border-radius:12px;
+      border:1.5px solid var(--border);
+      background:var(--white);
+      display:flex;align-items:center;justify-content:center;
+      transition:transform .2s var(--ease),background .2s var(--ease),border-color .2s var(--ease);
+      flex-shrink:0;
+    }
+    .kb-chev i{color:var(--muted)}
+    .kb.open .kb-chev{transform:rotate(180deg);background:var(--blue-xl);border-color:var(--blue-l)}
+    .kb.open .kb-chev i{color:var(--blue)}
+    .kb-body{display:none;padding:16px 18px 20px}
+    .kb.open .kb-body{display:block}
 
-    .topic-grid{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
-      padding:20px;
+    .group{margin-top:12px}
+    .group:first-child{margin-top:0}
+    .group h3{
+      font-size:.78rem;font-weight:900;
+      text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+      margin:0 0 10px;
+      display:flex;align-items:center;gap:8px;
     }
-    .topic-card{
-      padding:18px;
-      display:flex;flex-direction:column;gap:12px;
-      transition:.18s;
+    .group h3::after{content:'';height:1px;background:var(--border);flex:1}
+
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.grid{grid-template-columns:1fr}}
+
+    .topic{
+      border:1.5px solid var(--border);
+      border-radius:18px;
+      background:#fff;
+      padding:14px;
+      display:flex;flex-direction:column;gap:10px;
+      transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease);
+      min-width:0;
     }
-    .topic-card:hover{transform:translateY(-3px);box-shadow:var(--s2);}
-    .topic-top{
-      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+    .topic:hover{transform:translateY(-2px);box-shadow:var(--s2);border-color:transparent}
+    .topic.done{
+      background:linear-gradient(145deg,#fff 0%,#f0fdf4 100%);
+      border-color:rgba(5,150,105,.25);
     }
-    .topic-icon{
-      width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+
+    .t-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .t-icon{
+      width:42px;height:42px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
       font-size:1.15rem;flex-shrink:0;
+      background:var(--blue-xl);
     }
-    .topic-title{
-      font-weight:800;font-size:.92rem;line-height:1.3;
+    .t-right{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 9px;border-radius:999px;
+      font-size:.68rem;font-weight:900;
+      border:1px solid;
+      white-space:nowrap;
     }
-    .topic-sub{
-      font-size:.77rem;color:var(--muted);line-height:1.5;min-height:38px;
+    .tag.exam{background:var(--faint);border-color:var(--border2);color:var(--muted)}
+    .tag.done{background:var(--green-l);border-color:#a7f3d0;color:var(--green)}
+    .tag.open{background:var(--amber-l);border-color:rgba(217,119,6,.28);color:#92400e}
+    .tag.diff-e{background:var(--green-l);border-color:#a7f3d0;color:var(--green)}
+    .tag.diff-l{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue)}
+    .tag.diff-h{background:var(--rose-l);border-color:rgba(225,29,72,.25);color:var(--rose)}
+
+    .t-title{font-weight:900;font-size:.95rem;line-height:1.25;word-break:break-word}
+    .t-sub{font-size:.78rem;color:var(--muted);line-height:1.5;min-height:34px}
+
+    .diff{
+      display:flex;border:1.5px solid var(--border);
+      border-radius:14px;overflow:hidden;background:#fff;
     }
-    .topic-meta{
-      display:flex;flex-wrap:wrap;gap:8px;font-size:.72rem;color:var(--muted);
+    .diff button{
+      flex:1;border:none;background:transparent;
+      padding:10px 8px;
+      font-weight:900;font-size:.78rem;
+      cursor:pointer;color:var(--muted);
+      transition:background .15s var(--ease),color .15s var(--ease);
     }
-    .topic-meta span{display:flex;align-items:center;gap:5px;}
-    .topic-actions{
-      display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;
-    }
-    .link-btn,.mark-btn{
+    .diff button.on-e{background:var(--green-l);color:var(--green)}
+    .diff button.on-l{background:var(--blue-xl);color:var(--blue)}
+    .diff button.on-h{background:var(--rose-l);color:var(--rose)}
+    .diff button:focus{outline:2px solid rgba(37,99,235,.25);outline-offset:-2px}
+
+    .t-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+    .t-actions a,.t-actions button{
       flex:1;min-width:120px;
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      text-decoration:none;padding:10px 12px;border-radius:12px;
-      font-size:.8rem;font-weight:800;transition:.18s;
+      padding:10px 12px;border-radius:14px;
+      font-weight:900;font-size:.82rem;
+      border:none;cursor:pointer;
+      transition:all .16s var(--ease);
+      text-decoration:none;
+      white-space:nowrap;
     }
-    .link-btn{
-      background:var(--blue);color:#fff;
+    .open-btn{background:var(--blue);color:#fff}
+    .open-btn:hover{background:var(--blue-d)}
+    .done-btn{
+      background:var(--white);color:var(--ink);
+      border:1.5px solid var(--border2);
     }
-    .link-btn:hover{background:var(--blue-d);}
-    .mark-btn{
-      background:var(--white);color:var(--ink);border:1.5px solid var(--border2);cursor:pointer;
-    }
-    .mark-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-l);}
-    .topic-card.done{
-      border-color:rgba(5,150,105,.25);
-      background:linear-gradient(145deg,#fff 0%,#f0fdf4 100%);
-    }
-    .topic-card.done .mark-btn{
-      border-color:#a7f3d0;background:var(--green-l);color:var(--green);
-    }
+    .done-btn:hover{border-color:var(--green);background:var(--green-l);color:var(--green)}
+    .topic.done .done-btn{border-color:#a7f3d0;background:var(--green-l);color:var(--green)}
+
     .empty{
-      background:var(--white);border:1.5px dashed var(--border2);
-      border-radius:18px;padding:28px;text-align:center;color:var(--muted);
+      background:var(--white);
+      border:1.5px dashed var(--border2);
+      border-radius:18px;
+      padding:24px;
+      text-align:center;
+      color:var(--muted);
+      display:none;
     }
 
-    .site-footer{
-      padding:26px 0;border-top:1px solid var(--border);text-align:center;
-      font-size:.75rem;color:var(--muted);
-    }
-
-    @media(max-width:1024px){
-      .hero-grid{grid-template-columns:1fr;}
-      .topic-grid{grid-template-columns:repeat(2,1fr);}
-      .overview-grid{grid-template-columns:repeat(3,1fr);}
-      .tools-bar{grid-template-columns:1fr 1fr;gap:10px;}
-      .tools-right{grid-column:1/-1;justify-content:flex-start;}
-    }
-    @media(max-width:700px){
-      :root{--nh:60px;}
-      .hero h1{font-size:2rem;}
-      .topic-grid{grid-template-columns:1fr;}
-      .overview-grid{grid-template-columns:repeat(2,1fr);}
-      .tools-bar{grid-template-columns:1fr;}
-      .hdr-in{gap:8px;}
-      .hdr-r{justify-content:flex-end;}
-      .stat-pill{font-size:.72rem;padding:6px 10px;}
-    }
-    @media(max-width:420px){
-      .wrap{padding:0 12px;}
-      .logo-text{display:none;}
-      .overview-grid{grid-template-columns:1fr 1fr;}
+    .footer{
+      border-top:1px solid var(--border);
+      padding:24px 0;
+      text-align:center;
+      font-size:.75rem;
+      color:var(--muted);
+      margin-top:40px;
     }
   </style>
 </head>
+
 <body>
+  <a class="skip" href="#main">Zum Inhalt</a>
 
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a class="logo" href="index.html">
-      <div class="logo-mark"><i class="fas fa-hand-holding-heart"></i></div>
-      <div class="logo-text">Pflege<span>fach</span>Profi</div>
-    </a>
+  <header class="hdr" id="hdr">
+    <div class="wrap hdr-in">
+      <a class="logo" href="index.html" aria-label="Startseite">
+        <div class="logo-mark"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="logo-text">Pflege<span>fach</span>Profi</div>
+      </a>
 
-    <div class="hdr-r">
-      <div class="stat-pill stat-blue"><i class="fas fa-layer-group"></i><span id="statTotal">0</span> Themen</div>
-      <div class="stat-pill stat-green"><i class="fas fa-check-circle"></i><span id="statDone">0</span> gelernt</div>
-      <div class="stat-pill stat-amber"><i class="fas fa-chart-line"></i><span id="statPct">0%</span></div>
+      <nav aria-label="Hauptnavigation">
+        <ul class="dnav">
+          <li><a href="index.html"><i class="fas fa-home"></i> Start</a></li>
+          <li><a class="active" href="lernkatalog.html"><i class="fas fa-book"></i> Lernkatalog</a></li>
+          <li><a href="pruefungsinfos.html"><i class="fas fa-graduation-cap"></i> Prüfungsinfos</a></li>
+          <li><a href="profil.html"><i class="fas fa-user"></i> Profil</a></li>
+        </ul>
+      </nav>
+
+      <div class="hdr-r">
+        <div class="pill" aria-label="Gelernt">
+          <i class="fas fa-check-circle"></i>
+          <strong id="doneN">0</strong>/<span id="totalN">0</span>
+        </div>
+
+        <div class="prog" aria-label="Fortschritt">
+          <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
+          <span class="prog-txt" id="pTxt">0%</span>
+        </div>
+
+        <button class="burger" id="burgerBtn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="drawer">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
-  <section class="hero">
-    <div class="wrap">
-      <div class="hero-grid">
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Mobile Menü">
+    <div class="drawer-head">
+      <div class="drawer-title">Menü</div>
+      <button class="drawer-close" id="drawerClose" aria-label="Menü schließen">
+        <i class="fas fa-xmark"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-block">
+        <div class="drawer-metrics">
+          <div class="mcol">
+            <div class="k">Gelernt</div>
+            <div class="v"><span id="mDone">0</span>/<span id="mTot">0</span></div>
+          </div>
+          <div class="mcol" style="text-align:right;">
+            <div class="k">Fortschritt</div>
+            <div class="v" id="mPct">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="drawer-links" aria-label="Navigation">
+        <li><a href="index.html"><i class="fas fa-home"></i> Start</a></li>
+        <li><a href="lernkatalog.html"><i class="fas fa-book"></i> Lernkatalog</a></li>
+        <li><a href="pruefungsinfos.html"><i class="fas fa-graduation-cap"></i> Prüfungsinfos</a></li>
+        <li><a href="einstellungen.html"><i class="fas fa-gear"></i> Einstellungen</a></li>
+      </ul>
+
+      <button class="danger" id="resetBtn"><i class="fas fa-rotate-left"></i> Fortschritt zurücksetzen</button>
+    </div>
+  </aside>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
         <div class="hero-card">
-          <div class="eyebrow"><i class="fas fa-graduation-cap"></i> Lernkatalog Abschlussprüfung</div>
-          <h1>Alle Themen nach <em>Kompetenzbereich I–V</em></h1>
+          <div class="eyebrow"><i class="fas fa-graduation-cap"></i> Abschlussprüfung Pflegefachmann</div>
+          <h1>Lernkatalog KB I bis KB V</h1>
           <p>
-            Diese Seite ist dein kompletter Themen-Hub für die Pflegefachmann Abschlussprüfung.
-            Jede Karte führt später auf eine eigene Inhaltsseite. Dein Lernfortschritt wird lokal mit Cookies gespeichert.
+            Markiere jedes Thema mit Status und Schwierigkeit. Filter zeigen dir sofort, was heute dran ist.
+            Prüfungs-Tags W1, W2, W3, O helfen beim Tagesplan.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#kbSection"><i class="fas fa-book-open"></i> Jetzt Themen öffnen</a>
-            <button class="btn btn-outline" id="resetProgressBtn"><i class="fas fa-rotate-left"></i> Fortschritt zurücksetzen</button>
+            <a class="btn btn-primary" href="#catalog"><i class="fas fa-list-check"></i> Themen öffnen</a>
+            <button class="btn btn-ghost" id="clearFiltersBtn"><i class="fas fa-filter-circle-xmark"></i> Filter leeren</button>
           </div>
         </div>
-
-        <aside class="side-card">
-          <h3>So nutzt du die Seite</h3>
-          <div class="mini-list">
-            <div class="mini-item">
-              <div>
-                <strong>Thema öffnen</strong>
-                <span>führt zur späteren Detailseite</span>
-              </div>
-              <span class="badge b-blue">Placeholder Link</span>
-            </div>
-            <div class="mini-item">
-              <div>
-                <strong>Als gelernt markieren</strong>
-                <span>speichert direkt in Cookies</span>
-              </div>
-              <span class="badge b-green">Cookie Save</span>
-            </div>
-            <div class="mini-item">
-              <div>
-                <strong>Nach KB filtern</strong>
-                <span>schneller zu Tag 1 bis Tag 3</span>
-              </div>
-              <span class="badge b-purple">KB I–V</span>
-            </div>
-            <div class="mini-item">
-              <div>
-                <strong>Später erweiterbar</strong>
-                <span>für Quiz, XP, Notizen, Freischaltung</span>
-              </div>
-              <span class="badge b-amber">Skalierbar</span>
-            </div>
-          </div>
-        </aside>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="tools">
-    <div class="wrap">
-      <div class="tools-bar">
-        <label class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Thema suchen, z. B. Ethik, NANDA, Delegation..." />
-        </label>
+    <section class="filters">
+      <div class="wrap">
+        <div class="filter-card" aria-label="Filter">
+          <div class="ibox slot-wide">
+            <i class="fas fa-search"></i>
+            <input id="qInput" type="text" placeholder="Suchen, z. B. NANDA, Ethik, Notfall, Demenz" />
+          </div>
 
-        <label class="filter-box">
-          <i class="fas fa-filter"></i>
-          <select id="kbFilter">
-            <option value="all">Alle Kompetenzbereiche</option>
-            <option value="KB I">Nur KB I</option>
-            <option value="KB II">Nur KB II</option>
-            <option value="KB III">Nur KB III</option>
-            <option value="KB IV">Nur KB IV</option>
-            <option value="KB V">Nur KB V</option>
-          </select>
-        </label>
+          <div class="ibox">
+            <i class="fas fa-layer-group"></i>
+            <select id="kbSelect" aria-label="Kompetenzbereich">
+              <option value="0">Alle KB</option>
+              <option value="1">KB I</option>
+              <option value="2">KB II</option>
+              <option value="3">KB III</option>
+              <option value="4">KB IV</option>
+              <option value="5">KB V</option>
+            </select>
+          </div>
 
-        <div class="tools-right">
-          <button class="btn btn-outline" id="showOpenBtn"><i class="fas fa-circle"></i> Nur offen</button>
-          <button class="btn btn-outline" id="showDoneBtn"><i class="fas fa-check-circle"></i> Nur gelernt</button>
+          <div class="ibox">
+            <i class="fas fa-calendar-day"></i>
+            <select id="examSelect" aria-label="Prüfungs-Tag">
+              <option value="0">Alle Prüfungen</option>
+              <option value="1">W1 Schriftlich Tag 1</option>
+              <option value="2">W2 Schriftlich Tag 2</option>
+              <option value="3">W3 Schriftlich Tag 3</option>
+              <option value="4">O Mündlich</option>
+            </select>
+          </div>
+
+          <div class="ibox">
+            <i class="fas fa-sliders"></i>
+            <select id="diffSelect" aria-label="Schwierigkeit">
+              <option value="0">Alle Level</option>
+              <option value="1">Unmarkiert</option>
+              <option value="2">Easy</option>
+              <option value="3">Lernen</option>
+              <option value="4">Schwer</option>
+            </select>
+          </div>
+
+          <div class="seg" aria-label="Status">
+            <button id="stAll" class="on" data-st="0">Alle</button>
+            <button id="stOpen" data-st="1">Offen</button>
+            <button id="stDone" data-st="2">Gelernt</button>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="overview">
-    <div class="wrap">
-      <div class="overview-grid">
-        <div class="ov-card"><div class="n" id="ov1">0</div><div class="t">KB I</div></div>
-        <div class="ov-card"><div class="n" id="ov2">0</div><div class="t">KB II</div></div>
-        <div class="ov-card"><div class="n" id="ov3">0</div><div class="t">KB III</div></div>
-        <div class="ov-card"><div class="n" id="ov4">0</div><div class="t">KB IV</div></div>
-        <div class="ov-card"><div class="n" id="ov5">0</div><div class="t">KB V</div></div>
+    <section class="catalog" id="catalog">
+      <div class="wrap">
+        <div class="kbs" id="kbList"></div>
+        <div id="emptyBox" class="empty">Keine Themen gefunden. Filter ändern.</div>
+
+        <footer class="footer">
+          <div class="wrap">Client only · Cookie Status · Kein Backend</div>
+        </footer>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <section class="wrap" id="kbSection">
-    <div class="section-head">
-      <div>
-        <h2>Themenübersicht</h2>
-        <p>Ein Klick pro Thema. Eigene Inhaltsseiten kommen später über die hinterlegten Links.</p>
-      </div>
-    </div>
+  <script>
+  (function(){
+    'use strict';
 
-    <div class="kb-list" id="kbList"></div>
-  </section>
-</main>
+    const COOKIE_NAME = 'pfp_lk_vA';
+    const COOKIE_DAYS = 180;
+    const STATE_VERSION = 1;
 
-<footer class="site-footer">
-  <div class="wrap">
-    PflegefachProfi · Lernkatalog KB I–V · Fortschritt lokal per Cookie gespeichert
-  </div>
-</footer>
+    const KB_ORDER = ['KB I','KB II','KB III','KB IV','KB V'];
+    const OPEN_DEFAULT = 31;
 
-<script>
-(function(){
-  'use strict';
+    const EXAM_ORDER = ['W1','W2','W3','O'];
+    const DIFF_LABEL = { e:'Easy', l:'Lernen', h:'Schwer' };
+    const DIFF_CODE = { easy:'e', learn:'l', hard:'h' };
 
-  const DATA = [
-    {
-      id:'kb1',
-      label:'KB I',
-      title:'Pflegeprozesse und Pflegediagnostik planen, durchführen, steuern und evaluieren',
-      desc:'Klassische Prüfungsfelder aus Pflegeprozess, Modelle, Assessments, Krankheitslehre, Notfall und Wundmanagement.',
-      color:'linear-gradient(135deg,#2563eb,#7c3aed)',
-      icon:'🩺',
-      topics:[
-        {id:'kb1-pflegeprozess', title:'Pflegeprozess', note:'Pflegeprozess allgemein', link:'/module/kb1/pflegeprozess.html', level:'hoch'},
-        {id:'kb1-pflegeprozess-who', title:'Pflegeprozessmodell nach WHO', note:'Struktur und Schritte', link:'/module/kb1/pflegeprozessmodell-who.html', level:'hoch'},
-        {id:'kb1-pflegeprozess-fm', title:'Pflegeprozessmodell nach Fiechter und Meier', note:'Vergleich und Anwendung', link:'/module/kb1/pflegeprozessmodell-fiechter-meier.html', level:'hoch'},
-        {id:'kb1-nanda', title:'NANDA', note:'Pflegediagnosen und Formulierung', link:'/module/kb1/nanda.html', level:'hoch'},
-        {id:'kb1-assessment', title:'Assessmentinstrumente', note:'Skalen und Einschätzung', link:'/module/kb1/assessmentinstrumente.html', level:'hoch'},
-        {id:'kb1-doku', title:'Pflegedokumentation', note:'Rechtssicher und vollständig dokumentieren', link:'/module/kb1/pflegedokumentation.html', level:'hoch'},
-        {id:'kb1-uebergabe', title:'Übergabe', note:'Strukturierte Informationsweitergabe', link:'/module/kb1/uebergabe.html', level:'hoch'},
-        {id:'kb1-expertenstandard', title:'Expertenstandard', note:'Bedeutung, Aufbau und Anwendung', link:'/module/kb1/expertenstandard.html', level:'hoch'},
-        {id:'kb1-ebn', title:'EBN', note:'Grundlagen evidenzbasierter Pflege', link:'/module/kb1/ebn.html', level:'mittel'},
-        {id:'kb1-pflegewissenschaft', title:'Pflegewissenschaft', note:'Wissenschaftliche Basis der Pflege', link:'/module/kb1/pflegewissenschaft.html', level:'mittel'},
-        {id:'kb1-informieren-schulen-beraten', title:'Informieren, Schulen, Beraten', note:'Anleitung und Edukation', link:'/module/kb1/informieren-schulen-beraten.html', level:'mittel'},
-
-        {id:'kb1-orem', title:'Orem', note:'Selbstpflege und Selbstpflegedefizit', link:'/module/kb1/orem.html', level:'mittel'},
-        {id:'kb1-peplau', title:'Peplau', note:'Pflegebeziehung und Phasenmodell', link:'/module/kb1/peplau.html', level:'mittel'},
-        {id:'kb1-friedemann', title:'Friedemann', note:'Systemisches Gleichgewicht', link:'/module/kb1/friedemann.html', level:'mittel'},
-        {id:'kb1-leininger', title:'Sunrise Modell nach Leininger', note:'Transkulturelle Pflege', link:'/module/kb1/leininger-sunrise.html', level:'mittel'},
-        {id:'kb1-abedl', title:'ABEDL', note:'Pflegemodell nach Krohwinkel', link:'/module/kb1/abedl.html', level:'mittel'},
-        {id:'kb1-roper-logan-tierney', title:'Roper-Logan-Tierney', note:'Aktivitäten des täglichen Lebens', link:'/module/kb1/roper-logan-tierney.html', level:'mittel'},
-        {id:'kb1-corbin-strauss', title:'Corbin und Strauss', note:'Trajektmodell chronischer Krankheit', link:'/module/kb1/corbin-strauss.html', level:'mittel'},
-        {id:'kb1-benner', title:'Kompetenzmodell nach Benner', note:'Vom Anfänger zum Experten', link:'/module/kb1/benner.html', level:'mittel'},
-        {id:'kb1-berufliche-handlungskompetenz', title:'Modell berufliche Handlungskompetenz', note:'Berufliche Kompetenzentwicklung', link:'/module/kb1/berufliche-handlungskompetenz.html', level:'mittel'},
-
-        {id:'kb1-pflegesysteme', title:'Pflegesysteme', note:'Funktionspflege, Bereichspflege, Bezugspflege', link:'/module/kb1/pflegesysteme.html', level:'mittel'},
-
-        {id:'kb1-diabetes-typ2', title:'Diabetes mellitus Typ 2', note:'Krankheitsbild und Pflege', link:'/module/kb1/diabetes-mellitus-typ-2.html', level:'hoch'},
-        {id:'kb1-tvt', title:'Tiefe Venenthrombose', note:'Ursachen, Symptome, Pflege', link:'/module/kb1/tiefe-venenthrombose.html', level:'hoch'},
-        {id:'kb1-appendizitis', title:'Appendizitis', note:'Akutes Abdomen und Beobachtung', link:'/module/kb1/appendizitis.html', level:'mittel'},
-        {id:'kb1-asthma', title:'Asthma bronchiale', note:'Anfall, Atemerleichterung, Pflege', link:'/module/kb1/asthma-bronchiale.html', level:'hoch'},
-        {id:'kb1-depression', title:'Depression', note:'Psychische Pflege und Beobachtung', link:'/module/kb1/depression.html', level:'hoch'},
-        {id:'kb1-herzinsuffizienz', title:'Herzinsuffizienz, Stufen', note:'NYHA und Pflegeschwerpunkte', link:'/module/kb1/herzinsuffizienz.html', level:'hoch'},
-        {id:'kb1-mammakarzinom', title:'Mammakarzinom', note:'Onkologische Pflege', link:'/module/kb1/mammakarzinom.html', level:'mittel'},
-        {id:'kb1-demenz', title:'Demenz', note:'Symptome, Umgang, Pflege', link:'/module/kb1/demenz.html', level:'hoch'},
-        {id:'kb1-niereninsuffizienz', title:'Niereninsuffizienz', note:'Akut, chronisch, Pflege', link:'/module/kb1/niereninsuffizienz.html', level:'hoch'},
-        {id:'kb1-neurodermitis', title:'Neurodermitis', note:'Hautpflege und Trigger', link:'/module/kb1/neurodermitis.html', level:'mittel'},
-        {id:'kb1-apoplex', title:'Apoplex', note:'Schlaganfall und Akutpflege', link:'/module/kb1/apoplex.html', level:'hoch'},
-        {id:'kb1-arthrose', title:'Arthrose', note:'Schmerz, Bewegung, Pflege', link:'/module/kb1/arthrose.html', level:'mittel'},
-        {id:'kb1-rheumatoide-arthritis', title:'Rheumatoide Arthritis', note:'Entzündung, Gelenke, Pflege', link:'/module/kb1/rheumatoide-arthritis.html', level:'mittel'},
-
-        {id:'kb1-prophylaxen', title:'Prophylaxen, besonders Sturz', note:'Prüfungsrelevante Standardprophylaxen', link:'/module/kb1/prophylaxen.html', level:'hoch'},
-        {id:'kb1-wundmanagement', title:'Wundmanagement', note:'Akute und chronische Wunden', link:'/module/kb1/wundmanagement.html', level:'hoch'},
-        {id:'kb1-notfall', title:'Notfall', note:'Erkennen, Handeln, Prioritäten', link:'/module/kb1/notfall.html', level:'hoch'},
-        {id:'kb1-maligne-tumoren', title:'Maligne Tumoren, Pflege', note:'Pflegeschwerpunkte bei Krebs', link:'/module/kb1/maligne-tumoren.html', level:'mittel'}
-      ]
-    },
-    {
-      id:'kb2',
-      label:'KB II',
-      title:'Kommunikation und Beratung personen- und situationsorientiert gestalten',
-      desc:'Kommunikationsmodelle, Beziehungsgestaltung, Entwicklung, Beratung und schwierige Gesprächssituationen.',
-      color:'linear-gradient(135deg,#7c3aed,#e11d48)',
-      icon:'💬',
-      topics:[
-        {id:'kb2-gelungene-kommunikation', title:'Gelungene Kommunikation, Maßnahmen', note:'Grundlagen guter Gesprächsführung', link:'/module/kb2/gelungene-kommunikation.html', level:'hoch'},
-        {id:'kb2-kommunikationsbarrieren', title:'Kommunikationsbarrieren', note:'Hindernisse erkennen und vermeiden', link:'/module/kb2/kommunikationsbarrieren.html', level:'hoch'},
-        {id:'kb2-feedbackregeln', title:'Feedbackregeln', note:'Konstruktives Feedback in der Pflege', link:'/module/kb2/feedbackregeln.html', level:'mittel'},
-        {id:'kb2-bobath', title:'Bobath', note:'Kommunikation und Aktivierung im Konzept', link:'/module/kb2/bobath.html', level:'mittel'},
-        {id:'kb2-kinaesthetik', title:'Kinästhetik', note:'Bewegungsunterstützung und Interaktion', link:'/module/kb2/kinaesthetik.html', level:'mittel'},
-        {id:'kb2-basale-stimulation', title:'Basale Stimulation', note:'Wahrnehmung fördern', link:'/module/kb2/basale-stimulation.html', level:'mittel'},
-        {id:'kb2-altersgerechte-kommunikation', title:'Altersgerechte Kommunikation', note:'Kommunikation mit älteren Menschen', link:'/module/kb2/altersgerechte-kommunikation.html', level:'hoch'},
-
-        {id:'kb2-schulz-von-thun', title:'Schulz von Thun', note:'Vier-Seiten-Modell', link:'/module/kb2/schulz-von-thun.html', level:'hoch'},
-        {id:'kb2-watzlawick', title:'Watzlawick', note:'Axiome der Kommunikation', link:'/module/kb2/watzlawick.html', level:'hoch'},
-        {id:'kb2-transaktionsanalyse', title:'Transaktionsanalyse', note:'Ich-Zustände und Kommunikation', link:'/module/kb2/transaktionsanalyse.html', level:'mittel'},
-        {id:'kb2-carl-rogers', title:'Carl Rogers', note:'Empathie, Kongruenz, Wertschätzung', link:'/module/kb2/carl-rogers.html', level:'hoch'},
-        {id:'kb2-iceberg', title:'*Iceberg Modell', note:'Unsicher gelesen, wahrscheinlich Eisbergmodell', link:'/module/kb2/iceberg-modell.html', level:'mittel'},
-        {id:'kb2-rosenberg', title:'Rosenberg, Gewaltfreie Kommunikation', note:'GFK und Gesprächsführung', link:'/module/kb2/rosenberg-gfk.html', level:'hoch'},
-
-        {id:'kb2-naehe-distanz', title:'Nähe und Distanz', note:'Professionelle Beziehung gestalten', link:'/module/kb2/naehe-und-distanz.html', level:'hoch'},
-        {id:'kb2-ekel-scham', title:'Umgang mit Ekel und Scham', note:'Reflexion und professionelles Handeln', link:'/module/kb2/ekel-und-scham.html', level:'hoch'},
-        {id:'kb2-biografiearbeit', title:'Biografiearbeit', note:'Lebensgeschichte pflegerisch nutzen', link:'/module/kb2/biografiearbeit.html', level:'mittel'},
-        {id:'kb2-motivation', title:'Motivation', note:'Förderung von Mitarbeit und Ressourcen', link:'/module/kb2/motivation.html', level:'mittel'},
-
-        {id:'kb2-havighurst', title:'Havighurst', note:'Entwicklungsaufgaben', link:'/module/kb2/havighurst.html', level:'mittel'},
-        {id:'kb2-freud', title:'Freud', note:'Psychosexuelle Entwicklung', link:'/module/kb2/freud.html', level:'mittel'},
-        {id:'kb2-erikson', title:'Erikson', note:'Psychosoziale Entwicklung', link:'/module/kb2/erikson.html', level:'hoch'},
-        {id:'kb2-piaget', title:'Piaget', note:'Kognitive Entwicklung', link:'/module/kb2/piaget.html', level:'mittel'},
-        {id:'kb2-maslow', title:'Maslow', note:'Bedürfnispyramide', link:'/module/kb2/maslow.html', level:'hoch'},
-
-        {id:'kb2-fallbesprechung', title:'Fallbesprechung', note:'Strukturierte Besprechung im Team', link:'/module/kb2/fallbesprechung.html', level:'hoch'},
-        {id:'kb2-kollegiale-beratung', title:'Kollegiale Beratung', note:'Lösungsorientierte Beratung im Team', link:'/module/kb2/kollegiale-beratung.html', level:'mittel'},
-        {id:'kb2-konfliktloesung', title:'Konfliktlösung', note:'Konflikte erkennen und bearbeiten', link:'/module/kb2/konfliktloesung.html', level:'hoch'},
-        {id:'kb2-case-management', title:'Case Management', note:'Versorgung koordinieren', link:'/module/kb2/case-management.html', level:'mittel'},
-        {id:'kb2-entscheidungsfindung', title:'Entscheidungsfindung', note:'Strukturiertes Vorgehen', link:'/module/kb2/entscheidungsfindung.html', level:'mittel'}
-      ]
-    },
-    {
-      id:'kb3',
-      label:'KB III',
-      title:'Intra- und interprofessionelles Handeln verantwortlich gestalten',
-      desc:'Zusammenarbeit, Organisation, Qualität, Pflegeversicherung und Strukturen im Versorgungssystem.',
-      color:'linear-gradient(135deg,#ea580c,#d97706)',
-      icon:'🤝',
-      topics:[
-        {id:'kb3-interdisziplinaere-zusammenarbeit', title:'Interdisziplinäre Zusammenarbeit', note:'Zusammenarbeit im multiprofessionellen Team', link:'/module/kb3/interdisziplinaere-zusammenarbeit.html', level:'hoch'},
-        {id:'kb3-teamarbeit', title:'Teamarbeit', note:'Rollen, Kommunikation, Verantwortung', link:'/module/kb3/teamarbeit.html', level:'hoch'},
-        {id:'kb3-fallbesprechung', title:'Fallbesprechung', note:'Teambezogene Fallanalyse', link:'/module/kb3/fallbesprechung.html', level:'mittel'},
-        {id:'kb3-konfliktloesung', title:'Konfliktlösung', note:'Konflikte im Team lösen', link:'/module/kb3/konfliktloesung.html', level:'mittel'},
-        {id:'kb3-case-management', title:'Case Management', note:'Koordinierte Versorgungsplanung', link:'/module/kb3/case-management.html', level:'mittel'},
-
-        {id:'kb3-qualitaetsmanagement', title:'Qualitätsmanagement', note:'QM Grundlagen in Pflegeeinrichtungen', link:'/module/kb3/qualitaetsmanagement.html', level:'hoch'},
-        {id:'kb3-fehlermanagement', title:'Qualitäts- und Fehlermanagement, besonders Audits', note:'Fehlerkultur und Prüfprozesse', link:'/module/kb3/fehlermanagement-audits.html', level:'hoch'},
-        {id:'kb3-mdk-pruefkriterien', title:'Prüfkriterien MDK', note:'Prüfungen und Qualitätsanforderungen', link:'/module/kb3/mdk-pruefkriterien.html', level:'hoch'},
-
-        {id:'kb3-pflegegrad', title:'Pflegegrad mit Leistungen', note:'Pflegegrade und Ansprüche', link:'/module/kb3/pflegegrad-mit-leistungen.html', level:'hoch'},
-        {id:'kb3-sozialversicherung', title:'Sozialversicherungssystem', note:'Versicherungen und Leistungsträger', link:'/module/kb3/sozialversicherungssystem.html', level:'hoch'},
-        {id:'kb3-reha', title:'Reha', note:'Rehabilitation und Ziele', link:'/module/kb3/reha.html', level:'mittel'}
-      ]
-    },
-    {
-      id:'kb4',
-      label:'KB IV',
-      title:'Das eigene Handeln auf Grundlage von Gesetzen und ethischen Leitlinien reflektieren',
-      desc:'Recht, Ethik, Selbstfürsorge, Gewalt, Freiheitsentzug, Patientenrechte und pflegeethische Reflexion.',
-      color:'linear-gradient(135deg,#0891b2,#2563eb)',
-      icon:'⚖️',
-      topics:[
-        {id:'kb4-delegation', title:'Delegation', note:'Anordnungs- und Durchführungsverantwortung', link:'/module/kb4/delegation.html', level:'hoch'},
-        {id:'kb4-fem', title:'FEM', note:'Freiheitsentziehende Maßnahmen', link:'/module/kb4/fem.html', level:'hoch'},
-        {id:'kb4-haftungsrecht', title:'Haftungsrecht', note:'Pflichtverletzung und Folgen', link:'/module/kb4/haftungsrecht.html', level:'hoch'},
-        {id:'kb4-zivilrecht', title:'Zivilrecht', note:'Schadenersatz und vertragliche Aspekte', link:'/module/kb4/zivilrecht.html', level:'mittel'},
-        {id:'kb4-strafrecht', title:'Strafrecht', note:'Körperverletzung, Unterlassen, Schweigepflicht', link:'/module/kb4/strafrecht.html', level:'hoch'},
-        {id:'kb4-sorgerecht', title:'Sorgerecht', note:'Rechte und Verantwortung bei Minderjährigen', link:'/module/kb4/sorgerecht.html', level:'mittel'},
-        {id:'kb4-weisungsrecht', title:'Weisungsrecht', note:'Grenzen arbeitsrechtlicher Anweisungen', link:'/module/kb4/weisungsrecht.html', level:'mittel'},
-        {id:'kb4-weigerungsrecht', title:'Weigerungsrecht', note:'Wann du ablehnen musst', link:'/module/kb4/weigerungsrecht.html', level:'hoch'},
-        {id:'kb4-remonstrationspflicht', title:'Remonstrationspflicht', note:'Fehlerhafte Anordnungen beanstanden', link:'/module/kb4/remonstrationspflicht.html', level:'hoch'},
-        {id:'kb4-unterlassene-hilfeleistung', title:'Unterlassene Hilfeleistung', note:'Rechtliche Folgen des Nicht-Handelns', link:'/module/kb4/unterlassene-hilfeleistung.html', level:'hoch'},
-        {id:'kb4-schweigepflicht', title:'Schweigepflicht', note:'Datenschutz und Vertraulichkeit', link:'/module/kb4/schweigepflicht.html', level:'hoch'},
-        {id:'kb4-jugendarbeitsschutzgesetz', title:'Jugend-Arbeitsschutzgesetz', note:'Regeln für Minderjährige in Ausbildung', link:'/module/kb4/jugendarbeitsschutzgesetz.html', level:'mittel'},
-        {id:'kb4-aufsichtspflicht', title:'Aufsichtspflicht', note:'Pflicht zur Beaufsichtigung', link:'/module/kb4/aufsichtspflicht.html', level:'mittel'},
-        {id:'kb4-fuersorgepflicht', title:'Fürsorgepflicht', note:'Verantwortung gegenüber Schutzbedürftigen', link:'/module/kb4/fuersorgepflicht.html', level:'mittel'},
-        {id:'kb4-vorbehaltene-aufgaben', title:'Vorbehaltene Aufgaben', note:'Kernaufgaben der Pflegefachkraft', link:'/module/kb4/vorbehaltene-aufgaben.html', level:'hoch'},
-        {id:'kb4-betreuungsrecht', title:'Betreuungsrecht', note:'Rechtliche Betreuung und Vertretung', link:'/module/kb4/betreuungsrecht.html', level:'hoch'},
-        {id:'kb4-patientenverfuegung', title:'Patientenverfügung', note:'Selbstbestimmung für spätere Entscheidungen', link:'/module/kb4/patientenverfuegung.html', level:'hoch'},
-        {id:'kb4-testament', title:'Testament', note:'Grundlagen im Prüfungskontext', link:'/module/kb4/testament.html', level:'niedrig'},
-        {id:'kb4-einwilligung', title:'Einwilligung', note:'Voraussetzung jeder Maßnahme', link:'/module/kb4/einwilligung.html', level:'hoch'},
-        {id:'kb4-sterbehilfe', title:'Sterbehilfe', note:'Abgrenzung und rechtlicher Rahmen', link:'/module/kb4/sterbehilfe.html', level:'hoch'},
-        {id:'kb4-echr-charta', title:'ECHR Charta', note:'*Begriff unsicher gelesen', link:'/module/kb4/echr-charta.html', level:'niedrig'},
-
-        {id:'kb4-ethik', title:'Ethik', note:'Grundlagen ethischer Entscheidungen', link:'/module/kb4/ethik.html', level:'hoch'},
-        {id:'kb4-pflegecharta', title:'Ethik in der Pflegecharta', note:'Werte und Rechte in der Pflege', link:'/module/kb4/pflegecharta.html', level:'hoch'},
-        {id:'kb4-ethikkomitee', title:'Ethikkomitee', note:'Aufgaben und Einsatz im Klinikalltag', link:'/module/kb4/ethikkomitee.html', level:'mittel'},
-        {id:'kb4-macht-ohnmacht', title:'Macht und Ohnmacht', note:'Reflexion professioneller Beziehung', link:'/module/kb4/macht-und-ohnmacht.html', level:'hoch'},
-        {id:'kb4-gewalt', title:'Gewalt', note:'Formen von Gewalt in der Pflege', link:'/module/kb4/gewalt.html', level:'hoch'},
-        {id:'kb4-selbstfuersorge-stressmanagement', title:'Selbstfürsorge und Stressmanagement', note:'Belastung erkennen und gegensteuern', link:'/module/kb4/selbstfuersorge-stressmanagement.html', level:'hoch'},
-        {id:'kb4-burnout', title:'Burnout', note:'Symptome, Prävention, Umgang', link:'/module/kb4/burnout.html', level:'hoch'},
-        {id:'kb4-mobbing', title:'Mobbing', note:'Erkennen, handeln, schützen', link:'/module/kb4/mobbing.html', level:'hoch'},
-        {id:'kb4-stressbewaeltigung', title:'Strategien zur Stressbewältigung', note:'Praktische Methoden im Alltag', link:'/module/kb4/stressbewaeltigung.html', level:'mittel'}
-      ]
-    },
-    {
-      id:'kb5',
-      label:'KB V',
-      title:'Das eigene Handeln wissenschaftlich fundiert und berufsethisch reflektieren',
-      desc:'Wissenschaft, Professionalität, Gesundheitskonzepte, Evidenz und Reflexion.',
-      color:'linear-gradient(135deg,#0891b2,#059669)',
-      icon:'🔬',
-      topics:[
-        {id:'kb5-ebn', title:'EBN', note:'Evidenzbasierung in der Pflege', link:'/module/kb5/ebn.html', level:'hoch'},
-        {id:'kb5-pflegewissenschaft', title:'Pflegewissenschaft', note:'Wissenschaftlich denken und handeln', link:'/module/kb5/pflegewissenschaft.html', level:'hoch'},
-        {id:'kb5-kompetenz-pflegekraefte', title:'Kompetenz von Pflegekräften', note:'Profession, Rolle, Verantwortung', link:'/module/kb5/kompetenz-von-pflegekraeften.html', level:'mittel'},
-        {id:'kb5-vorbehaltene-aufgaben', title:'Vorbehaltsaufgaben', note:'Pflegefachliche Eigenverantwortung', link:'/module/kb5/vorbehaltsaufgaben.html', level:'hoch'},
-        {id:'kb5-salutogenese', title:'Salutogenese', note:'Gesundheitsentstehung nach Antonovsky', link:'/module/kb5/salutogenese.html', level:'hoch'},
-        {id:'kb5-pathogenese', title:'Pathogenese', note:'Krankheitsentstehung verstehen', link:'/module/kb5/pathogenese.html', level:'hoch'},
-        {id:'kb5-resilienz', title:'Resilienz', note:'Widerstandskraft fördern', link:'/module/kb5/resilienz.html', level:'hoch'}
-      ]
+    function setCookie(name, value, days){
+      const exp = new Date(Date.now() + days * 86400000).toUTCString();
+      document.cookie = encodeURIComponent(name) + '=' + value + ';expires=' + exp + ';path=/;SameSite=Lax';
     }
-  ];
 
-  const COOKIE_KEY = 'pfp_lernkatalog_v1';
-  let viewMode = 'all';
+    function getCookie(name){
+      const key = encodeURIComponent(name) + '=';
+      for(const part of document.cookie.split(';')){
+        const p = part.trim();
+        if(p.startsWith(key)) return p.slice(key.length);
+      }
+      return '';
+    }
 
-  const state = {
-    done: []
-  };
+    function delCookie(name){
+      document.cookie = encodeURIComponent(name) + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+    }
 
-  function setCookie(name, value, days){
-    const d = new Date();
-    d.setTime(d.getTime() + days * 86400000);
-    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(JSON.stringify(value)) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
-  }
+    function esc(s){
+      return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+    }
 
-  function getCookie(name){
-    const key = encodeURIComponent(name) + '=';
-    const parts = document.cookie.split(';');
-    for(const part of parts){
-      const p = part.trim();
-      if(p.startsWith(key)){
-        try { return JSON.parse(decodeURIComponent(p.slice(key.length))); }
-        catch(e){ return null; }
+    function b36(n){ return n.toString(36); }
+    function from36(s){ return parseInt(s, 36); }
+
+    const TOPICS = {
+      pflegeprozess: { id:'pflegeprozess', title:'Pflegeprozess', note:'Zyklus, Planung, Evaluation', link:'topics/pflegeprozess.html', exam:['W1','W2'], kbRefs:[] },
+      pflegeprozess_who: { id:'pflegeprozess_who', title:'Pflegeprozessmodell nach WHO', note:'Phasen und Logik', link:'topics/pflegeprozess-who.html', exam:['W1'], kbRefs:[] },
+      pflegeprozess_fm: { id:'pflegeprozess_fm', title:'Pflegeprozessmodell nach Fiechter und Meier', note:'Vergleich und Anwendung', link:'topics/pflegeprozess-fiechter-meier.html', exam:['W1'], kbRefs:[] },
+      nanda: { id:'nanda', title:'NANDA', note:'Pflegediagnosen, PÄS', link:'topics/nanda.html', exam:['W1','W2'], kbRefs:[] },
+      assessment: { id:'assessment', title:'Assessmentinstrumente', note:'Skalen und Einschätzung', link:'topics/assessment.html', exam:['W1','W2'], kbRefs:[] },
+      dokumentation: { id:'dokumentation', title:'Pflegedokumentation', note:'Struktur und Nachvollziehbarkeit', link:'topics/pflegedokumentation.html', exam:['W1'], kbRefs:[] },
+      uebergabe: { id:'uebergabe', title:'Übergabe', note:'Strukturiert, sicher', link:'topics/uebergabe.html', exam:['W1'], kbRefs:[] },
+      expertenstandard: { id:'expertenstandard', title:'Expertenstandard', note:'Standards anwenden', link:'topics/expertenstandard.html', exam:['W2'], kbRefs:[] },
+      ebn: { id:'ebn', title:'EBN', note:'Evidenzbasierte Pflege', link:'topics/ebn.html', exam:['W2'], kbRefs:[] },
+      pflegewissenschaft: { id:'pflegewissenschaft', title:'Pflegewissenschaft', note:'Begründungswissen', link:'topics/pflegewissenschaft.html', exam:['W2'], kbRefs:[] },
+      schulen_beraten: { id:'schulen_beraten', title:'Informieren, Schulen, Beraten', note:'Edukation und Anleitung', link:'topics/schulen-beraten.html', exam:['W2'], kbRefs:[] },
+
+      orem: { id:'orem', title:'Orem', note:'Selbstpflege, Defizit', link:'topics/orem.html', exam:['W1'], kbRefs:[] },
+      peplau: { id:'peplau', title:'Peplau', note:'Pflegebeziehung, Phasen', link:'topics/peplau.html', exam:['W1'], kbRefs:[] },
+      friedemann: { id:'friedemann', title:'Friedemann', note:'Systemisches Gleichgewicht', link:'topics/friedemann.html', exam:['W1'], kbRefs:[] },
+      leininger: { id:'leininger', title:'Sunrise Modell nach Leininger', note:'Transkulturelle Pflege', link:'topics/leininger.html', exam:['W1'], kbRefs:[] },
+      abedl: { id:'abedl', title:'ABEDL', note:'Krohwinkel Modell', link:'topics/abedl.html', exam:['W1'], kbRefs:[] },
+      roper: { id:'roper', title:'Roper-Logan-Tierney', note:'ATL Modell', link:'topics/roper.html', exam:['W1'], kbRefs:[] },
+      corbin_strauss: { id:'corbin_strauss', title:'Corbin und Strauss', note:'Trajektmodell chronischer Krankheit', link:'topics/corbin-strauss.html', exam:['W1','W2'], kbRefs:[] },
+      benner: { id:'benner', title:'Kompetenzmodell nach Benner', note:'Novize bis Experte', link:'topics/benner.html', exam:['W1'], kbRefs:[] },
+      handlungskompetenz: { id:'handlungskompetenz', title:'Modell berufliche Handlungskompetenz', note:'Kompetenzentwicklung', link:'topics/handlungskompetenz.html', exam:['W1'], kbRefs:[] },
+      pflegesysteme: { id:'pflegesysteme', title:'Pflegesysteme', note:'Bezugspflege, Bereich, Funktion', link:'topics/pflegesysteme.html', exam:['W1'], kbRefs:[] },
+
+      diabetes2: { id:'diabetes2', title:'Diabetes mellitus Typ 2', note:'BZ, Pflege, Schulung', link:'topics/diabetes-typ2.html', exam:['W2'], kbRefs:[] },
+      tvt: { id:'tvt', title:'Tiefe Venenthrombose', note:'Risiko, Zeichen, Prophylaxe', link:'topics/tvt.html', exam:['W2'], kbRefs:[] },
+      appendizitis: { id:'appendizitis', title:'Appendizitis', note:'Akut, Beobachtung', link:'topics/appendizitis.html', exam:['W2'], kbRefs:[] },
+      asthma: { id:'asthma', title:'Asthma bronchiale', note:'Atemnot, Akutmaßnahmen', link:'topics/asthma.html', exam:['W2','W3'], kbRefs:[] },
+      depression: { id:'depression', title:'Depression', note:'Beobachtung, Beziehung, Sicherheit', link:'topics/depression.html', exam:['W2'], kbRefs:[] },
+      herzinsuffizienz: { id:'herzinsuffizienz', title:'Herzinsuffizienz', note:'Stufen, Pflegeziele', link:'topics/herzinsuffizienz.html', exam:['W2','W3'], kbRefs:[] },
+      mammakarzinom: { id:'mammakarzinom', title:'Mammakarzinom', note:'Onkologische Pflege', link:'topics/mammakarzinom.html', exam:['W2'], kbRefs:[] },
+      demenz: { id:'demenz', title:'Demenz', note:'Umgang, Sicherheit, Verlauf', link:'topics/demenz.html', exam:['W2','W3'], kbRefs:[] },
+      niereninsuffizienz: { id:'niereninsuffizienz', title:'Niereninsuffizienz', note:'Bilanz, Symptome, Pflege', link:'topics/niereninsuffizienz.html', exam:['W2'], kbRefs:[] },
+      neurodermitis: { id:'neurodermitis', title:'Neurodermitis', note:'Hautpflege, Trigger', link:'topics/neurodermitis.html', exam:['W2'], kbRefs:[] },
+      apoplex: { id:'apoplex', title:'Apoplex', note:'FAST, Pflege, Mobilität', link:'topics/apoplex.html', exam:['W2','W3'], kbRefs:[] },
+      arthrose: { id:'arthrose', title:'Arthrose', note:'Schmerz und Bewegung', link:'topics/arthrose.html', exam:['W2'], kbRefs:[] },
+      ra: { id:'ra', title:'Rheumatoide Arthritis', note:'Entzündung, Gelenke', link:'topics/rheumatoide-arthritis.html', exam:['W2'], kbRefs:[] },
+      maligne: { id:'maligne', title:'Maligne Tumoren, Pflege', note:'Supportive Pflege', link:'topics/maligne-tumoren.html', exam:['W2'], kbRefs:[] },
+
+      prophylaxen: { id:'prophylaxen', title:'Prophylaxen, besonders Sturz', note:'Risiko, Maßnahmen, Doku', link:'topics/prophylaxen.html', exam:['W2'], kbRefs:[] },
+      wundmanagement: { id:'wundmanagement', title:'Wundmanagement', note:'Wunden, Heilung, Versorgung', link:'topics/wundmanagement.html', exam:['W2'], kbRefs:[] },
+      notfall: { id:'notfall', title:'Notfall', note:'Erkennen, handeln, Prioritäten', link:'topics/notfall.html', exam:['W3'], kbRefs:[] },
+
+      kommunikation: { id:'kommunikation', title:'Gelungene Kommunikation', note:'Haltung, Struktur', link:'topics/kommunikation.html', exam:['W1'], kbRefs:[] },
+      barrieren: { id:'barrieren', title:'Kommunikationsbarrieren', note:'Störungen erkennen', link:'topics/kommunikationsbarrieren.html', exam:['W1'], kbRefs:[] },
+      feedback: { id:'feedback', title:'Feedbackregeln', note:'Konstruktiv, konkret', link:'topics/feedbackregeln.html', exam:['W1'], kbRefs:[] },
+      bobath: { id:'bobath', title:'Bobath', note:'Konzept in Pflege', link:'topics/bobath.html', exam:['W2'], kbRefs:[] },
+      kinaesthetik: { id:'kinaesthetik', title:'Kinästhetik', note:'Bewegung unterstützen', link:'topics/kinaesthetik.html', exam:['W2'], kbRefs:[] },
+      basale: { id:'basale', title:'Basale Stimulation', note:'Wahrnehmung fördern', link:'topics/basale-stimulation.html', exam:['W2'], kbRefs:[] },
+      altersgerecht: { id:'altersgerecht', title:'Altersgerechte Kommunikation', note:'Adaptieren, klar', link:'topics/altersgerechte-kommunikation.html', exam:['W1'], kbRefs:[] },
+
+      schulz: { id:'schulz', title:'Schulz von Thun', note:'Vier-Seiten-Modell', link:'topics/schulz-von-thun.html', exam:['W1'], kbRefs:[] },
+      watzlawick: { id:'watzlawick', title:'Watzlawick', note:'Axiome', link:'topics/watzlawick.html', exam:['W1'], kbRefs:[] },
+      ta: { id:'ta', title:'Transaktionsanalyse', note:'Ich-Zustände', link:'topics/transaktionsanalyse.html', exam:['W1'], kbRefs:[] },
+      rogers: { id:'rogers', title:'Carl Rogers', note:'Empathie, Kongruenz', link:'topics/carl-rogers.html', exam:['W1'], kbRefs:[] },
+      iceberg: { id:'iceberg', title:'Iceberg Modell', note:'Sichtbar und unsichtbar', link:'topics/iceberg.html', exam:['W1'], kbRefs:[] },
+      gfk: { id:'gfk', title:'Rosenberg, Gewaltfreie Kommunikation', note:'GFK 4 Schritte', link:'topics/gfk.html', exam:['W1'], kbRefs:[] },
+
+      naehe_distanz: { id:'naehe_distanz', title:'Nähe und Distanz', note:'Professionelle Grenze', link:'topics/naehe-distanz.html', exam:['W1'], kbRefs:[] },
+      ekel_scham: { id:'ekel_scham', title:'Umgang mit Ekel und Scham', note:'Reflexion und Schutz', link:'topics/ekel-scham.html', exam:['W1'], kbRefs:[] },
+      biografie: { id:'biografie', title:'Biografiearbeit', note:'Kontext und Ressourcen', link:'topics/biografiearbeit.html', exam:['W1'], kbRefs:[] },
+      motivation: { id:'motivation', title:'Motivation', note:'Mitarbeit fördern', link:'topics/motivation.html', exam:['W2'], kbRefs:[] },
+
+      havighurst: { id:'havighurst', title:'Havighurst', note:'Entwicklungsaufgaben', link:'topics/havighurst.html', exam:['W1'], kbRefs:[] },
+      freud: { id:'freud', title:'Freud', note:'Entwicklungsphasen', link:'topics/freud.html', exam:['W1'], kbRefs:[] },
+      erikson: { id:'erikson', title:'Erikson', note:'Psychosoziale Entwicklung', link:'topics/erikson.html', exam:['W1'], kbRefs:[] },
+      piaget: { id:'piaget', title:'Piaget', note:'Kognitive Entwicklung', link:'topics/piaget.html', exam:['W1'], kbRefs:[] },
+      maslow: { id:'maslow', title:'Maslow', note:'Bedürfnisse', link:'topics/maslow.html', exam:['W1'], kbRefs:[] },
+
+      fallbesprechung: { id:'fallbesprechung', title:'Fallbesprechung', note:'Struktur und Ziel', link:'topics/fallbesprechung.html', exam:['W2'], kbRefs:[] },
+      kollegial: { id:'kollegial', title:'Kollegiale Beratung', note:'Lösungsarbeit im Team', link:'topics/kollegiale-beratung.html', exam:['W2'], kbRefs:[] },
+      konflikt: { id:'konflikt', title:'Konfliktlösung', note:'Konflikte bearbeiten', link:'topics/konfliktloesung.html', exam:['W2'], kbRefs:[] },
+      case: { id:'case', title:'Case Management', note:'Versorgung koordinieren', link:'topics/case-management.html', exam:['W2'], kbRefs:[] },
+      entscheidung: { id:'entscheidung', title:'Entscheidungsfindung', note:'Optionen, Werte, Plan', link:'topics/entscheidungsfindung.html', exam:['W3'], kbRefs:[] },
+
+      interdis: { id:'interdis', title:'Interdisziplinäre Zusammenarbeit', note:'Schnittstellen und Rollen', link:'topics/interdisziplinaer.html', exam:[], kbRefs:[] },
+      team: { id:'team', title:'Teamarbeit', note:'Zusammenarbeit im Alltag', link:'topics/teamarbeit.html', exam:[], kbRefs:[] },
+      qm: { id:'qm', title:'Qualitätsmanagement', note:'QM Grundlagen', link:'topics/qm.html', exam:[], kbRefs:[] },
+      audits: { id:'audits', title:'Qualitäts- und Fehlermanagement, Audits', note:'Fehlerkultur, Auditlogik', link:'topics/audits.html', exam:[], kbRefs:[] },
+      mdk: { id:'mdk', title:'Prüfkriterien MDK', note:'Prüflogik und Nachweise', link:'topics/mdk.html', exam:[], kbRefs:[] },
+      pflegegrad: { id:'pflegegrad', title:'Pflegegrad mit Leistungen', note:'Ansprüche und Leistungen', link:'topics/pflegegrad.html', exam:[], kbRefs:[] },
+      sozial: { id:'sozial', title:'Sozialversicherungssystem', note:'Leistungsträger', link:'topics/sozialversicherung.html', exam:[], kbRefs:[] },
+      reha: { id:'reha', title:'Reha', note:'Reha Ziele und Planung', link:'topics/reha.html', exam:[], kbRefs:[] },
+
+      delegation: { id:'delegation', title:'Delegation', note:'Anordnung und Durchführung', link:'topics/delegation.html', exam:['W3'], kbRefs:[] },
+      fem: { id:'fem', title:'FEM', note:'Freiheitsentziehende Maßnahmen', link:'topics/fem.html', exam:['W3'], kbRefs:[] },
+      haftung: { id:'haftung', title:'Haftungsrecht', note:'Pflichtverletzung und Folgen', link:'topics/haftung.html', exam:['W1'], kbRefs:[] },
+      zivil: { id:'zivil', title:'Zivilrecht', note:'Schadensersatz und Ansprüche', link:'topics/zivilrecht.html', exam:['W1'], kbRefs:[] },
+      straf: { id:'straf', title:'Strafrecht', note:'Körperverletzung, Unterlassen', link:'topics/strafrecht.html', exam:['W1'], kbRefs:[] },
+      sorgerecht: { id:'sorgerecht', title:'Sorgerecht', note:'Vertretung bei Minderjährigen', link:'topics/sorgerecht.html', exam:['W1'], kbRefs:[] },
+      weisungsrecht: { id:'weisungsrecht', title:'Weisungsrecht', note:'Arbeitsrechtliche Weisung', link:'topics/weisungsrecht.html', exam:[], kbRefs:[] },
+      weigerungsrecht: { id:'weigerungsrecht', title:'Weigerungsrecht', note:'Ablehnung bei Risiko', link:'topics/weigerungsrecht.html', exam:['W3'], kbRefs:[] },
+      remonstration: { id:'remonstration', title:'Remonstrationspflicht', note:'Anordnung prüfen und melden', link:'topics/remonstration.html', exam:['W3'], kbRefs:[] },
+      uhilfe: { id:'uhilfe', title:'Unterlassene Hilfeleistung', note:'Pflicht zu handeln', link:'topics/unterlassene-hilfeleistung.html', exam:['W3'], kbRefs:[] },
+      schweigepflicht: { id:'schweigepflicht', title:'Schweigepflicht', note:'Vertraulichkeit', link:'topics/schweigepflicht.html', exam:['W1'], kbRefs:[] },
+      jugend: { id:'jugend', title:'Jugend-Arbeitsschutzgesetz', note:'Ausbildung und Schutz', link:'topics/jugendarbeitsschutz.html', exam:[], kbRefs:[] },
+      aufsicht: { id:'aufsicht', title:'Aufsichtspflicht', note:'Schutzpflichten', link:'topics/aufsichtspflicht.html', exam:['W1'], kbRefs:[] },
+      fuersorge: { id:'fuersorge', title:'Fürsorgepflicht', note:'Schutz und Verantwortung', link:'topics/fuersorgepflicht.html', exam:['W1'], kbRefs:[] },
+      vorbehalt_aufgaben: { id:'vorbehalt_aufgaben', title:'Vorbehaltene Aufgaben', note:'Pflegefachliche Eigenverantwortung', link:'topics/vorbehaltene-aufgaben.html', exam:[], kbRefs:[] },
+      betreuung: { id:'betreuung', title:'Betreuungsrecht', note:'Vertretung und Wille', link:'topics/betreuungsrecht.html', exam:['W1'], kbRefs:[] },
+      patientenverfuegung: { id:'patientenverfuegung', title:'Patientenverfügung', note:'Wille und Umsetzung', link:'topics/patientenverfuegung.html', exam:['W3'], kbRefs:[] },
+      testament: { id:'testament', title:'Testament', note:'Grundbegriffe', link:'topics/testament.html', exam:[], kbRefs:[] },
+      einwilligung: { id:'einwilligung', title:'Einwilligung', note:'Voraussetzung jeder Maßnahme', link:'topics/einwilligung.html', exam:['W1'], kbRefs:[] },
+      sterbehilfe: { id:'sterbehilfe', title:'Sterbehilfe', note:'Abgrenzung und Haltung', link:'topics/sterbehilfe.html', exam:['W3'], kbRefs:[] },
+      echr: { id:'echr', title:'ECHR Charta', note:'Grundrechte im Kontext', link:'topics/echr.html', exam:[], kbRefs:[] },
+
+      ethik: { id:'ethik', title:'Ethik', note:'Prinzipien und Begründung', link:'topics/ethik.html', exam:['W3'], kbRefs:[] },
+      pflegecharta: { id:'pflegecharta', title:'Ethik in der Pflegecharta', note:'Werte und Rechte', link:'topics/pflegecharta.html', exam:['W3'], kbRefs:[] },
+      ethikkomitee: { id:'ethikkomitee', title:'Ethikkomitee', note:'Fallberatung', link:'topics/ethikkomitee.html', exam:['W3'], kbRefs:[] },
+      macht: { id:'macht', title:'Macht und Ohnmacht', note:'Rollen und Beziehung', link:'topics/macht-ohmacht.html', exam:['W3'], kbRefs:[] },
+      gewalt: { id:'gewalt', title:'Gewalt', note:'Formen, Prävention', link:'topics/gewalt.html', exam:['W3'], kbRefs:[] },
+      selbstfuersorge: { id:'selbstfuersorge', title:'Selbstfürsorge und Stressmanagement', note:'Belastung reduzieren', link:'topics/selbstfuersorge.html', exam:[], kbRefs:[] },
+      burnout: { id:'burnout', title:'Burnout', note:'Risiken und Prävention', link:'topics/burnout.html', exam:[], kbRefs:[] },
+      mobbing: { id:'mobbing', title:'Mobbing', note:'Erkennen und handeln', link:'topics/mobbing.html', exam:[], kbRefs:[] },
+      stress: { id:'stress', title:'Strategien zur Stressbewältigung', note:'Tools im Alltag', link:'topics/stress.html', exam:[], kbRefs:[] },
+
+      kompetenz: { id:'kompetenz', title:'Kompetenz von Pflegekräften', note:'Rolle und Verantwortung', link:'topics/kompetenz.html', exam:[], kbRefs:[] },
+      salutogenese: { id:'salutogenese', title:'Salutogenese', note:'Gesundheit fördern', link:'topics/salutogenese.html', exam:['W2'], kbRefs:[] },
+      pathogenese: { id:'pathogenese', title:'Pathogenese', note:'Krankheit verstehen', link:'topics/pathogenese.html', exam:['W2'], kbRefs:[] },
+      resilienz: { id:'resilienz', title:'Resilienz', note:'Widerstandskraft', link:'topics/resilienz.html', exam:['W2'], kbRefs:[] }
+    };
+
+    const KBS = [
+      {
+        kb:'KB I',
+        icon:'🩺',
+        grad:'linear-gradient(135deg,#2563eb,#7c3aed)',
+        title:'Pflegeprozesse und Pflegediagnostik',
+        desc:'Planen, organisieren, durchführen, steuern, evaluieren',
+        groups:[
+          { name:'Pflegeprozess und Doku', ids:['pflegeprozess','pflegeprozess_who','pflegeprozess_fm','nanda','assessment','dokumentation','uebergabe','expertenstandard','ebn','pflegewissenschaft','schulen_beraten'] },
+          { name:'Theorien und Modelle', ids:['orem','peplau','friedemann','leininger','abedl','roper','corbin_strauss','benner','handlungskompetenz','pflegesysteme'] },
+          { name:'Krankheitslehre mit Pflege', ids:['diabetes2','tvt','appendizitis','asthma','depression','herzinsuffizienz','mammakarzinom','demenz','niereninsuffizienz','neurodermitis','apoplex','arthrose','ra','maligne'] },
+          { name:'Prophylaxen und Wunden', ids:['prophylaxen','wundmanagement'] },
+          { name:'Krise', ids:['notfall'] }
+        ]
+      },
+      {
+        kb:'KB II',
+        icon:'💬',
+        grad:'linear-gradient(135deg,#7c3aed,#e11d48)',
+        title:'Kommunikation und Beratung',
+        desc:'Personen und situationsorientiert handeln',
+        groups:[
+          { name:'Kommunikation', ids:['kommunikation','barrieren','feedback','altersgerecht'] },
+          { name:'Konzepte', ids:['bobath','kinaesthetik','basale'] },
+          { name:'Modelle', ids:['schulz','watzlawick','ta','rogers','iceberg','gfk'] },
+          { name:'Beziehung', ids:['naehe_distanz','ekel_scham','biografie','motivation'] },
+          { name:'Entwicklung', ids:['havighurst','freud','erikson','piaget','maslow'] },
+          { name:'Beratung und Entscheidung', ids:['fallbesprechung','kollegial','konflikt','case','entscheidung'] }
+        ]
+      },
+      {
+        kb:'KB III',
+        icon:'🤝',
+        grad:'linear-gradient(135deg,#ea580c,#d97706)',
+        title:'Intra- und interprofessionelles Handeln',
+        desc:'Zusammenarbeit, Organisation, Qualität, System',
+        groups:[
+          { name:'Zusammenarbeit', ids:['interdis','team','fallbesprechung','konflikt','case'] },
+          { name:'Qualität', ids:['qm','audits','mdk'] },
+          { name:'Organisation', ids:['pflegegrad','sozial','reha'] }
+        ]
+      },
+      {
+        kb:'KB IV',
+        icon:'⚖️',
+        grad:'linear-gradient(135deg,#0891b2,#2563eb)',
+        title:'Recht und Ethik',
+        desc:'Handeln begründen und reflektieren',
+        groups:[
+          { name:'Recht', ids:['delegation','fem','haftung','zivil','straf','sorgerecht','weisungsrecht','weigerungsrecht','remonstration','uhilfe','schweigepflicht','jugend','aufsicht','fuersorge','vorbehalt_aufgaben','betreuung','patientenverfuegung','testament','einwilligung','sterbehilfe','echr'] },
+          { name:'Ethik und Selbstschutz', ids:['ethik','pflegecharta','ethikkomitee','macht','gewalt','selbstfuersorge','burnout','mobbing','stress'] }
+        ]
+      },
+      {
+        kb:'KB V',
+        icon:'🔬',
+        grad:'linear-gradient(135deg,#0891b2,#059669)',
+        title:'Wissenschaft und Reflexion',
+        desc:'Wissenschaftlich und berufsethisch reflektieren',
+        groups:[
+          { name:'Wissenschaft', ids:['ebn','pflegewissenschaft'] },
+          { name:'Professionalität', ids:['kompetenz','vorbehalt_aufgaben'] },
+          { name:'Gesundheitskonzepte', ids:['salutogenese','pathogenese','resilienz'] }
+        ]
+      }
+    ];
+
+    const TOPIC_IDS = Object.keys(TOPICS);
+    const IDX_BY_ID = {};
+    for(let i=0;i<TOPIC_IDS.length;i++) IDX_BY_ID[TOPIC_IDS[i]] = i;
+
+    function buildRefsAndOral(){
+      for(const id of TOPIC_IDS) TOPICS[id].kbRefs = [];
+      for(const kb of KBS){
+        for(const g of kb.groups){
+          for(const id of g.ids){
+            if(!TOPICS[id]) continue;
+            if(TOPICS[id].kbRefs.indexOf(kb.kb) < 0) TOPICS[id].kbRefs.push(kb.kb);
+          }
+        }
+      }
+      for(const id of TOPIC_IDS){
+        const t = TOPICS[id];
+        const oral = t.kbRefs.indexOf('KB III') >= 0 || t.kbRefs.indexOf('KB IV') >= 0 || t.kbRefs.indexOf('KB V') >= 0;
+        if(oral && t.exam.indexOf('O') < 0) t.exam.push('O');
+        t.exam = t.exam.slice().sort((a,b)=>EXAM_ORDER.indexOf(a)-EXAM_ORDER.indexOf(b));
       }
     }
-    return null;
-  }
 
-  function deleteCookie(name){
-    document.cookie = encodeURIComponent(name) + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
-  }
-
-  function loadState(){
-    const saved = getCookie(COOKIE_KEY);
-    if(saved && typeof saved === 'object'){
-      state.done = Array.isArray(saved.done) ? saved.done : [];
+    function encDone(doneSet){
+      const arr = Array.from(doneSet).sort((a,b)=>a-b);
+      return arr.map(b36).join('.');
     }
-  }
-
-  function saveState(){
-    setCookie(COOKIE_KEY, state, 180);
-  }
-
-  function flattenTopics(){
-    return DATA.flatMap(kb => kb.topics.map(t => ({...t, kb:kb.label, kbId:kb.id})));
-  }
-
-  function isDone(id){
-    return state.done.includes(id);
-  }
-
-  function toggleDone(id){
-    if(isDone(id)){
-      state.done = state.done.filter(x => x !== id);
-    } else {
-      state.done.push(id);
+    function decDone(s){
+      const set = new Set();
+      if(!s) return set;
+      for(const part of s.split('.')){
+        if(!part) continue;
+        const idx = from36(part);
+        if(Number.isFinite(idx)) set.add(idx);
+      }
+      return set;
     }
-    saveState();
-    renderAll();
-  }
 
-  function countDoneInKB(kb){
-    return kb.topics.filter(t => isDone(t.id)).length;
-  }
+    function encDiff(diffMap){
+      const keys = Object.keys(diffMap).map(n=>parseInt(n,10)).filter(Number.isFinite).sort((a,b)=>a-b);
+      const parts = [];
+      for(const idx of keys){
+        const code = diffMap[idx];
+        if(code === 'e' || code === 'l' || code === 'h') parts.push(b36(idx) + ':' + code);
+      }
+      return parts.join('.');
+    }
+    function decDiff(s){
+      const map = {};
+      if(!s) return map;
+      for(const part of s.split('.')){
+        if(!part) continue;
+        const i = part.indexOf(':');
+        if(i < 0) continue;
+        const idx = from36(part.slice(0,i));
+        const code = part.slice(i+1);
+        if(!Number.isFinite(idx)) continue;
+        if(code !== 'e' && code !== 'l' && code !== 'h') continue;
+        map[idx] = code;
+      }
+      return map;
+    }
 
-  function getLevelBadge(level){
-    if(level === 'hoch') return '<span class="badge b-rose">Prüfungsrelevant</span>';
-    if(level === 'mittel') return '<span class="badge b-blue">Wichtig</span>';
-    return '<span class="badge b-amber">Ergänzend</span>';
-  }
+    function encFilters(f){
+      const parts = [];
+      const q = (f.q || '').trim().slice(0,80);
+      if(q) parts.push('q=' + encodeURIComponent(q));
+      if(f.k) parts.push('k=' + f.k);
+      if(f.x) parts.push('x=' + f.x);
+      if(f.r) parts.push('r=' + f.r);
+      if(f.s) parts.push('s=' + f.s);
+      return parts.join('&');
+    }
+    function decFilters(s){
+      const f = { q:'', k:0, x:0, r:0, s:0 };
+      if(!s) return f;
+      const pairs = s.split('&');
+      for(const p of pairs){
+        const i = p.indexOf('=');
+        if(i < 0) continue;
+        const k = p.slice(0,i);
+        const v = p.slice(i+1);
+        if(k === 'q') f.q = v ? decodeURIComponent(v) : '';
+        if(k === 'k') f.k = parseInt(v,10) || 0;
+        if(k === 'x') f.x = parseInt(v,10) || 0;
+        if(k === 'r') f.r = parseInt(v,10) || 0;
+        if(k === 's') f.s = parseInt(v,10) || 0;
+      }
+      return f;
+    }
 
-  function updateStats(){
-    const all = flattenTopics();
-    const total = all.length;
-    const done = all.filter(t => isDone(t.id)).length;
-    const pct = total ? Math.round(done / total * 100) : 0;
+    function encState(state){
+      const parts = [];
+      parts.push('v=' + STATE_VERSION);
 
-    document.getElementById('statTotal').textContent = total;
-    document.getElementById('statDone').textContent = done;
-    document.getElementById('statPct').textContent = pct + '%';
+      const d = encDone(state.done);
+      if(d) parts.push('d=' + d);
 
-    document.getElementById('ov1').textContent = DATA[0].topics.length;
-    document.getElementById('ov2').textContent = DATA[1].topics.length;
-    document.getElementById('ov3').textContent = DATA[2].topics.length;
-    document.getElementById('ov4').textContent = DATA[3].topics.length;
-    document.getElementById('ov5').textContent = DATA[4].topics.length;
-  }
+      const t = encDiff(state.diff);
+      if(t) parts.push('t=' + t);
 
-  function renderKBs(){
-    const q = document.getElementById('searchInput').value.trim().toLowerCase();
-    const kbFilter = document.getElementById('kbFilter').value;
-    const wrap = document.getElementById('kbList');
-    wrap.innerHTML = '';
+      const f = encFilters(state.f);
+      if(f) parts.push('f=' + f);
 
-    let totalVisible = 0;
+      if(typeof state.o === 'number' && state.o !== OPEN_DEFAULT) parts.push('o=' + b36(state.o));
 
-    DATA.forEach(kb => {
-      if(kbFilter !== 'all' && kb.label !== kbFilter) return;
+      return parts.join('|');
+    }
 
-      const topics = kb.topics.filter(t => {
-        const matchesQuery = !q || (t.title + ' ' + t.note + ' ' + kb.title).toLowerCase().includes(q);
-        const matchesView =
-          viewMode === 'all' ||
-          (viewMode === 'open' && !isDone(t.id)) ||
-          (viewMode === 'done' && isDone(t.id));
-        return matchesQuery && matchesView;
+    function decState(raw){
+      const state = {
+        v: STATE_VERSION,
+        done: new Set(),
+        diff: {},
+        f: { q:'', k:0, x:0, r:0, s:0 },
+        o: OPEN_DEFAULT
+      };
+
+      if(!raw) return state;
+
+      const parts = raw.split('|');
+      let dStr = '';
+      let tStr = '';
+      let fStr = '';
+      for(const part of parts){
+        const i = part.indexOf('=');
+        if(i < 0) continue;
+        const k = part.slice(0,i);
+        const v = part.slice(i+1);
+        if(k === 'd') dStr = v || '';
+        if(k === 't') tStr = v || '';
+        if(k === 'f') fStr = v || '';
+        if(k === 'o') state.o = from36(v) || OPEN_DEFAULT;
+      }
+      state.done = decDone(dStr);
+      state.diff = decDiff(tStr);
+      state.f = decFilters(fStr);
+
+      return state;
+    }
+
+    function iconForTopic(t){
+      const s = (t.title || '').toLowerCase();
+      if(s.indexOf('ethik') >= 0) return '🕊️';
+      if(s.indexOf('recht') >= 0 || s.indexOf('einwilligung') >= 0 || s.indexOf('schweigepflicht') >= 0 || s.indexOf('fem') >= 0) return '⚖️';
+      if(s.indexOf('notfall') >= 0) return '🚨';
+      if(s.indexOf('wund') >= 0) return '🩹';
+      if(s.indexOf('demenz') >= 0) return '🧠';
+      if(s.indexOf('diabetes') >= 0) return '🩸';
+      if(s.indexOf('asthma') >= 0) return '🫁';
+      if(s.indexOf('herzinsuffizienz') >= 0) return '❤️';
+      if(s.indexOf('apoplex') >= 0) return '🧠';
+      if(s.indexOf('pflegeprozess') >= 0) return '🔄';
+      if(s.indexOf('assessment') >= 0) return '📊';
+      if(s.indexOf('kommunikation') >= 0) return '💬';
+      if(s.indexOf('ebn') >= 0 || s.indexOf('pflegewissenschaft') >= 0) return '🔬';
+      if(s.indexOf('resilienz') >= 0) return '🌱';
+      return '📘';
+    }
+
+    let state = null;
+    let lastFocus = null;
+
+    function save(){
+      setCookie(COOKIE_NAME, encState(state), COOKIE_DAYS);
+    }
+
+    function setOpenMask(kb, open){
+      const idx = KB_ORDER.indexOf(kb);
+      if(idx < 0) return;
+      if(open) state.o = state.o | (1 << idx);
+      else state.o = state.o & ~(1 << idx);
+      save();
+    }
+    function isKbOpen(kb){
+      const idx = KB_ORDER.indexOf(kb);
+      if(idx < 0) return true;
+      return !!(state.o & (1 << idx));
+    }
+
+    function topicDone(id){
+      const idx = IDX_BY_ID[id];
+      if(idx === undefined) return false;
+      return state.done.has(idx);
+    }
+    function toggleDone(id){
+      const idx = IDX_BY_ID[id];
+      if(idx === undefined) return;
+      if(state.done.has(idx)) state.done.delete(idx);
+      else state.done.add(idx);
+      save();
+      render();
+    }
+
+    function topicDiffCode(id){
+      const idx = IDX_BY_ID[id];
+      if(idx === undefined) return '';
+      return state.diff[idx] || '';
+    }
+    function toggleDiff(id, label){
+      const idx = IDX_BY_ID[id];
+      if(idx === undefined) return;
+      const code = DIFF_CODE[label] || '';
+      const cur = state.diff[idx] || '';
+      if(cur === code) delete state.diff[idx];
+      else if(code) state.diff[idx] = code;
+      save();
+      render();
+    }
+
+    function selectedKb(){
+      if(!state.f.k) return '';
+      return KB_ORDER[state.f.k - 1] || '';
+    }
+    function selectedExam(){
+      if(state.f.x === 1) return 'W1';
+      if(state.f.x === 2) return 'W2';
+      if(state.f.x === 3) return 'W3';
+      if(state.f.x === 4) return 'O';
+      return '';
+    }
+    function selectedDiffFilter(){
+      if(state.f.r === 1) return 'unset';
+      if(state.f.r === 2) return 'easy';
+      if(state.f.r === 3) return 'learn';
+      if(state.f.r === 4) return 'hard';
+      return '';
+    }
+
+    function passesFilters(t){
+      const q = (state.f.q || '').trim().toLowerCase();
+      if(q){
+        const hay = ((t.title||'') + ' ' + (t.note||'')).toLowerCase();
+        if(hay.indexOf(q) < 0) return false;
+      }
+
+      const kb = selectedKb();
+      if(kb && (!t.kbRefs || t.kbRefs.indexOf(kb) < 0)) return false;
+
+      const ex = selectedExam();
+      if(ex && (!t.exam || t.exam.indexOf(ex) < 0)) return false;
+
+      const df = selectedDiffFilter();
+      if(df){
+        const code = topicDiffCode(t.id);
+        const lab = DIFF_LABEL[code] || '';
+        if(df === 'unset'){
+          if(lab) return false;
+        } else {
+          if(lab.toLowerCase() !== (df === 'easy' ? 'easy' : df === 'learn' ? 'lernen' : 'schwer')) return false;
+        }
+      }
+
+      if(state.f.s === 1 && topicDone(t.id)) return false;
+      if(state.f.s === 2 && !topicDone(t.id)) return false;
+
+      return true;
+    }
+
+    function updateProgress(){
+      const total = TOPIC_IDS.length;
+      const done = state.done.size;
+      const pct = total ? Math.round(done / total * 100) : 0;
+
+      document.getElementById('doneN').textContent = String(done);
+      document.getElementById('totalN').textContent = String(total);
+      document.getElementById('pFill').style.width = pct + '%';
+      document.getElementById('pTxt').textContent = pct + '%';
+
+      document.getElementById('mDone').textContent = String(done);
+      document.getElementById('mTot').textContent = String(total);
+      document.getElementById('mPct').textContent = pct + '%';
+    }
+
+    function countKbProgress(kbDef){
+      const set = new Set();
+      for(const g of kbDef.groups){
+        for(const id of g.ids){
+          if(TOPICS[id]) set.add(id);
+        }
+      }
+      let total = 0, done = 0;
+      set.forEach(id => {
+        total++;
+        if(topicDone(id)) done++;
       });
+      return { total, done };
+    }
 
-      if(!topics.length) return;
-      totalVisible += topics.length;
+    function render(){
+      updateProgress();
 
-      const doneCount = countDoneInKB(kb);
-      const pct = Math.round(doneCount / kb.topics.length * 100);
+      const host = document.getElementById('kbList');
+      host.innerHTML = '';
 
-      const section = document.createElement('section');
-      section.className = 'kb-card';
-      section.innerHTML = `
-        <div class="kb-top">
-          <div class="kb-title-wrap">
-            <div class="kb-icon" style="background:${kb.color}">${kb.icon}</div>
-            <div>
-              <div class="kb-title">${kb.label} · ${kb.title}</div>
-              <div class="kb-desc">${kb.desc}</div>
+      let any = false;
+
+      for(const kbDef of KBS){
+        const kbFilter = selectedKb();
+        if(kbFilter && kbDef.kb !== kbFilter) continue;
+
+        const open = isKbOpen(kbDef.kb);
+        const prog = countKbProgress(kbDef);
+
+        const bodyId = 'kb_body_' + kbDef.kb.replace(/\s/g,'_');
+
+        const kbEl = document.createElement('section');
+        kbEl.className = 'kb' + (open ? ' open' : '');
+
+        kbEl.innerHTML = `
+          <button class="kb-head" data-act="kb" data-kb="${esc(kbDef.kb)}" aria-expanded="${open ? 'true' : 'false'}" aria-controls="${bodyId}">
+            <div class="kb-l">
+              <div class="kb-ico" style="background:${kbDef.grad}">${kbDef.icon}</div>
+              <div class="kb-t">
+                <h2>${esc(kbDef.kb)} · ${esc(kbDef.title)}</h2>
+                <p>${esc(kbDef.desc)}</p>
+              </div>
             </div>
-          </div>
-
-          <div class="kb-progress">
-            <span class="badge b-green"><i class="fas fa-check-circle"></i> ${doneCount}/${kb.topics.length} gelernt</span>
-            <div class="prog-shell"><div class="prog-fill" style="width:${pct}%"></div></div>
-            <div class="prog-txt">${pct}%</div>
-          </div>
-        </div>
-        <div class="topic-grid"></div>
-      `;
-
-      const grid = section.querySelector('.topic-grid');
-
-      topics.forEach(topic => {
-        const card = document.createElement('article');
-        card.className = 'topic-card' + (isDone(topic.id) ? ' done' : '');
-        card.innerHTML = `
-          <div class="topic-top">
-            <div class="topic-icon" style="background:${softBg(kb.id)}">${iconForTopic(topic.title)}</div>
-            ${getLevelBadge(topic.level)}
-          </div>
-
-          <div class="topic-title">${escapeHtml(topic.title)}</div>
-          <div class="topic-sub">${escapeHtml(topic.note)}</div>
-
-          <div class="topic-meta">
-            <span><i class="fas fa-layer-group"></i> ${kb.label}</span>
-            <span><i class="fas fa-link"></i> separate Seite</span>
-          </div>
-
-          <div class="topic-actions">
-            <a class="link-btn" href="${topic.link}">
-              <i class="fas fa-arrow-up-right-from-square"></i> Thema öffnen
-            </a>
-            <button class="mark-btn" data-id="${topic.id}">
-              <i class="fas ${isDone(topic.id) ? 'fa-check-circle' : 'fa-circle'}"></i>
-              ${isDone(topic.id) ? 'Gelernt' : 'Als gelernt markieren'}
-            </button>
-          </div>
+            <div class="kb-r">
+              <span class="kb-badge"><i class="fas fa-check-circle"></i> ${prog.done}/${prog.total}</span>
+              <span class="kb-chev" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+            </div>
+          </button>
+          <div class="kb-body" id="${bodyId}"></div>
         `;
-        grid.appendChild(card);
+
+        const body = kbEl.querySelector('.kb-body');
+
+        if(open){
+          for(const g of kbDef.groups){
+            const ids = g.ids.filter(id => TOPICS[id] && passesFilters(TOPICS[id]));
+            if(!ids.length) continue;
+
+            any = true;
+
+            const groupEl = document.createElement('div');
+            groupEl.className = 'group';
+            groupEl.innerHTML = `<h3>${esc(g.name)}</h3><div class="grid"></div>`;
+            const grid = groupEl.querySelector('.grid');
+
+            for(const id of ids){
+              const t = TOPICS[id];
+              const done = topicDone(id);
+              const dcode = topicDiffCode(id);
+              const dlab = DIFF_LABEL[dcode] || '';
+
+              const statusTag = done ? '<span class="tag done">Gelernt</span>' : '<span class="tag open">Offen</span>';
+              const diffTag = dcode ? '<span class="tag diff-' + dcode + '">' + esc(dlab) + '</span>' : '';
+              const examTags = (t.exam || []).slice().sort((a,b)=>EXAM_ORDER.indexOf(a)-EXAM_ORDER.indexOf(b))
+                .map(x => '<span class="tag exam">' + esc(x) + '</span>').join('');
+
+              const card = document.createElement('article');
+              card.className = 'topic' + (done ? ' done' : '');
+              card.dataset.id = id;
+
+              card.innerHTML = `
+                <div class="t-top">
+                  <div class="t-icon">${iconForTopic(t)}</div>
+                  <div class="t-right">
+                    ${statusTag}
+                    ${diffTag}
+                    ${examTags}
+                  </div>
+                </div>
+                <div class="t-title">${esc(t.title)}</div>
+                <div class="t-sub">${esc(t.note)}</div>
+
+                <div class="diff" role="group" aria-label="Schwierigkeit">
+                  <button data-act="diff" data-val="easy" aria-pressed="${dcode === 'e'}" class="${dcode === 'e' ? 'on-e' : ''}">Easy</button>
+                  <button data-act="diff" data-val="learn" aria-pressed="${dcode === 'l'}" class="${dcode === 'l' ? 'on-l' : ''}">Lernen</button>
+                  <button data-act="diff" data-val="hard" aria-pressed="${dcode === 'h'}" class="${dcode === 'h' ? 'on-h' : ''}">Schwer</button>
+                </div>
+
+                <div class="t-actions">
+                  <a class="open-btn" href="${esc(t.link)}"><i class="fas fa-play"></i> Öffnen</a>
+                  <button class="done-btn" data-act="done"><i class="fas ${done ? 'fa-check-circle' : 'fa-circle'}"></i> ${done ? 'Gelernt' : 'Als gelernt'}</button>
+                </div>
+              `;
+
+              grid.appendChild(card);
+            }
+
+            body.appendChild(groupEl);
+          }
+        }
+
+        host.appendChild(kbEl);
+      }
+
+      document.getElementById('emptyBox').style.display = any ? 'none' : 'block';
+      updateProgress();
+    }
+
+    function syncFilterUI(){
+      document.getElementById('qInput').value = state.f.q || '';
+      document.getElementById('kbSelect').value = String(state.f.k || 0);
+      document.getElementById('examSelect').value = String(state.f.x || 0);
+      document.getElementById('diffSelect').value = String(state.f.r || 0);
+
+      document.getElementById('stAll').classList.toggle('on', (state.f.s || 0) === 0);
+      document.getElementById('stOpen').classList.toggle('on', (state.f.s || 0) === 1);
+      document.getElementById('stDone').classList.toggle('on', (state.f.s || 0) === 2);
+    }
+
+    function openDrawer(){
+      lastFocus = document.activeElement;
+
+      const overlay = document.getElementById('overlay');
+      const drawer = document.getElementById('drawer');
+      const burger = document.getElementById('burgerBtn');
+
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden','false');
+
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+
+      burger.classList.add('open');
+      burger.setAttribute('aria-expanded','true');
+
+      document.body.style.overflow = 'hidden';
+
+      const closeBtn = document.getElementById('drawerClose');
+      closeBtn.focus();
+
+      drawer.addEventListener('keydown', trapFocus);
+    }
+
+    function closeDrawer(){
+      const overlay = document.getElementById('overlay');
+      const drawer = document.getElementById('drawer');
+      const burger = document.getElementById('burgerBtn');
+
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+
+      document.body.style.overflow = '';
+
+      drawer.removeEventListener('keydown', trapFocus);
+
+      if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      lastFocus = null;
+    }
+
+    function trapFocus(e){
+      if(e.key !== 'Tab') return;
+
+      const drawer = document.getElementById('drawer');
+      const focusable = drawer.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
+      if(!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if(e.shiftKey && document.activeElement === first){
+        e.preventDefault();
+        last.focus();
+      } else if(!e.shiftKey && document.activeElement === last){
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function bind(){
+      document.getElementById('burgerBtn').addEventListener('click', function(){
+        const open = document.getElementById('drawer').classList.contains('open');
+        if(open) closeDrawer();
+        else openDrawer();
       });
 
-      wrap.appendChild(section);
-    });
+      document.getElementById('overlay').addEventListener('click', closeDrawer);
+      document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 
-    if(!totalVisible){
-      wrap.innerHTML = '<div class="empty">Keine Themen gefunden. Ändere Suche oder Filter.</div>';
-    }
-
-    wrap.querySelectorAll('.mark-btn').forEach(btn => {
-      btn.addEventListener('click', function(){
-        toggleDone(this.dataset.id);
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && document.getElementById('drawer').classList.contains('open')) closeDrawer();
       });
-    });
-  }
 
-  function softBg(kbId){
-    if(kbId === 'kb1') return 'var(--blue-xl)';
-    if(kbId === 'kb2') return '#fdf4ff';
-    if(kbId === 'kb3') return '#fff7ed';
-    if(kbId === 'kb4') return '#eff6ff';
-    return '#f0fdf4';
-  }
+      document.getElementById('resetBtn').addEventListener('click', function(){
+        const ok = confirm('Fortschritt wirklich zurücksetzen?');
+        if(!ok) return;
+        delCookie(COOKIE_NAME);
+        state = { v:STATE_VERSION, done:new Set(), diff:{}, f:{ q:'',k:0,x:0,r:0,s:0 }, o:OPEN_DEFAULT };
+        syncFilterUI();
+        render();
+        closeDrawer();
+      });
 
-  function iconForTopic(title){
-    const t = title.toLowerCase();
-    if(t.includes('recht') || t.includes('einwilligung') || t.includes('schweigepflicht') || t.includes('fem')) return '⚖️';
-    if(t.includes('ethik')) return '🕊️';
-    if(t.includes('kommunikation') || t.includes('feedback') || t.includes('beratung')) return '💬';
-    if(t.includes('pflegeprozess') || t.includes('nanda')) return '🔄';
-    if(t.includes('assessment')) return '📊';
-    if(t.includes('wund')) return '🩹';
-    if(t.includes('notfall')) return '🚨';
-    if(t.includes('demenz')) return '🧠';
-    if(t.includes('diabetes')) return '🩸';
-    if(t.includes('asthma')) return '🫁';
-    if(t.includes('herzinsuffizienz')) return '❤️';
-    if(t.includes('apoplex')) return '🧠';
-    if(t.includes('burnout') || t.includes('stress')) return '🔥';
-    if(t.includes('qualität')) return '📋';
-    if(t.includes('pflegegrad') || t.includes('versicherung')) return '🏥';
-    if(t.includes('wissenschaft') || t.includes('ebn')) return '🔬';
-    if(t.includes('resilienz')) return '🌱';
-    return '📘';
-  }
+      document.getElementById('qInput').addEventListener('input', function(){
+        state.f.q = this.value || '';
+        save();
+        render();
+      });
 
-  function escapeHtml(str){
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+      document.getElementById('kbSelect').addEventListener('change', function(){
+        state.f.k = parseInt(this.value,10) || 0;
+        save();
+        render();
+      });
 
-  function renderAll(){
-    updateStats();
-    renderKBs();
-  }
+      document.getElementById('examSelect').addEventListener('change', function(){
+        state.f.x = parseInt(this.value,10) || 0;
+        save();
+        render();
+      });
 
-  document.getElementById('searchInput').addEventListener('input', renderKBs);
-  document.getElementById('kbFilter').addEventListener('change', renderKBs);
+      document.getElementById('diffSelect').addEventListener('change', function(){
+        state.f.r = parseInt(this.value,10) || 0;
+        save();
+        render();
+      });
 
-  document.getElementById('showOpenBtn').addEventListener('click', function(){
-    viewMode = viewMode === 'open' ? 'all' : 'open';
-    document.getElementById('showDoneBtn').classList.remove('btn-primary');
-    document.getElementById('showDoneBtn').classList.add('btn-outline');
-    if(viewMode === 'open'){
-      this.classList.remove('btn-outline');
-      this.classList.add('btn-primary');
-    } else {
-      this.classList.remove('btn-primary');
-      this.classList.add('btn-outline');
+      document.getElementById('stAll').addEventListener('click', function(){ state.f.s = 0; save(); syncFilterUI(); render(); });
+      document.getElementById('stOpen').addEventListener('click', function(){ state.f.s = 1; save(); syncFilterUI(); render(); });
+      document.getElementById('stDone').addEventListener('click', function(){ state.f.s = 2; save(); syncFilterUI(); render(); });
+
+      document.getElementById('clearFiltersBtn').addEventListener('click', function(){
+        state.f = { q:'', k:0, x:0, r:0, s:0 };
+        save();
+        syncFilterUI();
+        render();
+      });
+
+      document.getElementById('kbList').addEventListener('click', function(e){
+        const kbBtn = e.target.closest('button[data-act="kb"]');
+        if(kbBtn){
+          const kb = kbBtn.dataset.kb || '';
+          const open = isKbOpen(kb);
+          setOpenMask(kb, !open);
+          render();
+          return;
+        }
+
+        const card = e.target.closest('.topic');
+        if(!card) return;
+        const id = card.dataset.id || '';
+        if(!id) return;
+
+        const doneBtn = e.target.closest('button[data-act="done"]');
+        if(doneBtn){
+          toggleDone(id);
+          return;
+        }
+
+        const diffBtn = e.target.closest('button[data-act="diff"]');
+        if(diffBtn){
+          toggleDiff(id, diffBtn.dataset.val || '');
+          return;
+        }
+      });
+
+      window.addEventListener('scroll', function(){
+        document.getElementById('hdr').classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive:true });
     }
-    renderKBs();
-  });
 
-  document.getElementById('showDoneBtn').addEventListener('click', function(){
-    viewMode = viewMode === 'done' ? 'all' : 'done';
-    document.getElementById('showOpenBtn').classList.remove('btn-primary');
-    document.getElementById('showOpenBtn').classList.add('btn-outline');
-    if(viewMode === 'done'){
-      this.classList.remove('btn-outline');
-      this.classList.add('btn-primary');
-    } else {
-      this.classList.remove('btn-primary');
-      this.classList.add('btn-outline');
-    }
-    renderKBs();
-  });
+    buildRefsAndOral();
 
-  document.getElementById('resetProgressBtn').addEventListener('click', function(){
-    if(confirm('Fortschritt wirklich zurücksetzen?')){
-      state.done = [];
-      deleteCookie(COOKIE_KEY);
-      renderAll();
-    }
-  });
+    state = decState(getCookie(COOKIE_NAME));
+    if(!state || typeof state !== 'object' || !state.f) state = { v:STATE_VERSION, done:new Set(), diff:{}, f:{ q:'',k:0,x:0,r:0,s:0 }, o:OPEN_DEFAULT };
 
-  loadState();
-  renderAll();
-})();
-</script>
+    if(!(state.done instanceof Set)) state.done = new Set();
+    if(!state.diff || typeof state.diff !== 'object') state.diff = {};
+    if(!state.f || typeof state.f !== 'object') state.f = { q:'',k:0,x:0,r:0,s:0 };
+    if(typeof state.o !== 'number') state.o = OPEN_DEFAULT;
+
+    syncFilterUI();
+    bind();
+    render();
+  })();
+  </script>
 </body>
 </html>
