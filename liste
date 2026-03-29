@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PflegefachProfi • Lernkatalog KB I–V</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;overflow-x:hidden;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc;color:#0d1117;overflow-x:hidden;}
+    :root{
+      --ink:#0d1117;
+      --ink2:#1c2333;
+      --ink3:#374151;
+      --muted:#6b7280;
+      --faint:#f3f4f6;
+      --white:#ffffff;
+      --border:#e5e7eb;
+      --border2:#d1d5db;
+      --blue:#2563eb;
+      --blue-d:#1d4ed8;
+      --blue-l:#dbeafe;
+      --blue-xl:#eff6ff;
+      --purple:#7c3aed;
+      --purple-l:#ede9fe;
+      --green:#059669;
+      --green-l:#d1fae5;
+      --amber:#d97706;
+      --amber-l:#fef3c7;
+      --rose:#e11d48;
+      --rose-l:#ffe4e6;
+      --teal:#0891b2;
+      --teal-l:#cffafe;
+      --orange:#ea580c;
+      --orange-l:#fed7aa;
+      --s1:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+      --s2:0 4px 16px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.06);
+      --s3:0 16px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);
+      --nh:64px;
+    }
+
+    .wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+    .hdr{
+      position:sticky;top:0;z-index:100;
+      height:var(--nh);
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .hdr-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+    .logo-mark{
+      width:38px;height:38px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.35);
+    }
+    .logo-text{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;}
+    .logo-text span{color:var(--blue);}
+    .hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .stat-pill{
+      display:flex;align-items:center;gap:6px;
+      padding:7px 12px;border-radius:999px;
+      font-size:.78rem;font-weight:800;border:1.5px solid;
+      background:var(--white);
+    }
+    .stat-blue{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue-d);}
+    .stat-green{background:var(--green-l);border-color:#a7f3d0;color:var(--green);}
+    .stat-amber{background:#fff7ed;border-color:#fed7aa;color:#c2410c;}
+
+    .hero{
+      padding:42px 0 20px;
+      position:relative;overflow:hidden;
+    }
+    .hero::before{
+      content:'';
+      position:absolute;top:-160px;right:-160px;width:520px;height:520px;
+      background:radial-gradient(circle,rgba(37,99,235,.09) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .hero-grid{
+      display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:stretch;
+    }
+    .hero-card,.side-card,.kb-card,.topic-card,.tools-bar{
+      background:var(--white);border:1.5px solid var(--border);border-radius:22px;
+      box-shadow:var(--s1);
+    }
+    .hero-card{padding:30px;}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:7px;
+      padding:6px 14px;border-radius:999px;
+      background:var(--blue-xl);border:1px solid var(--blue-l);
+      color:var(--blue);font-size:.74rem;font-weight:800;
+      text-transform:uppercase;letter-spacing:.05em;margin-bottom:18px;
+    }
+    .hero h1{
+      font-family:'Fraunces',serif;font-size:2.65rem;line-height:1.08;
+      letter-spacing:-.03em;margin-bottom:14px;
+    }
+    .hero h1 em{font-style:italic;color:var(--blue);}
+    .hero p{
+      color:var(--ink3);font-size:.98rem;line-height:1.7;max-width:720px;
+    }
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+      padding:12px 18px;border-radius:12px;font-weight:800;font-size:.88rem;
+      border:none;cursor:pointer;transition:.18s;
+    }
+    .btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(37,99,235,.25);}
+    .btn-primary:hover{background:var(--blue-d);}
+    .btn-outline{background:var(--white);color:var(--ink);border:1.5px solid var(--border2);}
+    .btn-outline:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-xl);}
+    .side-card{padding:24px;}
+    .side-card h3{
+      font-family:'Fraunces',serif;font-size:1.1rem;margin-bottom:14px;
+    }
+    .mini-list{display:grid;gap:10px;}
+    .mini-item{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;
+      background:#fafafa;
+    }
+    .mini-item strong{font-size:.9rem;}
+    .mini-item span{font-size:.76rem;color:var(--muted);}
+    .badge{
+      display:inline-flex;align-items:center;gap:5px;
+      padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:800;
+      white-space:nowrap;
+    }
+    .b-blue{background:var(--blue-xl);color:var(--blue);}
+    .b-purple{background:var(--purple-l);color:var(--purple);}
+    .b-green{background:var(--green-l);color:var(--green);}
+    .b-amber{background:var(--amber-l);color:#92400e;}
+    .b-rose{background:var(--rose-l);color:var(--rose);}
+
+    .tools{padding:22px 0 10px;}
+    .tools-bar{
+      padding:16px;
+      display:grid;grid-template-columns:1.3fr .8fr .6fr;gap:12px;
+      align-items:center;
+    }
+    .search-box,.filter-box{
+      display:flex;align-items:center;gap:10px;
+      background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;
+    }
+    .search-box i,.filter-box i{color:var(--muted);}
+    .search-box input,.filter-box select{
+      width:100%;border:none;outline:none;background:transparent;
+      font:inherit;color:var(--ink);
+    }
+    .filter-box select{cursor:pointer;}
+    .tools-right{
+      display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;
+    }
+
+    .overview{padding:18px 0 8px;}
+    .overview-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+    .ov-card{
+      background:var(--white);border:1.5px solid var(--border);border-radius:18px;
+      padding:18px;text-align:center;
+    }
+    .ov-card .n{
+      font-family:'Fraunces',serif;font-size:1.9rem;font-weight:900;
+      color:var(--blue);line-height:1;margin-bottom:6px;
+    }
+    .ov-card .t{font-size:.78rem;color:var(--muted);font-weight:700;}
+
+    .section-head{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      margin:30px 0 16px;flex-wrap:wrap;
+    }
+    .section-head h2{
+      font-family:'Fraunces',serif;font-size:1.7rem;letter-spacing:-.02em;
+    }
+    .section-head p{color:var(--muted);font-size:.88rem;}
+
+    .kb-list{display:grid;gap:18px;padding-bottom:60px;}
+    .kb-card{overflow:hidden;}
+    .kb-top{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+      padding:20px 22px;border-bottom:1px solid var(--border);flex-wrap:wrap;
+    }
+    .kb-title-wrap{display:flex;gap:14px;align-items:flex-start;}
+    .kb-icon{
+      width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+      font-size:1.35rem;color:#fff;flex-shrink:0;
+    }
+    .kb-title{
+      font-family:'Fraunces',serif;font-size:1.18rem;line-height:1.15;margin-bottom:4px;
+    }
+    .kb-desc{color:var(--muted);font-size:.84rem;line-height:1.5;max-width:780px;}
+    .kb-progress{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    }
+    .prog-shell{
+      width:140px;height:8px;background:var(--border);border-radius:999px;overflow:hidden;
+    }
+    .prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;}
+    .prog-txt{font-size:.76rem;font-weight:800;color:var(--muted);}
+
+    .topic-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+      padding:20px;
+    }
+    .topic-card{
+      padding:18px;
+      display:flex;flex-direction:column;gap:12px;
+      transition:.18s;
+    }
+    .topic-card:hover{transform:translateY(-3px);box-shadow:var(--s2);}
+    .topic-top{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+    }
+    .topic-icon{
+      width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+      font-size:1.15rem;flex-shrink:0;
+    }
+    .topic-title{
+      font-weight:800;font-size:.92rem;line-height:1.3;
+    }
+    .topic-sub{
+      font-size:.77rem;color:var(--muted);line-height:1.5;min-height:38px;
+    }
+    .topic-meta{
+      display:flex;flex-wrap:wrap;gap:8px;font-size:.72rem;color:var(--muted);
+    }
+    .topic-meta span{display:flex;align-items:center;gap:5px;}
+    .topic-actions{
+      display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;
+    }
+    .link-btn,.mark-btn{
+      flex:1;min-width:120px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      text-decoration:none;padding:10px 12px;border-radius:12px;
+      font-size:.8rem;font-weight:800;transition:.18s;
+    }
+    .link-btn{
+      background:var(--blue);color:#fff;
+    }
+    .link-btn:hover{background:var(--blue-d);}
+    .mark-btn{
+      background:var(--white);color:var(--ink);border:1.5px solid var(--border2);cursor:pointer;
+    }
+    .mark-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-l);}
+    .topic-card.done{
+      border-color:rgba(5,150,105,.25);
+      background:linear-gradient(145deg,#fff 0%,#f0fdf4 100%);
+    }
+    .topic-card.done .mark-btn{
+      border-color:#a7f3d0;background:var(--green-l);color:var(--green);
+    }
+    .empty{
+      background:var(--white);border:1.5px dashed var(--border2);
+      border-radius:18px;padding:28px;text-align:center;color:var(--muted);
+    }
+
+    .site-footer{
+      padding:26px 0;border-top:1px solid var(--border);text-align:center;
+      font-size:.75rem;color:var(--muted);
+    }
+
+    @media(max-width:1024px){
+      .hero-grid{grid-template-columns:1fr;}
+      .topic-grid{grid-template-columns:repeat(2,1fr);}
+      .overview-grid{grid-template-columns:repeat(3,1fr);}
+      .tools-bar{grid-template-columns:1fr 1fr;gap:10px;}
+      .tools-right{grid-column:1/-1;justify-content:flex-start;}
+    }
+    @media(max-width:700px){
+      :root{--nh:60px;}
+      .hero h1{font-size:2rem;}
+      .topic-grid{grid-template-columns:1fr;}
+      .overview-grid{grid-template-columns:repeat(2,1fr);}
+      .tools-bar{grid-template-columns:1fr;}
+      .hdr-in{gap:8px;}
+      .hdr-r{justify-content:flex-end;}
+      .stat-pill{font-size:.72rem;padding:6px 10px;}
+    }
+    @media(max-width:420px){
+      .wrap{padding:0 12px;}
+      .logo-text{display:none;}
+      .overview-grid{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="logo" href="index.html">
+      <div class="logo-mark"><i class="fas fa-hand-holding-heart"></i></div>
+      <div class="logo-text">Pflege<span>fach</span>Profi</div>
+    </a>
+
+    <div class="hdr-r">
+      <div class="stat-pill stat-blue"><i class="fas fa-layer-group"></i><span id="statTotal">0</span> Themen</div>
+      <div class="stat-pill stat-green"><i class="fas fa-check-circle"></i><span id="statDone">0</span> gelernt</div>
+      <div class="stat-pill stat-amber"><i class="fas fa-chart-line"></i><span id="statPct">0%</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <div class="eyebrow"><i class="fas fa-graduation-cap"></i> Lernkatalog Abschlussprüfung</div>
+          <h1>Alle Themen nach <em>Kompetenzbereich I–V</em></h1>
+          <p>
+            Diese Seite ist dein kompletter Themen-Hub für die Pflegefachmann Abschlussprüfung.
+            Jede Karte führt später auf eine eigene Inhaltsseite. Dein Lernfortschritt wird lokal mit Cookies gespeichert.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#kbSection"><i class="fas fa-book-open"></i> Jetzt Themen öffnen</a>
+            <button class="btn btn-outline" id="resetProgressBtn"><i class="fas fa-rotate-left"></i> Fortschritt zurücksetzen</button>
+          </div>
+        </div>
+
+        <aside class="side-card">
+          <h3>So nutzt du die Seite</h3>
+          <div class="mini-list">
+            <div class="mini-item">
+              <div>
+                <strong>Thema öffnen</strong>
+                <span>führt zur späteren Detailseite</span>
+              </div>
+              <span class="badge b-blue">Placeholder Link</span>
+            </div>
+            <div class="mini-item">
+              <div>
+                <strong>Als gelernt markieren</strong>
+                <span>speichert direkt in Cookies</span>
+              </div>
+              <span class="badge b-green">Cookie Save</span>
+            </div>
+            <div class="mini-item">
+              <div>
+                <strong>Nach KB filtern</strong>
+                <span>schneller zu Tag 1 bis Tag 3</span>
+              </div>
+              <span class="badge b-purple">KB I–V</span>
+            </div>
+            <div class="mini-item">
+              <div>
+                <strong>Später erweiterbar</strong>
+                <span>für Quiz, XP, Notizen, Freischaltung</span>
+              </div>
+              <span class="badge b-amber">Skalierbar</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="tools">
+    <div class="wrap">
+      <div class="tools-bar">
+        <label class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Thema suchen, z. B. Ethik, NANDA, Delegation..." />
+        </label>
+
+        <label class="filter-box">
+          <i class="fas fa-filter"></i>
+          <select id="kbFilter">
+            <option value="all">Alle Kompetenzbereiche</option>
+            <option value="KB I">Nur KB I</option>
+            <option value="KB II">Nur KB II</option>
+            <option value="KB III">Nur KB III</option>
+            <option value="KB IV">Nur KB IV</option>
+            <option value="KB V">Nur KB V</option>
+          </select>
+        </label>
+
+        <div class="tools-right">
+          <button class="btn btn-outline" id="showOpenBtn"><i class="fas fa-circle"></i> Nur offen</button>
+          <button class="btn btn-outline" id="showDoneBtn"><i class="fas fa-check-circle"></i> Nur gelernt</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="overview">
+    <div class="wrap">
+      <div class="overview-grid">
+        <div class="ov-card"><div class="n" id="ov1">0</div><div class="t">KB I</div></div>
+        <div class="ov-card"><div class="n" id="ov2">0</div><div class="t">KB II</div></div>
+        <div class="ov-card"><div class="n" id="ov3">0</div><div class="t">KB III</div></div>
+        <div class="ov-card"><div class="n" id="ov4">0</div><div class="t">KB IV</div></div>
+        <div class="ov-card"><div class="n" id="ov5">0</div><div class="t">KB V</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="kbSection">
+    <div class="section-head">
+      <div>
+        <h2>Themenübersicht</h2>
+        <p>Ein Klick pro Thema. Eigene Inhaltsseiten kommen später über die hinterlegten Links.</p>
+      </div>
+    </div>
+
+    <div class="kb-list" id="kbList"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    PflegefachProfi · Lernkatalog KB I–V · Fortschritt lokal per Cookie gespeichert
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  const DATA = [
+    {
+      id:'kb1',
+      label:'KB I',
+      title:'Pflegeprozesse und Pflegediagnostik planen, durchführen, steuern und evaluieren',
+      desc:'Klassische Prüfungsfelder aus Pflegeprozess, Modelle, Assessments, Krankheitslehre, Notfall und Wundmanagement.',
+      color:'linear-gradient(135deg,#2563eb,#7c3aed)',
+      icon:'🩺',
+      topics:[
+        {id:'kb1-pflegeprozess', title:'Pflegeprozess', note:'Pflegeprozess allgemein', link:'/module/kb1/pflegeprozess.html', level:'hoch'},
+        {id:'kb1-pflegeprozess-who', title:'Pflegeprozessmodell nach WHO', note:'Struktur und Schritte', link:'/module/kb1/pflegeprozessmodell-who.html', level:'hoch'},
+        {id:'kb1-pflegeprozess-fm', title:'Pflegeprozessmodell nach Fiechter und Meier', note:'Vergleich und Anwendung', link:'/module/kb1/pflegeprozessmodell-fiechter-meier.html', level:'hoch'},
+        {id:'kb1-nanda', title:'NANDA', note:'Pflegediagnosen und Formulierung', link:'/module/kb1/nanda.html', level:'hoch'},
+        {id:'kb1-assessment', title:'Assessmentinstrumente', note:'Skalen und Einschätzung', link:'/module/kb1/assessmentinstrumente.html', level:'hoch'},
+        {id:'kb1-doku', title:'Pflegedokumentation', note:'Rechtssicher und vollständig dokumentieren', link:'/module/kb1/pflegedokumentation.html', level:'hoch'},
+        {id:'kb1-uebergabe', title:'Übergabe', note:'Strukturierte Informationsweitergabe', link:'/module/kb1/uebergabe.html', level:'hoch'},
+        {id:'kb1-expertenstandard', title:'Expertenstandard', note:'Bedeutung, Aufbau und Anwendung', link:'/module/kb1/expertenstandard.html', level:'hoch'},
+        {id:'kb1-ebn', title:'EBN', note:'Grundlagen evidenzbasierter Pflege', link:'/module/kb1/ebn.html', level:'mittel'},
+        {id:'kb1-pflegewissenschaft', title:'Pflegewissenschaft', note:'Wissenschaftliche Basis der Pflege', link:'/module/kb1/pflegewissenschaft.html', level:'mittel'},
+        {id:'kb1-informieren-schulen-beraten', title:'Informieren, Schulen, Beraten', note:'Anleitung und Edukation', link:'/module/kb1/informieren-schulen-beraten.html', level:'mittel'},
+
+        {id:'kb1-orem', title:'Orem', note:'Selbstpflege und Selbstpflegedefizit', link:'/module/kb1/orem.html', level:'mittel'},
+        {id:'kb1-peplau', title:'Peplau', note:'Pflegebeziehung und Phasenmodell', link:'/module/kb1/peplau.html', level:'mittel'},
+        {id:'kb1-friedemann', title:'Friedemann', note:'Systemisches Gleichgewicht', link:'/module/kb1/friedemann.html', level:'mittel'},
+        {id:'kb1-leininger', title:'Sunrise Modell nach Leininger', note:'Transkulturelle Pflege', link:'/module/kb1/leininger-sunrise.html', level:'mittel'},
+        {id:'kb1-abedl', title:'ABEDL', note:'Pflegemodell nach Krohwinkel', link:'/module/kb1/abedl.html', level:'mittel'},
+        {id:'kb1-roper-logan-tierney', title:'Roper-Logan-Tierney', note:'Aktivitäten des täglichen Lebens', link:'/module/kb1/roper-logan-tierney.html', level:'mittel'},
+        {id:'kb1-corbin-strauss', title:'Corbin und Strauss', note:'Trajektmodell chronischer Krankheit', link:'/module/kb1/corbin-strauss.html', level:'mittel'},
+        {id:'kb1-benner', title:'Kompetenzmodell nach Benner', note:'Vom Anfänger zum Experten', link:'/module/kb1/benner.html', level:'mittel'},
+        {id:'kb1-berufliche-handlungskompetenz', title:'Modell berufliche Handlungskompetenz', note:'Berufliche Kompetenzentwicklung', link:'/module/kb1/berufliche-handlungskompetenz.html', level:'mittel'},
+
+        {id:'kb1-pflegesysteme', title:'Pflegesysteme', note:'Funktionspflege, Bereichspflege, Bezugspflege', link:'/module/kb1/pflegesysteme.html', level:'mittel'},
+
+        {id:'kb1-diabetes-typ2', title:'Diabetes mellitus Typ 2', note:'Krankheitsbild und Pflege', link:'/module/kb1/diabetes-mellitus-typ-2.html', level:'hoch'},
+        {id:'kb1-tvt', title:'Tiefe Venenthrombose', note:'Ursachen, Symptome, Pflege', link:'/module/kb1/tiefe-venenthrombose.html', level:'hoch'},
+        {id:'kb1-appendizitis', title:'Appendizitis', note:'Akutes Abdomen und Beobachtung', link:'/module/kb1/appendizitis.html', level:'mittel'},
+        {id:'kb1-asthma', title:'Asthma bronchiale', note:'Anfall, Atemerleichterung, Pflege', link:'/module/kb1/asthma-bronchiale.html', level:'hoch'},
+        {id:'kb1-depression', title:'Depression', note:'Psychische Pflege und Beobachtung', link:'/module/kb1/depression.html', level:'hoch'},
+        {id:'kb1-herzinsuffizienz', title:'Herzinsuffizienz, Stufen', note:'NYHA und Pflegeschwerpunkte', link:'/module/kb1/herzinsuffizienz.html', level:'hoch'},
+        {id:'kb1-mammakarzinom', title:'Mammakarzinom', note:'Onkologische Pflege', link:'/module/kb1/mammakarzinom.html', level:'mittel'},
+        {id:'kb1-demenz', title:'Demenz', note:'Symptome, Umgang, Pflege', link:'/module/kb1/demenz.html', level:'hoch'},
+        {id:'kb1-niereninsuffizienz', title:'Niereninsuffizienz', note:'Akut, chronisch, Pflege', link:'/module/kb1/niereninsuffizienz.html', level:'hoch'},
+        {id:'kb1-neurodermitis', title:'Neurodermitis', note:'Hautpflege und Trigger', link:'/module/kb1/neurodermitis.html', level:'mittel'},
+        {id:'kb1-apoplex', title:'Apoplex', note:'Schlaganfall und Akutpflege', link:'/module/kb1/apoplex.html', level:'hoch'},
+        {id:'kb1-arthrose', title:'Arthrose', note:'Schmerz, Bewegung, Pflege', link:'/module/kb1/arthrose.html', level:'mittel'},
+        {id:'kb1-rheumatoide-arthritis', title:'Rheumatoide Arthritis', note:'Entzündung, Gelenke, Pflege', link:'/module/kb1/rheumatoide-arthritis.html', level:'mittel'},
+
+        {id:'kb1-prophylaxen', title:'Prophylaxen, besonders Sturz', note:'Prüfungsrelevante Standardprophylaxen', link:'/module/kb1/prophylaxen.html', level:'hoch'},
+        {id:'kb1-wundmanagement', title:'Wundmanagement', note:'Akute und chronische Wunden', link:'/module/kb1/wundmanagement.html', level:'hoch'},
+        {id:'kb1-notfall', title:'Notfall', note:'Erkennen, Handeln, Prioritäten', link:'/module/kb1/notfall.html', level:'hoch'},
+        {id:'kb1-maligne-tumoren', title:'Maligne Tumoren, Pflege', note:'Pflegeschwerpunkte bei Krebs', link:'/module/kb1/maligne-tumoren.html', level:'mittel'}
+      ]
+    },
+    {
+      id:'kb2',
+      label:'KB II',
+      title:'Kommunikation und Beratung personen- und situationsorientiert gestalten',
+      desc:'Kommunikationsmodelle, Beziehungsgestaltung, Entwicklung, Beratung und schwierige Gesprächssituationen.',
+      color:'linear-gradient(135deg,#7c3aed,#e11d48)',
+      icon:'💬',
+      topics:[
+        {id:'kb2-gelungene-kommunikation', title:'Gelungene Kommunikation, Maßnahmen', note:'Grundlagen guter Gesprächsführung', link:'/module/kb2/gelungene-kommunikation.html', level:'hoch'},
+        {id:'kb2-kommunikationsbarrieren', title:'Kommunikationsbarrieren', note:'Hindernisse erkennen und vermeiden', link:'/module/kb2/kommunikationsbarrieren.html', level:'hoch'},
+        {id:'kb2-feedbackregeln', title:'Feedbackregeln', note:'Konstruktives Feedback in der Pflege', link:'/module/kb2/feedbackregeln.html', level:'mittel'},
+        {id:'kb2-bobath', title:'Bobath', note:'Kommunikation und Aktivierung im Konzept', link:'/module/kb2/bobath.html', level:'mittel'},
+        {id:'kb2-kinaesthetik', title:'Kinästhetik', note:'Bewegungsunterstützung und Interaktion', link:'/module/kb2/kinaesthetik.html', level:'mittel'},
+        {id:'kb2-basale-stimulation', title:'Basale Stimulation', note:'Wahrnehmung fördern', link:'/module/kb2/basale-stimulation.html', level:'mittel'},
+        {id:'kb2-altersgerechte-kommunikation', title:'Altersgerechte Kommunikation', note:'Kommunikation mit älteren Menschen', link:'/module/kb2/altersgerechte-kommunikation.html', level:'hoch'},
+
+        {id:'kb2-schulz-von-thun', title:'Schulz von Thun', note:'Vier-Seiten-Modell', link:'/module/kb2/schulz-von-thun.html', level:'hoch'},
+        {id:'kb2-watzlawick', title:'Watzlawick', note:'Axiome der Kommunikation', link:'/module/kb2/watzlawick.html', level:'hoch'},
+        {id:'kb2-transaktionsanalyse', title:'Transaktionsanalyse', note:'Ich-Zustände und Kommunikation', link:'/module/kb2/transaktionsanalyse.html', level:'mittel'},
+        {id:'kb2-carl-rogers', title:'Carl Rogers', note:'Empathie, Kongruenz, Wertschätzung', link:'/module/kb2/carl-rogers.html', level:'hoch'},
+        {id:'kb2-iceberg', title:'*Iceberg Modell', note:'Unsicher gelesen, wahrscheinlich Eisbergmodell', link:'/module/kb2/iceberg-modell.html', level:'mittel'},
+        {id:'kb2-rosenberg', title:'Rosenberg, Gewaltfreie Kommunikation', note:'GFK und Gesprächsführung', link:'/module/kb2/rosenberg-gfk.html', level:'hoch'},
+
+        {id:'kb2-naehe-distanz', title:'Nähe und Distanz', note:'Professionelle Beziehung gestalten', link:'/module/kb2/naehe-und-distanz.html', level:'hoch'},
+        {id:'kb2-ekel-scham', title:'Umgang mit Ekel und Scham', note:'Reflexion und professionelles Handeln', link:'/module/kb2/ekel-und-scham.html', level:'hoch'},
+        {id:'kb2-biografiearbeit', title:'Biografiearbeit', note:'Lebensgeschichte pflegerisch nutzen', link:'/module/kb2/biografiearbeit.html', level:'mittel'},
+        {id:'kb2-motivation', title:'Motivation', note:'Förderung von Mitarbeit und Ressourcen', link:'/module/kb2/motivation.html', level:'mittel'},
+
+        {id:'kb2-havighurst', title:'Havighurst', note:'Entwicklungsaufgaben', link:'/module/kb2/havighurst.html', level:'mittel'},
+        {id:'kb2-freud', title:'Freud', note:'Psychosexuelle Entwicklung', link:'/module/kb2/freud.html', level:'mittel'},
+        {id:'kb2-erikson', title:'Erikson', note:'Psychosoziale Entwicklung', link:'/module/kb2/erikson.html', level:'hoch'},
+        {id:'kb2-piaget', title:'Piaget', note:'Kognitive Entwicklung', link:'/module/kb2/piaget.html', level:'mittel'},
+        {id:'kb2-maslow', title:'Maslow', note:'Bedürfnispyramide', link:'/module/kb2/maslow.html', level:'hoch'},
+
+        {id:'kb2-fallbesprechung', title:'Fallbesprechung', note:'Strukturierte Besprechung im Team', link:'/module/kb2/fallbesprechung.html', level:'hoch'},
+        {id:'kb2-kollegiale-beratung', title:'Kollegiale Beratung', note:'Lösungsorientierte Beratung im Team', link:'/module/kb2/kollegiale-beratung.html', level:'mittel'},
+        {id:'kb2-konfliktloesung', title:'Konfliktlösung', note:'Konflikte erkennen und bearbeiten', link:'/module/kb2/konfliktloesung.html', level:'hoch'},
+        {id:'kb2-case-management', title:'Case Management', note:'Versorgung koordinieren', link:'/module/kb2/case-management.html', level:'mittel'},
+        {id:'kb2-entscheidungsfindung', title:'Entscheidungsfindung', note:'Strukturiertes Vorgehen', link:'/module/kb2/entscheidungsfindung.html', level:'mittel'}
+      ]
+    },
+    {
+      id:'kb3',
+      label:'KB III',
+      title:'Intra- und interprofessionelles Handeln verantwortlich gestalten',
+      desc:'Zusammenarbeit, Organisation, Qualität, Pflegeversicherung und Strukturen im Versorgungssystem.',
+      color:'linear-gradient(135deg,#ea580c,#d97706)',
+      icon:'🤝',
+      topics:[
+        {id:'kb3-interdisziplinaere-zusammenarbeit', title:'Interdisziplinäre Zusammenarbeit', note:'Zusammenarbeit im multiprofessionellen Team', link:'/module/kb3/interdisziplinaere-zusammenarbeit.html', level:'hoch'},
+        {id:'kb3-teamarbeit', title:'Teamarbeit', note:'Rollen, Kommunikation, Verantwortung', link:'/module/kb3/teamarbeit.html', level:'hoch'},
+        {id:'kb3-fallbesprechung', title:'Fallbesprechung', note:'Teambezogene Fallanalyse', link:'/module/kb3/fallbesprechung.html', level:'mittel'},
+        {id:'kb3-konfliktloesung', title:'Konfliktlösung', note:'Konflikte im Team lösen', link:'/module/kb3/konfliktloesung.html', level:'mittel'},
+        {id:'kb3-case-management', title:'Case Management', note:'Koordinierte Versorgungsplanung', link:'/module/kb3/case-management.html', level:'mittel'},
+
+        {id:'kb3-qualitaetsmanagement', title:'Qualitätsmanagement', note:'QM Grundlagen in Pflegeeinrichtungen', link:'/module/kb3/qualitaetsmanagement.html', level:'hoch'},
+        {id:'kb3-fehlermanagement', title:'Qualitäts- und Fehlermanagement, besonders Audits', note:'Fehlerkultur und Prüfprozesse', link:'/module/kb3/fehlermanagement-audits.html', level:'hoch'},
+        {id:'kb3-mdk-pruefkriterien', title:'Prüfkriterien MDK', note:'Prüfungen und Qualitätsanforderungen', link:'/module/kb3/mdk-pruefkriterien.html', level:'hoch'},
+
+        {id:'kb3-pflegegrad', title:'Pflegegrad mit Leistungen', note:'Pflegegrade und Ansprüche', link:'/module/kb3/pflegegrad-mit-leistungen.html', level:'hoch'},
+        {id:'kb3-sozialversicherung', title:'Sozialversicherungssystem', note:'Versicherungen und Leistungsträger', link:'/module/kb3/sozialversicherungssystem.html', level:'hoch'},
+        {id:'kb3-reha', title:'Reha', note:'Rehabilitation und Ziele', link:'/module/kb3/reha.html', level:'mittel'}
+      ]
+    },
+    {
+      id:'kb4',
+      label:'KB IV',
+      title:'Das eigene Handeln auf Grundlage von Gesetzen und ethischen Leitlinien reflektieren',
+      desc:'Recht, Ethik, Selbstfürsorge, Gewalt, Freiheitsentzug, Patientenrechte und pflegeethische Reflexion.',
+      color:'linear-gradient(135deg,#0891b2,#2563eb)',
+      icon:'⚖️',
+      topics:[
+        {id:'kb4-delegation', title:'Delegation', note:'Anordnungs- und Durchführungsverantwortung', link:'/module/kb4/delegation.html', level:'hoch'},
+        {id:'kb4-fem', title:'FEM', note:'Freiheitsentziehende Maßnahmen', link:'/module/kb4/fem.html', level:'hoch'},
+        {id:'kb4-haftungsrecht', title:'Haftungsrecht', note:'Pflichtverletzung und Folgen', link:'/module/kb4/haftungsrecht.html', level:'hoch'},
+        {id:'kb4-zivilrecht', title:'Zivilrecht', note:'Schadenersatz und vertragliche Aspekte', link:'/module/kb4/zivilrecht.html', level:'mittel'},
+        {id:'kb4-strafrecht', title:'Strafrecht', note:'Körperverletzung, Unterlassen, Schweigepflicht', link:'/module/kb4/strafrecht.html', level:'hoch'},
+        {id:'kb4-sorgerecht', title:'Sorgerecht', note:'Rechte und Verantwortung bei Minderjährigen', link:'/module/kb4/sorgerecht.html', level:'mittel'},
+        {id:'kb4-weisungsrecht', title:'Weisungsrecht', note:'Grenzen arbeitsrechtlicher Anweisungen', link:'/module/kb4/weisungsrecht.html', level:'mittel'},
+        {id:'kb4-weigerungsrecht', title:'Weigerungsrecht', note:'Wann du ablehnen musst', link:'/module/kb4/weigerungsrecht.html', level:'hoch'},
+        {id:'kb4-remonstrationspflicht', title:'Remonstrationspflicht', note:'Fehlerhafte Anordnungen beanstanden', link:'/module/kb4/remonstrationspflicht.html', level:'hoch'},
+        {id:'kb4-unterlassene-hilfeleistung', title:'Unterlassene Hilfeleistung', note:'Rechtliche Folgen des Nicht-Handelns', link:'/module/kb4/unterlassene-hilfeleistung.html', level:'hoch'},
+        {id:'kb4-schweigepflicht', title:'Schweigepflicht', note:'Datenschutz und Vertraulichkeit', link:'/module/kb4/schweigepflicht.html', level:'hoch'},
+        {id:'kb4-jugendarbeitsschutzgesetz', title:'Jugend-Arbeitsschutzgesetz', note:'Regeln für Minderjährige in Ausbildung', link:'/module/kb4/jugendarbeitsschutzgesetz.html', level:'mittel'},
+        {id:'kb4-aufsichtspflicht', title:'Aufsichtspflicht', note:'Pflicht zur Beaufsichtigung', link:'/module/kb4/aufsichtspflicht.html', level:'mittel'},
+        {id:'kb4-fuersorgepflicht', title:'Fürsorgepflicht', note:'Verantwortung gegenüber Schutzbedürftigen', link:'/module/kb4/fuersorgepflicht.html', level:'mittel'},
+        {id:'kb4-vorbehaltene-aufgaben', title:'Vorbehaltene Aufgaben', note:'Kernaufgaben der Pflegefachkraft', link:'/module/kb4/vorbehaltene-aufgaben.html', level:'hoch'},
+        {id:'kb4-betreuungsrecht', title:'Betreuungsrecht', note:'Rechtliche Betreuung und Vertretung', link:'/module/kb4/betreuungsrecht.html', level:'hoch'},
+        {id:'kb4-patientenverfuegung', title:'Patientenverfügung', note:'Selbstbestimmung für spätere Entscheidungen', link:'/module/kb4/patientenverfuegung.html', level:'hoch'},
+        {id:'kb4-testament', title:'Testament', note:'Grundlagen im Prüfungskontext', link:'/module/kb4/testament.html', level:'niedrig'},
+        {id:'kb4-einwilligung', title:'Einwilligung', note:'Voraussetzung jeder Maßnahme', link:'/module/kb4/einwilligung.html', level:'hoch'},
+        {id:'kb4-sterbehilfe', title:'Sterbehilfe', note:'Abgrenzung und rechtlicher Rahmen', link:'/module/kb4/sterbehilfe.html', level:'hoch'},
+        {id:'kb4-echr-charta', title:'ECHR Charta', note:'*Begriff unsicher gelesen', link:'/module/kb4/echr-charta.html', level:'niedrig'},
+
+        {id:'kb4-ethik', title:'Ethik', note:'Grundlagen ethischer Entscheidungen', link:'/module/kb4/ethik.html', level:'hoch'},
+        {id:'kb4-pflegecharta', title:'Ethik in der Pflegecharta', note:'Werte und Rechte in der Pflege', link:'/module/kb4/pflegecharta.html', level:'hoch'},
+        {id:'kb4-ethikkomitee', title:'Ethikkomitee', note:'Aufgaben und Einsatz im Klinikalltag', link:'/module/kb4/ethikkomitee.html', level:'mittel'},
+        {id:'kb4-macht-ohnmacht', title:'Macht und Ohnmacht', note:'Reflexion professioneller Beziehung', link:'/module/kb4/macht-und-ohnmacht.html', level:'hoch'},
+        {id:'kb4-gewalt', title:'Gewalt', note:'Formen von Gewalt in der Pflege', link:'/module/kb4/gewalt.html', level:'hoch'},
+        {id:'kb4-selbstfuersorge-stressmanagement', title:'Selbstfürsorge und Stressmanagement', note:'Belastung erkennen und gegensteuern', link:'/module/kb4/selbstfuersorge-stressmanagement.html', level:'hoch'},
+        {id:'kb4-burnout', title:'Burnout', note:'Symptome, Prävention, Umgang', link:'/module/kb4/burnout.html', level:'hoch'},
+        {id:'kb4-mobbing', title:'Mobbing', note:'Erkennen, handeln, schützen', link:'/module/kb4/mobbing.html', level:'hoch'},
+        {id:'kb4-stressbewaeltigung', title:'Strategien zur Stressbewältigung', note:'Praktische Methoden im Alltag', link:'/module/kb4/stressbewaeltigung.html', level:'mittel'}
+      ]
+    },
+    {
+      id:'kb5',
+      label:'KB V',
+      title:'Das eigene Handeln wissenschaftlich fundiert und berufsethisch reflektieren',
+      desc:'Wissenschaft, Professionalität, Gesundheitskonzepte, Evidenz und Reflexion.',
+      color:'linear-gradient(135deg,#0891b2,#059669)',
+      icon:'🔬',
+      topics:[
+        {id:'kb5-ebn', title:'EBN', note:'Evidenzbasierung in der Pflege', link:'/module/kb5/ebn.html', level:'hoch'},
+        {id:'kb5-pflegewissenschaft', title:'Pflegewissenschaft', note:'Wissenschaftlich denken und handeln', link:'/module/kb5/pflegewissenschaft.html', level:'hoch'},
+        {id:'kb5-kompetenz-pflegekraefte', title:'Kompetenz von Pflegekräften', note:'Profession, Rolle, Verantwortung', link:'/module/kb5/kompetenz-von-pflegekraeften.html', level:'mittel'},
+        {id:'kb5-vorbehaltene-aufgaben', title:'Vorbehaltsaufgaben', note:'Pflegefachliche Eigenverantwortung', link:'/module/kb5/vorbehaltsaufgaben.html', level:'hoch'},
+        {id:'kb5-salutogenese', title:'Salutogenese', note:'Gesundheitsentstehung nach Antonovsky', link:'/module/kb5/salutogenese.html', level:'hoch'},
+        {id:'kb5-pathogenese', title:'Pathogenese', note:'Krankheitsentstehung verstehen', link:'/module/kb5/pathogenese.html', level:'hoch'},
+        {id:'kb5-resilienz', title:'Resilienz', note:'Widerstandskraft fördern', link:'/module/kb5/resilienz.html', level:'hoch'}
+      ]
+    }
+  ];
+
+  const COOKIE_KEY = 'pfp_lernkatalog_v1';
+  let viewMode = 'all';
+
+  const state = {
+    done: []
+  };
+
+  function setCookie(name, value, days){
+    const d = new Date();
+    d.setTime(d.getTime() + days * 86400000);
+    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(JSON.stringify(value)) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+  function getCookie(name){
+    const key = encodeURIComponent(name) + '=';
+    const parts = document.cookie.split(';');
+    for(const part of parts){
+      const p = part.trim();
+      if(p.startsWith(key)){
+        try { return JSON.parse(decodeURIComponent(p.slice(key.length))); }
+        catch(e){ return null; }
+      }
+    }
+    return null;
+  }
+
+  function deleteCookie(name){
+    document.cookie = encodeURIComponent(name) + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+  }
+
+  function loadState(){
+    const saved = getCookie(COOKIE_KEY);
+    if(saved && typeof saved === 'object'){
+      state.done = Array.isArray(saved.done) ? saved.done : [];
+    }
+  }
+
+  function saveState(){
+    setCookie(COOKIE_KEY, state, 180);
+  }
+
+  function flattenTopics(){
+    return DATA.flatMap(kb => kb.topics.map(t => ({...t, kb:kb.label, kbId:kb.id})));
+  }
+
+  function isDone(id){
+    return state.done.includes(id);
+  }
+
+  function toggleDone(id){
+    if(isDone(id)){
+      state.done = state.done.filter(x => x !== id);
+    } else {
+      state.done.push(id);
+    }
+    saveState();
+    renderAll();
+  }
+
+  function countDoneInKB(kb){
+    return kb.topics.filter(t => isDone(t.id)).length;
+  }
+
+  function getLevelBadge(level){
+    if(level === 'hoch') return '<span class="badge b-rose">Prüfungsrelevant</span>';
+    if(level === 'mittel') return '<span class="badge b-blue">Wichtig</span>';
+    return '<span class="badge b-amber">Ergänzend</span>';
+  }
+
+  function updateStats(){
+    const all = flattenTopics();
+    const total = all.length;
+    const done = all.filter(t => isDone(t.id)).length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statDone').textContent = done;
+    document.getElementById('statPct').textContent = pct + '%';
+
+    document.getElementById('ov1').textContent = DATA[0].topics.length;
+    document.getElementById('ov2').textContent = DATA[1].topics.length;
+    document.getElementById('ov3').textContent = DATA[2].topics.length;
+    document.getElementById('ov4').textContent = DATA[3].topics.length;
+    document.getElementById('ov5').textContent = DATA[4].topics.length;
+  }
+
+  function renderKBs(){
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const kbFilter = document.getElementById('kbFilter').value;
+    const wrap = document.getElementById('kbList');
+    wrap.innerHTML = '';
+
+    let totalVisible = 0;
+
+    DATA.forEach(kb => {
+      if(kbFilter !== 'all' && kb.label !== kbFilter) return;
+
+      const topics = kb.topics.filter(t => {
+        const matchesQuery = !q || (t.title + ' ' + t.note + ' ' + kb.title).toLowerCase().includes(q);
+        const matchesView =
+          viewMode === 'all' ||
+          (viewMode === 'open' && !isDone(t.id)) ||
+          (viewMode === 'done' && isDone(t.id));
+        return matchesQuery && matchesView;
+      });
+
+      if(!topics.length) return;
+      totalVisible += topics.length;
+
+      const doneCount = countDoneInKB(kb);
+      const pct = Math.round(doneCount / kb.topics.length * 100);
+
+      const section = document.createElement('section');
+      section.className = 'kb-card';
+      section.innerHTML = `
+        <div class="kb-top">
+          <div class="kb-title-wrap">
+            <div class="kb-icon" style="background:${kb.color}">${kb.icon}</div>
+            <div>
+              <div class="kb-title">${kb.label} · ${kb.title}</div>
+              <div class="kb-desc">${kb.desc}</div>
+            </div>
+          </div>
+
+          <div class="kb-progress">
+            <span class="badge b-green"><i class="fas fa-check-circle"></i> ${doneCount}/${kb.topics.length} gelernt</span>
+            <div class="prog-shell"><div class="prog-fill" style="width:${pct}%"></div></div>
+            <div class="prog-txt">${pct}%</div>
+          </div>
+        </div>
+        <div class="topic-grid"></div>
+      `;
+
+      const grid = section.querySelector('.topic-grid');
+
+      topics.forEach(topic => {
+        const card = document.createElement('article');
+        card.className = 'topic-card' + (isDone(topic.id) ? ' done' : '');
+        card.innerHTML = `
+          <div class="topic-top">
+            <div class="topic-icon" style="background:${softBg(kb.id)}">${iconForTopic(topic.title)}</div>
+            ${getLevelBadge(topic.level)}
+          </div>
+
+          <div class="topic-title">${escapeHtml(topic.title)}</div>
+          <div class="topic-sub">${escapeHtml(topic.note)}</div>
+
+          <div class="topic-meta">
+            <span><i class="fas fa-layer-group"></i> ${kb.label}</span>
+            <span><i class="fas fa-link"></i> separate Seite</span>
+          </div>
+
+          <div class="topic-actions">
+            <a class="link-btn" href="${topic.link}">
+              <i class="fas fa-arrow-up-right-from-square"></i> Thema öffnen
+            </a>
+            <button class="mark-btn" data-id="${topic.id}">
+              <i class="fas ${isDone(topic.id) ? 'fa-check-circle' : 'fa-circle'}"></i>
+              ${isDone(topic.id) ? 'Gelernt' : 'Als gelernt markieren'}
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      wrap.appendChild(section);
+    });
+
+    if(!totalVisible){
+      wrap.innerHTML = '<div class="empty">Keine Themen gefunden. Ändere Suche oder Filter.</div>';
+    }
+
+    wrap.querySelectorAll('.mark-btn').forEach(btn => {
+      btn.addEventListener('click', function(){
+        toggleDone(this.dataset.id);
+      });
+    });
+  }
+
+  function softBg(kbId){
+    if(kbId === 'kb1') return 'var(--blue-xl)';
+    if(kbId === 'kb2') return '#fdf4ff';
+    if(kbId === 'kb3') return '#fff7ed';
+    if(kbId === 'kb4') return '#eff6ff';
+    return '#f0fdf4';
+  }
+
+  function iconForTopic(title){
+    const t = title.toLowerCase();
+    if(t.includes('recht') || t.includes('einwilligung') || t.includes('schweigepflicht') || t.includes('fem')) return '⚖️';
+    if(t.includes('ethik')) return '🕊️';
+    if(t.includes('kommunikation') || t.includes('feedback') || t.includes('beratung')) return '💬';
+    if(t.includes('pflegeprozess') || t.includes('nanda')) return '🔄';
+    if(t.includes('assessment')) return '📊';
+    if(t.includes('wund')) return '🩹';
+    if(t.includes('notfall')) return '🚨';
+    if(t.includes('demenz')) return '🧠';
+    if(t.includes('diabetes')) return '🩸';
+    if(t.includes('asthma')) return '🫁';
+    if(t.includes('herzinsuffizienz')) return '❤️';
+    if(t.includes('apoplex')) return '🧠';
+    if(t.includes('burnout') || t.includes('stress')) return '🔥';
+    if(t.includes('qualität')) return '📋';
+    if(t.includes('pflegegrad') || t.includes('versicherung')) return '🏥';
+    if(t.includes('wissenschaft') || t.includes('ebn')) return '🔬';
+    if(t.includes('resilienz')) return '🌱';
+    return '📘';
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderAll(){
+    updateStats();
+    renderKBs();
+  }
+
+  document.getElementById('searchInput').addEventListener('input', renderKBs);
+  document.getElementById('kbFilter').addEventListener('change', renderKBs);
+
+  document.getElementById('showOpenBtn').addEventListener('click', function(){
+    viewMode = viewMode === 'open' ? 'all' : 'open';
+    document.getElementById('showDoneBtn').classList.remove('btn-primary');
+    document.getElementById('showDoneBtn').classList.add('btn-outline');
+    if(viewMode === 'open'){
+      this.classList.remove('btn-outline');
+      this.classList.add('btn-primary');
+    } else {
+      this.classList.remove('btn-primary');
+      this.classList.add('btn-outline');
+    }
+    renderKBs();
+  });
+
+  document.getElementById('showDoneBtn').addEventListener('click', function(){
+    viewMode = viewMode === 'done' ? 'all' : 'done';
+    document.getElementById('showOpenBtn').classList.remove('btn-primary');
+    document.getElementById('showOpenBtn').classList.add('btn-outline');
+    if(viewMode === 'done'){
+      this.classList.remove('btn-outline');
+      this.classList.add('btn-primary');
+    } else {
+      this.classList.remove('btn-primary');
+      this.classList.add('btn-outline');
+    }
+    renderKBs();
+  });
+
+  document.getElementById('resetProgressBtn').addEventListener('click', function(){
+    if(confirm('Fortschritt wirklich zurücksetzen?')){
+      state.done = [];
+      deleteCookie(COOKIE_KEY);
+      renderAll();
+    }
+  });
+
+  loadState();
+  renderAll();
+})();
+</script>
+</body>
+</html>
