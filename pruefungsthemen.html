@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PflegefachProfi • Prüfungsthemen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+/* ═══════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{overflow-x:hidden;scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f8fafc;color:#0d1117;min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:#f1f5f9;}
+::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:99px;}
+
+:root{
+  --ink:#0d1117; --ink2:#1c2333; --ink3:#374151;
+  --muted:#6b7280; --faint:#f3f4f6; --white:#ffffff;
+  --border:#e5e7eb; --border2:#d1d5db;
+  --blue:#2563eb; --blue-d:#1d4ed8; --blue-l:#dbeafe; --blue-xl:#eff6ff;
+  --purple:#7c3aed; --purple-l:#ede9fe;
+  --green:#059669; --green-l:#d1fae5; --green-xl:#f0fdf4;
+  --amber:#d97706; --amber-l:#fef3c7; --amber-xl:#fffbeb;
+  --rose:#e11d48; --rose-l:#ffe4e6;
+  --teal:#0891b2; --teal-l:#cffafe; --teal-xl:#ecfeff;
+  --indigo:#4f46e5; --indigo-l:#e0e7ff;
+  --sky:#0284c7; --sky-l:#e0f2fe;
+  --pink:#db2777; --pink-l:#fce7f3;
+  --orange:#ea580c; --orange-l:#fed7aa; --orange-xl:#fff7ed;
+  --s1:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --s2:0 4px 16px rgba(0,0,0,.09),0 2px 6px rgba(0,0,0,.05);
+  --s3:0 12px 32px rgba(0,0,0,.11),0 4px 10px rgba(0,0,0,.05);
+  --r:10px; --rl:16px; --rxl:20px;
+  --nh:64px;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px;width:100%;}
+
+/* ═══════════════════════════════════
+   HEADER (identical to main site)
+═══════════════════════════════════ */
+.hdr{background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:500;height:var(--nh);transition:box-shadow .2s;}
+.hdr.scrolled{box-shadow:var(--s2);}
+.hdr-in{display:flex;align-items:center;justify-content:space-between;height:100%;gap:12px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;}
+.logo-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;box-shadow:0 4px 12px rgba(37,99,235,.35);flex-shrink:0;}
+.logo-text{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;color:var(--ink);letter-spacing:-.01em;}
+.logo-text span{color:var(--blue);}
+.dnav{display:flex;align-items:center;gap:2px;list-style:none;margin-left:4px;}
+.dnav li button{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.83rem;color:var(--muted);border:none;background:transparent;cursor:pointer;transition:all .18s var(--ease);}
+.dnav li button:hover{background:var(--faint);color:var(--ink);}
+.dnav li button.act{background:var(--blue-xl);color:var(--blue);font-weight:700;}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.stat-pill{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:99px;font-weight:700;font-size:.78rem;border:1.5px solid;white-space:nowrap;}
+.stat-fire{background:#fff7ed;border-color:#fed7aa;color:#c2410c;}
+.stat-xp{background:var(--blue-xl);border-color:var(--blue-l);color:var(--blue-d);}
+.stat-key{background:#fefce8;border-color:#fef08a;color:#854d0e;}
+.stat-progress{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 8px;background:var(--white);border:1.5px solid var(--border);border-radius:99px;}
+.prog-bar{width:56px;height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px;transition:width .5s var(--ease);}
+.prog-lbl{font-weight:700;font-size:.75rem;color:var(--muted);}
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:38px;height:38px;border:1.5px solid var(--border);background:var(--white);border-radius:10px;cursor:pointer;padding:9px;flex-shrink:0;transition:all .2s;}
+.burger span{display:block;width:100%;height:2px;background:var(--ink);border-radius:99px;transition:transform .25s,opacity .2s;}
+.burger.open{background:var(--blue-xl);border-color:var(--blue-l);}
+.burger.open span{background:var(--blue);}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mnav{position:fixed;top:var(--nh);left:0;right:0;bottom:0;background:var(--white);z-index:499;transform:translateX(100%);opacity:0;transition:transform .28s var(--ease),opacity .28s;pointer-events:none;overflow-y:auto;padding:16px 16px 32px;}
+.mnav.open{transform:translateX(0);opacity:1;pointer-events:all;}
+.mnav-inner{display:flex;flex-direction:column;gap:4px;}
+.mnav-sect{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:12px 12px 4px;}
+.mnav ul{list-style:none;display:flex;flex-direction:column;gap:2px;}
+.mnav ul li button{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.9rem;color:var(--ink3);border:none;background:transparent;cursor:pointer;width:100%;transition:all .15s;}
+.mnav ul li button:hover,.mnav ul li button.act{background:var(--blue-xl);color:var(--blue);}
+.mnav ul li button i{width:20px;text-align:center;color:var(--blue);}
+.ndiv{height:1px;background:var(--border);margin:8px 12px;}
+
+/* ═══════════════════════════════════
+   PAGE HERO
+═══════════════════════════════════ */
+.page-hero{padding:40px 0 32px;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,.07) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--blue-xl);color:var(--blue);padding:5px 13px;border-radius:99px;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px;border:1px solid var(--blue-l);}
+.hero-h1{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:var(--ink);letter-spacing:-.03em;line-height:1.1;margin-bottom:10px;}
+.hero-h1 em{font-style:italic;color:var(--blue);}
+.hero-sub{font-size:.92rem;color:var(--muted);max-width:600px;line-height:1.65;margin-bottom:24px;}
+
+/* Stats bar */
+.hero-stats{display:flex;flex-wrap:wrap;gap:10px;}
+.hstat{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:9px;box-shadow:var(--s1);}
+.hstat-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.hstat-txt .val{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:var(--ink);line-height:1;}
+.hstat-txt .lbl{font-size:.68rem;color:var(--muted);font-weight:600;margin-top:1px;}
+
+/* ═══════════════════════════════════
+   STICKY FILTER BAR
+═══════════════════════════════════ */
+.filter-bar{position:sticky;top:var(--nh);z-index:400;background:rgba(248,250,252,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 0;margin-bottom:24px;}
+.filter-inner{display:flex;flex-direction:column;gap:10px;}
+
+/* Search row */
+.search-row{display:flex;gap:10px;align-items:center;}
+.search-wrap{flex:1;position:relative;max-width:380px;}
+.search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none;}
+.search-inp{width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--border);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;color:var(--ink);background:var(--white);outline:none;transition:border-color .2s;}
+.search-inp:focus{border-color:var(--blue);}
+.search-inp::placeholder{color:var(--muted);}
+.clear-btn{padding:8px 14px;border-radius:9px;border:1.5px solid var(--border);background:var(--white);color:var(--muted);font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;white-space:nowrap;}
+.clear-btn:hover{border-color:var(--rose);color:var(--rose);}
+.result-count{font-size:.78rem;color:var(--muted);font-weight:600;white-space:nowrap;flex-shrink:0;}
+
+/* Filter rows */
+.filter-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.filter-label{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;flex-shrink:0;padding-right:4px;}
+.ftab{padding:5px 13px;border-radius:99px;font-size:.75rem;font-weight:700;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;transition:all .15s var(--ease);font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+.ftab:hover{border-color:var(--blue);color:var(--blue);}
+.ftab.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.28);}
+/* Day-specific colors */
+.ftab.day-active.d1{background:#2563eb;border-color:#2563eb;color:#fff;}
+.ftab.day-active.d2{background:#7c3aed;border-color:#7c3aed;color:#fff;}
+.ftab.day-active.d3{background:#059669;border-color:#059669;color:#fff;}
+.ftab.day-active.dm{background:#d97706;border-color:#d97706;color:#fff;}
+
+/* Learned toggle */
+.learned-filter{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.toggle-wrap{display:flex;align-items:center;gap:6px;cursor:pointer;}
+.toggle-track{width:34px;height:18px;background:var(--border2);border-radius:99px;position:relative;transition:background .2s;flex-shrink:0;}
+.toggle-track.on{background:var(--green);}
+.toggle-thumb{width:14px;height:14px;border-radius:99px;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s var(--spring);}
+.toggle-track.on .toggle-thumb{transform:translateX(16px);}
+.toggle-lbl{font-size:.75rem;font-weight:700;color:var(--muted);}
+
+/* ═══════════════════════════════════
+   TOPICS LIST
+═══════════════════════════════════ */
+.topics-list{display:flex;flex-direction:column;gap:8px;padding-bottom:60px;}
+
+/* Topic item */
+.topic-item{background:var(--white);border-radius:var(--rl);border:1.5px solid var(--border);box-shadow:var(--s1);overflow:hidden;transition:box-shadow .2s var(--ease),border-color .2s;position:relative;}
+.topic-item:hover{box-shadow:var(--s2);}
+.topic-item.expanded{border-color:var(--blue-l);box-shadow:var(--s3);}
+.topic-item.learned{border-color:rgba(5,150,105,.3);}
+.topic-item.learned .topic-num{background:var(--green);color:#fff;}
+
+/* Category color bar */
+.cat-bar{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;}
+
+/* Header row */
+.topic-head{display:flex;align-items:center;gap:12px;padding:14px 16px 14px 20px;cursor:pointer;user-select:none;min-width:0;}
+.topic-num{width:30px;height:30px;border-radius:9px;background:var(--faint);color:var(--muted);font-weight:900;font-size:.72rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-family:'Fraunces',serif;}
+.topic-info{flex:1;min-width:0;}
+.topic-title{font-weight:800;font-size:.9rem;color:var(--ink);line-height:1.25;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topic-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.cat-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;font-size:.63rem;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.day-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:.63rem;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.day-chip.d1{background:#dbeafe;color:#1d4ed8;}
+.day-chip.d2{background:var(--purple-l);color:#5b21b6;}
+.day-chip.d3{background:var(--green-l);color:#065f46;}
+.topic-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.learned-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:99px;border:1.5px solid var(--border);background:var(--white);font-family:'Plus Jakarta Sans',sans-serif;font-size:.72rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s var(--ease);white-space:nowrap;}
+.learned-btn:hover{border-color:var(--green);color:var(--green);}
+.learned-btn.done{background:var(--green-l);border-color:rgba(5,150,105,.3);color:var(--green);}
+.expand-ico{width:28px;height:28px;border-radius:8px;background:var(--faint);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.7rem;transition:all .2s;flex-shrink:0;}
+.topic-item.expanded .expand-ico{background:var(--blue-xl);color:var(--blue);transform:rotate(180deg);}
+
+/* Expanded body */
+.topic-body{display:none;padding:0 16px 16px 20px;animation:bodyIn .22s var(--ease);}
+.topic-item.expanded .topic-body{display:block;}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+/* Divider */
+.body-divider{height:1px;background:var(--border);margin-bottom:16px;}
+
+/* Focus panels */
+.focus-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.focus-panel{border-radius:12px;padding:14px 16px;}
+.focus-panel.med{background:var(--blue-xl);border:1px solid var(--blue-l);}
+.focus-panel.nrs{background:var(--green-xl);border:1px solid rgba(5,150,105,.2);}
+.focus-panel-head{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.focus-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
+.focus-panel.med .focus-icon{background:var(--blue);color:#fff;}
+.focus-panel.nrs .focus-icon{background:var(--green);color:#fff;}
+.focus-label{font-weight:800;font-size:.78rem;color:var(--ink);}
+.focus-text{font-size:.82rem;color:var(--ink3);line-height:1.7;}
+
+/* Keywords */
+.kw-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.kw-chip{padding:3px 9px;border-radius:99px;background:var(--faint);border:1px solid var(--border2);font-size:.65rem;font-weight:700;color:var(--muted);}
+
+/* Priority badge */
+.priority-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:.62rem;font-weight:700;margin-left:auto;}
+.prio-high{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+.prio-medium{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
+
+/* Empty state */
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-ico{font-size:3rem;margin-bottom:12px;display:block;}
+.empty-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;margin-bottom:6px;}
+.empty-sub{font-size:.85rem;color:var(--muted);}
+
+/* Progress bar at top */
+.global-progress{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.gp-label{font-weight:800;font-size:.85rem;color:var(--ink);flex-shrink:0;}
+.gp-bar-wrap{flex:1;min-width:120px;}
+.gp-bar{height:9px;background:var(--faint);border-radius:99px;overflow:hidden;}
+.gp-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px;transition:width .6s var(--ease);}
+.gp-pct{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:var(--blue);flex-shrink:0;}
+.gp-count{font-size:.78rem;color:var(--muted);font-weight:600;}
+
+/* Toast */
+.toast{position:fixed;bottom:22px;right:16px;z-index:9998;padding:10px 18px;border-radius:11px;font-weight:700;font-size:.82rem;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.14);animation:toastIn .28s var(--ease);color:#fff;max-width:calc(100vw - 32px);}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* Footer */
+.site-footer{margin-top:20px;padding:24px 0;border-top:1px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media(max-width:900px){
+  .dnav{display:none;}
+  .burger{display:flex;}
+  .stat-pill.stat-fire,.stat-pill.stat-key{display:none;}
+  .focus-grid{grid-template-columns:1fr;}
+  .hero-h1{font-size:1.9rem;}
+}
+@media(max-width:640px){
+  :root{--nh:60px;}
+  .topic-head{padding:12px 14px 12px 18px;gap:9px;}
+  .topic-title{white-space:normal;}
+  .topic-actions{flex-direction:column;gap:5px;align-items:flex-end;}
+  .learned-btn{padding:5px 9px;font-size:.68rem;}
+  .hero-h1{font-size:1.65rem;}
+  .search-row{flex-wrap:wrap;}
+  .search-wrap{max-width:100%;width:100%;}
+  .filter-row{gap:5px;}
+  .stat-pill.stat-xp{display:none;}
+  .prog-bar{width:44px;}
+}
+@media(max-width:440px){
+  .wrap{padding:0 12px;}
+  .logo-text{display:none;}
+  .focus-panel{padding:11px 13px;}
+}
+
+/* Highlight match */
+mark{background:#fef08a;color:var(--ink);border-radius:3px;padding:0 2px;}
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="hdr" id="mainHdr">
+  <div class="wrap hdr-in">
+    <a class="logo" href="javascript:void(0)" onclick="window.location.href='pflegefachprofi.html'">
+      <div class="logo-mark"><i class="fas fa-hand-holding-heart"></i></div>
+      <div class="logo-text">Pflege<span>fach</span>Profi</div>
+    </a>
+    <nav aria-label="Hauptnavigation">
+      <ul class="dnav">
+        <li><button onclick="window.location.href='pflegefachprofi.html'"><i class="fas fa-home"></i> Start</button></li>
+        <li><button onclick="window.location.href='pflegefachprofi.html'"><i class="fas fa-cubes"></i> Module</button></li>
+        <li><button class="act"><i class="fas fa-list-check"></i> Prüfungsthemen</button></li>
+        <li><button><i class="fas fa-chart-bar"></i> Fortschritt</button></li>
+      </ul>
+    </nav>
+    <div class="hdr-r">
+      <div class="stat-pill stat-fire"><i class="fas fa-fire"></i> 3</div>
+      <div class="stat-pill stat-xp"><i class="fas fa-bolt"></i> 0 XP</div>
+      <div class="stat-pill stat-key"><i class="fas fa-key"></i> 1</div>
+      <div class="stat-progress">
+        <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+        <span class="prog-lbl" id="pLbl">0/48</span>
+      </div>
+      <button class="burger" id="burgerBtn" aria-label="Menü" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ MOBILE DRAWER ═══ -->
+<nav class="mnav" id="mobileNav">
+  <div class="mnav-inner">
+    <div class="mnav-sect">Navigation</div>
+    <ul>
+      <li><button onclick="window.location.href='pflegefachprofi.html'"><i class="fas fa-home"></i> Start / Home</button></li>
+      <li><button onclick="window.location.href='pflegefachprofi.html'"><i class="fas fa-cubes"></i> Alle Module</button></li>
+      <li><button class="act"><i class="fas fa-list-check"></i> Prüfungsthemen</button></li>
+      <li><button><i class="fas fa-chart-line"></i> Mein Fortschritt</button></li>
+    </ul>
+    <div class="ndiv"></div>
+    <div class="mnav-sect">Einstellungen</div>
+    <ul>
+      <li><button id="resetLearnedBtn"><i class="fas fa-rotate-left"></i> Lernfortschritt zurücksetzen</button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+  <div class="wrap">
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+      <div class="hero-eyebrow"><i class="fas fa-list-check"></i>&nbsp; Prüfungsvorbereitung</div>
+      <h1 class="hero-h1">Die <em>48 wichtigsten</em><br>Prüfungsthemen</h1>
+      <p class="hero-sub">Alle relevanten Krankheitsbilder mit medizinischem & pflegerischem Fokus — gefiltert nach Prüfungstag und Fachbereich. Markiere Themen als gelernt und behalte deinen Fortschritt im Blick.</p>
+      <div class="hero-stats" id="heroStats">
+        <div class="hstat">
+          <div class="hstat-ico" style="background:#eff6ff;font-size:1.1rem;">📋</div>
+          <div class="hstat-txt"><div class="val">48</div><div class="lbl">Themen gesamt</div></div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-ico" style="background:#f0fdf4;">✅</div>
+          <div class="hstat-txt"><div class="val" id="learnedCount">0</div><div class="lbl">Gelernt</div></div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-ico" style="background:#fff1f2;">🔥</div>
+          <div class="hstat-txt"><div class="val" id="highPrioCount">0</div><div class="lbl">Hohe Priorität</div></div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-ico" style="background:#fefce8;">🗓️</div>
+          <div class="hstat-txt"><div class="val">3</div><div class="lbl">Prüfungstage</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="wrap filter-inner">
+
+        <!-- Search -->
+        <div class="search-row">
+          <div class="search-wrap">
+            <i class="fas fa-search search-ico"></i>
+            <input type="text" class="search-inp" id="searchInp" placeholder="Thema suchen… z.B. Apoplexie, Bobath, NANDA" autocomplete="off" spellcheck="false"/>
+          </div>
+          <button class="clear-btn" id="clearBtn" style="display:none;"><i class="fas fa-times"></i> Zurücksetzen</button>
+          <div class="result-count" id="resultCount">48 Themen</div>
+        </div>
+
+        <!-- Category filter -->
+        <div class="filter-row">
+          <span class="filter-label">Fachbereich:</span>
+          <button class="ftab active" data-cat="all">Alle</button>
+          <button class="ftab" data-cat="neurologie">🧠 Neurologie</button>
+          <button class="ftab" data-cat="psychiatrie">🧬 Psychiatrie</button>
+          <button class="ftab" data-cat="kardiologie">❤️ Kardiologie</button>
+          <button class="ftab" data-cat="pneumologie">🫁 Pneumologie</button>
+          <button class="ftab" data-cat="gastroenterologie">🫄 Gastroenterologie</button>
+          <button class="ftab" data-cat="orthopaedie">🦴 Orthopädie</button>
+          <button class="ftab" data-cat="endokrinologie">⚗️ Endokrinologie</button>
+          <button class="ftab" data-cat="nephrologie">🫘 Nephrologie</button>
+          <button class="ftab" data-cat="onkologie">🎗️ Onkologie</button>
+        </div>
+
+        <!-- Day filter + Learned toggle -->
+        <div class="filter-row">
+          <span class="filter-label">Prüfungstag:</span>
+          <button class="ftab active" data-day="all">Alle Tage</button>
+          <button class="ftab d1" data-day="1">📝 Tag 1 — Schriftlich KB I+II</button>
+          <button class="ftab d2" data-day="2">📋 Tag 2 — Schriftlich KB III+IV</button>
+          <button class="ftab d3" data-day="3">🗣️ Tag 3 — Mündlich KB V</button>
+          <div class="learned-filter">
+            <label class="toggle-wrap" id="learnedFilterWrap">
+              <div class="toggle-track" id="learnedFilterTrack"><div class="toggle-thumb"></div></div>
+              <span class="toggle-lbl">Nur ungelernte</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GLOBAL PROGRESS -->
+    <div class="global-progress" id="globalProgress">
+      <span class="gp-label">🎯 Lernfortschritt</span>
+      <div class="gp-bar-wrap">
+        <div class="gp-bar"><div class="gp-fill" id="gpFill" style="width:0%"></div></div>
+      </div>
+      <span class="gp-pct" id="gpPct">0%</span>
+      <span class="gp-count" id="gpCount">0 von 48 Themen gelernt</span>
+    </div>
+
+    <!-- TOPICS -->
+    <div class="topics-list" id="topicsList"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <span class="empty-ico">🔍</span>
+      <div class="empty-title">Keine Themen gefunden</div>
+      <div class="empty-sub">Versuche andere Filter oder leere die Suche.</div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">PflegefachProfi · Prüfungsthemen · Für Azubis in der Pflegeausbildung · © 2025</div>
+</footer>
+
+<div id="toastEl" style="display:none;"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   📚 DATENQUELLE — HIER KÖNNEN ALLE THEMEN BEARBEITET WERDEN
+   
+   Felder pro Thema:
+   ─ id        : Eindeutige Nummer (1–48)
+   ─ title     : Vollständiger Titel des Krankheitsbildes
+   ─ cat       : Kategorie-ID (muss in CATEGORIES definiert sein)
+   ─ days      : Array mit Prüfungstagen [1], [2], [3] oder Kombinationen
+   ─ priority  : 'high' (kommt häufig vor) oder 'medium'
+   ─ medical   : Medizinischer Fokus (String)
+   ─ nursing   : Pflegerischer Fokus (String)
+   ─ keywords  : Array mit Stichwörtern / Fachbegriffen
+════════════════════════════════════════════════════════ */
+
+const CATEGORIES = {
+  neurologie:        { label:'Neurologie',           color:'#2563eb', bg:'#eff6ff', icon:'🧠' },
+  psychiatrie:       { label:'Psychiatrie & Psyche', color:'#7c3aed', bg:'#f5f3ff', icon:'🧬' },
+  kardiologie:       { label:'Kardiologie & Gefäße', color:'#e11d48', bg:'#fff1f2', icon:'❤️' },
+  pneumologie:       { label:'Pneumologie',           color:'#0891b2', bg:'#ecfeff', icon:'🫁' },
+  gastroenterologie: { label:'Gastroenterologie',     color:'#d97706', bg:'#fffbeb', icon:'🫄' },
+  orthopaedie:       { label:'Orthopädie & Trauma',  color:'#059669', bg:'#f0fdf4', icon:'🦴' },
+  endokrinologie:    { label:'Endokrinologie',        color:'#4f46e5', bg:'#eef2ff', icon:'⚗️' },
+  nephrologie:       { label:'Nephrologie & Urologie',color:'#0284c7', bg:'#f0f9ff', icon:'🫘' },
+  onkologie:         { label:'Onkologie',             color:'#db2777', bg:'#fdf2f8', icon:'🎗️' },
+};
+
+const TOPICS = [
+  /* ─── NEUROLOGIE ─── */
+  {
+    id:1, title:'Demenz (Alzheimer & Vaskuläre Demenz)',
+    cat:'neurologie', days:[1,3], priority:'high',
+    medical:'Neurodegenerative Prozesse (z.B. Amyloid-Plaques, neuronale Degeneration) oder vaskuläre Mikroinfarkte führen zu progredientem kognitivem Abbau, Orientierungsverlust und Persönlichkeitsveränderungen.',
+    nursing:'Anwendung der Integrativen Validation (IVA) nach Richard zur Wertschätzung der Gefühle, konsequente Biografiearbeit, Milieugestaltung zur Orientierungsförderung und Umsetzung des Expertenstandards zur Beziehungsgestaltung.',
+    keywords:['IVA','Biografiearbeit','Milieugestaltung','Expertenstandard','Reminiszenz'],
+  },
+  {
+    id:2, title:'Delir (Akute Verwirrtheit)',
+    cat:'neurologie', days:[1,3], priority:'high',
+    medical:'Akute, fluktuierende und potenziell reversible organische Psychose, häufig postoperativ oder infektiös bedingt, gekennzeichnet durch Bewusstseins- und Aufmerksamkeitsstörungen.',
+    nursing:'Identifikation von Auslösern (Dehydratation, Polypharmazie), Reizabschirmung, Sicherstellung des Tag-Nacht-Rhythmus und engmaschiges Monitoring zur Vermeidung freiheitsentziehender Maßnahmen.',
+    keywords:['Dehydratation','Polypharmazie','Reizabschirmung','Tag-Nacht-Rhythmus','FEM'],
+  },
+  {
+    id:3, title:'Apoplexie (Schlaganfall)',
+    cat:'neurologie', days:[1,3], priority:'high',
+    medical:'Zerebrale Ischämie oder intrazerebrale Hämorrhagie mit akutem neurologischem Defizit; Leitsymptome umfassen Hemiparese, Aphasie, Dysphagie und Neglect.',
+    nursing:'Konsequente Anwendung des Bobath-Konzepts (Einbezug der mehr betroffenen Seite in ATLs), Aspirationsprophylaxe beim Kostaufbau und Förderung der Restitution neuroplastischer Funktionen.',
+    keywords:['Bobath','Hemiparese','Aphasie','Dysphagie','Aspirationsprophylaxe','Neglect'],
+  },
+  {
+    id:4, title:'Morbus Parkinson',
+    cat:'neurologie', days:[2,3], priority:'high',
+    medical:'Degeneration dopaminerger Neurone in der Substantia nigra; Kardinalsymptomatik: Rigor, Tremor, Akinese und posturale Instabilität.',
+    nursing:'Striktes Timing der L-Dopa-Gabe zur Vermeidung von On-Off-Fluktuationen, Implementierung von Anti-Freezing-Strategien (rhythmische Reize) und Sturzprophylaxe.',
+    keywords:['L-Dopa','On-Off-Fluktuation','Anti-Freezing','Sturzprophylaxe','Rigor','Akinese'],
+  },
+  {
+    id:5, title:'Multiple Sklerose (MS)',
+    cat:'neurologie', days:[2,3], priority:'medium',
+    medical:'Chronisch-entzündliche Autoimmunerkrankung mit Demyelinisierung im ZNS; führt zu schubförmigen motorischen, sensiblen und autonomen Ausfällen.',
+    nursing:'Adäquates Fatigue-Management durch Pacing (Energiemanagement), Spastik-Reduktion durch Positionierung und Begleitung der medikamentösen Immunmodulation.',
+    keywords:['Fatigue','Pacing','Spastik','Immunmodulation','Demyelinisierung'],
+  },
+  {
+    id:6, title:'Epilepsie & Krampfanfälle',
+    cat:'neurologie', days:[3], priority:'high',
+    medical:'Pathologische, synchrone Entladungen von Neuronengruppen; Differenzierung in fokale und generalisierte Anfälle (z.B. Grand-Mal); Status epilepticus ist absolut lebensbedrohlich.',
+    nursing:'Akuter Verletzungsschutz (Umgebung sichern, keine Beißkeile, nicht fixieren!), Dokumentation von Anfallsdauer und -charakteristik sowie postiktale Überwachung der Vitalparameter.',
+    keywords:['Verletzungsschutz','kein Beißkeil','Grand-Mal','Status epilepticus','postiktal'],
+  },
+  {
+    id:7, title:'Schädel-Hirn-Trauma (SHT)',
+    cat:'neurologie', days:[3], priority:'medium',
+    medical:'Verletzung des Gehirns durch externe Gewalteinwirkung; Einteilung des Schweregrads mittels Glasgow Coma Scale (GCS); höchste Gefahr durch intrakraniellen Druckanstieg.',
+    nursing:'Oberkörperhochlagerung (30°), lückenloses neurologisches Monitoring (Pupillenreaktion, Bewusstseinslage) und strikte Reizabschirmung.',
+    keywords:['GCS','Oberkörperhochlagerung','intrakranieller Druck','Pupillenreaktion','Reizabschirmung'],
+  },
+  {
+    id:8, title:'Meningitis',
+    cat:'neurologie', days:[3], priority:'medium',
+    medical:'Bakterielle oder virale Entzündung der weichen Hirnhäute; Leitsymptome: Meningismus (Nackensteifigkeit), hohes Fieber und Photophobie.',
+    nursing:'Unverzügliche Isolation (Tröpfcheninfektion bei bakterieller Genese), Abdunkelung des Patientenzimmers und Überwachung auf septische Komplikationen.',
+    keywords:['Meningismus','Photophobie','Tröpfcheninfektion','Isolation','Sepsis'],
+  },
+  {
+    id:9, title:'Querschnittsyndrom & Spastische Paraplegie',
+    cat:'neurologie', days:[1,3], priority:'medium',
+    medical:'Traumatische oder entzündliche Läsion des Rückenmarks, die zu Paresen (Plegien) und autonomen Ausfällen (neurogene Blase/Darm) unterhalb des Läsionsniveaus führt.',
+    nursing:'Anleitung zum intermittierenden Selbstkatheterismus (ISK), striktes Dekubitusmanagement durch Mikrolagerungen und Förderung der Adaption an die neue Lebenssituation.',
+    keywords:['ISK','Mikrolagerung','neurogene Blase','Dekubitusprophylaxe','Autonomie'],
+  },
+
+  /* ─── PSYCHIATRIE ─── */
+  {
+    id:10, title:'Depression',
+    cat:'psychiatrie', days:[2,3], priority:'high',
+    medical:'Affektive Störung mit der Leittrias: depressive Verstimmung, Antriebsminderung und Interessenverlust; häufig begleitet von somatischem Syndrom und Suizidgedanken.',
+    nursing:'Strukturierung des Tagesablaufs, empathische wertfreie Kommunikation (aktives Zuhören) und regelmäßige Evaluation der Suizidalität zur Krisenintervention.',
+    keywords:['Leittrias','Suizidalität','Tagesstruktur','aktives Zuhören','Krisenintervention'],
+  },
+  {
+    id:11, title:'Schizophrenie',
+    cat:'psychiatrie', days:[2], priority:'medium',
+    medical:'Endogene Psychose, charakterisiert durch Positivsymptome (Wahn, Halluzinationen) und Negativsymptome (Affektverflachung, Alogie).',
+    nursing:'Klare, eindeutige Kommunikation, Reizreduktion in Akutphasen und Vermeidung von Konfrontationen bezüglich wahnhafter Überzeugungen (keine Diskussion, aber auch keine Bestätigung).',
+    keywords:['Positivsymptome','Negativsymptome','Wahn','Halluzinationen','Reizreduktion'],
+  },
+  {
+    id:12, title:'Anorexia nervosa',
+    cat:'psychiatrie', days:[2], priority:'medium',
+    medical:'Psychosomatische Essstörung mit gravierender Körperschemastörung, absichtlich herbeigeführtem Gewichtsverlust und endokrinen Störungen; potenziell letal.',
+    nursing:'Strukturierte Essbegleitung mit therapeutischen Verträgen, Post-Mahlzeiten-Überwachung (Verhinderung von Erbrechen) und Begleitung der psychologischen Therapie.',
+    keywords:['Körperschemastörung','Essbegleitung','therapeutischer Vertrag','Mangelernährung'],
+  },
+  {
+    id:13, title:'Suizidalität & Psychiatrischer Notfall',
+    cat:'psychiatrie', days:[3], priority:'high',
+    medical:'Akute Selbstgefährdung; Erkennen des präsuizidalen Syndroms (Einengung, Aggressionsumkehr, Suizidfantasien) ist differenzialdiagnostisch essenziell.',
+    nursing:'Direkte und offene Ansprache der Suizidalität, Etablierung eines Anti-Suizid-Vertrags, Entfernung potenziell gefährlicher Gegenstände und Einleitung einer 1:1-Sitzwache.',
+    keywords:['präsuizidales Syndrom','Anti-Suizid-Vertrag','1:1-Sitzwache','Gefahrenentfernung'],
+  },
+  {
+    id:14, title:'Alkoholabhängigkeits-Syndrom',
+    cat:'psychiatrie', days:[2], priority:'medium',
+    medical:'Physische und psychische Substanzabhängigkeit; abrupter Entzug birgt die Gefahr des lebensbedrohlichen Delirium tremens oder von Krampfanfällen.',
+    nursing:'CIWA-Ar Score zur Überwachung der Entzugssymptomatik, Flüssigkeitsbilanzierung und motivierende Gesprächsführung (Motivational Interviewing) zur Förderung der Krankheitsbewältigung.',
+    keywords:['CIWA-Ar','Delirium tremens','Motivational Interviewing','Entzug','Bilanzierung'],
+  },
+
+  /* ─── KARDIOLOGIE ─── */
+  {
+    id:15, title:'Tiefe Beinvenenthrombose (TVT)',
+    cat:'kardiologie', days:[2,3], priority:'high',
+    medical:'Intravasale Blutgerinnung im tiefen Venensystem; Pathogenese basiert auf der Virchow-Trias (Gefäßwandschaden, Stase, Hyperkoagulabilität).',
+    nursing:'Applikation von Kompressionsverbänden (Typ Fischer), Überwachung der ärztlich angeordneten Antikoagulation und engmaschige Beobachtung auf Anzeichen einer Lungenembolie.',
+    keywords:['Virchow-Trias','Kompressionsverband','Antikoagulation','Lungenembolie-Risiko'],
+  },
+  {
+    id:16, title:'Periphere arterielle Verschlusskrankheit (pAVK)',
+    cat:'kardiologie', days:[2,3], priority:'high',
+    medical:'Fortschreitende Stenosierung der peripheren Arterien, meist auf Basis einer Arteriosklerose; führt zur Claudicatio intermittens und Gewebsnekrosen.',
+    nursing:'Tieflagerung der betroffenen Extremität zur Durchblutungsförderung, strikter Kälteschutz ohne direkte Wärmeanwendung und strukturiertes Gehtraining im Stadium II.',
+    keywords:['Claudicatio intermittens','Tieflagerung','kein Wärmepflaster','Gehtraining'],
+  },
+  {
+    id:17, title:'Chronisch venöse Insuffizienz (CVI)',
+    cat:'kardiologie', days:[2], priority:'medium',
+    medical:'Mikrozirkulationsstörung infolge chronischer venöser Hypertonie; Leitsymptome: Ödeme, Varikosis, trophische Hautveränderungen und Ulcus cruris venosum.',
+    nursing:'Konsequente Kompressionstherapie, Hochlagerung der Extremitäten in Ruhephasen und Aktivierung der Muskelvenenpumpe durch Bewegungsübungen.',
+    keywords:['Kompressionstherapie','Hochlagerung','Muskelvenenpumpe','Ulcus cruris'],
+  },
+  {
+    id:18, title:'Arterielle Hypertonie',
+    cat:'kardiologie', days:[2], priority:'medium',
+    medical:'Dauerhafte Erhöhung des Blutdrucks (systolisch >140 mmHg / diastolisch >90 mmHg); Hauptrisikofaktor für Apoplex, Niereninsuffizienz und KHK.',
+    nursing:'Patientenedukation zur Lebensstilmodifikation (DASH-Diät, Natriumrestriktion, Gewichtsreduktion) und Monitoring der medikamentösen Adhärenz.',
+    keywords:['DASH-Diät','Natriumrestriktion','Adhärenz','Blutdruckmessung','Edukation'],
+  },
+  {
+    id:19, title:'Koronare Herzkrankheit (KHK) & Angina Pectoris',
+    cat:'kardiologie', days:[2,3], priority:'high',
+    medical:'Manifestation der Arteriosklerose in den Koronararterien mit konsekutiver Myokardischämie; führt zu retrosternalen Schmerzen (stabil vs. instabil).',
+    nursing:'Applikation von schnellwirksamen Nitraten bei Anfällen, Begleitung bei diagnostischen Eingriffen (Linksherzkatheter) und Beratung zur Sekundärprävention.',
+    keywords:['Nitrate','Angina','Linksherzkatheter','Sekundärprävention','Ischämie'],
+  },
+  {
+    id:20, title:'Akuter Myokardinfarkt (STEMI/NSTEMI)',
+    cat:'kardiologie', days:[3], priority:'high',
+    medical:'Akuter, kompletter Verschluss eines Koronargefäßes mit Myokardnekrose; Leitsymptome: stärkster Thoraxschmerz, Ausstrahlung in Arm/Kiefer, Todesangst und vegetative Begleitsymptome.',
+    nursing:'Absolute Bettruhe, Herzbettlagerung zur Vorlastsenkung, Assistenz beim Notfallmanagement (MONA-Schema) und lückenloses EKG- sowie Vitalzeichenmonitoring.',
+    keywords:['MONA-Schema','Herzbettlagerung','EKG','Vorlast','Myokardnekrose'],
+  },
+  {
+    id:21, title:'Herzinsuffizienz',
+    cat:'kardiologie', days:[2,3], priority:'high',
+    medical:'Unvermögen des Herzens, das benötigte Herzzeitvolumen zu fördern; Linksherzinsuffizienz führt zum Lungenödem, Rechtsherzinsuffizienz zu peripheren Ödemen und Leberstauung.',
+    nursing:'Exakte Flüssigkeitsbilanzierung, tägliche Gewichtskontrolle (Ödem-Monitoring), kochsalzarme Ernährung und atemerleichternde Positionierung.',
+    keywords:['Bilanzierung','Gewichtskontrolle','Lungenödem','atemerleichternde Lagerung'],
+  },
+  {
+    id:22, title:'Lungenembolie',
+    cat:'kardiologie', days:[3], priority:'high',
+    medical:'Verschluss einer oder mehrerer Lungenarterien, meist durch verschleppte Thromben; akute Rechtsherzbelastung mit Dyspnoe, Tachykardie und Thoraxschmerz.',
+    nursing:'Sofortige Sauerstoffapplikation nach Arztanordnung, strikte Bettruhe zur Vermeidung weiterer Embolien und Assistenz bei der Lysetherapie.',
+    keywords:['O2-Gabe','Bettruhe','Lysetherapie','Dyspnoe','Tachykardie'],
+  },
+  {
+    id:23, title:'Herzrhythmusstörungen (Vorhofflimmern)',
+    cat:'kardiologie', days:[3], priority:'high',
+    medical:'Störung der Reizbildung oder Erregungsleitung; Vorhofflimmern birgt ein massives Thromboembolierisiko (Schlaganfall) durch Stase im Vorhof.',
+    nursing:'Pulskontrolle auf Pulsdefizite, EKG-Überwachung und Schulung des Patienten im Umgang mit oralen Antikoagulanzien.',
+    keywords:['Pulsdefizit','EKG','Antikoagulanzien','Thromboembolie','Vorhofflimmern'],
+  },
+
+  /* ─── PNEUMOLOGIE ─── */
+  {
+    id:24, title:'Asthma bronchiale',
+    cat:'pneumologie', days:[2,3], priority:'medium',
+    medical:'Chronisch-entzündliche Erkrankung der Atemwege mit bronchialer Hyperreagibilität und reversibler Obstruktion (Bronchospasmus, Ödem, Dyskrinie).',
+    nursing:'Schulung im Umgang mit Dosieraerosolen, Vermittlung atemerleichternder Körperhaltungen (Kutschersitz) und der Lippenbremse zur Vermeidung eines Kollapses der kleinen Atemwege.',
+    keywords:['Dosieraerosol','Kutschersitz','Lippenbremse','Bronchospasmus','Dyskrinie'],
+  },
+  {
+    id:25, title:'COPD (Chronisch obstruktive Lungenerkrankung)',
+    cat:'pneumologie', days:[2,3], priority:'high',
+    medical:'Irreversible, progrediente Atemwegsobstruktion, meist durch Noxen (Rauchen); führt zum Lungenemphysem und respiratorischer Insuffizienz.',
+    nursing:'Striktes Management der Sauerstofftherapie (Gefahr der CO2-Narkose bei zu hohen Dosen!), Sekretolyse und Anleitung zum Pacing im Alltag.',
+    keywords:['CO2-Narkose','O2-Therapie','Sekretolyse','Pacing','Emphysem'],
+  },
+  {
+    id:26, title:'Pneumonie',
+    cat:'pneumologie', days:[1,3], priority:'high',
+    medical:'Akute oder chronische Entzündung des Lungenparenchyms, typischerweise infektiös oder durch Aspiration (Schluckstörungen) bedingt.',
+    nursing:'Pneumonieprophylaxe durch Atemstimulierende Einreibungen (ASE), Frühmobilisation, Sekretmanagement (Inhalation) und Überwachung der Antibiose.',
+    keywords:['ASE','Frühmobilisation','Inhalation','Aspirationspneumonie','Antibiose'],
+  },
+  {
+    id:27, title:'Mukoviszidose (Zystische Fibrose)',
+    cat:'pneumologie', days:[2], priority:'medium',
+    medical:'Autosomal-rezessiv vererbter Defekt der Chloridkanäle; führt zu hochviskösem Sekret in Respirationstrakt, Pankreas und Gallenwegen.',
+    nursing:'Intensive tägliche Inhalationstherapie, autogene Drainage zur Sekretelimination und Sicherstellung einer hochkalorischen, enzymsubstituierten Ernährung.',
+    keywords:['Inhalationstherapie','autogene Drainage','Enzymsubstitution','Chloridkanal'],
+  },
+
+  /* ─── GASTROENTEROLOGIE ─── */
+  {
+    id:28, title:'Morbus Crohn',
+    cat:'gastroenterologie', days:[2,3], priority:'medium',
+    medical:'Chronisch-entzündliche Darmerkrankung, die den gesamten GI-Trakt segmental und transmural befallen kann; Fistel- und Abszessbildung sind typische Komplikationen.',
+    nursing:'Ernährungstherapie im akuten Schub (ballaststoffarm), Überwachung auf Mangelernährung und psychosoziale Begleitung bei chronischer Krankheitslast.',
+    keywords:['CED','ballaststoffarm','Fistelbildung','Mangelernährung','Schubtherapie'],
+  },
+  {
+    id:29, title:'Colitis ulcerosa',
+    cat:'gastroenterologie', days:[2,3], priority:'medium',
+    medical:'Chronisch-entzündliche Darmerkrankung mit kontinuierlichem Befall der Mukosa und Submukosa, beginnend im Rektum; führt zu blutig-schleimigen Diarrhöen.',
+    nursing:'Engmaschige Flüssigkeits- und Elektrolytbilanzierung bei schweren Diarrhöen, Stuhlprotokollierung und Hautschutz im perianalen Bereich.',
+    keywords:['Diarrhö','Bilanzierung','Elektrolyte','Stuhlprotokoll','perianaler Hautschutz'],
+  },
+  {
+    id:30, title:'Leberzirrhose & Aszites',
+    cat:'gastroenterologie', days:[2,3], priority:'high',
+    medical:'Irreversibler narbiger Umbau der Leberarchitektur mit portaler Hypertension, Aszites, Ikterus und hepatischer Enzephalopathie.',
+    nursing:'Tägliche Gewichtskontrolle und Bauchumfangsmessung (Aszites-Monitoring), Überwachung der Bewusstseinslage (Ammoniakintoxikation) und Vorbereitung zur Aszitespunktion.',
+    keywords:['Aszites','portale Hypertension','hepatische Enzephalopathie','Ammoniak','Punktion'],
+  },
+  {
+    id:31, title:'Cholezystitis & Cholelithiasis',
+    cat:'gastroenterologie', days:[3], priority:'medium',
+    medical:'Entzündung der Gallenblase bzw. Vorhandensein von Gallensteinen; äußert sich durch kolikartige Schmerzen im rechten Oberbauch (oft postprandial).',
+    nursing:'Nahrungskarenz in der Akutphase, Schmerzmanagement durch bauchdeckenentspannende Lagerung und perioperative Pflege bei Cholezystektomie.',
+    keywords:['Gallenkolik','Nahrungskarenz','bauchdeckenentspannend','Cholezystektomie'],
+  },
+  {
+    id:32, title:'Appendizitis & Akutes Abdomen',
+    cat:'gastroenterologie', days:[3], priority:'medium',
+    medical:'Akute Entzündung des Wurmfortsatzes, präsentierend als akutes Abdomen mit Abwehrspannung, Fieber und Loslassschmerz; Rupturgefahr.',
+    nursing:'Sofortige absolute Nahrungskarenz, keine eigenmächtige Analgetikagabe (Verschleierung der Symptomatik) und zügige präoperative Vorbereitung.',
+    keywords:['Nahrungskarenz','kein Analgetikum','Abwehrspannung','Loslassschmerz','OP-Vorbereitung'],
+  },
+  {
+    id:33, title:'Ulcus ventriculi et duodeni',
+    cat:'gastroenterologie', days:[2,3], priority:'medium',
+    medical:'Tiefer Schleimhautdefekt in Magen oder Duodenum, oft assoziiert mit Helicobacter pylori oder NSAR-Therapie; Risiko gastrointestinaler Blutungen.',
+    nursing:'Beobachtung der Fäzes (Melaena/Teerstuhl) und des Erbrochenen (Hämatemesis), Stressreduktion und Überwachung der Eradikationstherapie (PPI).',
+    keywords:['Helicobacter pylori','Melaena','Hämatemesis','PPI','Eradikation'],
+  },
+  {
+    id:34, title:'Ileus (Darmverschluss)',
+    cat:'gastroenterologie', days:[3], priority:'high',
+    medical:'Mechanische oder paralytische Unterbrechung der Darmpassage; lebensbedrohlicher Zustand mit Stuhl-/Windverhalt, Erbrechen und Meteorismus.',
+    nursing:'Anlage und Pflege einer nasogastralen Entlastungssonde, intravenöse Volumensubstitution, lückenlose Bilanzierung und Notfall-OP-Vorbereitung.',
+    keywords:['Nasogastralsonde','Meteorismus','Volumensubstitution','Notfall-OP','paralytisch'],
+  },
+
+  /* ─── ORTHOPÄDIE & TRAUMA ─── */
+  {
+    id:35, title:'Schenkelhalsfraktur / Pertrochantäre Femurfraktur',
+    cat:'orthopaedie', days:[1,3], priority:'high',
+    medical:'Proximale Femurfrakturen, häufig bei geriatrischen Patienten infolge von Osteoporose und Stürzen; erfordern rasche operative Versorgung.',
+    nursing:'Postoperative Überwachung von Durchblutung, Motorik und Sensibilität (DMS-Kontrolle), Delir-Prävention und schnelle Frühmobilisation zur Vermeidung von Atelektasen und TVT.',
+    keywords:['DMS-Kontrolle','Frühmobilisation','Delirprävention','Osteoporose','TVT-Prophylaxe'],
+  },
+  {
+    id:36, title:'Arthrose (Cox- und Gonarthrose)',
+    cat:'orthopaedie', days:[2], priority:'medium',
+    medical:'Degenerativer, nicht-entzündlicher Gelenkknorpelschwund; gekennzeichnet durch Anlaufschmerz und Belastungsschmerz.',
+    nursing:'Beratung zur Gewichtsreduktion, ergotherapeutische Hilfsmittelberatung und Gelenkschutzmaßnahmen zur Schmerzreduktion.',
+    keywords:['Anlaufschmerz','Gelenkschutz','Hilfsmittel','Ergotherapie','Gewichtsreduktion'],
+  },
+  {
+    id:37, title:'Rheumatoide Arthritis',
+    cat:'orthopaedie', days:[2], priority:'medium',
+    medical:'Chronisch-entzündliche Systemerkrankung, die zur symmetrischen Destruktion von Gelenken führt; typisches Symptom: ausgeprägte Morgensteifigkeit.',
+    nursing:'Lokale Kälteapplikation im hochakuten Entzündungsschub, Wärmetherapie in der Latenzphase und Begleitung der immunsuppressiven Basistherapie.',
+    keywords:['Morgensteifigkeit','Kälteapplikation','Wärmetherapie','Immunsuppression','symmetrisch'],
+  },
+  {
+    id:38, title:'Osteoporose',
+    cat:'orthopaedie', days:[2], priority:'medium',
+    medical:'Systemische Skeletterkrankung mit verminderter Knochenmasse und Mikroarchitekturstörung; führt zu pathologischen Frakturen (z.B. Wirbelkörper).',
+    nursing:'Multimodale Sturzprophylaxe, kalzium- und vitamin-D-reiche Ernährung sowie Förderung mechanischer Knochenbelastung durch gezieltes Training.',
+    keywords:['Sturzprophylaxe','Kalzium','Vitamin D','pathologische Fraktur','Knochendichte'],
+  },
+  {
+    id:39, title:'Bandscheibenvorfall (Diskusprolaps)',
+    cat:'orthopaedie', days:[2], priority:'medium',
+    medical:'Austritt des Nucleus pulposus mit Kompression spinaler Nervenwurzeln; verursacht radikuläre Schmerzen, Sensibilitätsstörungen und Paresen.',
+    nursing:'Stufenbettlagerung zur Entlastung der LWS, Anleitung zu kinästhetischem, rückengerechtem Bewegungsverhalten und Analgesie.',
+    keywords:['Stufenbett','Radikulopathie','Kinaesthetik','rückengerechtes Verhalten','Analgesie'],
+  },
+  {
+    id:40, title:'Totalendoprothese (TEP) — Perioperative Pflege',
+    cat:'orthopaedie', days:[1,3], priority:'high',
+    medical:'Operativer Ersatz eines Gelenks (meist Hüfte oder Knie); größte postoperative Gefahr ist die Luxation des neuen Gelenks.',
+    nursing:'Vermeidung von Hüftflexion >90° und Adduktion über die Mittellinie (Abduktionskissen!), Frühmobilisation und adäquates Schmerzmanagement.',
+    keywords:['Luxationsprophylaxe','Abduktionskissen','Hüftflexion >90°','Frühmobilisation','DMS'],
+  },
+
+  /* ─── ENDOKRINOLOGIE ─── */
+  {
+    id:41, title:'Diabetes mellitus Typ 1',
+    cat:'endokrinologie', days:[2,3], priority:'high',
+    medical:'Autoimmun vermittelte Destruktion der pankreatischen B-Zellen mit absolutem Insulinmangel; Manifestation meist im Kindes-/Jugendalter mit Ketoazidose-Risiko.',
+    nursing:'Intensive Edukation zur Insulin-Injektionstechnik, Erkennung von Hypoglykämien und Berechnung von Kohlenhydrateinheiten (KE/BE).',
+    keywords:['Insulinmangel','Ketoazidose','KE/BE','Hypoglykämie','Injektionstechnik'],
+  },
+  {
+    id:42, title:'Diabetes mellitus Typ 2',
+    cat:'endokrinologie', days:[2,3], priority:'high',
+    medical:'Periphere Insulinresistenz gekoppelt mit einem relativen Insulinmangel; stark assoziiert mit dem Metabolischen Syndrom und Adipositas.',
+    nursing:'Schulung zur Lebensstilmodifikation (Ernährung, Bewegung), Überwachung oraler Antidiabetika und Monitoring zur Vermeidung von Makro-/Mikroangiopathien.',
+    keywords:['Insulinresistenz','Lebensstilmodifikation','Antidiabetika','Angiopathie','Metabolisches Syndrom'],
+  },
+  {
+    id:43, title:'Diabetisches Fußsyndrom (DFS)',
+    cat:'endokrinologie', days:[2,3], priority:'high',
+    medical:'Komplexe Folgeerkrankung des Diabetes durch periphere Polyneuropathie und pAVK; hohes Risiko für Ulzera und Amputationen.',
+    nursing:'Tägliche systematische Fußinspektion, fachgerechte Hautpflege (Feilen statt Schneiden), konsequente Druckentlastung und phasengerechte Wundversorgung.',
+    keywords:['Fußinspektion','Feilen','Druckentlastung','phasengerechte Wundversorgung','Polyneuropathie'],
+  },
+  {
+    id:44, title:'Hypothyreose & Hyperthyreose',
+    cat:'endokrinologie', days:[2], priority:'medium',
+    medical:'Endokrine Dysfunktion der Schilddrüse; Hyperthyreose bedingt Tachykardie und Gewichtsverlust, Hypothyreose führt zu Bradykardie und Antriebsarmut.',
+    nursing:'Adaption der Ernährung an den Grundumsatz, Temperaturregulation (Wärme bei Hypothyreose) und Überwachung der kardialen Vitalparameter.',
+    keywords:['Tachykardie','Bradykardie','Grundumsatz','Schilddrüse','Temperaturregulation'],
+  },
+
+  /* ─── NEPHROLOGIE ─── */
+  {
+    id:45, title:'Akutes Nierenversagen (ANV)',
+    cat:'nephrologie', days:[3], priority:'high',
+    medical:'Plötzlicher, potenziell reversibler Abfall der glomerulären Filtrationsrate (prärenal, intrarenal, postrenal); Leitsymptome: Oligurie/Anurie und Elektrolytentgleisungen.',
+    nursing:'Strenge, stündliche Flüssigkeitsbilanzierung, kontinuierliche Überwachung der Kaliumwerte (Herzrhythmusstörungen!) und Vorbereitung zur Akutdialyse.',
+    keywords:['GFR','Oligurie','Anurie','Hyperkaliämie','Akutdialyse','stündliche Bilanz'],
+  },
+  {
+    id:46, title:'Chronische Niereninsuffizienz (CNI)',
+    cat:'nephrologie', days:[2,3], priority:'high',
+    medical:'Irreversibler Verlust der Nierenfunktion bis zur terminalen Urämie; erfordert Nierenersatzverfahren (Hämodialyse, Peritonealdialyse).',
+    nursing:'Strikte Einhaltung der Trinkmengenrestriktion, kalium- und phosphatarme Diät sowie spezielle Shuntpflege (keine Blutdruckmessung am Shunt-Arm!).',
+    keywords:['Hämodialyse','Peritonealdialyse','Shuntpflege','kein RR am Shunt-Arm','Urämie'],
+  },
+  {
+    id:47, title:'Zystitis (Harnwegsinfektion)',
+    cat:'nephrologie', days:[1,2], priority:'medium',
+    medical:'Aufsteigende bakterielle Entzündung der unteren Harnwege, begünstigt durch Restharn oder Dauerkatheter; Symptome: Algurie, Pollakisurie, Dysurie.',
+    nursing:'Steigerung der oralen Flüssigkeitszufuhr zur Durchspülung, Applikation lokaler Wärme, korrekte Intimhygiene und Katheterpflege nach hygienischen Standards.',
+    keywords:['Algurie','Pollakisurie','Katheterpflege','Intimhygiene','Flüssigkeitszufuhr'],
+  },
+
+  /* ─── ONKOLOGIE ─── */
+  {
+    id:48, title:'Mammakarzinom',
+    cat:'onkologie', days:[3], priority:'high',
+    medical:'Maligner Tumor der Brustdrüse; operative Therapie (Mastektomie/brusterhaltend) gefolgt von adjuvanter Radio-/Chemotherapie; Risiko der Lymphödem-Entwicklung nach axillärer Lymphonodektomie.',
+    nursing:'Lymphödemprophylaxe (keine Injektionen/RR-Messungen am betroffenen Arm!), psychoonkologische Begleitung (Körperbild-Störung, Sexualität) und Edukation zur Prothesenversorgung und Nachsorge.',
+    keywords:['Lymphödem','kein RR am betroffenen Arm','Körperbild','Psychoonkologie','Mastektomie'],
+  },
+];
+
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+function setCk(n,v){try{document.cookie=encodeURIComponent(n)+'='+encodeURIComponent(JSON.stringify(v))+';max-age=15552000;path=/;SameSite=Lax';}catch(e){}}
+function getCk(n){try{const k=encodeURIComponent(n)+'=';for(const c of document.cookie.split(';')){const t=c.trim();if(t.startsWith(k))return JSON.parse(decodeURIComponent(t.slice(k.length)));}return null;}catch(e){return null;}}
+
+let learned = getCk('pfp_learned') || [];
+let filterCat = 'all';
+let filterDay = 'all';
+let filterOnlyUnlearned = false;
+let searchQ = '';
+
+function saveLearned(){setCk('pfp_learned',learned);}
+
+/* ════════════════════════════════════════
+   RENDER
+════════════════════════════════════════ */
+function getFiltered(){
+  return TOPICS.filter(t => {
+    if(filterCat !== 'all' && t.cat !== filterCat) return false;
+    if(filterDay !== 'all' && !t.days.includes(parseInt(filterDay))) return false;
+    if(filterOnlyUnlearned && learned.includes(t.id)) return false;
+    if(searchQ){
+      const q = searchQ.toLowerCase();
+      const haystack = (t.title + ' ' + t.medical + ' ' + t.nursing + ' ' + t.keywords.join(' ')).toLowerCase();
+      if(!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function highlight(text, q){
+  if(!q) return text;
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return text.replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
+}
+
+function render(){
+  const list = document.getElementById('topicsList');
+  const empty = document.getElementById('emptyState');
+  const filtered = getFiltered();
+
+  document.getElementById('resultCount').textContent = `${filtered.length} Themen`;
+  updateProgress();
+
+  if(filtered.length === 0){
+    list.innerHTML=''; empty.style.display='block'; return;
+  }
+  empty.style.display='none';
+
+  list.innerHTML = filtered.map(t => {
+    const cat = CATEGORIES[t.cat];
+    const isLearned = learned.includes(t.id);
+    const isExpanded = expandedId === t.id;
+    const numStr = String(t.id).padStart(2,'0');
+    const dayChips = t.days.map(d => `<span class="day-chip d${d}">Tag ${d}</span>`).join('');
+    const kwChips = t.keywords.map(k=>`<span class="kw-chip">${k}</span>`).join('');
+    const prioBadge = t.priority === 'high'
+      ? `<span class="priority-badge prio-high"><i class="fas fa-star" style="font-size:.55rem;"></i> Hohe Priorität</span>` : '';
+
+    const titleHL = highlight(t.title, searchQ);
+    const medHL = highlight(t.medical, searchQ);
+    const nrsHL = highlight(t.nursing, searchQ);
+
+    return `
+    <div class="topic-item${isLearned?' learned':''}${isExpanded?' expanded':''}" id="ti-${t.id}">
+      <div class="cat-bar" style="background:${cat.color};"></div>
+      <div class="topic-head" onclick="toggleExpand(${t.id})">
+        <div class="topic-num" style="${isLearned?`background:${cat.color};color:#fff;`:''}">${isLearned?'✓':numStr}</div>
+        <div class="topic-info">
+          <div class="topic-title">${titleHL}</div>
+          <div class="topic-meta">
+            <span class="cat-chip" style="background:${cat.bg};color:${cat.color};">${cat.icon} ${cat.label}</span>
+            ${dayChips}
+            ${prioBadge}
+          </div>
+        </div>
+        <div class="topic-actions" onclick="event.stopPropagation()">
+          <button class="learned-btn${isLearned?' done':''}" onclick="toggleLearned(${t.id})">
+            ${isLearned ? '<i class="fas fa-check-circle"></i> Gelernt' : '<i class="far fa-circle"></i> Markieren'}
+          </button>
+          <div class="expand-ico"><i class="fas fa-chevron-down"></i></div>
+        </div>
+      </div>
+      ${isExpanded ? `
+      <div class="topic-body">
+        <div class="body-divider"></div>
+        <div class="focus-grid">
+          <div class="focus-panel med">
+            <div class="focus-panel-head">
+              <div class="focus-icon">💊</div>
+              <span class="focus-label">Medizinischer Fokus</span>
+            </div>
+            <div class="focus-text">${medHL}</div>
+          </div>
+          <div class="focus-panel nrs">
+            <div class="focus-panel-head">
+              <div class="focus-icon" style="background:var(--green);">🏥</div>
+              <span class="focus-label">Pflegerischer Fokus</span>
+            </div>
+            <div class="focus-text">${nrsHL}</div>
+          </div>
+        </div>
+        <div class="kw-row">${kwChips}</div>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════
+   EXPAND / LEARNED
+════════════════════════════════════════ */
+let expandedId = null;
+
+function toggleExpand(id){
+  expandedId = expandedId === id ? null : id;
+  render();
+  // Scroll to item if expanded
+  if(expandedId){
+    requestAnimationFrame(()=>{
+      const el = document.getElementById('ti-'+id);
+      if(el){
+        const top = el.getBoundingClientRect().top + window.scrollY - 140;
+        window.scrollTo({top, behavior:'smooth'});
+      }
+    });
+  }
+}
+
+function toggleLearned(id){
+  const idx = learned.indexOf(id);
+  if(idx > -1){
+    learned.splice(idx,1);
+    toast('📚 Thema als ungelernt markiert.','info');
+  } else {
+    learned.push(id);
+    toast('✅ Thema gelernt! Weiter so 💪','green');
+  }
+  saveLearned();
+  render();
+}
+
+/* ════════════════════════════════════════
+   PROGRESS
+════════════════════════════════════════ */
+function updateProgress(){
+  const total = TOPICS.length;
+  const done = learned.length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('pFill').style.width = pct+'%';
+  document.getElementById('pLbl').textContent = done+'/'+total;
+  document.getElementById('gpFill').style.width = pct+'%';
+  document.getElementById('gpPct').textContent = pct+'%';
+  document.getElementById('gpCount').textContent = `${done} von ${total} Themen gelernt`;
+  document.getElementById('learnedCount').textContent = done;
+  // high prio count
+  const hpCount = TOPICS.filter(t=>t.priority==='high'&&!learned.includes(t.id)).length;
+  document.getElementById('highPrioCount').textContent = hpCount;
+}
+
+/* ════════════════════════════════════════
+   FILTERS
+════════════════════════════════════════ */
+// Category
+document.querySelectorAll('[data-cat]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    filterCat = btn.dataset.cat;
+    document.querySelectorAll('[data-cat]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    expandedId = null;
+    render();
+  });
+});
+
+// Day
+document.querySelectorAll('[data-day]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    filterDay = btn.dataset.day;
+    document.querySelectorAll('[data-day]').forEach(b=>{
+      b.classList.remove('active','day-active');
+    });
+    btn.classList.add('active');
+    if(filterDay !== 'all') btn.classList.add('day-active');
+    expandedId = null;
+    render();
+  });
+});
+
+// Search
+const searchInp = document.getElementById('searchInp');
+const clearBtn = document.getElementById('clearBtn');
+let searchTimer;
+searchInp.addEventListener('input', ()=>{
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=>{
+    searchQ = searchInp.value.trim();
+    clearBtn.style.display = searchQ ? '' : 'none';
+    expandedId = null;
+    render();
+  }, 200);
+});
+clearBtn.addEventListener('click', ()=>{
+  searchInp.value = '';
+  searchQ = '';
+  clearBtn.style.display = 'none';
+  render();
+});
+
+// Learned filter toggle
+const learnedTrack = document.getElementById('learnedFilterTrack');
+document.getElementById('learnedFilterWrap').addEventListener('click', ()=>{
+  filterOnlyUnlearned = !filterOnlyUnlearned;
+  learnedTrack.classList.toggle('on', filterOnlyUnlearned);
+  expandedId = null;
+  render();
+});
+
+/* ════════════════════════════════════════
+   SCROLL → HEADER SHADOW
+════════════════════════════════════════ */
+window.addEventListener('scroll', ()=>{
+  document.getElementById('mainHdr').classList.toggle('scrolled', window.scrollY > 10);
+}, {passive:true});
+
+/* ════════════════════════════════════════
+   BURGER / MOBILE NAV
+════════════════════════════════════════ */
+const burgerBtn = document.getElementById('burgerBtn');
+const mNav = document.getElementById('mobileNav');
+function closeNav(){burgerBtn.classList.remove('open');mNav.classList.remove('open');document.body.style.overflow='';}
+burgerBtn.addEventListener('click',()=>{
+  const o = mNav.classList.toggle('open');
+  burgerBtn.classList.toggle('open',o);
+  document.body.style.overflow = o?'hidden':'';
+});
+document.addEventListener('click',e=>{
+  if(!mNav.contains(e.target)&&!burgerBtn.contains(e.target)) closeNav();
+});
+document.getElementById('resetLearnedBtn').addEventListener('click',()=>{
+  if(confirm('Lernfortschritt wirklich zurücksetzen?')){
+    learned = [];
+    saveLearned();
+    render();
+    toast('Fortschritt zurückgesetzt.','info');
+    closeNav();
+  }
+});
+
+/* ════════════════════════════════════════
+   TOAST
+════════════════════════════════════════ */
+function toast(msg, type='info'){
+  const old = document.querySelector('.toast');
+  if(old) old.remove();
+  const t = document.createElement('div');
+  t.className = 'toast';
+  const colors = {green:'#059669', info:'#374151', warn:'#d97706'};
+  t.style.background = colors[type] || colors.info;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2400);
+}
+
+/* ════════════════════════════════════════
+   KEYBOARD: Space to mark learned when expanded
+════════════════════════════════════════ */
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(e.code==='Space' && expandedId){
+    e.preventDefault();
+    toggleLearned(expandedId);
+  }
+  if(e.code==='Escape'){expandedId=null;render();}
+});
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+render();
+updateProgress();
+</script>
+</body>
+</html>
