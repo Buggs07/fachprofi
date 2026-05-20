@@ -1,736 +1,457 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PflegefachProfi • Übung</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PflegefachProfi • Üben</title>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <style>
-*{
-box-sizing:border-box;
-margin:0;
-padding:0
-}
-
 :root{
---blue:#3158ff;
---purple:#8b16d8;
---pink:#f72585;
---bg:#f7f8fc;
---card:#fff;
---ink:#15182f;
---muted:#687086;
---line:#e8ecf5;
---green:#1fca72;
---yellow:#ffbf1f;
---red:#ff3864;
---shadow:0 18px 50px rgba(49,88,255,.14);
---shadow2:0 8px 24px rgba(15,18,42,.09);
---ease:cubic-bezier(.2,.8,.2,1);
---navH:76px
+  --blue:#4361ee;--purple:#7209b7;--pink:#f72585;--cyan:#4cc9f0;
+  --green:#4ade80;--yellow:#f59e0b;--red:#ef4444;
+  --bg:#f8fafc;--card:#fff;--ink:#1e293b;--muted:#64748b;--line:#e2e8f0;
+  --shadow:0 18px 48px rgba(67,97,238,.18);
+  --shadow2:0 8px 24px rgba(15,23,42,.09);
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
-
-html{
-scroll-behavior:smooth;
-overflow-x:hidden
-}
-
-body{
-font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
-background:var(--bg);
-color:var(--ink);
-min-height:100vh;
-overflow-x:hidden;
--webkit-font-smoothing:antialiased
-}
-
-button,input{
-font-family:inherit
-}
-
-button{
-cursor:pointer;
-border:0
-}
-
-.wrap{
-max-width:1180px;
-margin:0 auto;
-padding:0 18px;
-width:100%
-}
-
-.appbar{
-position:sticky;
-top:0;
-z-index:1000;
-height:var(--navH);
-background:linear-gradient(135deg,#3158ff 0%,#5c25dc 52%,#9400c9 100%);
-box-shadow:0 10px 30px rgba(67,43,218,.24)
-}
-
-.appbar-in{
-height:100%;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:14px
-}
-
-.brand{
-display:flex;
-align-items:center;
-gap:12px;
-color:white;
-text-decoration:none
-}
-
-.logo{
-width:48px;
-height:48px;
-border-radius:18px;
-background:rgba(255,255,255,.18);
-display:grid;
-place-items:center;
-backdrop-filter:blur(8px)
-}
-
-.logo i{
-font-size:24px
-}
-
-.brand b{
-font-size:22px;
-letter-spacing:-.04em
-}
-
-.nav{
-display:flex;
-align-items:center;
-gap:8px;
-background:rgba(255,255,255,.12);
-padding:7px;
-border-radius:24px;
-backdrop-filter:blur(10px)
-}
-
-.nav a{
-border:0;
-text-decoration:none;
-color:rgba(255,255,255,.78);
-background:transparent;
-font-weight:900;
-font-size:13px;
-border-radius:17px;
-padding:10px 13px;
-display:flex;
-gap:8px;
-align-items:center;
-transition:.2s var(--ease)
-}
-
-.nav a.active,
-.nav a:hover{
-background:#fff;
-color:#4b2be4;
-transform:translateY(-1px)
-}
-
-.hero{
-padding:18px 0
-}
-
-.hero-card{
-background:linear-gradient(135deg,#3158ff 0%,#6323d8 58%,#9b00c9 100%);
-border-radius:34px;
-padding:18px;
-box-shadow:var(--shadow);
-color:#fff
-}
-
-.hero-top{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:18px;
-flex-wrap:wrap
-}
-
-.hero-title h1{
-font-size:clamp(1.5rem,4vw,2.4rem);
-letter-spacing:-.06em
-}
-
-.hero-title p{
-font-size:13px;
-margin-top:6px;
-line-height:1.5;
-color:rgba(255,255,255,.78);
-font-weight:700
-}
-
-.stats{
-display:flex;
-gap:8px;
-flex-wrap:wrap
-}
-
-.stat{
-background:rgba(255,255,255,.14);
-padding:12px;
-border-radius:20px;
-min-width:90px
-}
-
-.stat small{
-display:block;
-font-size:10px;
-font-weight:900;
-opacity:.7;
-text-transform:uppercase
-}
-
-.stat b{
-font-size:22px;
-letter-spacing:-.05em
-}
-
-.layout{
-display:grid;
-grid-template-columns:320px 1fr;
-gap:14px;
-padding-bottom:100px
-}
-
-.sidebar{
-background:#fff;
-border-radius:30px;
-box-shadow:var(--shadow2);
-overflow:hidden;
-position:sticky;
-top:90px;
-height:fit-content
-}
-
-.sidebar-head{
-padding:16px;
-border-bottom:1px solid var(--line)
-}
-
-.sidebar-head h2{
-font-size:17px;
-letter-spacing:-.04em
-}
-
-.search{
-margin-top:12px;
-position:relative
-}
-
-.search i{
-position:absolute;
-left:14px;
-top:50%;
-transform:translateY(-50%);
-color:var(--muted)
-}
-
-.search input{
-width:100%;
-height:46px;
-border-radius:17px;
-border:1px solid var(--line);
-padding:0 14px 0 40px;
-font-weight:800;
-background:#fbfcff
-}
-
-.topic-list{
-display:grid;
-gap:8px;
-padding:10px;
-max-height:650px;
-overflow:auto
-}
-
-.topic{
-width:100%;
-border:1px solid var(--line);
-background:#fff;
-border-radius:22px;
-padding:12px;
-display:grid;
-grid-template-columns:auto 1fr;
-gap:10px;
-text-align:left;
-transition:.2s var(--ease)
-}
-
-.topic:hover{
-transform:translateY(-1px);
-box-shadow:0 8px 20px rgba(15,18,42,.06)
-}
-
-.topic.active{
-background:linear-gradient(135deg,#3158ff,#8b16d8);
-color:#fff;
-border-color:transparent
-}
-
-.topic-icon{
-width:44px;
-height:44px;
-border-radius:16px;
-display:grid;
-place-items:center;
-font-size:22px;
-background:rgba(49,88,255,.12)
-}
-
-.topic.active .topic-icon{
-background:rgba(255,255,255,.16)
-}
-
-.topic-title{
-font-weight:950;
-font-size:13px;
-letter-spacing:-.02em
-}
-
-.topic-meta{
-font-size:10px;
-font-weight:900;
-margin-top:4px;
-opacity:.7
-}
-
-.main{
-background:#fff;
-border-radius:34px;
-box-shadow:var(--shadow2);
-overflow:hidden
-}
-
-.selected{
-padding:18px;
-border-bottom:1px solid var(--line)
-}
-
-.selected h2{
-font-size:28px;
-letter-spacing:-.06em
-}
-
-.selected p{
-margin-top:6px;
-font-size:13px;
-font-weight:700;
-color:var(--muted)
-}
-
-.modes{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:14px;
-padding:18px
-}
-
-.mode{
-position:relative;
-overflow:hidden;
-background:#fff;
-border:1px solid var(--line);
-border-radius:30px;
-padding:22px;
-min-height:180px;
-text-align:left;
-transition:.25s var(--ease)
-}
-
-.mode:hover{
-transform:translateY(-3px);
-box-shadow:var(--shadow)
-}
-
-.mode:active{
-transform:scale(.98)
-}
-
-.mode::before{
-content:"";
-position:absolute;
-right:-35px;
-top:-35px;
-width:120px;
-height:120px;
-border-radius:50%;
-background:rgba(49,88,255,.09)
-}
-
-.mode-icon{
-width:58px;
-height:58px;
-border-radius:22px;
-display:grid;
-place-items:center;
-font-size:28px;
-background:rgba(49,88,255,.11);
-margin-bottom:16px
-}
-
-.mode h3{
-font-size:22px;
-letter-spacing:-.05em
-}
-
-.mode p{
-margin-top:8px;
-font-size:13px;
-line-height:1.55;
-font-weight:700;
-color:var(--muted)
-}
-
-.reward{
-margin-top:14px;
-display:inline-flex;
-align-items:center;
-gap:6px;
-background:#f1f4ff;
-padding:8px 10px;
-border-radius:99px;
-font-size:11px;
-font-weight:900;
-color:#4a4fe7
-}
-
-@media(max-width:940px){
-
-.layout{
-grid-template-columns:1fr
-}
-
-.sidebar{
-position:relative;
-top:auto
-}
-
-.modes{
-grid-template-columns:1fr
-}
-
-}
-
-@media(max-width:650px){
-
-.wrap{
-padding:0 12px
-}
-
-.hero-card{
-border-radius:28px
-}
-
-.hero-top{
-display:block
-}
-
-.stats{
-margin-top:12px;
-display:grid;
-grid-template-columns:repeat(3,1fr)
-}
-
-.stat{
-min-width:0
-}
-
-.selected h2{
-font-size:24px
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+button,input{font-family:inherit}
+button{cursor:pointer;border:0}
+.wrap{max-width:1160px;margin:0 auto;padding:0 18px}
+
+.appbar{position:sticky;top:0;z-index:1000;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:var(--shadow)}
+.appbar-in{height:76px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:12px;color:white;text-decoration:none;font-weight:900;font-size:22px}
+.logo{width:48px;height:48px;border-radius:18px;background:rgba(255,255,255,.18);display:grid;place-items:center}
+.nav{display:flex;gap:8px;background:rgba(255,255,255,.12);padding:7px;border-radius:24px}
+.nav a{color:rgba(255,255,255,.78);text-decoration:none;font-weight:900;font-size:13px;padding:10px 13px;border-radius:17px;display:flex;gap:8px;align-items:center}
+.nav a.active,.nav a:hover{background:#fff;color:var(--purple)}
+.xp-pill{color:white;font-weight:900;background:rgba(255,255,255,.14);padding:10px 14px;border-radius:18px}
+
+.hero{padding:24px 0 14px}
+.hero-card{background:linear-gradient(135deg,var(--blue),var(--purple));color:white;border-radius:32px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero-card:before{content:"";position:absolute;right:-80px;top:-90px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.1)}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.4fr .8fr;gap:20px;align-items:center}
+h1{font-size:clamp(2rem,5vw,3.4rem);letter-spacing:-.07em;line-height:1}
+.hero p{margin-top:10px;color:rgba(255,255,255,.82);font-weight:700;font-size:16px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:16px}
+.stat small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.7);font-weight:900}
+.stat b{font-size:28px}
+
+.panel{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow2);border-radius:30px;padding:16px;margin:12px 0}
+.step-title{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:950;margin-bottom:12px}
+.topic-grid,.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.topic,.mode{background:#fff;border:1px solid var(--line);border-radius:24px;padding:16px;text-align:left;transition:.22s var(--ease);position:relative;overflow:hidden}
+.topic:hover,.mode:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:transparent}
+.topic.active,.mode.active{background:linear-gradient(135deg,rgba(67,97,238,.1),rgba(114,9,183,.1));border-color:rgba(67,97,238,.35)}
+.topic h3,.mode h3{font-size:17px;margin-bottom:6px}
+.topic p,.mode p{font-size:13px;color:var(--muted);font-weight:700;line-height:1.4}
+.topic .emoji,.mode .emoji{font-size:30px;margin-bottom:10px}
+.mode.locked{opacity:.45;pointer-events:none}
+
+.actionbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:14px}
+.primary,.ghost{border-radius:18px;padding:14px 18px;font-weight:950;display:inline-flex;align-items:center;gap:9px;transition:.2s var(--ease)}
+.primary{background:linear-gradient(135deg,var(--pink),var(--purple));color:white;box-shadow:0 12px 26px rgba(247,37,133,.28)}
+.primary:hover{transform:translateY(-2px) scale(1.02)}
+.primary:active{transform:scale(.96)}
+.ghost{background:#f1f5f9;color:var(--ink)}
+.ghost:hover{background:#e8eef8}
+
+.game{display:none}
+.game.active{display:block;animation:rise .32s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.progress{height:12px;background:#e8eef8;border-radius:99px;overflow:hidden;margin:12px 0}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(135deg,var(--blue),var(--pink));border-radius:99px;transition:.4s var(--ease)}
+
+.card-stage{min-height:330px;display:grid;place-items:center}
+.flashcard{width:min(620px,100%);height:310px;perspective:1000px}
+.flash-inner{position:relative;width:100%;height:100%;transition:.6s var(--ease);transform-style:preserve-3d}
+.flashcard.flipped .flash-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:30px;background:linear-gradient(135deg,#fff,#f8fbff);box-shadow:var(--shadow2);border:1px solid var(--line);backface-visibility:hidden;padding:28px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.face.back{transform:rotateY(180deg);background:linear-gradient(135deg,var(--blue),var(--purple));color:white}
+.face small{font-weight:950;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.face.back small{color:rgba(255,255,255,.7)}
+.face h2{font-size:clamp(1.4rem,4vw,2.2rem);letter-spacing:-.04em;margin:12px 0}
+.face p{font-size:18px;font-weight:800;line-height:1.5}
+
+.quiz-options,.blank-options{display:grid;gap:10px;margin-top:16px}
+.option{padding:16px;border-radius:20px;border:1px solid var(--line);background:#fff;font-weight:850;text-align:left;transition:.2s}
+.option:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+.option.correct{background:rgba(74,222,128,.16);border-color:var(--green)}
+.option.wrong{background:rgba(239,68,68,.13);border-color:var(--red)}
+
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mem{height:112px;border-radius:20px;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;font-weight:950;display:grid;place-items:center;text-align:center;padding:10px;transition:.3s var(--ease);transform-style:preserve-3d}
+.mem.revealed,.mem.matched{background:#fff;color:var(--ink);box-shadow:var(--shadow2);border:1px solid var(--line)}
+.mem.matched{background:rgba(74,222,128,.18);border-color:var(--green)}
+
+.end{display:none;text-align:center;padding:34px}
+.end.active{display:block;animation:rise .35s var(--ease)}
+.score-big{font-size:72px;font-weight:950;letter-spacing:-.08em;background:linear-gradient(135deg,var(--blue),var(--pink));-webkit-background-clip:text;color:transparent}
+.toast{position:fixed;right:18px;bottom:18px;background:#111827;color:white;padding:13px 17px;border-radius:99px;font-weight:900;box-shadow:var(--shadow);z-index:3000;animation:rise .25s}
+.confetti{position:fixed;width:10px;height:10px;top:-20px;border-radius:3px;z-index:4000;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@media(max-width:820px){
+  .nav{display:none}.hero-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}
+  .memory-grid{grid-template-columns:repeat(2,1fr)}
+  .appbar-in{height:68px}.brand{font-size:18px}.xp-pill{font-size:13px}
 }
 </style>
 </head>
-
 <body>
 
 <header class="appbar">
-<div class="wrap appbar-in">
-
-<a class="brand" href="#">
-<div class="logo">
-<i class="fa-solid fa-stethoscope"></i>
-</div>
-<b>PflegefachProfi</b>
-</a>
-
-<nav class="nav">
-<a href="#">Home</a>
-<a href="#">Themen</a>
-<a href="#" class="active">Üben</a>
-</nav>
-
-</div>
+  <div class="wrap appbar-in">
+    <a class="brand" href="index.html"><span class="logo"><i class="fa-solid fa-stethoscope"></i></span>PflegefachProfi</a>
+    <nav class="nav">
+      <a href="index.html"><i class="fa-solid fa-house"></i>Home</a>
+      <a href="pruefungsthemen.html"><i class="fa-solid fa-layer-group"></i>Themen</a>
+      <a href="uebung.html" class="active"><i class="fa-solid fa-gamepad"></i>Üben</a>
+    </nav>
+    <div class="xp-pill"><i class="fa-solid fa-bolt"></i> <span id="xp">0</span> XP</div>
+  </div>
 </header>
 
 <section class="hero">
-<div class="wrap">
-
-<div class="hero-card">
-
-<div class="hero-top">
-
-<div class="hero-title">
-<h1>Übungsarena</h1>
-<p>
-Lerne aktiv statt passiv. Flashcards, Quiz, Memory und Lückentext direkt aus den Prüfungsthemen generiert.
-</p>
-</div>
-
-<div class="stats">
-<div class="stat">
-<small>XP</small>
-<b id="xp">0</b>
-</div>
-
-<div class="stat">
-<small>Streak</small>
-<b id="streak">0</b>
-</div>
-
-<div class="stat">
-<small>Sessions</small>
-<b id="sessions">0</b>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
+  <div class="wrap">
+    <div class="hero-card">
+      <div class="hero-grid">
+        <div>
+          <h1>Üben, punkten, behalten.</h1>
+          <p>Wähle ein Prüfungsthema und trainiere es mit Flashcards, Quiz, Memory oder Lückentext. Dein Fortschritt bleibt gespeichert.</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><small>Streak</small><b id="streak">0</b></div>
+          <div class="stat"><small>Runden</small><b id="rounds">0</b></div>
+          <div class="stat"><small>Bestscore</small><b id="best">0%</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<main class="wrap layout">
+<main class="wrap">
+  <section class="panel" id="setup">
+    <div class="step-title">1 · Thema auswählen</div>
+    <div class="topic-grid" id="topicGrid"></div>
 
-<aside class="sidebar">
+    <div class="step-title" style="margin-top:22px">2 · Lernmodus auswählen</div>
+    <div class="mode-grid">
+      <button class="mode" data-mode="flash"><div class="emoji">🃏</div><h3>Flashcards</h3><p>Karte ansehen, drehen, merken und schnell wiederholen.</p></button>
+      <button class="mode" data-mode="quiz"><div class="emoji">⚡</div><h3>Quiz</h3><p>Multiple Choice mit direkter Rückmeldung und XP-Belohnung.</p></button>
+      <button class="mode" data-mode="memory"><div class="emoji">🧠</div><h3>Flip Memory</h3><p>Begriff und passende Erklärung finden.</p></button>
+      <button class="mode" data-mode="blank"><div class="emoji">✍️</div><h3>Lückentext</h3><p>Wichtige Fachbegriffe aktiv ergänzen.</p></button>
+    </div>
 
-<div class="sidebar-head">
-<h2>Thema auswählen</h2>
+    <div class="actionbar">
+      <button class="ghost" onclick="resetProgress()"><i class="fa-solid fa-rotate-left"></i> Fortschritt zurücksetzen</button>
+      <button class="primary" id="startBtn"><i class="fa-solid fa-play"></i> Training starten</button>
+    </div>
+  </section>
 
-<div class="search">
-<i class="fa-solid fa-magnifying-glass"></i>
-<input placeholder="COPD, Diabetes, Sepsis…"/>
-</div>
-</div>
+  <section class="panel game" id="game">
+    <div class="actionbar">
+      <button class="ghost" onclick="backToSetup()"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+      <strong id="gameTitle">Training</strong>
+      <span id="gameScore">0 Punkte</span>
+    </div>
+    <div class="progress"><span id="bar"></span></div>
+    <div id="gameArea"></div>
+  </section>
 
-<div class="topic-list">
-
-<button class="topic active">
-<div class="topic-icon">🩸</div>
-<div>
-<div class="topic-title">Diabetes mellitus</div>
-<div class="topic-meta">⚗️ Endokrinologie</div>
-</div>
-</button>
-
-<button class="topic">
-<div class="topic-icon">🧠</div>
-<div>
-<div class="topic-title">Schlaganfall</div>
-<div class="topic-meta">🧠 Neurologie</div>
-</div>
-</button>
-
-<button class="topic">
-<div class="topic-icon">🫁</div>
-<div>
-<div class="topic-title">COPD</div>
-<div class="topic-meta">🫁 Pneumologie</div>
-</div>
-</button>
-
-</div>
-
-</aside>
-
-<section class="main">
-
-<div class="selected">
-<h2>Diabetes mellitus</h2>
-<p>
-Wähle eine Lernmethode. Fortschritt und XP werden lokal gespeichert.
-</p>
-</div>
-
-<div class="modes">
-
-<button class="mode">
-
-<div class="mode-icon">
-🃏
-</div>
-
-<h3>Flashcards</h3>
-
-<p>
-Animierte Lernkarten mit Definitionen, Symptomen, Assessment und Pflege.
-</p>
-
-<div class="reward">
-<i class="fa-solid fa-star"></i>
-+2 XP pro Karte
-</div>
-
-</button>
-
-<button class="mode">
-
-<div class="mode-icon">
-⚡
-</div>
-
-<h3>Quiz</h3>
-
-<p>
-Schnelle Multiple-Choice-Fragen mit Sofortfeedback und Animationen.
-</p>
-
-<div class="reward">
-<i class="fa-solid fa-star"></i>
-+10 XP richtig
-</div>
-
-</button>
-
-<button class="mode">
-
-<div class="mode-icon">
-🧠
-</div>
-
-<h3>Flip Memory</h3>
-
-<p>
-Verbinde Symptome, Assessment und Pflegeinhalte miteinander.
-</p>
-
-<div class="reward">
-<i class="fa-solid fa-star"></i>
-+8 XP pro Paar
-</div>
-
-</button>
-
-<button class="mode">
-
-<div class="mode-icon">
-✍️
-</div>
-
-<h3>Lückentext</h3>
-
-<p>
-Aktives Abrufen wichtiger Fachbegriffe und Prüfungssätze.
-</p>
-
-<div class="reward">
-<i class="fa-solid fa-star"></i>
-+12 XP richtig
-</div>
-
-</button>
-
-</div>
-
-</section>
-
+  <section class="panel end" id="end">
+    <div class="score-big" id="finalScore">0%</div>
+    <h2 id="endTitle">Runde beendet</h2>
+    <p id="endText" style="color:var(--muted);font-weight:800;margin:10px 0 18px"></p>
+    <button class="primary" onclick="backToSetup()"><i class="fa-solid fa-gamepad"></i> Neues Spiel wählen</button>
+  </section>
 </main>
 
 <script>
+const STORAGE_KEY="pfp.practice.v1";
 
-let xp = Number(localStorage.getItem("pfp_xp")) || 0
-let streak = Number(localStorage.getItem("pfp_streak")) || 0
-let sessions = Number(localStorage.getItem("pfp_sessions")) || 0
+const TOPICS=[
+ {id:"diabetes",title:"Diabetes mellitus",icon:"🩸",cat:"Endokrinologie",cards:[
+  ["Definition","Chronische Stoffwechselerkrankung mit Hyperglykämie durch absoluten oder relativen Insulinmangel."],
+  ["Hypoglykämie","Schwitzen, Zittern, Unruhe, Verwirrtheit."],
+  ["Hyperglykämie","Durst, Polyurie, Müdigkeit, Azetongeruch."],
+  ["Pflege","BZ messen, Insulin nach 10-R-Regel vorbereiten, Füße kontrollieren."]
+ ]},
+ {id:"apoplex",title:"Schlaganfall / Apoplex",icon:"🧠",cat:"Neurologie",cards:[
+  ["Definition","Akute neurologische Funktionsstörung durch Gefäßverschluss oder Hirnblutung."],
+  ["FAST","Face, Arms, Speech, Time."],
+  ["Dysphagie","Vor Essen und Trinken Schluckfähigkeit beachten."],
+  ["Pflege","Oberkörper lagern, Aspirationsprophylaxe, Kommunikation anpassen."]
+ ]},
+ {id:"copd",title:"COPD",icon:"🫁",cat:"Pneumologie",cards:[
+  ["Definition","Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion."],
+  ["Symptome","Atemnot, Husten, Auswurf, verlängerte Exspiration."],
+  ["Atemtechnik","Lippenbremse und Kutschersitz erleichtern die Atmung."],
+  ["Pflege","SpO₂, Atemfrequenz, Sekret und Inhalationstechnik kontrollieren."]
+ ]},
+ {id:"herz",title:"Herzinsuffizienz",icon:"💙",cat:"Kardiologie",cards:[
+  ["Definition","Das Herz versorgt den Körper nicht ausreichend mit Blut und Sauerstoff."],
+  ["Symptome","Dyspnoe, Beinödeme, Gewichtszunahme, Leistungsminderung."],
+  ["NYHA","Einteilung der Belastbarkeit von I bis IV."],
+  ["Pflege","Täglich wiegen, Bilanz führen, Ödeme beobachten, Oberkörper hochlagern."]
+ ]},
+ {id:"sepsis",title:"Sepsis",icon:"🚨",cat:"Notfall",cards:[
+  ["Definition","Lebensbedrohliche Organdysfunktion durch fehlregulierte Reaktion auf Infektion."],
+  ["Warnzeichen","Fieber oder Hypothermie, Tachykardie, Tachypnoe, Hypotonie, Verwirrtheit."],
+  ["Assessment","qSOFA, Vitalzeichen, Laktat, Blutkulturen, Urinausscheidung."],
+  ["Pflege","Engmaschig kontrollieren, Infektquelle prüfen, Verschlechterung sofort eskalieren."]
+ ]},
+ {id:"dekubitus",title:"Dekubitus",icon:"🩹",cat:"Wundversorgung",cards:[
+  ["Definition","Lokale Haut- und Gewebeschädigung durch Druck oder Scherkräfte."],
+  ["Kategorie 1","Nicht wegdrückbare Rötung."],
+  ["Risiken","Immobilität, Mangelernährung, Inkontinenz, Sensibilitätsstörung."],
+  ["Pflege","Haut inspizieren, Druck entlasten, Lagerungsplan durchführen, Fersen freilagern."]
+ ]}
+];
 
-document.getElementById("xp").textContent = xp
-document.getElementById("streak").textContent = streak
-document.getElementById("sessions").textContent = sessions
+let state={
+ topic:null,mode:null,index:0,score:0,total:0,locked:false,
+ memory:[],first:null,second:null,
+ progress:load()
+};
 
-document.querySelectorAll(".mode").forEach(mode => {
-
-mode.addEventListener("click", () => {
-
-xp += 10
-sessions += 1
-
-localStorage.setItem("pfp_xp", xp)
-localStorage.setItem("pfp_sessions", sessions)
-
-document.getElementById("xp").textContent = xp
-document.getElementById("sessions").textContent = sessions
-
-mode.animate([
-{ transform:"scale(1)" },
-{ transform:"scale(.96)" },
-{ transform:"scale(1)" }
-],{
-duration:280,
-easing:"cubic-bezier(.2,.8,.2,1)"
-})
-
-confetti()
-
-})
-
-})
-
-function confetti(){
-
-for(let i=0;i<60;i++){
-
-const el = document.createElement("div")
-
-el.style.position = "fixed"
-el.style.width = "10px"
-el.style.height = "10px"
-el.style.borderRadius = "50%"
-el.style.left = Math.random()*100+"vw"
-el.style.top = "-20px"
-el.style.background = ["#3158ff","#8b16d8","#f72585","#1fca72","#ffbf1f"][Math.floor(Math.random()*5)]
-el.style.zIndex = "9999"
-el.style.pointerEvents = "none"
-
-document.body.appendChild(el)
-
-el.animate([
-{
-transform:"translateY(0) rotate(0deg)",
-opacity:1
-},
-{
-transform:`translateY(${window.innerHeight+100}px) rotate(720deg)`,
-opacity:.2
+function load(){
+ try{
+  const raw=localStorage.getItem(STORAGE_KEY) || getCookie(STORAGE_KEY);
+  return raw?JSON.parse(raw):{xp:0,rounds:0,best:0,streak:0,topic:{}};
+ }catch(e){return{xp:0,rounds:0,best:0,streak:0,topic:{}}}
 }
-],{
-duration:3000 + Math.random()*1200,
-easing:"linear"
-})
+function save(){
+ const raw=JSON.stringify(state.progress);
+ localStorage.setItem(STORAGE_KEY,raw);
+ document.cookie=STORAGE_KEY+"="+encodeURIComponent(raw)+"; max-age=31536000; path=/; SameSite=Lax";
+ updateHud();
+}
+function getCookie(n){
+ return document.cookie.split("; ").find(x=>x.startsWith(n+"="))?.split("=")[1];
+}
+function $(s){return document.querySelector(s)}
+function $$(s){return Array.from(document.querySelectorAll(s))}
 
-setTimeout(()=>{
-el.remove()
-},4200)
+function updateHud(){
+ $("#xp").textContent=state.progress.xp||0;
+ $("#rounds").textContent=state.progress.rounds||0;
+ $("#best").textContent=(state.progress.best||0)+"%";
+ $("#streak").textContent=state.progress.streak||0;
+}
+function init(){
+ $("#topicGrid").innerHTML=TOPICS.map(t=>`
+  <button class="topic" data-topic="${t.id}">
+   <div class="emoji">${t.icon}</div>
+   <h3>${t.title}</h3>
+   <p>${t.cat} · ${t.cards.length} Kernkarten</p>
+  </button>`).join("");
 
+ $$(".topic").forEach(b=>b.onclick=()=>selectTopic(b.dataset.topic));
+ $$(".mode").forEach(b=>b.onclick=()=>selectMode(b.dataset.mode));
+ $("#startBtn").onclick=startGame;
+ selectTopic(TOPICS[0].id);
+ selectMode("flash");
+ updateHud();
+}
+function selectTopic(id){
+ state.topic=TOPICS.find(t=>t.id===id);
+ $$(".topic").forEach(b=>b.classList.toggle("active",b.dataset.topic===id));
+ pulse("+ Thema gewählt");
+}
+function selectMode(mode){
+ state.mode=mode;
+ $$(".mode").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
+ pulse("+ Modus bereit");
+}
+function startGame(){
+ state.index=0;state.score=0;state.locked=false;state.total=state.topic.cards.length;
+ $("#setup").style.display="none";
+ $("#end").classList.remove("active");
+ $("#game").classList.add("active");
+ $("#gameTitle").textContent=state.topic.title+" · "+modeLabel(state.mode);
+ renderGame();
+}
+function modeLabel(m){return {flash:"Flashcards",quiz:"Quiz",memory:"Flip Memory",blank:"Lückentext"}[m]}
+function renderGame(){
+ $("#gameScore").textContent=state.score+" Punkte";
+ if(state.mode==="flash")renderFlash();
+ if(state.mode==="quiz")renderQuiz();
+ if(state.mode==="memory")renderMemory();
+ if(state.mode==="blank")renderBlank();
+}
+function setBar(){
+ const pct=Math.round((state.index/state.total)*100);
+ $("#bar").style.width=pct+"%";
 }
 
+function renderFlash(){
+ setBar();
+ const card=state.topic.cards[state.index];
+ if(!card)return finish();
+ $("#gameArea").innerHTML=`
+ <div class="card-stage">
+  <div class="flashcard" id="flashcard" onclick="this.classList.toggle('flipped'); reward(2,'Gedreht')">
+   <div class="flash-inner">
+    <div class="face"><small>Begriff</small><h2>${card[0]}</h2><p>Tippe zum Umdrehen</p></div>
+    <div class="face back"><small>Erklärung</small><h2>${card[0]}</h2><p>${card[1]}</p></div>
+   </div>
+  </div>
+ </div>
+ <div class="actionbar">
+  <button class="ghost" onclick="markFlash(false)">Noch unsicher</button>
+  <button class="primary" onclick="markFlash(true)"><i class="fa-solid fa-check"></i> Gewusst</button>
+ </div>`;
+}
+function markFlash(ok){
+ if(ok){state.score+=10;reward(10,"Gewusst")}
+ else reward(2,"Wiederholen");
+ state.index++;
+ renderFlash();
 }
 
+function renderQuiz(){
+ setBar();
+ const c=state.topic.cards[state.index];
+ if(!c)return finish();
+ const wrong=TOPICS.flatMap(t=>t.cards).filter(x=>x[1]!==c[1]).sort(()=>Math.random()-.5).slice(0,3).map(x=>x[1]);
+ const options=[c[1],...wrong].sort(()=>Math.random()-.5);
+ $("#gameArea").innerHTML=`
+  <h2>${c[0]}</h2>
+  <p style="color:var(--muted);font-weight:800;margin-top:6px">Welche Antwort passt?</p>
+  <div class="quiz-options">${options.map(o=>`<button class="option" onclick="answerQuiz(this, '${escapeText(o)}','${escapeText(c[1])}')">${o}</button>`).join("")}</div>`;
+}
+function escapeText(t){return String(t).replaceAll("'","&#39;")}
+function answerQuiz(btn,answer,correct){
+ if(state.locked)return;
+ state.locked=true;
+ const ok=answer===correct;
+ btn.classList.add(ok?"correct":"wrong");
+ $$(".option").forEach(o=>{if(o.textContent===correct)o.classList.add("correct")});
+ if(ok){state.score+=15;reward(15,"Richtig")}
+ else pulse("Fast!");
+ setTimeout(()=>{state.index++;state.locked=false;renderQuiz()},900);
+}
+
+function renderMemory(){
+ if(state.index===0 && state.memory.length===0){
+  const pairs=state.topic.cards.slice(0,4).flatMap((c,i)=>[
+   {id:i,text:c[0],type:"term"},
+   {id:i,text:c[1],type:"def"}
+  ]).sort(()=>Math.random()-.5);
+  state.memory=pairs;state.total=pairs.length/2;state.index=0;state.first=null;state.second=null;
+ }
+ $("#bar").style.width=Math.round((state.index/state.total)*100)+"%";
+ $("#gameArea").innerHTML=`
+  <p style="color:var(--muted);font-weight:850;margin-bottom:12px">Finde Begriff und passende Erklärung.</p>
+  <div class="memory-grid">
+   ${state.memory.map((m,i)=>`<button class="mem ${m.revealed?'revealed':''} ${m.matched?'matched':''}" onclick="flipMem(${i})">${m.revealed||m.matched?m.text:'?'}</button>`).join("")}
+  </div>`;
+}
+function flipMem(i){
+ const m=state.memory[i];
+ if(m.matched||m.revealed||state.second!==null)return;
+ m.revealed=true;reward(1,"Flip");
+ if(state.first===null){state.first=i;renderMemory();return}
+ state.second=i;renderMemory();
+ const a=state.memory[state.first],b=state.memory[state.second];
+ setTimeout(()=>{
+  if(a.id===b.id && a.type!==b.type){
+   a.matched=b.matched=true;state.score+=20;state.index++;reward(20,"Match!");
+   if(state.index>=state.total)return finish();
+  }else{
+   a.revealed=b.revealed=false;pulse("Nochmal");
+  }
+  state.first=null;state.second=null;renderMemory();
+ },650);
+}
+
+function renderBlank(){
+ setBar();
+ const c=state.topic.cards[state.index];
+ if(!c)return finish();
+ const sentence=c[1];
+ const word=c[0].split(" ")[0];
+ const display=sentence.replace(new RegExp(word,"i"),"_____");
+ const wrong=state.topic.cards.filter(x=>x[0]!==c[0]).map(x=>x[0].split(" ")[0]).slice(0,3);
+ const opts=[word,...wrong].sort(()=>Math.random()-.5);
+ $("#gameArea").innerHTML=`
+  <h2>${c[0]}</h2>
+  <p style="font-size:20px;font-weight:850;line-height:1.5;margin-top:10px">${display}</p>
+  <div class="blank-options">${opts.map(o=>`<button class="option" onclick="answerBlank(this,'${escapeText(o)}','${escapeText(word)}')">${o}</button>`).join("")}</div>`;
+}
+function answerBlank(btn,answer,correct){
+ if(state.locked)return;
+ state.locked=true;
+ const ok=answer.toLowerCase()===correct.toLowerCase();
+ btn.classList.add(ok?"correct":"wrong");
+ if(ok){state.score+=15;reward(15,"Eingesetzt")}
+ else pulse("Knapp daneben");
+ setTimeout(()=>{state.index++;state.locked=false;renderBlank()},850);
+}
+
+function finish(){
+ const max={flash:40,quiz:60,memory:80,blank:60}[state.mode]||60;
+ const pct=Math.min(100,Math.round((state.score/max)*100));
+ state.progress.rounds++;
+ state.progress.xp+=state.score;
+ state.progress.best=Math.max(state.progress.best||0,pct);
+ state.progress.streak=pct>=60?(state.progress.streak||0)+1:0;
+ state.progress.topic[state.topic.id]=state.progress.topic[state.topic.id]||{};
+ state.progress.topic[state.topic.id][state.mode]=Math.max(state.progress.topic[state.topic.id][state.mode]||0,pct);
+ save();
+
+ $("#game").classList.remove("active");
+ $("#end").classList.add("active");
+ $("#finalScore").textContent=pct+"%";
+ $("#endTitle").textContent=pct>=80?"Stark gelernt!":pct>=60?"Solide Runde!":"Nochmal festigen";
+ $("#endText").textContent="Du hast "+state.score+" XP gesammelt. Du wirst gleich wieder zur Spielauswahl geführt.";
+ confetti(pct);
+ setTimeout(backToSetup,4200);
+}
+function backToSetup(){
+ $("#game").classList.remove("active");
+ $("#end").classList.remove("active");
+ $("#setup").style.display="block";
+ $("#bar").style.width="0";
+ state.memory=[];
+}
+function reward(x,msg){
+ state.progress.xp+=x;
+ save();
+ pulse("+"+x+" XP · "+msg);
+}
+function pulse(msg){
+ document.querySelector(".toast")?.remove();
+ const t=document.createElement("div");
+ t.className="toast";t.textContent=msg;
+ document.body.appendChild(t);
+ setTimeout(()=>t.remove(),900);
+}
+function confetti(score){
+ const amount=score>=80?90:score>=60?45:18;
+ const colors=["#4361ee","#7209b7","#f72585","#4cc9f0","#4ade80","#f59e0b"];
+ for(let i=0;i<amount;i++){
+  const c=document.createElement("div");
+  c.className="confetti";
+  c.style.left=Math.random()*100+"vw";
+  c.style.background=colors[Math.floor(Math.random()*colors.length)];
+  c.style.animationDuration=(Math.random()*2+2)+"s";
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),4500);
+ }
+}
+function resetProgress(){
+ if(!confirm("Fortschritt wirklich zurücksetzen?"))return;
+ state.progress={xp:0,rounds:0,best:0,streak:0,topic:{}};
+ save();pulse("Fortschritt zurückgesetzt");
+}
+init();
 </script>
-
 </body>
 </html>
