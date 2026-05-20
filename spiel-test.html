@@ -1,2202 +1,736 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fachwort Master | PflegefachProfi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --primary-light: #eef2ff;
-            --secondary: #7209b7;
-            --accent: #f72585;
-            --success: #4cc9f0;
-            --warning: #fca311;
-            --danger: #e63946;
-            --coin: #ffd166;
-            --text-primary: #1d3557;
-            --text-secondary: #457b9d;
-            --text-tertiary: #a8dadc;
-            --background: #f1faee;
-            --surface: #ffffff;
-            --border: #e0e0e0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --radius: 12px;
-            --radius-lg: 20px;
-            --spacing-xs: 8px;
-            --spacing-sm: 16px;
-            --spacing-md: 24px;
-            --spacing-lg: 32px;
-            --spacing-xl: 48px;
-            --spacing-xxl: 64px;
-            --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-primary);
-            color: var(--text-primary);
-            background-color: var(--background);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-md);
-        }
-
-        /* Header */
-        .header {
-            background-color: var(--surface);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--spacing-sm) 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .user-stats {
-            display: flex;
-            gap: var(--spacing-sm);
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--primary-light);
-            padding: 6px 10px;
-            border-radius: var(--radius);
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-
-        .coins {
-            background: linear-gradient(135deg, var(--coin) 0%, #ffb347 100%);
-            color: var(--text-primary);
-        }
-
-        .level {
-            background: var(--primary);
-            color: white;
-        }
-
-        .xp {
-            background: var(--success);
-            color: white;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: var(--spacing-xxl) 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            text-align: center;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            color: white;
-            margin-bottom: var(--spacing-md);
-            font-size: 2.5rem;
-        }
-
-        .hero p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--accent);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: var(--radius);
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: var(--shadow-elevated);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(247, 37, 133, 0.4);
-        }
-
-        /* Categories Dashboard */
-        .dashboard {
-            padding: var(--spacing-xl) 0;
-            background: var(--background);
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
-            font-size: 2rem;
-            color: var(--text-primary);
-        }
-
-        .section-subtitle {
-            text-align: center;
-            margin-bottom: var(--spacing-xl);
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
-        }
-
-        .category-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid transparent;
-        }
-
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-        }
-
-        .category-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-elevated);
-            border-color: var(--primary-light);
-        }
-
-        .category-card.locked {
-            opacity: 0.7;
-            filter: grayscale(0.5);
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .category-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.5rem;
-        }
-
-        .category-cost {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--coin);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .category-title {
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .category-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            font-size: 0.9rem;
-        }
-
-        .category-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-        }
-
-        .category-action {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-        }
-
-        .category-action.unlock {
-            background: var(--primary);
-            color: white;
-        }
-
-        .category-action.unlock:hover {
-            background: var(--primary-dark);
-        }
-
-        .category-action.start {
-            background: var(--success);
-            color: white;
-        }
-
-        .category-action.start:hover {
-            background: #3ab0d9;
-        }
-
-        .category-action.continue {
-            background: var(--accent);
-            color: white;
-        }
-
-        .category-action.continue:hover {
-            background: #e1156d;
-        }
-
-        /* Game Selection */
-        .game-selection {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .game-selection.active {
-            display: block;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
-        }
-
-        .game-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-            border: 2px solid transparent;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-elevated);
-            border-color: var(--primary-light);
-        }
-
-        .game-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 2rem;
-            margin: 0 auto var(--spacing-md);
-        }
-
-        .game-title {
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .game-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-md);
-            font-size: 0.9rem;
-        }
-
-        /* Flashcard Game */
-        .flashcard-game {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .flashcard-game.active {
-            display: block;
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-            flex-wrap: wrap;
-            gap: var(--spacing-md);
-        }
-
-        .game-progress {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .game-stats {
-            display: flex;
-            gap: var(--spacing-md);
-        }
-
-        .flashcard {
-            width: 100%;
-            max-width: 600px;
-            height: 400px;
-            margin: 0 auto;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-
-        .flashcard-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .flashcard.flipped .flashcard-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-front, .flashcard-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: var(--radius-lg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: var(--spacing-xl);
-            box-shadow: var(--shadow-elevated);
-        }
-
-        .flashcard-front {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-        }
-
-        .flashcard-back {
-            background: var(--surface);
-            color: var(--text-primary);
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-term {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .flashcard-hint {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .flashcard-definition {
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .flashcard-example {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            font-style: italic;
-            margin-top: var(--spacing-md);
-        }
-
-        .flashcard-category {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        .flashcard-back .flashcard-category {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .game-actions {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-xl);
-        }
-
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--surface);
-            color: var(--text-primary);
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .action-btn.difficult {
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        .action-btn.medium {
-            border-color: var(--warning);
-            color: var(--warning);
-        }
-
-        .action-btn.easy {
-            border-color: var(--success);
-            color: var(--success);
-        }
-
-        /* Memory Game */
-        .memory-game {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .memory-game.active {
-            display: block;
-        }
-
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--spacing-md);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        @media (min-width: 768px) {
-            .memory-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        .memory-card {
-            height: 120px;
-            background: var(--primary);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-            cursor: pointer;
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-            position: relative;
-        }
-
-        .memory-card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .memory-card.matched {
-            border: 3px solid var(--success);
-            animation: pulse 1s;
-        }
-
-        .memory-card-front, .memory-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-md);
-        }
-
-        .memory-card-front {
-            background: var(--primary);
-            color: white;
-        }
-
-        .memory-card-back {
-            background: var(--surface);
-            color: var(--text-primary);
-            transform: rotateY(180deg);
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        /* Quiz Game */
-        .quiz-game {
-            display: none;
-            padding: var(--spacing-xl) 0;
-            background: var(--surface);
-            min-height: 100vh;
-        }
-
-        .quiz-game.active {
-            display: block;
-        }
-
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-md);
-        }
-
-        .quiz-question {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-lg);
-            color: var(--text-primary);
-            text-align: center;
-        }
-
-        .quiz-options {
-            display: grid;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .quiz-option {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: var(--spacing-md);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .quiz-option:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .quiz-option.correct {
-            border-color: var(--success);
-            background: rgba(76, 201, 240, 0.1);
-            animation: correct 0.5s ease;
-        }
-
-        .quiz-option.incorrect {
-            border-color: var(--danger);
-            background: rgba(230, 57, 70, 0.1);
-            animation: incorrect 0.5s ease;
-        }
-
-        .option-indicator {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.875rem;
-            flex-shrink: 0;
-        }
-
-        .quiz-option.correct .option-indicator {
-            border-color: var(--success);
-            background: var(--success);
-            color: white;
-        }
-
-        .quiz-option.incorrect .option-indicator {
-            border-color: var(--danger);
-            background: var(--danger);
-            color: white;
-        }
-
-        .quiz-feedback {
-            padding: var(--spacing-md);
-            border-radius: var(--radius);
-            margin-top: var(--spacing-md);
-            display: none;
-        }
-
-        .quiz-feedback.correct {
-            background: rgba(76, 201, 240, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
-
-        .quiz-feedback.incorrect {
-            background: rgba(230, 57, 70, 0.1);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-        }
-
-        /* Results Screen */
-        .results-screen {
-            display: none;
-            text-align: center;
-            padding: var(--spacing-xl);
-            animation: fadeIn 0.8s ease;
-        }
-
-        .results-screen.active {
-            display: block;
-        }
-
-        .result-icon {
-            font-size: 4rem;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-icon.correct {
-            color: var(--success);
-        }
-
-        .result-score {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .result-score.good {
-            color: var(--success);
-        }
-
-        .result-score.average {
-            color: var(--warning);
-        }
-
-        .result-score.poor {
-            color: var(--danger);
-        }
-
-        .reward-animation {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-lg);
-            margin: var(--spacing-lg) 0;
-        }
-
-        .reward-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .reward-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        .reward-icon.coins {
-            background: var(--coin);
-            color: var(--text-primary);
-        }
-
-        .reward-icon.xp {
-            background: var(--success);
-            color: white;
-        }
-
-        .reward-amount {
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes correct {
-            0% { background-color: var(--surface); }
-            50% { background-color: var(--success); }
-            100% { background-color: var(--surface); }
-        }
-
-        @keyframes incorrect {
-            0% { background-color: var(--surface); }
-            50% { background-color: var(--danger); }
-            100% { background-color: var(--surface); }
-        }
-
-        .correct-animation {
-            animation: correct 0.5s ease;
-        }
-
-        .incorrect-animation {
-            animation: incorrect 0.5s ease;
-        }
-
-        /* Back Button */
-        .back-button {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: var(--primary);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .back-button:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .user-stats {
-                gap: 8px;
-            }
-            
-            .stat-item {
-                padding: 4px 8px;
-                font-size: 0.75rem;
-            }
-            
-            .stat-item i {
-                font-size: 0.7rem;
-            }
-
-            .flashcard {
-                height: 350px;
-            }
-
-            .flashcard-term {
-                font-size: 2rem;
-            }
-
-            .flashcard-definition {
-                font-size: 1.25rem;
-            }
-
-            .memory-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero {
-                padding: var(--spacing-xl) 0;
-            }
-            
-            .hero h1 {
-                font-size: 1.75rem;
-            }
-            
-            .section-title {
-                font-size: 1.5rem;
-            }
-            
-            .user-stats {
-                gap: 4px;
-            }
-            
-            .stat-item {
-                padding: 3px 6px;
-                font-size: 0.7rem;
-            }
-            
-            .cta-button {
-                padding: var(--spacing-sm) var(--spacing-lg);
-                font-size: 1rem;
-            }
-
-            .flashcard {
-                height: 300px;
-            }
-
-            .flashcard-term {
-                font-size: 1.75rem;
-            }
-
-            .memory-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PflegefachProfi • Übung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
+
+:root{
+--blue:#3158ff;
+--purple:#8b16d8;
+--pink:#f72585;
+--bg:#f7f8fc;
+--card:#fff;
+--ink:#15182f;
+--muted:#687086;
+--line:#e8ecf5;
+--green:#1fca72;
+--yellow:#ffbf1f;
+--red:#ff3864;
+--shadow:0 18px 50px rgba(49,88,255,.14);
+--shadow2:0 8px 24px rgba(15,18,42,.09);
+--ease:cubic-bezier(.2,.8,.2,1);
+--navH:76px
+}
+
+html{
+scroll-behavior:smooth;
+overflow-x:hidden
+}
+
+body{
+font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+background:var(--bg);
+color:var(--ink);
+min-height:100vh;
+overflow-x:hidden;
+-webkit-font-smoothing:antialiased
+}
+
+button,input{
+font-family:inherit
+}
+
+button{
+cursor:pointer;
+border:0
+}
+
+.wrap{
+max-width:1180px;
+margin:0 auto;
+padding:0 18px;
+width:100%
+}
+
+.appbar{
+position:sticky;
+top:0;
+z-index:1000;
+height:var(--navH);
+background:linear-gradient(135deg,#3158ff 0%,#5c25dc 52%,#9400c9 100%);
+box-shadow:0 10px 30px rgba(67,43,218,.24)
+}
+
+.appbar-in{
+height:100%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:14px
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:12px;
+color:white;
+text-decoration:none
+}
+
+.logo{
+width:48px;
+height:48px;
+border-radius:18px;
+background:rgba(255,255,255,.18);
+display:grid;
+place-items:center;
+backdrop-filter:blur(8px)
+}
+
+.logo i{
+font-size:24px
+}
+
+.brand b{
+font-size:22px;
+letter-spacing:-.04em
+}
+
+.nav{
+display:flex;
+align-items:center;
+gap:8px;
+background:rgba(255,255,255,.12);
+padding:7px;
+border-radius:24px;
+backdrop-filter:blur(10px)
+}
+
+.nav a{
+border:0;
+text-decoration:none;
+color:rgba(255,255,255,.78);
+background:transparent;
+font-weight:900;
+font-size:13px;
+border-radius:17px;
+padding:10px 13px;
+display:flex;
+gap:8px;
+align-items:center;
+transition:.2s var(--ease)
+}
+
+.nav a.active,
+.nav a:hover{
+background:#fff;
+color:#4b2be4;
+transform:translateY(-1px)
+}
+
+.hero{
+padding:18px 0
+}
+
+.hero-card{
+background:linear-gradient(135deg,#3158ff 0%,#6323d8 58%,#9b00c9 100%);
+border-radius:34px;
+padding:18px;
+box-shadow:var(--shadow);
+color:#fff
+}
+
+.hero-top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:18px;
+flex-wrap:wrap
+}
+
+.hero-title h1{
+font-size:clamp(1.5rem,4vw,2.4rem);
+letter-spacing:-.06em
+}
+
+.hero-title p{
+font-size:13px;
+margin-top:6px;
+line-height:1.5;
+color:rgba(255,255,255,.78);
+font-weight:700
+}
+
+.stats{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.stat{
+background:rgba(255,255,255,.14);
+padding:12px;
+border-radius:20px;
+min-width:90px
+}
+
+.stat small{
+display:block;
+font-size:10px;
+font-weight:900;
+opacity:.7;
+text-transform:uppercase
+}
+
+.stat b{
+font-size:22px;
+letter-spacing:-.05em
+}
+
+.layout{
+display:grid;
+grid-template-columns:320px 1fr;
+gap:14px;
+padding-bottom:100px
+}
+
+.sidebar{
+background:#fff;
+border-radius:30px;
+box-shadow:var(--shadow2);
+overflow:hidden;
+position:sticky;
+top:90px;
+height:fit-content
+}
+
+.sidebar-head{
+padding:16px;
+border-bottom:1px solid var(--line)
+}
+
+.sidebar-head h2{
+font-size:17px;
+letter-spacing:-.04em
+}
+
+.search{
+margin-top:12px;
+position:relative
+}
+
+.search i{
+position:absolute;
+left:14px;
+top:50%;
+transform:translateY(-50%);
+color:var(--muted)
+}
+
+.search input{
+width:100%;
+height:46px;
+border-radius:17px;
+border:1px solid var(--line);
+padding:0 14px 0 40px;
+font-weight:800;
+background:#fbfcff
+}
+
+.topic-list{
+display:grid;
+gap:8px;
+padding:10px;
+max-height:650px;
+overflow:auto
+}
+
+.topic{
+width:100%;
+border:1px solid var(--line);
+background:#fff;
+border-radius:22px;
+padding:12px;
+display:grid;
+grid-template-columns:auto 1fr;
+gap:10px;
+text-align:left;
+transition:.2s var(--ease)
+}
+
+.topic:hover{
+transform:translateY(-1px);
+box-shadow:0 8px 20px rgba(15,18,42,.06)
+}
+
+.topic.active{
+background:linear-gradient(135deg,#3158ff,#8b16d8);
+color:#fff;
+border-color:transparent
+}
+
+.topic-icon{
+width:44px;
+height:44px;
+border-radius:16px;
+display:grid;
+place-items:center;
+font-size:22px;
+background:rgba(49,88,255,.12)
+}
+
+.topic.active .topic-icon{
+background:rgba(255,255,255,.16)
+}
+
+.topic-title{
+font-weight:950;
+font-size:13px;
+letter-spacing:-.02em
+}
+
+.topic-meta{
+font-size:10px;
+font-weight:900;
+margin-top:4px;
+opacity:.7
+}
+
+.main{
+background:#fff;
+border-radius:34px;
+box-shadow:var(--shadow2);
+overflow:hidden
+}
+
+.selected{
+padding:18px;
+border-bottom:1px solid var(--line)
+}
+
+.selected h2{
+font-size:28px;
+letter-spacing:-.06em
+}
+
+.selected p{
+margin-top:6px;
+font-size:13px;
+font-weight:700;
+color:var(--muted)
+}
+
+.modes{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+padding:18px
+}
+
+.mode{
+position:relative;
+overflow:hidden;
+background:#fff;
+border:1px solid var(--line);
+border-radius:30px;
+padding:22px;
+min-height:180px;
+text-align:left;
+transition:.25s var(--ease)
+}
+
+.mode:hover{
+transform:translateY(-3px);
+box-shadow:var(--shadow)
+}
+
+.mode:active{
+transform:scale(.98)
+}
+
+.mode::before{
+content:"";
+position:absolute;
+right:-35px;
+top:-35px;
+width:120px;
+height:120px;
+border-radius:50%;
+background:rgba(49,88,255,.09)
+}
+
+.mode-icon{
+width:58px;
+height:58px;
+border-radius:22px;
+display:grid;
+place-items:center;
+font-size:28px;
+background:rgba(49,88,255,.11);
+margin-bottom:16px
+}
+
+.mode h3{
+font-size:22px;
+letter-spacing:-.05em
+}
+
+.mode p{
+margin-top:8px;
+font-size:13px;
+line-height:1.55;
+font-weight:700;
+color:var(--muted)
+}
+
+.reward{
+margin-top:14px;
+display:inline-flex;
+align-items:center;
+gap:6px;
+background:#f1f4ff;
+padding:8px 10px;
+border-radius:99px;
+font-size:11px;
+font-weight:900;
+color:#4a4fe7
+}
+
+@media(max-width:940px){
+
+.layout{
+grid-template-columns:1fr
+}
+
+.sidebar{
+position:relative;
+top:auto
+}
+
+.modes{
+grid-template-columns:1fr
+}
+
+}
+
+@media(max-width:650px){
+
+.wrap{
+padding:0 12px
+}
+
+.hero-card{
+border-radius:28px
+}
+
+.hero-top{
+display:block
+}
+
+.stats{
+margin-top:12px;
+display:grid;
+grid-template-columns:repeat(3,1fr)
+}
+
+.stat{
+min-width:0
+}
+
+.selected h2{
+font-size:24px
+}
+
+}
+</style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
-                    <span>PflegefachProfi</span>
-                </div>
-                <div class="user-stats">
-                    <div class="stat-item coins">
-                        <i class="fas fa-coins"></i>
-                        <span id="coins">100</span>
-                    </div>
-                    <div class="stat-item level">
-                        <i class="fas fa-level-up-alt"></i>
-                        <span id="level">1</span>
-                    </div>
-                    <div class="stat-item xp">
-                        <i class="fas fa-fire"></i>
-                        <span id="xp">0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Fachwort Master</h1>
-                <p>Lerne Pflegefachwörter mit wissenschaftlichen Methoden und sammle Belohnungen!</p>
-                <button class="cta-button" id="start-learning">
-                    <i class="fas fa-play"></i>
-                    Jetzt starten
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Dashboard -->
-    <section class="dashboard" id="dashboard">
-        <div class="container">
-            <h2 class="section-title">Wortschatz Kategorien</h2>
-            <p class="section-subtitle">Wähle eine Kategorie aus und lerne mit drei verschiedenen Spielmodi</p>
-            
-            <div class="categories-grid" id="categories-grid">
-                <!-- Categories will be loaded by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Game Selection -->
-    <section class="game-selection" id="game-selection">
-        <div class="container">
-            <button class="back-button" id="back-to-categories">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Kategorien
-            </button>
-            <h2 class="section-title" id="game-selection-title">Spielmodi auswählen</h2>
-            
-            <div class="games-grid">
-                <div class="game-card" data-game="flashcards">
-                    <div class="game-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3 class="game-title">Karteikarten</h3>
-                    <p class="game-description">Lerne mit intelligenten Karteikarten und Spaced Repetition für maximale Merkfähigkeit.</p>
-                    <div class="category-stats">
-                        <div class="stat">
-                            <span class="stat-value" id="flashcards-progress">0%</span>
-                            <span class="stat-label">Fortschritt</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="game-card" data-game="memory">
-                    <div class="game-icon">
-                        <i class="fas fa-puzzle-piece"></i>
-                    </div>
-                    <h3 class="game-title">Memory Spiel</h3>
-                    <p class="game-description">Verbinde Begriffe mit ihren Definitionen in einem unterhaltsamen Memory-Spiel.</p>
-                    <div class="category-stats">
-                        <div class="stat">
-                            <span class="stat-value" id="memory-progress">0%</span>
-                            <span class="stat-label">Fortschritt</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="game-card" data-game="quiz">
-                    <div class="game-icon">
-                        <i class="fas fa-question-circle"></i>
-                    </div>
-                    <h3 class="game-title">Quiz</h3>
-                    <p class="game-description">Teste dein Wissen mit Multiple-Choice-Fragen zu den Fachbegriffen.</p>
-                    <div class="category-stats">
-                        <div class="stat">
-                            <span class="stat-value" id="quiz-progress">0%</span>
-                            <span class="stat-label">Fortschritt</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Flashcard Game -->
-    <section class="flashcard-game" id="flashcard-game">
-        <div class="container">
-            <button class="back-button" id="back-to-games-flashcards">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Spielmodi
-            </button>
-            
-            <div class="game-header">
-                <h2 id="flashcard-category-title">Karteikarten</h2>
-                <div class="game-progress">
-                    <span>Fortschritt: <strong id="flashcard-progress">0/0</strong></span>
-                    <div class="game-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
-                            <span id="flashcard-correct">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-times-circle" style="color: var(--danger);"></i>
-                            <span id="flashcard-incorrect">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flashcard" id="flashcard">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <div class="flashcard-category" id="flashcard-front-category">Kategorie</div>
-                        <div class="flashcard-term" id="flashcard-term">Begriff</div>
-                        <div class="flashcard-hint">Klicken zum Umdrehen</div>
-                        <div class="flashcard-hint">
-                            <i class="fas fa-hand-pointer"></i>
-                        </div>
-                    </div>
-                    <div class="flashcard-back">
-                        <div class="flashcard-category" id="flashcard-back-category">Kategorie</div>
-                        <div class="flashcard-definition" id="flashcard-definition">Definition</div>
-                        <div class="flashcard-example" id="flashcard-example">Beispiel</div>
-                        <div class="flashcard-hint">Wie gut kennst du dieses Wort?</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="game-actions">
-                <button class="action-btn difficult" id="btn-difficult">
-                    <i class="fas fa-times-circle"></i>
-                    Schwer
-                </button>
-                <button class="action-btn medium" id="btn-medium">
-                    <i class="fas fa-minus-circle"></i>
-                    Mittel
-                </button>
-                <button class="action-btn easy" id="btn-easy">
-                    <i class="fas fa-check-circle"></i>
-                    Einfach
-                </button>
-            </div>
-
-            <div class="results-screen" id="flashcard-results">
-                <div class="result-icon correct">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="result-score good" id="flashcard-final-score">100%</div>
-                <p>Herzlichen Glückwunsch! Du hast alle Karteikarten bearbeitet.</p>
-                
-                <div class="reward-animation">
-                    <div class="reward-item">
-                        <div class="reward-icon coins">
-                            <i class="fas fa-coins"></i>
-                        </div>
-                        <div class="reward-amount" id="flashcard-coins-reward">+0</div>
-                        <div class="stat-label">Coins</div>
-                    </div>
-                    <div class="reward-item">
-                        <div class="reward-icon xp">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="reward-amount" id="flashcard-xp-reward">+0</div>
-                        <div class="stat-label">XP</div>
-                    </div>
-                </div>
-                
-                <div class="game-actions">
-                    <button class="action-btn" id="flashcard-restart">
-                        <i class="fas fa-redo"></i>
-                        Nochmal spielen
-                    </button>
-                    <button class="action-btn easy" id="flashcard-back-to-games">
-                        <i class="fas fa-home"></i>
-                        Zurück zu Spielmodi
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Memory Game -->
-    <section class="memory-game" id="memory-game">
-        <div class="container">
-            <button class="back-button" id="back-to-games-memory">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Spielmodi
-            </button>
-            
-            <div class="game-header">
-                <h2 id="memory-category-title">Memory Spiel</h2>
-                <div class="game-progress">
-                    <span>Paare: <strong id="memory-progress-text">0/0</strong></span>
-                    <div class="game-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-redo"></i>
-                            <span id="memory-moves">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="memory-grid" id="memory-grid">
-                <!-- Memory cards will be generated by JavaScript -->
-            </div>
-
-            <div class="results-screen" id="memory-results">
-                <div class="result-icon correct">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="result-score good" id="memory-final-score">100%</div>
-                <p>Glückwunsch! Du hast alle Paare gefunden.</p>
-                
-                <div class="reward-animation">
-                    <div class="reward-item">
-                        <div class="reward-icon coins">
-                            <i class="fas fa-coins"></i>
-                        </div>
-                        <div class="reward-amount" id="memory-coins-reward">+0</div>
-                        <div class="stat-label">Coins</div>
-                    </div>
-                    <div class="reward-item">
-                        <div class="reward-icon xp">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="reward-amount" id="memory-xp-reward">+0</div>
-                        <div class="stat-label">XP</div>
-                    </div>
-                </div>
-                
-                <div class="game-actions">
-                    <button class="action-btn" id="memory-restart">
-                        <i class="fas fa-redo"></i>
-                        Nochmal spielen
-                    </button>
-                    <button class="action-btn easy" id="memory-back-to-games">
-                        <i class="fas fa-home"></i>
-                        Zurück zu Spielmodi
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quiz Game -->
-    <section class="quiz-game" id="quiz-game">
-        <div class="container">
-            <button class="back-button" id="back-to-games-quiz">
-                <i class="fas fa-arrow-left"></i>
-                Zurück zu Spielmodi
-            </button>
-            
-            <div class="game-header">
-                <h2 id="quiz-category-title">Quiz</h2>
-                <div class="game-progress">
-                    <span>Frage <strong id="quiz-current">1</strong> von <strong id="quiz-total">0</strong></span>
-                    <div class="game-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
-                            <span id="quiz-correct">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-times-circle" style="color: var(--danger);"></i>
-                            <span id="quiz-incorrect">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quiz-container">
-                <div class="quiz-question" id="quiz-question">
-                    Quizfrage wird geladen...
-                </div>
-                
-                <div class="quiz-options" id="quiz-options">
-                    <!-- Options will be populated by JavaScript -->
-                </div>
-                
-                <div class="quiz-feedback" id="quiz-feedback">
-                    <!-- Feedback will be shown here -->
-                </div>
-                
-                <div class="game-actions">
-                    <button class="action-btn" id="quiz-next" disabled>
-                        Weiter
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="results-screen" id="quiz-results">
-                <div class="result-icon correct">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="result-score good" id="quiz-final-score">100%</div>
-                <p>Super! Du hast das Quiz abgeschlossen.</p>
-                
-                <div class="reward-animation">
-                    <div class="reward-item">
-                        <div class="reward-icon coins">
-                            <i class="fas fa-coins"></i>
-                        </div>
-                        <div class="reward-amount" id="quiz-coins-reward">+0</div>
-                        <div class="stat-label">Coins</div>
-                    </div>
-                    <div class="reward-item">
-                        <div class="reward-icon xp">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="reward-amount" id="quiz-xp-reward">+0</div>
-                        <div class="stat-label">XP</div>
-                    </div>
-                </div>
-                
-                <div class="game-actions">
-                    <button class="action-btn" id="quiz-restart">
-                        <i class="fas fa-redo"></i>
-                        Nochmal spielen
-                    </button>
-                    <button class="action-btn easy" id="quiz-back-to-games">
-                        <i class="fas fa-home"></i>
-                        Zurück zu Spielmodi
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // ===============================
-        // DATA STRUCTURES
-        // ===============================
-
-        // User data structure
-        let user = {
-            coins: 100,
-            xp: 0,
-            level: 1,
-            unlockedCategories: [],
-            progress: {}
-        };
-
-        // Category data - Easy to expand by adding new categories
-        const categories = {
-            "Herz und Kreislauf": {
-                cost: 50,
-                icon: "fas fa-heartbeat",
-                color: "#e63946",
-                vocabulary: [
-                    { term: "Hypertonie", definition: "Bluthochdruck (>140/90 mmHg)", example: "Risikofaktor für Schlaganfall und Herzinfarkt." },
-                    { term: "Hypotonie", definition: "Niedriger Blutdruck (<100/60 mmHg)", example: "Kann zu Schwindel und Synkope führen." },
-                    { term: "Tachykardie", definition: "Herzfrequenz > 100 Schläge pro Minute", example: "Bei Fieber, Anämie oder Schilddrüsenüberfunktion." },
-                    { term: "Bradykardie", definition: "Herzfrequenz < 60 Schläge pro Minute", example: "Kann physiologisch bei Sportlern auftreten." },
-                    { term: "Arrhythmie", definition: "Unregelmäßiger Herzschlag", example: "Vorhofflimmern ist die häufigste Form." },
-                    { term: "Ödem", definition: "Wassereinlagerung im Gewebe", example: "Knöchelödeme bei Rechtsherzinsuffizienz." },
-                    { term: "Dyspnoe", definition: "Atemnot oder erschwerte Atmung", example: "Ruhedyspnoe bei dekompensierter Herzinsuffizienz." },
-                    { term: "Angina Pectoris", definition: "Brustschmerz bei Durchblutungsstörung des Herzens", example: "Typisches Symptom der KHK." },
-                    { term: "Myokardinfarkt", definition: "Herzinfarkt durch Verschluss eines Herzkranzgefäßes", example: "Notfall mit ST-Strecken-Hebung im EKG." },
-                    { term: "Herzinsuffizienz", definition: "Eingeschränkte Pumpleistung des Herzens", example: "NYHA-Stadien I-IV zur Einteilung." }
-                ]
-            },
-            "Lungen": {
-                cost: 40,
-                icon: "fas fa-lungs",
-                color: "#4cc9f0",
-                vocabulary: [
-                    { term: "Dyspnoe", definition: "Atemnot oder erschwerte Atmung", example: "Leitsymptom bei Asthma bronchiale." },
-                    { term: "Tachypnoe", definition: "Erhöhte Atemfrequenz (>20/min)", example: "Bei Lungenentzündung oder Lungenödem." },
-                    { term: "Bradypnoe", definition: "Verminderte Atemfrequenz (<12/min)", example: "Bei Opiat-Überdosierung." },
-                    { term: "Zyanose", definition: "Bläuliche Verfärbung von Haut und Schleimhäuten", example: "Zeichen für Sauerstoffmangel." },
-                    { term: "Husten", definition: "Schutzreflex zur Reinigung der Atemwege", example: "Produktiv (mit Auswurf) oder unproduktiv." },
-                    { term: "Asthma bronchiale", definition: "Chronisch-entzündliche Erkrankung der Atemwege", example: "Anfallsweise auftretende Atemnot." },
-                    { term: "COPD", definition: "Chronisch obstruktive Lungenerkrankung", example: "Hauptursache: Rauchen." },
-                    { term: "Pneumonie", definition: "Lungenentzündung", example: "Kann bakteriell, viral oder fungal verursacht sein." },
-                    { term: "Pneumothorax", definition: "Luft im Pleuraspalt", example: "Plötzlicher stechender Brustschmerz und Dyspnoe." },
-                    { term: "Lungenödem", definition: "Wassereinlagerung in der Lunge", example: "Bei Linksherzinsuffizienz." }
-                ]
-            },
-            "Verdauungssystem": {
-                cost: 45,
-                icon: "fas fa-stomach",
-                color: "#fca311",
-                vocabulary: [
-                    { term: "Dysphagie", definition: "Schluckstörung", example: "Häufig bei neurologischen Erkrankungen." },
-                    { term: "Ösophagitis", definition: "Entzündung der Speiseröhre", example: "Oft durch Reflux verursacht." },
-                    { term: "Gastritis", definition: "Entzündung der Magenschleimhaut", example: "Kann akut oder chronisch sein." },
-                    { term: "Ulkus", definition: "Geschwür der Magen- oder Darmschleimhaut", example: "Magengeschwür oder Zwölffingerdarmgeschwür." },
-                    { term: "Diarrhoe", definition: "Durchfall", example: "Mehr als 3 dünnflüssige Stühle pro Tag." },
-                    { term: "Obstipation", definition: "Verstopfung", example: "Seltene oder erschwerte Stuhlentleerung." },
-                    { term: "Meteorismus", definition: "Blähungen durch Gasansammlung", example: "Völlegefühl und aufgetriebener Bauch." },
-                    { term: "Ileus", definition: "Darmverschluss", example: "Notfall mit Erbrechen und Stuhlverhalt." },
-                    { term: "Peritonitis", definition: "Bauchfellentzündung", example: "Akutes Abdomen mit Abwehrspannung." },
-                    { term: "Colitis", definition: "Entzündung des Dickdarms", example: "Morbus Crohn oder Colitis ulcerosa." }
-                ]
-            },
-            "Nieren": {
-                cost: 55,
-                icon: "fas fa-filter",
-                color: "#7209b7",
-                vocabulary: [
-                    { term: "Niereninsuffizienz", definition: "Eingeschränkte Nierenfunktion", example: "Akut oder chronisch." },
-                    { term: "Urämie", definition: "Harnvergiftung bei Nierenversagen", example: "Symptome: Übelkeit, Juckreiz, neurologische Störungen." },
-                    { term: "Dialyse", definition: "Blutwäsche bei Nierenversagen", example: "Hämodialyse oder Peritonealdialyse." },
-                    { term: "Proteinurie", definition: "Eiweißausscheidung im Urin", example: "Hinweis auf Nierenschädigung." },
-                    { term: "Hämaturie", definition: "Blut im Urin", example: "Makroskopisch sichtbar oder mikroskopisch." },
-                    { term: "Glomerulonephritis", definition: "Entzündung der Nierenkörperchen", example: "Immunologisch bedingt." },
-                    { term: "Pyelonephritis", definition: "Nierenbeckenentzündung", example: "Oft aufsteigende Harnwegsinfektion." },
-                    { term: "Nierensteine", definition: "Konkremente in den Nieren", example: "Kolikartige Schmerzen bei Abgang." },
-                    { term: "Zystitis", definition: "Blasenentzündung", example: "Häufig bei Frauen, Schmerzen beim Wasserlassen." },
-                    { term: "Anurie", definition: "Harnverhalt (<100 ml/24h)", example: "Notfall bei akutem Nierenversagen." }
-                ]
-            },
-            "Prophylaxen": {
-                cost: 35,
-                icon: "fas fa-shield-alt",
-                color: "#06d6a0",
-                vocabulary: [
-                    { term: "Dekubitusprophylaxe", definition: "Vorbeugung von Druckgeschwüren", example: "Regelmäßige Lagerung und Hautpflege." },
-                    { term: "Thromboseprophylaxe", definition: "Vorbeugung von Blutgerinnseln", example: "Frühmobilisation, Kompressionsstrümpfe, Heparin." },
-                    { term: "Pneumonieprophylaxe", definition: "Vorbeugung von Lungenentzündungen", example: "Atemgymnastik, Mobilisation, Sekretolyse." },
-                    { term: "Sturzprophylaxe", definition: "Vorbeugung von Stürzen", example: "Geeignetes Schuhwerk, Gehhilfen, Stolperfallen beseitigen." },
-                    { term: "Kontrakturprophylaxe", definition: "Vorbeugung von Gelenkversteifungen", example: "Bewegungstraining, Lagerungsschienen." },
-                    { term: "Infektionsprophylaxe", definition: "Vorbeugung von Infektionen", example: "Händedesinfektion, sterile Arbeitsweise." },
-                    { term: "Exsikkoseprophylaxe", definition: "Vorbeugung von Austrocknung", example: "Ausreichende Flüssigkeitszufuhr, Hautpflege." },
-                    { term: "Mangelernährungsprophylaxe", definition: "Vorbeugung von Unterernährung", example: "Ausgewogene Ernährung, Nahrungsergänzung." },
-                    { term: "Obstipationsprophylaxe", definition: "Vorbeugung von Verstopfung", example: "Ballaststoffreiche Ernährung, ausreichend trinken." },
-                    { term: "Delirprophylaxe", definition: "Vorbeugung von Verwirrtheitszuständen", example: "Orientierungshilfen, vertraute Bezugspersonen." }
-                ]
-            },
-            "Pflegetheorien": {
-                cost: 60,
-                icon: "fas fa-book-medical",
-                color: "#118ab2",
-                vocabulary: [
-                    { term: "AEDL", definition: "Aktivitäten und existenzielle Erfahrungen des Lebens", example: "13 Lebensbereiche nach Monika Krohwinkel." },
-                    { term: "ATL", definition: "Aktivitäten des täglichen Lebens", example: "12 Lebensaktivitäten nach Nancy Roper." },
-                    { term: "Pflegeprozess", definition: "Systematisches Vorgehen in der Pflege", example: "Assessment, Diagnose, Planung, Durchführung, Evaluation." },
-                    { term: "Pflegediagnose", definition: "Benennung eines Pflegeproblems", example: "Formulierung nach NANDA-I." },
-                    { term: "Pflegeziel", definition: "Angestrebter Zustand des Patienten", example: "Soll SMART formuliert werden." },
-                    { term: "Pflegemaßnahme", definition: "Konkrete Handlung zur Zielerreichung", example: "Muss auf die Pflegediagnose abgestimmt sein." },
-                    { term: "Validation", definition: "Wertschätzende Kommunikationstechnik", example: "Nach Naomi Feil für Menschen mit Demenz." },
-                    { term: "Basale Stimulation", definition: "Förderung grundlegender Wahrnehmung", example: "Nach Andreas Fröhlich für schwerstpflegebedürftige Menschen." },
-                    { term: "Biografiearbeit", definition: "Einbeziehung der Lebensgeschichte", example: "Wichtig für individuelle Pflegeplanung." },
-                    { term: "Ressourcenorientierung", definition: "Fokus auf vorhandene Fähigkeiten", example: "Stärken des Patienten fördern und nutzen." }
-                ]
-            },
-            "Expertenstandards": {
-                cost: 65,
-                icon: "fas fa-award",
-                color: "#073b4c",
-                vocabulary: [
-                    { term: "Dekubitusprophylaxe", definition: "Expertenstandard zur Vorbeugung von Druckgeschwüren", example: "Risikoassessment, Hautbeobachtung, Lagerung." },
-                    { term: "Sturzprophylaxe", definition: "Expertenstandard zur Vorbeugung von Stürzen", example: "Risikoeinschätzung, Umgebungsgestaltung, Training." },
-                    { term: "Schmerzmanagement", definition: "Expertenstandard zur Schmerzerfassung und -behandlung", example: "Regelmäßige Schmerzerfassung, medikamentöse und nicht-medikamentöse Maßnahmen." },
-                    { term: "Ernährungsmanagement", definition: "Expertenstandard zur Sicherstellung der Ernährung", example: "Screening, Bedarfsermittlung, Ernährungsplanung." },
-                    { term: "Förderung der Harnkontinenz", definition: "Expertenstandard zum Erhalt der Blasenkontrolle", example: "Toilettentraining, Beckenbodengymnastik, Hilfsmittel." },
-                    { term: "Entlassungsmanagement", definition: "Expertenstandard zur Vorbereitung der Entlassung", example: "Frühzeitige Planung, Einbeziehung von Angehörigen, Nachsorge." },
-                    { term: "Chronische Wunden", definition: "Expertenstandard zur Versorgung von chronischen Wunden", example: "Wundassessment, Reinigung, geeignete Verbandmittel." },
-                    { term: "Demenz", definition: "Expertenstandard zur Pflege von Menschen mit Demenz", example: "Validation, Biografiearbeit, Milieugestaltung." },
-                    { term: "Beziehungsgestaltung", definition: "Expertenstandard zur professionellen Beziehungsarbeit", example: "Kommunikation, Empathie, professionelle Distanz." },
-                    { term: "Pflege von Menschen mit Depression", definition: "Expertenstandard zur Unterstützung depressiver Patienten", example: "Aktivierung, Gesprächsangebote, Sicherheit." }
-                ]
-            }
-        };
-
-        // ===============================
-        // UTILITY FUNCTIONS
-        // ===============================
-
-        // Cookie management
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
-        // Save and load user data
-        function saveUserData() {
-            setCookie('pflegeUser', JSON.stringify(user), 30);
-        }
-
-        function loadUserData() {
-            const userData = getCookie('pflegeUser');
-            if (userData) {
-                user = JSON.parse(userData);
-            }
-            updateUserStats();
-        }
-
-        // Update UI with user stats
-        function updateUserStats() {
-            document.getElementById('coins').textContent = user.coins;
-            document.getElementById('level').textContent = user.level;
-            document.getElementById('xp').textContent = user.xp;
-        }
-
-        // Calculate level based on XP
-        function calculateLevel() {
-            const newLevel = Math.floor(user.xp / 100) + 1;
-            if (newLevel > user.level) {
-                user.level = newLevel;
-                // Level up celebration could be added here
-            }
-        }
-
-        // Add XP and coins with animation
-        function addReward(coins, xp) {
-            user.coins += coins;
-            user.xp += xp;
-            calculateLevel();
-            updateUserStats();
-            saveUserData();
-            
-            // Visual feedback for rewards
-            if (coins > 0 || xp > 0) {
-                // Could add animation here
-            }
-        }
-
-        // Shuffle array (Fisher-Yates algorithm)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // Show confetti animation
-        function showConfetti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }
-
-        // ===============================
-        // DASHBOARD FUNCTIONALITY
-        // ===============================
-
-        let currentCategory = '';
-
-        function initializeDashboard() {
-            loadUserData();
-            renderCategories();
-            
-            // Event listeners for navigation
-            document.getElementById('start-learning').addEventListener('click', showDashboard);
-            document.getElementById('back-to-categories').addEventListener('click', showDashboard);
-            
-            // Event listener for game selection
-            const gameCards = document.querySelectorAll('.game-card');
-            gameCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const game = this.getAttribute('data-game');
-                    startGame(game);
-                });
-            });
-            
-            // Event listeners for back buttons in games
-            document.getElementById('back-to-games-flashcards').addEventListener('click', showGameSelection);
-            document.getElementById('back-to-games-memory').addEventListener('click', showGameSelection);
-            document.getElementById('back-to-games-quiz').addEventListener('click', showGameSelection);
-            
-            // Event listeners for restart and back buttons in results
-            document.getElementById('flashcard-restart').addEventListener('click', () => startGame('flashcards'));
-            document.getElementById('flashcard-back-to-games').addEventListener('click', showGameSelection);
-            document.getElementById('memory-restart').addEventListener('click', () => startGame('memory'));
-            document.getElementById('memory-back-to-games').addEventListener('click', showGameSelection);
-            document.getElementById('quiz-restart').addEventListener('click', () => startGame('quiz'));
-            document.getElementById('quiz-back-to-games').addEventListener('click', showGameSelection);
-        }
-
-        function renderCategories() {
-            const grid = document.getElementById('categories-grid');
-            grid.innerHTML = '';
-            
-            for (const [categoryName, categoryData] of Object.entries(categories)) {
-                const isUnlocked = user.unlockedCategories.includes(categoryName);
-                const progress = calculateCategoryProgress(categoryName);
-                
-                const card = document.createElement('div');
-                card.className = `category-card ${isUnlocked ? '' : 'locked'}`;
-                card.style.borderLeftColor = categoryData.color;
-                
-                card.innerHTML = `
-                    <div class="category-header">
-                        <div class="category-icon" style="background: ${categoryData.color}20; color: ${categoryData.color}">
-                            <i class="${categoryData.icon}"></i>
-                        </div>
-                        ${!isUnlocked ? `
-                        <div class="category-cost">
-                            <i class="fas fa-coins"></i>
-                            <span>${categoryData.cost}</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                    <h3 class="category-title">${categoryName}</h3>
-                    <p class="category-description">${categoryData.vocabulary.length} Fachwörter zum Lernen</p>
-                    <div class="category-stats">
-                        <div class="stat">
-                            <span class="stat-value">${progress}%</span>
-                            <span class="stat-label">Fortschritt</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">${categoryData.vocabulary.length}</span>
-                            <span class="stat-label">Wörter</span>
-                        </div>
-                    </div>
-                    <button class="category-action ${isUnlocked ? 'start' : 'unlock'}" 
-                            data-category="${categoryName}">
-                        <i class="fas fa-${isUnlocked ? 'play' : 'lock'}"></i>
-                        ${isUnlocked ? 'Kategorie öffnen' : 'Freischalten'}
-                    </button>
-                `;
-                
-                grid.appendChild(card);
-            }
-            
-            // Add event listeners to category buttons
-            const unlockButtons = document.querySelectorAll('.category-action.unlock');
-            unlockButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const category = this.getAttribute('data-category');
-                    unlockCategory(category);
-                });
-            });
-            
-            const startButtons = document.querySelectorAll('.category-action.start');
-            startButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const category = this.getAttribute('data-category');
-                    selectCategory(category);
-                });
-            });
-        }
-
-        function calculateCategoryProgress(categoryName) {
-            if (!user.progress[categoryName]) return 0;
-            
-            const progress = user.progress[categoryName];
-            const totalGames = 3; // flashcards, memory, quiz
-            let completedGames = 0;
-            
-            if (progress.flashcards && progress.flashcards.completed) completedGames++;
-            if (progress.memory && progress.memory.completed) completedGames++;
-            if (progress.quiz && progress.quiz.completed) completedGames++;
-            
-            return Math.round((completedGames / totalGames) * 100);
-        }
-
-        function unlockCategory(categoryName) {
-            const category = categories[categoryName];
-            if (user.coins >= category.cost) {
-                user.coins -= category.cost;
-                user.unlockedCategories.push(categoryName);
-                saveUserData();
-                updateUserStats();
-                renderCategories();
-                
-                // Show success message
-                alert(`Glückwunsch! Du hast die Kategorie "${categoryName}" freigeschaltet.`);
-            } else {
-                alert(`Du hast nicht genug Coins. Du benötigst ${category.cost} Coins.`);
-            }
-        }
-
-        function selectCategory(categoryName) {
-            currentCategory = categoryName;
-            updateGameSelectionProgress();
-            showGameSelection();
-        }
-
-        // ===============================
-        // NAVIGATION
-        // ===============================
-
-        function showDashboard() {
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('game-selection').classList.remove('active');
-            document.getElementById('flashcard-game').classList.remove('active');
-            document.getElementById('memory-game').classList.remove('active');
-            document.getElementById('quiz-game').classList.remove('active');
-        }
-
-        function showGameSelection() {
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('game-selection').classList.add('active');
-            document.getElementById('flashcard-game').classList.remove('active');
-            document.getElementById('memory-game').classList.remove('active');
-            document.getElementById('quiz-game').classList.remove('active');
-            
-            document.getElementById('game-selection-title').textContent = `Spielmodi - ${currentCategory}`;
-            updateGameSelectionProgress();
-        }
-
-        function updateGameSelectionProgress() {
-            const progress = user.progress[currentCategory] || {};
-            
-            const flashcardsProgress = progress.flashcards ? 
-                Math.round((progress.flashcards.correct / categories[currentCategory].vocabulary.length) * 100) : 0;
-            const memoryProgress = progress.memory && progress.memory.completed ? 100 : 0;
-            const quizProgress = progress.quiz ? 
-                Math.round((progress.quiz.correct / progress.quiz.total) * 100) : 0;
-            
-            document.getElementById('flashcards-progress').textContent = `${flashcardsProgress}%`;
-            document.getElementById('memory-progress').textContent = `${memoryProgress}%`;
-            document.getElementById('quiz-progress').textContent = `${quizProgress}%`;
-        }
-
-        function startGame(gameType) {
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('game-selection').classList.remove('active');
-            document.getElementById('flashcard-game').classList.remove('active');
-            document.getElementById('memory-game').classList.remove('active');
-            document.getElementById('quiz-game').classList.remove('active');
-            
-            switch(gameType) {
-                case 'flashcards':
-                    initializeFlashcards();
-                    document.getElementById('flashcard-game').classList.add('active');
-                    break;
-                case 'memory':
-                    initializeMemoryGame();
-                    document.getElementById('memory-game').classList.add('active');
-                    break;
-                case 'quiz':
-                    initializeQuizGame();
-                    document.getElementById('quiz-game').classList.add('active');
-                    break;
-            }
-        }
-
-        // ===============================
-        // FLASHCARD GAME
-        // ===============================
-
-        let flashcardIndex = 0;
-        let flashcardCorrect = 0;
-        let flashcardIncorrect = 0;
-        let flashcardDeck = [];
-
-        function initializeFlashcards() {
-            document.getElementById('flashcard-results').classList.remove('active');
-            
-            // Set category title
-            document.getElementById('flashcard-category-title').textContent = `Karteikarten - ${currentCategory}`;
-            document.getElementById('flashcard-front-category').textContent = currentCategory;
-            document.getElementById('flashcard-back-category').textContent = currentCategory;
-            
-            // Reset stats
-            flashcardIndex = 0;
-            flashcardCorrect = 0;
-            flashcardIncorrect = 0;
-            
-            // Create shuffled deck
-            flashcardDeck = shuffleArray([...categories[currentCategory].vocabulary]);
-            
-            // Update UI
-            updateFlashcardStats();
-            loadFlashcard();
-            
-            // Add event listeners
-            document.getElementById('flashcard').addEventListener('click', flipFlashcard);
-            document.getElementById('btn-difficult').addEventListener('click', () => rateFlashcard('difficult'));
-            document.getElementById('btn-medium').addEventListener('click', () => rateFlashcard('medium'));
-            document.getElementById('btn-easy').addEventListener('click', () => rateFlashcard('easy'));
-        }
-
-        function flipFlashcard() {
-            document.getElementById('flashcard').classList.toggle('flipped');
-        }
-
-        function loadFlashcard() {
-            const card = flashcardDeck[flashcardIndex];
-            document.getElementById('flashcard-term').textContent = card.term;
-            document.getElementById('flashcard-definition').textContent = card.definition;
-            document.getElementById('flashcard-example').textContent = card.example;
-            document.getElementById('flashcard').classList.remove('flipped');
-        }
-
-        function updateFlashcardStats() {
-            document.getElementById('flashcard-progress').textContent = `${flashcardIndex + 1}/${flashcardDeck.length}`;
-            document.getElementById('flashcard-correct').textContent = flashcardCorrect;
-            document.getElementById('flashcard-incorrect').textContent = flashcardIncorrect;
-        }
-
-        function rateFlashcard(difficulty) {
-            // Update stats based on difficulty
-            if (difficulty === 'easy') {
-                flashcardCorrect++;
-            } else if (difficulty === 'difficult') {
-                flashcardIncorrect++;
-                // Add card to the end of the deck for repetition
-                flashcardDeck.push(flashcardDeck[flashcardIndex]);
-            }
-            // Medium doesn't affect stats
-            
-            // Move to next card
-            flashcardIndex++;
-            
-            if (flashcardIndex < flashcardDeck.length) {
-                loadFlashcard();
-                updateFlashcardStats();
-            } else {
-                finishFlashcards();
-            }
-        }
-
-        function finishFlashcards() {
-            // Calculate score and rewards
-            const score = Math.round((flashcardCorrect / flashcardDeck.length) * 100);
-            const coinsReward = Math.max(10, Math.floor(score / 10));
-            const xpReward = Math.max(20, Math.floor(score / 5));
-            
-            // Update UI
-            document.getElementById('flashcard-final-score').textContent = `${score}%`;
-            document.getElementById('flashcard-final-score').className = `result-score ${
-                score >= 80 ? 'good' : score >= 60 ? 'average' : 'poor'
-            }`;
-            document.getElementById('flashcard-coins-reward').textContent = `+${coinsReward}`;
-            document.getElementById('flashcard-xp-reward').textContent = `+${xpReward}`;
-            
-            // Show results
-            document.getElementById('flashcard-results').classList.add('active');
-            
-            // Update user progress
-            if (!user.progress[currentCategory]) {
-                user.progress[currentCategory] = {};
-            }
-            user.progress[currentCategory].flashcards = {
-                completed: true,
-                correct: flashcardCorrect,
-                total: flashcardDeck.length,
-                score: score
-            };
-            
-            // Add rewards
-            addReward(coinsReward, xpReward);
-            
-            // Show confetti for good scores
-            if (score >= 80) {
-                showConfetti();
-            }
-        }
-
-        // ===============================
-        // MEMORY GAME
-        // ===============================
-
-        let memoryCards = [];
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let memoryMoves = 0;
-
-        function initializeMemoryGame() {
-            document.getElementById('memory-results').classList.remove('active');
-            
-            // Set category title
-            document.getElementById('memory-category-title').textContent = `Memory - ${currentCategory}`;
-            
-            // Reset stats
-            flippedCards = [];
-            matchedPairs = 0;
-            memoryMoves = 0;
-            
-            // Create card pairs
-            memoryCards = [];
-            const vocabulary = categories[currentCategory].vocabulary;
-            
-            // Use first 8 terms for memory game (16 cards)
-            const gameVocabulary = vocabulary.slice(0, 8);
-            
-            gameVocabulary.forEach((item, index) => {
-                // Term card
-                memoryCards.push({
-                    id: index,
-                    type: 'term',
-                    content: item.term,
-                    matched: false
-                });
-                
-                // Definition card
-                memoryCards.push({
-                    id: index,
-                    type: 'definition',
-                    content: item.definition,
-                    matched: false
-                });
-            });
-            
-            // Shuffle cards
-            memoryCards = shuffleArray(memoryCards);
-            
-            // Render cards
-            renderMemoryCards();
-            updateMemoryStats();
-        }
-
-        function renderMemoryCards() {
-            const grid = document.getElementById('memory-grid');
-            grid.innerHTML = '';
-            
-            memoryCards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'memory-card';
-                if (card.matched) cardElement.classList.add('matched');
-                cardElement.setAttribute('data-index', index);
-                
-                cardElement.innerHTML = `
-                    <div class="memory-card-front">
-                        <i class="fas fa-question"></i>
-                    </div>
-                    <div class="memory-card-back">
-                        ${card.content}
-                    </div>
-                `;
-                
-                cardElement.addEventListener('click', () => flipMemoryCard(index));
-                grid.appendChild(cardElement);
-            });
-        }
-
-        function flipMemoryCard(index) {
-            const card = memoryCards[index];
-            const cardElement = document.querySelector(`.memory-card[data-index="${index}"]`);
-            
-            // Ignore if card is already flipped, matched, or two cards are already flipped
-            if (card.matched || cardElement.classList.contains('flipped') || flippedCards.length >= 2) {
-                return;
-            }
-            
-            // Flip the card
-            cardElement.classList.add('flipped');
-            flippedCards.push({ index, card });
-            
-            // Check for match if two cards are flipped
-            if (flippedCards.length === 2) {
-                memoryMoves++;
-                updateMemoryStats();
-                
-                const card1 = flippedCards[0];
-                const card2 = flippedCards[1];
-                
-                // Check if cards match (same id, different types)
-                if (card1.card.id === card2.card.id && card1.card.type !== card2.card.type) {
-                    // Match found
-                    memoryCards[card1.index].matched = true;
-                    memoryCards[card2.index].matched = true;
-                    matchedPairs++;
-                    
-                    document.querySelector(`.memory-card[data-index="${card1.index}"]`).classList.add('matched');
-                    document.querySelector(`.memory-card[data-index="${card2.index}"]`).classList.add('matched');
-                    
-                    flippedCards = [];
-                    
-                    // Check if game is complete
-                    if (matchedPairs === 8) {
-                        setTimeout(finishMemoryGame, 500);
-                    }
-                } else {
-                    // No match, flip back after delay
-                    setTimeout(() => {
-                        document.querySelector(`.memory-card[data-index="${card1.index}"]`).classList.remove('flipped');
-                        document.querySelector(`.memory-card[data-index="${card2.index}"]`).classList.remove('flipped');
-                        flippedCards = [];
-                    }, 1000);
-                }
-            }
-        }
-
-        function updateMemoryStats() {
-            document.getElementById('memory-progress-text').textContent = `${matchedPairs}/8`;
-            document.getElementById('memory-moves').textContent = memoryMoves;
-        }
-
-        function finishMemoryGame() {
-            // Calculate rewards based on moves (fewer moves = better reward)
-            const maxMoves = 24; // Theoretical maximum for 8 pairs
-            const efficiency = Math.max(0, (maxMoves - memoryMoves) / maxMoves);
-            const coinsReward = Math.max(15, Math.floor(30 * efficiency));
-            const xpReward = Math.max(25, Math.floor(50 * efficiency));
-            
-            // Update UI
-            document.getElementById('memory-final-score').textContent = `${Math.round(efficiency * 100)}%`;
-            document.getElementById('memory-coins-reward').textContent = `+${coinsReward}`;
-            document.getElementById('memory-xp-reward').textContent = `+${xpReward}`;
-            
-            // Show results
-            document.getElementById('memory-results').classList.add('active');
-            
-            // Update user progress
-            if (!user.progress[currentCategory]) {
-                user.progress[currentCategory] = {};
-            }
-            user.progress[currentCategory].memory = {
-                completed: true,
-                moves: memoryMoves,
-                efficiency: Math.round(efficiency * 100)
-            };
-            
-            // Add rewards
-            addReward(coinsReward, xpReward);
-            
-            // Show confetti for good efficiency
-            if (efficiency >= 0.7) {
-                showConfetti();
-            }
-        }
-
-        // ===============================
-        // QUIZ GAME
-        // ===============================
-
-        let quizQuestions = [];
-        let currentQuestion = 0;
-        let quizCorrect = 0;
-        let quizIncorrect = 0;
-
-        function initializeQuizGame() {
-            document.getElementById('quiz-results').classList.remove('active');
-            document.getElementById('quiz-next').disabled = true;
-            
-            // Set category title
-            document.getElementById('quiz-category-title').textContent = `Quiz - ${currentCategory}`;
-            
-            // Reset stats
-            currentQuestion = 0;
-            quizCorrect = 0;
-            quizIncorrect = 0;
-            
-            // Create quiz questions
-            quizQuestions = [];
-            const vocabulary = categories[currentCategory].vocabulary;
-            
-            vocabulary.forEach(item => {
-                // Create question with correct answer and 3 distractors
-                const question = {
-                    term: item.term,
-                    correct: item.definition,
-                    options: [item.definition]
-                };
-                
-                // Add 3 random definitions from other terms as distractors
-                const otherDefinitions = vocabulary
-                    .filter(v => v.term !== item.term)
-                    .map(v => v.definition);
-                
-                const shuffledDefinitions = shuffleArray([...otherDefinitions]);
-                question.options.push(...shuffledDefinitions.slice(0, 3));
-                
-                // Shuffle options
-                question.options = shuffleArray(question.options);
-                
-                quizQuestions.push(question);
-            });
-            
-            // Shuffle questions
-            quizQuestions = shuffleArray(quizQuestions);
-            
-            // Load first question
-            loadQuizQuestion();
-            updateQuizStats();
-        }
-
-        function loadQuizQuestion() {
-            const question = quizQuestions[currentQuestion];
-            
-            document.getElementById('quiz-question').textContent = `Was bedeutet "${question.term}"?`;
-            document.getElementById('quiz-current').textContent = currentQuestion + 1;
-            document.getElementById('quiz-total').textContent = quizQuestions.length;
-            
-            const optionsContainer = document.getElementById('quiz-options');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'quiz-option';
-                optionElement.innerHTML = `
-                    <div class="option-indicator">${String.fromCharCode(65 + index)}</div>
-                    <div class="option-text">${option}</div>
-                `;
-                
-                optionElement.addEventListener('click', () => selectQuizOption(index, option === question.correct));
-                optionsContainer.appendChild(optionElement);
-            });
-            
-            document.getElementById('quiz-feedback').style.display = 'none';
-            document.getElementById('quiz-next').disabled = true;
-        }
-
-        function selectQuizOption(optionIndex, isCorrect) {
-            const options = document.querySelectorAll('.quiz-option');
-            const feedback = document.getElementById('quiz-feedback');
-            
-            // Disable all options
-            options.forEach(option => {
-                option.style.pointerEvents = 'none';
-            });
-            
-            // Mark correct/incorrect
-            if (isCorrect) {
-                options[optionIndex].classList.add('correct');
-                quizCorrect++;
-                feedback.textContent = 'Richtig! Gut gemacht.';
-                feedback.className = 'quiz-feedback correct';
-            } else {
-                options[optionIndex].classList.add('incorrect');
-                quizIncorrect++;
-                
-                // Find and highlight correct answer
-                const correctIndex = quizQuestions[currentQuestion].options.findIndex(
-                    option => option === quizQuestions[currentQuestion].correct
-                );
-                options[correctIndex].classList.add('correct');
-                
-                feedback.textContent = `Leider falsch. Die richtige Antwort ist: ${quizQuestions[currentQuestion].correct}`;
-                feedback.className = 'quiz-feedback incorrect';
-            }
-            
-            feedback.style.display = 'block';
-            document.getElementById('quiz-next').disabled = false;
-            updateQuizStats();
-        }
-
-        function updateQuizStats() {
-            document.getElementById('quiz-correct').textContent = quizCorrect;
-            document.getElementById('quiz-incorrect').textContent = quizIncorrect;
-        }
-
-        function nextQuizQuestion() {
-            currentQuestion++;
-            
-            if (currentQuestion < quizQuestions.length) {
-                loadQuizQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
-
-        function finishQuiz() {
-            // Calculate score and rewards
-            const score = Math.round((quizCorrect / quizQuestions.length) * 100);
-            const coinsReward = Math.max(15, Math.floor(score / 10) * 2);
-            const xpReward = Math.max(30, Math.floor(score / 5) * 2);
-            
-            // Update UI
-            document.getElementById('quiz-final-score').textContent = `${score}%`;
-            document.getElementById('quiz-final-score').className = `result-score ${
-                score >= 80 ? 'good' : score >= 60 ? 'average' : 'poor'
-            }`;
-            document.getElementById('quiz-coins-reward').textContent = `+${coinsReward}`;
-            document.getElementById('quiz-xp-reward').textContent = `+${xpReward}`;
-            
-            // Show results
-            document.getElementById('quiz-results').classList.add('active');
-            
-            // Update user progress
-            if (!user.progress[currentCategory]) {
-                user.progress[currentCategory] = {};
-            }
-            user.progress[currentCategory].quiz = {
-                completed: true,
-                correct: quizCorrect,
-                total: quizQuestions.length,
-                score: score
-            };
-            
-            // Add rewards
-            addReward(coinsReward, xpReward);
-            
-            // Show confetti for good scores
-            if (score >= 80) {
-                showConfetti();
-            }
-        }
-
-        // ===============================
-        // INITIALIZATION
-        // ===============================
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDashboard();
-            
-            // Set up quiz next button
-            document.getElementById('quiz-next').addEventListener('click', nextQuizQuestion);
-        });
-    </script>
+
+<header class="appbar">
+<div class="wrap appbar-in">
+
+<a class="brand" href="#">
+<div class="logo">
+<i class="fa-solid fa-stethoscope"></i>
+</div>
+<b>PflegefachProfi</b>
+</a>
+
+<nav class="nav">
+<a href="#">Home</a>
+<a href="#">Themen</a>
+<a href="#" class="active">Üben</a>
+</nav>
+
+</div>
+</header>
+
+<section class="hero">
+<div class="wrap">
+
+<div class="hero-card">
+
+<div class="hero-top">
+
+<div class="hero-title">
+<h1>Übungsarena</h1>
+<p>
+Lerne aktiv statt passiv. Flashcards, Quiz, Memory und Lückentext direkt aus den Prüfungsthemen generiert.
+</p>
+</div>
+
+<div class="stats">
+<div class="stat">
+<small>XP</small>
+<b id="xp">0</b>
+</div>
+
+<div class="stat">
+<small>Streak</small>
+<b id="streak">0</b>
+</div>
+
+<div class="stat">
+<small>Sessions</small>
+<b id="sessions">0</b>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+<main class="wrap layout">
+
+<aside class="sidebar">
+
+<div class="sidebar-head">
+<h2>Thema auswählen</h2>
+
+<div class="search">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input placeholder="COPD, Diabetes, Sepsis…"/>
+</div>
+</div>
+
+<div class="topic-list">
+
+<button class="topic active">
+<div class="topic-icon">🩸</div>
+<div>
+<div class="topic-title">Diabetes mellitus</div>
+<div class="topic-meta">⚗️ Endokrinologie</div>
+</div>
+</button>
+
+<button class="topic">
+<div class="topic-icon">🧠</div>
+<div>
+<div class="topic-title">Schlaganfall</div>
+<div class="topic-meta">🧠 Neurologie</div>
+</div>
+</button>
+
+<button class="topic">
+<div class="topic-icon">🫁</div>
+<div>
+<div class="topic-title">COPD</div>
+<div class="topic-meta">🫁 Pneumologie</div>
+</div>
+</button>
+
+</div>
+
+</aside>
+
+<section class="main">
+
+<div class="selected">
+<h2>Diabetes mellitus</h2>
+<p>
+Wähle eine Lernmethode. Fortschritt und XP werden lokal gespeichert.
+</p>
+</div>
+
+<div class="modes">
+
+<button class="mode">
+
+<div class="mode-icon">
+🃏
+</div>
+
+<h3>Flashcards</h3>
+
+<p>
+Animierte Lernkarten mit Definitionen, Symptomen, Assessment und Pflege.
+</p>
+
+<div class="reward">
+<i class="fa-solid fa-star"></i>
++2 XP pro Karte
+</div>
+
+</button>
+
+<button class="mode">
+
+<div class="mode-icon">
+⚡
+</div>
+
+<h3>Quiz</h3>
+
+<p>
+Schnelle Multiple-Choice-Fragen mit Sofortfeedback und Animationen.
+</p>
+
+<div class="reward">
+<i class="fa-solid fa-star"></i>
++10 XP richtig
+</div>
+
+</button>
+
+<button class="mode">
+
+<div class="mode-icon">
+🧠
+</div>
+
+<h3>Flip Memory</h3>
+
+<p>
+Verbinde Symptome, Assessment und Pflegeinhalte miteinander.
+</p>
+
+<div class="reward">
+<i class="fa-solid fa-star"></i>
++8 XP pro Paar
+</div>
+
+</button>
+
+<button class="mode">
+
+<div class="mode-icon">
+✍️
+</div>
+
+<h3>Lückentext</h3>
+
+<p>
+Aktives Abrufen wichtiger Fachbegriffe und Prüfungssätze.
+</p>
+
+<div class="reward">
+<i class="fa-solid fa-star"></i>
++12 XP richtig
+</div>
+
+</button>
+
+</div>
+
+</section>
+
+</main>
+
+<script>
+
+let xp = Number(localStorage.getItem("pfp_xp")) || 0
+let streak = Number(localStorage.getItem("pfp_streak")) || 0
+let sessions = Number(localStorage.getItem("pfp_sessions")) || 0
+
+document.getElementById("xp").textContent = xp
+document.getElementById("streak").textContent = streak
+document.getElementById("sessions").textContent = sessions
+
+document.querySelectorAll(".mode").forEach(mode => {
+
+mode.addEventListener("click", () => {
+
+xp += 10
+sessions += 1
+
+localStorage.setItem("pfp_xp", xp)
+localStorage.setItem("pfp_sessions", sessions)
+
+document.getElementById("xp").textContent = xp
+document.getElementById("sessions").textContent = sessions
+
+mode.animate([
+{ transform:"scale(1)" },
+{ transform:"scale(.96)" },
+{ transform:"scale(1)" }
+],{
+duration:280,
+easing:"cubic-bezier(.2,.8,.2,1)"
+})
+
+confetti()
+
+})
+
+})
+
+function confetti(){
+
+for(let i=0;i<60;i++){
+
+const el = document.createElement("div")
+
+el.style.position = "fixed"
+el.style.width = "10px"
+el.style.height = "10px"
+el.style.borderRadius = "50%"
+el.style.left = Math.random()*100+"vw"
+el.style.top = "-20px"
+el.style.background = ["#3158ff","#8b16d8","#f72585","#1fca72","#ffbf1f"][Math.floor(Math.random()*5)]
+el.style.zIndex = "9999"
+el.style.pointerEvents = "none"
+
+document.body.appendChild(el)
+
+el.animate([
+{
+transform:"translateY(0) rotate(0deg)",
+opacity:1
+},
+{
+transform:`translateY(${window.innerHeight+100}px) rotate(720deg)`,
+opacity:.2
+}
+],{
+duration:3000 + Math.random()*1200,
+easing:"linear"
+})
+
+setTimeout(()=>{
+el.remove()
+},4200)
+
+}
+
+}
+
+</script>
+
 </body>
 </html>
