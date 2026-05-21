@@ -3,734 +3,1024 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>PflegefachProfi • Übung</title>
+<title>PflegefachProfi • NextGen</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
+/* ==========================================================================
+   DESIGN SYSTEM & VARIABLES
+   ========================================================================== */
 :root {
-  --blue: #4361ee; --blue-dark: #3a0ca3; --purple: #7209b7; --pink: #f72585; --cyan: #4cc9f0;
-  --green: #4ade80; --green-dark: #16a34a; --yellow: #f59e0b; --red: #ef4444;
-  --bg: #f8fafc; --card: #fff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
-  --shadow: 0 18px 45px rgba(67,97,238,.18);
-  --game-shadow: 0 6px 0 rgba(15,23,42,.1);
-  --soft: 0 8px 24px rgba(15,23,42,.08);
-  --ease: cubic-bezier(.2,.8,.2,1);
-  --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Colors */
+  --primary: #4361ee;
+  --primary-dark: #3a0ca3;
+  --primary-light: #eef2ff;
+  --accent: #f72585;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  
+  /* Surfaces */
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  
+  /* Shadows & Elevations */
+  --shadow-sm: 0 2px 4px rgba(15,23,42,.04);
+  --shadow-md: 0 8px 16px rgba(15,23,42,.06);
+  --shadow-lg: 0 24px 48px rgba(67,97,238,.12);
+  --shadow-float: 0 12px 32px rgba(247,37,133,.2);
+  --shadow-inner: inset 0 -4px 0 rgba(0,0,0,0.1);
+  
+  /* Animation */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+
+/* ==========================================================================
+   RESET & TYPOGRAPHY
+   ========================================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; overflow-x: hidden; padding-bottom: 90px; }
-button, input { font-family: inherit; border: 0; cursor: pointer; outline: none; }
+body { 
+  font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, Arial, sans-serif; 
+  background: var(--bg-app); 
+  color: var(--text-main); 
+  min-height: 100vh; 
+  display: flex; 
+  justify-content: center;
+  overflow: hidden; /* App view constraint */
+}
 
-/* LAYOUT & NAV */
-.app { max-width: 520px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; }
-.topbar { position: sticky; top: 0; z-index: 50; background: rgba(248, 250, 252, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
-.topbar-in { height: 60px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 950; color: var(--ink); text-decoration: none; font-size: 18px; }
-.logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--blue), var(--purple)); display: grid; place-items: center; color: white; font-size: 16px; box-shadow: 0 4px 10px rgba(114, 9, 183, 0.3); }
-.header-stats { display: flex; gap: 8px; }
-.pill { background: white; border: 2px solid var(--line); color: var(--ink); padding: 6px 12px; border-radius: 999px; font-weight: 900; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 0 var(--line); transform: translateY(-2px); }
-.pill.xp-pill { color: var(--blue); border-color: rgba(67, 97, 238, 0.2); box-shadow: 0 4px 0 rgba(67, 97, 238, 0.15); }
-.pill i { color: var(--yellow); }
+button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 
-/* BOTTOM NAVBAR (GAME STYLE) */
-.bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: min(520px, 100%); height: 80px; background: white; border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 -10px 30px rgba(15,23,42,.05); border-radius: 30px 30px 0 0; padding-bottom: env(safe-area-inset-bottom); }
-.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; color: var(--muted); font-size: 11px; font-weight: 800; transition: .2s var(--ease); width: 60px; }
-.nav-item i { font-size: 20px; transition: .3s var(--bounce); }
-.nav-item.active { color: var(--blue); }
-.nav-item.active i { transform: scale(1.2) translateY(-4px); color: var(--blue); }
-.nav-play-btn { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; display: grid; place-items: center; font-size: 24px; box-shadow: 0 8px 20px rgba(247, 37, 133, 0.4); transform: translateY(-20px); border: 4px solid var(--bg); transition: .2s; }
-.nav-play-btn:active { transform: translateY(-16px) scale(0.95); box-shadow: 0 4px 10px rgba(247, 37, 133, 0.4); }
-.nav-play-btn span { display: none; }
-.nav-play-btn i { margin-left: 4px; } /* Optischer Ausgleich für Play-Icon */
+/* ==========================================================================
+   APP CONTAINER (Mobile First / SaaS Wrapper)
+   ========================================================================== */
+.app-wrapper {
+  width: 100%;
+  max-width: 480px; /* Mobile App constraint for Desktop */
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-app);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
 
-/* SCREENS & ANIMATIONS */
-.screen { display: none; padding: 18px 16px; animation: rise .3s var(--ease); }
-.screen.active { display: block; }
-@keyframes rise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-@keyframes pop-in { 0% { opacity: 0; transform: scale(0.8); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
-@keyframes float-up { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(1.2); } }
+/* ==========================================================================
+   GLOBAL UI COMPONENTS
+   ========================================================================== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: rgba(248, 250, 252, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 50;
+}
 
-/* HERO & HOME */
-.hero-dash { background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; border-radius: 30px; padding: 24px; box-shadow: var(--shadow); position: relative; overflow: hidden; margin-bottom: 20px; }
-.hero-dash:after { content: "🎯"; position: absolute; font-size: 120px; right: -20px; top: -10px; opacity: 0.15; transform: rotate(15deg); }
-.hero-dash h1 { font-size: 28px; letter-spacing: -0.05em; margin-bottom: 4px; z-index: 2; position: relative; }
-.hero-dash p { font-size: 14px; opacity: 0.8; font-weight: 700; z-index: 2; position: relative; margin-bottom: 16px; }
-.level-ring { width: 60px; height: 60px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.2); border-top-color: var(--green); display: grid; place-items: center; font-weight: 900; font-size: 18px; position: absolute; right: 20px; bottom: 20px; z-index: 2; }
+.brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; }
+.logo {
+  width: 40px; height: 40px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white; display: grid; place-items: center; font-size: 18px;
+  box-shadow: 0 8px 16px rgba(67,97,238,.2);
+}
 
-/* CARDS & BUTTONS */
-.section-title { font-size: 14px; color: var(--ink); font-weight: 950; letter-spacing: .02em; margin: 24px 2px 12px; display: flex; align-items: center; gap: 8px; }
-.section-title i { color: var(--pink); }
-.grid-list { display: grid; gap: 12px; }
-.game-card-btn { background: white; border: 2px solid var(--line); box-shadow: var(--game-shadow); border-radius: 20px; padding: 16px; display: flex; align-items: center; gap: 14px; transition: .15s; text-align: left; }
-.game-card-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(15,23,42,.1); }
-.game-card-btn.active { border-color: var(--blue); background: #f8faff; }
-.emoji-box { width: 52px; height: 52px; border-radius: 16px; background: var(--bg); display: grid; place-items: center; font-size: 26px; box-shadow: inset 0 2px 4px rgba(0,0,0,.05); }
-.card-content h3 { font-size: 17px; color: var(--ink); margin-bottom: 4px; }
-.card-content p { font-size: 12px; color: var(--muted); font-weight: 700; }
-.progress-track { height: 6px; background: var(--line); border-radius: 99px; margin-top: 8px; overflow: hidden; width: 100%; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--blue)); border-radius: 99px; }
+.user-stats { display: flex; gap: 8px; }
+.stat-pill {
+  background: var(--bg-surface); padding: 6px 12px; border-radius: 99px;
+  font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px;
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+}
+.stat-pill i.fa-fire { color: var(--warning); }
+.stat-pill i.fa-bolt { color: var(--primary); }
 
-/* GAME SESSION UI */
-.session-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.btn-icon { width: 44px; height: 44px; border-radius: 14px; background: white; border: 2px solid var(--line); color: var(--ink); display: grid; place-items: center; font-size: 16px; box-shadow: 0 4px 0 var(--line); transition: .1s; }
-.btn-icon:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--line); }
-.score-badge { background: var(--ink); color: white; padding: 8px 16px; border-radius: 999px; font-weight: 900; font-size: 15px; letter-spacing: 1px; }
-.play-card { background: white; border: 2px solid var(--line); box-shadow: var(--game-shadow); border-radius: 28px; padding: 24px; min-height: 340px; position: relative; }
-.question-label { color: var(--muted); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px; }
-.question { font-size: 24px; line-height: 1.2; letter-spacing: -0.03em; font-weight: 950; color: var(--ink); }
-.hint { color: var(--muted); font-weight: 700; margin-top: 10px; font-size: 14px; }
+/* ==========================================================================
+   SCREENS & NAVIGATION
+   ========================================================================== */
+.screen {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 0 24px 100px 24px;
+  display: none; opacity: 0; transform: translateY(10px);
+  transition: all 0.4s var(--ease-fluid);
+}
+.screen.active { display: block; opacity: 1; transform: translateY(0); }
 
-/* OPTIONS (QUIZ / BLANKS) */
-.options { display: grid; gap: 10px; margin-top: 24px; }
-.option { background: white; border: 2px solid var(--line); border-radius: 16px; padding: 16px; text-align: left; font-weight: 800; font-size: 15px; color: var(--ink); box-shadow: 0 4px 0 var(--line); transition: .15s; }
-.option:active { transform: translateY(4px); box-shadow: 0 0 0 var(--line); }
-.option.correct { background: #dcfce7; border-color: var(--green); color: var(--green-dark); box-shadow: 0 4px 0 var(--green); }
-.option.wrong { background: #fee2e2; border-color: var(--red); color: #b91c1c; box-shadow: 0 4px 0 var(--red); }
-.shake { animation: shake 0.4s var(--bounce); }
+/* Bottom Nav */
+.bottom-nav {
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 80px;
+  background: var(--bg-surface); border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around; align-items: center;
+  padding-bottom: env(safe-area-inset-bottom); z-index: 100;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: var(--text-muted); font-size: 11px; font-weight: 700;
+  transition: 0.3s var(--ease-spring); width: 70px;
+}
+.nav-item i { font-size: 22px; transition: 0.3s var(--ease-spring); }
+.nav-item.active { color: var(--primary); }
+.nav-item.active i { transform: translateY(-4px) scale(1.1); }
 
-/* FLASHCARDS 2.0 */
-.flash-container { perspective: 1000px; height: 260px; margin-bottom: 20px; }
-.flash-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s var(--bounce); transform-style: preserve-3d; cursor: pointer; }
-.flash-inner.flipped { transform: rotateY(180deg); }
-.face { position: absolute; inset: 0; background: white; border: 2px solid var(--line); box-shadow: var(--game-shadow); border-radius: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-.face.back { transform: rotateY(180deg); background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; border: none; box-shadow: 0 10px 30px rgba(114, 9, 183, 0.3); }
-.face h2 { font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
-.face.back p { font-size: 18px; font-weight: 700; opacity: 0.9; }
+/* FAB (Floating Action Button) */
+.fab-main {
+  width: 64px; height: 64px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--accent), var(--primary-dark));
+  color: white; font-size: 24px; display: grid; place-items: center;
+  transform: translateY(-20px) rotate(45deg);
+  box-shadow: var(--shadow-float); transition: 0.3s var(--ease-spring);
+  border: 4px solid var(--bg-app);
+}
+.fab-main i { transform: rotate(-45deg); transition: 0.3s; margin-left: 4px; }
+.fab-main:active { transform: translateY(-16px) rotate(45deg) scale(0.95); box-shadow: 0 4px 12px rgba(247,37,133,.3); }
 
-.difficulty-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; animation: pop-in 0.4s var(--bounce) forwards; opacity: 0; }
-.diff-btn { padding: 12px 4px; border-radius: 14px; font-weight: 900; font-size: 12px; color: white; border: none; box-shadow: 0 4px 0 rgba(0,0,0,0.2); transition: .1s; text-transform: uppercase; }
-.diff-btn:active { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
-.diff-1 { background: var(--muted); }
-.diff-2 { background: var(--red); }
-.diff-3 { background: var(--yellow); }
-.diff-4 { background: var(--green); }
+/* ==========================================================================
+   HOME DASHBOARD
+   ========================================================================== */
+.dash-header { margin: 10px 0 24px 0; }
+.dash-header h1 { font-size: 28px; color: var(--text-main); margin-bottom: 6px; }
+.dash-header p { color: var(--text-muted); font-size: 15px; font-weight: 500; }
 
-/* MEMORY */
-.memory-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
-.mem { min-height: 90px; border-radius: 16px; background: linear-gradient(135deg, var(--blue), var(--cyan)); color: white; font-weight: 900; font-size: 15px; padding: 10px; text-align: center; border: 0; box-shadow: 0 4px 0 rgba(0,0,0,0.15); transition: .15s; }
-.mem:active:not(.done):not(.open) { transform: translateY(4px); box-shadow: none; }
-.mem.open { background: white; color: var(--ink); border: 2px solid var(--blue); box-shadow: 0 4px 0 var(--blue); }
-.mem.done { background: #dcfce7; color: var(--green-dark); border: 2px solid var(--green); box-shadow: none; opacity: 0.6; transform: scale(0.95); }
+.goal-card {
+  background: var(--primary-dark); color: white;
+  border-radius: 24px; padding: 24px; position: relative; overflow: hidden;
+  box-shadow: var(--shadow-lg); margin-bottom: 24px;
+}
+.goal-card::after {
+  content: "🎯"; position: absolute; font-size: 140px; right: -20px; top: 0;
+  opacity: 0.1; transform: rotate(15deg); pointer-events: none;
+}
+.goal-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; opacity: 0.8; margin-bottom: 8px; }
+.goal-progress { display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px; }
+.goal-progress span:first-child { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
+.goal-progress span:last-child { font-size: 16px; opacity: 0.8; font-weight: 600; }
+.progress-bar-bg { height: 8px; background: rgba(255,255,255,0.2); border-radius: 99px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--success); width: 0%; transition: width 1s var(--ease-fluid); border-radius: 99px; }
 
-/* FLOATING DOPAMINE XP */
-.floating-xp { position: fixed; font-size: 24px; font-weight: 950; color: var(--green); text-shadow: 0 2px 10px rgba(74, 222, 128, 0.4); pointer-events: none; z-index: 1000; animation: float-up 1s var(--ease) forwards; }
+.section-title { font-size: 16px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.section-title i { color: var(--primary); }
 
-/* RESULTS */
-.result-card { text-align: center; padding: 30px 20px; background: white; border-radius: 30px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
-.result-card::before { content: ""; position: absolute; inset: 0; background: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="2" fill="%23e2e8f0"/></svg>'); opacity: 0.5; }
-.score-circle { width: 140px; height: 140px; border-radius: 50%; background: var(--bg); margin: 0 auto 20px; display: grid; place-items: center; border: 8px solid var(--line); position: relative; z-index: 2; }
-.score-circle.perfect { border-color: var(--yellow); box-shadow: 0 0 40px rgba(245, 158, 11, 0.4); }
-.score-number { font-size: 42px; font-weight: 950; color: var(--ink); }
-.xp-reward { font-size: 24px; font-weight: 900; color: var(--green); margin: 16px 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.action-btn { width: 100%; height: 60px; border-radius: 20px; background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; font-size: 18px; font-weight: 900; box-shadow: 0 6px 0 var(--blue-dark); transition: .15s; margin-top: 20px; position: relative; z-index: 2; }
-.action-btn:active { transform: translateY(6px); box-shadow: 0 0 0 var(--blue-dark); }
+.quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-box {
+  background: var(--bg-surface); padding: 16px; border-radius: 20px;
+  border: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px;
+}
+.stat-box .value { font-size: 24px; font-weight: 800; color: var(--primary); }
+.stat-box .label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
 
-/* TOAST & CONFETTI */
-.toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--ink); color: white; padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 900; z-index: 200; box-shadow: var(--shadow); animation: pop-in .3s var(--bounce); }
-.confetti { position: fixed; width: 10px; height: 10px; z-index: 999; border-radius: 2px; animation: fall linear forwards; pointer-events: none; }
+/* ==========================================================================
+   WIZARD OVERLAY (Game Setup Flow)
+   ========================================================================== */
+.wizard-overlay {
+  position: absolute; inset: 0; background: var(--bg-app); z-index: 200;
+  display: flex; flex-direction: column;
+  transform: translateY(100%); transition: transform 0.5s var(--ease-spring);
+}
+.wizard-overlay.open { transform: translateY(0); }
+
+.wizard-header {
+  padding: 24px; display: flex; align-items: center; gap: 16px;
+  background: var(--bg-surface); border-bottom: 1px solid var(--border);
+}
+.btn-back {
+  width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light);
+  color: var(--primary); display: grid; place-items: center; font-size: 16px;
+}
+.wizard-title { font-size: 18px; font-weight: 800; flex: 1; }
+
+.wizard-body { flex: 1; overflow-y: auto; padding: 24px; position: relative; overflow-x: hidden; }
+
+/* Wizard Sliding Panes */
+.wizard-pane {
+  position: absolute; top: 24px; left: 24px; right: 24px;
+  transition: 0.4s var(--ease-fluid);
+}
+.pane-hidden-left { transform: translateX(-120%); opacity: 0; pointer-events: none; }
+.pane-active { transform: translateX(0); opacity: 1; pointer-events: auto; }
+.pane-hidden-right { transform: translateX(120%); opacity: 0; pointer-events: none; }
+
+/* Rich Cards for Selection */
+.selection-grid { display: grid; gap: 12px; }
+.rich-card {
+  background: var(--bg-surface); border: 2px solid var(--border);
+  border-radius: 20px; padding: 16px; display: flex; gap: 16px; align-items: center;
+  transition: 0.2s; text-align: left; box-shadow: var(--shadow-sm);
+}
+.rich-card:active { transform: scale(0.98); border-color: var(--primary); }
+.rich-icon {
+  width: 56px; height: 56px; border-radius: 16px; background: var(--bg-app);
+  display: grid; place-items: center; font-size: 28px;
+}
+.rich-content flex: 1;
+.rich-content h3 { font-size: 16px; margin-bottom: 4px; color: var(--text-main); }
+.rich-content p { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+/* ==========================================================================
+   GAME ENGINE UI
+   ========================================================================== */
+.game-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+}
+.game-progress-container { flex: 1; margin: 0 16px; }
+.game-progress-track { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.game-progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.3s; }
+.game-score { font-weight: 800; font-size: 14px; color: var(--text-muted); background: var(--bg-surface); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border); }
+
+.play-area { position: relative; min-height: 400px; }
+
+/* The Game Card */
+.play-card {
+  background: var(--bg-surface); border-radius: 28px; padding: 32px 24px;
+  box-shadow: var(--shadow-md); border: 1px solid var(--border);
+  text-align: center;
+}
+.play-kicker { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.play-question { font-size: 22px; font-weight: 800; line-height: 1.3; color: var(--text-main); margin-bottom: 24px; }
+
+/* Options (Quiz/Blank) */
+.options-grid { display: grid; gap: 12px; }
+.option-btn {
+  background: var(--bg-surface); border: 2px solid var(--border);
+  padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 700;
+  text-align: left; color: var(--text-main); transition: 0.2s;
+  box-shadow: var(--shadow-inner);
+}
+.option-btn:active { transform: translateY(2px); background: var(--bg-app); }
+.option-btn.correct { background: var(--success-light); border-color: var(--success); color: #065f46; box-shadow: none; }
+.option-btn.wrong { background: var(--danger-light); border-color: var(--danger); color: #991b1b; box-shadow: none; animation: shake 0.4s var(--ease-spring); }
+
+/* Flashcards */
+.flash-scene { perspective: 1000px; height: 300px; margin-bottom: 20px; }
+.flash-card { width: 100%; height: 100%; position: relative; transition: transform 0.6s var(--ease-spring); transform-style: preserve-3d; cursor: pointer; }
+.flash-card.is-flipped { transform: rotateY(180deg); }
+.flash-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--bg-surface); border-radius: 28px; border: 2px solid var(--border);
+  padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: var(--shadow-md);
+}
+.flash-face.back {
+  transform: rotateY(180deg); background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white; border: none;
+}
+.flash-text { font-size: 22px; font-weight: 800; line-height: 1.3; }
+.flash-face.back .flash-text { font-size: 20px; font-weight: 600; }
+
+.flash-actions {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  opacity: 0; transform: translateY(10px); transition: 0.3s; pointer-events: none;
+}
+.flash-actions.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.rate-btn {
+  padding: 14px 4px; border-radius: 16px; font-weight: 800; font-size: 12px; color: white;
+  box-shadow: var(--shadow-inner); transition: 0.2s;
+}
+.rate-btn:active { transform: translateY(2px); box-shadow: none; }
+.rate-1 { background: var(--text-muted); }
+.rate-2 { background: var(--danger); }
+.rate-3 { background: var(--warning); }
+.rate-4 { background: var(--success); }
+
+/* Memory */
+.memory-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.mem-card {
+  height: 100px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white; font-weight: 800; font-size: 14px; padding: 10px; display: grid; place-items: center;
+  box-shadow: var(--shadow-sm); transition: 0.2s; border: 2px solid transparent; text-align: center;
+}
+.mem-card:active:not(.open):not(.matched) { transform: scale(0.95); }
+.mem-card.open { background: var(--bg-surface); color: var(--text-main); border-color: var(--primary); }
+.mem-card.matched { background: var(--success-light); color: var(--success); border-color: transparent; box-shadow: none; opacity: 0.7; transform: scale(0.95); pointer-events: none; }
+
+/* ==========================================================================
+   RESULTS & DOPAMINE
+   ========================================================================== */
+.result-container { text-align: center; padding-top: 40px; }
+.score-ring-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 30px; }
+.score-ring { width: 100%; height: 100%; border-radius: 50%; border: 10px solid var(--primary-light); display: grid; place-items: center; background: var(--bg-surface); box-shadow: var(--shadow-lg); z-index: 2; position: relative; }
+.score-value { font-size: 48px; font-weight: 900; color: var(--primary-dark); letter-spacing: -2px; }
+.score-value span { font-size: 24px; }
+.xp-reward { font-size: 24px; font-weight: 800; color: var(--success); margin-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+
+.btn-primary {
+  width: 100%; padding: 20px; border-radius: 20px;
+  background: var(--primary); color: white; font-size: 18px; font-weight: 800;
+  box-shadow: var(--shadow-inner); margin-top: 32px; transition: 0.2s;
+}
+.btn-primary:active { transform: translateY(4px); box-shadow: none; }
+
+/* Floating Feedback Animations */
+.floating-xp {
+  position: absolute; font-size: 24px; font-weight: 900; color: var(--success);
+  pointer-events: none; z-index: 1000; animation: floatUp 1s var(--ease-fluid) forwards;
+  text-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+@keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.2); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+@keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
+.confetti { position: fixed; width: 10px; height: 10px; z-index: 999; border-radius: 3px; animation: fall linear forwards; pointer-events: none; }
 @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 </style>
 </head>
 <body>
-<div class="app">
 
-<!-- TOPBAR -->
-<header class="topbar">
-  <div class="topbar-in">
+<div class="app-wrapper">
+
+  <!-- GLOBAL TOPBAR -->
+  <header class="topbar">
     <div class="brand">
       <div class="logo"><i class="fa-solid fa-stethoscope"></i></div>
-      <span>PflegeProfi</span>
+      PflegeProfi
     </div>
-    <div class="header-stats">
-      <div class="pill"><i class="fa-solid fa-fire"></i> <span id="hdrStreak">0</span></div>
-      <div class="pill xp-pill"><i class="fa-solid fa-bolt" style="color:var(--blue)"></i> <span id="hdrXp">0</span></div>
+    <div class="user-stats">
+      <div class="stat-pill"><i class="fa-solid fa-fire"></i> <span id="ui-streak">0</span></div>
+      <div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span id="ui-xp">0</span></div>
     </div>
-  </div>
-</header>
+  </header>
 
-<!-- MAIN SCREENS -->
-<main id="mainContent">
+  <!-- =========================================================
+       SCREEN 1: DASHBOARD
+       ========================================================= -->
+  <main class="screen active" id="view-home">
+    <div class="dash-header">
+      <h1>Hallo, Pflegekraft! 👋</h1>
+      <p>Lass uns dein Wissen auf das nächste Level bringen.</p>
+    </div>
 
-  <!-- HOME DASHBOARD -->
-  <section class="screen active" id="home">
-    <div class="hero-dash">
-      <h1>Bereit fürs Level-Up?</h1>
-      <p>Dein tägliches Training wartet auf dich. Baue deinen Streak aus!</p>
-      <div class="level-ring"><span id="lvlDisplay">1</span></div>
+    <!-- Daily Goal Card -->
+    <div class="goal-card">
+      <div class="goal-title">Tägliches Trainingsziel</div>
+      <div class="goal-progress">
+        <span id="ui-daily-xp">0</span> <span>/ 200 XP</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="ui-daily-bar"></div>
+      </div>
+    </div>
+
+    <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Deine Performance</div>
+    <div class="quick-stats">
+      <div class="stat-box">
+        <div class="value" id="ui-stat-rounds">0</div>
+        <div class="label">Abgeschlossene Runden</div>
+      </div>
+      <div class="stat-box">
+        <div class="value" id="ui-stat-best">0%</div>
+        <div class="label">Bester Durchschnitt</div>
+      </div>
     </div>
     
-    <div class="section-title"><i class="fa-solid fa-chart-simple"></i> Deine Stats</div>
-    <div class="grid-list" style="grid-template-columns: 1fr 1fr;">
-      <div class="game-card-btn" style="flex-direction: column; align-items: flex-start; gap: 4px;">
-        <span style="font-size:24px; font-weight:900; color:var(--ink)" id="statRounds">0</span>
-        <span style="font-size:12px; color:var(--muted); font-weight:800;">Gespielte Runden</span>
-      </div>
-      <div class="game-card-btn" style="flex-direction: column; align-items: flex-start; gap: 4px;">
-        <span style="font-size:24px; font-weight:900; color:var(--green)" id="statBest">0%</span>
-        <span style="font-size:12px; color:var(--muted); font-weight:800;">Bester Score</span>
-      </div>
+    <!-- Padding for bottom nav & FAB -->
+    <div style="height: 60px;"></div> 
+  </main>
+
+  <!-- =========================================================
+       SCREEN 2: LIBRARY (Topics Explorer)
+       ========================================================= -->
+  <main class="screen" id="view-library">
+    <div class="dash-header">
+      <h1>Wissensbibliothek</h1>
+      <p>Alle Fachbereiche im Überblick.</p>
     </div>
-
-    <div class="section-title" style="margin-top: 30px;"><i class="fa-solid fa-bolt"></i> Schnellstart</div>
-    <button class="action-btn" onclick="playNow()" style="margin-top: 0;">
-      <i class="fa-solid fa-play"></i> Zufälliges Training starten
-    </button>
-  </section>
-
-  <!-- TOPICS -->
-  <section class="screen" id="themen">
-    <div class="section-title"><i class="fa-solid fa-map"></i> Themen-Welten</div>
-    <div class="grid-list" id="topicsList"></div>
-  </section>
-
-  <!-- MODES -->
-  <section class="screen" id="modes">
-    <div class="session-head">
-      <button class="btn-icon" onclick="nav('themen')"><i class="fa-solid fa-arrow-left"></i></button>
-      <div style="text-align: right;">
-        <strong style="font-size: 18px;" id="selectedTopicTitle">Thema</strong>
-        <div style="font-size:12px;color:var(--muted);font-weight:800">Wähle deinen Modus</div>
-      </div>
+    <div class="selection-grid" id="library-list">
+      <!-- Generated via JS -->
     </div>
-    <div class="grid-list" id="modesList"></div>
-  </section>
+  </main>
 
-  <!-- PLAY AREA -->
-  <section class="screen" id="play">
-    <div class="session-head">
-      <button class="btn-icon" onclick="abortGame()"><i class="fa-solid fa-xmark"></i></button>
-      <div class="progress-track" style="margin: 0 16px; height: 10px;">
-        <div class="progress-fill" id="bar" style="width: 0%;"></div>
+  <!-- =========================================================
+       SCREEN 3: GAMEPLAY ENGINE
+       ========================================================= -->
+  <main class="screen" id="view-play" style="padding-top: 20px;">
+    <div class="game-header">
+      <button class="btn-back" onclick="GameEngine.abort()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="game-progress-container">
+        <div class="game-progress-track"><div class="game-progress-fill" id="game-bar"></div></div>
       </div>
-      <div class="score-badge" id="sessionScore">0/0</div>
+      <div class="game-score" id="game-score">0/0</div>
     </div>
-    <div id="game"></div>
-  </section>
+    <div class="play-area" id="game-container">
+      <!-- Game Content injected here -->
+    </div>
+  </main>
 
-  <!-- RESULT AREA -->
-  <section class="screen" id="result">
-    <div class="result-card">
-      <div class="score-circle" id="scoreCircle">
-        <div class="score-number"><span id="finalPercent">0</span>%</div>
+  <!-- =========================================================
+       SCREEN 4: RESULTS & REWARDS
+       ========================================================= -->
+  <main class="screen" id="view-result">
+    <div class="result-container">
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <div class="score-value"><span id="res-score">0</span><span>%</span></div>
+        </div>
       </div>
-      <h2 id="resultTitle" style="font-size: 26px; font-weight: 950; margin-bottom: 8px;">Stark!</h2>
-      <p id="resultText" style="color: var(--muted); font-weight: 700; font-size: 15px; margin-bottom: 20px;">Gut gemacht.</p>
+      <h1 id="res-title" style="font-size: 32px; margin-bottom: 12px;">Stark!</h1>
+      <p id="res-subtitle" style="color: var(--text-muted); font-weight: 600; margin-bottom: 32px;">Dein Wissen zahlt sich aus.</p>
       
       <div class="xp-reward">
-        <i class="fa-solid fa-bolt"></i> <span id="earnedXp">+0 XP</span>
+        <i class="fa-solid fa-bolt"></i> <span id="res-xp">+0 XP</span>
       </div>
 
-      <button class="action-btn" onclick="nav('home')">
-        Weiter im Text <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
-      </button>
+      <button class="btn-primary" onclick="App.nav('view-home')">Abschließen & Speichern</button>
     </div>
-  </section>
+  </main>
 
-</main>
+  <!-- =========================================================
+       SETUP WIZARD (The New "Games Page")
+       ========================================================= -->
+  <div class="wizard-overlay" id="wizard">
+    <div class="wizard-header">
+      <button class="btn-back" onclick="Wizard.close()"><i class="fa-solid fa-arrow-down"></i></button>
+      <div class="wizard-title" id="wizard-title">Neues Training</div>
+    </div>
+    
+    <div class="wizard-body">
+      <!-- Step 1: Topics -->
+      <div class="wizard-pane pane-active" id="wiz-step-1">
+        <h2 style="margin-bottom: 16px; font-size: 20px;">1. Fokus wählen</h2>
+        <div class="selection-grid" id="wiz-topics"></div>
+      </div>
+      
+      <!-- Step 2: Modes -->
+      <div class="wizard-pane pane-hidden-right" id="wiz-step-2">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <button class="btn-back" style="width: 32px; height: 32px; font-size: 14px;" onclick="Wizard.backToTopics()"><i class="fa-solid fa-arrow-left"></i></button>
+          <h2 style="font-size: 20px;">2. Trainingsmethode</h2>
+        </div>
+        <div class="selection-grid" id="wiz-modes"></div>
+      </div>
+    </div>
+  </div>
 
-<!-- BOTTOM NAVIGATION -->
-<nav class="bottom-nav" id="bottomNav">
-  <button class="nav-item active" data-tab="home" onclick="nav('home')">
-    <i class="fa-solid fa-house"></i>
-    <span>Home</span>
-  </button>
-  <button class="nav-play-btn" onclick="playNow()">
-    <i class="fa-solid fa-play"></i>
-    <span>Play</span>
-  </button>
-  <button class="nav-item" data-tab="themen" onclick="nav('themen')">
-    <i class="fa-solid fa-layer-group"></i>
-    <span>Themen</span>
-  </button>
-</nav>
+  <!-- =========================================================
+       BOTTOM NAVIGATION
+       ========================================================= -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="nav-item active" data-target="view-home" onclick="App.nav('view-home')">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </button>
+    
+    <!-- The Primary Play Button -> Opens Wizard -->
+    <button class="fab-main" onclick="Wizard.open()">
+      <i class="fa-solid fa-play"></i>
+    </button>
+
+    <button class="nav-item" data-target="view-library" onclick="App.nav('view-library')">
+      <i class="fa-solid fa-book-medical"></i>
+      <span>Themen</span>
+    </button>
+  </nav>
 
 </div>
 
 <script>
-/* =========================================================================
-   INHALTE (EDIT CONTENT HERE)
-========================================================================= */
+/* ==========================================================================
+   1. DATABASE / CONTENT (Easily Updatable Medical German)
+   ========================================================================== */
 const CONTENT = [
   {
-    id: "diabetes", title: "Diabetes mellitus", area: "Endokrinologie", icon: "🩸",
+    id: "vital", 
+    title: "Vitalparameter", 
+    area: "Überwachung & Diagnostik", 
+    icon: "🫀",
     flash: [
-      { front: "Was ist Diabetes mellitus?", back: "Chronische Stoffwechselerkrankung mit Hyperglykämie durch absoluten/relativen Insulinmangel." },
-      { front: "Hypoglykämie-Zeichen", back: "Schwitzen, Zittern, Unruhe, Heißhunger, Verwirrtheit." },
-      { front: "Hyperglykämie-Zeichen", back: "Durst, Polyurie, Müdigkeit, trockene Haut, Azetongeruch." }
+      { front: "Normwert Blutdruck (Erwachsener)", back: "Optimal: < 120/80 mmHg. Normal: 120-129 / 80-84 mmHg." },
+      { front: "Tachykardie: Definition", back: "Herzfrequenz über 100 Schläge pro Minute beim Erwachsenen." },
+      { front: "Fieber (Pyrexie) ab wann?", back: "Ab einer Körperkerntemperatur von 38,1 °C." }
     ],
     quiz: [
-      { q: "Welches Zeichen passt zur Hypoglykämie?", a: "Zittern und Schwitzen", o: ["Azetongeruch", "Bradykardie", "Trockene Haut"] },
-      { q: "Was gehört zur Diabetes-Pflege?", a: "Tägliche Fußinspektion", o: ["Wärmeflasche anwenden", "Flüssigkeit begrenzen", "Patient nüchtern lassen"] }
+      { q: "Wo wird der Puls am besten beim reanimationspflichtigen Patienten getastet?", a: "A. carotis (Hals)", o: ["A. radialis (Handgelenk)", "A. dorsalis pedis (Fuß)", "A. femoralis (Leiste)"] },
+      { q: "Welcher Faktor verfälscht die SpO2-Messung am Finger?", a: "Dunkler Nagellack", o: ["Erhöhter Blutzucker", "Normale Raumtemperatur", "Augenfarbe des Patienten"] }
     ],
     blanks: [
-      { text: "Bei Diabetes wird der _____ regelmäßig kontrolliert.", answer: "Blutzucker", options: ["Blutzucker", "Puls", "GCS", "BMI"] },
-      { text: "Insulin wird nach der _____ Regel vorbereitet.", answer: "10-R-Regel", options: ["10-R-Regel", "FAST-Regel", "NYHA", "qSOFA"] }
+      { text: "Die _____ ist die Differenz zwischen systolischem und diastolischem Blutdruck.", answer: "Blutdruckamplitude", options: ["Blutdruckamplitude", "Herzfrequenz", "Pulsdefizit", "Orthostase"] },
+      { text: "Die normale Atemfrequenz eines Erwachsenen liegt bei 12 bis _____ Zügen pro Minute.", answer: "20", options: ["20", "30", "10", "40"] }
     ],
     memory: [
-      ["Hypoglykämie", "Schwitzen & Zittern"], ["Hyperglykämie", "Durst & Polyurie"],
-      ["HbA1c", "Langzeit-Blutzucker"], ["Fußinspektion", "Druckstellenkontrolle"],
-      ["Insulin", "Blutzuckersenkend"]
+      ["Systole", "Austreibungsphase des Herzens"], ["Diastole", "Füllungsphase des Herzens"],
+      ["Bradypnoe", "Verlangsamte Atmung"], ["Hyperthermie", "Überwärmung des Körpers"],
+      ["Apnoe", "Atemstillstand"]
     ]
   },
   {
-    id: "apoplex", title: "Schlaganfall", area: "Neurologie", icon: "🧠",
+    id: "hygiene", 
+    title: "Hygiene & Infektion", 
+    area: "Qualitätsmanagement", 
+    icon: "🧼",
     flash: [
-      { front: "FAST-Test Bedeutung?", back: "Face, Arms, Speech, Time." },
-      { front: "Warum Schluckscreening?", back: "Zur Vermeidung von Aspiration bei Dysphagie." }
+      { front: "Nenne die 5 Momente der Händehygiene (WHO)", back: "1. Vor Patientenkontakt, 2. Vor aseptischen Tätigkeiten, 3. Nach Kontakt mit potenziell infektiösem Material, 4. Nach Patientenkontakt, 5. Nach Kontakt mit Patientenumgebung." },
+      { front: "Nosokomiale Infektion", back: "Eine Infektion, die im Zuge eines Aufenthalts in einer medizinischen Einrichtung erworben wird." }
     ],
     quiz: [
-      { q: "Komplikation bei Dysphagie?", a: "Aspiration", o: ["Dekubitus", "Hypoglykämie", "Ödem"] },
-      { q: "Bei Schlaganfall-Verdacht?", a: "Sofortige Eskalation", o: ["Abwarten", "Essen lassen", "Mobilisation"] }
+      { q: "Wie lange sollte die hygienische Händedesinfektion standardmäßig dauern?", a: "30 Sekunden", o: ["10 Sekunden", "1 Minute", "5 Minuten"] },
+      { q: "Welches Bakterium ist ein typischer multiresistenter Erreger?", a: "MRSA", o: ["Lactobacillus", "Bifidobacterium", "Saccharomyces"] }
     ],
     blanks: [
-      { text: "Beim FAST-Test steht Speech für _____.", answer: "Sprachstörung", options: ["Sprachstörung", "Hypotonie", "Wunde", "Hyperglykämie"] },
-      { text: "Ein Apoplex ist ein medizinischer _____.", answer: "Notfall", options: ["Notfall", "Routinefall", "Pflegegrad", "Ernährungsplan"] }
+      { text: "Schutzkleidung dient primär dem _____ von Personal und Patienten.", answer: "Infektionsschutz", options: ["Infektionsschutz", "Kälteschutz", "Datenschutz", "Brandschutz"] },
+      { text: "Materialien, die Haut durchdringen, müssen zwingend _____ sein.", answer: "steril", options: ["steril", "desinfiziert", "sauber", "kalt"] }
     ],
     memory: [
-      ["Face", "Mundwinkel hängt"], ["Arms", "Arm sinkt"],
-      ["Speech", "verwaschene Sprache"], ["Time", "sofort handeln"],
-      ["Hemiparese", "Halbseitenlähmung"]
+      ["Sterilisation", "Abtötung aller Mikroorganismen"], ["Desinfektion", "Keimreduktion"],
+      ["MRSA", "Methicillin-resistenter Staph. aureus"], ["Isolation", "Trennung infektiöser Patienten"],
+      ["Schleuse", "Übergangsbereich rein/unrein"]
+    ]
+  },
+  {
+    id: "meds", 
+    title: "Arzneimittellehre", 
+    area: "Pharmakologie", 
+    icon: "💊",
+    flash: [
+      { front: "Was ist die 6-R-Regel?", back: "Richtiger Patient, Richtiges Medikament, Richtige Dosierung, Richtige Applikationsform, Richtiger Zeitpunkt, Richtige Dokumentation." },
+      { front: "Applikationsweg 'sublingual'", back: "Unter die Zunge (Aufnahme über Mundschleimhaut)." }
+    ],
+    quiz: [
+      { q: "Was bedeutet 'p.o.' auf ärztlichen Verordnungen?", a: "per os (durch den Mund)", o: ["post operativ", "per oculus (ins Auge)", "pro omni (für alle)"] },
+      { q: "Welche Tablettenart darf niemals gemörsert werden?", a: "Retardtabletten", o: ["Filmtabletten", "Schmerztabletten", "Vitamintabletten"] }
+    ],
+    blanks: [
+      { text: "Suppositorien werden _____ appliziert.", answer: "rektal", options: ["rektal", "oral", "intravenös", "dermal"] },
+      { text: "Die _____ Halbwertszeit gibt an, wann die Hälfte des Wirkstoffs abgebaut ist.", answer: "biologische", options: ["biologische", "chemische", "physikalische", "totale"] }
+    ],
+    memory: [
+      ["i.v.", "intravenös"], ["s.c.", "subkutan"],
+      ["i.m.", "intramuskulär"], ["Analgetikum", "Schmerzmittel"],
+      ["Antipyretikum", "Fiebersenkendes Mittel"]
     ]
   }
 ];
 
 const MODES = [
-  {id:"flash", icon:"🃏", title:"Flashcards 2.0", desc:"Bewerten statt nur umdrehen."},
-  {id:"quiz", icon:"⚡", title:"Speed Quiz", desc:"Wähle die richtige Antwort."},
-  {id:"blank", icon:"✍️", title:"Lückentext", desc:"Fachbegriffe einsetzen."},
-  {id:"memory", icon:"🧠", title:"Memory", desc:"Finde die Paare."}
+  { id: "flash", icon: "🃏", title: "Smart Flashcards", desc: "Trainiere dein aktives Erinnerungsvermögen." },
+  { id: "quiz", icon: "⚡", title: "Speed Quiz", desc: "Teste dein Wissen unter Druck." },
+  { id: "blank", icon: "✍️", title: "Lückentext", desc: "Setze Fachbegriffe in den klinischen Kontext." },
+  { id: "memory", icon: "🧠", title: "Clinical Memory", desc: "Verknüpfe Symptome und Definitionen." }
 ];
 
-/* =========================================================================
-   SYSTEM-LOGIK & PSYCHOLOGIE
-========================================================================= */
-const SAVE_KEY = "pfp.practice.v3";
-const $ = s => document.querySelector(s);
-const $$ = s => Array.from(document.querySelectorAll(s));
+/* ==========================================================================
+   2. STATE MANAGEMENT & DATA PERSISTENCE
+   ========================================================================== */
+const SAVE_KEY = "pfp_state_v4";
+const AppState = {
+  data: {
+    xp: 0,
+    rounds: 0,
+    best: 0,
+    streak: 0,
+    dailyXp: 0,
+    lastPlayDate: new Date().toDateString(),
+    history: {}
+  },
+  
+  load() {
+    try {
+      const saved = localStorage.getItem(SAVE_KEY);
+      if(saved) {
+        // Safe Merge to prevent data loss on updates
+        this.data = { ...this.data, ...JSON.parse(saved) };
+      }
+      this.checkDailyReset();
+    } catch(e) { console.error("Save Load Error", e); }
+  },
+  
+  save() {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(this.data));
+    UI.updateDashboard();
+  },
 
-let app = {
-  topic: null, mode: null, index: 0, correct: 0, total: 0, 
-  locked: false, memory: null,
-  save: loadSave()
+  checkDailyReset() {
+    const today = new Date().toDateString();
+    if(this.data.lastPlayDate !== today) {
+      this.data.dailyXp = 0;
+      this.data.lastPlayDate = today;
+    }
+  },
+
+  addReward(xp, percent) {
+    this.data.xp += xp;
+    this.data.dailyXp += xp;
+    this.data.rounds += 1;
+    if(percent > this.data.best) this.data.best = percent;
+    if(percent >= 80) this.data.streak += 1; else this.data.streak = 0;
+    this.save();
+  }
 };
 
-function loadSave() {
-  try {
-    const raw = localStorage.getItem(SAVE_KEY);
-    return raw ? JSON.parse(raw) : { xp: 0, rounds: 0, best: 0, streak: 0, history: {} };
-  } catch(e) { return { xp: 0, rounds: 0, best: 0, streak: 0, history: {} }; }
-}
+/* ==========================================================================
+   3. APP CONTROLLER & UI UPDATE
+   ========================================================================== */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
 
-function saveProgress() {
-  localStorage.setItem(SAVE_KEY, JSON.stringify(app.save));
-  updateDash();
-}
+const App = {
+  init() {
+    AppState.load();
+    UI.updateDashboard();
+    UI.renderLibrary();
+    Wizard.render();
+    this.nav('view-home');
+  },
 
-function updateDash() {
-  $("#hdrXp").textContent = app.save.xp;
-  $("#hdrStreak").textContent = app.save.streak;
-  $("#statRounds").textContent = app.save.rounds;
-  $("#statBest").textContent = app.save.best + "%";
-  $("#lvlDisplay").textContent = Math.floor(app.save.xp / 500) + 1; // Level System (1 Lvl = 500 XP)
-}
-
-function init() {
-  updateDash();
-  renderTopicsList();
-  renderModesList();
-  nav("home");
-}
-
-function nav(tabId) {
-  // UI Tabs
-  $$(".screen").forEach(s => s.classList.remove("active"));
-  $("#" + tabId).classList.add("active");
-  
-  // Bottom Nav Highlighting
-  $$(".nav-item").forEach(i => i.classList.remove("active"));
-  const tabBtn = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
-  if(tabBtn) tabBtn.classList.add("active");
-
-  // Hide Bottom Nav during gameplay
-  $("#bottomNav").style.display = (tabId === "play" || tabId === "result") ? "none" : "flex";
-}
-
-function renderTopicsList() {
-  $("#topicsList").innerHTML = CONTENT.map(t => {
-    let playedCount = 0;
-    let totalScore = 0;
-    MODES.forEach(m => {
-      const s = app.save.history[`${t.id}.${m.id}`];
-      if(s) { playedCount++; totalScore += s; }
-    });
-    const progress = playedCount > 0 ? Math.min(100, (totalScore / (MODES.length * 100)) * 100) : 0;
-
-    return `
-    <button class="game-card-btn" onclick="selectTopic('${t.id}')">
-      <div class="emoji-box">${t.icon}</div>
-      <div class="card-content" style="flex: 1;">
-        <h3>${t.title}</h3>
-        <p>${t.area}</p>
-        <div class="progress-track"><div class="progress-fill" style="width: ${progress}%"></div></div>
-      </div>
-      <i class="fa-solid fa-chevron-right" style="color:var(--line)"></i>
-    </button>
-  `}).join("");
-}
-
-function renderModesList() {
-  $("#modesList").innerHTML = MODES.map(m => `
-    <button class="game-card-btn" onclick="selectMode('${m.id}')">
-      <div class="emoji-box">${m.icon}</div>
-      <div class="card-content">
-        <h3>${m.title}</h3>
-        <p>${m.desc}</p>
-      </div>
-    </button>
-  `).join("");
-}
-
-function selectTopic(id) {
-  app.topic = CONTENT.find(t => t.id === id);
-  $("#selectedTopicTitle").textContent = app.topic.title;
-  haptic();
-  nav("modes");
-}
-
-function selectMode(id) {
-  app.mode = MODES.find(m => m.id === id);
-  haptic();
-  startSession();
-}
-
-function playNow() {
-  haptic();
-  app.topic = CONTENT[Math.floor(Math.random() * CONTENT.length)];
-  app.mode = MODES[Math.floor(Math.random() * MODES.length)];
-  startSession();
-}
-
-function abortGame() {
-  if(confirm("Training abbrechen? Dein Fortschritt in dieser Runde geht verloren.")) {
-    nav("home");
-  }
-}
-
-/* =========================================================================
-   GAME ENGINE
-========================================================================= */
-function startSession() {
-  app.index = 0; app.correct = 0; app.locked = false; app.memory = null;
-  app.total = app.topic[app.mode.id].length;
-  if(app.mode.id === "memory") app.total = app.topic.memory.length; // 5 Pairs = 5 points max
-  
-  nav("play");
-  renderGame();
-}
-
-function renderGame() {
-  const percent = app.total > 0 ? (app.index / app.total) * 100 : 0;
-  $("#bar").style.width = percent + "%";
-  $("#sessionScore").textContent = `${Math.floor(app.correct)}/${app.total}`;
-
-  if(app.mode.id === "flash") renderFlash();
-  else if(app.mode.id === "quiz") renderQuiz();
-  else if(app.mode.id === "blank") renderBlank();
-  else if(app.mode.id === "memory") renderMemory();
-}
-
-/* --- FLASHCARDS 2.0 --- */
-function renderFlash() {
-  const item = app.topic.flash[app.index];
-  if(!item) return finish();
-
-  $("#game").innerHTML = `
-    <div class="flash-container">
-      <div class="flash-inner" id="flashCard" onclick="flipFlashcard()">
-        <div class="face">
-          <div class="question-label">Frage</div>
-          <h2>${item.front}</h2>
-          <p class="hint">Tippe zum Aufdecken</p>
-        </div>
-        <div class="face back">
-          <div class="question-label" style="color:rgba(255,255,255,.6)">Antwort</div>
-          <p>${item.back}</p>
-        </div>
-      </div>
-    </div>
-    <div class="difficulty-row" id="flashActions" style="display:none;">
-      <button class="diff-btn diff-1" onclick="flashRate(0)">Nochmal</button>
-      <button class="diff-btn diff-2" onclick="flashRate(0.5)">Schwer</button>
-      <button class="diff-btn diff-3" onclick="flashRate(1)">Gut</button>
-      <button class="diff-btn diff-4" onclick="flashRate(1.2)">Leicht</button>
-    </div>
-  `;
-}
-
-function flipFlashcard() {
-  const card = $("#flashCard");
-  if(card.classList.contains("flipped")) return; // already flipped
-  card.classList.add("flipped");
-  haptic();
-  
-  setTimeout(() => {
-    const actions = $("#flashActions");
-    actions.style.display = "grid";
-  }, 300);
-}
-
-function flashRate(scoreMulti) {
-  app.correct += scoreMulti;
-  if(scoreMulti > 0) showFloatingXP(Math.round(10 * scoreMulti));
-  
-  app.index++;
-  renderGame();
-}
-
-/* --- QUIZ & BLANKS --- */
-function renderQuiz() {
-  const q = app.topic.quiz[app.index];
-  if(!q) return finish();
-  const options = shuffle([q.a, ...q.o]);
-
-  $("#game").innerHTML = `
-    <div class="play-card" id="qCard">
-      <div class="question-label">Wähle weise</div>
-      <div class="question">${q.q}</div>
-      <div class="options">
-        ${options.map(o => `<button class="option" onclick="evalChoice(this, '${safe(o)}', '${safe(q.a)}')">${o}</button>`).join("")}
-      </div>
-    </div>
-  `;
-}
-
-function renderBlank() {
-  const b = app.topic.blanks[app.index];
-  if(!b) return finish();
-  const options = shuffle([...b.options]);
-
-  $("#game").innerHTML = `
-    <div class="play-card" id="qCard">
-      <div class="question-label">Lückentext</div>
-      <div class="question">${b.text}</div>
-      <div class="options">
-        ${options.map(o => `<button class="option" onclick="evalChoice(this, '${safe(o)}', '${safe(b.answer)}')">${o}</button>`).join("")}
-      </div>
-    </div>
-  `;
-}
-
-function evalChoice(btn, chosen, correct) {
-  if(app.locked) return;
-  app.locked = true;
-
-  const isOk = chosen === correct;
-  
-  if(isOk) {
-    app.correct++;
-    btn.classList.add("correct");
-    haptic();
-    showFloatingXP(15);
-  } else {
-    btn.classList.add("wrong");
-    $("#qCard").classList.add("shake");
-    haptic(true); // maybe longer vib for error
+  nav(targetId) {
+    // Hide all
+    $$('.screen').forEach(s => s.classList.remove('active'));
+    // Show target
+    $('#' + targetId).classList.add('active');
     
-    // Highlight correct option
-    $$(".option").forEach(o => {
-      if(o.textContent === correct) o.classList.add("correct");
-    });
-  }
-
-  $$(".option").forEach(o => o.disabled = true);
-
-  setTimeout(() => {
-    app.index++;
-    app.locked = false;
-    renderGame();
-  }, 1000);
-}
-
-/* --- MEMORY (10 Cards) --- */
-function renderMemory() {
-  if(!app.memory) {
-    let arr = app.topic.memory.flatMap((p, i) => [
-      {pair: i, type: "t", text: p[0], open: false, done: false},
-      {pair: i, type: "d", text: p[1], open: false, done: false}
-    ]);
-    app.memory = shuffleMemory(arr);
-    app.first = null;
-  }
-
-  $("#game").innerHTML = `
-    <div class="play-card" style="padding: 16px;">
-      <div class="question-label">Verbinde die Paare</div>
-      <div class="memory-grid">
-        ${app.memory.map((m, i) => `
-          <button class="mem ${m.open ? 'open' : ''} ${m.done ? 'done' : ''}" onclick="memFlip(${i})">
-            ${(m.open || m.done) ? m.text : '❔'}
-          </button>
-        `).join("")}
-      </div>
-    </div>
-  `;
-}
-
-function memFlip(i) {
-  const card = app.memory[i];
-  if(card.done || card.open || app.locked) return;
-
-  card.open = true;
-  haptic();
-  
-  if(app.first === null) {
-    app.first = i;
-    renderMemory();
-    return;
-  }
-
-  app.locked = true;
-  renderMemory();
-
-  const a = app.memory[app.first];
-  const b = app.memory[i];
-
-  setTimeout(() => {
-    if(a.pair === b.pair) {
-      a.done = true; b.done = true;
-      app.correct++;
-      haptic(); showFloatingXP(20);
+    // Manage Bottom Nav
+    const bNav = $('#bottom-nav');
+    if(targetId === 'view-play' || targetId === 'view-result') {
+      bNav.style.transform = "translateY(100%)";
     } else {
-      a.open = false; b.open = false;
-      haptic(true);
+      bNav.style.transform = "translateY(0)";
+      $$('.nav-item').forEach(i => i.classList.remove('active'));
+      const activeBtn = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+      if(activeBtn) activeBtn.classList.add('active');
     }
-    app.first = null;
-    app.locked = false;
+    Utils.haptic();
+  }
+};
 
-    if(app.correct >= app.total) finish();
-    else renderMemory();
-  }, 700);
-}
+const UI = {
+  updateDashboard() {
+    $('#ui-streak').textContent = AppState.data.streak;
+    $('#ui-xp').textContent = AppState.data.xp;
+    $('#ui-stat-rounds').textContent = AppState.data.rounds;
+    $('#ui-stat-best').textContent = AppState.data.best + '%';
+    
+    // Daily Bar (Max 200)
+    $('#ui-daily-xp').textContent = AppState.data.dailyXp;
+    let percent = Math.min(100, (AppState.data.dailyXp / 200) * 100);
+    $('#ui-daily-bar').style.width = percent + '%';
+  },
 
-/* =========================================================================
-   RESULTS & DOPAMINE
-========================================================================= */
-function finish() {
-  // Avoid division by zero
-  const maxPossible = app.total || 1;
-  const percent = Math.min(100, Math.round((app.correct / maxPossible) * 100));
-  
-  // XP Calculation based on difficulty/mode
-  const multipliers = { flash: 10, quiz: 15, blank: 15, memory: 20 };
-  let earnedXp = Math.round(app.correct * multipliers[app.mode.id]);
-  
-  // Streak Bonus
-  if(percent >= 80) earnedXp += 20;
+  renderLibrary() {
+    $('#library-list').innerHTML = CONTENT.map(t => `
+      <div class="rich-card" style="cursor:default">
+        <div class="rich-icon">${t.icon}</div>
+        <div class="rich-content">
+          <h3>${t.title}</h3>
+          <p>${t.area}<br>${t.flash.length + t.quiz.length + t.blanks.length} Lerneinheiten</p>
+        </div>
+      </div>
+    `).join('');
+  }
+};
 
-  // Save State
-  app.save.xp += earnedXp;
-  app.save.rounds += 1;
-  app.save.best = Math.max(app.save.best || 0, percent);
-  app.save.streak = percent >= 70 ? (app.save.streak || 0) + 1 : 0;
-  
-  const hKey = `${app.topic.id}.${app.mode.id}`;
-  app.save.history[hKey] = Math.max(app.save.history[hKey] || 0, percent);
-  saveProgress();
+/* ==========================================================================
+   4. THE SETUP WIZARD (Topic -> Mode Flow)
+   ========================================================================== */
+const Wizard = {
+  selectedTopic: null,
+  selectedMode: null,
 
-  // Setup UI
-  $("#finalPercent").textContent = "0"; // Will be animated
-  $("#earnedXp").textContent = "+" + earnedXp + " XP";
-  
-  if(percent >= 90) { $("#resultTitle").textContent = "Meisterhaft!"; $("#scoreCircle").classList.add("perfect"); }
-  else if(percent >= 70) { $("#resultTitle").textContent = "Starke Leistung!"; $("#scoreCircle").classList.remove("perfect"); }
-  else { $("#resultTitle").textContent = "Guter Versuch."; $("#scoreCircle").classList.remove("perfect"); }
+  render() {
+    // Render Topics
+    $('#wiz-topics').innerHTML = CONTENT.map(t => `
+      <button class="rich-card" onclick="Wizard.selectTopic('${t.id}')">
+        <div class="rich-icon">${t.icon}</div>
+        <div class="rich-content">
+          <h3>${t.title}</h3>
+          <p>${t.area}</p>
+        </div>
+        <i class="fa-solid fa-chevron-right" style="color:var(--border)"></i>
+      </button>
+    `).join('');
 
-  nav("result");
+    // Render Modes
+    $('#wiz-modes').innerHTML = MODES.map(m => `
+      <button class="rich-card" onclick="Wizard.selectMode('${m.id}')">
+        <div class="rich-icon" style="font-size:24px;">${m.icon}</div>
+        <div class="rich-content">
+          <h3>${m.title}</h3>
+          <p>${m.desc}</p>
+        </div>
+      </button>
+    `).join('');
+  },
 
-  // Number Counter Animation & Confetti
-  setTimeout(() => {
-    animateValue("finalPercent", 0, percent, 1000);
-    if(percent >= 70) triggerConfetti(percent);
-    haptic();
-  }, 300);
-}
+  open() {
+    $('#wizard').classList.add('open');
+    this.backToTopics(); // Always start fresh
+    Utils.haptic();
+  },
 
-function animateValue(id, start, end, duration) {
-  const obj = document.getElementById(id);
-  let startTimestamp = null;
-  const step = (timestamp) => {
-    if (!startTimestamp) startTimestamp = timestamp;
-    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-    obj.innerHTML = Math.floor(progress * (end - start) + start);
-    if (progress < 1) {
-      window.requestAnimationFrame(step);
+  close() {
+    $('#wizard').classList.remove('open');
+  },
+
+  selectTopic(id) {
+    this.selectedTopic = CONTENT.find(t => t.id === id);
+    // Slide to step 2
+    $('#wiz-step-1').className = "wizard-pane pane-hidden-left";
+    $('#wiz-step-2').className = "wizard-pane pane-active";
+    Utils.haptic();
+  },
+
+  backToTopics() {
+    this.selectedTopic = null;
+    $('#wiz-step-1').className = "wizard-pane pane-active";
+    $('#wiz-step-2').className = "wizard-pane pane-hidden-right";
+  },
+
+  selectMode(id) {
+    this.selectedMode = MODES.find(m => m.id === id);
+    this.close();
+    setTimeout(() => {
+      GameEngine.start(this.selectedTopic, this.selectedMode);
+    }, 300); // Wait for modal close
+  }
+};
+
+/* ==========================================================================
+   5. GAME ENGINE
+   ========================================================================== */
+const GameEngine = {
+  topic: null, mode: null,
+  index: 0, score: 0, total: 0, locked: false, memoryState: null,
+
+  start(topic, mode) {
+    this.topic = topic; this.mode = mode;
+    this.index = 0; this.score = 0; this.locked = false; this.memoryState = null;
+    
+    this.total = this.mode.id === "memory" ? this.topic.memory.length : this.topic[this.mode.id].length;
+    
+    App.nav('view-play');
+    this.renderStep();
+  },
+
+  abort() {
+    if(confirm("Training wirklich abbrechen? Fortschritt geht verloren.")) {
+      App.nav('view-home');
     }
-  };
-  window.requestAnimationFrame(step);
-}
+  },
 
-function showFloatingXP(amount) {
-  const el = document.createElement("div");
-  el.className = "floating-xp";
-  el.textContent = `+${amount}`;
-  // Spawn around center of screen
-  el.style.left = (50 + (Math.random() * 20 - 10)) + "%";
-  el.style.top = "40%";
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1000);
-}
+  updateHeader() {
+    let perc = this.total > 0 ? (this.index / this.total) * 100 : 0;
+    $('#game-bar').style.width = perc + '%';
+    $('#game-score').textContent = `${Math.floor(this.score)}/${this.total}`;
+  },
 
-function triggerConfetti(percent) {
-  const amount = percent >= 90 ? 60 : 30;
-  const colors = ["#4361ee", "#7209b7", "#f72585", "#4cc9f0", "#4ade80", "#f59e0b"];
-  for(let i=0; i<amount; i++) {
-    const c = document.createElement("div");
-    c.className = "confetti";
-    c.style.left = Math.random() * 100 + "vw";
-    c.style.background = colors[Math.floor(Math.random() * colors.length)];
-    c.style.animationDuration = (Math.random() * 2 + 2) + "s";
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 4000);
-  }
-}
+  renderStep() {
+    this.updateHeader();
+    if(this.index >= this.total) return this.finish();
 
-function haptic(error = false) {
-  if(navigator.vibrate) {
-    if(error) navigator.vibrate([50, 50, 50]);
-    else navigator.vibrate(40);
-  }
-}
+    const container = $('#game-container');
+    
+    if(this.mode.id === "flash") this.renderFlash(container);
+    if(this.mode.id === "quiz") this.renderQuiz(container);
+    if(this.mode.id === "blank") this.renderBlank(container);
+    if(this.mode.id === "memory") this.renderMemory(container);
+  },
 
-/* =========================================================================
-   UTILS
-========================================================================= */
-function shuffle(arr) {
-  let a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+  // --- Flashcards ---
+  renderFlash(container) {
+    const item = this.topic.flash[this.index];
+    container.innerHTML = `
+      <div class="flash-scene">
+        <div class="flash-card" id="fc" onclick="GameEngine.flipFlash()">
+          <div class="flash-face">
+            <div class="play-kicker">Wissensabfrage</div>
+            <div class="flash-text">${item.front}</div>
+            <p style="color:var(--text-muted); font-size:13px; margin-top:24px;">Tippe zum Aufdecken</p>
+          </div>
+          <div class="flash-face back">
+            <div class="play-kicker" style="color:rgba(255,255,255,0.7)">Antwort</div>
+            <div class="flash-text">${item.back}</div>
+          </div>
+        </div>
+      </div>
+      <div class="flash-actions" id="fc-actions">
+        <button class="rate-btn rate-1" onclick="GameEngine.evalFlash(0)">Nochmal</button>
+        <button class="rate-btn rate-2" onclick="GameEngine.evalFlash(0.5)">Schwer</button>
+        <button class="rate-btn rate-3" onclick="GameEngine.evalFlash(1)">Gut</button>
+        <button class="rate-btn rate-4" onclick="GameEngine.evalFlash(1.2)">Leicht</button>
+      </div>
+    `;
+  },
+  flipFlash() {
+    const card = $('#fc');
+    if(card.classList.contains('is-flipped')) return;
+    card.classList.add('is-flipped');
+    Utils.haptic();
+    setTimeout(() => { $('#fc-actions').classList.add('visible'); }, 400);
+  },
+  evalFlash(points) {
+    this.score += points;
+    if(points > 0) Utils.floatXP(points * 10);
+    this.index++;
+    this.renderStep();
+  },
 
-function shuffleMemory(arr) {
-  let array; let valid = false; let loops = 0;
-  while(!valid && loops < 100) {
-    array = shuffle(arr);
-    valid = true;
-    for(let i=0; i<array.length; i++) {
-      if(i % 2 === 0 && array[i+1] && array[i].pair === array[i+1].pair) valid = false; // Horizontal
-      if(array[i+2] && array[i].pair === array[i+2].pair) valid = false; // Vertikal
+  // --- Quiz & Blanks (Multiple Choice) ---
+  renderQuiz(container) {
+    const item = this.topic.quiz[this.index];
+    const opts = Utils.shuffle([item.a, ...item.o]);
+    this.renderChoiceUI(container, "Multiple Choice", item.q, opts, item.a);
+  },
+  renderBlank(container) {
+    const item = this.topic.blanks[this.index];
+    const opts = Utils.shuffle([...item.options]);
+    this.renderChoiceUI(container, "Lückentext", item.text, opts, item.answer);
+  },
+  renderChoiceUI(container, kicker, question, options, correctAnswer) {
+    container.innerHTML = `
+      <div class="play-card" id="choice-card">
+        <div class="play-kicker">${kicker}</div>
+        <div class="play-question">${question}</div>
+        <div class="options-grid">
+          ${options.map(o => `
+            <button class="option-btn" onclick="GameEngine.evalChoice(this, '${Utils.safe(o)}', '${Utils.safe(correctAnswer)}')">${o}</button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  },
+  evalChoice(btn, chosen, correct) {
+    if(this.locked) return;
+    this.locked = true;
+
+    if(chosen === correct) {
+      this.score++; btn.classList.add('correct');
+      Utils.haptic(); Utils.floatXP(15);
+    } else {
+      btn.classList.add('wrong');
+      $('#choice-card').style.animation = "shake 0.4s var(--ease-spring)";
+      Utils.haptic(true);
+      // Show correct one
+      $$('.option-btn').forEach(b => { if(b.textContent === correct) b.classList.add('correct'); });
     }
-    loops++;
+
+    $$('.option-btn').forEach(b => b.style.pointerEvents = 'none');
+    setTimeout(() => { this.index++; this.locked = false; this.renderStep(); }, 1200);
+  },
+
+  // --- Memory ---
+  renderMemory(container) {
+    if(!this.memoryState) {
+      let deck = this.topic.memory.flatMap((p, i) => [
+        { pair: i, type: "A", text: p[0], open: false, matched: false },
+        { pair: i, type: "B", text: p[1], open: false, matched: false }
+      ]);
+      this.memoryState = { deck: Utils.shuffleMemory(deck), firstId: null };
+    }
+
+    container.innerHTML = `
+      <div class="play-card" style="padding: 24px 16px;">
+        <div class="play-kicker">Clinical Memory</div>
+        <div class="memory-grid">
+          ${this.memoryState.deck.map((c, i) => `
+            <button class="mem-card ${c.open ? 'open' : ''} ${c.matched ? 'matched' : ''}" 
+                    onclick="GameEngine.evalMemory(${i})">
+              ${(c.open || c.matched) ? c.text : '❔'}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  },
+  evalMemory(idx) {
+    const state = this.memoryState;
+    const card = state.deck[idx];
+    if(this.locked || card.open || card.matched) return;
+
+    card.open = true;
+    Utils.haptic();
+
+    if(state.firstId === null) {
+      state.firstId = idx;
+      return this.renderMemory($('#game-container'));
+    }
+
+    this.locked = true;
+    this.renderMemory($('#game-container')); // render both open
+
+    const firstCard = state.deck[state.firstId];
+
+    setTimeout(() => {
+      if(firstCard.pair === card.pair) {
+        firstCard.matched = true; card.matched = true;
+        this.score++; this.index++; // index acts as pair counter here
+        Utils.haptic(); Utils.floatXP(20);
+      } else {
+        firstCard.open = false; card.open = false;
+        Utils.haptic(true);
+      }
+      state.firstId = null;
+      this.locked = false;
+
+      if(this.score >= this.total) this.finish();
+      else this.renderMemory($('#game-container'));
+    }, 800);
+  },
+
+  // --- End of Game ---
+  finish() {
+    this.updateHeader();
+    const percent = Math.min(100, Math.round((this.score / (this.total||1)) * 100));
+    
+    // Calculate Reward
+    const mult = { flash: 10, quiz: 15, blank: 15, memory: 20 };
+    let xpGain = Math.round(this.score * mult[this.mode.id]);
+    if(percent >= 80) xpGain += 20; // Streak bonus
+
+    AppState.addReward(xpGain, percent);
+
+    // Setup Result Screen
+    $('#res-score').textContent = "0"; // Will animate
+    $('#res-xp').textContent = `+${xpGain} XP`;
+    
+    if(percent >= 90) { $('#res-title').textContent = "Exzellent!"; $('#res-subtitle').textContent = "Nahezu fehlerfrei."; }
+    else if(percent >= 70) { $('#res-title').textContent = "Stark!"; $('#res-subtitle').textContent = "Gute Leistung."; }
+    else { $('#res-title').textContent = "Weiter so!"; $('#res-subtitle').textContent = "Übung macht den Meister."; }
+
+    App.nav('view-result');
+
+    setTimeout(() => {
+      Utils.animateValue("res-score", 0, percent, 1200);
+      if(percent >= 70) Utils.confetti(percent);
+      Utils.haptic();
+    }, 300);
   }
-  return array;
-}
+};
 
-function safe(str) { return String(str).replaceAll("'","&#39;").replaceAll('"',"&quot;"); }
+/* ==========================================================================
+   6. UTILITIES (Helpers, Animations, Haptics)
+   ========================================================================== */
+const Utils = {
+  shuffle(arr) {
+    let a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  },
+  shuffleMemory(arr) {
+    let a; let valid = false; let loops = 0;
+    while(!valid && loops < 100) {
+      a = this.shuffle(arr); valid = true;
+      for(let i=0; i<a.length; i++) {
+        if(i%2 === 0 && a[i+1] && a[i].pair === a[i+1].pair) valid = false; // Next to each other
+        if(a[i+2] && a[i].pair === a[i+2].pair) valid = false; // Directly below
+      }
+      loops++;
+    }
+    return a;
+  },
+  safe(str) { return String(str).replace(/'/g,"&#39;").replace(/"/g,"&quot;"); },
+  haptic(error = false) {
+    if(navigator.vibrate) navigator.vibrate(error ? [50, 50, 50] : 40);
+  },
+  floatXP(amount) {
+    const el = document.createElement("div");
+    el.className = "floating-xp";
+    el.textContent = `+${amount}`;
+    el.style.left = (40 + Math.random()*20) + "%";
+    el.style.top = "40%";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  },
+  animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    let startTs = null;
+    const step = (ts) => {
+      if (!startTs) startTs = ts;
+      const progress = Math.min((ts - startTs) / duration, 1);
+      // Custom easing out
+      const ease = 1 - Math.pow(1 - progress, 3);
+      obj.innerHTML = Math.floor(ease * (end - start) + start);
+      if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+  },
+  confetti(percent) {
+    const amount = percent >= 90 ? 50 : 25;
+    const colors = ["#4361ee", "#f72585", "#10b981", "#f59e0b"];
+    for(let i=0; i<amount; i++) {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDuration = (Math.random() * 1.5 + 1.5) + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3500);
+    }
+  }
+};
 
-// Init App
-init();
+// Start the App
+document.addEventListener('DOMContentLoaded', () => App.init());
+
 </script>
 </body>
 </html>
