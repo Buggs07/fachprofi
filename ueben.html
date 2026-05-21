@@ -2,522 +2,573 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>PflegefachProfi • Übung</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-:root{
---blue:#4361ee;--purple:#7209b7;--pink:#f72585;--cyan:#4cc9f0;
---green:#4ade80;--yellow:#f59e0b;--red:#ef4444;
---bg:#f8fafc;--card:#fff;--ink:#1e293b;--muted:#64748b;--line:#e2e8f0;
---shadow:0 18px 45px rgba(67,97,238,.18);
---soft:0 8px 24px rgba(15,23,42,.08);
---ease:cubic-bezier(.2,.8,.2,1);
+:root {
+  --blue: #4361ee; --blue-dark: #3a0ca3; --purple: #7209b7; --pink: #f72585; --cyan: #4cc9f0;
+  --green: #4ade80; --green-dark: #16a34a; --yellow: #f59e0b; --red: #ef4444;
+  --bg: #f8fafc; --card: #fff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
+  --shadow: 0 18px 45px rgba(67,97,238,.18);
+  --game-shadow: 0 6px 0 rgba(15,23,42,.1);
+  --soft: 0 8px 24px rgba(15,23,42,.08);
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
-button,input{font-family:inherit}button{border:0;cursor:pointer}
-.app{max-width:520px;margin:0 auto;min-height:100vh;background:linear-gradient(#fff,#f8fafc);position:relative;padding-bottom:96px}
-.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-.topbar-in{height:68px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:10px;font-weight:950;color:var(--ink);text-decoration:none}
-.logo{width:42px;height:42px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--purple));display:grid;place-items:center;color:white}
-.xp{background:#f1f5ff;color:var(--blue);padding:10px 12px;border-radius:999px;font-weight:950;font-size:13px}
-@media(max-width:380px) { .brand-text { display: none; } } /* Blendet Text auf sehr kleinen Handys aus */
-.screen{display:none;padding:18px 16px;animation:rise .28s var(--ease)}
-.screen.active{display:block}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.hero{background:linear-gradient(135deg,var(--blue),var(--purple));color:white;border-radius:30px;padding:22px;box-shadow:var(--shadow);overflow:hidden;position:relative}
-.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-70px;top:-70px;background:rgba(255,255,255,.12)}
-.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.09em;font-weight:950;color:rgba(255,255,255,.72)}
-h1{font-size:34px;line-height:.96;letter-spacing:-.07em;margin-top:8px}
-.hero p{margin-top:10px;color:rgba(255,255,255,.82);font-weight:700;line-height:1.45}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
-.stat{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px}
-.stat small{display:block;font-size:10px;color:rgba(255,255,255,.7);font-weight:900;text-transform:uppercase}
-.stat b{font-size:20px}
-.section-title{font-size:13px;color:var(--muted);font-weight:950;letter-spacing:.08em;text-transform:uppercase;margin:22px 2px 10px}
-.topic-list,.mode-list{display:grid;gap:10px}
-.pick-card{background:white;border:1px solid var(--line);box-shadow:var(--soft);border-radius:24px;padding:15px;display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;text-align:left;transition:.2s var(--ease)}
-.pick-card:active{transform:scale(.97)}
-.pick-card.active{border-color:rgba(67,97,238,.45);background:linear-gradient(135deg,rgba(67,97,238,.08),rgba(247,37,133,.05))}
-.emoji{width:48px;height:48px;border-radius:18px;background:#f1f5ff;display:grid;place-items:center;font-size:25px}
-.pick-card h3{font-size:16px;margin-bottom:3px}
-.pick-card p{color:var(--muted);font-size:13px;font-weight:700}
-.check{width:28px;height:28px;border-radius:50%;background:#eef2ff;color:var(--blue);display:grid;place-items:center;opacity:.25}
-.pick-card.active .check{opacity:1;background:var(--blue);color:white}
-.sticky-cta{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:min(520px,100%);padding:0 16px;z-index:60}
-.primary{width:100%;height:58px;border-radius:22px;background:linear-gradient(135deg,var(--pink),var(--purple));color:white;font-size:16px;font-weight:950;box-shadow:0 16px 34px rgba(247,37,133,.28);display:flex;align-items:center;justify-content:center;gap:10px;transition:.18s var(--ease)}
-.primary:active{transform:scale(.97)}
-.primary:disabled{opacity:.45;box-shadow:none}
-.secondary{height:48px;border-radius:18px;background:#eef2ff;color:var(--blue);font-weight:950;padding:0 16px}
-.session-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.back{width:44px;height:44px;border-radius:16px;background:#eef2ff;color:var(--blue);flex-shrink:0}
-.progress{height:11px;background:#e8eef8;border-radius:99px;overflow:hidden;margin:12px 0 16px}
-.progress span{height:100%;display:block;width:0;background:linear-gradient(135deg,var(--blue),var(--pink));border-radius:99px;transition:.35s var(--ease)}
-.game-card{background:white;border:1px solid var(--line);box-shadow:var(--soft);border-radius:30px;padding:20px;min-height:330px}
-.question-label{color:var(--muted);font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.question{font-size:25px;line-height:1.1;letter-spacing:-.04em;font-weight:950}
-.hint{color:var(--muted);font-weight:750;margin-top:8px;line-height:1.45}
-.options{display:grid;gap:10px;margin-top:18px}
-.option{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;text-align:left;font-weight:850;line-height:1.35;transition:.18s}
-.option:active{transform:scale(.98)}
-.option.correct{background:rgba(74,222,128,.16);border-color:var(--green)}
-.option.wrong{background:rgba(239,68,68,.13);border-color:var(--red)}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; overflow-x: hidden; padding-bottom: 90px; }
+button, input { font-family: inherit; border: 0; cursor: pointer; outline: none; }
 
-/* FLASHCARDS FIXES */
-.flash{height:330px;perspective:1000px;position:relative}
-.flash-inner{position:relative;width:100%;height:100%;transition:.55s var(--ease);transform-style:preserve-3d}
-.flash.flipped .flash-inner{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;border-radius:30px;background:white;border:1px solid var(--line);box-shadow:var(--soft);backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:22px;display:flex;flex-direction:column;justify-content:center;text-align:center}
-.face.back{transform:rotateY(180deg);background:linear-gradient(135deg,var(--blue),var(--purple));color:white}
-.face h2{font-size:30px;letter-spacing:-.05em}
-.face p{margin-top:14px;font-size:18px;font-weight:800;line-height:1.45}
+/* LAYOUT & NAV */
+.app { max-width: 520px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; }
+.topbar { position: sticky; top: 0; z-index: 50; background: rgba(248, 250, 252, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.topbar-in { height: 60px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 950; color: var(--ink); text-decoration: none; font-size: 18px; }
+.logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--blue), var(--purple)); display: grid; place-items: center; color: white; font-size: 16px; box-shadow: 0 4px 10px rgba(114, 9, 183, 0.3); }
+.header-stats { display: flex; gap: 8px; }
+.pill { background: white; border: 2px solid var(--line); color: var(--ink); padding: 6px 12px; border-radius: 999px; font-weight: 900; font-size: 13px; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 0 var(--line); transform: translateY(-2px); }
+.pill.xp-pill { color: var(--blue); border-color: rgba(67, 97, 238, 0.2); box-shadow: 0 4px 0 rgba(67, 97, 238, 0.15); }
+.pill i { color: var(--yellow); }
 
-.rate-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.memory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
-.mem{min-height:104px;border-radius:20px;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;font-weight:950;padding:10px;text-align:center;transition:.25s var(--ease)}
-.mem.open,.mem.done{background:white;color:var(--ink);border:1px solid var(--line);box-shadow:var(--soft)}
-.mem.done{background:rgba(74,222,128,.15);border-color:var(--green)}
-.result{text-align:center;padding-top:20px}
-.score{font-size:76px;font-weight:950;letter-spacing:-.08em;background:linear-gradient(135deg,var(--blue),var(--pink));-webkit-background-clip:text;color:transparent}
-.result h2{font-size:28px;letter-spacing:-.04em}
-.reward-box{margin:18px 0;background:white;border:1px solid var(--line);border-radius:24px;padding:16px;box-shadow:var(--soft)}
-.reward-box b{font-size:24px;color:var(--blue)}
-.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:#111827;color:white;padding:12px 16px;border-radius:999px;font-size:13px;font-weight:950;z-index:90;box-shadow:var(--shadow);animation:pop .35s var(--ease)}
-@keyframes pop{from{opacity:0;transform:translateX(-50%) translateY(10px) scale(.92)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
-.confetti{position:fixed;width:9px;height:9px;top:-20px;z-index:200;border-radius:3px;animation:fall linear forwards}
-@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
-@media(min-width:760px){
-body{background:#eef2ff}.app{box-shadow:0 30px 90px rgba(15,23,42,.14)}
-}
+/* BOTTOM NAVBAR (GAME STYLE) */
+.bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: min(520px, 100%); height: 80px; background: white; border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 -10px 30px rgba(15,23,42,.05); border-radius: 30px 30px 0 0; padding-bottom: env(safe-area-inset-bottom); }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; color: var(--muted); font-size: 11px; font-weight: 800; transition: .2s var(--ease); width: 60px; }
+.nav-item i { font-size: 20px; transition: .3s var(--bounce); }
+.nav-item.active { color: var(--blue); }
+.nav-item.active i { transform: scale(1.2) translateY(-4px); color: var(--blue); }
+.nav-play-btn { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; display: grid; place-items: center; font-size: 24px; box-shadow: 0 8px 20px rgba(247, 37, 133, 0.4); transform: translateY(-20px); border: 4px solid var(--bg); transition: .2s; }
+.nav-play-btn:active { transform: translateY(-16px) scale(0.95); box-shadow: 0 4px 10px rgba(247, 37, 133, 0.4); }
+.nav-play-btn span { display: none; }
+.nav-play-btn i { margin-left: 4px; } /* Optischer Ausgleich für Play-Icon */
+
+/* SCREENS & ANIMATIONS */
+.screen { display: none; padding: 18px 16px; animation: rise .3s var(--ease); }
+.screen.active { display: block; }
+@keyframes rise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes pop-in { 0% { opacity: 0; transform: scale(0.8); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes float-up { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(1.2); } }
+
+/* HERO & HOME */
+.hero-dash { background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; border-radius: 30px; padding: 24px; box-shadow: var(--shadow); position: relative; overflow: hidden; margin-bottom: 20px; }
+.hero-dash:after { content: "🎯"; position: absolute; font-size: 120px; right: -20px; top: -10px; opacity: 0.15; transform: rotate(15deg); }
+.hero-dash h1 { font-size: 28px; letter-spacing: -0.05em; margin-bottom: 4px; z-index: 2; position: relative; }
+.hero-dash p { font-size: 14px; opacity: 0.8; font-weight: 700; z-index: 2; position: relative; margin-bottom: 16px; }
+.level-ring { width: 60px; height: 60px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.2); border-top-color: var(--green); display: grid; place-items: center; font-weight: 900; font-size: 18px; position: absolute; right: 20px; bottom: 20px; z-index: 2; }
+
+/* CARDS & BUTTONS */
+.section-title { font-size: 14px; color: var(--ink); font-weight: 950; letter-spacing: .02em; margin: 24px 2px 12px; display: flex; align-items: center; gap: 8px; }
+.section-title i { color: var(--pink); }
+.grid-list { display: grid; gap: 12px; }
+.game-card-btn { background: white; border: 2px solid var(--line); box-shadow: var(--game-shadow); border-radius: 20px; padding: 16px; display: flex; align-items: center; gap: 14px; transition: .15s; text-align: left; }
+.game-card-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(15,23,42,.1); }
+.game-card-btn.active { border-color: var(--blue); background: #f8faff; }
+.emoji-box { width: 52px; height: 52px; border-radius: 16px; background: var(--bg); display: grid; place-items: center; font-size: 26px; box-shadow: inset 0 2px 4px rgba(0,0,0,.05); }
+.card-content h3 { font-size: 17px; color: var(--ink); margin-bottom: 4px; }
+.card-content p { font-size: 12px; color: var(--muted); font-weight: 700; }
+.progress-track { height: 6px; background: var(--line); border-radius: 99px; margin-top: 8px; overflow: hidden; width: 100%; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--blue)); border-radius: 99px; }
+
+/* GAME SESSION UI */
+.session-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.btn-icon { width: 44px; height: 44px; border-radius: 14px; background: white; border: 2px solid var(--line); color: var(--ink); display: grid; place-items: center; font-size: 16px; box-shadow: 0 4px 0 var(--line); transition: .1s; }
+.btn-icon:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--line); }
+.score-badge { background: var(--ink); color: white; padding: 8px 16px; border-radius: 999px; font-weight: 900; font-size: 15px; letter-spacing: 1px; }
+.play-card { background: white; border: 2px solid var(--line); box-shadow: var(--game-shadow); border-radius: 28px; padding: 24px; min-height: 340px; position: relative; }
+.question-label { color: var(--muted); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px; }
+.question { font-size: 24px; line-height: 1.2; letter-spacing: -0.03em; font-weight: 950; color: var(--ink); }
+.hint { color: var(--muted); font-weight: 700; margin-top: 10px; font-size: 14px; }
+
+/* OPTIONS (QUIZ / BLANKS) */
+.options { display: grid; gap: 10px; margin-top: 24px; }
+.option { background: white; border: 2px solid var(--line); border-radius: 16px; padding: 16px; text-align: left; font-weight: 800; font-size: 15px; color: var(--ink); box-shadow: 0 4px 0 var(--line); transition: .15s; }
+.option:active { transform: translateY(4px); box-shadow: 0 0 0 var(--line); }
+.option.correct { background: #dcfce7; border-color: var(--green); color: var(--green-dark); box-shadow: 0 4px 0 var(--green); }
+.option.wrong { background: #fee2e2; border-color: var(--red); color: #b91c1c; box-shadow: 0 4px 0 var(--red); }
+.shake { animation: shake 0.4s var(--bounce); }
+
+/* FLASHCARDS 2.0 */
+.flash-container { perspective: 1000px; height: 260px; margin-bottom: 20px; }
+.flash-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s var(--bounce); transform-style: preserve-3d; cursor: pointer; }
+.flash-inner.flipped { transform: rotateY(180deg); }
+.face { position: absolute; inset: 0; background: white; border: 2px solid var(--line); box-shadow: var(--game-shadow); border-radius: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.face.back { transform: rotateY(180deg); background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; border: none; box-shadow: 0 10px 30px rgba(114, 9, 183, 0.3); }
+.face h2 { font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
+.face.back p { font-size: 18px; font-weight: 700; opacity: 0.9; }
+
+.difficulty-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; animation: pop-in 0.4s var(--bounce) forwards; opacity: 0; }
+.diff-btn { padding: 12px 4px; border-radius: 14px; font-weight: 900; font-size: 12px; color: white; border: none; box-shadow: 0 4px 0 rgba(0,0,0,0.2); transition: .1s; text-transform: uppercase; }
+.diff-btn:active { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
+.diff-1 { background: var(--muted); }
+.diff-2 { background: var(--red); }
+.diff-3 { background: var(--yellow); }
+.diff-4 { background: var(--green); }
+
+/* MEMORY */
+.memory-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+.mem { min-height: 90px; border-radius: 16px; background: linear-gradient(135deg, var(--blue), var(--cyan)); color: white; font-weight: 900; font-size: 15px; padding: 10px; text-align: center; border: 0; box-shadow: 0 4px 0 rgba(0,0,0,0.15); transition: .15s; }
+.mem:active:not(.done):not(.open) { transform: translateY(4px); box-shadow: none; }
+.mem.open { background: white; color: var(--ink); border: 2px solid var(--blue); box-shadow: 0 4px 0 var(--blue); }
+.mem.done { background: #dcfce7; color: var(--green-dark); border: 2px solid var(--green); box-shadow: none; opacity: 0.6; transform: scale(0.95); }
+
+/* FLOATING DOPAMINE XP */
+.floating-xp { position: fixed; font-size: 24px; font-weight: 950; color: var(--green); text-shadow: 0 2px 10px rgba(74, 222, 128, 0.4); pointer-events: none; z-index: 1000; animation: float-up 1s var(--ease) forwards; }
+
+/* RESULTS */
+.result-card { text-align: center; padding: 30px 20px; background: white; border-radius: 30px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.result-card::before { content: ""; position: absolute; inset: 0; background: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="2" fill="%23e2e8f0"/></svg>'); opacity: 0.5; }
+.score-circle { width: 140px; height: 140px; border-radius: 50%; background: var(--bg); margin: 0 auto 20px; display: grid; place-items: center; border: 8px solid var(--line); position: relative; z-index: 2; }
+.score-circle.perfect { border-color: var(--yellow); box-shadow: 0 0 40px rgba(245, 158, 11, 0.4); }
+.score-number { font-size: 42px; font-weight: 950; color: var(--ink); }
+.xp-reward { font-size: 24px; font-weight: 900; color: var(--green); margin: 16px 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.action-btn { width: 100%; height: 60px; border-radius: 20px; background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; font-size: 18px; font-weight: 900; box-shadow: 0 6px 0 var(--blue-dark); transition: .15s; margin-top: 20px; position: relative; z-index: 2; }
+.action-btn:active { transform: translateY(6px); box-shadow: 0 0 0 var(--blue-dark); }
+
+/* TOAST & CONFETTI */
+.toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--ink); color: white; padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 900; z-index: 200; box-shadow: var(--shadow); animation: pop-in .3s var(--bounce); }
+.confetti { position: fixed; width: 10px; height: 10px; z-index: 999; border-radius: 2px; animation: fall linear forwards; pointer-events: none; }
+@keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 </style>
 </head>
 <body>
 <div class="app">
 
+<!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-in">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <!-- Main Page Return to Home Button -->
-      <button class="back" onclick="goHome()" title="Zurück zur Startseite">
-        <i class="fa-solid fa-house"></i>
-      </button>
-      <a class="brand" href="#" onclick="goHome(); return false;">
-        <span class="logo"><i class="fa-solid fa-stethoscope"></i></span>
-        <span class="brand-text">PflegefachProfi</span>
-      </a>
+    <div class="brand">
+      <div class="logo"><i class="fa-solid fa-stethoscope"></i></div>
+      <span>PflegeProfi</span>
     </div>
-    <div class="xp"><i class="fa-solid fa-bolt"></i> <span id="xp">0</span> XP</div>
+    <div class="header-stats">
+      <div class="pill"><i class="fa-solid fa-fire"></i> <span id="hdrStreak">0</span></div>
+      <div class="pill xp-pill"><i class="fa-solid fa-bolt" style="color:var(--blue)"></i> <span id="hdrXp">0</span></div>
+    </div>
   </div>
 </header>
 
-<section class="screen active" id="home">
-  <div class="hero">
-    <div class="kicker">Übungsmodus</div>
-    <h1>Lernen wie ein Spiel.</h1>
-    <p>Wähle ein Thema, trainiere aktiv und sammle XP nur für echte Leistung.</p>
-    <div class="stats">
-      <div class="stat"><small>Runden</small><b id="rounds">0</b></div>
-      <div class="stat"><small>Best</small><b id="best">0%</b></div>
-      <div class="stat"><small>Streak</small><b id="streak">0</b></div>
-    </div>
-  </div>
+<!-- MAIN SCREENS -->
+<main id="mainContent">
 
-  <div class="section-title">1 · Prüfungsthema</div>
-  <div class="topic-list" id="topics"></div>
-
-  <div class="section-title">2 · Lernspiel</div>
-  <div class="mode-list" id="modes"></div>
-</section>
-
-<section class="screen" id="play">
-  <div class="session-head">
-    <button class="back" onclick="goHome()"><i class="fa-solid fa-arrow-left"></i></button>
-    <div>
-      <strong id="sessionTitle">Training</strong>
-      <div style="font-size:12px;color:var(--muted);font-weight:800" id="sessionMeta"></div>
-    </div>
-    <strong id="sessionScore">0/0</strong>
-  </div>
-  <div class="progress"><span id="bar"></span></div>
-  <div id="game"></div>
-</section>
-
-<section class="screen" id="result">
-  <div class="result">
-    <div class="score" id="finalPercent">0%</div>
-    <h2 id="resultTitle">Runde beendet</h2>
-    <p class="hint" id="resultText"></p>
-    <div class="reward-box">
-      <div class="question-label">Verdiente Belohnung</div>
-      <b id="earnedXp">+0 XP</b>
+  <!-- HOME DASHBOARD -->
+  <section class="screen active" id="home">
+    <div class="hero-dash">
+      <h1>Bereit fürs Level-Up?</h1>
+      <p>Dein tägliches Training wartet auf dich. Baue deinen Streak aus!</p>
+      <div class="level-ring"><span id="lvlDisplay">1</span></div>
     </div>
     
-    <!-- Added explicit return to home button here -->
-    <button class="primary" onclick="goHome()" style="margin-top: 16px;">
-      <i class="fa-solid fa-house"></i> Zur Startseite zurückkehren
-    </button>
-  </div>
-</section>
+    <div class="section-title"><i class="fa-solid fa-chart-simple"></i> Deine Stats</div>
+    <div class="grid-list" style="grid-template-columns: 1fr 1fr;">
+      <div class="game-card-btn" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+        <span style="font-size:24px; font-weight:900; color:var(--ink)" id="statRounds">0</span>
+        <span style="font-size:12px; color:var(--muted); font-weight:800;">Gespielte Runden</span>
+      </div>
+      <div class="game-card-btn" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+        <span style="font-size:24px; font-weight:900; color:var(--green)" id="statBest">0%</span>
+        <span style="font-size:12px; color:var(--muted); font-weight:800;">Bester Score</span>
+      </div>
+    </div>
 
-<div class="sticky-cta" id="ctaBar">
-  <button class="primary" id="startBtn">
-    <i class="fa-solid fa-play"></i>
-    Training starten
+    <div class="section-title" style="margin-top: 30px;"><i class="fa-solid fa-bolt"></i> Schnellstart</div>
+    <button class="action-btn" onclick="playNow()" style="margin-top: 0;">
+      <i class="fa-solid fa-play"></i> Zufälliges Training starten
+    </button>
+  </section>
+
+  <!-- TOPICS -->
+  <section class="screen" id="themen">
+    <div class="section-title"><i class="fa-solid fa-map"></i> Themen-Welten</div>
+    <div class="grid-list" id="topicsList"></div>
+  </section>
+
+  <!-- MODES -->
+  <section class="screen" id="modes">
+    <div class="session-head">
+      <button class="btn-icon" onclick="nav('themen')"><i class="fa-solid fa-arrow-left"></i></button>
+      <div style="text-align: right;">
+        <strong style="font-size: 18px;" id="selectedTopicTitle">Thema</strong>
+        <div style="font-size:12px;color:var(--muted);font-weight:800">Wähle deinen Modus</div>
+      </div>
+    </div>
+    <div class="grid-list" id="modesList"></div>
+  </section>
+
+  <!-- PLAY AREA -->
+  <section class="screen" id="play">
+    <div class="session-head">
+      <button class="btn-icon" onclick="abortGame()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="progress-track" style="margin: 0 16px; height: 10px;">
+        <div class="progress-fill" id="bar" style="width: 0%;"></div>
+      </div>
+      <div class="score-badge" id="sessionScore">0/0</div>
+    </div>
+    <div id="game"></div>
+  </section>
+
+  <!-- RESULT AREA -->
+  <section class="screen" id="result">
+    <div class="result-card">
+      <div class="score-circle" id="scoreCircle">
+        <div class="score-number"><span id="finalPercent">0</span>%</div>
+      </div>
+      <h2 id="resultTitle" style="font-size: 26px; font-weight: 950; margin-bottom: 8px;">Stark!</h2>
+      <p id="resultText" style="color: var(--muted); font-weight: 700; font-size: 15px; margin-bottom: 20px;">Gut gemacht.</p>
+      
+      <div class="xp-reward">
+        <i class="fa-solid fa-bolt"></i> <span id="earnedXp">+0 XP</span>
+      </div>
+
+      <button class="action-btn" onclick="nav('home')">
+        Weiter im Text <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-item active" data-tab="home" onclick="nav('home')">
+    <i class="fa-solid fa-house"></i>
+    <span>Home</span>
   </button>
-</div>
+  <button class="nav-play-btn" onclick="playNow()">
+    <i class="fa-solid fa-play"></i>
+    <span>Play</span>
+  </button>
+  <button class="nav-item" data-tab="themen" onclick="nav('themen')">
+    <i class="fa-solid fa-layer-group"></i>
+    <span>Themen</span>
+  </button>
+</nav>
 
 </div>
 
 <script>
 /* =========================================================================
-   BEARBEITBARER INHALT (EDIT CONTENT HERE)
-   =========================================================================
-   Hier können Sie die Inhalte ganz einfach anpassen und austauschen.
-   Fügen Sie neue Blöcke nach dem gleichen Muster hinzu.
-   Für das Memory-Spiel (memory) werden exakt 5 Paare (10 Karten) benötigt.
+   INHALTE (EDIT CONTENT HERE)
 ========================================================================= */
-
 const CONTENT = [
   {
-    id: "diabetes",
-    title: "Diabetes mellitus",
-    area: "Endokrinologie",
-    icon: "🩸",
+    id: "diabetes", title: "Diabetes mellitus", area: "Endokrinologie", icon: "🩸",
     flash: [
-      { front: "Was ist Diabetes mellitus?", back: "Chronische Stoffwechselerkrankung mit Hyperglykämie durch absoluten oder relativen Insulinmangel." },
+      { front: "Was ist Diabetes mellitus?", back: "Chronische Stoffwechselerkrankung mit Hyperglykämie durch absoluten/relativen Insulinmangel." },
       { front: "Hypoglykämie-Zeichen", back: "Schwitzen, Zittern, Unruhe, Heißhunger, Verwirrtheit." },
-      { front: "Hyperglykämie-Zeichen", back: "Durst, Polyurie, Müdigkeit, trockene Haut, Azetongeruch." },
-      { front: "Wichtige Pflege", back: "BZ messen, Insulin korrekt vorbereiten, Füße kontrollieren, Hypoglykämien erkennen." }
+      { front: "Hyperglykämie-Zeichen", back: "Durst, Polyurie, Müdigkeit, trockene Haut, Azetongeruch." }
     ],
     quiz: [
-      { q: "Welches Zeichen passt typisch zur Hypoglykämie?", a: "Zittern und Schwitzen", o: ["Azetongeruch", "Bradykardie", "Trockene Haut"] },
-      { q: "Was gehört zur täglichen Diabetes-Pflege?", a: "Fußinspektion", o: ["Wärmeflasche anwenden", "Flüssigkeit stark begrenzen", "Patient nüchtern lassen"] },
-      { q: "Was beschreibt Typ-1-Diabetes am besten?", a: "Absoluter Insulinmangel", o: ["Reine Alterserscheinung", "Nur Ernährungsproblem", "Lungenerkrankung"] }
+      { q: "Welches Zeichen passt zur Hypoglykämie?", a: "Zittern und Schwitzen", o: ["Azetongeruch", "Bradykardie", "Trockene Haut"] },
+      { q: "Was gehört zur Diabetes-Pflege?", a: "Tägliche Fußinspektion", o: ["Wärmeflasche anwenden", "Flüssigkeit begrenzen", "Patient nüchtern lassen"] }
     ],
     blanks: [
       { text: "Bei Diabetes wird der _____ regelmäßig kontrolliert.", answer: "Blutzucker", options: ["Blutzucker", "Puls", "GCS", "BMI"] },
-      { text: "Insulin wird nach der _____ vorbereitet und kontrolliert.", answer: "10-R-Regel", options: ["10-R-Regel", "FAST-Regel", "NYHA-Klasse", "qSOFA"] },
-      { text: "Azetongeruch kann ein Hinweis auf eine schwere _____ sein.", answer: "Hyperglykämie", options: ["Hyperglykämie", "Hypotonie", "Dysphagie", "Pneumonie"] }
+      { text: "Insulin wird nach der _____ Regel vorbereitet.", answer: "10-R-Regel", options: ["10-R-Regel", "FAST-Regel", "NYHA", "qSOFA"] }
     ],
-    // 5 Paare = 10 Karten für das Memory
     memory: [
-      ["Hypoglykämie", "Schwitzen, Zittern, Unruhe"],
-      ["Hyperglykämie", "Durst, Polyurie, Müdigkeit"],
-      ["HbA1c", "Langzeit-Blutzuckerwert"],
-      ["Fußinspektion", "Kontrolle auf Druckstellen und Wunden"],
-      ["Insulin", "Blutzuckersenkendes Hormon"]
+      ["Hypoglykämie", "Schwitzen & Zittern"], ["Hyperglykämie", "Durst & Polyurie"],
+      ["HbA1c", "Langzeit-Blutzucker"], ["Fußinspektion", "Druckstellenkontrolle"],
+      ["Insulin", "Blutzuckersenkend"]
     ]
   },
   {
-    id: "apoplex",
-    title: "Schlaganfall",
-    area: "Neurologie",
-    icon: "🧠",
+    id: "apoplex", title: "Schlaganfall", area: "Neurologie", icon: "🧠",
     flash: [
-      { front: "Was ist ein Schlaganfall?", back: "Akute neurologische Funktionsstörung durch Gefäßverschluss oder Hirnblutung." },
-      { front: "FAST-Test", back: "Face, Arms, Speech, Time." },
-      { front: "Warum Schluckscreening?", back: "Zur Vermeidung von Aspiration bei Dysphagie." },
-      { front: "Pflegefokus", back: "Aspirationsprophylaxe, Lagerung, Bobath-Prinzip, Kommunikation anpassen." }
+      { front: "FAST-Test Bedeutung?", back: "Face, Arms, Speech, Time." },
+      { front: "Warum Schluckscreening?", back: "Zur Vermeidung von Aspiration bei Dysphagie." }
     ],
     quiz: [
-      { q: "Wofür steht FAST?", a: "Face, Arms, Speech, Time", o: ["Fieber, Atmung, Sprache, Temperatur", "Food, Airway, Safety, Time", "Face, Alertness, Sugar, Therapy"] },
-      { q: "Welche Komplikation droht bei Dysphagie?", a: "Aspiration", o: ["Dekubitus", "Hypoglykämie", "Ödem"] },
-      { q: "Was ist bei Verdacht auf Schlaganfall wichtig?", a: "Sofortige Eskalation", o: ["Abwarten", "Patient essen lassen", "Mobilisation ohne Prüfung"] }
+      { q: "Komplikation bei Dysphagie?", a: "Aspiration", o: ["Dekubitus", "Hypoglykämie", "Ödem"] },
+      { q: "Bei Schlaganfall-Verdacht?", a: "Sofortige Eskalation", o: ["Abwarten", "Essen lassen", "Mobilisation"] }
     ],
     blanks: [
-      { text: "Beim FAST-Test steht Speech für eine mögliche _____.", answer: "Sprachstörung", options: ["Sprachstörung", "Hypotonie", "Wunde", "Hyperglykämie"] },
-      { text: "Vor Essen und Trinken muss die _____ geprüft werden.", answer: "Schluckfähigkeit", options: ["Schluckfähigkeit", "Körpergröße", "Hautfarbe", "Temperaturkurve"] },
-      { text: "Ein Schlaganfall ist immer ein medizinischer _____.", answer: "Notfall", options: ["Notfall", "Routinefall", "Pflegegrad", "Ernährungsplan"] }
+      { text: "Beim FAST-Test steht Speech für _____.", answer: "Sprachstörung", options: ["Sprachstörung", "Hypotonie", "Wunde", "Hyperglykämie"] },
+      { text: "Ein Apoplex ist ein medizinischer _____.", answer: "Notfall", options: ["Notfall", "Routinefall", "Pflegegrad", "Ernährungsplan"] }
     ],
-    // 5 Paare = 10 Karten für das Memory
     memory: [
-      ["Face", "hängender Mundwinkel"],
-      ["Arms", "Arm sinkt ab"],
-      ["Speech", "verwaschene Sprache"],
-      ["Time", "sofort handeln"],
+      ["Face", "Mundwinkel hängt"], ["Arms", "Arm sinkt"],
+      ["Speech", "verwaschene Sprache"], ["Time", "sofort handeln"],
       ["Hemiparese", "Halbseitenlähmung"]
     ]
-  },
-  {
-    id: "copd",
-    title: "COPD",
-    area: "Pneumologie",
-    icon: "🫁",
-    flash: [
-      { front: "Was ist COPD?", back: "Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion." },
-      { front: "AHA-Symptome", back: "Atemnot, Husten, Auswurf." },
-      { front: "Atemerleichterung", back: "Kutschersitz, Torwartstellung und Lippenbremse." },
-      { front: "Pflegefokus", back: "SpO₂, Atemfrequenz, Sekret, Inhalationstechnik und Belastungsplanung." }
-    ],
-    quiz: [
-      { q: "Welche Technik hilft bei COPD?", a: "Lippenbremse", o: ["Flachlagerung", "Wärmeflasche", "Nahrungskarenz"] },
-      { q: "Was gehört zu AHA?", a: "Atemnot, Husten, Auswurf", o: ["Angst, Husten, Appetit", "Atemnot, Hautrötung, Anurie", "Auswurf, Hypertonie, Arrhythmie"] },
-      { q: "Was wird bei COPD regelmäßig beobachtet?", a: "SpO₂ und Atemmuster", o: ["Blutzucker nach jeder Mahlzeit", "Pupillenweite", "Wundrand"] }
-    ],
-    blanks: [
-      { text: "Die _____ ist eine wichtige Atemtechnik bei COPD.", answer: "Lippenbremse", options: ["Lippenbremse", "10-R-Regel", "FAST-Regel", "Braden-Skala"] },
-      { text: "COPD betrifft vor allem die _____.", answer: "Atmung", options: ["Atmung", "Niere", "Haut", "Leber"] },
-      { text: "AHA steht für Atemnot, Husten und _____.", answer: "Auswurf", options: ["Auswurf", "Anurie", "Appetit", "Angst"] }
-    ],
-    // 5 Paare = 10 Karten für das Memory
-    memory: [
-      ["Atemnot", "Dyspnoe"],
-      ["Husten", "typisches COPD-Symptom"],
-      ["Auswurf", "Sputum"],
-      ["Lippenbremse", "verlängert die Ausatmung"],
-      ["Zyanose", "Blaufärbung durch O2-Mangel"]
-    ]
   }
+];
+
+const MODES = [
+  {id:"flash", icon:"🃏", title:"Flashcards 2.0", desc:"Bewerten statt nur umdrehen."},
+  {id:"quiz", icon:"⚡", title:"Speed Quiz", desc:"Wähle die richtige Antwort."},
+  {id:"blank", icon:"✍️", title:"Lückentext", desc:"Fachbegriffe einsetzen."},
+  {id:"memory", icon:"🧠", title:"Memory", desc:"Finde die Paare."}
 ];
 
 /* =========================================================================
-   SYSTEM-LOGIK (AB HIER NICHTS MEHR ÄNDERN)
+   SYSTEM-LOGIK & PSYCHOLOGIE
 ========================================================================= */
-
-const MODES = [
-  {id:"flash",icon:"🃏",title:"Flashcards",desc:"Erst erinnern, dann Karte drehen."},
-  {id:"quiz",icon:"⚡",title:"Quiz",desc:"Schnelle Entscheidungen mit Sofortfeedback."},
-  {id:"memory",icon:"🧠",title:"Memory",desc:"Begriffe und Bedeutungen verbinden."},
-  {id:"blank",icon:"✍️",title:"Lückentext",desc:"Aktiv die passenden Fachbegriffe einsetzen."}
-];
-
-const SAVE_KEY = "pfp.practice.v2";
-
-let app = {
-  topic: CONTENT[0],
-  mode: MODES[0],
-  index:0,
-  correct:0,
-  total:0,
-  locked:false,
-  memory:null,
-  save: loadSave()
-};
-
-function loadSave(){
-  try{
-    const local = localStorage.getItem(SAVE_KEY);
-    const cookie = document.cookie.split("; ").find(x=>x.startsWith(SAVE_KEY+"="));
-    const raw = local || (cookie ? decodeURIComponent(cookie.split("=")[1]) : null);
-    return raw ? JSON.parse(raw) : {xp:0,rounds:0,best:0,streak:0,history:{}};
-  }catch(e){
-    return {xp:0,rounds:0,best:0,streak:0,history:{}};
-  }
-}
-
-function saveProgress(){
-  const raw = JSON.stringify(app.save);
-  localStorage.setItem(SAVE_KEY, raw);
-  document.cookie = SAVE_KEY+"="+encodeURIComponent(raw)+"; max-age=31536000; path=/; SameSite=Lax";
-  updateHud();
-}
-
+const SAVE_KEY = "pfp.practice.v3";
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
-function updateHud(){
-  $("#xp").textContent = app.save.xp || 0;
-  $("#rounds").textContent = app.save.rounds || 0;
-  $("#best").textContent = (app.save.best || 0) + "%";
-  $("#streak").textContent = app.save.streak || 0;
+let app = {
+  topic: null, mode: null, index: 0, correct: 0, total: 0, 
+  locked: false, memory: null,
+  save: loadSave()
+};
+
+function loadSave() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    return raw ? JSON.parse(raw) : { xp: 0, rounds: 0, best: 0, streak: 0, history: {} };
+  } catch(e) { return { xp: 0, rounds: 0, best: 0, streak: 0, history: {} }; }
 }
 
-function init(){
-  $("#topics").innerHTML = CONTENT.map(t => `
-    <button class="pick-card topic-card ${t.id===app.topic.id?'active':''}" data-id="${t.id}">
-      <div class="emoji">${t.icon}</div>
-      <div>
-        <h3>${t.title}</h3>
-        <p>${t.area} · ${t.flash.length + t.quiz.length + t.blanks.length} Lernimpulse</p>
-      </div>
-      <div class="check"><i class="fa-solid fa-check"></i></div>
-    </button>
-  `).join("");
+function saveProgress() {
+  localStorage.setItem(SAVE_KEY, JSON.stringify(app.save));
+  updateDash();
+}
 
-  $("#modes").innerHTML = MODES.map(m => `
-    <button class="pick-card mode-card ${m.id===app.mode.id?'active':''}" data-id="${m.id}">
-      <div class="emoji">${m.icon}</div>
-      <div>
+function updateDash() {
+  $("#hdrXp").textContent = app.save.xp;
+  $("#hdrStreak").textContent = app.save.streak;
+  $("#statRounds").textContent = app.save.rounds;
+  $("#statBest").textContent = app.save.best + "%";
+  $("#lvlDisplay").textContent = Math.floor(app.save.xp / 500) + 1; // Level System (1 Lvl = 500 XP)
+}
+
+function init() {
+  updateDash();
+  renderTopicsList();
+  renderModesList();
+  nav("home");
+}
+
+function nav(tabId) {
+  // UI Tabs
+  $$(".screen").forEach(s => s.classList.remove("active"));
+  $("#" + tabId).classList.add("active");
+  
+  // Bottom Nav Highlighting
+  $$(".nav-item").forEach(i => i.classList.remove("active"));
+  const tabBtn = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
+  if(tabBtn) tabBtn.classList.add("active");
+
+  // Hide Bottom Nav during gameplay
+  $("#bottomNav").style.display = (tabId === "play" || tabId === "result") ? "none" : "flex";
+}
+
+function renderTopicsList() {
+  $("#topicsList").innerHTML = CONTENT.map(t => {
+    let playedCount = 0;
+    let totalScore = 0;
+    MODES.forEach(m => {
+      const s = app.save.history[`${t.id}.${m.id}`];
+      if(s) { playedCount++; totalScore += s; }
+    });
+    const progress = playedCount > 0 ? Math.min(100, (totalScore / (MODES.length * 100)) * 100) : 0;
+
+    return `
+    <button class="game-card-btn" onclick="selectTopic('${t.id}')">
+      <div class="emoji-box">${t.icon}</div>
+      <div class="card-content" style="flex: 1;">
+        <h3>${t.title}</h3>
+        <p>${t.area}</p>
+        <div class="progress-track"><div class="progress-fill" style="width: ${progress}%"></div></div>
+      </div>
+      <i class="fa-solid fa-chevron-right" style="color:var(--line)"></i>
+    </button>
+  `}).join("");
+}
+
+function renderModesList() {
+  $("#modesList").innerHTML = MODES.map(m => `
+    <button class="game-card-btn" onclick="selectMode('${m.id}')">
+      <div class="emoji-box">${m.icon}</div>
+      <div class="card-content">
         <h3>${m.title}</h3>
         <p>${m.desc}</p>
       </div>
-      <div class="check"><i class="fa-solid fa-check"></i></div>
     </button>
   `).join("");
-
-  $$(".topic-card").forEach(btn=>{
-    btn.onclick=()=>{
-      app.topic = CONTENT.find(t=>t.id===btn.dataset.id);
-      $$(".topic-card").forEach(x=>x.classList.remove("active"));
-      btn.classList.add("active");
-      micro("Thema gewählt");
-    };
-  });
-
-  $$(".mode-card").forEach(btn=>{
-    btn.onclick=()=>{
-      app.mode = MODES.find(m=>m.id===btn.dataset.id);
-      $$(".mode-card").forEach(x=>x.classList.remove("active"));
-      btn.classList.add("active");
-      micro("Modus gewählt");
-    };
-  });
-
-  $("#startBtn").onclick = start;
-  updateHud();
 }
 
-function show(id){
-  $$(".screen").forEach(s=>s.classList.remove("active"));
-  $("#"+id).classList.add("active");
-  $("#ctaBar").style.display = id==="home" ? "block" : "none";
+function selectTopic(id) {
+  app.topic = CONTENT.find(t => t.id === id);
+  $("#selectedTopicTitle").textContent = app.topic.title;
+  haptic();
+  nav("modes");
 }
 
-function start(){
-  app.index = 0;
-  app.correct = 0;
-  app.locked = false;
-  app.memory = null;
+function selectMode(id) {
+  app.mode = MODES.find(m => m.id === id);
+  haptic();
+  startSession();
+}
 
-  if(app.mode.id==="flash") app.total = app.topic.flash.length;
-  if(app.mode.id==="quiz") app.total = app.topic.quiz.length;
-  if(app.mode.id==="blank") app.total = app.topic.blanks.length;
-  if(app.mode.id==="memory") app.total = app.topic.memory.length;
+function playNow() {
+  haptic();
+  app.topic = CONTENT[Math.floor(Math.random() * CONTENT.length)];
+  app.mode = MODES[Math.floor(Math.random() * MODES.length)];
+  startSession();
+}
 
-  $("#sessionTitle").textContent = app.topic.title;
-  $("#sessionMeta").textContent = app.mode.title;
-  show("play");
+function abortGame() {
+  if(confirm("Training abbrechen? Dein Fortschritt in dieser Runde geht verloren.")) {
+    nav("home");
+  }
+}
+
+/* =========================================================================
+   GAME ENGINE
+========================================================================= */
+function startSession() {
+  app.index = 0; app.correct = 0; app.locked = false; app.memory = null;
+  app.total = app.topic[app.mode.id].length;
+  if(app.mode.id === "memory") app.total = app.topic.memory.length; // 5 Pairs = 5 points max
+  
+  nav("play");
   renderGame();
 }
 
-function updateSession(){
-  $("#sessionScore").textContent = `${app.correct}/${app.total}`;
-  $("#bar").style.width = Math.round((app.index/app.total)*100) + "%";
+function renderGame() {
+  const percent = app.total > 0 ? (app.index / app.total) * 100 : 0;
+  $("#bar").style.width = percent + "%";
+  $("#sessionScore").textContent = `${Math.floor(app.correct)}/${app.total}`;
+
+  if(app.mode.id === "flash") renderFlash();
+  else if(app.mode.id === "quiz") renderQuiz();
+  else if(app.mode.id === "blank") renderBlank();
+  else if(app.mode.id === "memory") renderMemory();
 }
 
-function renderGame(){
-  updateSession();
-  if(app.mode.id==="flash") renderFlash();
-  if(app.mode.id==="quiz") renderQuiz();
-  if(app.mode.id==="blank") renderBlank();
-  if(app.mode.id==="memory") renderMemory();
-}
-
-function renderFlash(){
+/* --- FLASHCARDS 2.0 --- */
+function renderFlash() {
   const item = app.topic.flash[app.index];
   if(!item) return finish();
 
   $("#game").innerHTML = `
-    <div class="flash" id="flash">
-      <div class="flash-inner">
+    <div class="flash-container">
+      <div class="flash-inner" id="flashCard" onclick="flipFlashcard()">
         <div class="face">
-          <div class="question-label">Erinnere dich zuerst</div>
+          <div class="question-label">Frage</div>
           <h2>${item.front}</h2>
-          <p>Tippe auf die Karte, um die Antwort zu sehen.</p>
+          <p class="hint">Tippe zum Aufdecken</p>
         </div>
         <div class="face back">
-          <div class="question-label" style="color:rgba(255,255,255,.7)">Antwort</div>
-          <h2>${item.front}</h2>
+          <div class="question-label" style="color:rgba(255,255,255,.6)">Antwort</div>
           <p>${item.back}</p>
         </div>
       </div>
     </div>
-    <div class="rate-row">
-      <button class="secondary" onclick="flashAnswer(false)">Nochmal</button>
-      <button class="primary" onclick="flashAnswer(true)">Gewusst</button>
+    <div class="difficulty-row" id="flashActions" style="display:none;">
+      <button class="diff-btn diff-1" onclick="flashRate(0)">Nochmal</button>
+      <button class="diff-btn diff-2" onclick="flashRate(0.5)">Schwer</button>
+      <button class="diff-btn diff-3" onclick="flashRate(1)">Gut</button>
+      <button class="diff-btn diff-4" onclick="flashRate(1.2)">Leicht</button>
     </div>
   `;
-
-  $("#flash").onclick = () => {
-    $("#flash").classList.toggle("flipped");
-    micro("Karte gedreht");
-  };
 }
 
-function flashAnswer(ok){
-  if(ok) app.correct++;
+function flipFlashcard() {
+  const card = $("#flashCard");
+  if(card.classList.contains("flipped")) return; // already flipped
+  card.classList.add("flipped");
+  haptic();
+  
+  setTimeout(() => {
+    const actions = $("#flashActions");
+    actions.style.display = "grid";
+  }, 300);
+}
+
+function flashRate(scoreMulti) {
+  app.correct += scoreMulti;
+  if(scoreMulti > 0) showFloatingXP(Math.round(10 * scoreMulti));
+  
   app.index++;
-  micro(ok ? "Stark erinnert" : "Kommt in Wiederholung");
-  renderFlash();
+  renderGame();
 }
 
-function renderQuiz(){
+/* --- QUIZ & BLANKS --- */
+function renderQuiz() {
   const q = app.topic.quiz[app.index];
   if(!q) return finish();
-
-  const options = shuffle([q.a,...q.o]);
+  const options = shuffle([q.a, ...q.o]);
 
   $("#game").innerHTML = `
-    <div class="game-card">
-      <div class="question-label">Frage ${app.index+1} von ${app.total}</div>
+    <div class="play-card" id="qCard">
+      <div class="question-label">Wähle weise</div>
       <div class="question">${q.q}</div>
       <div class="options">
-        ${options.map(o=>`<button class="option" onclick="answerOption(this,'${safe(o)}','${safe(q.a)}')">${o}</button>`).join("")}
+        ${options.map(o => `<button class="option" onclick="evalChoice(this, '${safe(o)}', '${safe(q.a)}')">${o}</button>`).join("")}
       </div>
     </div>
   `;
 }
 
-function renderBlank(){
+function renderBlank() {
   const b = app.topic.blanks[app.index];
   if(!b) return finish();
+  const options = shuffle([...b.options]);
 
   $("#game").innerHTML = `
-    <div class="game-card">
-      <div class="question-label">Lückentext ${app.index+1} von ${app.total}</div>
+    <div class="play-card" id="qCard">
+      <div class="question-label">Lückentext</div>
       <div class="question">${b.text}</div>
-      <p class="hint">Wähle den passenden Fachbegriff.</p>
       <div class="options">
-        ${shuffle(b.options).map(o=>`<button class="option" onclick="answerOption(this,'${safe(o)}','${safe(b.answer)}')">${o}</button>`).join("")}
+        ${options.map(o => `<button class="option" onclick="evalChoice(this, '${safe(o)}', '${safe(b.answer)}')">${o}</button>`).join("")}
       </div>
     </div>
   `;
 }
 
-function answerOption(btn, answer, correct){
+function evalChoice(btn, chosen, correct) {
   if(app.locked) return;
   app.locked = true;
 
-  const ok = answer === correct;
-  if(ok) app.correct++;
+  const isOk = chosen === correct;
+  
+  if(isOk) {
+    app.correct++;
+    btn.classList.add("correct");
+    haptic();
+    showFloatingXP(15);
+  } else {
+    btn.classList.add("wrong");
+    $("#qCard").classList.add("shake");
+    haptic(true); // maybe longer vib for error
+    
+    // Highlight correct option
+    $$(".option").forEach(o => {
+      if(o.textContent === correct) o.classList.add("correct");
+    });
+  }
 
-  btn.classList.add(ok ? "correct" : "wrong");
-  $$(".option").forEach(o=>{
-    if(o.textContent === correct) o.classList.add("correct");
-    o.disabled = true;
-  });
+  $$(".option").forEach(o => o.disabled = true);
 
-  micro(ok ? "Richtig" : "Fast");
-
-  setTimeout(()=>{
+  setTimeout(() => {
     app.index++;
     app.locked = false;
     renderGame();
-  },850);
+  }, 1000);
 }
 
-function renderMemory(){
-  if(!app.memory){
-    const baseItems = app.topic.memory.flatMap((p,i)=>[
-      {pair:i,type:"term",text:p[0],open:false,done:false},
-      {pair:i,type:"def",text:p[1],open:false,done:false}
+/* --- MEMORY (10 Cards) --- */
+function renderMemory() {
+  if(!app.memory) {
+    let arr = app.topic.memory.flatMap((p, i) => [
+      {pair: i, type: "t", text: p[0], open: false, done: false},
+      {pair: i, type: "d", text: p[1], open: false, done: false}
     ]);
-    app.memory = shuffleMemory(baseItems);
+    app.memory = shuffleMemory(arr);
     app.first = null;
   }
 
-  $("#bar").style.width = Math.round((app.correct/app.total)*100)+"%";
-
   $("#game").innerHTML = `
-    <div class="game-card">
-      <div class="question-label">Memory</div>
-      <div class="question">Finde passende Paare</div>
+    <div class="play-card" style="padding: 16px;">
+      <div class="question-label">Verbinde die Paare</div>
       <div class="memory-grid">
-        ${app.memory.map((m,i)=>`
-          <button class="mem ${m.open?'open':''} ${m.done?'done':''}" onclick="flipMemory(${i})">
-            ${m.open || m.done ? m.text : "?"}
+        ${app.memory.map((m, i) => `
+          <button class="mem ${m.open ? 'open' : ''} ${m.done ? 'done' : ''}" onclick="memFlip(${i})">
+            ${(m.open || m.done) ? m.text : '❔'}
           </button>
         `).join("")}
       </div>
@@ -525,14 +576,14 @@ function renderMemory(){
   `;
 }
 
-function flipMemory(i){
+function memFlip(i) {
   const card = app.memory[i];
   if(card.done || card.open || app.locked) return;
 
   card.open = true;
-  micro("Flip");
-
-  if(app.first === null){
+  haptic();
+  
+  if(app.first === null) {
     app.first = i;
     renderMemory();
     return;
@@ -544,122 +595,141 @@ function flipMemory(i){
   const a = app.memory[app.first];
   const b = app.memory[i];
 
-  setTimeout(()=>{
-    if(a.pair === b.pair && a.type !== b.type){
-      a.done = true;
-      b.done = true;
+  setTimeout(() => {
+    if(a.pair === b.pair) {
+      a.done = true; b.done = true;
       app.correct++;
-      micro("Match");
-    }else{
-      a.open = false;
-      b.open = false;
-      micro("Nochmal suchen");
+      haptic(); showFloatingXP(20);
+    } else {
+      a.open = false; b.open = false;
+      haptic(true);
     }
-
     app.first = null;
     app.locked = false;
 
     if(app.correct >= app.total) finish();
     else renderMemory();
-  },700);
+  }, 700);
 }
 
-function finish(){
-  const percent = Math.round((app.correct / app.total) * 100);
-  const modeFactor = {flash:8,quiz:12,blank:12,memory:14}[app.mode.id];
-  const earned = Math.round(app.correct * modeFactor * (percent/100));
+/* =========================================================================
+   RESULTS & DOPAMINE
+========================================================================= */
+function finish() {
+  // Avoid division by zero
+  const maxPossible = app.total || 1;
+  const percent = Math.min(100, Math.round((app.correct / maxPossible) * 100));
+  
+  // XP Calculation based on difficulty/mode
+  const multipliers = { flash: 10, quiz: 15, blank: 15, memory: 20 };
+  let earnedXp = Math.round(app.correct * multipliers[app.mode.id]);
+  
+  // Streak Bonus
+  if(percent >= 80) earnedXp += 20;
 
-  app.save.xp += earned;
+  // Save State
+  app.save.xp += earnedXp;
   app.save.rounds += 1;
   app.save.best = Math.max(app.save.best || 0, percent);
   app.save.streak = percent >= 70 ? (app.save.streak || 0) + 1 : 0;
-
-  const key = `${app.topic.id}.${app.mode.id}`;
-  app.save.history[key] = Math.max(app.save.history[key] || 0, percent);
-
+  
+  const hKey = `${app.topic.id}.${app.mode.id}`;
+  app.save.history[hKey] = Math.max(app.save.history[hKey] || 0, percent);
   saveProgress();
 
-  $("#finalPercent").textContent = percent + "%";
-  $("#earnedXp").textContent = "+" + earned + " XP";
-  $("#resultTitle").textContent =
-    percent >= 90 ? "Exzellent!" :
-    percent >= 70 ? "Starke Runde!" :
-    percent >= 50 ? "Solide, weiter üben." :
-    "Nochmal wiederholen.";
-
-  $("#resultText").textContent =
-    percent >= 70
-      ? "Du hast das Thema aktiv verarbeitet und Punkte verdient."
-      : "Die Runde war nicht umsonst: Wiederholung macht den Unterschied.";
-
-  show("result");
-  confetti(percent);
-  // Das automatische Zurückkehren wurde entfernt, der Nutzer muss nun den Button drücken.
-}
-
-function goHome(){
-  show("home");
-}
-
-function micro(text){
-  document.querySelector(".toast")?.remove();
-  const t=document.createElement("div");
-  t.className="toast";
-  t.textContent=text;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),850);
-}
-
-function confetti(percent){
-  const amount = percent >= 90 ? 90 : percent >= 70 ? 55 : percent >= 50 ? 28 : 10;
-  const colors = ["#4361ee","#7209b7","#f72585","#4cc9f0","#4ade80","#f59e0b"];
-  for(let i=0;i<amount;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=colors[Math.floor(Math.random()*colors.length)];
-    c.style.animationDuration=(Math.random()*2+2)+"s";
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),4500);
-  }
-}
-
-// Echter Zufallsgenerator nach Fisher-Yates
-function shuffle(arr){
-  let array = [...arr];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-// Spezial-Shuffle für Memory: Verhindert, dass zusammengehörige Paare nebeneinander/übereinander spawnen
-function shuffleMemory(arr) {
-  let array;
-  let isValid = false;
-  let attempts = 0;
+  // Setup UI
+  $("#finalPercent").textContent = "0"; // Will be animated
+  $("#earnedXp").textContent = "+" + earnedXp + " XP";
   
-  while(!isValid && attempts < 100) {
-    array = shuffle([...arr]);
-    isValid = true;
-    
-    // Prüfe, ob Paare in der Nähe (direkt rechts oder darunter) sind
-    for(let i = 0; i < array.length; i++) {
-      // Überprüft horizontal (da das Grid aus 2 Spalten besteht)
-      if (i % 2 === 0 && array[i+1] && array[i].pair === array[i+1].pair) isValid = false;
-      // Überprüft vertikal (direkt darunter)
-      if (array[i+2] && array[i].pair === array[i+2].pair) isValid = false;
+  if(percent >= 90) { $("#resultTitle").textContent = "Meisterhaft!"; $("#scoreCircle").classList.add("perfect"); }
+  else if(percent >= 70) { $("#resultTitle").textContent = "Starke Leistung!"; $("#scoreCircle").classList.remove("perfect"); }
+  else { $("#resultTitle").textContent = "Guter Versuch."; $("#scoreCircle").classList.remove("perfect"); }
+
+  nav("result");
+
+  // Number Counter Animation & Confetti
+  setTimeout(() => {
+    animateValue("finalPercent", 0, percent, 1000);
+    if(percent >= 70) triggerConfetti(percent);
+    haptic();
+  }, 300);
+}
+
+function animateValue(id, start, end, duration) {
+  const obj = document.getElementById(id);
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    obj.innerHTML = Math.floor(progress * (end - start) + start);
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
     }
-    attempts++;
+  };
+  window.requestAnimationFrame(step);
+}
+
+function showFloatingXP(amount) {
+  const el = document.createElement("div");
+  el.className = "floating-xp";
+  el.textContent = `+${amount}`;
+  // Spawn around center of screen
+  el.style.left = (50 + (Math.random() * 20 - 10)) + "%";
+  el.style.top = "40%";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+}
+
+function triggerConfetti(percent) {
+  const amount = percent >= 90 ? 60 : 30;
+  const colors = ["#4361ee", "#7209b7", "#f72585", "#4cc9f0", "#4ade80", "#f59e0b"];
+  for(let i=0; i<amount; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDuration = (Math.random() * 2 + 2) + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+function haptic(error = false) {
+  if(navigator.vibrate) {
+    if(error) navigator.vibrate([50, 50, 50]);
+    else navigator.vibrate(40);
+  }
+}
+
+/* =========================================================================
+   UTILS
+========================================================================= */
+function shuffle(arr) {
+  let a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function shuffleMemory(arr) {
+  let array; let valid = false; let loops = 0;
+  while(!valid && loops < 100) {
+    array = shuffle(arr);
+    valid = true;
+    for(let i=0; i<array.length; i++) {
+      if(i % 2 === 0 && array[i+1] && array[i].pair === array[i+1].pair) valid = false; // Horizontal
+      if(array[i+2] && array[i].pair === array[i+2].pair) valid = false; // Vertikal
+    }
+    loops++;
   }
   return array;
 }
 
-function safe(str){
-  return String(str).replaceAll("'","&#39;").replaceAll('"',"&quot;");
-}
+function safe(str) { return String(str).replaceAll("'","&#39;").replaceAll('"',"&quot;"); }
 
+// Init App
 init();
 </script>
 </body>
