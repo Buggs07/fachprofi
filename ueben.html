@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <title>PflegefachProfi • NextGen</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
@@ -10,43 +10,44 @@
    DESIGN SYSTEM & VARIABLES
    ========================================================================== */
 :root {
-  /* Colors */
   --primary: #4361ee;
   --primary-dark: #3a0ca3;
   --primary-light: #eef2ff;
   --accent: #f72585;
+  --accent-glow: rgba(247, 37, 133, 0.5);
   --success: #10b981;
   --success-light: #d1fae5;
   --warning: #f59e0b;
   --danger: #ef4444;
   --danger-light: #fee2e2;
   
-  /* Surfaces */
   --bg-app: #f8fafc;
   --bg-surface: #ffffff;
   --text-main: #0f172a;
   --text-muted: #64748b;
   --border: #e2e8f0;
   
-  /* Shadows & Elevations */
   --shadow-sm: 0 2px 4px rgba(15,23,42,.04);
-  --shadow-md: 0 8px 16px rgba(15,23,42,.06);
+  --shadow-md: 0 8px 16px rgba(15,23,42,.08);
   --shadow-lg: 0 24px 48px rgba(67,97,238,.12);
-  --shadow-float: 0 12px 32px rgba(67,97,238,.25);
   --shadow-inner: inset 0 -4px 0 rgba(0,0,0,0.1);
   
-  /* Animation */
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --ease-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* ==========================================================================
-   RESET & TYPOGRAPHY
+   RESET, TYPOGRAPHY & ANTI-BUG MEASURES
    ========================================================================== */
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { 
+  box-sizing: border-box; margin: 0; padding: 0; 
+  -webkit-tap-highlight-color: transparent; 
+  user-select: none; /* Prevents ugly text highlighting on fast clicks */
+}
+
 body { 
   font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, Arial, sans-serif; 
-  background: var(--bg-app); 
+  background: #e2e8f0; /* Darker outer bg for desktop */
   color: var(--text-main); 
   min-height: 100vh; 
   display: flex; 
@@ -54,11 +55,13 @@ body {
   overflow: hidden; 
 }
 
+/* Allow selection only in specific texts if needed */
+p, h1, h2, h3, .flash-text { user-select: auto; }
 button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
-h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 
 /* ==========================================================================
-   APP CONTAINER (Mobile First / SaaS Wrapper)
+   APP CONTAINER (SaaS Wrapper)
    ========================================================================== */
 .app-wrapper {
   width: 100%; max-width: 480px; height: 100vh; height: 100dvh;
@@ -67,12 +70,14 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 }
 
 /* ==========================================================================
-   GLOBAL UI COMPONENTS
+   GLOBAL UI (Topbar & Bottom Nav)
    ========================================================================== */
 .topbar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 20px 24px; background: rgba(248, 250, 252, 0.85);
+  padding: max(20px, env(safe-area-inset-top)) 24px 20px 24px; 
+  background: rgba(248, 250, 252, 0.85);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 50;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
 }
 
 .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; }
@@ -92,47 +97,46 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 .stat-pill i.fa-fire { color: var(--warning); }
 .stat-pill i.fa-bolt { color: var(--primary); }
 
-/* ==========================================================================
-   SCREENS & NAVIGATION
-   ========================================================================== */
-.screen {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: 0 24px 100px 24px; display: none; opacity: 0; transform: translateY(10px);
-  transition: all 0.4s var(--ease-fluid);
-}
-.screen.active { display: block; opacity: 1; transform: translateY(0); }
-
-/* Bottom Nav */
 .bottom-nav {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 80px;
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 85px;
   background: var(--bg-surface); border-top: 1px solid var(--border);
   display: flex; justify-content: space-around; align-items: center;
   padding-bottom: env(safe-area-inset-bottom); z-index: 100;
+  transition: transform 0.4s var(--ease-fluid);
 }
+.bottom-nav.hidden { transform: translateY(100%); pointer-events: none; }
+
 .nav-item {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   color: var(--text-muted); font-size: 11px; font-weight: 700;
-  transition: 0.3s var(--ease-spring); width: 70px;
+  transition: 0.3s var(--ease-spring); width: 70px; height: 50px; justify-content: center;
 }
 .nav-item i { font-size: 22px; transition: 0.3s var(--ease-spring); }
 .nav-item.active { color: var(--primary); }
-.nav-item.active i { transform: translateY(-4px) scale(1.1); }
+.nav-item.active i { transform: translateY(-4px) scale(1.15); }
 
-/* FAB */
 .fab-main {
   width: 64px; height: 64px; border-radius: 20px;
   background: linear-gradient(135deg, var(--accent), var(--primary-dark));
   color: white; font-size: 24px; display: grid; place-items: center;
-  transform: translateY(-20px) rotate(45deg);
-  box-shadow: 0 12px 32px rgba(247,37,133,.25); transition: 0.3s var(--ease-spring);
+  transform: translateY(-24px) rotate(45deg);
+  box-shadow: 0 12px 28px var(--accent-glow); transition: 0.3s var(--ease-spring);
   border: 4px solid var(--bg-app);
 }
 .fab-main i { transform: rotate(-45deg); transition: 0.3s; margin-left: 4px; }
-.fab-main:active { transform: translateY(-16px) rotate(45deg) scale(0.95); box-shadow: 0 4px 12px rgba(247,37,133,.3); }
+.fab-main:active { transform: translateY(-18px) rotate(45deg) scale(0.92); box-shadow: 0 4px 12px var(--accent-glow); }
 
 /* ==========================================================================
-   HOME DASHBOARD
+   SCREENS
    ========================================================================== */
+.screen {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 0 24px 120px 24px; display: none; opacity: 0; transform: translateY(15px);
+  transition: all 0.4s var(--ease-fluid);
+}
+.screen.active { display: block; opacity: 1; transform: translateY(0); }
+
+/* DASHBOARD */
 .dash-header { margin: 10px 0 24px 0; }
 .dash-header h1 { font-size: 28px; color: var(--text-main); margin-bottom: 6px; }
 .dash-header p { color: var(--text-muted); font-size: 15px; font-weight: 500; }
@@ -142,14 +146,14 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
   position: relative; overflow: hidden; box-shadow: var(--shadow-lg); margin-bottom: 24px;
 }
 .goal-card::after {
-  content: "🎯"; position: absolute; font-size: 140px; right: -20px; top: 0;
+  content: "🎯"; position: absolute; font-size: 140px; right: -20px; top: -10px;
   opacity: 0.1; transform: rotate(15deg); pointer-events: none;
 }
 .goal-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; opacity: 0.8; margin-bottom: 8px; }
 .goal-progress { display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px; }
 .goal-progress span:first-child { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
 .goal-progress span:last-child { font-size: 16px; opacity: 0.8; font-weight: 600; }
-.progress-bar-bg { height: 8px; background: rgba(255,255,255,0.2); border-radius: 99px; overflow: hidden; }
+.progress-bar-bg { height: 8px; background: rgba(255,255,255,0.2); border-radius: 99px; overflow: hidden; width: 100%; }
 .progress-bar-fill { height: 100%; background: var(--success); width: 0%; transition: width 1s var(--ease-fluid); border-radius: 99px; }
 
 .section-title { font-size: 16px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
@@ -158,23 +162,25 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 .quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .stat-box {
   background: var(--bg-surface); padding: 16px; border-radius: 20px;
-  border: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px;
+  border: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; box-shadow: var(--shadow-sm);
 }
 .stat-box .value { font-size: 24px; font-weight: 800; color: var(--primary); }
 .stat-box .label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
 
 /* ==========================================================================
-   WIZARD OVERLAY (Game Setup Flow)
+   THE WIZARD (Fixed Scroll & Overflow Bugs)
    ========================================================================== */
 .wizard-overlay {
   position: absolute; inset: 0; background: var(--bg-app); z-index: 200;
-  display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.5s var(--ease-spring);
+  display: flex; flex-direction: column; transform: translateY(100%); 
+  transition: transform 0.5s var(--ease-spring); pointer-events: none;
 }
-.wizard-overlay.open { transform: translateY(0); }
+.wizard-overlay.open { transform: translateY(0); pointer-events: auto; }
 
 .wizard-header {
-  padding: 24px; display: flex; align-items: center; gap: 16px;
-  background: var(--bg-surface); border-bottom: 1px solid var(--border);
+  padding: max(20px, env(safe-area-inset-top)) 24px 20px 24px; 
+  display: flex; align-items: center; gap: 16px;
+  background: var(--bg-surface); border-bottom: 1px solid var(--border); z-index: 10;
 }
 .btn-back {
   width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light);
@@ -183,17 +189,15 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 .btn-back:active { transform: scale(0.9); }
 .wizard-title { font-size: 18px; font-weight: 800; flex: 1; }
 
-.wizard-body { flex: 1; position: relative; overflow: hidden; }
+.wizard-body { flex: 1; position: relative; overflow: hidden; background: var(--bg-app); }
 
-/* Wizard Sliding Panes */
 .wizard-pane {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  padding: 24px 24px 120px 24px; overflow-y: auto;
-  transition: 0.4s var(--ease-fluid);
+  position: absolute; inset: 0; padding: 24px 24px 160px 24px; /* Space for Mega CTA */
+  overflow-y: auto; overflow-x: hidden; transition: 0.4s var(--ease-fluid);
 }
-.pane-hidden-left { transform: translateX(-120%); opacity: 0; pointer-events: none; }
+.pane-hidden-left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
 .pane-active { transform: translateX(0); opacity: 1; pointer-events: auto; }
-.pane-hidden-right { transform: translateX(120%); opacity: 0; pointer-events: none; }
+.pane-hidden-right { transform: translateX(100%); opacity: 0; pointer-events: none; }
 
 /* Rich Cards */
 .selection-grid { display: grid; gap: 12px; }
@@ -203,40 +207,63 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
   transition: 0.2s; text-align: left; box-shadow: var(--shadow-sm); position: relative;
 }
 .rich-card:active { transform: scale(0.98); }
-.rich-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 4px 12px rgba(67,97,238,.1); }
+.rich-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 4px 16px rgba(67,97,238,.15); }
 
 .rich-icon {
   width: 56px; height: 56px; border-radius: 16px; background: var(--bg-app);
-  display: grid; place-items: center; font-size: 28px; transition: 0.2s;
+  display: grid; place-items: center; font-size: 28px; transition: 0.2s; flex-shrink: 0;
 }
-.rich-card.selected .rich-icon { background: white; color: var(--primary); }
+.rich-card.selected .rich-icon { background: white; color: var(--primary); box-shadow: var(--shadow-sm); }
 
-.rich-content { flex: 1; }
-.rich-content h3 { font-size: 16px; margin-bottom: 4px; color: var(--text-main); }
+.rich-content { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.rich-content h3 { font-size: 16px; color: var(--text-main); }
 .rich-content p { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
 
-.check-icon { display: none; color: var(--primary); font-size: 20px; }
-.rich-card.selected .check-icon { display: block; animation: popIn 0.3s var(--ease-spring); }
-
-/* Sticky CTA Footer in Wizard */
-.wizard-cta-footer {
-  position: absolute; bottom: 0; left: 0; width: 100%;
-  padding: 24px; background: linear-gradient(to top, var(--bg-app) 70%, rgba(248,250,252,0));
-  transform: translateY(100%); transition: 0.4s var(--ease-spring);
-  display: flex; flex-direction: column; gap: 10px;
-}
-.wizard-cta-footer.visible { transform: translateY(0); }
-
-.btn-massive {
-  width: 100%; padding: 20px; border-radius: 20px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white; font-size: 18px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 10px;
-  box-shadow: var(--shadow-float); transition: 0.2s;
-}
-.btn-massive:active { transform: translateY(4px); box-shadow: 0 4px 12px rgba(67,97,238,.2); }
+.check-icon { display: none; color: var(--primary); font-size: 22px; margin-left: auto; }
+.rich-card.selected .check-icon { display: block; animation: popIn 0.4s var(--ease-spring); }
 
 /* ==========================================================================
-   GAME ENGINE UI & OTHERS
+   THE MEGA CTA (Start Game Button)
+   ========================================================================== */
+.wizard-cta-footer {
+  position: absolute; bottom: 0; left: 0; width: 100%;
+  padding: 24px; padding-bottom: max(24px, env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg-app) 70%, rgba(248,250,252,0));
+  transform: translateY(120%); transition: transform 0.5s var(--ease-spring);
+  z-index: 20; pointer-events: none; /* Let clicks pass through when hidden */
+}
+.wizard-cta-footer.visible { transform: translateY(0); pointer-events: auto; }
+
+.btn-mega {
+  width: 100%; padding: 22px; border-radius: 24px;
+  background: linear-gradient(135deg, var(--accent), #ff0a6c);
+  color: white; font-size: 20px; font-weight: 900; letter-spacing: 0.5px;
+  display: flex; justify-content: center; align-items: center; gap: 12px;
+  box-shadow: 0 12px 32px var(--accent-glow);
+  position: relative; overflow: hidden; border: none;
+  animation: breathe 2.5s infinite alternate var(--ease-fluid);
+  transition: all 0.2s; cursor: pointer;
+}
+.btn-mega::after {
+  content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shine 3s infinite;
+}
+.btn-mega:active {
+  transform: scale(0.95); animation: none;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+@keyframes breathe {
+  0% { transform: scale(1); box-shadow: 0 10px 24px var(--accent-glow); }
+  100% { transform: scale(1.02); box-shadow: 0 16px 40px rgba(247, 37, 133, 0.6); }
+}
+@keyframes shine {
+  0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; }
+}
+
+/* ==========================================================================
+   GAME ENGINE UI
    ========================================================================== */
 .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .game-progress-container { flex: 1; margin: 0 16px; }
@@ -251,7 +278,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 .play-kicker { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
 .play-question { font-size: 22px; font-weight: 800; line-height: 1.3; color: var(--text-main); margin-bottom: 24px; }
 
-/* Options */
+/* Options (Multiple Choice) */
 .options-grid { display: grid; gap: 12px; }
 .option-btn {
   background: var(--bg-surface); border: 2px solid var(--border);
@@ -262,59 +289,84 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 .option-btn.correct { background: var(--success-light); border-color: var(--success); color: #065f46; box-shadow: none; }
 .option-btn.wrong { background: var(--danger-light); border-color: var(--danger); color: #991b1b; box-shadow: none; animation: shake 0.4s var(--ease-spring); }
 
-/* Flashcards */
-.flash-scene { perspective: 1000px; height: 300px; margin-bottom: 20px; }
-.flash-card { width: 100%; height: 100%; position: relative; transition: transform 0.6s var(--ease-spring); transform-style: preserve-3d; cursor: pointer; }
+/* Flashcards 3D Fixed */
+.flash-scene { perspective: 1200px; height: 320px; margin-bottom: 20px; }
+.flash-card { 
+  width: 100%; height: 100%; position: relative; 
+  transition: transform 0.6s var(--ease-spring); 
+  transform-style: preserve-3d; cursor: pointer; 
+}
 .flash-card.is-flipped { transform: rotateY(180deg); }
 .flash-face {
-  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  position: absolute; inset: 0; 
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
   background: var(--bg-surface); border-radius: 28px; border: 2px solid var(--border);
   padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: var(--shadow-md);
 }
-.flash-face.back { transform: rotateY(180deg); background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none; }
+.flash-face.back { 
+  transform: rotateY(180deg); 
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+  color: white; border: none; 
+}
 .flash-text { font-size: 22px; font-weight: 800; line-height: 1.3; }
 .flash-face.back .flash-text { font-size: 20px; font-weight: 600; }
 
-.flash-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; opacity: 0; transform: translateY(10px); transition: 0.3s; pointer-events: none; }
+.flash-actions { 
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; 
+  opacity: 0; transform: translateY(10px); transition: 0.3s; pointer-events: none; 
+}
 .flash-actions.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.rate-btn { padding: 14px 4px; border-radius: 16px; font-weight: 800; font-size: 12px; color: white; box-shadow: var(--shadow-inner); transition: 0.2s; }
+.rate-btn { padding: 16px 8px; border-radius: 16px; font-weight: 800; font-size: 14px; color: white; box-shadow: var(--shadow-inner); transition: 0.2s; }
 .rate-btn:active { transform: translateY(2px); box-shadow: none; }
 .rate-1 { background: var(--text-muted); } .rate-2 { background: var(--danger); }
 .rate-3 { background: var(--warning); } .rate-4 { background: var(--success); }
 
-/* Memory */
+/* Memory Grid Fixes */
 .memory-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .mem-card {
-  height: 100px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white; font-weight: 800; font-size: 14px; padding: 10px; display: grid; place-items: center;
-  box-shadow: var(--shadow-sm); transition: 0.2s; border: 2px solid transparent; text-align: center;
+  min-height: 100px; border-radius: 16px; 
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white; font-weight: 800; font-size: 14px; padding: 12px; 
+  display: grid; place-items: center; box-shadow: var(--shadow-sm); 
+  transition: 0.2s; border: 2px solid transparent; text-align: center;
+  word-break: break-word; /* Prevent text overflow */
 }
 .mem-card:active:not(.open):not(.matched) { transform: scale(0.95); }
 .mem-card.open { background: var(--bg-surface); color: var(--text-main); border-color: var(--primary); }
-.mem-card.matched { background: var(--success-light); color: var(--success); border-color: transparent; box-shadow: none; opacity: 0.7; transform: scale(0.95); pointer-events: none; }
+.mem-card.matched { background: var(--success-light); color: var(--success); border-color: transparent; box-shadow: none; opacity: 0.6; transform: scale(0.95); pointer-events: none; }
 
-/* Results */
-.result-container { text-align: center; padding-top: 40px; }
-.score-ring-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 30px; }
-.score-ring { width: 100%; height: 100%; border-radius: 50%; border: 10px solid var(--primary-light); display: grid; place-items: center; background: var(--bg-surface); box-shadow: var(--shadow-lg); z-index: 2; position: relative; }
-.score-value { font-size: 48px; font-weight: 900; color: var(--primary-dark); letter-spacing: -2px; }
+/* ==========================================================================
+   RESULTS & REWARDS
+   ========================================================================== */
+.result-container { text-align: center; padding-top: 20px; display: flex; flex-direction: column; align-items: center; }
+.score-ring-wrap { position: relative; width: 180px; height: 180px; margin: 0 auto 30px; }
+.score-ring { 
+  width: 100%; height: 100%; border-radius: 50%; border: 12px solid var(--primary-light); 
+  display: grid; place-items: center; background: var(--bg-surface); 
+  box-shadow: var(--shadow-lg); z-index: 2; position: relative; 
+}
+.score-value { font-size: 56px; font-weight: 900; color: var(--primary-dark); letter-spacing: -2px; }
 .score-value span { font-size: 24px; }
-.xp-reward { font-size: 24px; font-weight: 800; color: var(--success); margin-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+.xp-reward { font-size: 28px; font-weight: 900; color: var(--success); margin-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; }
 
 /* Animations */
-.floating-xp { position: absolute; font-size: 24px; font-weight: 900; color: var(--success); pointer-events: none; z-index: 1000; animation: floatUp 1s var(--ease-fluid) forwards; text-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
-@keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.2); } }
+.floating-xp { position: absolute; font-size: 28px; font-weight: 900; color: var(--success); pointer-events: none; z-index: 1000; animation: floatUp 1.2s var(--ease-fluid) forwards; text-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+@keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-80px) scale(1.3); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
 @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 70% { transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
-.confetti { position: fixed; width: 10px; height: 10px; z-index: 999; border-radius: 3px; animation: fall linear forwards; pointer-events: none; }
+.confetti { position: fixed; width: 10px; height: 10px; z-index: 999; border-radius: 4px; animation: fall linear forwards; pointer-events: none; }
 @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+/* Fix utility for library */
+.lib-card-progress { height: 6px; border-radius: 99px; background: var(--border); width: 100%; margin-top: 12px; overflow: hidden;}
+.lib-card-fill { height: 100%; background: var(--primary); border-radius: 99px; }
 </style>
 </head>
 <body>
 
 <div class="app-wrapper">
 
-  <!-- GLOBAL TOPBAR -->
+  <!-- TOPBAR -->
   <header class="topbar">
     <div class="brand">
       <div class="logo"><i class="fa-solid fa-stethoscope"></i></div>
@@ -326,16 +378,12 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
     </div>
   </header>
 
-  <!-- =========================================================
-       SCREEN: DASHBOARD
-       ========================================================= -->
+  <!-- DASHBOARD -->
   <main class="screen active" id="view-home">
     <div class="dash-header">
       <h1>Hallo, Pflegekraft! 👋</h1>
       <p>Lass uns dein Wissen auf das nächste Level bringen.</p>
     </div>
-
-    <!-- Daily Goal Card -->
     <div class="goal-card">
       <div class="goal-title">Tägliches Trainingsziel</div>
       <div class="goal-progress">
@@ -345,7 +393,6 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
         <div class="progress-bar-fill" id="ui-daily-bar"></div>
       </div>
     </div>
-
     <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Deine Performance</div>
     <div class="quick-stats">
       <div class="stat-box">
@@ -357,23 +404,18 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
         <div class="label">Bester Durchschnitt</div>
       </div>
     </div>
-    <div style="height: 60px;"></div> 
   </main>
 
-  <!-- =========================================================
-       SCREEN: LIBRARY
-       ========================================================= -->
+  <!-- LIBRARY -->
   <main class="screen" id="view-library">
     <div class="dash-header">
       <h1>Wissensbibliothek</h1>
-      <p>Alle Fachbereiche im Überblick.</p>
+      <p>Alle Fachbereiche & dein Fortschritt.</p>
     </div>
     <div class="selection-grid" id="library-list"></div>
   </main>
 
-  <!-- =========================================================
-       SCREEN: GAMEPLAY
-       ========================================================= -->
+  <!-- GAMEPLAY -->
   <main class="screen" id="view-play" style="padding-top: 20px;">
     <div class="game-header">
       <button class="btn-back" onclick="GameEngine.abort()"><i class="fa-solid fa-xmark"></i></button>
@@ -385,9 +427,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
     <div class="play-area" id="game-container"></div>
   </main>
 
-  <!-- =========================================================
-       SCREEN: RESULTS
-       ========================================================= -->
+  <!-- RESULTS -->
   <main class="screen" id="view-result">
     <div class="result-container">
       <div class="score-ring-wrap">
@@ -398,13 +438,15 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
       <h1 id="res-title" style="font-size: 32px; margin-bottom: 12px;">Stark!</h1>
       <p id="res-subtitle" style="color: var(--text-muted); font-weight: 600; margin-bottom: 32px;">Dein Wissen zahlt sich aus.</p>
       <div class="xp-reward"><i class="fa-solid fa-bolt"></i> <span id="res-xp">+0 XP</span></div>
-      <button class="btn-massive" style="margin-top: 32px;" onclick="App.nav('view-home')">Abschließen & Speichern</button>
+      
+      <!-- Primary Action Button in Result -->
+      <button class="btn-mega" style="margin-top: 40px; animation: none;" onclick="App.nav('view-home')">
+        Abschließen & Speichern
+      </button>
     </div>
   </main>
 
-  <!-- =========================================================
-       SETUP WIZARD (With New Sticky CTA)
-       ========================================================= -->
+  <!-- THE WIZARD (Fixed Scroll & Overflow) -->
   <div class="wizard-overlay" id="wizard">
     <div class="wizard-header">
       <button class="btn-back" onclick="Wizard.close()"><i class="fa-solid fa-arrow-down"></i></button>
@@ -412,33 +454,29 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
     </div>
     
     <div class="wizard-body">
-      <!-- Step 1: Topics -->
       <div class="wizard-pane pane-active" id="wiz-step-1">
         <h2 style="margin-bottom: 16px; font-size: 20px;">1. Fokus wählen</h2>
         <div class="selection-grid" id="wiz-topics"></div>
       </div>
       
-      <!-- Step 2: Modes -->
       <div class="wizard-pane pane-hidden-right" id="wiz-step-2">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
           <button class="btn-back" style="width: 32px; height: 32px; font-size: 14px;" onclick="Wizard.backToTopics()"><i class="fa-solid fa-arrow-left"></i></button>
-          <h2 style="font-size: 20px;">2. Trainingsmethode</h2>
+          <h2 style="font-size: 20px;">2. Methode</h2>
         </div>
         <div class="selection-grid" id="wiz-modes"></div>
       </div>
+    </div>
 
-      <!-- NEW: Sticky CTA Button (Hidden by default) -->
-      <div class="wizard-cta-footer" id="wiz-cta">
-        <button class="btn-massive" onclick="Wizard.startGame()">
-          Training Starten <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
+    <!-- MEGA CTA FOOTER -->
+    <div class="wizard-cta-footer" id="wiz-cta">
+      <button class="btn-mega" onclick="Wizard.startGame()">
+        🚀 Training Starten
+      </button>
     </div>
   </div>
 
-  <!-- =========================================================
-       BOTTOM NAVIGATION
-       ========================================================= -->
+  <!-- BOTTOM NAV -->
   <nav class="bottom-nav" id="bottom-nav">
     <button class="nav-item active" data-target="view-home" onclick="App.nav('view-home')">
       <i class="fa-solid fa-house"></i><span>Home</span>
@@ -457,7 +495,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; }
 
 <script>
 /* ==========================================================================
-   1. DATABASE / CONTENT
+   1. DATABASE / CONTENT (Verified & Clean)
    ========================================================================== */
 const CONTENT = [
   {
@@ -469,7 +507,7 @@ const CONTENT = [
     ],
     quiz: [
       { q: "Wo wird der Puls am besten beim reanimationspflichtigen Patienten getastet?", a: "A. carotis (Hals)", o: ["A. radialis (Handgelenk)", "A. dorsalis pedis (Fuß)", "A. femoralis (Leiste)"] },
-      { q: "Welcher Faktor verfälscht die SpO2-Messung am Finger?", a: "Dunkler Nagellack", o: ["Erhöhter Blutzucker", "Normale Raumtemperatur", "Augenfarbe"] }
+      { q: "Welcher Faktor verfälscht die SpO2-Messung am Finger am ehesten?", a: "Dunkler Nagellack", o: ["Erhöhter Blutzucker", "Normale Raumtemperatur", "Augenfarbe"] }
     ],
     blanks: [
       { text: "Die _____ ist die Differenz zwischen systolischem und diastolischem Blutdruck.", answer: "Blutdruckamplitude", options: ["Blutdruckamplitude", "Herzfrequenz", "Pulsdefizit", "Orthostase"] },
@@ -484,12 +522,12 @@ const CONTENT = [
   {
     id: "hygiene", title: "Hygiene & Infektion", area: "Qualitätsmanagement", icon: "🧼",
     flash: [
-      { front: "Nenne die 5 Momente der Händehygiene (WHO)", back: "1. Vor Patientenkontakt, 2. Vor aseptischen Tätigkeiten, 3. Nach Kontakt mit potenziell infektiösem Material, 4. Nach Patientenkontakt, 5. Nach Kontakt mit Patientenumgebung." },
-      { front: "Nosokomiale Infektion", back: "Eine Infektion, die im Zuge eines Aufenthalts in einer medizinischen Einrichtung erworben wird." }
+      { front: "Nenne die 5 Momente der Händehygiene (WHO)", back: "1. Vor Patientenkontakt, 2. Vor aseptischen Tätigkeiten, 3. Nach Kontakt mit infektiösem Material, 4. Nach Patientenkontakt, 5. Nach Patientenumgebung." },
+      { front: "Nosokomiale Infektion", back: "Infektion, die im Zuge eines Aufenthalts in einer Einrichtung erworben wird." }
     ],
     quiz: [
       { q: "Wie lange sollte die hygienische Händedesinfektion standardmäßig dauern?", a: "30 Sekunden", o: ["10 Sekunden", "1 Minute", "5 Minuten"] },
-      { q: "Welches Bakterium ist ein typischer multiresistenter Erreger?", a: "MRSA", o: ["Lactobacillus", "Bifidobacterium", "Saccharomyces"] }
+      { q: "Welches Bakterium ist ein typischer multiresistenter Erreger (MRE)?", a: "MRSA", o: ["Lactobacillus", "Bifidobacterium", "Saccharomyces"] }
     ],
     blanks: [
       { text: "Schutzkleidung dient primär dem _____ von Personal und Patienten.", answer: "Infektionsschutz", options: ["Infektionsschutz", "Kälteschutz", "Datenschutz", "Brandschutz"] },
@@ -498,7 +536,7 @@ const CONTENT = [
     memory: [
       ["Sterilisation", "Abtötung aller Mikroorganismen"], ["Desinfektion", "Keimreduktion"],
       ["MRSA", "Multiresistenter Erreger"], ["Isolation", "Trennung infektiöser Patienten"],
-      ["Schleuse", "Übergangsbereich rein/unrein"]
+      ["Schleuse", "Übergangsbereich"]
     ]
   }
 ];
@@ -506,32 +544,47 @@ const CONTENT = [
 const MODES = [
   { id: "flash", icon: "🃏", title: "Smart Flashcards", desc: "Trainiere dein aktives Erinnerungsvermögen." },
   { id: "quiz", icon: "⚡", title: "Speed Quiz", desc: "Teste dein Wissen unter Druck." },
-  { id: "blank", icon: "✍️", title: "Lückentext", desc: "Setze Fachbegriffe in den klinischen Kontext." },
+  { id: "blank", icon: "✍️", title: "Lückentext", desc: "Setze Fachbegriffe in den Kontext ein." },
   { id: "memory", icon: "🧠", title: "Clinical Memory", desc: "Verknüpfe Symptome und Definitionen." }
 ];
 
 /* ==========================================================================
-   2. STATE MANAGEMENT & DATA PERSISTENCE
+   2. STATE MANAGEMENT (Bugfree History Saving)
    ========================================================================== */
-const SAVE_KEY = "pfp_state_v5";
+const SAVE_KEY = "pfp_state_v6";
 const AppState = {
   data: { xp: 0, rounds: 0, best: 0, streak: 0, dailyXp: 0, lastPlayDate: new Date().toDateString(), history: {} },
+  
   load() {
     try {
       const saved = localStorage.getItem(SAVE_KEY);
       if(saved) this.data = { ...this.data, ...JSON.parse(saved) };
+      if(!this.data.history) this.data.history = {}; // Safety check
       this.checkDailyReset();
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error("Save Load Error", e); }
   },
-  save() { localStorage.setItem(SAVE_KEY, JSON.stringify(this.data)); UI.updateDashboard(); },
+  
+  save() { 
+    localStorage.setItem(SAVE_KEY, JSON.stringify(this.data)); 
+    UI.updateDashboard(); 
+    UI.renderLibrary(); // Re-render to show new progress
+  },
+  
   checkDailyReset() {
     const today = new Date().toDateString();
     if(this.data.lastPlayDate !== today) { this.data.dailyXp = 0; this.data.lastPlayDate = today; }
   },
-  addReward(xp, percent) {
+  
+  addReward(xp, percent, historyKey) {
     this.data.xp += xp; this.data.dailyXp += xp; this.data.rounds += 1;
     if(percent > this.data.best) this.data.best = percent;
     if(percent >= 80) this.data.streak += 1; else this.data.streak = 0;
+    
+    // Track per-topic history for library progress bars
+    if(historyKey) {
+      const current = this.data.history[historyKey] || 0;
+      this.data.history[historyKey] = Math.max(current, percent);
+    }
     this.save();
   }
 };
@@ -552,9 +605,9 @@ const App = {
     
     const bNav = $('#bottom-nav');
     if(targetId === 'view-play' || targetId === 'view-result') {
-      bNav.style.transform = "translateY(100%)";
+      bNav.classList.add('hidden');
     } else {
-      bNav.style.transform = "translateY(0)";
+      bNav.classList.remove('hidden');
       $$('.nav-item').forEach(i => i.classList.remove('active'));
       const activeBtn = document.querySelector(`.nav-item[data-target="${targetId}"]`);
       if(activeBtn) activeBtn.classList.add('active');
@@ -573,21 +626,38 @@ const UI = {
     let percent = Math.min(100, (AppState.data.dailyXp / 200) * 100);
     $('#ui-daily-bar').style.width = percent + '%';
   },
+  
   renderLibrary() {
-    $('#library-list').innerHTML = CONTENT.map(t => `
-      <div class="rich-card" style="cursor:default">
-        <div class="rich-icon">${t.icon}</div>
-        <div class="rich-content">
-          <h3>${t.title}</h3>
-          <p>${t.area}<br>${t.flash.length + t.quiz.length + t.blanks.length} Lerneinheiten</p>
+    // Calculates total progress across all 4 modes for each topic
+    $('#library-list').innerHTML = CONTENT.map(t => {
+      let playedCount = 0; let totalScore = 0;
+      MODES.forEach(m => {
+        const s = AppState.data.history[`${t.id}.${m.id}`];
+        if(s !== undefined) { playedCount++; totalScore += s; }
+      });
+      const progress = playedCount > 0 ? Math.min(100, Math.round(totalScore / MODES.length)) : 0;
+
+      return `
+        <div class="rich-card" style="cursor:default; flex-direction: column; align-items: stretch; gap: 4px;">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div class="rich-icon">${t.icon}</div>
+            <div class="rich-content">
+              <h3>${t.title}</h3>
+              <p>${t.area}</p>
+            </div>
+            <div style="font-weight: 800; color: var(--primary); font-size: 14px;">${progress}%</div>
+          </div>
+          <div class="lib-card-progress">
+            <div class="lib-card-fill" style="width: ${progress}%"></div>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 };
 
 /* ==========================================================================
-   4. THE SETUP WIZARD (With Sticky CTA)
+   4. THE SETUP WIZARD (The Core "Games" Page)
    ========================================================================== */
 const Wizard = {
   selectedTopic: null, selectedMode: null,
@@ -597,7 +667,7 @@ const Wizard = {
       <button class="rich-card" onclick="Wizard.selectTopic('${t.id}')">
         <div class="rich-icon">${t.icon}</div>
         <div class="rich-content"><h3>${t.title}</h3><p>${t.area}</p></div>
-        <i class="fa-solid fa-chevron-right" style="color:var(--border)"></i>
+        <i class="fa-solid fa-chevron-right" style="color:var(--border); margin-left: auto;"></i>
       </button>
     `).join('');
 
@@ -625,33 +695,25 @@ const Wizard = {
     $('#wiz-step-1').className = "wizard-pane pane-active";
     $('#wiz-step-2').className = "wizard-pane pane-hidden-right";
     $$('.mode-card').forEach(c => c.classList.remove('selected'));
-    $('#wiz-cta').classList.remove('visible'); // Hide CTA
+    $('#wiz-cta').classList.remove('visible'); 
   },
 
-  // NEW: Select Mode -> Highlight it & Show the CTA
   selectMode(id) {
     this.selectedMode = MODES.find(m => m.id === id);
-    
-    // Manage UI states
     $$('.mode-card').forEach(c => c.classList.remove('selected'));
     const activeCard = $(`#mode-btn-${id}`);
     if(activeCard) activeCard.classList.add('selected');
     
-    // Reveal Sticky CTA
+    // Reveal Mega CTA
     $('#wiz-cta').classList.add('visible');
     Utils.haptic();
   },
 
-  // NEW: The actual Start Button function
   startGame() {
     if(!this.selectedTopic || !this.selectedMode) return;
-    Utils.haptic();
+    Utils.haptic([50, 30, 50]); // Powerful start haptic
     this.close();
-    
-    // Give wizard time to close smoothly before rendering game
-    setTimeout(() => {
-      GameEngine.start(this.selectedTopic, this.selectedMode);
-    }, 400); 
+    setTimeout(() => { GameEngine.start(this.selectedTopic, this.selectedMode); }, 400); 
   }
 };
 
@@ -668,6 +730,7 @@ const GameEngine = {
     App.nav('view-play');
     this.renderStep();
   },
+  
   abort() { if(confirm("Training wirklich abbrechen? Fortschritt geht verloren.")) App.nav('view-home'); },
 
   updateHeader() {
@@ -679,6 +742,7 @@ const GameEngine = {
   renderStep() {
     this.updateHeader();
     if(this.index >= this.total) return this.finish();
+    
     const container = $('#game-container');
     if(this.mode.id === "flash") this.renderFlash(container);
     if(this.mode.id === "quiz") this.renderQuiz(container);
@@ -686,7 +750,7 @@ const GameEngine = {
     if(this.mode.id === "memory") this.renderMemory(container);
   },
 
-  // Flashcards
+  // --- Flashcards ---
   renderFlash(container) {
     const item = this.topic.flash[this.index];
     container.innerHTML = `
@@ -695,7 +759,9 @@ const GameEngine = {
           <div class="flash-face">
             <div class="play-kicker">Wissensabfrage</div>
             <div class="flash-text">${item.front}</div>
-            <p style="color:var(--text-muted); font-size:13px; margin-top:24px;">Tippe zum Aufdecken</p>
+            <p style="color:var(--text-muted); font-size:14px; margin-top:24px; font-weight: 700;">
+              <i class="fa-solid fa-hand-pointer"></i> Tippe zum Aufdecken
+            </p>
           </div>
           <div class="flash-face back">
             <div class="play-kicker" style="color:rgba(255,255,255,0.7)">Antwort</div>
@@ -716,7 +782,7 @@ const GameEngine = {
     if(card.classList.contains('is-flipped')) return;
     card.classList.add('is-flipped');
     Utils.haptic();
-    setTimeout(() => { $('#fc-actions').classList.add('visible'); }, 400);
+    setTimeout(() => { $('#fc-actions').classList.add('visible'); }, 300);
   },
   evalFlash(points) {
     this.score += points;
@@ -724,7 +790,7 @@ const GameEngine = {
     this.index++; this.renderStep();
   },
 
-  // Multiple Choice
+  // --- Choice Modes ---
   renderQuiz(container) {
     const item = this.topic.quiz[this.index];
     this.renderChoiceUI(container, "Multiple Choice", item.q, Utils.shuffle([item.a, ...item.o]), item.a);
@@ -745,8 +811,9 @@ const GameEngine = {
     `;
   },
   evalChoice(btn, chosen, correct) {
-    if(this.locked) return;
+    if(this.locked) return; // Prevent double clicks
     this.locked = true;
+    
     if(chosen === correct) {
       this.score++; btn.classList.add('correct');
       Utils.haptic(); Utils.floatXP(15);
@@ -756,11 +823,12 @@ const GameEngine = {
       Utils.haptic(true);
       $$('.option-btn').forEach(b => { if(b.textContent === correct) b.classList.add('correct'); });
     }
+    
     $$('.option-btn').forEach(b => b.style.pointerEvents = 'none');
     setTimeout(() => { this.index++; this.locked = false; this.renderStep(); }, 1200);
   },
 
-  // Memory
+  // --- Memory Mode ---
   renderMemory(container) {
     if(!this.memoryState) {
       let deck = this.topic.memory.flatMap((p, i) => [
@@ -784,7 +852,8 @@ const GameEngine = {
   },
   evalMemory(idx) {
     const state = this.memoryState; const card = state.deck[idx];
-    if(this.locked || card.open || card.matched) return;
+    if(this.locked || card.open || card.matched) return; // Anti-bug
+    
     card.open = true; Utils.haptic();
     if(state.firstId === null) { state.firstId = idx; return this.renderMemory($('#game-container')); }
     
@@ -800,18 +869,21 @@ const GameEngine = {
       }
       state.firstId = null; this.locked = false;
       if(this.score >= this.total) this.finish(); else this.renderMemory($('#game-container'));
-    }, 800);
+    }, 850);
   },
 
-  // Finish
+  // --- End of Game ---
   finish() {
     this.updateHeader();
     const percent = Math.min(100, Math.round((this.score / (this.total||1)) * 100));
+    
     const mult = { flash: 10, quiz: 15, blank: 15, memory: 20 };
     let xpGain = Math.round(this.score * mult[this.mode.id]);
     if(percent >= 80) xpGain += 20;
 
-    AppState.addReward(xpGain, percent);
+    // SAVE HISTORY
+    const historyKey = `${this.topic.id}.${this.mode.id}`;
+    AppState.addReward(xpGain, percent, historyKey);
 
     $('#res-score').textContent = "0";
     $('#res-xp').textContent = `+${xpGain} XP`;
@@ -821,7 +893,7 @@ const GameEngine = {
 
     App.nav('view-result');
     setTimeout(() => {
-      Utils.animateValue("res-score", 0, percent, 1200);
+      Utils.animateValue("res-score", 0, percent, 1400);
       if(percent >= 70) Utils.confetti(percent);
       Utils.haptic();
     }, 300);
@@ -829,7 +901,7 @@ const GameEngine = {
 };
 
 /* ==========================================================================
-   6. UTILITIES
+   6. UTILITIES (Logic & Visual Effects)
    ========================================================================== */
 const Utils = {
   shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; },
@@ -838,30 +910,34 @@ const Utils = {
     while(!valid && loops < 100) {
       a = this.shuffle(arr); valid = true;
       for(let i=0; i<a.length; i++) {
-        if(i%2 === 0 && a[i+1] && a[i].pair === a[i+1].pair) valid = false;
-        if(a[i+2] && a[i].pair === a[i+2].pair) valid = false;
+        if(i%2 === 0 && a[i+1] && a[i].pair === a[i+1].pair) valid = false; // Horizontal side-by-side
+        if(a[i+2] && a[i].pair === a[i+2].pair) valid = false; // Vertical directly above/below
       } loops++;
     } return a;
   },
   safe(str) { return String(str).replace(/'/g,"&#39;").replace(/"/g,"&quot;"); },
-  haptic(error = false) { if(navigator.vibrate) navigator.vibrate(error ? [50, 50, 50] : 40); },
+  haptic(pattern = false) { 
+    if(!navigator.vibrate) return;
+    if(Array.isArray(pattern)) navigator.vibrate(pattern);
+    else navigator.vibrate(pattern === true ? [50, 50, 50] : 40); 
+  },
   floatXP(amount) {
     const el = document.createElement("div"); el.className = "floating-xp"; el.textContent = `+${amount}`;
     el.style.left = (40 + Math.random()*20) + "%"; el.style.top = "40%";
-    document.body.appendChild(el); setTimeout(() => el.remove(), 1000);
+    document.body.appendChild(el); setTimeout(() => el.remove(), 1200);
   },
   animateValue(id, start, end, duration) {
     const obj = document.getElementById(id); let startTs = null;
     const step = (ts) => {
       if (!startTs) startTs = ts;
       const progress = Math.min((ts - startTs) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
+      const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
       obj.innerHTML = Math.floor(ease * (end - start) + start);
       if (progress < 1) window.requestAnimationFrame(step);
     }; window.requestAnimationFrame(step);
   },
   confetti(percent) {
-    const amount = percent >= 90 ? 50 : 25; const colors = ["#4361ee", "#f72585", "#10b981", "#f59e0b"];
+    const amount = percent >= 90 ? 55 : 30; const colors = ["#4361ee", "#f72585", "#10b981", "#f59e0b"];
     for(let i=0; i<amount; i++) {
       const c = document.createElement("div"); c.className = "confetti";
       c.style.left = Math.random() * 100 + "vw"; c.style.background = colors[Math.floor(Math.random() * colors.length)];
@@ -871,6 +947,7 @@ const Utils = {
   }
 };
 
+// Initialize App
 document.addEventListener('DOMContentLoaded', () => App.init());
 </script>
 </body>
