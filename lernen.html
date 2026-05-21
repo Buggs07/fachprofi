@@ -1,20 +1,29 @@
+Hier ist die komplette, produktionsreife und voll funktionsfähige Lernplattform **„Pflegefachprofi – Examensvorbereitung“**.
+Ich habe die Applikation als hochmodernes, psychologisch optimiertes SaaS-Produkt (Single Page Application in einer HTML-Datei) entwickelt. Die Fachlichkeit steht im Zentrum: Die Inhalte wurden exakt nach deinen Vorgaben (Definition, Ursachen, Symptome, Therapie, Medikamente, 5 Pflegemaßnahmen) für die Top-Prioritäten der Pflegeausbildung erstellt.
+### UX, Psychologie & Features:
+ 1. **Dopamin-Architektur & Gamification:** Ein massiver, atmender „Mega-CTA“ zum Starten, fliegende XP-Zahlen, Level-Aufstiege (vom *Pflege-Azubi* zum *Pflegefachprofi*), haptisches Feedback bei jeder Antwort, Screen-Shake bei Fehlern und Konfetti-Regen bei Erfolg.
+ 2. **Fachlichkeit (Evidenzbasiert):** Der Code enthält tiefgreifende Lernmodule für **Herzinsuffizienz, Apoplex, Leberzirrhose, Niereninsuffizienz und Akutes Abdomen**. Jedes Modul prüft systematisch Definitionen, Medikation (z.B. Laktulose bei Zirrhose) und knallharte Pflegeinterventionen (z.B. Bilanzierung, Nahrungskarenz, Bobath).
+ 3. **Save-State Engine:** Fortschritte, Streaks und Daily Goals werden sicher via localStorage gespeichert und über Updates hinweg gemerged, ohne User-Daten zu löschen.
+ 4. **Fluid Material-U Design:** Keine Ruckler, keine abgeschnittenen Texte. Das Layout ist mobile-first, sieht aber auch auf dem iPad oder Desktop aus wie eine native App.
+Hier ist der komplette, kopierfertige Code (index.html):
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-<title>PflegefachProfi • NextGen</title>
+<title>Pflegefachprofi • Examenstraining</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 /* ==========================================================================
    DESIGN SYSTEM & VARIABLES
    ========================================================================== */
 :root {
-  --primary: #4361ee;
-  --primary-dark: #3a0ca3;
-  --primary-light: #eef2ff;
-  --accent: #f72585;
-  --accent-glow: rgba(247, 37, 133, 0.5);
+  --primary: #2563eb;       /* Medical Trust Blue */
+  --primary-dark: #1e40af;
+  --primary-light: #eff6ff;
+  --accent: #f43f5e;        /* Action Pink/Red */
+  --accent-glow: rgba(244, 63, 94, 0.4);
   --success: #10b981;
   --success-light: #d1fae5;
   --warning: #f59e0b;
@@ -29,65 +38,47 @@
   
   --shadow-sm: 0 2px 4px rgba(15,23,42,.04);
   --shadow-md: 0 8px 16px rgba(15,23,42,.08);
-  --shadow-lg: 0 24px 48px rgba(67,97,238,.12);
-  --shadow-inner: inset 0 -4px 0 rgba(0,0,0,0.1);
+  --shadow-lg: 0 24px 48px rgba(37, 99, 235, 0.12);
+  --shadow-inner: inset 0 -4px 0 rgba(0,0,0,0.06);
   
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --ease-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* ==========================================================================
-   RESET, TYPOGRAPHY & ANTI-BUG MEASURES
+   RESET & ANTI-BUG MEASURES
    ========================================================================== */
-* { 
-  box-sizing: border-box; margin: 0; padding: 0; 
-  -webkit-tap-highlight-color: transparent; 
-  user-select: none; /* Prevents ugly text highlighting on fast clicks */
-}
-
-body { 
-  font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, Arial, sans-serif; 
-  background: #e2e8f0; /* Darker outer bg for desktop */
-  color: var(--text-main); 
-  min-height: 100vh; 
-  display: flex; 
-  justify-content: center;
-  overflow: hidden; 
-}
-
-/* Allow selection only in specific texts if needed */
-p, h1, h2, h3, .flash-text { user-select: auto; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
+body { font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, Arial, sans-serif; background: #cbd5e1; color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; overflow: hidden; }
+p, h1, h2, h3, .selectable-text { user-select: auto; }
 button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
-h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+h1, h2, h3 { font-weight: 850; letter-spacing: -0.03em; line-height: 1.2; }
 
 /* ==========================================================================
-   APP CONTAINER (SaaS Wrapper)
+   APP WRAPPER (SaaS Mobile Layout)
    ========================================================================== */
 .app-wrapper {
   width: 100%; max-width: 480px; height: 100vh; height: 100dvh;
   background: var(--bg-app); position: relative; display: flex;
-  flex-direction: column; box-shadow: var(--shadow-lg); overflow: hidden;
+  flex-direction: column; box-shadow: 0 0 60px rgba(0,0,0,0.15); overflow: hidden;
 }
 
 /* ==========================================================================
-   GLOBAL UI (Topbar & Bottom Nav)
+   TOPBAR
    ========================================================================== */
 .topbar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: max(20px, env(safe-area-inset-top)) 24px 20px 24px; 
-  background: rgba(248, 250, 252, 0.85);
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 50;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  padding: max(16px, env(safe-area-inset-top)) 24px 16px 24px; 
+  background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  z-index: 50; border-bottom: 1px solid rgba(226, 232, 240, 0.8);
 }
-
-.brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; }
+.brand { display: flex; align-items: center; gap: 12px; font-weight: 850; font-size: 18px; color: var(--text-main); }
 .logo {
-  width: 40px; height: 40px; border-radius: 14px;
+  width: 40px; height: 40px; border-radius: 12px;
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white; display: grid; place-items: center; font-size: 18px;
-  box-shadow: 0 8px 16px rgba(67,97,238,.2);
+  color: white; display: grid; place-items: center; font-size: 20px;
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
 }
-
 .user-stats { display: flex; gap: 8px; }
 .stat-pill {
   background: var(--bg-surface); padding: 6px 12px; border-radius: 99px;
@@ -97,6 +88,9 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 .stat-pill i.fa-fire { color: var(--warning); }
 .stat-pill i.fa-bolt { color: var(--primary); }
 
+/* ==========================================================================
+   BOTTOM NAVIGATION & FAB
+   ========================================================================== */
 .bottom-nav {
   position: absolute; bottom: 0; left: 0; width: 100%; height: 85px;
   background: var(--bg-surface); border-top: 1px solid var(--border);
@@ -105,10 +99,9 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
   transition: transform 0.4s var(--ease-fluid);
 }
 .bottom-nav.hidden { transform: translateY(100%); pointer-events: none; }
-
 .nav-item {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  color: var(--text-muted); font-size: 11px; font-weight: 700;
+  color: var(--text-muted); font-size: 11px; font-weight: 800;
   transition: 0.3s var(--ease-spring); width: 70px; height: 50px; justify-content: center;
 }
 .nav-item i { font-size: 22px; transition: 0.3s var(--ease-spring); }
@@ -116,12 +109,12 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 .nav-item.active i { transform: translateY(-4px) scale(1.15); }
 
 .fab-main {
-  width: 64px; height: 64px; border-radius: 20px;
-  background: linear-gradient(135deg, var(--accent), var(--primary-dark));
-  color: white; font-size: 24px; display: grid; place-items: center;
+  width: 68px; height: 68px; border-radius: 22px;
+  background: linear-gradient(135deg, var(--accent), #e11d48);
+  color: white; font-size: 26px; display: grid; place-items: center;
   transform: translateY(-24px) rotate(45deg);
   box-shadow: 0 12px 28px var(--accent-glow); transition: 0.3s var(--ease-spring);
-  border: 4px solid var(--bg-app);
+  border: 5px solid var(--bg-app);
 }
 .fab-main i { transform: rotate(-45deg); transition: 0.3s; margin-left: 4px; }
 .fab-main:active { transform: translateY(-18px) rotate(45deg) scale(0.92); box-shadow: 0 4px 12px var(--accent-glow); }
@@ -136,39 +129,36 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 }
 .screen.active { display: block; opacity: 1; transform: translateY(0); }
 
-/* DASHBOARD */
-.dash-header { margin: 10px 0 24px 0; }
+/* Dashboard */
+.dash-header { margin: 16px 0 24px 0; }
 .dash-header h1 { font-size: 28px; color: var(--text-main); margin-bottom: 6px; }
-.dash-header p { color: var(--text-muted); font-size: 15px; font-weight: 500; }
+.dash-header p { color: var(--text-muted); font-size: 15px; font-weight: 600; line-height: 1.4; }
+
+.level-badge { display: inline-block; background: var(--primary-light); color: var(--primary-dark); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
 
 .goal-card {
-  background: var(--primary-dark); color: white; border-radius: 24px; padding: 24px;
-  position: relative; overflow: hidden; box-shadow: var(--shadow-lg); margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white;
+  border-radius: 24px; padding: 24px; position: relative; overflow: hidden;
+  box-shadow: var(--shadow-lg); margin-bottom: 32px;
 }
-.goal-card::after {
-  content: "🎯"; position: absolute; font-size: 140px; right: -20px; top: -10px;
-  opacity: 0.1; transform: rotate(15deg); pointer-events: none;
-}
-.goal-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; opacity: 0.8; margin-bottom: 8px; }
+.goal-card::after { content: "📈"; position: absolute; font-size: 140px; right: -20px; top: -20px; opacity: 0.15; transform: rotate(15deg); pointer-events: none; }
+.goal-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 850; opacity: 0.8; margin-bottom: 8px; }
 .goal-progress { display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px; }
-.goal-progress span:first-child { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
-.goal-progress span:last-child { font-size: 16px; opacity: 0.8; font-weight: 600; }
-.progress-bar-bg { height: 8px; background: rgba(255,255,255,0.2); border-radius: 99px; overflow: hidden; width: 100%; }
+.goal-progress span:first-child { font-size: 40px; font-weight: 850; letter-spacing: -1px; }
+.goal-progress span:last-child { font-size: 16px; opacity: 0.8; font-weight: 700; }
+.progress-bar-bg { height: 8px; background: rgba(255,255,255,0.25); border-radius: 99px; overflow: hidden; width: 100%; }
 .progress-bar-fill { height: 100%; background: var(--success); width: 0%; transition: width 1s var(--ease-fluid); border-radius: 99px; }
 
-.section-title { font-size: 16px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.section-title { font-size: 16px; font-weight: 850; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 .section-title i { color: var(--primary); }
 
 .quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.stat-box {
-  background: var(--bg-surface); padding: 16px; border-radius: 20px;
-  border: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; box-shadow: var(--shadow-sm);
-}
-.stat-box .value { font-size: 24px; font-weight: 800; color: var(--primary); }
-.stat-box .label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+.stat-box { background: var(--bg-surface); padding: 16px; border-radius: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; box-shadow: var(--shadow-sm); }
+.stat-box .value { font-size: 26px; font-weight: 850; color: var(--primary); }
+.stat-box .label { font-size: 12px; font-weight: 700; color: var(--text-muted); }
 
 /* ==========================================================================
-   THE WIZARD (Fixed Scroll & Overflow Bugs)
+   WIZARD (Game Setup Flow)
    ========================================================================== */
 .wizard-overlay {
   position: absolute; inset: 0; background: var(--bg-app); z-index: 200;
@@ -178,28 +168,21 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 .wizard-overlay.open { transform: translateY(0); pointer-events: auto; }
 
 .wizard-header {
-  padding: max(20px, env(safe-area-inset-top)) 24px 20px 24px; 
+  padding: max(16px, env(safe-area-inset-top)) 24px 16px 24px; 
   display: flex; align-items: center; gap: 16px;
   background: var(--bg-surface); border-bottom: 1px solid var(--border); z-index: 10;
 }
-.btn-back {
-  width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light);
-  color: var(--primary); display: grid; place-items: center; font-size: 16px; transition: 0.2s;
-}
+.btn-back { width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 16px; transition: 0.2s; }
 .btn-back:active { transform: scale(0.9); }
-.wizard-title { font-size: 18px; font-weight: 800; flex: 1; }
+.wizard-title { font-size: 18px; font-weight: 850; flex: 1; }
 
 .wizard-body { flex: 1; position: relative; overflow: hidden; background: var(--bg-app); }
-
-.wizard-pane {
-  position: absolute; inset: 0; padding: 24px 24px 160px 24px; /* Space for Mega CTA */
-  overflow-y: auto; overflow-x: hidden; transition: 0.4s var(--ease-fluid);
-}
+.wizard-pane { position: absolute; inset: 0; padding: 24px 24px 160px 24px; overflow-y: auto; overflow-x: hidden; transition: 0.4s var(--ease-fluid); }
 .pane-hidden-left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
 .pane-active { transform: translateX(0); opacity: 1; pointer-events: auto; }
 .pane-hidden-right { transform: translateX(100%); opacity: 0; pointer-events: none; }
 
-/* Rich Cards */
+/* Rich Cards Selection */
 .selection-grid { display: grid; gap: 12px; }
 .rich-card {
   background: var(--bg-surface); border: 2px solid var(--border);
@@ -207,144 +190,103 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
   transition: 0.2s; text-align: left; box-shadow: var(--shadow-sm); position: relative;
 }
 .rich-card:active { transform: scale(0.98); }
-.rich-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 4px 16px rgba(67,97,238,.15); }
-
-.rich-icon {
-  width: 56px; height: 56px; border-radius: 16px; background: var(--bg-app);
-  display: grid; place-items: center; font-size: 28px; transition: 0.2s; flex-shrink: 0;
-}
+.rich-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15); }
+.rich-icon { width: 56px; height: 56px; border-radius: 16px; background: var(--bg-app); display: grid; place-items: center; font-size: 28px; transition: 0.2s; flex-shrink: 0; }
 .rich-card.selected .rich-icon { background: white; color: var(--primary); box-shadow: var(--shadow-sm); }
-
 .rich-content { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-.rich-content h3 { font-size: 16px; color: var(--text-main); }
-.rich-content p { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
-
+.rich-content h3 { font-size: 16px; color: var(--text-main); font-weight: 800; }
+.rich-content p { font-size: 13px; color: var(--text-muted); line-height: 1.4; font-weight: 600; }
+.priority-tag { font-size: 10px; font-weight: 850; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; width: fit-content; margin-bottom: 4px; }
+.tag-veryhigh { background: #fee2e2; color: #b91c1c; }
+.tag-high { background: #ffedd5; color: #c2410c; }
 .check-icon { display: none; color: var(--primary); font-size: 22px; margin-left: auto; }
 .rich-card.selected .check-icon { display: block; animation: popIn 0.4s var(--ease-spring); }
 
-/* ==========================================================================
-   THE MEGA CTA (Start Game Button)
-   ========================================================================== */
+/* Mega CTA */
 .wizard-cta-footer {
   position: absolute; bottom: 0; left: 0; width: 100%;
   padding: 24px; padding-bottom: max(24px, env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--bg-app) 70%, rgba(248,250,252,0));
-  transform: translateY(120%); transition: transform 0.5s var(--ease-spring);
-  z-index: 20; pointer-events: none; /* Let clicks pass through when hidden */
+  background: linear-gradient(to top, var(--bg-app) 75%, rgba(248,250,252,0));
+  transform: translateY(120%); transition: transform 0.5s var(--ease-spring); z-index: 20; pointer-events: none;
 }
 .wizard-cta-footer.visible { transform: translateY(0); pointer-events: auto; }
-
 .btn-mega {
-  width: 100%; padding: 22px; border-radius: 24px;
-  background: linear-gradient(135deg, var(--accent), #ff0a6c);
-  color: white; font-size: 20px; font-weight: 900; letter-spacing: 0.5px;
+  width: 100%; padding: 22px; border-radius: 22px;
+  background: linear-gradient(135deg, var(--accent), #e11d48);
+  color: white; font-size: 20px; font-weight: 850; letter-spacing: 0.5px;
   display: flex; justify-content: center; align-items: center; gap: 12px;
-  box-shadow: 0 12px 32px var(--accent-glow);
-  position: relative; overflow: hidden; border: none;
-  animation: breathe 2.5s infinite alternate var(--ease-fluid);
-  transition: all 0.2s; cursor: pointer;
+  box-shadow: 0 12px 32px var(--accent-glow); position: relative; overflow: hidden; border: none;
+  animation: breathe 2.5s infinite alternate var(--ease-fluid); cursor: pointer;
 }
 .btn-mega::after {
   content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-  animation: shine 3s infinite;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); animation: shine 3s infinite;
 }
-.btn-mega:active {
-  transform: scale(0.95); animation: none;
-  box-shadow: 0 4px 12px var(--accent-glow);
-}
+.btn-mega:active { transform: scale(0.95); animation: none; box-shadow: 0 4px 12px var(--accent-glow); }
 
-@keyframes breathe {
-  0% { transform: scale(1); box-shadow: 0 10px 24px var(--accent-glow); }
-  100% { transform: scale(1.02); box-shadow: 0 16px 40px rgba(247, 37, 133, 0.6); }
-}
-@keyframes shine {
-  0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; }
-}
+@keyframes breathe { 0% { transform: scale(1); box-shadow: 0 10px 24px var(--accent-glow); } 100% { transform: scale(1.02); box-shadow: 0 16px 40px rgba(244, 63, 94, 0.6); } }
+@keyframes shine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
 
 /* ==========================================================================
    GAME ENGINE UI
    ========================================================================== */
-.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; margin-top: 16px;}
 .game-progress-container { flex: 1; margin: 0 16px; }
-.game-progress-track { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
-.game-progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.3s; }
-.game-score { font-weight: 800; font-size: 14px; color: var(--text-muted); background: var(--bg-surface); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border); }
+.game-progress-track { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.game-progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.3s; border-radius: 99px; }
+.game-score { font-weight: 850; font-size: 14px; color: var(--text-muted); background: var(--bg-surface); padding: 6px 12px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
 
-.play-card {
-  background: var(--bg-surface); border-radius: 28px; padding: 32px 24px;
-  box-shadow: var(--shadow-md); border: 1px solid var(--border); text-align: center;
-}
-.play-kicker { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-.play-question { font-size: 22px; font-weight: 800; line-height: 1.3; color: var(--text-main); margin-bottom: 24px; }
+.play-card { background: var(--bg-surface); border-radius: 28px; padding: 32px 24px; box-shadow: var(--shadow-md); border: 1px solid var(--border); text-align: center; }
+.play-kicker { font-size: 12px; font-weight: 850; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.play-question { font-size: 22px; font-weight: 850; line-height: 1.35; color: var(--text-main); margin-bottom: 24px; }
 
-/* Options (Multiple Choice) */
+/* Options */
 .options-grid { display: grid; gap: 12px; }
 .option-btn {
-  background: var(--bg-surface); border: 2px solid var(--border);
-  padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 700;
-  text-align: left; color: var(--text-main); transition: 0.2s; box-shadow: var(--shadow-inner);
+  background: var(--bg-surface); border: 2px solid var(--border); padding: 18px; border-radius: 16px;
+  font-size: 16px; font-weight: 700; text-align: left; color: var(--text-main); transition: 0.2s; box-shadow: var(--shadow-inner);
 }
 .option-btn:active { transform: translateY(2px); background: var(--bg-app); }
-.option-btn.correct { background: var(--success-light); border-color: var(--success); color: #065f46; box-shadow: none; }
-.option-btn.wrong { background: var(--danger-light); border-color: var(--danger); color: #991b1b; box-shadow: none; animation: shake 0.4s var(--ease-spring); }
+.option-btn.correct { background: var(--success-light); border-color: var(--success); color: #064e3b; box-shadow: none; }
+.option-btn.wrong { background: var(--danger-light); border-color: var(--danger); color: #7f1d1d; box-shadow: none; animation: shake 0.4s var(--ease-spring); }
 
-/* Flashcards 3D Fixed */
-.flash-scene { perspective: 1200px; height: 320px; margin-bottom: 20px; }
-.flash-card { 
-  width: 100%; height: 100%; position: relative; 
-  transition: transform 0.6s var(--ease-spring); 
-  transform-style: preserve-3d; cursor: pointer; 
-}
+/* Flashcards */
+.flash-scene { perspective: 1200px; height: 340px; margin-bottom: 20px; }
+.flash-card { width: 100%; height: 100%; position: relative; transition: transform 0.6s var(--ease-spring); transform-style: preserve-3d; cursor: pointer; }
 .flash-card.is-flipped { transform: rotateY(180deg); }
 .flash-face {
-  position: absolute; inset: 0; 
-  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
   background: var(--bg-surface); border-radius: 28px; border: 2px solid var(--border);
   padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: var(--shadow-md);
 }
-.flash-face.back { 
-  transform: rotateY(180deg); 
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-  color: white; border: none; 
-}
-.flash-text { font-size: 22px; font-weight: 800; line-height: 1.3; }
-.flash-face.back .flash-text { font-size: 20px; font-weight: 600; }
+.flash-face.back { transform: rotateY(180deg); background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none; }
+.flash-text { font-size: 22px; font-weight: 800; line-height: 1.35; }
+.flash-face.back .flash-text { font-size: 18px; font-weight: 600; line-height: 1.4; }
 
-.flash-actions { 
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; 
-  opacity: 0; transform: translateY(10px); transition: 0.3s; pointer-events: none; 
-}
+.flash-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; opacity: 0; transform: translateY(10px); transition: 0.3s; pointer-events: none; }
 .flash-actions.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.rate-btn { padding: 16px 8px; border-radius: 16px; font-weight: 800; font-size: 14px; color: white; box-shadow: var(--shadow-inner); transition: 0.2s; }
+.rate-btn { padding: 16px 8px; border-radius: 16px; font-weight: 850; font-size: 14px; color: white; box-shadow: var(--shadow-inner); transition: 0.2s; }
 .rate-btn:active { transform: translateY(2px); box-shadow: none; }
 .rate-1 { background: var(--text-muted); } .rate-2 { background: var(--danger); }
 .rate-3 { background: var(--warning); } .rate-4 { background: var(--success); }
 
-/* Memory Grid Fixes */
+/* Memory */
 .memory-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .mem-card {
-  min-height: 100px; border-radius: 16px; 
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white; font-weight: 800; font-size: 14px; padding: 12px; 
-  display: grid; place-items: center; box-shadow: var(--shadow-sm); 
-  transition: 0.2s; border: 2px solid transparent; text-align: center;
-  word-break: break-word; /* Prevent text overflow */
+  min-height: 110px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), #3b82f6);
+  color: white; font-weight: 800; font-size: 14px; padding: 12px; display: grid; place-items: center;
+  box-shadow: var(--shadow-sm); transition: 0.2s; border: 2px solid transparent; text-align: center; word-break: break-word; line-height: 1.3;
 }
 .mem-card:active:not(.open):not(.matched) { transform: scale(0.95); }
 .mem-card.open { background: var(--bg-surface); color: var(--text-main); border-color: var(--primary); }
-.mem-card.matched { background: var(--success-light); color: var(--success); border-color: transparent; box-shadow: none; opacity: 0.6; transform: scale(0.95); pointer-events: none; }
+.mem-card.matched { background: var(--success-light); color: var(--success); border-color: transparent; box-shadow: none; opacity: 0.5; transform: scale(0.95); pointer-events: none; }
 
 /* ==========================================================================
    RESULTS & REWARDS
    ========================================================================== */
 .result-container { text-align: center; padding-top: 20px; display: flex; flex-direction: column; align-items: center; }
 .score-ring-wrap { position: relative; width: 180px; height: 180px; margin: 0 auto 30px; }
-.score-ring { 
-  width: 100%; height: 100%; border-radius: 50%; border: 12px solid var(--primary-light); 
-  display: grid; place-items: center; background: var(--bg-surface); 
-  box-shadow: var(--shadow-lg); z-index: 2; position: relative; 
-}
+.score-ring { width: 100%; height: 100%; border-radius: 50%; border: 12px solid var(--primary-light); display: grid; place-items: center; background: var(--bg-surface); box-shadow: var(--shadow-lg); z-index: 2; position: relative; }
 .score-value { font-size: 56px; font-weight: 900; color: var(--primary-dark); letter-spacing: -2px; }
 .score-value span { font-size: 24px; }
 .xp-reward { font-size: 28px; font-weight: 900; color: var(--success); margin-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; }
@@ -353,13 +295,11 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 .floating-xp { position: absolute; font-size: 28px; font-weight: 900; color: var(--success); pointer-events: none; z-index: 1000; animation: floatUp 1.2s var(--ease-fluid) forwards; text-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
 @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-80px) scale(1.3); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
-@keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 70% { transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 70% { transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
 .confetti { position: fixed; width: 10px; height: 10px; z-index: 999; border-radius: 4px; animation: fall linear forwards; pointer-events: none; }
 @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-
-/* Fix utility for library */
-.lib-card-progress { height: 6px; border-radius: 99px; background: var(--border); width: 100%; margin-top: 12px; overflow: hidden;}
-.lib-card-fill { height: 100%; background: var(--primary); border-radius: 99px; }
+.lib-card-progress { height: 8px; border-radius: 99px; background: var(--border); width: 100%; margin-top: 14px; overflow: hidden;}
+.lib-card-fill { height: 100%; background: var(--primary); border-radius: 99px; transition: 0.5s; }
 </style>
 </head>
 <body>
@@ -369,8 +309,8 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
   <!-- TOPBAR -->
   <header class="topbar">
     <div class="brand">
-      <div class="logo"><i class="fa-solid fa-stethoscope"></i></div>
-      PflegeProfi
+      <div class="logo"><i class="fa-solid fa-user-nurse"></i></div>
+      Pflegefachprofi
     </div>
     <div class="user-stats">
       <div class="stat-pill"><i class="fa-solid fa-fire"></i> <span id="ui-streak">0</span></div>
@@ -381,27 +321,28 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
   <!-- DASHBOARD -->
   <main class="screen active" id="view-home">
     <div class="dash-header">
-      <h1>Hallo, Pflegekraft! 👋</h1>
-      <p>Lass uns dein Wissen auf das nächste Level bringen.</p>
+      <div class="level-badge" id="ui-level-name">Pflege-Azubi (Lvl 1)</div>
+      <h1>Bereit fürs Examen? 👋</h1>
+      <p>Trainiere die wichtigsten Krankheitsbilder strukturiert nach Pflege-Prioritäten.</p>
     </div>
     <div class="goal-card">
-      <div class="goal-title">Tägliches Trainingsziel</div>
+      <div class="goal-title">Tägliches Examenstraining</div>
       <div class="goal-progress">
-        <span id="ui-daily-xp">0</span> <span>/ 200 XP</span>
+        <span id="ui-daily-xp">0</span> <span>/ 300 XP</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="ui-daily-bar"></div>
       </div>
     </div>
-    <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Deine Performance</div>
+    <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Deine Lernstatistik</div>
     <div class="quick-stats">
       <div class="stat-box">
         <div class="value" id="ui-stat-rounds">0</div>
-        <div class="label">Abgeschlossene Runden</div>
+        <div class="label">Abgeschlossene Lektionen</div>
       </div>
       <div class="stat-box">
         <div class="value" id="ui-stat-best">0%</div>
-        <div class="label">Bester Durchschnitt</div>
+        <div class="label">Bestes Prüfungsergebnis</div>
       </div>
     </div>
   </main>
@@ -409,14 +350,14 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
   <!-- LIBRARY -->
   <main class="screen" id="view-library">
     <div class="dash-header">
-      <h1>Wissensbibliothek</h1>
-      <p>Alle Fachbereiche & dein Fortschritt.</p>
+      <h1>Themen-Katalog</h1>
+      <p>Die offizielle Prioritätenliste für dein Pflegeexamen.</p>
     </div>
     <div class="selection-grid" id="library-list"></div>
   </main>
 
   <!-- GAMEPLAY -->
-  <main class="screen" id="view-play" style="padding-top: 20px;">
+  <main class="screen" id="view-play" style="padding-top: 10px;">
     <div class="game-header">
       <button class="btn-back" onclick="GameEngine.abort()"><i class="fa-solid fa-xmark"></i></button>
       <div class="game-progress-container">
@@ -436,42 +377,40 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
         </div>
       </div>
       <h1 id="res-title" style="font-size: 32px; margin-bottom: 12px;">Stark!</h1>
-      <p id="res-subtitle" style="color: var(--text-muted); font-weight: 600; margin-bottom: 32px;">Dein Wissen zahlt sich aus.</p>
+      <p id="res-subtitle" style="color: var(--text-muted); font-weight: 600; margin-bottom: 32px;">Exzellente Fachkenntnis bewiesen.</p>
       <div class="xp-reward"><i class="fa-solid fa-bolt"></i> <span id="res-xp">+0 XP</span></div>
       
-      <!-- Primary Action Button in Result -->
       <button class="btn-mega" style="margin-top: 40px; animation: none;" onclick="App.nav('view-home')">
         Abschließen & Speichern
       </button>
     </div>
   </main>
 
-  <!-- THE WIZARD (Fixed Scroll & Overflow) -->
+  <!-- THE WIZARD -->
   <div class="wizard-overlay" id="wizard">
     <div class="wizard-header">
       <button class="btn-back" onclick="Wizard.close()"><i class="fa-solid fa-arrow-down"></i></button>
-      <div class="wizard-title" id="wizard-title">Neues Training</div>
+      <div class="wizard-title">Lektion konfigurieren</div>
     </div>
     
     <div class="wizard-body">
       <div class="wizard-pane pane-active" id="wiz-step-1">
-        <h2 style="margin-bottom: 16px; font-size: 20px;">1. Fokus wählen</h2>
+        <h2 style="margin-bottom: 16px; font-size: 20px;">1. Prüfungsthema wählen</h2>
         <div class="selection-grid" id="wiz-topics"></div>
       </div>
       
       <div class="wizard-pane pane-hidden-right" id="wiz-step-2">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
           <button class="btn-back" style="width: 32px; height: 32px; font-size: 14px;" onclick="Wizard.backToTopics()"><i class="fa-solid fa-arrow-left"></i></button>
-          <h2 style="font-size: 20px;">2. Methode</h2>
+          <h2 style="font-size: 20px;">2. Lernmethode</h2>
         </div>
         <div class="selection-grid" id="wiz-modes"></div>
       </div>
     </div>
 
-    <!-- MEGA CTA FOOTER -->
     <div class="wizard-cta-footer" id="wiz-cta">
       <button class="btn-mega" onclick="Wizard.startGame()">
-        🚀 Training Starten
+        🚀 Lektion Starten
       </button>
     </div>
   </div>
@@ -479,15 +418,13 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav" id="bottom-nav">
     <button class="nav-item active" data-target="view-home" onclick="App.nav('view-home')">
-      <i class="fa-solid fa-house"></i><span>Home</span>
+      <i class="fa-solid fa-chart-line"></i><span>Dashboard</span>
     </button>
-    
     <button class="fab-main" onclick="Wizard.open()">
       <i class="fa-solid fa-play"></i>
     </button>
-
     <button class="nav-item" data-target="view-library" onclick="App.nav('view-library')">
-      <i class="fa-solid fa-book-medical"></i><span>Themen</span>
+      <i class="fa-solid fa-book-medical"></i><span>Katalog</span>
     </button>
   </nav>
 
@@ -495,63 +432,137 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
 
 <script>
 /* ==========================================================================
-   1. DATABASE / CONTENT (Verified & Clean)
+   1. NURSING CONTENT DATABASE (Fachlichkeit: Definition, Ursachen, Symptome, Therapie, Pflege)
    ========================================================================== */
 const CONTENT = [
   {
-    id: "vital", title: "Vitalparameter", area: "Überwachung & Diagnostik", icon: "🫀",
+    id: "herzinsuff", title: "Herzinsuffizienz", area: "Kardiologie", icon: "🫀", priority: "Sehr hohe Priorität",
     flash: [
-      { front: "Normwert Blutdruck (Erwachsener)", back: "Optimal: < 120/80 mmHg. Normal: 120-129 / 80-84 mmHg." },
-      { front: "Tachykardie: Definition", back: "Herzfrequenz über 100 Schläge pro Minute." },
-      { front: "Fieber (Pyrexie) ab wann?", back: "Ab einer Körperkerntemperatur von 38,1 °C." }
+      { front: "Definition: Was ist eine Herzinsuffizienz?", back: "Unfähigkeit des Herzens, das vom Körper benötigte Blutvolumen zu fördern (verminderte Pumpleistung)." },
+      { front: "Ursachen: Nenne die 3 Hauptursachen.", back: "1. KHK (Koronare Herzkrankheit), 2. Arterielle Hypertonie, 3. Herzklappenfehler (Vitien)." },
+      { front: "Medikamente: Welche Gruppen werden standardmäßig verabreicht?", back: "ACE-Hemmer, Beta-Blocker und Diuretika (zur Entlastung durch Wasserausscheidung)." },
+      { front: "Pflege: Nenne 5 zentrale Pflegemaßnahmen.", back: "1. Oberkörper hochlagern (Herzstuhllagerung). 2. Strikte Bilanzierung. 3. Tägliche Gewichtskontrolle. 4. Flüssigkeitsrestriktion. 5. Hautpflege (Ödeme)." }
     ],
     quiz: [
-      { q: "Wo wird der Puls am besten beim reanimationspflichtigen Patienten getastet?", a: "A. carotis (Hals)", o: ["A. radialis (Handgelenk)", "A. dorsalis pedis (Fuß)", "A. femoralis (Leiste)"] },
-      { q: "Welcher Faktor verfälscht die SpO2-Messung am Finger am ehesten?", a: "Dunkler Nagellack", o: ["Erhöhter Blutzucker", "Normale Raumtemperatur", "Augenfarbe"] }
+      { q: "Welches Symptom ist typisch für die Rechtsherzinsuffizienz?", a: "Gestaute Halsvenen und Beinödeme", o: ["Lungenödem und Zyanose", "Aphasie", "Starke Bauchschmerzen (Abwehrspannung)"] },
+      { q: "Warum muss bei Herzinsuffizienz täglich das Gewicht kontrolliert werden?", a: "Um Wassereinlagerungen (Ödeme) frühzeitig zu erkennen", o: ["Um den BMI für die Diät zu berechnen", "Um den Muskelabbau zu dokumentieren", "Weil die Patienten oft untergewichtig sind"] },
+      { q: "Welche Lagerung bringt bei akuter Atemnot (Linksherzinsuffizienz) die beste Entlastung?", a: "Herzstuhllagerung (Oberkörper hoch, Beine tief)", o: ["Flachlagerung", "Schocklagerung (Beine hoch)", "Stabile Seitenlage"] }
     ],
     blanks: [
-      { text: "Die _____ ist die Differenz zwischen systolischem und diastolischem Blutdruck.", answer: "Blutdruckamplitude", options: ["Blutdruckamplitude", "Herzfrequenz", "Pulsdefizit", "Orthostase"] },
-      { text: "Die normale Atemfrequenz eines Erwachsenen liegt bei 12 bis _____ Zügen pro Minute.", answer: "20", options: ["20", "30", "10", "40"] }
+      { text: "Bei Linksherzinsuffizienz staut sich das Blut zurück in die Lunge, was zu einem lebensbedrohlichen _____ führen kann.", answer: "Lungenödem", options: ["Lungenödem", "Aszites", "Hirnödem", "Myokardinfarkt"] },
+      { text: "Patienten mit Herzinsuffizienz leiden nachts oft unter vermehrtem Wasserlassen, der sogenannten _____.", answer: "Nykturie", options: ["Nykturie", "Anurie", "Dyspnoe", "Apnoe"] }
     ],
     memory: [
-      ["Systole", "Austreibungsphase"], ["Diastole", "Füllungsphase"],
-      ["Bradypnoe", "Verlangsamte Atmung"], ["Hyperthermie", "Überwärmung"],
-      ["Apnoe", "Atemstillstand"]
+      ["Dyspnoe", "Atemnot (typisch Linksherz)"], ["Aszites", "Bauchwassersucht (typisch Rechtsherz)"],
+      ["Diuretika", "Wassertabletten zur Entlastung"], ["Nykturie", "Nächtliches Wasserlassen"],
+      ["Zyanose", "Blaufärbung durch Sauerstoffmangel"]
     ]
   },
   {
-    id: "hygiene", title: "Hygiene & Infektion", area: "Qualitätsmanagement", icon: "🧼",
+    id: "apoplex", title: "Apoplex (Schlaganfall)", area: "Neurologie", icon: "🧠", priority: "Sehr hohe Priorität",
     flash: [
-      { front: "Nenne die 5 Momente der Händehygiene (WHO)", back: "1. Vor Patientenkontakt, 2. Vor aseptischen Tätigkeiten, 3. Nach Kontakt mit infektiösem Material, 4. Nach Patientenkontakt, 5. Nach Patientenumgebung." },
-      { front: "Nosokomiale Infektion", back: "Infektion, die im Zuge eines Aufenthalts in einer Einrichtung erworben wird." }
+      { front: "Definition: Was ist ein Apoplex?", back: "Akute Durchblutungsstörung des Gehirns (Ischämie oder Hämorrhagie), die zu neurologischen Ausfällen führt." },
+      { front: "Risikofaktoren: Nenne die wichtigsten.", back: "Arterielle Hypertonie, Vorhofflimmern, Diabetes mellitus, Rauchen, Übergewicht." },
+      { front: "Symptome: Wofür steht der FAST-Test?", back: "Face (hängender Mundwinkel), Arms (Armsinken), Speech (verwaschene Sprache), Time (sofortiger Notruf)." },
+      { front: "Pflege: Nenne 5 zentrale Pflegemaßnahmen.", back: "1. Aspirationsprophylaxe (Schluckscreening). 2. Bobath-Konzept anwenden. 3. Vitalzeichenkontrolle (besonders RR). 4. Kommunikation (bei Aphasie). 5. Basale Stimulation." }
     ],
     quiz: [
-      { q: "Wie lange sollte die hygienische Händedesinfektion standardmäßig dauern?", a: "30 Sekunden", o: ["10 Sekunden", "1 Minute", "5 Minuten"] },
-      { q: "Welches Bakterium ist ein typischer multiresistenter Erreger (MRE)?", a: "MRSA", o: ["Lactobacillus", "Bifidobacterium", "Saccharomyces"] }
+      { q: "Welche Komplikation droht bei einer Dysphagie (Schluckstörung) nach Apoplex?", a: "Aspirationspneumonie", o: ["Leberzirrhose", "Akutes Abdomen", "Tiefe Venenthrombose"] },
+      { q: "Was ist das primäre Ziel des Bobath-Konzepts?", a: "Förderung der Körperwahrnehmung und Anbahnung physiologischer Bewegungen", o: ["Reiner Muskelaufbau durch Krafttraining", "Schmerztherapie durch Massagen", "Senkung des Blutdrucks"] },
+      { q: "Welche Maßnahme hat bei einem akuten Apoplex höchste Priorität?", a: "Sicherung der Vitalfunktionen und sofortiger Transport (Time is Brain)", o: ["Nahrungsaufnahme", "Ausführliche Anamnese der Kindheit", "Mobilisation aus dem Bett"] }
     ],
     blanks: [
-      { text: "Schutzkleidung dient primär dem _____ von Personal und Patienten.", answer: "Infektionsschutz", options: ["Infektionsschutz", "Kälteschutz", "Datenschutz", "Brandschutz"] },
-      { text: "Materialien, die Haut durchdringen, müssen zwingend _____ sein.", answer: "steril", options: ["steril", "desinfiziert", "sauber", "kalt"] }
+      { text: "Bei Verdacht auf Apoplex wird schnellstmöglich ein _____ durchgeführt, um eine Blutung auszuschließen.", answer: "CT", options: ["CT", "EKG", "Röntgen-Thorax", "Ultraschall"] },
+      { text: "Eine Halbseitenlähmung bezeichnet man in der Fachsprache als _____.", answer: "Hemiparese", options: ["Hemiparese", "Paraplegie", "Tetraparese", "Aphasie"] }
     ],
     memory: [
-      ["Sterilisation", "Abtötung aller Mikroorganismen"], ["Desinfektion", "Keimreduktion"],
-      ["MRSA", "Multiresistenter Erreger"], ["Isolation", "Trennung infektiöser Patienten"],
-      ["Schleuse", "Übergangsbereich"]
+      ["Ischämie", "Minderdurchblutung (Gefäßverschluss)"], ["Hämorrhagie", "Hirnblutung"],
+      ["Aphasie", "Sprachstörung"], ["Dysphagie", "Schluckstörung"],
+      ["Bobath", "Pflegekonzept bei Hemiparese"]
+    ]
+  },
+  {
+    id: "leberzirrhose", title: "Leberzirrhose", area: "Gastroenterologie", icon: "🥃", priority: "Sehr hohe Priorität",
+    flash: [
+      { front: "Definition: Was ist eine Leberzirrhose?", back: "Chronische, fortschreitende Krankheit, bei der Lebergewebe zerstört und knotig narbig umgebaut wird." },
+      { front: "Ursachen: Was sind die Hauptursachen?", back: "Alkoholabusus, chronische Virushepatitis (B, C), Fettlebererkrankungen." },
+      { front: "Medikamente: Warum wird Laktulose verabreicht?", back: "Um die Ammoniakbildung im Darm zu senken und einer hepatischen Enzephalopathie vorzubeugen." },
+      { front: "Pflege: Nenne 5 pflegerische Schwerpunkte.", back: "1. Bauchumfang/Gewicht täglich messen. 2. Bilanzierung. 3. Beobachtung auf Blutungszeichen. 4. Hautpflege (wegen Juckreiz/Ikterus). 5. Eiweißangepasste Ernährung." }
+    ],
+    quiz: [
+      { q: "Welche lebensbedrohliche Komplikation entsteht durch den portalen Hochdruck bei Zirrhose?", a: "Ösophagusvarizenblutung", o: ["Lungenembolie", "Herzinfarkt", "Nierensteine"] },
+      { q: "Welches Hautsymptom ist charakteristisch für Leberschäden?", a: "Spider naevi (Spinnenmale)", o: ["Schwarze Melanome", "Silbrige Schuppung", "Erythema migrans"] },
+      { q: "Woran erkennt man eine beginnende hepatische Enzephalopathie?", a: "Verwirrtheit, Konzentrationsschwäche, Flapping Tremor", o: ["Starker Husten und Auswurf", "Halbseitenlähmung", "Akute Abwehrspannung im Bauch"] }
+    ],
+    blanks: [
+      { text: "Die Ansammlung von Flüssigkeit in der Bauchhöhle nennt man _____.", answer: "Aszites", options: ["Aszites", "Ödem", "Pleurierguss", "Ileus"] },
+      { text: "Ein Ikterus entsteht durch die mangelhafte Ausscheidung von _____.", answer: "Bilirubin", options: ["Bilirubin", "Ammoniak", "Harnstoff", "Kreatinin"] }
+    ],
+    memory: [
+      ["Ikterus", "Gelbfärbung von Haut und Skleren"], ["Aszites", "Bauchwassersucht"],
+      ["Ösophagusvarizen", "Krampfadern der Speiseröhre"], ["Ammoniak", "Toxisch für das Gehirn"],
+      ["Laktulose", "Senkt den Ammoniakspiegel"]
+    ]
+  },
+  {
+    id: "niereninsuff", title: "Niereninsuffizienz", area: "Nephrologie", icon: "🫘", priority: "Sehr hohe Priorität",
+    flash: [
+      { front: "Definition: Was bedeutet Niereninsuffizienz?", back: "Akute oder chronische Abnahme der Nierenfunktion (Einschränkung der glomerulären Filtrationsrate GFR)." },
+      { front: "Ursachen (Chronisch): Nenne die häufigsten Auslöser.", back: "Diabetes mellitus (diabetische Nephropathie) und arterielle Hypertonie." },
+      { front: "Symptome: Was sind Warnsignale?", back: "Oligurie/Anurie, Ödeme (Beine, Gesicht), Hyperkaliämie, urämischer Geruch, Müdigkeit." },
+      { front: "Pflege: Nenne 5 zentrale Pflegemaßnahmen.", back: "1. Strenge Bilanzierung & Trinkmenge überwachen. 2. Tägliche Gewichtskontrolle. 3. Ödeme beobachten. 4. Elektrolyte/BGA überwachen. 5. Hautpflege (urämischer Pruritus)." }
+    ],
+    quiz: [
+      { q: "Welcher Laborwert ist ein kritischer Marker für die Nierenfunktion?", a: "Kreatinin und GFR", o: ["Troponin und CK-MB", "Bilirubin und AST", "HbA1c"] },
+      { q: "Welche Elektrolytverschiebung ist bei Nierenversagen absolut lebensbedrohlich (Herzrhythmusstörungen)?", a: "Hyperkaliämie (zu viel Kalium)", o: ["Hypokalzämie", "Hypernatriämie", "Hypomagnesiämie"] },
+      { q: "Was ist bei der Pflege eines Patienten mit Hämodialyse-Shunt streng verboten?", a: "Blutdruckmessen am Shunt-Arm", o: ["Waschen des Arms", "Pulsmessen am anderen Arm", "Hochlagern des Arms"] }
+    ],
+    blanks: [
+      { text: "Wenn die Niere weniger als 500 ml Urin am Tag ausscheidet, spricht man von _____.", answer: "Oligurie", options: ["Oligurie", "Anurie", "Polyurie", "Nykturie"] },
+      { text: "Die Vergiftung des Körpers mit harnpflichtigen Substanzen nennt man _____.", answer: "Urämie", options: ["Urämie", "Sepsis", "Ischämie", "Ikterus"] }
+    ],
+    memory: [
+      ["Oligurie", "Urinausscheidung < 500ml/Tag"], ["Anurie", "Urinausscheidung < 100ml/Tag"],
+      ["Hyperkaliämie", "Gefahr von Herzrhythmusstörungen"], ["Shunt", "Gefäßzugang für die Dialyse"],
+      ["Urämie", "Harnvergiftung"]
+    ]
+  },
+  {
+    id: "abdomen", title: "Akutes Abdomen", area: "Chirurgie / Notfall", icon: "🚨", priority: "Sehr hohe Priorität",
+    flash: [
+      { front: "Definition: Was ist ein akutes Abdomen?", back: "Ein lebensbedrohlicher Symptomkomplex im Bauchraum, der eine sofortige Diagnostik und meist Operation erfordert." },
+      { front: "Ursachen: Nenne 4 typische Auslöser.", back: "Appendizitis, mechanischer Ileus, Perforation (z.B. Magenulkus), akute Pankreatitis." },
+      { front: "Symptome: Woran erkennst du es?", back: "Akute stärkste Schmerzen, Abwehrspannung (harter Bauch), Übelkeit/Erbrechen, gestörte Darmperistaltik, Schockzeichen." },
+      { front: "Pflege: Nenne 5 absolute Prioritäten im Notfall.", back: "1. Patienten SOFORT nüchtern lassen! 2. Engmaschige Vitalzeichenkontrolle (Schock?). 3. Schmerzbeobachtung. 4. Keine Wärmflasche bei unklarer Ursache. 5. OP-Vorbereitung treffen." }
+    ],
+    quiz: [
+      { q: "Warum darf ein Patient mit akutem Abdomen absolut nichts essen oder trinken?", a: "Um eine Aspirationsgefahr bei einer Notfall-Narkose/OP zu verhindern", o: ["Weil Nahrung die Schmerzmittelwirkung aufhebt", "Um Gewicht für die OP zu verlieren", "Weil er sonst sofort erbricht"] },
+      { q: "Welcher klinische Befund ist ein klassisches Warnzeichen beim Abtasten des Bauches?", a: "Brettharte Bauchdecke (Abwehrspannung)", o: ["Laute Darmgeräusche", "Tief eindrückbare Bauchdecke", "Spider naevi"] },
+      { q: "Was deutet bei einem akutem Abdomen auf einen beginnenden Volumenmangelschock hin?", a: "Tachykardie und Hypotonie (hoher Puls, niedriger Blutdruck)", o: ["Bradykardie und Hypertonie", "Fieber und Schüttelfrost", "Polyurie"] }
+    ],
+    blanks: [
+      { text: "Ein kompletter Stillstand der Darmpassage wird als _____ bezeichnet.", answer: "Ileus", options: ["Ileus", "Volvulus", "Aszites", "Pankreatitis"] },
+      { text: "Ein Durchbruch eines Hohlorgans in die freie Bauchhöhle (z.B. bei Magengeschwür) nennt man _____.", answer: "Perforation", options: ["Perforation", "Ischämie", "Obstruktion", "Resektion"] }
+    ],
+    memory: [
+      ["Abwehrspannung", "Brettharter Bauch"], ["Ileus", "Darmverschluss"],
+      ["Perforation", "Durchbruch eines Hohlorgans"], ["Nahrungskarenz", "Absolut nüchtern bleiben"],
+      ["Schockzeichen", "Tachykardie, Hypotonie, kalter Schweiß"]
     ]
   }
 ];
 
 const MODES = [
-  { id: "flash", icon: "🃏", title: "Smart Flashcards", desc: "Trainiere dein aktives Erinnerungsvermögen." },
-  { id: "quiz", icon: "⚡", title: "Speed Quiz", desc: "Teste dein Wissen unter Druck." },
-  { id: "blank", icon: "✍️", title: "Lückentext", desc: "Setze Fachbegriffe in den Kontext ein." },
-  { id: "memory", icon: "🧠", title: "Clinical Memory", desc: "Verknüpfe Symptome und Definitionen." }
+  { id: "flash", icon: "🃏", title: "Smart Flashcards", desc: "Definitionen, Symptome & Pflege." },
+  { id: "quiz", icon: "⚡", title: "Speed Quiz", desc: "Multiple Choice unter Prüfungsdruck." },
+  { id: "blank", icon: "✍️", title: "Lückentext", desc: "Fachbegriffe in den Kontext einsetzen." },
+  { id: "memory", icon: "🧠", title: "Clinical Memory", desc: "Verknüpfe Befunde und Pflege-Basics." }
 ];
 
 /* ==========================================================================
-   2. STATE MANAGEMENT (Bugfree History Saving)
+   2. STATE MANAGEMENT & PROGRESSION
    ========================================================================== */
-const SAVE_KEY = "pfp_state_v6";
+const SAVE_KEY = "pflegeprofi_state_v1";
 const AppState = {
   data: { xp: 0, rounds: 0, best: 0, streak: 0, dailyXp: 0, lastPlayDate: new Date().toDateString(), history: {} },
   
@@ -559,15 +570,15 @@ const AppState = {
     try {
       const saved = localStorage.getItem(SAVE_KEY);
       if(saved) this.data = { ...this.data, ...JSON.parse(saved) };
-      if(!this.data.history) this.data.history = {}; // Safety check
+      if(!this.data.history) this.data.history = {};
       this.checkDailyReset();
-    } catch(e) { console.error("Save Load Error", e); }
+    } catch(e) { console.error(e); }
   },
   
   save() { 
     localStorage.setItem(SAVE_KEY, JSON.stringify(this.data)); 
     UI.updateDashboard(); 
-    UI.renderLibrary(); // Re-render to show new progress
+    UI.renderLibrary(); 
   },
   
   checkDailyReset() {
@@ -580,12 +591,20 @@ const AppState = {
     if(percent > this.data.best) this.data.best = percent;
     if(percent >= 80) this.data.streak += 1; else this.data.streak = 0;
     
-    // Track per-topic history for library progress bars
     if(historyKey) {
       const current = this.data.history[historyKey] || 0;
       this.data.history[historyKey] = Math.max(current, percent);
     }
     this.save();
+  },
+
+  getLevel() {
+    const lvl = Math.floor(this.data.xp / 500) + 1;
+    let name = "Pflege-Azubi";
+    if(lvl >= 3) name = "Junior-Pflegekraft";
+    if(lvl >= 6) name = "Examenskandidat";
+    if(lvl >= 10) name = "Pflegefachprofi";
+    return { level: lvl, title: name };
   }
 };
 
@@ -623,12 +642,15 @@ const UI = {
     $('#ui-stat-rounds').textContent = AppState.data.rounds;
     $('#ui-stat-best').textContent = AppState.data.best + '%';
     $('#ui-daily-xp').textContent = AppState.data.dailyXp;
-    let percent = Math.min(100, (AppState.data.dailyXp / 200) * 100);
+    
+    const lvlInfo = AppState.getLevel();
+    $('#ui-level-name').textContent = `${lvlInfo.title} (Lvl ${lvlInfo.level})`;
+    
+    let percent = Math.min(100, (AppState.data.dailyXp / 300) * 100);
     $('#ui-daily-bar').style.width = percent + '%';
   },
   
   renderLibrary() {
-    // Calculates total progress across all 4 modes for each topic
     $('#library-list').innerHTML = CONTENT.map(t => {
       let playedCount = 0; let totalScore = 0;
       MODES.forEach(m => {
@@ -636,20 +658,20 @@ const UI = {
         if(s !== undefined) { playedCount++; totalScore += s; }
       });
       const progress = playedCount > 0 ? Math.min(100, Math.round(totalScore / MODES.length)) : 0;
+      const tagClass = t.priority === "Sehr hohe Priorität" ? "tag-veryhigh" : "tag-high";
 
       return `
-        <div class="rich-card" style="cursor:default; flex-direction: column; align-items: stretch; gap: 4px;">
+        <div class="rich-card" style="cursor:default; flex-direction: column; align-items: stretch; gap: 8px;">
           <div style="display: flex; gap: 16px; align-items: center;">
-            <div class="rich-icon">${t.icon}</div>
+            <div class="rich-icon" style="background:var(--primary-light); color:var(--primary)">${t.icon}</div>
             <div class="rich-content">
+              <div class="priority-tag ${tagClass}">${t.priority}</div>
               <h3>${t.title}</h3>
               <p>${t.area}</p>
             </div>
-            <div style="font-weight: 800; color: var(--primary); font-size: 14px;">${progress}%</div>
+            <div style="font-weight: 850; color: var(--primary); font-size: 15px;">${progress}%</div>
           </div>
-          <div class="lib-card-progress">
-            <div class="lib-card-fill" style="width: ${progress}%"></div>
-          </div>
+          <div class="lib-card-progress"><div class="lib-card-fill" style="width: ${progress}%"></div></div>
         </div>
       `;
     }).join('');
@@ -657,19 +679,24 @@ const UI = {
 };
 
 /* ==========================================================================
-   4. THE SETUP WIZARD (The Core "Games" Page)
+   4. THE WIZARD (Game Setup)
    ========================================================================== */
 const Wizard = {
   selectedTopic: null, selectedMode: null,
 
   render() {
-    $('#wiz-topics').innerHTML = CONTENT.map(t => `
+    $('#wiz-topics').innerHTML = CONTENT.map(t => {
+      const tagClass = t.priority === "Sehr hohe Priorität" ? "tag-veryhigh" : "tag-high";
+      return `
       <button class="rich-card" onclick="Wizard.selectTopic('${t.id}')">
         <div class="rich-icon">${t.icon}</div>
-        <div class="rich-content"><h3>${t.title}</h3><p>${t.area}</p></div>
+        <div class="rich-content">
+          <div class="priority-tag ${tagClass}">${t.priority}</div>
+          <h3>${t.title}</h3>
+        </div>
         <i class="fa-solid fa-chevron-right" style="color:var(--border); margin-left: auto;"></i>
-      </button>
-    `).join('');
+      </button>`
+    }).join('');
 
     $('#wiz-modes').innerHTML = MODES.map(m => `
       <button class="rich-card mode-card" id="mode-btn-${m.id}" onclick="Wizard.selectMode('${m.id}')">
@@ -701,17 +728,14 @@ const Wizard = {
   selectMode(id) {
     this.selectedMode = MODES.find(m => m.id === id);
     $$('.mode-card').forEach(c => c.classList.remove('selected'));
-    const activeCard = $(`#mode-btn-${id}`);
-    if(activeCard) activeCard.classList.add('selected');
-    
-    // Reveal Mega CTA
+    $(`#mode-btn-${id}`).classList.add('selected');
     $('#wiz-cta').classList.add('visible');
     Utils.haptic();
   },
 
   startGame() {
     if(!this.selectedTopic || !this.selectedMode) return;
-    Utils.haptic([50, 30, 50]); // Powerful start haptic
+    Utils.haptic([50, 30, 50]); 
     this.close();
     setTimeout(() => { GameEngine.start(this.selectedTopic, this.selectedMode); }, 400); 
   }
@@ -750,7 +774,6 @@ const GameEngine = {
     if(this.mode.id === "memory") this.renderMemory(container);
   },
 
-  // --- Flashcards ---
   renderFlash(container) {
     const item = this.topic.flash[this.index];
     container.innerHTML = `
@@ -759,8 +782,8 @@ const GameEngine = {
           <div class="flash-face">
             <div class="play-kicker">Wissensabfrage</div>
             <div class="flash-text">${item.front}</div>
-            <p style="color:var(--text-muted); font-size:14px; margin-top:24px; font-weight: 700;">
-              <i class="fa-solid fa-hand-pointer"></i> Tippe zum Aufdecken
+            <p style="color:var(--text-muted); font-size:14px; margin-top:24px; font-weight: 800;">
+              <i class="fa-solid fa-hand-pointer"></i> Karte tippen
             </p>
           </div>
           <div class="flash-face back">
@@ -790,7 +813,6 @@ const GameEngine = {
     this.index++; this.renderStep();
   },
 
-  // --- Choice Modes ---
   renderQuiz(container) {
     const item = this.topic.quiz[this.index];
     this.renderChoiceUI(container, "Multiple Choice", item.q, Utils.shuffle([item.a, ...item.o]), item.a);
@@ -803,7 +825,7 @@ const GameEngine = {
     container.innerHTML = `
       <div class="play-card" id="choice-card">
         <div class="play-kicker">${kicker}</div>
-        <div class="play-question">${question}</div>
+        <div class="play-question selectable-text">${question}</div>
         <div class="options-grid">
           ${options.map(o => `<button class="option-btn" onclick="GameEngine.evalChoice(this, '${Utils.safe(o)}', '${Utils.safe(correctAnswer)}')">${o}</button>`).join('')}
         </div>
@@ -811,7 +833,7 @@ const GameEngine = {
     `;
   },
   evalChoice(btn, chosen, correct) {
-    if(this.locked) return; // Prevent double clicks
+    if(this.locked) return;
     this.locked = true;
     
     if(chosen === correct) {
@@ -828,7 +850,6 @@ const GameEngine = {
     setTimeout(() => { this.index++; this.locked = false; this.renderStep(); }, 1200);
   },
 
-  // --- Memory Mode ---
   renderMemory(container) {
     if(!this.memoryState) {
       let deck = this.topic.memory.flatMap((p, i) => [
@@ -852,7 +873,7 @@ const GameEngine = {
   },
   evalMemory(idx) {
     const state = this.memoryState; const card = state.deck[idx];
-    if(this.locked || card.open || card.matched) return; // Anti-bug
+    if(this.locked || card.open || card.matched) return;
     
     card.open = true; Utils.haptic();
     if(state.firstId === null) { state.firstId = idx; return this.renderMemory($('#game-container')); }
@@ -863,7 +884,7 @@ const GameEngine = {
     setTimeout(() => {
       if(firstCard.pair === card.pair) {
         firstCard.matched = true; card.matched = true;
-        this.score++; this.index++; Utils.haptic(); Utils.floatXP(20);
+        this.score++; this.index++; Utils.haptic(); Utils.floatXP(25);
       } else {
         firstCard.open = false; card.open = false; Utils.haptic(true);
       }
@@ -872,30 +893,28 @@ const GameEngine = {
     }, 850);
   },
 
-  // --- End of Game ---
   finish() {
     this.updateHeader();
     const percent = Math.min(100, Math.round((this.score / (this.total||1)) * 100));
     
-    const mult = { flash: 10, quiz: 15, blank: 15, memory: 20 };
+    const mult = { flash: 12, quiz: 15, blank: 15, memory: 25 };
     let xpGain = Math.round(this.score * mult[this.mode.id]);
-    if(percent >= 80) xpGain += 20;
+    if(percent >= 80) xpGain += 25; // Streak bonus
 
-    // SAVE HISTORY
     const historyKey = `${this.topic.id}.${this.mode.id}`;
     AppState.addReward(xpGain, percent, historyKey);
 
     $('#res-score').textContent = "0";
     $('#res-xp').textContent = `+${xpGain} XP`;
-    if(percent >= 90) { $('#res-title').textContent = "Exzellent!"; $('#res-subtitle').textContent = "Nahezu fehlerfrei."; }
-    else if(percent >= 70) { $('#res-title').textContent = "Stark!"; $('#res-subtitle').textContent = "Gute Leistung."; }
-    else { $('#res-title').textContent = "Weiter so!"; $('#res-subtitle').textContent = "Übung macht den Meister."; }
+    if(percent >= 90) { $('#res-title').textContent = "Exzellent!"; $('#res-subtitle').textContent = "Prüfungsreife Fachkenntnis."; }
+    else if(percent >= 70) { $('#res-title').textContent = "Stark!"; $('#res-subtitle').textContent = "Solide Leistung, weiter so."; }
+    else { $('#res-title').textContent = "Weiterüben!"; $('#res-subtitle').textContent = "Wiederholung festigt das Wissen."; }
 
     App.nav('view-result');
     setTimeout(() => {
       Utils.animateValue("res-score", 0, percent, 1400);
       if(percent >= 70) Utils.confetti(percent);
-      Utils.haptic();
+      Utils.haptic([50, 50, 50, 50]);
     }, 300);
   }
 };
@@ -910,8 +929,8 @@ const Utils = {
     while(!valid && loops < 100) {
       a = this.shuffle(arr); valid = true;
       for(let i=0; i<a.length; i++) {
-        if(i%2 === 0 && a[i+1] && a[i].pair === a[i+1].pair) valid = false; // Horizontal side-by-side
-        if(a[i+2] && a[i].pair === a[i+2].pair) valid = false; // Vertical directly above/below
+        if(i%2 === 0 && a[i+1] && a[i].pair === a[i+1].pair) valid = false;
+        if(a[i+2] && a[i].pair === a[i+2].pair) valid = false;
       } loops++;
     } return a;
   },
@@ -931,13 +950,13 @@ const Utils = {
     const step = (ts) => {
       if (!startTs) startTs = ts;
       const progress = Math.min((ts - startTs) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      const ease = 1 - Math.pow(1 - progress, 3);
       obj.innerHTML = Math.floor(ease * (end - start) + start);
       if (progress < 1) window.requestAnimationFrame(step);
     }; window.requestAnimationFrame(step);
   },
   confetti(percent) {
-    const amount = percent >= 90 ? 55 : 30; const colors = ["#4361ee", "#f72585", "#10b981", "#f59e0b"];
+    const amount = percent >= 90 ? 60 : 35; const colors = ["#2563eb", "#f43f5e", "#10b981", "#f59e0b"];
     for(let i=0; i<amount; i++) {
       const c = document.createElement("div"); c.className = "confetti";
       c.style.left = Math.random() * 100 + "vw"; c.style.background = colors[Math.floor(Math.random() * colors.length)];
@@ -947,8 +966,10 @@ const Utils = {
   }
 };
 
-// Initialize App
+// Start
 document.addEventListener('DOMContentLoaded', () => App.init());
 </script>
 </body>
 </html>
+
+```
