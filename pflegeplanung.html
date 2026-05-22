@@ -1,694 +1,542 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>PflegefachProfi | Pflegeplanung</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PflegefachProfi • Ziele & Maßnahmen</title>
+
 <style>
-/* ==========================================================================
-   DESIGN SYSTEM & VARIABLES
-   ========================================================================== */
-:root {
-  --primary: #2563eb;
-  --primary-dark: #1e40af;
-  --purple: #8b5cf6;
-  --pink: #ec4899;
-  
-  --success: #10b981;
-  --success-light: #d1fae5;
-  --success-dark: #065f46;
-  
-  --warning: #f59e0b;
-  --warning-light: #fef3c7;
-  --warning-dark: #92400e;
-  
-  --danger: #ef4444;
-  --danger-light: #fee2e2;
-  --danger-dark: #991b1b;
-  
-  --bg-app: #f8fafc;
-  --bg-surface: #ffffff;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  
-  --shadow-sm: 0 2px 4px rgba(15,23,42,0.04);
-  --shadow-md: 0 8px 16px rgba(15,23,42,0.08);
-  --shadow-lg: 0 24px 48px rgba(37,99,235,0.12);
-  --shadow-glow: 0 0 20px rgba(37,99,235,0.3);
-  
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+:root{
+  --primary:#2563eb;
+  --green:#16a34a;
+  --red:#dc2626;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --shadow:0 18px 40px rgba(15,23,42,.12);
 }
 
-/* ==========================================================================
-   RESET & WRAPPER (MOBILE FIRST SAAS)
-   ========================================================================== */
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'Inter', sans-serif; background: #cbd5e1; color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; overflow: hidden; }
-button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
-h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
+*{box-sizing:border-box}
 
-.app-wrapper {
-  width: 100%; max-width: 500px; height: 100vh; height: 100dvh;
-  background: var(--bg-app); position: relative; display: flex; flex-direction: column;
-  box-shadow: 0 0 50px rgba(0,0,0,0.15); overflow: hidden;
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,#eef4ff 0%,#f8fafc 45%,#ffffff 100%);
+  color:var(--text);
 }
 
-/* ==========================================================================
-   GLOBAL UI ELEMENTS
-   ========================================================================== */
-.topbar {
-  padding: max(16px, env(safe-area-inset-top)) 20px 16px;
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
-  z-index: 50; position: relative;
+.app{
+  max-width:520px;
+  margin:0 auto;
+  min-height:100vh;
+  padding:20px;
 }
-.brand { font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
-.brand i { color: var(--primary); font-size: 22px; }
-.stats { display: flex; gap: 8px; }
-.stat-pill { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm); }
-.stat-pill .fa-bolt { color: var(--primary); }
-.stat-pill .fa-fire { color: var(--warning); }
 
-.view { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 100px; display: none; opacity: 0; transform: translateY(10px); transition: all 0.3s var(--ease); }
-.view.active { display: block; opacity: 1; transform: translateY(0); }
+.screen{display:none}
+.screen.active{display:block}
 
-/* ==========================================================================
-   HOME VIEW (ACCORDIONS)
-   ========================================================================== */
-.home-header { padding: 24px 20px 16px; }
-.home-header h1 { font-size: 28px; line-height: 1.2; margin-bottom: 8px; background: linear-gradient(135deg, var(--primary), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.home-header p { color: var(--text-muted); font-size: 15px; font-weight: 500; line-height: 1.4; }
-
-.cat-list { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
-.cat-card { background: var(--bg-surface); border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; transition: 0.3s var(--ease); }
-.cat-card.open { border-color: var(--primary); box-shadow: var(--shadow-md); }
-
-.cat-header { padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-.cat-title { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 800; }
-.cat-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 18px; }
-.cat-arrow { color: var(--text-muted); transition: 0.3s var(--ease-spring); }
-.cat-card.open .cat-arrow { transform: rotate(180deg); color: var(--primary); }
-
-.cat-body { display: grid; grid-template-rows: 0fr; transition: 0.3s var(--ease); }
-.cat-card.open .cat-body { grid-template-rows: 1fr; }
-.cat-body-inner { overflow: hidden; }
-.prob-list { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 8px; }
-
-.prob-btn {
-  width: 100%; text-align: left; padding: 14px 16px; border-radius: 14px; background: var(--bg-app);
-  border: 1px solid var(--border); font-size: 15px; font-weight: 700; color: var(--text-main);
-  display: flex; justify-content: space-between; align-items: center; transition: 0.2s;
+.hero{
+  padding:28px 22px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  color:white;
+  box-shadow:var(--shadow);
+  margin-top:20px;
 }
-.prob-btn:active { transform: scale(0.98); background: var(--primary-light); border-color: var(--primary); }
-.status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
-.status-dot.easy { background: var(--success); box-shadow: 0 0 8px var(--success); }
-.status-dot.medium { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
-.status-dot.hard { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
-/* ==========================================================================
-   TRAINING VIEW (THE EXAM SIMULATOR)
-   ========================================================================== */
-.train-header { padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--bg-surface); position: sticky; top: 0; z-index: 10; }
-.back-btn { font-size: 14px; font-weight: 800; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
-.train-kicker { font-size: 11px; text-transform: uppercase; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; margin-bottom: 4px; }
-.train-title { font-size: 22px; margin-bottom: 16px; }
-
-.train-progress { display: flex; gap: 8px; margin-bottom: 12px; }
-.step-dot { flex: 1; height: 6px; border-radius: 99px; background: var(--border); transition: 0.4s var(--ease); }
-.step-dot.active { background: var(--primary); box-shadow: 0 0 10px rgba(37,99,235,0.4); }
-
-.instruction-box { background: var(--primary-light); border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 0 12px 12px 0; font-size: 14px; font-weight: 700; color: var(--primary-dark); display: flex; justify-content: space-between; align-items: center; }
-
-.card-grid { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-.select-card {
-  background: var(--bg-surface); border: 2px solid var(--border); border-radius: 16px;
-  padding: 16px; cursor: pointer; transition: 0.2s var(--ease-spring); position: relative;
-  box-shadow: var(--shadow-sm);
+.hero h1{
+  margin:0 0 10px;
+  font-size:30px;
+  line-height:1.05;
 }
-.select-card:active { transform: scale(0.97); }
-.select-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: var(--shadow-glow); transform: translateY(-2px); }
-.card-text { font-size: 15px; font-weight: 600; line-height: 1.45; color: var(--text-main); }
-.check-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s var(--ease-spring); }
-.select-card.selected .check-icon { opacity: 1; transform: scale(1); }
-.select-card.selected .card-text { padding-right: 24px; }
 
-/* Evaluation States */
-.select-card.eval-correct { border-color: var(--success); background: var(--success-light); }
-.select-card.eval-correct .check-icon { color: var(--success-dark); opacity: 1; transform: scale(1); content: "\f00c"; }
-.select-card.eval-wrong { border-color: var(--danger); background: var(--danger-light); animation: shake 0.4s var(--ease-spring); }
-.select-card.eval-wrong .check-icon { color: var(--danger-dark); opacity: 1; transform: scale(1); }
-.select-card.eval-missed { border-color: var(--warning); background: var(--warning-light); }
+.hero p{
+  margin:0;
+  color:#dbeafe;
+  line-height:1.5;
+}
 
-.explanation { margin-top: 12px; font-size: 13px; font-weight: 600; padding: 10px; border-radius: 8px; display: none; line-height: 1.4; }
-.eval-correct .explanation { display: block; background: rgba(16,185,129,0.15); color: var(--success-dark); }
-.eval-wrong .explanation { display: block; background: rgba(239,68,68,0.15); color: var(--danger-dark); }
-.eval-missed .explanation { display: block; background: rgba(245,158,11,0.15); color: var(--warning-dark); }
+.cta{
+  margin-top:24px;
+  width:100%;
+  border:none;
+  border-radius:22px;
+  padding:18px 20px;
+  font-size:18px;
+  font-weight:800;
+  color:white;
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  box-shadow:0 16px 35px rgba(22,163,74,.35);
+  cursor:pointer;
+  animation:pulseCTA 1.7s infinite;
+  position:relative;
+  overflow:hidden;
+}
 
-/* Footer CTA */
-.train-footer { position: fixed; bottom: 0; width: 100%; max-width: 500px; padding: 16px 20px; padding-bottom: max(16px, env(safe-area-inset-bottom)); background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-top: 1px solid var(--border); z-index: 100; }
-.btn-main { width: 100%; padding: 18px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--purple)); color: white; font-size: 16px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(37,99,235,0.3); transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
-.btn-main:active { transform: scale(0.96); box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
-.btn-main:disabled { background: var(--border); color: var(--text-muted); box-shadow: none; transform: none; cursor: not-allowed; }
+.cta::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-80%;
+  width:60%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  animation:shine 2.4s infinite;
+}
 
-/* ==========================================================================
-   RESULT VIEW
-   ========================================================================== */
-.result-header { text-align: center; padding: 40px 20px 20px; }
-.score-circle { width: 140px; height: 140px; border-radius: 50%; border: 10px solid var(--primary-light); margin: 0 auto 20px; display: grid; place-items: center; background: var(--bg-surface); box-shadow: var(--shadow-lg); position: relative; }
-.score-circle.perfect { border-color: var(--success-light); box-shadow: 0 0 30px rgba(16,185,129,0.3); }
-.score-text { font-size: 42px; font-weight: 900; letter-spacing: -2px; color: var(--text-main); }
-.score-text span { font-size: 20px; }
+@keyframes pulseCTA{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.035)}
+}
 
-.feedback-msg { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
-.coaching-msg { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; line-height: 1.4; }
-.xp-reward { font-size: 24px; font-weight: 900; color: var(--success); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 30px;}
+@keyframes shine{
+  0%{left:-80%}
+  100%{left:130%}
+}
 
-.ampel-box { background: var(--bg-surface); border-radius: 20px; padding: 20px; border: 1px solid var(--border); margin: 0 20px 30px; text-align: center; }
-.ampel-title { font-size: 13px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); margin-bottom: 12px; }
-.ampel-btns { display: flex; gap: 10px; }
-.ampel-btn { flex: 1; padding: 14px 0; border-radius: 12px; font-weight: 800; font-size: 14px; border: 2px solid transparent; transition: 0.2s; }
-.ampel-btn:active { transform: scale(0.95); }
-.btn-easy { background: var(--success-light); color: var(--success-dark); }
-.btn-med { background: var(--warning-light); color: var(--warning-dark); }
-.btn-hard { background: var(--danger-light); color: var(--danger-dark); }
-.ampel-btn.selected { border-color: currentColor; box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:0 10px 24px rgba(15,23,42,.07);
+  margin-bottom:16px;
+}
 
-/* ==========================================================================
-   ANIMATIONS
-   ========================================================================== */
-@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-.shake { animation: shake 0.4s var(--ease-spring); }
+.header{
+  margin-top:18px;
+  margin-bottom:18px;
+}
 
-.floating-xp { position: fixed; font-size: 28px; font-weight: 900; color: var(--success); pointer-events: none; z-index: 9999; text-shadow: 0 4px 10px rgba(16,185,129,0.4); animation: floatUp 1s var(--ease) forwards; }
-.floating-xp.negative { color: var(--danger); text-shadow: 0 4px 10px rgba(239,68,68,0.4); }
-@keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.2); } }
+.header h2{
+  margin:0 0 8px;
+  font-size:23px;
+  line-height:1.2;
+}
+
+.header p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#eff6ff;
+  color:#1d4ed8;
+  font-weight:700;
+  font-size:13px;
+  margin-top:12px;
+}
+
+.option{
+  width:100%;
+  text-align:left;
+  border:2px solid var(--border);
+  background:white;
+  border-radius:18px;
+  padding:15px;
+  font-size:15px;
+  line-height:1.45;
+  margin-bottom:12px;
+  cursor:pointer;
+  transition:.18s ease;
+}
+
+.option:hover{
+  transform:translateY(-2px);
+  border-color:#93c5fd;
+}
+
+.option.selected{
+  border-color:var(--primary);
+  background:#eff6ff;
+}
+
+.option.correct{
+  border-color:var(--green);
+  background:#ecfdf5;
+}
+
+.option.wrong{
+  border-color:var(--red);
+  background:#fef2f2;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+}
+
+.btn{
+  flex:1;
+  border:none;
+  border-radius:18px;
+  padding:15px;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.btn.primary{
+  background:var(--primary);
+  color:white;
+}
+
+.btn.secondary{
+  background:#e2e8f0;
+  color:#334155;
+}
+
+.scoreBox{
+  text-align:center;
+  padding:28px 18px;
+}
+
+.scoreCircle{
+  width:132px;
+  height:132px;
+  margin:0 auto 18px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  color:white;
+  font-size:34px;
+  font-weight:900;
+  box-shadow:0 20px 45px rgba(22,163,74,.35);
+  animation:pop .5s ease;
+}
+
+@keyframes pop{
+  0%{transform:scale(.75);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
+
+.feedback{
+  min-height:28px;
+  font-weight:800;
+  margin-top:10px;
+}
+
+.feedback.good{color:var(--green)}
+.feedback.bad{color:var(--red)}
+
+.small{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.confetti{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.confetti span{
+  position:absolute;
+  top:-20px;
+  width:10px;
+  height:16px;
+  background:var(--primary);
+  animation:fall 2.6s linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0;
+  }
+}
 </style>
 </head>
+
 <body>
+<div class="app">
 
-<div class="app-wrapper">
+  <section id="home" class="screen active">
+    <div class="hero">
+      <h1>Pflegeplanung trainieren</h1>
+      <p>Wähle passende Ziele und Maßnahmen wie in der Prüfung. Direktes Feedback, Punkte und Erfolgserlebnis inklusive.</p>
+      <button class="cta" onclick="startGame()">Jetzt starten</button>
+    </div>
+  </section>
 
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="brand"><i class="fa-solid fa-clipboard-list"></i> PflegefachProfi</div>
-    <div class="stats">
-      <div class="stat-pill"><i class="fa-solid fa-fire"></i> <span id="ui-streak">0</span></div>
-      <div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span id="ui-xp">0</span></div>
+  <section id="ziele" class="screen">
+    <div class="header">
+      <h2 id="zieleQuestion"></h2>
+      <p class="badge">2 richtig · 2 falsch</p>
     </div>
-  </header>
+    <div id="zieleOptions"></div>
+    <div id="zieleFeedback" class="feedback"></div>
+    <div class="actions">
+      <button class="btn secondary" onclick="goHome()">Home</button>
+      <button class="btn primary" onclick="checkZiele()">Antwort prüfen</button>
+    </div>
+  </section>
 
-  <!-- =========================================================
-       VIEW: HOME (CATEGORIES)
-       ========================================================= -->
-  <main class="view active" id="view-home">
-    <div class="home-header">
-      <h1>Pflegeplanung<br>Examenstraining</h1>
-      <p>Wähle ein Pflegeproblem. Trainiere die korrekte Formulierung von Zielen und Maßnahmen nach Prüfungsstandard.</p>
+  <section id="massnahmen" class="screen">
+    <div class="header">
+      <h2 id="massnahmenQuestion"></h2>
+      <p class="badge">2 richtig · 2 falsch</p>
     </div>
-    <div class="cat-list" id="cat-container">
-      <!-- Injected via JS -->
+    <div id="massnahmenOptions"></div>
+    <div id="massnahmenFeedback" class="feedback"></div>
+    <div class="actions">
+      <button class="btn secondary" onclick="showScreen('ziele')">Zurück</button>
+      <button class="btn primary" onclick="checkMassnahmen()">Antwort prüfen</button>
     </div>
-  </main>
+  </section>
 
-  <!-- =========================================================
-       VIEW: TRAINING
-       ========================================================= -->
-  <main class="view" id="view-train">
-    <div class="train-header">
-      <button class="back-btn" onclick="App.goHome()"><i class="fa-solid fa-chevron-left"></i> Übersicht</button>
-      <div class="train-progress">
-        <div class="step-dot active" id="dot-1"></div>
-        <div class="step-dot" id="dot-2"></div>
-        <div class="step-dot" id="dot-3"></div>
-      </div>
-      <div class="train-kicker" id="train-category">Kategorie</div>
-      <h2 class="train-title" id="train-title">Pflegeproblem</h2>
-      <div class="instruction-box" id="train-instruction">
-        <span>Wähle 2 Ziele aus.</span>
-        <span id="train-counter">0/2</span>
-      </div>
+  <section id="result" class="screen">
+    <div class="card scoreBox">
+      <div class="scoreCircle" id="scoreCircle">0%</div>
+      <h2 id="resultTitle">Geschafft!</h2>
+      <p id="resultText" class="small"></p>
+      <button class="cta" onclick="goHome()">Zurück zur Startseite</button>
+      <p class="small">Automatische Rückkehr in wenigen Sekunden.</p>
     </div>
-    
-    <div class="card-grid" id="train-cards">
-      <!-- Injected via JS -->
-    </div>
-
-    <div class="train-footer">
-      <button class="btn-main" id="btn-submit" disabled onclick="Trainer.submitStep()">Prüfen <i class="fa-solid fa-check"></i></button>
-    </div>
-  </main>
-
-  <!-- =========================================================
-       VIEW: RESULT
-       ========================================================= -->
-  <main class="view" id="view-result">
-    <div class="result-header">
-      <div class="score-circle" id="res-circle">
-        <div class="score-text"><span id="res-score">0</span><span>%</span></div>
-      </div>
-      <div class="feedback-msg" id="res-feedback">Prüfungsreif!</div>
-      <div class="coaching-msg" id="res-coaching">Sehr sauber strukturiert.</div>
-      <div class="xp-reward" id="res-xp">+0 XP</div>
-    </div>
-
-    <div class="ampel-box">
-      <div class="ampel-title">Wie schwer war dieser Fall?</div>
-      <div class="ampel-btns">
-        <button class="ampel-btn btn-easy" onclick="Trainer.setDifficulty('easy')">🟢 Easy</button>
-        <button class="ampel-btn btn-med" onclick="Trainer.setDifficulty('medium')">🟡 Mittel</button>
-        <button class="ampel-btn btn-hard" onclick="Trainer.setDifficulty('hard')">🔴 Schwer</button>
-      </div>
-    </div>
-
-    <div style="padding: 0 20px;">
-      <button class="btn-main" style="margin-bottom: 12px; background: var(--bg-surface); color: var(--text-main); border: 2px solid var(--border); box-shadow: none;" onclick="Trainer.retry()">Nochmal üben <i class="fa-solid fa-rotate-right"></i></button>
-      <button class="btn-main" onclick="App.goHome()">Zurück zur Übersicht <i class="fa-solid fa-list"></i></button>
-    </div>
-  </main>
+  </section>
 
 </div>
 
+<div id="confetti" class="confetti"></div>
+
 <script>
-/* ==========================================================================
-   1. DATABASE: PFLEGEPLANUNG EXAM CONTENT
-   ========================================================================== */
-const DATA = [
-  {
-    id: "p1", categoryId: "c1", categoryTitle: "Schmerz / Wohlbefinden", categoryIcon: "🔥",
-    title: "Akuter / Chronischer Schmerz",
-    goals: [
-      { id: "g1", correct: true, text: "Pflegeempfänger gibt innerhalb von 60 Minuten eine Schmerzreduktion von NRS 8 auf max. NRS 4 an.", explanation: "SMART: messbar durch NRS und zeitlich definiert." },
-      { id: "g2", correct: true, text: "Pflegeempfänger zeigt im FD/SD eine entspannte Mimik und Körperhaltung.", explanation: "Beobachtbar und realistisch als Nahziel." },
-      { id: "g3", correct: false, text: "Pflegeempfänger ist irgendwann schmerzfrei.", explanation: "Falsch: Nicht messbar, kein Zeitraum, oft unrealistisch." },
-      { id: "g4", correct: false, text: "Pfk gibt rechtzeitig Schmerzmittel.", explanation: "Falsch: Das ist eine Maßnahme, kein patientenbezogenes Ziel." }
-    ],
-    measures: [
-      { id: "m1", correct: true, text: "Pfk erhebt im FD/SD und bei Bedarf die Schmerzintensität mittels NRS zur Verlaufskontrolle.", explanation: "Wer (Pfk) + Wann (FD/SD) + Womit (NRS) + Warum (Verlaufskontrolle)." },
-      { id: "m2", correct: true, text: "Pfk lagert PE 3x tgl. und bei Bedarf nach Kinästhetik zur Schmerzlinderung.", explanation: "Vollständige Maßnahme inkl. Methode und Begründung." },
-      { id: "m3", correct: true, text: "Pfk verabreicht Bedarfsmedikation (Ibuprofen 400mg) nach ärztl. AO bei NRS > 4 zur Analgesie.", explanation: "Korrekter Umgang mit Bedarfsmedikation inkl. Grenze." },
-      { id: "m4", correct: true, text: "Pfk wendet vor dem Schlafen die verordnete Einreibung am Rücken zur Entspannung an.", explanation: "Konkrete Maßnahme mit Zeitpunkt und Ziel." },
-      { id: "m5", correct: true, text: "Pfk erfragt 30 Min. nach Analgetikagabe die Wirkung mittels NRS zur Wirksamkeitsprüfung.", explanation: "Wichtiges Assessment nach Intervention." },
-      { id: "m6", correct: false, text: "Pfk kümmert sich regelmäßig um Schmerzen.", explanation: "Zu ungenau. Wann? Wie? Warum?" },
-      { id: "m7", correct: false, text: "Pfk gibt Schmerzmittel.", explanation: "Fehlt: nach ärztlicher Anordnung, welches Medikament, wann?" },
-      { id: "m8", correct: false, text: "Ablenkung durch Gespräche anbieten.", explanation: "Wer macht es? Wann? Formulierung unvollständig." }
-    ]
-  },
-  {
-    id: "p2", categoryId: "c2", categoryTitle: "Mobilität / Dekubitus", categoryIcon: "🛏️",
-    title: "Dekubitusrisiko",
-    goals: [
-      { id: "g1", correct: true, text: "Die Haut des PE bleibt während des gesamten Krankenhausaufenthalts intakt.", explanation: "Klares, messbares Erhaltungsziel." },
-      { id: "g2", correct: true, text: "PE toleriert die 30-Grad-Lagerung für jeweils 2 Stunden ohne Schmerzen.", explanation: "Messbar und realistisches Verhaltensziel." },
-      { id: "g3", correct: false, text: "Kein Dekubitus.", explanation: "Zu kurz, nicht als vollständiges Ziel formuliert." },
-      { id: "g4", correct: false, text: "PE wird oft gelagert.", explanation: "Falsch: Das beschreibt eine Maßnahme, kein Ziel." }
-    ],
-    measures: [
-      { id: "m1", correct: true, text: "Pfk führt im FD/SD eine Hautinspektion aller Prädilektionsstellen zur Früherkennung durch.", explanation: "Vollständig nach WER+WANN+WIE+WARUM." },
-      { id: "m2", correct: true, text: "Pfk lagert PE alle 2h im Wechsel (Rücken, 30° links, 30° rechts) zur Druckentlastung.", explanation: "Konkretes Lagerungsschema und Intervall genannt." },
-      { id: "m3", correct: true, text: "Pfk stellt PE zu jeder Hauptmahlzeit zur Freilagerung der Fersen ein Kissen unter die Waden.", explanation: "Konkrete Mikro-Positionierung mit Zeitpunkt." },
-      { id: "m4", correct: true, text: "Pfk reinigt Haut bei Inkontinenz sofort mit klarem Wasser zur Vermeidung von Mazeration.", explanation: "Handlung + Begründung klar definiert." },
-      { id: "m5", correct: true, text: "Pfk leitet PE 1x im FD zur Durchführung von Mikrobewegungen im Bett an.", explanation: "Fokus auf Ressourcenförderung und Eigenbewegung." },
-      { id: "m6", correct: false, text: "Pfk lagert regelmäßig um.", explanation: "Zu ungenau. Welches Intervall? Welche Positionen?" },
-      { id: "m7", correct: false, text: "Haut gut eincremen und massieren.", explanation: "Kontraindiziert! Gefährdete Stellen dürfen nicht massiert werden." },
-      { id: "m8", correct: false, text: "Pfk benutzt Antidekubitusmatratze.", explanation: "Ersetzt keine Bewegung. Formulierung zu passiv/ungenau." }
-    ]
-  },
-  {
-    id: "p3", categoryId: "c3", categoryTitle: "Atmung / Kreislauf", categoryIcon: "🫁",
-    title: "Dyspnoe / Ineffektives Atemmuster",
-    goals: [
-      { id: "g1", correct: true, text: "PE weist im FD/SD eine Atemfrequenz zwischen 12-20 Atemzügen/Min auf.", explanation: "Messbar durch konkrete Normwerte." },
-      { id: "g2", correct: true, text: "PE gibt nach Intervention subjektive Atemlinderung an.", explanation: "Wichtiges subjektives Ziel bei Dyspnoe." },
-      { id: "g3", correct: false, text: "PE atmet besser.", explanation: "Nicht messbar. Was bedeutet 'besser'?" },
-      { id: "g4", correct: false, text: "Pfk gibt Sauerstoff.", explanation: "Maßnahme, kein Pflegeziel." }
-    ],
-    measures: [
-      { id: "m1", correct: true, text: "Pfk positioniert PE bei Bedarf zur Atemhilfsmuskulatur-Nutzung im Kutschersitz.", explanation: "Klare Positionierungstechnik und Begründung." },
-      { id: "m2", correct: true, text: "Pfk misst im FD/SD und bei Dyspnoe SpO2 und Atemfrequenz zur Vitalzeichenkontrolle.", explanation: "Konkrete Parameter und Zeitpunkte." },
-      { id: "m3", correct: true, text: "Pfk lüftet das Zimmer 3x tgl. für 10 Min zur Frischluftzufuhr und Beruhigung.", explanation: "Einfache aber wichtige Umgebungsmaßnahme." },
-      { id: "m4", correct: true, text: "Pfk leitet PE 1x im FD zur Anwendung der Lippenbremse bei Ausatmung an.", explanation: "Konkrete Atemtechnik zur Exspirationsverlängerung." },
-      { id: "m5", correct: true, text: "Pfk verabreicht O2 (2L/Min) nach ärztl. AO bei SpO2 < 90% zur Oxygenierung.", explanation: "Med. Anordnung inkl. Grenzwert korrekt eingebaut." },
-      { id: "m6", correct: false, text: "Pfk beruhigt den Patienten.", explanation: "Zu ungenau. Wie genau? Womit?" },
-      { id: "m7", correct: false, text: "Regelmäßig atmen lassen.", explanation: "Ergibt keinen pflegerischen Sinn." },
-      { id: "m8", correct: false, text: "Pfk lagert PE flach.", explanation: "Kontraindiziert bei Atemnot!" }
-    ]
-  },
-  {
-    id: "p4", categoryId: "c2", categoryTitle: "Mobilität / Sturz", categoryIcon: "🚶",
-    title: "Sturzgefahr",
-    goals: [
-      { id: "g1", correct: true, text: "PE bleibt während des stationären Aufenthalts sturzfrei.", explanation: "Klassisches, klares Erhaltungsziel." },
-      { id: "g2", correct: true, text: "PE fordert vor jedem Aufstehen aktiv Hilfe durch Klingeln an.", explanation: "Realistisches Verhaltensziel." },
-      { id: "g3", correct: false, text: "PE fällt nicht mehr so oft.", explanation: "Schwammig und inakzeptabel als Ziel." },
-      { id: "g4", correct: false, text: "Bettgitter hochziehen.", explanation: "Maßnahme (und freiheitsentziehend ohne Beschluss)." }
-    ],
-    measures: [
-      { id: "m1", correct: true, text: "Pfk stellt das Bett nach jeder Pflegehandlung auf die niedrigste Stufe zur Sturzprävention.", explanation: "Wichtige Umgebungsanpassung mit klarem Zeitpunkt." },
-      { id: "m2", correct: true, text: "Pfk reicht PE zu jeder Mobilisation den Rollator zur sicheren Fortbewegung.", explanation: "Hilfsmitteleinsatz konkretisiert." },
-      { id: "m3", correct: true, text: "Pfk stellt die Klingel jederzeit in greifbare Nähe des PE zur schnellen Rufmöglichkeit.", explanation: "Standardmaßnahme präzise formuliert." },
-      { id: "m4", correct: true, text: "Pfk leitet PE im FD an, festes und geschlossenes Schuhwerk vor dem Aufstehen anzuziehen.", explanation: "Edukative Maßnahme." },
-      { id: "m5", correct: true, text: "Pfk begleitet PE nachts bei jedem Toilettengang zur Gangsicherung.", explanation: "Wer+Wann+Warum exakt." },
-      { id: "m6", correct: false, text: "Pfk passt auf.", explanation: "Völlig ungenügend für eine Pflegeplanung." },
-      { id: "m7", correct: false, text: "PE wird fixiert.", explanation: "Darf nicht als Standard-Sturzprophylaxe geplant werden." },
-      { id: "m8", correct: false, text: "Boden trocken halten.", explanation: "Wer macht es? Wann? Formulierung unvollständig." }
-    ]
-  },
-  {
-    id: "p5", categoryId: "c4", categoryTitle: "Ernährung / Flüssigkeit", categoryIcon: "💧",
-    title: "Dehydratation",
-    goals: [
-      { id: "g1", correct: true, text: "PE nimmt täglich mindestens 1.500 ml Flüssigkeit (oral) zu sich.", explanation: "SMART formuliertes und messbares Ziel." },
-      { id: "g2", correct: true, text: "Hautturgor des PE ist innerhalb von 48 Stunden wieder elastisch.", explanation: "Klinisch messbares Nahziel." },
-      { id: "g3", correct: false, text: "PE trinkt genug.", explanation: "Nicht messbar. Was ist 'genug'?" },
-      { id: "g4", correct: false, text: "Infusion anhängen.", explanation: "Das ist eine ärztlich delegierte Maßnahme." }
-    ],
-    measures: [
-      { id: "m1", correct: true, text: "Pfk führt tägl. im FD/SD/ND eine strenge Ein- und Ausfuhrbilanzierung zur Überwachung durch.", explanation: "Korrekte Formulierung für Bilanzierung." },
-      { id: "m2", correct: true, text: "Pfk reicht zu jeder Mahlzeit das Lieblingsgetränk (Apfelschorle) zur Trinkförderung.", explanation: "Patientenorientiert und konkret." },
-      { id: "m3", correct: true, text: "Pfk stellt stündlich ein gefülltes 200ml Glas in Sichtweite zur Erinnerung an.", explanation: "Zeitintervall und Menge definiert." },
-      { id: "m4", correct: true, text: "Pfk kontrolliert 1x tägl. im FD den Hautturgor am Sternum zur Exsikkose-Prüfung.", explanation: "Klinisches Assessment." },
-      { id: "m5", correct: true, text: "Pfk hängt im FD die ärztlich verordnete s.c. Infusion (1000ml Sterofundin) an.", explanation: "Delegierbare Maßnahme korrekt eingebaut." },
-      { id: "m6", correct: false, text: "Pfk erinnert PE ans Trinken.", explanation: "Wann? Wie oft? Zu vage." },
-      { id: "m7", correct: false, text: "Viel Wasser hinstellen.", explanation: "Nicht pflegefachlich formuliert." },
-      { id: "m8", correct: false, text: "Pfk zwingt PE zum Trinken.", explanation: "Ethisch und fachlich inakzeptabel." }
-    ]
-  }
-]; // Simplified to 5 items for token length, logic handles N items
-
-/* ==========================================================================
-   2. STATE & STORAGE
-   ========================================================================== */
-const STORAGE_KEY = 'pfp.exam.v1';
-const State = {
-  xp: 0, streak: 0,
-  history: {}, // { probId: { status: 'easy' } }
-  
-  // View State
-  activeProb: null,
-  step: 1,
-  selGoals: [],
-  selMeasures: []
-};
-
-function loadData() {
-  try {
-    const d = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(d) { State.xp = d.xp||0; State.streak = d.streak||0; State.history = d.history||{}; }
-  } catch(e) {}
-  updateTopbar();
-}
-function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({xp: State.xp, streak: State.streak, history: State.history}));
-  updateTopbar();
-}
-function addXP(amount) {
-  State.xp += amount;
-  if(amount > 0) showFloatingXP(amount);
-  else if(amount < 0) showFloatingXP(amount, true);
-  saveData();
-}
-
-/* ==========================================================================
-   3. CORE APP LOGIC
-   ========================================================================== */
-const App = {
-  init() {
-    loadData();
-    this.renderHome();
-    this.nav('view-home');
-  },
-  nav(id) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo(0,0);
-  },
-  goHome() {
-    this.renderHome(); // Refresh statuses
-    this.nav('view-home');
-  },
-  renderHome() {
-    const container = document.getElementById('cat-container');
-    // Group categories
-    const groups = {};
-    DATA.forEach(p => {
-      if(!groups[p.categoryId]) groups[p.categoryId] = { title: p.categoryTitle, icon: p.categoryIcon, problems: [] };
-      groups[p.categoryId].problems.push(p);
-    });
-
-    let html = '';
-    for(const key in groups) {
-      const g = groups[key];
-      html += `
-        <div class="cat-card">
-          <div class="cat-header" onclick="this.parentElement.classList.toggle('open'); haptic(10);">
-            <div class="cat-title"><div class="cat-icon">${g.icon}</div> ${g.title}</div>
-            <i class="fa-solid fa-chevron-down cat-arrow"></i>
-          </div>
-          <div class="cat-body">
-            <div class="cat-body-inner">
-              <div class="prob-list">
-                ${g.problems.map(p => {
-                  const status = State.history[p.id]?.status || 'none';
-                  const dotClass = status === 'easy' ? 'easy' : status === 'medium' ? 'medium' : status === 'hard' ? 'hard' : '';
-                  return `
-                  <button class="prob-btn" onclick="Trainer.start('${p.id}')">
-                    ${p.title}
-                    <div class="status-dot ${dotClass}"></div>
-                  </button>
-                `}).join('')}
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+const DATA = {
+  pflegeproblem: "Sturzrisiko",
+  ziele: [
+    {
+      text: "Der Patient bleibt während des Frühdienstes sturzfrei.",
+      correct: true
+    },
+    {
+      text: "Der Patient nutzt innerhalb von 2 Tagen beim Aufstehen konsequent die Klingel.",
+      correct: true
+    },
+    {
+      text: "Der Patient wird vollständig geheilt.",
+      correct: false
+    },
+    {
+      text: "Der Patient soll sich besser fühlen.",
+      correct: false
     }
-    container.innerHTML = html;
-  }
+  ],
+  massnahmen: [
+    {
+      text: "Sturzrisiko mit geeignetem Assessment einschätzen und Veränderungen dokumentieren.",
+      correct: true
+    },
+    {
+      text: "Klingel, Brille, Rollator und rutschfeste Schuhe in erreichbarer Nähe bereitstellen.",
+      correct: true
+    },
+    {
+      text: "Patient dauerhaft im Bett lassen, damit kein Sturz passieren kann.",
+      correct: false
+    },
+    {
+      text: "Dem Patienten allgemein sagen, dass er vorsichtig sein soll.",
+      correct: false
+    }
+  ]
 };
 
-/* ==========================================================================
-   4. TRAINING ENGINE
-   ========================================================================== */
-const Trainer = {
-  start(id) {
-    State.activeProb = DATA.find(p => p.id === id);
-    State.step = 1;
-    State.selGoals = [];
-    State.selMeasures = [];
-    
-    // Shuffle arrays
-    State.activeProb.sGoals = [...State.activeProb.goals].sort(() => Math.random() - 0.5);
-    State.activeProb.sMeasures = [...State.activeProb.measures].sort(() => Math.random() - 0.5);
+let selectedZiele = [];
+let selectedMassnahmen = [];
+let score = 0;
 
-    document.getElementById('train-category').innerText = State.activeProb.categoryTitle;
-    document.getElementById('train-title').innerText = State.activeProb.title;
-    
-    App.nav('view-train');
-    this.renderStep();
-  },
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 
-  renderStep() {
-    const isStep1 = State.step === 1;
-    
-    // Update Header
-    document.getElementById('dot-1').className = `step-dot ${isStep1 ? 'active' : 'active'}`;
-    document.getElementById('dot-2').className = `step-dot ${isStep1 ? '' : 'active'}`;
-    document.getElementById('train-counter').innerText = isStep1 ? `${State.selGoals.length}/2` : `${State.selMeasures.length}/5`;
-    document.querySelector('#train-instruction span').innerText = isStep1 ? "Wähle exakt 2 Ziele aus." : "Wähle exakt 5 Maßnahmen.";
+function startGame(){
+  selectedZiele = [];
+  selectedMassnahmen = [];
+  score = 0;
 
-    // Render Cards
-    const items = isStep1 ? State.activeProb.sGoals : State.activeProb.sMeasures;
-    const selectedArr = isStep1 ? State.selGoals : State.selMeasures;
+  document.getElementById("zieleQuestion").textContent =
+    `Prüfungsfrage: Wählen Sie 2 geeignete Ziele zu "${DATA.pflegeproblem}" aus:`;
 
-    let html = '';
-    items.forEach(item => {
-      const isSelected = selectedArr.includes(item.id);
-      html += `
-        <div class="select-card ${isSelected ? 'selected' : ''}" id="card-${item.id}" onclick="Trainer.toggleCard('${item.id}')">
-          <i class="fa-solid fa-check check-icon"></i>
-          <div class="card-text">${item.text}</div>
-          <div class="explanation" id="exp-${item.id}">${item.explanation}</div>
-        </div>
-      `;
-    });
-    document.getElementById('train-cards').innerHTML = html;
-    
-    this.checkButtonState();
-  },
+  document.getElementById("massnahmenQuestion").textContent =
+    `Prüfungsfrage: Wählen Sie 2 geeignete Maßnahmen zu "${DATA.pflegeproblem}" aus:`;
 
-  toggleCard(id) {
-    const isStep1 = State.step === 1;
-    const arr = isStep1 ? State.selGoals : State.selMeasures;
-    const limit = isStep1 ? 2 : 5;
+  renderOptions("zieleOptions", DATA.ziele, selectedZiele);
+  renderOptions("massnahmenOptions", DATA.massnahmen, selectedMassnahmen);
 
-    if(arr.includes(id)) {
-      arr.splice(arr.indexOf(id), 1);
-      haptic(10);
-    } else {
-      if(arr.length >= limit) {
-        document.getElementById(`card-${id}`).classList.add('shake');
-        setTimeout(()=> document.getElementById(`card-${id}`).classList.remove('shake'), 400);
-        haptic([30,30]);
-        return; // limit reached
+  document.getElementById("zieleFeedback").textContent = "";
+  document.getElementById("massnahmenFeedback").textContent = "";
+
+  showScreen("ziele");
+}
+
+function renderOptions(containerId, items, selectedArray){
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+
+  items.forEach((item, index) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = item.text;
+
+    btn.onclick = () => {
+      if(btn.classList.contains("correct") || btn.classList.contains("wrong")) return;
+
+      if(selectedArray.includes(index)){
+        selectedArray.splice(selectedArray.indexOf(index), 1);
+        btn.classList.remove("selected");
+      } else {
+        if(selectedArray.length >= 2){
+          dopamine("Bitte nur 2 auswählen.", false, containerId);
+          return;
+        }
+        selectedArray.push(index);
+        btn.classList.add("selected");
       }
-      arr.push(id);
-      haptic(15);
-    }
-    this.renderStep(); // Re-render to update classes and counter
-  },
+    };
 
-  checkButtonState() {
-    const isStep1 = State.step === 1;
-    const arr = isStep1 ? State.selGoals : State.selMeasures;
-    const limit = isStep1 ? 2 : 5;
-    const btn = document.getElementById('btn-submit');
-    
-    if(arr.length === limit) {
-      btn.disabled = false;
-      btn.innerHTML = `Auswahl prüfen <i class="fa-solid fa-magnifying-glass"></i>`;
-    } else {
-      btn.disabled = true;
-      btn.innerHTML = `Noch ${limit - arr.length} wählen...`;
-    }
-  },
+    container.appendChild(btn);
+  });
+}
 
-  submitStep() {
-    haptic(40);
-    const isStep1 = State.step === 1;
-    const items = isStep1 ? State.activeProb.sGoals : State.activeProb.sMeasures;
-    const selectedArr = isStep1 ? State.selGoals : State.selMeasures;
-    
-    let allCorrect = true;
+function checkZiele(){
+  if(selectedZiele.length !== 2){
+    dopamine("Bitte genau 2 Ziele auswählen.", false, "zieleOptions");
+    return;
+  }
 
-    // Evaluate
-    items.forEach(item => {
-      const card = document.getElementById(`card-${item.id}`);
-      const isSelected = selectedArr.includes(item.id);
-      
-      // Remove basic selected class for eval classes
-      card.classList.remove('selected');
-      card.style.pointerEvents = 'none'; // Lock card
+  const correct = evaluate("zieleOptions", DATA.ziele, selectedZiele);
+  const feedback = document.getElementById("zieleFeedback");
 
-      if(isSelected && item.correct) {
-        card.classList.add('eval-correct');
-        addXP(isStep1 ? 10 : 8);
-      } else if (isSelected && !item.correct) {
-        card.classList.add('eval-wrong');
-        addXP(isStep1 ? -5 : -4);
-        allCorrect = false;
-      } else if (!isSelected && item.correct) {
-        card.classList.add('eval-missed');
+  if(correct){
+    score += 50;
+    feedback.textContent = "Sehr gut. Beide Ziele sind prüfungstauglich.";
+    feedback.className = "feedback good";
+    smallConfetti();
+    setTimeout(() => showScreen("massnahmen"), 900);
+  } else {
+    feedback.textContent = "Noch nicht richtig. Schau genau auf SMART, Pflegeproblem und Realismus.";
+    feedback.className = "feedback bad";
+  }
+}
+
+function checkMassnahmen(){
+  if(selectedMassnahmen.length !== 2){
+    dopamine("Bitte genau 2 Maßnahmen auswählen.", false, "massnahmenOptions");
+    return;
+  }
+
+  const correct = evaluate("massnahmenOptions", DATA.massnahmen, selectedMassnahmen);
+  const feedback = document.getElementById("massnahmenFeedback");
+
+  if(correct){
+    score += 50;
+    feedback.textContent = "Stark. Die Maßnahmen sind konkret und prüfungsgeeignet.";
+    feedback.className = "feedback good";
+    finishGame();
+  } else {
+    feedback.textContent = "Noch nicht richtig. Maßnahmen müssen konkret, pflegerisch und begründbar sein.";
+    feedback.className = "feedback bad";
+  }
+}
+
+function evaluate(containerId, items, selectedArray){
+  const buttons = document.querySelectorAll(`#${containerId} .option`);
+  let allCorrect = true;
+
+  buttons.forEach((btn, index) => {
+    btn.classList.remove("selected");
+
+    if(selectedArray.includes(index)){
+      if(items[index].correct){
+        btn.classList.add("correct");
+      } else {
+        btn.classList.add("wrong");
         allCorrect = false;
       }
-    });
-
-    if(allCorrect) {
-      State.streak++;
-      addXP(10); // Bonus
-    } else {
-      State.streak = 0;
     }
-    saveData();
+  });
 
-    // Update Button for next phase
-    const btn = document.getElementById('btn-submit');
-    if(isStep1) {
-      btn.innerHTML = `Weiter zu Maßnahmen <i class="fa-solid fa-arrow-right"></i>`;
-      btn.onclick = () => { State.step = 2; Trainer.renderStep(); };
-    } else {
-      btn.innerHTML = `Ergebnis anzeigen <i class="fa-solid fa-flag-checkered"></i>`;
-      btn.onclick = () => { Trainer.finish(); };
-    }
-  },
+  const correctSelected = selectedArray.every(i => items[i].correct);
+  return allCorrect && correctSelected;
+}
 
-  finish() {
-    App.nav('view-result');
-    document.getElementById('dot-3').classList.add('active');
-    
-    // Calculate Score
-    let maxCorrect = 7; // 2 goals + 5 measures
-    let actualCorrect = 0;
-    
-    State.activeProb.goals.forEach(g => { if(g.correct && State.selGoals.includes(g.id)) actualCorrect++; });
-    State.activeProb.measures.forEach(m => { if(m.correct && State.selMeasures.includes(m.id)) actualCorrect++; });
-    // Minus wrongs
-    State.activeProb.goals.forEach(g => { if(!g.correct && State.selGoals.includes(g.id)) actualCorrect--; });
-    State.activeProb.measures.forEach(m => { if(!m.correct && State.selMeasures.includes(m.id)) actualCorrect--; });
-    
-    if(actualCorrect < 0) actualCorrect = 0;
-    let pct = Math.round((actualCorrect / maxCorrect) * 100);
+function finishGame(){
+  const percent = score;
+  document.getElementById("scoreCircle").textContent = `${percent}%`;
 
-    // UI Updates
-    document.getElementById('res-score').innerText = pct;
-    const circle = document.getElementById('res-circle');
-    const fb = document.getElementById('res-feedback');
-    const coach = document.getElementById('res-coaching');
-
-    if(pct >= 90) {
-      circle.className = "score-circle perfect";
-      fb.innerText = "Prüfungsreif!";
-      fb.style.color = "var(--success)";
-      coach.innerText = "Exzellente Struktur. WER, WANN, WIE und WARUM perfekt angewandt.";
-    } else if (pct >= 70) {
-      circle.className = "score-circle";
-      fb.innerText = "Solide!";
-      fb.style.color = "var(--warning)";
-      coach.innerText = "Gute Basis, aber achte genauer auf die Distraktoren in der Prüfung.";
-    } else {
-      circle.className = "score-circle";
-      fb.innerText = "Noch unsicher";
-      fb.style.color = "var(--danger)";
-      coach.innerText = "Einige Pflegemaßnahmen waren nicht messbar oder falsch formuliert. Übe diesen Fall nochmal.";
-    }
-
-    // Reset Ampel buttons visually
-    document.querySelectorAll('.ampel-btn').forEach(b => b.classList.remove('selected'));
-    haptic([40,50,40]);
-  },
-
-  setDifficulty(status) {
-    haptic(20);
-    document.querySelectorAll('.ampel-btn').forEach(b => b.classList.remove('selected'));
-    event.target.classList.add('selected');
-    
-    if(!State.history[State.activeProb.id]) State.history[State.activeProb.id] = {};
-    State.history[State.activeProb.id].status = status;
-    saveData();
-  },
-
-  retry() {
-    this.start(State.activeProb.id);
+  if(percent === 100){
+    document.getElementById("resultTitle").textContent = "Perfekt bestanden!";
+    document.getElementById("resultText").textContent =
+      "Du hast die passenden Ziele und Maßnahmen korrekt erkannt. Genau so prüfungsnah denken.";
+  } else {
+    document.getElementById("resultTitle").textContent = "Training abgeschlossen";
+    document.getElementById("resultText").textContent =
+      "Guter Versuch. Wiederhole die Auswahl und achte auf konkrete, realistische Formulierungen.";
   }
-};
 
-/* ==========================================================================
-   5. UTILS & EFFECTS
-   ========================================================================== */
-function updateTopbar() {
-  document.getElementById('ui-xp').innerText = State.xp;
-  document.getElementById('ui-streak').innerText = State.streak;
+  showScreen("result");
+  bigConfetti();
+
+  setTimeout(() => {
+    goHome();
+  }, 6500);
 }
 
-function haptic(pattern) {
-  if(navigator.vibrate) navigator.vibrate(pattern);
+function dopamine(message, good, containerId){
+  const el = containerId.includes("ziele")
+    ? document.getElementById("zieleFeedback")
+    : document.getElementById("massnahmenFeedback");
+
+  el.textContent = message;
+  el.className = good ? "feedback good" : "feedback bad";
+
+  navigator.vibrate?.(70);
 }
 
-function showFloatingXP(amount, negative=false) {
-  const el = document.createElement('div');
-  el.className = `floating-xp ${negative ? 'negative' : ''}`;
-  el.innerText = amount > 0 ? `+${amount}` : amount;
-  el.style.left = (40 + Math.random()*20) + '%';
-  el.style.top = '50%';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1000);
+function smallConfetti(){
+  createConfetti(25);
 }
 
-// Boot
-document.addEventListener('DOMContentLoaded', () => App.init());
+function bigConfetti(){
+  createConfetti(90);
+}
+
+function createConfetti(count){
+  const layer = document.getElementById("confetti");
+  layer.innerHTML = "";
+
+  for(let i=0;i<count;i++){
+    const piece = document.createElement("span");
+    piece.style.left = Math.random() * 100 + "vw";
+    piece.style.animationDelay = Math.random() * .6 + "s";
+    piece.style.background = randomColor();
+    piece.style.transform = `rotate(${Math.random()*360}deg)`;
+    layer.appendChild(piece);
+  }
+
+  setTimeout(() => layer.innerHTML = "", 3200);
+}
+
+function randomColor(){
+  const colors = ["#2563eb","#16a34a","#f59e0b","#dc2626","#7c3aed","#ec4899"];
+  return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function goHome(){
+  showScreen("home");
+}
 </script>
 </body>
 </html>
