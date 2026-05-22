@@ -44,7 +44,7 @@
 }
 
 /* ==========================================================================
-   RESET & WRAPPER (MOBILE FIRST SAAS)
+   RESET & WRAPPER
    ========================================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'Inter', sans-serif; background: #cbd5e1; color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; overflow: hidden; }
@@ -54,7 +54,7 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .app-wrapper {
   width: 100%; max-width: 500px; height: 100vh; height: 100dvh;
   background: var(--bg-app); position: relative; display: flex; flex-direction: column;
-  box-shadow: 0 0 50px rgba(0,0,0,0.15); overflow: hidden;
+  box-shadow: 0 0 50px rgba(0,0,0,0.15); overflow: hidden; padding-bottom: 75px; /* Space for Bottom Nav */
 }
 
 /* ==========================================================================
@@ -73,25 +73,67 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .stat-pill .fa-bolt { color: var(--primary); }
 .stat-pill .fa-fire { color: var(--warning); }
 
-.view { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 100px; display: none; opacity: 0; transform: translateY(10px); transition: all 0.3s var(--ease); }
+.view { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; opacity: 0; transform: translateY(10px); transition: all 0.3s var(--ease); }
 .view.active { display: block; opacity: 1; transform: translateY(0); }
 
 /* ==========================================================================
-   HOME VIEW (ACCORDIONS)
+   BOTTOM NAVIGATION (APP STYLE)
    ========================================================================== */
-.home-header { padding: 24px 20px 16px; }
-.home-header h1 { font-size: 28px; line-height: 1.2; margin-bottom: 8px; background: linear-gradient(135deg, var(--primary), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.home-header p { color: var(--text-muted); font-size: 15px; font-weight: 500; line-height: 1.4; }
+.bottom-nav {
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 75px;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+  align-items: center; padding-bottom: env(safe-area-inset-bottom); z-index: 1000;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--text-muted); font-size: 10px; font-weight: 800; transition: 0.3s var(--ease-spring);
+  width: 70px; text-decoration: none;
+}
+.nav-item i { font-size: 22px; transition: 0.3s var(--ease-spring); }
+.nav-item.active { color: var(--primary); }
+.nav-item.active i { transform: translateY(-4px) scale(1.1); }
+.nav-item.locked { opacity: 0.5; }
 
-.cat-list { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
-.cat-card { background: var(--bg-surface); border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; transition: 0.3s var(--ease); }
+/* ==========================================================================
+   HOME VIEW (REVAMPED OVERVIEW)
+   ========================================================================== */
+.home-header { padding: 24px 20px 0; }
+.home-header h1 { font-size: 28px; line-height: 1.2; margin-bottom: 8px; }
+
+/* Hero CTA Card */
+.hero-cta {
+  margin: 16px 20px; background: linear-gradient(135deg, var(--primary-dark), var(--purple));
+  border-radius: 24px; padding: 24px; color: white; position: relative; overflow: hidden;
+  box-shadow: 0 16px 32px rgba(37,99,235,0.25);
+  animation: fadeSlideIn 0.6s var(--ease-spring) forwards; opacity: 0; transform: translateY(20px);
+}
+.hero-cta::after {
+  content: "🎯"; position: absolute; font-size: 120px; right: -20px; top: -10px;
+  opacity: 0.15; transform: rotate(15deg); pointer-events: none;
+}
+.hero-tag { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 8px; backdrop-filter: blur(4px); }
+.hero-cta h2 { font-size: 22px; margin-bottom: 6px; position: relative; z-index: 2; }
+.hero-cta p { font-size: 13px; font-weight: 500; opacity: 0.9; margin-bottom: 20px; position: relative; z-index: 2; line-height: 1.4; max-width: 85%; }
+.btn-hero {
+  background: white; color: var(--primary-dark); padding: 14px 20px; border-radius: 14px;
+  font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: space-between;
+  width: 100%; box-shadow: 0 8px 16px rgba(0,0,0,0.1); transition: 0.2s; position: relative; z-index: 2;
+}
+.btn-hero:active { transform: scale(0.97); }
+.btn-hero i { background: var(--primary-light); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: var(--primary); }
+
+.section-title { padding: 10px 20px 0; font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+
+.cat-list { padding: 12px 20px 40px; display: flex; flex-direction: column; gap: 12px; }
+.cat-card { background: var(--bg-surface); border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; transition: 0.3s var(--ease); opacity: 0; transform: translateY(20px); animation: fadeSlideIn 0.5s var(--ease-spring) forwards; }
 .cat-card.open { border-color: var(--primary); box-shadow: var(--shadow-md); }
 
-.cat-header { padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.cat-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 .cat-title { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 800; }
-.cat-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 18px; }
-.cat-arrow { color: var(--text-muted); transition: 0.3s var(--ease-spring); }
-.cat-card.open .cat-arrow { transform: rotate(180deg); color: var(--primary); }
+.cat-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 20px; }
+.cat-arrow { color: var(--text-muted); transition: 0.4s var(--ease-spring); }
+.cat-card.open .cat-arrow { transform: rotate(180deg); color: var(--primary); background: var(--primary-light); width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; }
 
 .cat-body { display: grid; grid-template-rows: 0fr; transition: 0.3s var(--ease); }
 .cat-card.open .cat-body { grid-template-rows: 1fr; }
@@ -100,7 +142,7 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 
 .prob-btn {
   width: 100%; text-align: left; padding: 14px 16px; border-radius: 14px; background: var(--bg-app);
-  border: 1px solid var(--border); font-size: 15px; font-weight: 700; color: var(--text-main);
+  border: 1px solid var(--border); font-size: 14px; font-weight: 700; color: var(--text-main);
   display: flex; justify-content: space-between; align-items: center; transition: 0.2s;
 }
 .prob-btn:active { transform: scale(0.98); background: var(--primary-light); border-color: var(--primary); }
@@ -108,6 +150,8 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .status-dot.easy { background: var(--success); box-shadow: 0 0 8px var(--success); }
 .status-dot.medium { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
 .status-dot.hard { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+
+@keyframes fadeSlideIn { to { opacity: 1; transform: translateY(0); } }
 
 /* ==========================================================================
    TRAINING VIEW (THE EXAM SIMULATOR)
@@ -117,33 +161,43 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .train-kicker { font-size: 11px; text-transform: uppercase; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; margin-bottom: 4px; }
 .train-title { font-size: 22px; margin-bottom: 16px; }
 
-.train-progress { display: flex; gap: 8px; margin-bottom: 12px; }
+.train-progress { display: flex; gap: 8px; margin-bottom: 16px; }
 .step-dot { flex: 1; height: 6px; border-radius: 99px; background: var(--border); transition: 0.4s var(--ease); }
 .step-dot.active { background: var(--primary); box-shadow: 0 0 10px rgba(37,99,235,0.4); }
 
-.instruction-box { background: var(--primary-light); border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 0 12px 12px 0; font-size: 14px; font-weight: 700; color: var(--primary-dark); display: flex; justify-content: space-between; align-items: center; }
+/* The Fixed Instruction Tab */
+.instruction-tab { 
+  background: var(--bg-app); border: 2px solid var(--border); border-radius: 16px; 
+  padding: 16px; margin: 0 20px 8px; display: flex; align-items: center; justify-content: space-between; 
+  box-shadow: var(--shadow-sm); transition: 0.3s;
+}
+.instruction-tab.highlight { border-color: var(--primary); background: var(--primary-light); }
+.inst-content h3 { font-size: 16px; color: var(--text-main); margin-bottom: 4px; }
+.inst-content p { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+.inst-counter { background: var(--surface); border: 2px solid var(--border); padding: 8px 14px; border-radius: 12px; font-weight: 900; font-size: 16px; color: var(--primary); }
 
-.card-grid { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.card-grid { padding: 12px 20px 40px; display: flex; flex-direction: column; gap: 12px; }
 .select-card {
   background: var(--bg-surface); border: 2px solid var(--border); border-radius: 16px;
   padding: 16px; cursor: pointer; transition: 0.2s var(--ease-spring); position: relative;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm); transform-origin: center;
 }
 .select-card:active { transform: scale(0.97); }
 .select-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: var(--shadow-glow); transform: translateY(-2px); }
-.card-text { font-size: 15px; font-weight: 600; line-height: 1.45; color: var(--text-main); }
+.card-text { font-size: 15px; font-weight: 600; line-height: 1.45; color: var(--text-main); transition: 0.3s; }
 .check-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s var(--ease-spring); }
 .select-card.selected .check-icon { opacity: 1; transform: scale(1); }
 .select-card.selected .card-text { padding-right: 24px; }
 
-/* Evaluation States */
-.select-card.eval-correct { border-color: var(--success); background: var(--success-light); }
+/* Advanced Evaluation Animation States */
+.select-card.evaluating { transform: scale(0.95); opacity: 0.8; }
+.select-card.eval-correct { border-color: var(--success); background: var(--success-light); transform: scale(1); opacity: 1; }
 .select-card.eval-correct .check-icon { color: var(--success-dark); opacity: 1; transform: scale(1); content: "\f00c"; }
-.select-card.eval-wrong { border-color: var(--danger); background: var(--danger-light); animation: shake 0.4s var(--ease-spring); }
+.select-card.eval-wrong { border-color: var(--danger); background: var(--danger-light); transform: scale(1); opacity: 1; animation: shake 0.4s var(--ease-spring); }
 .select-card.eval-wrong .check-icon { color: var(--danger-dark); opacity: 1; transform: scale(1); }
-.select-card.eval-missed { border-color: var(--warning); background: var(--warning-light); }
+.select-card.eval-missed { border-color: var(--warning); background: var(--warning-light); transform: scale(1); opacity: 1; }
 
-.explanation { margin-top: 12px; font-size: 13px; font-weight: 600; padding: 10px; border-radius: 8px; display: none; line-height: 1.4; }
+.explanation { margin-top: 12px; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 10px; display: none; line-height: 1.4; animation: fadeSlideIn 0.4s var(--ease-spring); }
 .eval-correct .explanation { display: block; background: rgba(16,185,129,0.15); color: var(--success-dark); }
 .eval-wrong .explanation { display: block; background: rgba(239,68,68,0.15); color: var(--danger-dark); }
 .eval-missed .explanation { display: block; background: rgba(245,158,11,0.15); color: var(--warning-dark); }
@@ -163,8 +217,8 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .score-text { font-size: 42px; font-weight: 900; letter-spacing: -2px; color: var(--text-main); }
 .score-text span { font-size: 20px; }
 
-.feedback-msg { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
-.coaching-msg { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; line-height: 1.4; }
+.feedback-msg { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+.coaching-msg { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; line-height: 1.4; padding: 0 20px; }
 .xp-reward { font-size: 24px; font-weight: 900; color: var(--success); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 30px;}
 
 .ampel-box { background: var(--bg-surface); border-radius: 20px; padding: 20px; border: 1px solid var(--border); margin: 0 20px 30px; text-align: center; }
@@ -178,14 +232,16 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .ampel-btn.selected { border-color: currentColor; box-shadow: var(--shadow-md); transform: translateY(-2px); }
 
 /* ==========================================================================
-   ANIMATIONS
+   ANIMATIONS & EFFECTS
    ========================================================================== */
 @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-.shake { animation: shake 0.4s var(--ease-spring); }
 
 .floating-xp { position: fixed; font-size: 28px; font-weight: 900; color: var(--success); pointer-events: none; z-index: 9999; text-shadow: 0 4px 10px rgba(16,185,129,0.4); animation: floatUp 1s var(--ease) forwards; }
 .floating-xp.negative { color: var(--danger); text-shadow: 0 4px 10px rgba(239,68,68,0.4); }
 @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.2); } }
+
+.toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: white; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 800; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s var(--ease-spring); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -202,13 +258,23 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
   </header>
 
   <!-- =========================================================
-       VIEW: HOME (CATEGORIES)
+       VIEW: HOME (CATEGORIES & HERO)
        ========================================================= -->
   <main class="view active" id="view-home">
     <div class="home-header">
       <h1>Pflegeplanung<br>Examenstraining</h1>
-      <p>Wähle ein Pflegeproblem. Trainiere die korrekte Formulierung von Zielen und Maßnahmen nach Prüfungsstandard.</p>
     </div>
+
+    <div class="hero-cta" style="animation-delay: 0.1s;">
+      <div class="hero-tag">Tages-Challenge</div>
+      <h2>Akutes Abdomen</h2>
+      <p>Trainiere die exakte Formulierung von Pflegezielen und Maßnahmen unter Prüfungsbedingungen.</p>
+      <button class="btn-hero" onclick="Trainer.startRandom()">
+        Fall starten <i class="fa-solid fa-play"></i>
+      </button>
+    </div>
+
+    <div class="section-title" style="animation-delay: 0.2s; opacity: 0; animation: fadeSlideIn 0.6s var(--ease-spring) forwards;">Katalog nach Themen</div>
     <div class="cat-list" id="cat-container">
       <!-- Injected via JS -->
     </div>
@@ -217,7 +283,7 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
   <!-- =========================================================
        VIEW: TRAINING
        ========================================================= -->
-  <main class="view" id="view-train">
+  <main class="view" id="view-train" style="padding-bottom: 90px;">
     <div class="train-header">
       <button class="back-btn" onclick="App.goHome()"><i class="fa-solid fa-chevron-left"></i> Übersicht</button>
       <div class="train-progress">
@@ -227,10 +293,15 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
       </div>
       <div class="train-kicker" id="train-category">Kategorie</div>
       <h2 class="train-title" id="train-title">Pflegeproblem</h2>
-      <div class="instruction-box" id="train-instruction">
-        <span>Wähle 2 Ziele aus.</span>
-        <span id="train-counter">0/2</span>
+    </div>
+
+    <!-- FIXED INSTRUCTION TAB -->
+    <div class="instruction-tab" id="inst-tab">
+      <div class="inst-content">
+        <h3 id="inst-heading">Schritt 1: Pflegeziele</h3>
+        <p id="inst-sub">Wähle exakt 2 passende Ziele.</p>
       </div>
+      <div class="inst-counter" id="train-counter">0/2</div>
     </div>
     
     <div class="card-grid" id="train-cards">
@@ -238,7 +309,7 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
     </div>
 
     <div class="train-footer">
-      <button class="btn-main" id="btn-submit" disabled onclick="Trainer.submitStep()">Prüfen <i class="fa-solid fa-check"></i></button>
+      <button class="btn-main" id="btn-submit" disabled onclick="Trainer.submitStep()">Auswahl prüfen <i class="fa-solid fa-check"></i></button>
     </div>
   </main>
 
@@ -266,9 +337,21 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 
     <div style="padding: 0 20px;">
       <button class="btn-main" style="margin-bottom: 12px; background: var(--bg-surface); color: var(--text-main); border: 2px solid var(--border); box-shadow: none;" onclick="Trainer.retry()">Nochmal üben <i class="fa-solid fa-rotate-right"></i></button>
-      <button class="btn-main" onclick="App.goHome()">Zurück zur Übersicht <i class="fa-solid fa-list"></i></button>
     </div>
   </main>
+
+  <!-- TOAST -->
+  <div class="toast" id="toastMsg">In Entwicklung</div>
+
+  <!-- =========================================================
+       BOTTOM NAVIGATION (APP STYLE)
+       ========================================================= -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item" onclick="App.mockNav('Dashboard')"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" class="nav-item" onclick="App.mockNav('Katalog')"><i class="fa-solid fa-layer-group"></i><span>Katalog</span></a>
+    <a href="#" class="nav-item locked" onclick="App.mockNav('Spiel')"><i class="fa-solid fa-gamepad"></i><span>Spiel</span></a>
+    <a href="#" class="nav-item active" onclick="App.nav('view-home')"><i class="fa-solid fa-clipboard-list"></i><span>Pflegeplanung</span></a>
+  </nav>
 
 </div>
 
@@ -336,62 +419,16 @@ const DATA = [
       { id: "m7", correct: false, text: "Regelmäßig atmen lassen.", explanation: "Ergibt keinen pflegerischen Sinn." },
       { id: "m8", correct: false, text: "Pfk lagert PE flach.", explanation: "Kontraindiziert bei Atemnot!" }
     ]
-  },
-  {
-    id: "p4", categoryId: "c2", categoryTitle: "Mobilität / Sturz", categoryIcon: "🚶",
-    title: "Sturzgefahr",
-    goals: [
-      { id: "g1", correct: true, text: "PE bleibt während des stationären Aufenthalts sturzfrei.", explanation: "Klassisches, klares Erhaltungsziel." },
-      { id: "g2", correct: true, text: "PE fordert vor jedem Aufstehen aktiv Hilfe durch Klingeln an.", explanation: "Realistisches Verhaltensziel." },
-      { id: "g3", correct: false, text: "PE fällt nicht mehr so oft.", explanation: "Schwammig und inakzeptabel als Ziel." },
-      { id: "g4", correct: false, text: "Bettgitter hochziehen.", explanation: "Maßnahme (und freiheitsentziehend ohne Beschluss)." }
-    ],
-    measures: [
-      { id: "m1", correct: true, text: "Pfk stellt das Bett nach jeder Pflegehandlung auf die niedrigste Stufe zur Sturzprävention.", explanation: "Wichtige Umgebungsanpassung mit klarem Zeitpunkt." },
-      { id: "m2", correct: true, text: "Pfk reicht PE zu jeder Mobilisation den Rollator zur sicheren Fortbewegung.", explanation: "Hilfsmitteleinsatz konkretisiert." },
-      { id: "m3", correct: true, text: "Pfk stellt die Klingel jederzeit in greifbare Nähe des PE zur schnellen Rufmöglichkeit.", explanation: "Standardmaßnahme präzise formuliert." },
-      { id: "m4", correct: true, text: "Pfk leitet PE im FD an, festes und geschlossenes Schuhwerk vor dem Aufstehen anzuziehen.", explanation: "Edukative Maßnahme." },
-      { id: "m5", correct: true, text: "Pfk begleitet PE nachts bei jedem Toilettengang zur Gangsicherung.", explanation: "Wer+Wann+Warum exakt." },
-      { id: "m6", correct: false, text: "Pfk passt auf.", explanation: "Völlig ungenügend für eine Pflegeplanung." },
-      { id: "m7", correct: false, text: "PE wird fixiert.", explanation: "Darf nicht als Standard-Sturzprophylaxe geplant werden." },
-      { id: "m8", correct: false, text: "Boden trocken halten.", explanation: "Wer macht es? Wann? Formulierung unvollständig." }
-    ]
-  },
-  {
-    id: "p5", categoryId: "c4", categoryTitle: "Ernährung / Flüssigkeit", categoryIcon: "💧",
-    title: "Dehydratation",
-    goals: [
-      { id: "g1", correct: true, text: "PE nimmt täglich mindestens 1.500 ml Flüssigkeit (oral) zu sich.", explanation: "SMART formuliertes und messbares Ziel." },
-      { id: "g2", correct: true, text: "Hautturgor des PE ist innerhalb von 48 Stunden wieder elastisch.", explanation: "Klinisch messbares Nahziel." },
-      { id: "g3", correct: false, text: "PE trinkt genug.", explanation: "Nicht messbar. Was ist 'genug'?" },
-      { id: "g4", correct: false, text: "Infusion anhängen.", explanation: "Das ist eine ärztlich delegierte Maßnahme." }
-    ],
-    measures: [
-      { id: "m1", correct: true, text: "Pfk führt tägl. im FD/SD/ND eine strenge Ein- und Ausfuhrbilanzierung zur Überwachung durch.", explanation: "Korrekte Formulierung für Bilanzierung." },
-      { id: "m2", correct: true, text: "Pfk reicht zu jeder Mahlzeit das Lieblingsgetränk (Apfelschorle) zur Trinkförderung.", explanation: "Patientenorientiert und konkret." },
-      { id: "m3", correct: true, text: "Pfk stellt stündlich ein gefülltes 200ml Glas in Sichtweite zur Erinnerung an.", explanation: "Zeitintervall und Menge definiert." },
-      { id: "m4", correct: true, text: "Pfk kontrolliert 1x tägl. im FD den Hautturgor am Sternum zur Exsikkose-Prüfung.", explanation: "Klinisches Assessment." },
-      { id: "m5", correct: true, text: "Pfk hängt im FD die ärztlich verordnete s.c. Infusion (1000ml Sterofundin) an.", explanation: "Delegierbare Maßnahme korrekt eingebaut." },
-      { id: "m6", correct: false, text: "Pfk erinnert PE ans Trinken.", explanation: "Wann? Wie oft? Zu vage." },
-      { id: "m7", correct: false, text: "Viel Wasser hinstellen.", explanation: "Nicht pflegefachlich formuliert." },
-      { id: "m8", correct: false, text: "Pfk zwingt PE zum Trinken.", explanation: "Ethisch und fachlich inakzeptabel." }
-    ]
   }
-]; // Simplified to 5 items for token length, logic handles N items
+];
 
 /* ==========================================================================
    2. STATE & STORAGE
    ========================================================================== */
-const STORAGE_KEY = 'pfp.exam.v1';
+const STORAGE_KEY = 'pfp.pflegeplanung.v1';
 const State = {
-  xp: 0, streak: 0,
-  history: {}, // { probId: { status: 'easy' } }
-  
-  // View State
-  activeProb: null,
-  step: 1,
-  selGoals: [],
-  selMeasures: []
+  xp: 0, streak: 0, history: {}, 
+  activeProb: null, step: 1, selGoals: [], selMeasures: []
 };
 
 function loadData() {
@@ -424,15 +461,28 @@ const App = {
   nav(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+    
+    // Update bottom nav highlighting
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    if(id === 'view-home' || id === 'view-train' || id === 'view-result') {
+        const pfpTab = document.querySelectorAll('.nav-item')[3];
+        if(pfpTab) pfpTab.classList.add('active');
+    }
     window.scrollTo(0,0);
   },
+  mockNav(name) {
+    const toast = document.getElementById("toastMsg");
+    toast.textContent = `${name} Modul (kommt bald)`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+    haptic(15);
+  },
   goHome() {
-    this.renderHome(); // Refresh statuses
+    this.renderHome(); 
     this.nav('view-home');
   },
   renderHome() {
     const container = document.getElementById('cat-container');
-    // Group categories
     const groups = {};
     DATA.forEach(p => {
       if(!groups[p.categoryId]) groups[p.categoryId] = { title: p.categoryTitle, icon: p.categoryIcon, problems: [] };
@@ -440,10 +490,11 @@ const App = {
     });
 
     let html = '';
+    let delay = 0.3;
     for(const key in groups) {
       const g = groups[key];
       html += `
-        <div class="cat-card">
+        <div class="cat-card" style="opacity: 0; animation: fadeSlideIn 0.5s var(--ease-spring) forwards; animation-delay: ${delay}s;">
           <div class="cat-header" onclick="this.parentElement.classList.toggle('open'); haptic(10);">
             <div class="cat-title"><div class="cat-icon">${g.icon}</div> ${g.title}</div>
             <i class="fa-solid fa-chevron-down cat-arrow"></i>
@@ -465,6 +516,7 @@ const App = {
           </div>
         </div>
       `;
+      delay += 0.1;
     }
     container.innerHTML = html;
   }
@@ -474,13 +526,15 @@ const App = {
    4. TRAINING ENGINE
    ========================================================================== */
 const Trainer = {
+  startRandom() {
+    const randomProb = DATA[Math.floor(Math.random() * DATA.length)];
+    this.start(randomProb.id);
+  },
+
   start(id) {
     State.activeProb = DATA.find(p => p.id === id);
-    State.step = 1;
-    State.selGoals = [];
-    State.selMeasures = [];
+    State.step = 1; State.selGoals = []; State.selMeasures = [];
     
-    // Shuffle arrays
     State.activeProb.sGoals = [...State.activeProb.goals].sort(() => Math.random() - 0.5);
     State.activeProb.sMeasures = [...State.activeProb.measures].sort(() => Math.random() - 0.5);
 
@@ -494,11 +548,29 @@ const Trainer = {
   renderStep() {
     const isStep1 = State.step === 1;
     
-    // Update Header
+    // UI Update Header & Instruction Tab
     document.getElementById('dot-1').className = `step-dot ${isStep1 ? 'active' : 'active'}`;
     document.getElementById('dot-2').className = `step-dot ${isStep1 ? '' : 'active'}`;
-    document.getElementById('train-counter').innerText = isStep1 ? `${State.selGoals.length}/2` : `${State.selMeasures.length}/5`;
-    document.querySelector('#train-instruction span').innerText = isStep1 ? "Wähle exakt 2 Ziele aus." : "Wähle exakt 5 Maßnahmen.";
+    
+    const instTab = document.getElementById('inst-tab');
+    const instHeading = document.getElementById('inst-heading');
+    const instSub = document.getElementById('inst-sub');
+    const counter = document.getElementById('train-counter');
+
+    instTab.classList.remove('highlight');
+    // Force reflow for animation
+    void instTab.offsetWidth;
+    
+    if(isStep1) {
+        instHeading.innerText = "Schritt 1: Pflegeziele";
+        instSub.innerText = "Wähle exakt 2 passende Ziele aus.";
+        counter.innerText = `${State.selGoals.length}/2`;
+    } else {
+        instHeading.innerText = "Schritt 2: Pflegemaßnahmen";
+        instSub.innerText = "WER + WANN + WIE + WARUM (Wähle 5).";
+        counter.innerText = `${State.selMeasures.length}/5`;
+    }
+    instTab.classList.add('highlight');
 
     // Render Cards
     const items = isStep1 ? State.activeProb.sGoals : State.activeProb.sMeasures;
@@ -533,12 +605,18 @@ const Trainer = {
         document.getElementById(`card-${id}`).classList.add('shake');
         setTimeout(()=> document.getElementById(`card-${id}`).classList.remove('shake'), 400);
         haptic([30,30]);
-        return; // limit reached
+        return; 
       }
       arr.push(id);
       haptic(15);
     }
-    this.renderStep(); // Re-render to update classes and counter
+    
+    // Quick DOM update instead of full re-render for better tactile feel
+    const card = document.getElementById(`card-${id}`);
+    card.classList.toggle('selected');
+    document.getElementById('train-counter').innerText = `${arr.length}/${limit}`;
+    
+    this.checkButtonState();
   },
 
   checkButtonState() {
@@ -556,73 +634,94 @@ const Trainer = {
     }
   },
 
+  // STAGGERED VALIDATION CHECK
   submitStep() {
-    haptic(40);
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true; // Lock button
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Werte aus...`;
+
     const isStep1 = State.step === 1;
     const items = isStep1 ? State.activeProb.sGoals : State.activeProb.sMeasures;
     const selectedArr = isStep1 ? State.selGoals : State.selMeasures;
     
     let allCorrect = true;
+    let delay = 0;
 
-    // Evaluate
-    items.forEach(item => {
+    // Staggered Animation Logic
+    items.forEach((item, index) => {
       const card = document.getElementById(`card-${item.id}`);
       const isSelected = selectedArr.includes(item.id);
       
-      // Remove basic selected class for eval classes
-      card.classList.remove('selected');
       card.style.pointerEvents = 'none'; // Lock card
 
-      if(isSelected && item.correct) {
-        card.classList.add('eval-correct');
-        addXP(isStep1 ? 10 : 8);
-      } else if (isSelected && !item.correct) {
-        card.classList.add('eval-wrong');
-        addXP(isStep1 ? -5 : -4);
-        allCorrect = false;
-      } else if (!isSelected && item.correct) {
-        card.classList.add('eval-missed');
-        allCorrect = false;
-      }
+      setTimeout(() => {
+        card.classList.remove('selected');
+        card.classList.add('evaluating');
+        
+        setTimeout(() => {
+            card.classList.remove('evaluating');
+            if(isSelected && item.correct) {
+                card.classList.add('eval-correct');
+                addXP(isStep1 ? 10 : 8);
+                haptic(30);
+            } else if (isSelected && !item.correct) {
+                card.classList.add('eval-wrong');
+                addXP(isStep1 ? -5 : -4);
+                allCorrect = false;
+                haptic([40, 40]);
+            } else if (!isSelected && item.correct) {
+                card.classList.add('eval-missed');
+                allCorrect = false;
+                haptic(20);
+            }
+        }, 150); // Small pop delay
+      }, delay);
+      
+      delay += 300; // 300ms between each card check
     });
 
-    if(allCorrect) {
-      State.streak++;
-      addXP(10); // Bonus
-    } else {
-      State.streak = 0;
-    }
-    saveData();
+    // After all cards are checked
+    setTimeout(() => {
+        if(allCorrect) {
+          State.streak++;
+          addXP(10); // Bonus
+        } else {
+          State.streak = 0;
+        }
+        saveData();
 
-    // Update Button for next phase
-    const btn = document.getElementById('btn-submit');
-    if(isStep1) {
-      btn.innerHTML = `Weiter zu Maßnahmen <i class="fa-solid fa-arrow-right"></i>`;
-      btn.onclick = () => { State.step = 2; Trainer.renderStep(); };
-    } else {
-      btn.innerHTML = `Ergebnis anzeigen <i class="fa-solid fa-flag-checkered"></i>`;
-      btn.onclick = () => { Trainer.finish(); };
-    }
+        // Update Button for next phase
+        btn.disabled = false;
+        if(isStep1) {
+          btn.innerHTML = `Weiter zu Maßnahmen <i class="fa-solid fa-arrow-right"></i>`;
+          btn.onclick = () => { 
+              State.step = 2; 
+              document.getElementById('train-cards').innerHTML = ''; // Clear for animation
+              window.scrollTo(0,0);
+              Trainer.renderStep(); 
+          };
+        } else {
+          btn.innerHTML = `Ergebnis anzeigen <i class="fa-solid fa-flag-checkered"></i>`;
+          btn.onclick = () => { Trainer.finish(); };
+        }
+    }, delay + 200);
   },
 
   finish() {
     App.nav('view-result');
     document.getElementById('dot-3').classList.add('active');
     
-    // Calculate Score
-    let maxCorrect = 7; // 2 goals + 5 measures
+    let maxCorrect = 7; 
     let actualCorrect = 0;
     
     State.activeProb.goals.forEach(g => { if(g.correct && State.selGoals.includes(g.id)) actualCorrect++; });
     State.activeProb.measures.forEach(m => { if(m.correct && State.selMeasures.includes(m.id)) actualCorrect++; });
-    // Minus wrongs
     State.activeProb.goals.forEach(g => { if(!g.correct && State.selGoals.includes(g.id)) actualCorrect--; });
     State.activeProb.measures.forEach(m => { if(!m.correct && State.selMeasures.includes(m.id)) actualCorrect--; });
     
     if(actualCorrect < 0) actualCorrect = 0;
     let pct = Math.round((actualCorrect / maxCorrect) * 100);
 
-    // UI Updates
     document.getElementById('res-score').innerText = pct;
     const circle = document.getElementById('res-circle');
     const fb = document.getElementById('res-feedback');
@@ -642,10 +741,9 @@ const Trainer = {
       circle.className = "score-circle";
       fb.innerText = "Noch unsicher";
       fb.style.color = "var(--danger)";
-      coach.innerText = "Einige Pflegemaßnahmen waren nicht messbar oder falsch formuliert. Übe diesen Fall nochmal.";
+      coach.innerText = "Einige Maßnahmen waren nicht messbar oder ungenau formuliert. Übe diesen Fall nochmal.";
     }
 
-    // Reset Ampel buttons visually
     document.querySelectorAll('.ampel-btn').forEach(b => b.classList.remove('selected'));
     haptic([40,50,40]);
   },
