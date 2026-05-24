@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-/* ==========================================================================
+/* ========================================================================== 
    DESIGN SYSTEM & VARIABLES
    ========================================================================== */
 :root {
@@ -16,23 +16,23 @@
   --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
   --bg-app: #f8fafc; --bg-surface: #ffffff;
   --text-main: #0f172a; --text-muted: #64748b; --border: #e2e8f0;
-  
   --shadow-sm: 0 2px 4px rgba(15,23,42,0.04);
   --shadow-md: 0 8px 16px rgba(15,23,42,0.08);
   --shadow-lg: 0 20px 40px rgba(37,99,235,0.12);
   --shadow-glow: 0 0 20px rgba(37,99,235,0.25);
-  
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --shutter-width: 55px;
 }
 
-/* ==========================================================================
+/* ========================================================================== 
    RESET & WRAPPER
    ========================================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; }
 body { font-family: 'Inter', sans-serif; background: #cbd5e1; color: var(--text-main); display: flex; justify-content: center; height: 100vh; overflow: hidden; }
 button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
+a { color: inherit; }
 h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 
 .app-wrapper {
@@ -41,7 +41,7 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
   position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.15); overflow: hidden;
 }
 
-/* ==========================================================================
+/* ========================================================================== 
    TOPBAR
    ========================================================================== */
 .topbar {
@@ -53,94 +53,108 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .brand { font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
 .brand i { color: var(--primary); font-size: 22px; }
 .stats { display: flex; gap: 8px; }
-.stat-pill { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm); }
+.stat-pill { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm); white-space: nowrap; }
 .stat-pill .fa-bolt { color: var(--primary); }
 
-/* ==========================================================================
-   ROUTING VIEWS (Flexbox driven for no glitching)
+/* ========================================================================== 
+   ROUTING VIEWS
    ========================================================================== */
-#content-area { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; }
-
-.view { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; opacity: 0; transform: translateY(10px); transition: 0.4s var(--ease); }
+#content-area { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; min-height: 0; }
+.view { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; opacity: 0; transform: translateY(10px); transition: 0.4s var(--ease); min-height: 0; }
 .view.active { display: flex; flex-direction: column; opacity: 1; transform: translateY(0); }
 
-/* ==========================================================================
-   CATALOG VIEW (Selection)
+/* ========================================================================== 
+   CATALOG VIEW
    ========================================================================== */
-.view-header { padding: 24px 20px 16px; flex-shrink: 0; }
+.view-header { padding: 24px 20px 14px; flex-shrink: 0; }
 .view-header h1 { font-size: 26px; line-height: 1.2; margin-bottom: 8px; }
-.view-header p { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1.4; }
-
-.catalog-list { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px; }
-.topic-card {
-  background: var(--bg-surface); border: 1px solid var(--border); border-radius: 20px;
-  padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
-  box-shadow: var(--shadow-sm); cursor: pointer; transition: 0.2s var(--ease-spring);
+.view-header p { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1.45; }
+.guidance-card {
+  margin: 0 20px 14px; padding: 14px 14px; border-radius: 18px;
+  background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+  border: 1px solid rgba(37,99,235,0.14); box-shadow: var(--shadow-sm);
+  display: flex; gap: 12px; align-items: flex-start;
 }
-.topic-card:active { transform: scale(0.97); border-color: var(--primary); box-shadow: var(--shadow-glow); }
-.topic-info { display: flex; align-items: center; gap: 14px; }
-.topic-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 20px; }
-.topic-title h3 { font-size: 16px; margin-bottom: 4px; }
-.topic-title p { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.topic-arrow { color: var(--primary); font-size: 16px; width: 32px; height: 32px; background: var(--primary-light); border-radius: 50%; display: grid; place-items: center; }
+.guidance-card i { color: var(--primary); font-size: 18px; margin-top: 2px; }
+.guidance-card strong { display:block; font-size: 13px; margin-bottom: 3px; }
+.guidance-card span { display:block; font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
+.catalog-list { padding: 0 20px 28px; display: flex; flex-direction: column; gap: 12px; }
 
-/* ==========================================================================
-   SHUTTER INTERFACE (The Magic)
+.category-card {
+  background: var(--bg-surface); border: 1px solid var(--border); border-radius: 22px;
+  box-shadow: var(--shadow-sm); overflow: hidden; transition: 0.25s var(--ease);
+}
+.category-card.open { border-color: rgba(37,99,235,0.25); box-shadow: var(--shadow-md); }
+.category-toggle {
+  width: 100%; padding: 16px; display: flex; align-items: center; justify-content: space-between;
+  text-align: left; color: var(--text-main);
+}
+.category-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.category-icon {
+  width: 44px; height: 44px; border-radius: 14px; background: var(--primary-light); color: var(--primary);
+  display: grid; place-items: center; font-size: 20px; flex-shrink: 0;
+}
+.category-title { min-width: 0; }
+.category-title h3 { font-size: 16px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.category-title p { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-top: 4px; }
+.category-chevron {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--bg-app); color: var(--primary);
+  display: grid; place-items: center; transition: 0.3s var(--ease-spring); flex-shrink: 0;
+}
+.category-card.open .category-chevron { transform: rotate(180deg); background: var(--primary-light); }
+.problem-list { max-height: 0; overflow: hidden; transition: max-height 0.45s var(--ease); border-top: 1px solid transparent; }
+.category-card.open .problem-list { border-top-color: var(--border); }
+.problem-list-inner { padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.topic-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 16px;
+  padding: 13px 14px; display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.03); cursor: pointer; transition: 0.2s var(--ease-spring);
+}
+.topic-card:active { transform: scale(0.98); border-color: var(--primary); box-shadow: var(--shadow-glow); }
+.topic-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.topic-icon { width: 38px; height: 38px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+.topic-title { min-width: 0; }
+.topic-title h3 { font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topic-title p { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+.topic-arrow { color: var(--primary); font-size: 13px; width: 28px; height: 28px; background: var(--primary-light); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+
+/* ========================================================================== 
+   SHUTTER INTERFACE
    ========================================================================== */
 .shutter-header { padding: 12px 20px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0;}
 .btn-back { width: 36px; height: 36px; border-radius: 10px; background: var(--bg-app); color: var(--text-main); display: grid; place-items: center; font-size: 14px; transition: 0.2s; }
 .btn-back:active { transform: scale(0.9); background: var(--border); }
 .shutter-title-text { font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.shutter-wrapper { flex: 1; position: relative; overflow: hidden; }
-.shutter-grid {
-  display: grid; height: 100%; width: 100%;
-  grid-template-columns: 1fr var(--shutter-width) var(--shutter-width);
-  transition: grid-template-columns 0.6s var(--ease);
-}
-
+.shutter-wrapper { flex: 1; position: relative; overflow: hidden; min-height: 0; }
+.shutter-grid { display: grid; height: 100%; width: 100%; grid-template-columns: 1fr var(--shutter-width) var(--shutter-width); transition: grid-template-columns 0.6s var(--ease); }
 .col { border-right: 1px solid var(--border); background: var(--bg-app); display: flex; flex-direction: column; overflow: hidden; position: relative; }
 .col:last-child { border-right: none; }
-
-.col-header {
-  height: 100%; width: var(--shutter-width); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-  background: white; color: var(--text-muted); cursor: pointer; transition: 0.3s; padding: 20px 0;
-}
+.col-header { height: 100%; width: var(--shutter-width); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: white; color: var(--text-muted); cursor: pointer; transition: 0.3s; padding: 20px 0; }
 .col:hover .col-header { background: var(--primary-light); color: var(--primary); }
 .col-header-text { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 800; font-size: 15px; letter-spacing: 1px; white-space: nowrap; }
 .col-header i { font-size: 20px; transform: rotate(0deg); }
-
 .click-hint { font-size: 10px; text-transform: uppercase; font-weight: 900; color: var(--primary); writing-mode: vertical-rl; transform: rotate(180deg); margin-top: auto; opacity: 0; transition: 0.3s; }
 .col:not(.active) .click-hint { opacity: 1; animation: pulseHint 2s infinite; }
 @keyframes pulseHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
-
 .col.active { background: var(--bg-app); cursor: default; }
-.col.active .col-header {
-  height: auto; width: 100%; flex-direction: row; writing-mode: horizontal-tb; transform: none;
-  justify-content: flex-start; padding: 20px; background: transparent; color: var(--primary);
-  border-bottom: 2px solid var(--primary);
-}
+.col.active .col-header { height: auto; width: 100%; flex-direction: row; writing-mode: horizontal-tb; transform: none; justify-content: flex-start; padding: 20px; background: transparent; color: var(--primary); border-bottom: 2px solid var(--primary); }
 .col.active .col-header-text { writing-mode: horizontal-tb; transform: none; font-size: 20px; }
-
-.col-content { flex: 1; padding: 20px; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease); padding-bottom: 40px;}
+.col-content { flex: 1; padding: 20px; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease); padding-bottom: 40px; }
 .col.active .col-content { opacity: 1; pointer-events: auto; }
-
 .rich-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); opacity: 0; transform: translateY(15px); }
 .col.active .rich-card { animation: slideUpFade 0.5s var(--ease-spring) forwards; }
 .col.active .rich-card:nth-child(1) { animation-delay: 0.1s; }
-.col.active .rich-card:nth-child(2) { animation-delay: 0.2s; }
-.col.active .rich-card:nth-child(3) { animation-delay: 0.3s; }
-.col.active .rich-card:nth-child(4) { animation-delay: 0.4s; }
-.col.active .rich-card:nth-child(5) { animation-delay: 0.5s; }
-
+.col.active .rich-card:nth-child(2) { animation-delay: 0.18s; }
+.col.active .rich-card:nth-child(3) { animation-delay: 0.26s; }
+.col.active .rich-card:nth-child(4) { animation-delay: 0.34s; }
+.col.active .rich-card:nth-child(5) { animation-delay: 0.42s; }
 @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
-
 .rich-card-title { font-size: 11px; text-transform: uppercase; font-weight: 900; color: var(--primary); margin-bottom: 6px; letter-spacing: 0.5px; }
 .rich-card-text { font-size: 14px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
 .rich-card-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 14px; }
 
-/* ==========================================================================
-   NEW ANIMATED BOTTOM NAVIGATION (FLEX ALIGNED)
+/* ========================================================================== 
+   APP BOTTOM NAVIGATION - FUNCTIONAL LINKS
    ========================================================================== */
 .nav-bottom {
   flex-shrink: 0; width: 100%; height: 85px;
@@ -149,135 +163,74 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
   align-items: flex-end; padding-bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 1000;
   transition: height 0.4s var(--ease-spring), padding 0.4s var(--ease-spring);
 }
-
-/* Compact Nav State */
 .nav-bottom.compact { height: 60px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
 .nav-bottom.compact span { opacity: 0; height: 0; margin-top: 0; transform: scale(0.5); pointer-events: none; }
 .nav-bottom.compact .nav-item { padding-top: 0; }
 .nav-bottom.compact .nav-item.active .icon-wrapper { transform: translateY(-2px) scale(1.1); }
 .nav-bottom.compact .nav-item.active::before { transform: translate(-50%, -14px) scale(0.8); }
-
-/* Normal Nav Items */
-.nav-item {
-  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: var(--text-muted); text-decoration: none; width: 20%; height: 100%;
-  cursor: pointer; -webkit-tap-highlight-color: transparent; padding-top: 8px;
-}
-.nav-item .icon-wrapper {
-  position: relative; width: 44px; height: 32px; display: flex; justify-content: center; align-items: center;
-  transition: 0.4s var(--ease-spring); z-index: 2; border-radius: 50%;
-}
+.nav-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; width: 20%; height: 100%; cursor: pointer; padding-top: 8px; }
+.nav-item .icon-wrapper { position: relative; width: 44px; height: 32px; display: flex; justify-content: center; align-items: center; transition: 0.4s var(--ease-spring); z-index: 2; border-radius: 50%; }
 .nav-item i { font-size: 22px; transition: 0.4s var(--ease-spring); color: inherit; }
-.nav-item span {
-  font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8;
-  transition: 0.4s var(--ease-spring); color: inherit;
-}
-
-/* Background Blob for Active State */
-.nav-item::before {
-  content: ''; position: absolute; top: 12px; left: 50%; transform: translate(-50%, 0) scale(0);
-  width: 44px; height: 44px; background: var(--primary-light); border-radius: 50%;
-  opacity: 0; transition: 0.4s var(--ease-spring); z-index: 1;
-}
-
-/* Active State Styles */
+.nav-item span { font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8; transition: 0.4s var(--ease-spring); color: inherit; }
+.nav-item::before { content: ''; position: absolute; top: 12px; left: 50%; transform: translate(-50%, 0) scale(0); width: 44px; height: 44px; background: var(--primary-light); border-radius: 50%; opacity: 0; transition: 0.4s var(--ease-spring); z-index: 1; }
 .nav-item.active { color: var(--primary); }
 .nav-item.active .icon-wrapper { transform: translateY(-8px); }
 .nav-item.active i { transform: scale(1.15); }
 .nav-item.active span { opacity: 1; transform: translateY(-4px); }
 .nav-item.active::before { transform: translate(-50%, -20px) scale(1); opacity: 1; }
-
-/* --- THE CTA STATE ("Üben") --- */
-.nav-cta .cta-wrapper {
-  position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
-  width: 62px; height: 62px; background: linear-gradient(135deg, var(--primary), var(--pink));
-  color: white; font-size: 26px; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
-  border: 5px solid var(--bg-app); animation: floatCTA 3s ease-in-out infinite; z-index: 10;
-  border-radius: 50%; display: flex; justify-content: center; align-items: center;
-  transition: all 0.6s var(--ease-spring);
-}
+.nav-cta .cta-wrapper { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 62px; height: 62px; background: linear-gradient(135deg, var(--primary), var(--pink)); color: white; font-size: 26px; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4); border: 5px solid var(--bg-app); animation: floatCTA 3s ease-in-out infinite; z-index: 10; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: all 0.6s var(--ease-spring); }
 .nav-cta span { margin-top: 36px; transition: 0.6s var(--ease-spring); }
 .nav-cta:active .cta-wrapper { transform: translate(-50%, 4px) scale(0.92); box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); animation: none; }
-
-@keyframes floatCTA {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-6px); }
-}
-
-/* --- NORMALIZED CTA (After 10 Seconds) --- */
-.nav-cta.normalized .cta-wrapper {
-  position: relative; top: 0; left: 0; transform: none; width: 44px; height: 32px;
-  background: transparent; color: inherit; font-size: 22px; box-shadow: none; border-width: 0; animation: none;
-}
+@keyframes floatCTA { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+.nav-cta.normalized .cta-wrapper { position: relative; top: 0; left: 0; transform: none; width: 44px; height: 32px; background: transparent; color: inherit; font-size: 22px; box-shadow: none; border-width: 0; animation: none; }
 .nav-cta.normalized span { margin-top: 4px; }
 .nav-cta.normalized.active .cta-wrapper { transform: translateY(-8px); color: var(--primary); }
 .nav-cta.normalized.active i { transform: scale(1.15); }
-
-/* Toast */
 .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: white; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 800; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s var(--ease-spring); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
 </style>
 </head>
 <body>
-
 <div class="app-wrapper">
-
-  <!-- TOPBAR -->
   <header class="topbar">
     <div class="brand"><i class="fa-solid fa-clipboard-list"></i> PflegefachProfi</div>
-    <div class="stats">
-      <div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span>240 XP</span></div>
-    </div>
+    <div class="stats"><div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span>240 XP</span></div></div>
   </header>
 
   <div id="content-area">
-    <!-- VIEW 1: CATALOG -->
     <main class="view active" id="view-catalog">
       <div class="view-header">
         <h1>Pflegeplanung<br>Bibliothek</h1>
-        <p>Wähle ein pflegerisches Problem, um Ziele und Maßnahmen nach Prüfungsstandard zu analysieren.</p>
+        <p>Wähle zuerst eine Hauptkategorie. Danach öffnest du ein konkretes Pflegeproblem mit Problem, Zielen und Maßnahmen.</p>
       </div>
-      <div class="catalog-list" id="catalog-container">
-        <!-- Injected via JS -->
+      <div class="guidance-card">
+        <i class="fa-solid fa-compass"></i>
+        <div><strong>So nutzt du diese Seite</strong><span>1. Kategorie öffnen · 2. Pflegeproblem wählen · 3. Pflegeproblem, Ziele und Maßnahmen nacheinander prüfen.</span></div>
       </div>
+      <div class="catalog-list" id="catalog-container"></div>
     </main>
 
-    <!-- VIEW 2: SHUTTER INTERFACE -->
     <main class="view" id="view-shutter" style="padding-bottom: 0;">
       <div class="shutter-header">
-        <button class="btn-back" onclick="App.nav('view-catalog', 3)"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="btn-back" type="button" onclick="App.nav('view-catalog', 3)" aria-label="Zurück zur Pflegeplanung"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="shutter-title-text" id="shutter-main-title">Titel</div>
       </div>
-      
       <div class="shutter-wrapper">
         <div class="shutter-grid" id="shutter-grid">
-          <!-- Column 1: Problem -->
           <div class="col active" data-col="1" onclick="Shutter.focus(1)">
-            <div class="col-header">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              <span class="col-header-text">Pflegeproblem</span>
-              <div class="click-hint">Tippe zum Öffnen</div>
-            </div>
+            <div class="col-header"><i class="fa-solid fa-triangle-exclamation"></i><span class="col-header-text">Pflegeproblem</span><div class="click-hint">Tippe zum Öffnen</div></div>
             <div class="col-content" id="content-problem"></div>
           </div>
-          
-          <!-- Column 2: Ziele -->
           <div class="col" data-col="2" onclick="Shutter.focus(2)">
-            <div class="col-header">
-              <i class="fa-solid fa-bullseye"></i>
-              <span class="col-header-text">Pflegeziele</span>
-              <div class="click-hint">Tippe zum Öffnen</div>
-            </div>
+            <div class="col-header"><i class="fa-solid fa-bullseye"></i><span class="col-header-text">Pflegeziele</span><div class="click-hint">Tippe zum Öffnen</div></div>
             <div class="col-content" id="content-goals"></div>
           </div>
-          
-          <!-- Column 3: Maßnahmen -->
           <div class="col" data-col="3" onclick="Shutter.focus(3)">
-            <div class="col-header">
-              <i class="fa-solid fa-list-check"></i>
-              <span class="col-header-text">Maßnahmen</span>
-              <div class="click-hint">Tippe zum Öffnen</div>
-            </div>
+            <div class="col-header"><i class="fa-solid fa-list-check"></i><span class="col-header-text">Maßnahmen</span><div class="click-hint">Tippe zum Öffnen</div></div>
             <div class="col-content" id="content-measures"></div>
           </div>
         </div>
@@ -285,220 +238,214 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
     </main>
   </div>
 
-  <!-- TOAST -->
   <div class="toast" id="toastMsg">In Entwicklung</div>
 
-  <!-- BOTTOM NAVIGATION -->
-  <nav class="nav-bottom" id="bottomNav">
-    <a href="#" class="nav-item" onclick="App.mockNav('Home', 0)">
-      <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
-      <span>Home</span>
-    </a>
-    <a href="#" class="nav-item" onclick="App.mockNav('Themen', 1)">
-      <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
-      <span>Themen</span>
-    </a>
-    
-    <!-- CTA Button (Normalizes after 10s) -->
-    <a href="#" class="nav-item nav-cta" id="cta-btn" onclick="App.mockNav('Üben', 2)">
-      <div class="icon-wrapper cta-wrapper">
-        <i class="fa-solid fa-bolt"></i>
-      </div>
-      <span>Üben</span>
-    </a>
-
-    <a href="#" class="nav-item active" onclick="App.nav('view-catalog', 3)">
-      <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div>
-      <span>Planung</span>
-    </a>
-    <a href="#" class="nav-item" onclick="App.mockNav('Handlungsketten', 4)">
-      <div class="icon-wrapper"><i class="fa-solid fa-route"></i></div>
-      <span>Ketten</span>
-    </a>
+  <nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation">
+    <a href="https://pflegefachprofi.de" class="nav-item" aria-label="Home"><div class="icon-wrapper"><i class="fa-solid fa-house"></i></div><span>Home</span></a>
+    <a href="/pruefungsthemen.html" class="nav-item" aria-label="Prüfungsthemen"><div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div><span>Themen</span></a>
+    <a href="/lernen.html" class="nav-item nav-cta" id="cta-btn" aria-label="Üben"><div class="icon-wrapper cta-wrapper"><i class="fa-solid fa-bolt"></i></div><span>Üben</span></a>
+    <a href="/pflegeplanung.html" class="nav-item active" aria-current="page" onclick="event.preventDefault(); App.nav('view-catalog', 3);"><div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div><span>Planung</span></a>
+    <a href="/handlungsketten.html" class="nav-item" aria-label="Handlungsketten"><div class="icon-wrapper"><i class="fa-solid fa-route"></i></div><span>Ketten</span></a>
   </nav>
-
 </div>
 
 <script>
-/* ==========================================================================
-   1. DATA STRUCTURE (Exam Focus)
+/* ========================================================================== 
+   1. EASY EDIT CONTENT AREA
+   --------------------------------------------------------------------------
+   Add/edit Pflegeprobleme only inside this array.
+   Required fields per item:
+   id, category, icon, title, problemText, goals, measures
    ========================================================================== */
 const DATA = [
-  {
-    id: "p1", category: "Kardiologie", icon: "🫀",
-    title: "Gefahr der Hypervolämie",
-    problemText: "Der Pflegeempfänger hat eine fortgeschrittene Herzinsuffizienz (NYHA III). Es besteht die Gefahr einer kardialen Dekompensation mit akuter Überwässerung (Lungen-/Beinödeme).",
-    goals: [
-      { type: "Nahziel", text: "PE zeigt innerhalb von 48h keine Zunahme der peripheren Ödeme." },
-      { type: "Fernziel", text: "PE hält sein Trockengewicht (+/- 500g) dauerhaft stabil." }
-    ],
-    measures: [
-      "Pfk wiegt PE täglich morgens nüchtern zur Verlaufskontrolle.",
-      "Pfk führt im FD/SD/ND eine strenge Ein- und Ausfuhrbilanzierung durch.",
-      "Pfk kontrolliert 1x im FD Knöchel und Unterschenkel auf Ödembildung.",
-      "Pfk beschränkt die tägliche Trinkmenge nach ärztl. AO auf 1.500 ml.",
-      "Pfk positioniert PE bei Dyspnoe umgehend in Herzstuhllagerung zur Vorlastsenkung.",
-      "Pfk verabreicht angeordnete Diuretika pünktlich im FD zur Entlastung."
-    ]
-  },
-  {
-    id: "p2", category: "Neurologie", icon: "🧠",
-    title: "Aspirationsgefahr bei Dysphagie",
-    problemText: "Nach einem ischämischen Apoplex leidet der PE an einer Schluckstörung. Es droht das Verschlucken von Nahrung oder Speichel mit Folge einer Aspirationspneumonie.",
-    goals: [
-      { type: "Nahziel", text: "PE toleriert angedickte Flüssigkeiten ohne Hustenreiz während der Mahlzeit." },
-      { type: "Fernziel", text: "PE bleibt während des gesamten Aufenthalts pneumoniefrei." }
-    ],
-    measures: [
-      "Pfk lagert PE zu jeder Mahlzeit strikt im 90°-Winkel (Oberkörper hoch).",
-      "Pfk dickt alle Getränke auf Nektarkonsistenz an, um die Fließgeschwindigkeit zu senken.",
-      "Pfk reicht Nahrungsmittel nur teelöffelweise an.",
-      "Pfk führt nach jeder Mahlzeit eine Mundraumkontrolle auf Speisereste durch.",
-      "Pfk belässt PE nach dem Essen für weitere 30 Minuten in aufrechter Position.",
-      "Pfk saugt bei plötzlichem Husten/Verschlucken sofort ab."
-    ]
-  },
-  {
-    id: "p3", category: "Mobilität", icon: "🛏️",
-    title: "Hohes Dekubitusrisiko",
-    problemText: "Der PE ist stark immobil, kachektisch und stuhlinkontinent. Es besteht ein hohes Risiko für die Entstehung von Druckgeschwüren an den Prädilektionsstellen.",
-    goals: [
-      { type: "Nahziel", text: "Die Haut an Kreuzbein und Fersen zeigt bis zum Schichtende keine Rötung." },
-      { type: "Fernziel", text: "Die Hautintegrität des PE bleibt dauerhaft vollständig erhalten." }
-    ],
-    measures: [
-      "Pfk führt im FD und SD eine Hautinspektion aller Prädilektionsstellen durch.",
-      "Pfk positioniert PE alle 2 Stunden im Wechsel (Rücken, 30° Li, 30° Re).",
-      "Pfk lagert die Fersen des PE dauerhaft mit einem Kissen hohl.",
-      "Pfk reinigt die Haut bei Inkontinenzereignissen sofort mit klarem Wasser.",
-      "Pfk streicht gefährdete Hautstellen NICHT aus, um Mikrotraumen zu vermeiden.",
-      "Pfk reicht im FD und SD eiweißreiche Zusatznahrung zur Gewebeunterstützung an."
-    ]
-  }
+  { id:'hypervolaemie', category:'Herz & Kreislauf', icon:'🫀', title:'Gefahr der Hypervolämie', problemText:'Der Pflegeempfänger hat eine fortgeschrittene Herzinsuffizienz. Es besteht die Gefahr einer kardialen Dekompensation mit Überwässerung, Beinödemen oder Lungenödem.', goals:[{type:'Nahziel',text:'PE zeigt innerhalb von 48 Stunden keine Zunahme der peripheren Ödeme.'},{type:'Fernziel',text:'PE hält sein Trockengewicht dauerhaft stabil (+/- 500 g).'}], measures:['Pfk wiegt PE täglich morgens nüchtern zur Verlaufskontrolle.','Pfk führt nach ärztlicher Anordnung eine Ein- und Ausfuhrbilanzierung durch.','Pfk kontrolliert im Frühdienst Knöchel und Unterschenkel auf Ödeme.','Pfk achtet auf Dyspnoe, Gewichtszunahme und feuchte Rasselgeräusche.','Pfk positioniert PE bei Dyspnoe in Herzstuhllagerung.','Pfk verabreicht angeordnete Diuretika pünktlich und beobachtet Wirkung.'] },
+  { id:'hypotonie-sturz', category:'Herz & Kreislauf', icon:'🫀', title:'Sturzgefahr bei orthostatischer Hypotonie', problemText:'Beim Lagewechsel kommt es zu Schwindel und Blutdruckabfall. Dadurch besteht ein erhöhtes Sturzrisiko.', goals:[{type:'Nahziel',text:'PE steht innerhalb der nächsten 24 Stunden nur mit Unterstützung sicher auf.'},{type:'Fernziel',text:'PE führt Lagewechsel sicher und ohne Sturzereignis durch.'}], measures:['Pfk misst Blutdruck und Puls vor und nach Mobilisation bei Schwindelangabe.','Pfk leitet PE zu langsamem Aufsetzen über die Bettkante an.','Pfk lässt PE vor dem Aufstehen 1–2 Minuten sitzen.','Pfk stellt Klingel, Schuhe und Gehhilfe griffbereit bereit.','Pfk begleitet Toilettengänge bei Schwindel.','Pfk dokumentiert Schwindelereignisse und informiert Arzt bei Verschlechterung.'] },
+  { id:'thromboserisiko', category:'Herz & Kreislauf', icon:'🫀', title:'Thromboserisiko bei Immobilität', problemText:'Durch eingeschränkte Mobilität und reduzierte Muskelpumpe besteht ein erhöhtes Risiko für eine tiefe Beinvenenthrombose.', goals:[{type:'Nahziel',text:'PE führt bis heute Abend angeleitete Venengymnastik durch.'},{type:'Fernziel',text:'PE bleibt während des Aufenthalts frei von Thrombosezeichen.'}], measures:['Pfk mobilisiert PE nach Ressourcen mehrmals täglich.','Pfk leitet Fußkreisen und Zehenbewegungen an.','Pfk beobachtet Beine auf Schwellung, Schmerz, Überwärmung und Umfangsdifferenz.','Pfk achtet auf ausreichende Flüssigkeitszufuhr gemäß Plan.','Pfk legt Kompressionsstrümpfe nach Anordnung korrekt an.','Pfk verabreicht Antikoagulanzien nach ärztlicher Anordnung und beobachtet Blutungszeichen.'] },
+
+  { id:'aspiration', category:'Atmung & Ernährung', icon:'🫁', title:'Aspirationsgefahr bei Dysphagie', problemText:'Nach einem Apoplex besteht eine Schluckstörung. Nahrung, Flüssigkeit oder Speichel können in die Atemwege gelangen.', goals:[{type:'Nahziel',text:'PE nimmt angedickte Flüssigkeit ohne Hustenreiz während der Mahlzeit zu sich.'},{type:'Fernziel',text:'PE bleibt während des Aufenthalts frei von Aspirationspneumonie.'}], measures:['Pfk lagert PE zu jeder Mahlzeit im 90°-Sitz.','Pfk dickt Flüssigkeiten nach Logopädie-/Arztvorgabe an.','Pfk reicht Nahrung langsam und teelöffelweise an.','Pfk achtet auf Husten, Räuspern, feuchte Stimme und Atemnot.','Pfk führt nach der Mahlzeit eine Mundraumkontrolle durch.','Pfk belässt PE nach dem Essen mindestens 30 Minuten aufrecht.'] },
+  { id:'pneumonierisiko', category:'Atmung & Ernährung', icon:'🫁', title:'Pneumonierisiko bei Immobilität', problemText:'Durch Immobilität, flache Atmung und Sekretstau besteht die Gefahr einer Pneumonie.', goals:[{type:'Nahziel',text:'PE führt heute mindestens 3 angeleitete Atemübungen durch.'},{type:'Fernziel',text:'PE bleibt afebril und zeigt keine Pneumoniezeichen.'}], measures:['Pfk leitet mehrmals täglich zur tiefen Ein- und Ausatmung an.','Pfk mobilisiert PE nach Möglichkeit an die Bettkante oder in den Stuhl.','Pfk führt atemerleichternde Lagerungen durch.','Pfk achtet auf Temperatur, Husten, Sputum und Atemfrequenz.','Pfk fördert ausreichende Flüssigkeitszufuhr gemäß Plan.','Pfk informiert Arzt bei Fieber, Dyspnoe oder eitrigem Sputum.'] },
+  { id:'mangelernaehrung', category:'Atmung & Ernährung', icon:'🍽️', title:'Risiko der Mangelernährung', problemText:'Durch Appetitlosigkeit, Erkrankung oder Schluck-/Kauprobleme nimmt der PE zu wenig Energie und Eiweiß auf.', goals:[{type:'Nahziel',text:'PE nimmt heute mindestens 50 % der angebotenen Mahlzeit zu sich.'},{type:'Fernziel',text:'PE hält sein Gewicht über die nächsten 14 Tage stabil.'}], measures:['Pfk erfasst Essmenge und Trinkmenge nachvollziehbar.','Pfk bietet kleine energiereiche Portionen an.','Pfk berücksichtigt Vorlieben und Abneigungen des PE.','Pfk führt wöchentliches Wiegen nach Standard durch.','Pfk bietet Zwischenmahlzeiten und Trinknahrung nach Anordnung an.','Pfk informiert Ernährungsberatung/Arzt bei anhaltend geringer Aufnahme.'] },
+
+  { id:'dekubitusrisiko', category:'Haut & Wunde', icon:'🛏️', title:'Hohes Dekubitusrisiko', problemText:'Der PE ist immobil, kachektisch oder inkontinent. Es besteht ein hohes Risiko für Druckschäden an Prädilektionsstellen.', goals:[{type:'Nahziel',text:'Die Haut an Kreuzbein und Fersen zeigt bis Schichtende keine Rötung.'},{type:'Fernziel',text:'Die Hautintegrität bleibt dauerhaft vollständig erhalten.'}], measures:['Pfk führt im Früh- und Spätdienst eine Hautinspektion durch.','Pfk positioniert PE nach individuellem Bewegungsplan.','Pfk lagert Fersen druckentlastend frei.','Pfk reinigt Haut nach Inkontinenzereignissen zeitnah und schonend.','Pfk vermeidet Massage gefährdeter Hautareale.','Pfk dokumentiert Hautzustand und Lagerungsintervalle.'] },
+  { id:'intertrigo', category:'Haut & Wunde', icon:'🧴', title:'Intertrigogefahr in Hautfalten', problemText:'In Hautfalten besteht durch Feuchtigkeit, Reibung und Wärme ein Risiko für Mazeration und Entzündung.', goals:[{type:'Nahziel',text:'Hautfalten sind nach der Körperpflege trocken und reizfrei.'},{type:'Fernziel',text:'PE entwickelt keine nässenden oder entzündeten Hautareale.'}], measures:['Pfk inspiziert Hautfalten täglich.','Pfk reinigt betroffene Bereiche pH-hautneutral.','Pfk trocknet Hautfalten sorgfältig durch Tupfen.','Pfk verwendet atmungsaktive textile Einlagen nach Standard.','Pfk vermeidet okklusive fettige Produkte in Hautfalten.','Pfk dokumentiert Rötung, Nässen oder Geruch.'] },
+  { id:'wundheilung', category:'Haut & Wunde', icon:'🩹', title:'Verzögerte Wundheilung', problemText:'Bei bestehender Wunde besteht durch Diabetes, Durchblutungsstörung oder Infektion das Risiko einer verzögerten Heilung.', goals:[{type:'Nahziel',text:'Die Wunde zeigt beim nächsten Verbandwechsel keine neuen Infektzeichen.'},{type:'Fernziel',text:'Die Wundfläche verkleinert sich im geplanten Verlauf.'}], measures:['Pfk führt Verbandwechsel aseptisch nach Standard durch.','Pfk beurteilt Wunde nach Größe, Exsudat, Geruch und Umgebungshaut.','Pfk achtet auf Schmerzen und Infektzeichen.','Pfk dokumentiert Wundzustand nachvollziehbar.','Pfk entlastet betroffene Körperstelle konsequent.','Pfk informiert Wundexperte/Arzt bei Verschlechterung.'] },
+
+  { id:'sturzrisiko', category:'Mobilität & Sicherheit', icon:'🚶', title:'Erhöhtes Sturzrisiko', problemText:'Durch Gangunsicherheit, Medikamente oder kognitive Einschränkung besteht ein erhöhtes Sturzrisiko.', goals:[{type:'Nahziel',text:'PE nutzt bis heute Abend bei jeder Mobilisation die Klingel.'},{type:'Fernziel',text:'PE bleibt während des Aufenthalts sturzfrei.'}], measures:['Pfk stellt Klingel und persönliche Gegenstände griffbereit.','Pfk achtet auf festes Schuhwerk und freie Laufwege.','Pfk begleitet unsichere Transfers.','Pfk stellt Bett auf niedrigste sichere Höhe.','Pfk nutzt geeignete Hilfsmittel nach Einweisung.','Pfk dokumentiert Sturzrisiko und evaluiert Maßnahmen regelmäßig.'] },
+  { id:'kontrakturrisiko', category:'Mobilität & Sicherheit', icon:'🤲', title:'Kontrakturrisiko', problemText:'Durch Immobilität oder Schonhaltung besteht die Gefahr einer dauerhaften Bewegungseinschränkung von Gelenken.', goals:[{type:'Nahziel',text:'PE bewegt betroffene Gelenke heute im schmerzarmen Bewegungsumfang.'},{type:'Fernziel',text:'Die vorhandene Gelenkbeweglichkeit bleibt erhalten.'}], measures:['Pfk führt aktive oder passive Bewegungsübungen nach Plan durch.','Pfk achtet auf schmerzfreie Bewegungsgrenzen.','Pfk lagert Extremitäten physiologisch.','Pfk vermeidet dauerhafte Spitzfußstellung.','Pfk fördert Alltagsbewegungen bei der Körperpflege.','Pfk bezieht Physiotherapie nach Plan ein.'] },
+  { id:'transferdefizit', category:'Mobilität & Sicherheit', icon:'♿', title:'Beeinträchtigter Transfer', problemText:'PE kann Positionswechsel oder Transfers nicht selbstständig und sicher durchführen.', goals:[{type:'Nahziel',text:'PE führt Transfer Bett-Stuhl heute mit Anleitung und Unterstützung durch.'},{type:'Fernziel',text:'PE erreicht größtmögliche sichere Selbstständigkeit beim Transfer.'}], measures:['Pfk erklärt jeden Transfersschritt vor Durchführung.','Pfk nutzt geeignete Hilfsmittel wie Rutschbrett oder Lifter.','Pfk aktiviert vorhandene Ressourcen des PE.','Pfk sichert Bremsen von Bett/Rollstuhl vor Transfer.','Pfk achtet auf rückenschonende Arbeitsweise.','Pfk dokumentiert Unterstützungsbedarf und Fortschritte.'] },
+
+  { id:'obstipationsrisiko', category:'Ausscheidung', icon:'🚽', title:'Obstipationsrisiko', problemText:'Durch Immobilität, geringe Trinkmenge oder opioidhaltige Medikamente besteht ein Risiko für Verstopfung.', goals:[{type:'Nahziel',text:'PE benennt heute zwei obstipationsfördernde Faktoren.'},{type:'Fernziel',text:'PE hat regelmäßig schmerzarmen Stuhlgang gemäß individuellem Rhythmus.'}], measures:['Pfk beobachtet und dokumentiert Stuhlgang nach Rhythmus und Konsistenz.','Pfk fördert Flüssigkeitszufuhr gemäß Plan.','Pfk bietet ballaststoffreiche Kost nach Verträglichkeit an.','Pfk mobilisiert PE regelmäßig.','Pfk ermöglicht ungestörte Toilettengänge.','Pfk verabreicht Laxanzien nur nach ärztlicher Anordnung.'] },
+  { id:'harnwegsinfekt', category:'Ausscheidung', icon:'💧', title:'Harnwegsinfektrisiko', problemText:'Durch Restharn, Inkontinenz oder Dauerkatheter besteht ein erhöhtes Risiko für Harnwegsinfektionen.', goals:[{type:'Nahziel',text:'PE zeigt heute keine Schmerzen/Brennen beim Wasserlassen.'},{type:'Fernziel',text:'PE bleibt frei von Fieber und klinischen Harnwegsinfektzeichen.'}], measures:['Pfk achtet auf Urinfarbe, Geruch, Schmerzen und Temperatur.','Pfk unterstützt ausreichende Trinkmenge gemäß Plan.','Pfk führt Intimpflege von vorne nach hinten durch.','Pfk hält geschlossenes Kathetersystem konsequent geschlossen.','Pfk positioniert Urinbeutel unter Blasenniveau ohne Bodenkontakt.','Pfk informiert Arzt bei Fieber, Flankenschmerz oder trübem Urin.'] },
+  { id:'inkontinenz', category:'Ausscheidung', icon:'🧻', title:'Belastung durch Inkontinenz', problemText:'PE verliert ungewollt Urin oder Stuhl. Dies belastet Haut, Würde und Teilhabe.', goals:[{type:'Nahziel',text:'PE nimmt geplante Toilettengänge heute an.'},{type:'Fernziel',text:'Haut bleibt intakt und PE erlebt mehr Sicherheit im Alltag.'}], measures:['Pfk bietet Toilettentraining nach individuellem Rhythmus an.','Pfk stellt passende Inkontinenzmaterialien bereit.','Pfk kontrolliert Hautzustand regelmäßig.','Pfk wechselt Material zeitnah und würdevoll.','Pfk dokumentiert Ausscheidungsmuster.','Pfk achtet auf diskrete Kommunikation und Intimsphäre.'] },
+
+  { id:'akutschmerz', category:'Schmerz & Ruhe', icon:'⚡', title:'Akuter Schmerz', problemText:'PE hat akute Schmerzen nach Operation, Verletzung oder Erkrankung mit Einschränkung von Bewegung und Wohlbefinden.', goals:[{type:'Nahziel',text:'PE gibt innerhalb von 60 Minuten nach Intervention eine Schmerzreduktion an.'},{type:'Fernziel',text:'PE kann notwendige Aktivitäten mit tolerierbarem Schmerz durchführen.'}], measures:['Pfk erfasst Schmerz regelmäßig mit NRS/VAS.','Pfk fragt Lokalisation, Qualität, Dauer und Auslöser ab.','Pfk lagert betroffene Region schmerzlindernd.','Pfk verabreicht Analgetika nach Anordnung rechtzeitig.','Pfk evaluiert Wirkung und Nebenwirkung nach 30–60 Minuten.','Pfk informiert Arzt bei unzureichender Wirkung.'] },
+  { id:'schlafstoerung', category:'Schmerz & Ruhe', icon:'🌙', title:'Schlafstörung', problemText:'PE schläft durch Schmerzen, Unruhe, Umgebung oder Sorgen schlecht ein oder durch.', goals:[{type:'Nahziel',text:'PE benennt heute einen schlaffördernden Faktor.'},{type:'Fernziel',text:'PE berichtet über erholsameren Schlaf über mehrere Nächte.'}], measures:['Pfk erfragt individuelle Schlafgewohnheiten.','Pfk reduziert nächtliche Störungen soweit möglich.','Pfk bietet Abendroutine und bequeme Lagerung an.','Pfk achtet auf Schmerzmanagement vor der Nacht.','Pfk vermeidet unnötiges Licht und Lärm.','Pfk dokumentiert Schlafdauer und Schlafqualität.'] },
+  { id:'fatigue', category:'Schmerz & Ruhe', icon:'🔋', title:'Erschöpfung/Fatigue', problemText:'PE zeigt ausgeprägte Müdigkeit und reduzierte Belastbarkeit im Alltag.', goals:[{type:'Nahziel',text:'PE plant heute Aktivität und Ruhepausen mit Unterstützung.'},{type:'Fernziel',text:'PE geht mit Energie ressourcenschonend um.'}], measures:['Pfk plant Pflegehandlungen gebündelt und mit Pausen.','Pfk priorisiert wichtige Aktivitäten mit PE.','Pfk beobachtet Belastungszeichen wie Dyspnoe oder Schwindel.','Pfk unterstützt energiesparende Techniken.','Pfk fördert kurze angepasste Mobilisation.','Pfk evaluiert Tagesform und passt Maßnahmen an.'] },
+
+  { id:'delirrisiko', category:'Kognition & Psyche', icon:'🧠', title:'Delirrisiko', problemText:'Durch Alter, Infekt, Operation, Schmerzen oder ungewohnte Umgebung besteht ein Risiko für akute Verwirrtheit.', goals:[{type:'Nahziel',text:'PE ist heute wiederholt zu Person und Ort orientiert.'},{type:'Fernziel',text:'PE bleibt frei von vermeidbaren Delirsymptomen.'}], measures:['Pfk orientiert PE regelmäßig zu Zeit, Ort und Situation.','Pfk stellt Brille und Hörgerät bereit.','Pfk fördert Tag-Nacht-Rhythmus mit Tageslicht.','Pfk achtet auf Schmerzen, Ausscheidung und Flüssigkeitsmangel.','Pfk vermeidet unnötige Reizüberflutung.','Pfk informiert Arzt bei akuter Verwirrtheit.'] },
+  { id:'angst', category:'Kognition & Psyche', icon:'🧠', title:'Angst vor Behandlung', problemText:'PE zeigt Sorge, Anspannung oder Vermeidungsverhalten im Zusammenhang mit Erkrankung oder Behandlung.', goals:[{type:'Nahziel',text:'PE benennt heute seine Hauptsorge in eigenen Worten.'},{type:'Fernziel',text:'PE nimmt notwendige Behandlung informierter und ruhiger an.'}], measures:['Pfk schafft ruhige Gesprächssituation.','Pfk erklärt Maßnahmen kurz, ehrlich und verständlich.','Pfk fragt nach konkreten Auslösern der Angst.','Pfk bietet Atem- oder Entspannungsimpulse an.','Pfk bezieht Bezugspersonen nach Wunsch ein.','Pfk informiert Arzt/Team bei starker anhaltender Angst.'] },
+  { id:'depressive-stimmung', category:'Kognition & Psyche', icon:'🧠', title:'Depressive Stimmung', problemText:'PE wirkt antriebsgemindert, traurig oder hoffnungslos und zieht sich zurück.', goals:[{type:'Nahziel',text:'PE nimmt heute an mindestens einer kurzen Aktivität teil.'},{type:'Fernziel',text:'PE erlebt mehr Tagesstruktur und soziale Teilhabe.'}], measures:['Pfk spricht PE wertschätzend und niedrigschwellig an.','Pfk bietet kleine erreichbare Tagesziele an.','Pfk fördert Kontakt zu Bezugspersonen nach Wunsch.','Pfk beobachtet Appetit, Schlaf, Antrieb und Stimmung.','Pfk achtet auf Hinweise auf Selbstgefährdung.','Pfk informiert Fachteam bei Verschlechterung.'] },
+
+  { id:'selbstpflege-waschen', category:'Selbstversorgung', icon:'🧼', title:'Selbstpflegedefizit Körperpflege', problemText:'PE kann Körperpflege aufgrund von Schwäche, Schmerz oder Einschränkung nicht vollständig selbst durchführen.', goals:[{type:'Nahziel',text:'PE übernimmt heute mindestens einen Teil der Körperpflege selbst.'},{type:'Fernziel',text:'PE erreicht größtmögliche Selbstständigkeit bei der Körperpflege.'}], measures:['Pfk stellt benötigte Materialien erreichbar bereit.','Pfk aktiviert vorhandene Ressourcen vor Übernahme.','Pfk gibt klare Schritt-für-Schritt-Anleitung.','Pfk übernimmt nur nicht leistbare Teilhandlungen.','Pfk achtet auf Intimsphäre und Wunschreihenfolge.','Pfk lobt selbstständig durchgeführte Schritte konkret.'] },
+  { id:'selbstpflege-ankleiden', category:'Selbstversorgung', icon:'👕', title:'Selbstpflegedefizit Ankleiden', problemText:'PE ist beim An- und Auskleiden eingeschränkt, z. B. durch Hemiparese, Schmerzen oder Erschöpfung.', goals:[{type:'Nahziel',text:'PE zieht heute ein Kleidungsstück mit Anleitung selbst an.'},{type:'Fernziel',text:'PE kleidet sich mit geeigneten Hilfsmitteln möglichst selbstständig.'}], measures:['Pfk legt Kleidung in sinnvoller Reihenfolge bereit.','Pfk achtet auf bequeme und passende Kleidung.','Pfk leitet bei Hemiparese an: betroffene Seite zuerst anziehen.','Pfk nutzt Hilfsmittel wie Greifzange nach Bedarf.','Pfk gibt ausreichend Zeit ohne Druck.','Pfk dokumentiert benötigte Unterstützung.'] },
+  { id:'mundpflege', category:'Selbstversorgung', icon:'🦷', title:'Mundpflegedefizit', problemText:'PE kann Mundpflege nicht ausreichend selbst durchführen. Es besteht Risiko für Beläge, Infektionen, Schmerzen oder Aspiration.', goals:[{type:'Nahziel',text:'Mundschleimhaut ist nach der Pflege sauber und feucht.'},{type:'Fernziel',text:'PE bleibt frei von Mundschleimhautentzündungen.'}], measures:['Pfk inspiziert Mundhöhle täglich.','Pfk führt Mundpflege nach Standard und Ressourcen durch.','Pfk befeuchtet trockene Schleimhäute.','Pfk reinigt Prothesen sorgfältig.','Pfk achtet auf Schmerzen, Beläge und Druckstellen.','Pfk dokumentiert Auffälligkeiten und informiert Arzt bei Soorverdacht.'] },
+
+  { id:'diabetes-hypo', category:'Stoffwechsel & Medikamente', icon:'💉', title:'Hypoglykämierisiko bei Diabetes', problemText:'Durch Insulin, Antidiabetika, reduzierte Nahrungsaufnahme oder Bewegung besteht ein Risiko für Unterzuckerung.', goals:[{type:'Nahziel',text:'PE zeigt heute keine Hypoglykämiezeichen.'},{type:'Fernziel',text:'PE erkennt eigene Warnzeichen und reagiert angemessen.'}], measures:['Pfk misst Blutzucker nach Schema.','Pfk achtet auf Schwitzen, Zittern, Hunger, Unruhe und Verwirrtheit.','Pfk stellt schnell wirksame Kohlenhydrate bereit.','Pfk koordiniert Insulingabe mit Mahlzeiten.','Pfk dokumentiert Werte und Maßnahmen.','Pfk informiert Arzt bei wiederholten Hypoglykämien.'] },
+  { id:'medikationsfehler', category:'Stoffwechsel & Medikamente', icon:'💊', title:'Risiko fehlerhafter Medikamenteneinnahme', problemText:'PE hat Schwierigkeiten mit Einnahmezeit, Dosierung oder Verständnis der Medikation.', goals:[{type:'Nahziel',text:'PE nimmt Medikamente heute korrekt nach Plan ein.'},{type:'Fernziel',text:'PE versteht Zweck und Einnahme wichtiger Dauermedikamente.'}], measures:['Pfk richtet Medikamente nach 6-R-Regel.','Pfk erklärt Einnahmezeit und Besonderheiten verständlich.','Pfk beobachtet Schluckfähigkeit und Nebenwirkungen.','Pfk kontrolliert vollständige Einnahme bei Bedarf.','Pfk nutzt Medikationsplan als Orientierung.','Pfk meldet Unklarheiten sofort an Arzt/Apotheke.'] },
+  { id:'exsikkose', category:'Stoffwechsel & Medikamente', icon:'💧', title:'Exsikkoserisiko', problemText:'Durch geringe Trinkmenge, Fieber, Diuretika oder kognitive Einschränkung besteht Risiko für Flüssigkeitsmangel.', goals:[{type:'Nahziel',text:'PE erreicht heute die vereinbarte Trinkmenge nach Plan.'},{type:'Fernziel',text:'PE zeigt keine Zeichen von Dehydratation.'}], measures:['Pfk bietet regelmäßig bevorzugte Getränke an.','Pfk stellt Getränke sichtbar und erreichbar bereit.','Pfk führt Trinkprotokoll bei Risiko.','Pfk achtet auf trockene Schleimhäute, stehende Hautfalten und Verwirrtheit.','Pfk berücksichtigt Schluckstörung und angedickte Getränke.','Pfk informiert Arzt bei anhaltend geringer Trinkmenge.'] },
+
+  { id:'soziale-isolation', category:'Kommunikation & Teilhabe', icon:'🤝', title:'Soziale Isolation', problemText:'PE nimmt wenig Kontakt auf oder zieht sich aufgrund Krankheit, Scham oder Mobilitätseinschränkung zurück.', goals:[{type:'Nahziel',text:'PE nimmt heute ein kurzes Gesprächsangebot an.'},{type:'Fernziel',text:'PE erlebt regelmäßige soziale Teilhabe nach Wunsch.'}], measures:['Pfk bietet kurze verbindliche Kontaktmomente an.','Pfk fragt nach gewünschten Bezugspersonen.','Pfk unterstützt Telefonat oder Besuchsplanung.','Pfk motiviert ohne Druck zu Gruppenangeboten.','Pfk berücksichtigt kulturelle und biografische Bedürfnisse.','Pfk dokumentiert Teilhabe und Rückzugstendenzen.'] },
+  { id:'kommunikation-eingeschraenkt', category:'Kommunikation & Teilhabe', icon:'💬', title:'Beeinträchtigte Kommunikation', problemText:'PE kann Bedürfnisse durch Aphasie, Hörminderung oder kognitive Einschränkung nur eingeschränkt mitteilen.', goals:[{type:'Nahziel',text:'PE kann heute Grundbedürfnisse mit Hilfsmittel anzeigen.'},{type:'Fernziel',text:'PE wird in Entscheidungen möglichst aktiv einbezogen.'}], measures:['Pfk spricht langsam, klar und in kurzen Sätzen.','Pfk stellt Ja/Nein-Fragen bei Bedarf.','Pfk nutzt Bildkarten, Schreibtafel oder Gestik.','Pfk stellt Brille/Hörgerät bereit.','Pfk gibt ausreichend Antwortzeit.','Pfk dokumentiert wirksame Kommunikationswege.'] },
+  { id:'wissensdefizit', category:'Kommunikation & Teilhabe', icon:'📘', title:'Wissensdefizit zur Erkrankung', problemText:'PE versteht Erkrankung, Risiken oder notwendige Maßnahmen noch nicht ausreichend.', goals:[{type:'Nahziel',text:'PE erklärt heute eine wichtige Maßnahme in eigenen Worten.'},{type:'Fernziel',text:'PE beteiligt sich informiert an Pflege und Therapie.'}], measures:['Pfk erfragt vorhandenes Wissen und Informationsbedarf.','Pfk erklärt in einfacher Sprache und kleinen Einheiten.','Pfk nutzt Teach-back-Methode.','Pfk gibt schriftliche Informationen nach Bedarf.','Pfk bezieht Angehörige nach Wunsch ein.','Pfk dokumentiert Beratung und Verständnis.'] }
 ];
 
-/* ==========================================================================
+const CATEGORY_META = {
+  'Herz & Kreislauf': { icon: 'fa-heart-pulse', hint: 'Ödeme, Sturz durch Blutdruck, Thrombose' },
+  'Atmung & Ernährung': { icon: 'fa-lungs', hint: 'Aspiration, Pneumonie, Mangelernährung' },
+  'Haut & Wunde': { icon: 'fa-bandage', hint: 'Dekubitus, Intertrigo, Wundheilung' },
+  'Mobilität & Sicherheit': { icon: 'fa-person-walking', hint: 'Sturz, Kontraktur, Transfer' },
+  'Ausscheidung': { icon: 'fa-toilet', hint: 'Obstipation, HWI, Inkontinenz' },
+  'Schmerz & Ruhe': { icon: 'fa-moon', hint: 'Schmerz, Schlaf, Erschöpfung' },
+  'Kognition & Psyche': { icon: 'fa-brain', hint: 'Delir, Angst, Stimmung' },
+  'Selbstversorgung': { icon: 'fa-hands-holding', hint: 'Waschen, Ankleiden, Mundpflege' },
+  'Stoffwechsel & Medikamente': { icon: 'fa-pills', hint: 'Diabetes, Medikamente, Flüssigkeit' },
+  'Kommunikation & Teilhabe': { icon: 'fa-comments', hint: 'Isolation, Kommunikation, Beratung' }
+};
+
+/* ========================================================================== 
    2. APP & NAVIGATION LOGIC
    ========================================================================== */
 const App = {
   init() {
     this.renderCatalog();
-    
-    // Normalize CTA after 10 seconds (Dopamine effect settles)
     setTimeout(() => {
       const cta = document.getElementById('cta-btn');
       if (cta) cta.classList.add('normalized');
     }, 10000);
   },
-  
   nav(id, navIndex = 3) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    
     this.updateNav(navIndex);
-    
-    // Shrink navbar when opening Shutter
     const bottomNav = document.getElementById('bottomNav');
-    if(id === 'view-shutter') {
-      bottomNav.classList.add('compact');
-    } else {
-      bottomNav.classList.remove('compact');
-    }
-    
-    if(navigator.vibrate) navigator.vibrate(15);
+    if (id === 'view-shutter') bottomNav.classList.add('compact');
+    else bottomNav.classList.remove('compact');
+    if (navigator.vibrate) navigator.vibrate(15);
   },
-  
-  mockNav(name, navIndex) {
-    const toast = document.getElementById("toastMsg");
-    toast.textContent = `${name} Modul (kommt bald)`;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
-    
-    this.updateNav(navIndex);
-    if(navigator.vibrate) navigator.vibrate(15);
-  },
-  
   updateNav(index) {
     const navItems = document.querySelectorAll('.nav-bottom > a');
     navItems.forEach(i => i.classList.remove('active'));
-    if(navItems[index]) navItems[index].classList.add('active');
+    if (navItems[index]) navItems[index].classList.add('active');
   },
-  
   renderCatalog() {
     const list = document.getElementById('catalog-container');
-    list.innerHTML = DATA.map(item => `
-      <div class="topic-card" onclick="Shutter.open('${item.id}')">
-        <div class="topic-info">
-          <div class="topic-icon">${item.icon}</div>
-          <div class="topic-title">
-            <p>${item.category}</p>
-            <h3>${item.title}</h3>
+    const grouped = DATA.reduce((acc, item) => {
+      if (!acc[item.category]) acc[item.category] = [];
+      acc[item.category].push(item);
+      return acc;
+    }, {});
+
+    list.innerHTML = Object.entries(grouped).map(([category, items], index) => {
+      const meta = CATEGORY_META[category] || { icon: 'fa-folder', hint: 'Pflegeprobleme' };
+      return `
+        <section class="category-card ${index === 0 ? 'open' : ''}" data-category="${escapeHtml(category)}">
+          <button class="category-toggle" type="button" onclick="App.toggleCategory(this)" aria-expanded="${index === 0 ? 'true' : 'false'}">
+            <div class="category-left">
+              <div class="category-icon"><i class="fa-solid ${meta.icon}"></i></div>
+              <div class="category-title">
+                <h3>${escapeHtml(category)}</h3>
+                <p>${items.length} Pflegeprobleme · ${escapeHtml(meta.hint)}</p>
+              </div>
+            </div>
+            <div class="category-chevron"><i class="fa-solid fa-chevron-down"></i></div>
+          </button>
+          <div class="problem-list">
+            <div class="problem-list-inner">
+              ${items.map(item => `
+                <article class="topic-card" onclick="Shutter.open('${item.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Shutter.open('${item.id}');}">
+                  <div class="topic-info">
+                    <div class="topic-icon">${item.icon}</div>
+                    <div class="topic-title">
+                      <p>${escapeHtml(item.category)}</p>
+                      <h3>${escapeHtml(item.title)}</h3>
+                    </div>
+                  </div>
+                  <div class="topic-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </article>
+              `).join('')}
+            </div>
           </div>
-        </div>
-        <div class="topic-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-      </div>
-    `).join('');
+        </section>
+      `;
+    }).join('');
+
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.category-card').forEach(card => this.syncCategoryHeight(card));
+    });
+  },
+  toggleCategory(button) {
+    const card = button.closest('.category-card');
+    const isOpen = card.classList.toggle('open');
+    button.setAttribute('aria-expanded', String(isOpen));
+    this.syncCategoryHeight(card);
+    if (navigator.vibrate) navigator.vibrate(10);
+  },
+  syncCategoryHeight(card) {
+    const list = card.querySelector('.problem-list');
+    if (!list) return;
+    list.style.maxHeight = card.classList.contains('open') ? `${list.scrollHeight}px` : '0px';
   }
 };
 
-/* ==========================================================================
+/* ========================================================================== 
    3. SHUTTER ENGINE
    ========================================================================== */
 const Shutter = {
   open(id) {
     const data = DATA.find(d => d.id === id);
-    if(!data) return;
-
+    if (!data) return;
     document.getElementById('shutter-main-title').innerText = data.title;
-    
     document.getElementById('content-problem').innerHTML = `
-      <div class="rich-card">
-        <div class="rich-card-icon"><i class="fa-solid fa-user-injured"></i></div>
-        <div class="rich-card-title">Situationsbeschreibung</div>
-        <div class="rich-card-text">${data.problemText}</div>
-      </div>
+      <div class="rich-card"><div class="rich-card-icon"><i class="fa-solid fa-user-injured"></i></div><div class="rich-card-title">Situationsbeschreibung</div><div class="rich-card-text">${escapeHtml(data.problemText)}</div></div>
     `;
-
     document.getElementById('content-goals').innerHTML = data.goals.map(g => `
-      <div class="rich-card">
-        <div class="rich-card-title">${g.type}</div>
-        <div class="rich-card-text">${g.text}</div>
-      </div>
+      <div class="rich-card"><div class="rich-card-title">${escapeHtml(g.type)}</div><div class="rich-card-text">${escapeHtml(g.text)}</div></div>
     `).join('');
-
     document.getElementById('content-measures').innerHTML = data.measures.map((m, i) => `
-      <div class="rich-card">
-        <div class="rich-card-title">Maßnahme ${i+1}</div>
-        <div class="rich-card-text">${m}</div>
-      </div>
+      <div class="rich-card"><div class="rich-card-title">Maßnahme ${i + 1}</div><div class="rich-card-text">${escapeHtml(m)}</div></div>
     `).join('');
-
     this.focus(1);
     App.nav('view-shutter', 3);
   },
-
   focus(index) {
     document.querySelectorAll('.col').forEach(c => {
       c.classList.remove('active');
       const content = c.querySelector('.col-content');
       content.style.animation = 'none';
-      content.offsetHeight; // trigger reflow
-      content.style.animation = null; 
+      content.offsetHeight;
+      content.style.animation = null;
     });
-    
-    document.querySelector(`.col[data-col="${index}"]`).classList.add('active');
-    
+    const target = document.querySelector(`.col[data-col="${index}"]`);
+    if (target) target.classList.add('active');
     const grid = document.getElementById('shutter-grid');
-    if(index === 1) grid.style.gridTemplateColumns = "1fr var(--shutter-width) var(--shutter-width)";
-    if(index === 2) grid.style.gridTemplateColumns = "var(--shutter-width) 1fr var(--shutter-width)";
-    if(index === 3) grid.style.gridTemplateColumns = "var(--shutter-width) var(--shutter-width) 1fr";
-
-    if(navigator.vibrate) navigator.vibrate(20);
+    if (index === 1) grid.style.gridTemplateColumns = '1fr var(--shutter-width) var(--shutter-width)';
+    if (index === 2) grid.style.gridTemplateColumns = 'var(--shutter-width) 1fr var(--shutter-width)';
+    if (index === 3) grid.style.gridTemplateColumns = 'var(--shutter-width) var(--shutter-width) 1fr';
+    if (navigator.vibrate) navigator.vibrate(20);
   }
 };
 
-// Boot App
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&')
+    .replaceAll('<', '<')
+    .replaceAll('>', '>')
+    .replaceAll('"', '"')
+    .replaceAll("'", ''');
+}
+
 document.addEventListener('DOMContentLoaded', () => App.init());
+window.addEventListener('resize', () => document.querySelectorAll('.category-card').forEach(card => App.syncCategoryHeight(card)));
 </script>
 </body>
 </html>
