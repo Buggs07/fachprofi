@@ -1,542 +1,107 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PflegefachProfi • Ziele & Maßnahmen</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PflegefachProfi | Planung</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-:root{
-  --primary:#2563eb;
-  --green:#16a34a;
-  --red:#dc2626;
-  --bg:#f6f8fc;
-  --card:#ffffff;
-  --text:#0f172a;
-  --muted:#64748b;
-  --border:#e2e8f0;
-  --shadow:0 18px 40px rgba(15,23,42,.12);
-}
+:root { --primary: #2563eb; --purple: #8b5cf6; --bg: #f8fafc; --text: #0f172a; --border: #e2e8f0; --shutter: 50px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #cbd5e1; height: 100vh; overflow: hidden; }
 
-*{box-sizing:border-box}
+/* APP LAYOUT */
+.app-wrapper { width: 100%; max-width: 500px; height: 100vh; margin: 0 auto; background: var(--bg); display: flex; flex-direction: column; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.1); }
+#content-area { flex: 1; overflow: hidden; position: relative; }
 
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:linear-gradient(180deg,#eef4ff 0%,#f8fafc 45%,#ffffff 100%);
-  color:var(--text);
-}
+/* SHUTTER GRID */
+.shutter-grid { display: grid; height: 100%; transition: 0.5s var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1)); }
+.col { border-right: 1px solid var(--border); background: white; display: flex; flex-direction: column; cursor: pointer; overflow: hidden; }
+.col-header { padding: 20px; font-weight: 900; background: var(--bg); height: 100%; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; transform: rotate(180deg); }
+.active .col-header { writing-mode: horizontal-tb; transform: none; justify-content: flex-start; height: 60px; background: #eff6ff; color: var(--primary); }
+.col-content { padding: 20px; opacity: 0; pointer-events: none; height: 100%; overflow-y: auto; }
+.active .col-content { opacity: 1; pointer-events: auto; }
 
-.app{
-  max-width:520px;
-  margin:0 auto;
-  min-height:100vh;
-  padding:20px;
-}
+/* HOME / CATALOG VIEW */
+.catalog-list { padding: 20px; }
+.item-card { background: white; padding: 20px; border-radius: 16px; margin-bottom: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 
-.screen{display:none}
-.screen.active{display:block}
-
-.hero{
-  padding:28px 22px;
-  border-radius:28px;
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
-  color:white;
-  box-shadow:var(--shadow);
-  margin-top:20px;
-}
-
-.hero h1{
-  margin:0 0 10px;
-  font-size:30px;
-  line-height:1.05;
-}
-
-.hero p{
-  margin:0;
-  color:#dbeafe;
-  line-height:1.5;
-}
-
-.cta{
-  margin-top:24px;
-  width:100%;
-  border:none;
-  border-radius:22px;
-  padding:18px 20px;
-  font-size:18px;
-  font-weight:800;
-  color:white;
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-  box-shadow:0 16px 35px rgba(22,163,74,.35);
-  cursor:pointer;
-  animation:pulseCTA 1.7s infinite;
-  position:relative;
-  overflow:hidden;
-}
-
-.cta::after{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-80%;
-  width:60%;
-  height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
-  animation:shine 2.4s infinite;
-}
-
-@keyframes pulseCTA{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.035)}
-}
-
-@keyframes shine{
-  0%{left:-80%}
-  100%{left:130%}
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:18px;
-  box-shadow:0 10px 24px rgba(15,23,42,.07);
-  margin-bottom:16px;
-}
-
-.header{
-  margin-top:18px;
-  margin-bottom:18px;
-}
-
-.header h2{
-  margin:0 0 8px;
-  font-size:23px;
-  line-height:1.2;
-}
-
-.header p{
-  margin:0;
-  color:var(--muted);
-  line-height:1.45;
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:#eff6ff;
-  color:#1d4ed8;
-  font-weight:700;
-  font-size:13px;
-  margin-top:12px;
-}
-
-.option{
-  width:100%;
-  text-align:left;
-  border:2px solid var(--border);
-  background:white;
-  border-radius:18px;
-  padding:15px;
-  font-size:15px;
-  line-height:1.45;
-  margin-bottom:12px;
-  cursor:pointer;
-  transition:.18s ease;
-}
-
-.option:hover{
-  transform:translateY(-2px);
-  border-color:#93c5fd;
-}
-
-.option.selected{
-  border-color:var(--primary);
-  background:#eff6ff;
-}
-
-.option.correct{
-  border-color:var(--green);
-  background:#ecfdf5;
-}
-
-.option.wrong{
-  border-color:var(--red);
-  background:#fef2f2;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:16px;
-}
-
-.btn{
-  flex:1;
-  border:none;
-  border-radius:18px;
-  padding:15px;
-  font-weight:800;
-  font-size:15px;
-  cursor:pointer;
-}
-
-.btn.primary{
-  background:var(--primary);
-  color:white;
-}
-
-.btn.secondary{
-  background:#e2e8f0;
-  color:#334155;
-}
-
-.scoreBox{
-  text-align:center;
-  padding:28px 18px;
-}
-
-.scoreCircle{
-  width:132px;
-  height:132px;
-  margin:0 auto 18px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-  color:white;
-  font-size:34px;
-  font-weight:900;
-  box-shadow:0 20px 45px rgba(22,163,74,.35);
-  animation:pop .5s ease;
-}
-
-@keyframes pop{
-  0%{transform:scale(.75);opacity:0}
-  100%{transform:scale(1);opacity:1}
-}
-
-.feedback{
-  min-height:28px;
-  font-weight:800;
-  margin-top:10px;
-}
-
-.feedback.good{color:var(--green)}
-.feedback.bad{color:var(--red)}
-
-.small{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.45;
-}
-
-.confetti{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  overflow:hidden;
-}
-
-.confetti span{
-  position:absolute;
-  top:-20px;
-  width:10px;
-  height:16px;
-  background:var(--primary);
-  animation:fall 2.6s linear forwards;
-}
-
-@keyframes fall{
-  to{
-    transform:translateY(110vh) rotate(720deg);
-    opacity:0;
-  }
-}
+/* NAV */
+.nav-bottom { height: 75px; background: white; border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; }
 </style>
 </head>
-
 <body>
-<div class="app">
 
-  <section id="home" class="screen active">
-    <div class="hero">
-      <h1>Pflegeplanung trainieren</h1>
-      <p>Wähle passende Ziele und Maßnahmen wie in der Prüfung. Direktes Feedback, Punkte und Erfolgserlebnis inklusive.</p>
-      <button class="cta" onclick="startGame()">Jetzt starten</button>
-    </div>
-  </section>
+<div class="app-wrapper">
+    <div id="content-area">
+        <!-- View: Catalog -->
+        <div id="view-catalog" class="screen">
+            <header style="padding: 20px;"><h1>Erkrankungen</h1></header>
+            <div class="catalog-list" id="topic-list"></div>
+        </div>
 
-  <section id="ziele" class="screen">
-    <div class="header">
-      <h2 id="zieleQuestion"></h2>
-      <p class="badge">2 richtig · 2 falsch</p>
+        <!-- View: Shutter Planning -->
+        <div id="view-shutter" class="screen" style="display:none;">
+            <div class="shutter-grid" id="grid" style="grid-template-columns: 1fr var(--shutter) var(--shutter);">
+                <div class="col active" data-col="1" onclick="focusCol(1)">
+                    <div class="col-header"><i class="fa-solid fa-exclamation-circle"></i> Problem</div>
+                    <div class="col-content" id="col-problem"></div>
+                </div>
+                <div class="col" data-col="2" onclick="focusCol(2)">
+                    <div class="col-header"><i class="fa-solid fa-bullseye"></i> Ziele</div>
+                    <div class="col-content" id="col-goals"></div>
+                </div>
+                <div class="col" data-col="3" onclick="focusCol(3)">
+                    <div class="col-header"><i class="fa-solid fa-clipboard-check"></i> Maßnahmen</div>
+                    <div class="col-content" id="col-measures"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="zieleOptions"></div>
-    <div id="zieleFeedback" class="feedback"></div>
-    <div class="actions">
-      <button class="btn secondary" onclick="goHome()">Home</button>
-      <button class="btn primary" onclick="checkZiele()">Antwort prüfen</button>
-    </div>
-  </section>
 
-  <section id="massnahmen" class="screen">
-    <div class="header">
-      <h2 id="massnahmenQuestion"></h2>
-      <p class="badge">2 richtig · 2 falsch</p>
-    </div>
-    <div id="massnahmenOptions"></div>
-    <div id="massnahmenFeedback" class="feedback"></div>
-    <div class="actions">
-      <button class="btn secondary" onclick="showScreen('ziele')">Zurück</button>
-      <button class="btn primary" onclick="checkMassnahmen()">Antwort prüfen</button>
-    </div>
-  </section>
-
-  <section id="result" class="screen">
-    <div class="card scoreBox">
-      <div class="scoreCircle" id="scoreCircle">0%</div>
-      <h2 id="resultTitle">Geschafft!</h2>
-      <p id="resultText" class="small"></p>
-      <button class="cta" onclick="goHome()">Zurück zur Startseite</button>
-      <p class="small">Automatische Rückkehr in wenigen Sekunden.</p>
-    </div>
-  </section>
-
+    <nav class="nav-bottom">
+        <button onclick="switchView('catalog')"><i class="fa-solid fa-house"></i></button>
+        <button><i class="fa-solid fa-layer-group"></i></button>
+        <button><i class="fa-solid fa-bolt"></i></button>
+    </nav>
 </div>
 
-<div id="confetti" class="confetti"></div>
-
 <script>
-const DATA = {
-  pflegeproblem: "Sturzrisiko",
-  ziele: [
-    {
-      text: "Der Patient bleibt während des Frühdienstes sturzfrei.",
-      correct: true
-    },
-    {
-      text: "Der Patient nutzt innerhalb von 2 Tagen beim Aufstehen konsequent die Klingel.",
-      correct: true
-    },
-    {
-      text: "Der Patient wird vollständig geheilt.",
-      correct: false
-    },
-    {
-      text: "Der Patient soll sich besser fühlen.",
-      correct: false
-    }
-  ],
-  massnahmen: [
-    {
-      text: "Sturzrisiko mit geeignetem Assessment einschätzen und Veränderungen dokumentieren.",
-      correct: true
-    },
-    {
-      text: "Klingel, Brille, Rollator und rutschfeste Schuhe in erreichbarer Nähe bereitstellen.",
-      correct: true
-    },
-    {
-      text: "Patient dauerhaft im Bett lassen, damit kein Sturz passieren kann.",
-      correct: false
-    },
-    {
-      text: "Dem Patienten allgemein sagen, dass er vorsichtig sein soll.",
-      correct: false
-    }
-  ]
-};
+const DATA = [
+    { id: 1, title: "Herzinsuffizienz", prob: "Gefahr der Überwässerung", goals: ["Nahziel: Ödemreduktion", "Fernziel: Gewichtsstabilität"], measures: ["Bilanzieren", "Wiegen", "Diuretika"] },
+    { id: 2, title: "Schlaganfall", prob: "Dysphagie", goals: ["Nahziel: Schluckfähigkeit", "Fernziel: Mobilität"], measures: ["Aspirationsschutz", "Bobath"] }
+];
 
-let selectedZiele = [];
-let selectedMassnahmen = [];
-let score = 0;
-
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+function renderCatalog() {
+    const list = document.getElementById('topic-list');
+    list.innerHTML = DATA.map(t => `<div class="item-card" onclick="openPlanning('${t.id}')">${t.title} <i class="fa-solid fa-arrow-right"></i></div>`).join('');
 }
 
-function startGame(){
-  selectedZiele = [];
-  selectedMassnahmen = [];
-  score = 0;
-
-  document.getElementById("zieleQuestion").textContent =
-    `Prüfungsfrage: Wählen Sie 2 geeignete Ziele zu "${DATA.pflegeproblem}" aus:`;
-
-  document.getElementById("massnahmenQuestion").textContent =
-    `Prüfungsfrage: Wählen Sie 2 geeignete Maßnahmen zu "${DATA.pflegeproblem}" aus:`;
-
-  renderOptions("zieleOptions", DATA.ziele, selectedZiele);
-  renderOptions("massnahmenOptions", DATA.massnahmen, selectedMassnahmen);
-
-  document.getElementById("zieleFeedback").textContent = "";
-  document.getElementById("massnahmenFeedback").textContent = "";
-
-  showScreen("ziele");
+function openPlanning(id) {
+    const p = DATA.find(x => x.id == id);
+    document.getElementById('col-problem').innerHTML = `<h3>${p.prob}</h3>`;
+    document.getElementById('col-goals').innerHTML = p.goals.map(g => `<div class="card">${g}</div>`).join('');
+    document.getElementById('col-measures').innerHTML = p.measures.map(m => `<div class="card">${m}</div>`).join('');
+    document.getElementById('view-catalog').style.display = 'none';
+    document.getElementById('view-shutter').style.display = 'block';
 }
 
-function renderOptions(containerId, items, selectedArray){
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-
-  items.forEach((item, index) => {
-    const btn = document.createElement("button");
-    btn.className = "option";
-    btn.textContent = item.text;
-
-    btn.onclick = () => {
-      if(btn.classList.contains("correct") || btn.classList.contains("wrong")) return;
-
-      if(selectedArray.includes(index)){
-        selectedArray.splice(selectedArray.indexOf(index), 1);
-        btn.classList.remove("selected");
-      } else {
-        if(selectedArray.length >= 2){
-          dopamine("Bitte nur 2 auswählen.", false, containerId);
-          return;
-        }
-        selectedArray.push(index);
-        btn.classList.add("selected");
-      }
-    };
-
-    container.appendChild(btn);
-  });
+function focusCol(index) {
+    document.querySelectorAll('.col').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.col[data-col="${index}"]`).classList.add('active');
+    const grid = document.getElementById('grid');
+    if(index === 1) grid.style.gridTemplateColumns = "1fr var(--shutter) var(--shutter)";
+    if(index === 2) grid.style.gridTemplateColumns = "var(--shutter) 1fr var(--shutter)";
+    if(index === 3) grid.style.gridTemplateColumns = "var(--shutter) var(--shutter) 1fr";
 }
 
-function checkZiele(){
-  if(selectedZiele.length !== 2){
-    dopamine("Bitte genau 2 Ziele auswählen.", false, "zieleOptions");
-    return;
-  }
-
-  const correct = evaluate("zieleOptions", DATA.ziele, selectedZiele);
-  const feedback = document.getElementById("zieleFeedback");
-
-  if(correct){
-    score += 50;
-    feedback.textContent = "Sehr gut. Beide Ziele sind prüfungstauglich.";
-    feedback.className = "feedback good";
-    smallConfetti();
-    setTimeout(() => showScreen("massnahmen"), 900);
-  } else {
-    feedback.textContent = "Noch nicht richtig. Schau genau auf SMART, Pflegeproblem und Realismus.";
-    feedback.className = "feedback bad";
-  }
+function switchView(id) {
+    document.getElementById('view-shutter').style.display = 'none';
+    document.getElementById('view-catalog').style.display = 'block';
 }
 
-function checkMassnahmen(){
-  if(selectedMassnahmen.length !== 2){
-    dopamine("Bitte genau 2 Maßnahmen auswählen.", false, "massnahmenOptions");
-    return;
-  }
-
-  const correct = evaluate("massnahmenOptions", DATA.massnahmen, selectedMassnahmen);
-  const feedback = document.getElementById("massnahmenFeedback");
-
-  if(correct){
-    score += 50;
-    feedback.textContent = "Stark. Die Maßnahmen sind konkret und prüfungsgeeignet.";
-    feedback.className = "feedback good";
-    finishGame();
-  } else {
-    feedback.textContent = "Noch nicht richtig. Maßnahmen müssen konkret, pflegerisch und begründbar sein.";
-    feedback.className = "feedback bad";
-  }
-}
-
-function evaluate(containerId, items, selectedArray){
-  const buttons = document.querySelectorAll(`#${containerId} .option`);
-  let allCorrect = true;
-
-  buttons.forEach((btn, index) => {
-    btn.classList.remove("selected");
-
-    if(selectedArray.includes(index)){
-      if(items[index].correct){
-        btn.classList.add("correct");
-      } else {
-        btn.classList.add("wrong");
-        allCorrect = false;
-      }
-    }
-  });
-
-  const correctSelected = selectedArray.every(i => items[i].correct);
-  return allCorrect && correctSelected;
-}
-
-function finishGame(){
-  const percent = score;
-  document.getElementById("scoreCircle").textContent = `${percent}%`;
-
-  if(percent === 100){
-    document.getElementById("resultTitle").textContent = "Perfekt bestanden!";
-    document.getElementById("resultText").textContent =
-      "Du hast die passenden Ziele und Maßnahmen korrekt erkannt. Genau so prüfungsnah denken.";
-  } else {
-    document.getElementById("resultTitle").textContent = "Training abgeschlossen";
-    document.getElementById("resultText").textContent =
-      "Guter Versuch. Wiederhole die Auswahl und achte auf konkrete, realistische Formulierungen.";
-  }
-
-  showScreen("result");
-  bigConfetti();
-
-  setTimeout(() => {
-    goHome();
-  }, 6500);
-}
-
-function dopamine(message, good, containerId){
-  const el = containerId.includes("ziele")
-    ? document.getElementById("zieleFeedback")
-    : document.getElementById("massnahmenFeedback");
-
-  el.textContent = message;
-  el.className = good ? "feedback good" : "feedback bad";
-
-  navigator.vibrate?.(70);
-}
-
-function smallConfetti(){
-  createConfetti(25);
-}
-
-function bigConfetti(){
-  createConfetti(90);
-}
-
-function createConfetti(count){
-  const layer = document.getElementById("confetti");
-  layer.innerHTML = "";
-
-  for(let i=0;i<count;i++){
-    const piece = document.createElement("span");
-    piece.style.left = Math.random() * 100 + "vw";
-    piece.style.animationDelay = Math.random() * .6 + "s";
-    piece.style.background = randomColor();
-    piece.style.transform = `rotate(${Math.random()*360}deg)`;
-    layer.appendChild(piece);
-  }
-
-  setTimeout(() => layer.innerHTML = "", 3200);
-}
-
-function randomColor(){
-  const colors = ["#2563eb","#16a34a","#f59e0b","#dc2626","#7c3aed","#ec4899"];
-  return colors[Math.floor(Math.random()*colors.length)];
-}
-
-function goHome(){
-  showScreen("home");
-}
+renderCatalog();
 </script>
 </body>
 </html>
