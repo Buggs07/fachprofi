@@ -1,377 +1,424 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kontakt | PflegefachProfi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* ===== COMPACT CSS VARIABLES ===== */
-        :root {
-            --primary-blue: #4361ee;
-            --primary-purple: #7209b7;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --background: #f8fafc;
-            --surface: #ffffff;
-            --border: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --space-xs: 8px;
-            --space-sm: 12px;
-            --space-md: 16px;
-            --space-lg: 24px;
-            --space-xl: 32px;
-        }
+<!DOCTYPE html> 
+<html lang="de"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"> 
+<title>PflegefachProfi | Kontakt & Support</title> 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+<style> 
+/* ========================================================================== 
+   DESIGN SYSTEM & VARIABLES 
+   ========================================================================== */ 
+:root { 
+    --primary: #2563eb; 
+    --primary-dark: #1e40af; 
+    --primary-light: #eff6ff; 
+    --purple: #8b5cf6; 
+    --pink: #ec4899; 
+    --success: #10b981; 
+    --warning: #f59e0b; 
+    --danger: #ef4444; 
+    --bg-app: #f8fafc; 
+    --bg-surface: #ffffff; 
+    --text-main: #0f172a; 
+    --text-muted: #64748b; 
+    --border: #e2e8f0; 
+    --shadow-sm: 0 2px 4px rgba(15,23,42,0.04); 
+    --shadow-md: 0 8px 16px rgba(15,23,42,0.08); 
+    --shadow-lg: 0 20px 40px rgba(37,99,235,0.12); 
+    --shadow-glow: 0 0 20px rgba(37,99,235,0.25); 
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1); 
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+} 
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* ========================================================================== 
+   RESET & WRAPPER 
+   ========================================================================== */ 
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; } 
+html, body { width: 100%; height: 100%; } 
+body { 
+    font-family: 'Inter', sans-serif; 
+    background: #cbd5e1; 
+    color: var(--text-main); 
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start; 
+    height: 100vh; 
+    height: 100dvh;
+    overflow: hidden; 
+} 
+button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; } 
+a { color: inherit; text-decoration: none; } 
+h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; } 
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: var(--text-primary);
-            background-color: var(--background);
-            line-height: 1.5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-size: 14px;
-        }
+.app-wrapper { 
+    width: 100%; 
+    max-width: 500px; 
+    height: 100%; 
+    background: var(--bg-app); 
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+    box-shadow: 0 0 50px rgba(0,0,0,0.15); 
+    overflow: hidden; 
+} 
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 var(--space-md);
-        }
+@media (min-width: 768px) {
+    body { align-items: center; padding: 20px; }
+    .app-wrapper { height: 95vh; max-height: 900px; max-width: 1024px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+}
 
-        /* Header - Compact */
-        .header {
-            background: var(--surface);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+/* ========================================================================== 
+   TOPBAR 
+   ========================================================================== */ 
+.topbar { 
+    padding: max(16px, env(safe-area-inset-top)) 20px 16px; 
+    background: rgba(255,255,255,0.9); 
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); 
+    display: flex; justify-content: space-between; align-items: center; 
+    z-index: 50; flex-shrink: 0; 
+} 
+.brand { font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 8px; color: var(--text-main); } 
+.brand i { color: var(--primary); font-size: 22px; } 
+.stats { display: flex; gap: 8px; } 
+.stat-pill { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm); white-space: nowrap; } 
+.stat-pill .fa-bolt { color: var(--primary); } 
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-sm) 0;
-        }
+/* ========================================================================== 
+   SCROLLABLE CONTENT AREA 
+   ========================================================================== */ 
+#content-area { 
+    flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; 
+    display: flex; flex-direction: column; min-height: 0; 
+} 
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary-blue);
-            text-decoration: none;
-        }
+.view-header { padding: 24px 20px 14px; text-align: center; animation: slideUpFade 0.6s var(--ease-spring) forwards; } 
+.view-header h1 { font-size: 26px; line-height: 1.2; margin-bottom: 8px; } 
+.view-header p { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1.45; } 
 
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.9rem;
-        }
+/* ========================================================================== 
+   CONTACT CARD & ANIMATIONS
+   ========================================================================== */ 
+.contact-card {
+    margin: 0 20px 24px;
+    background: var(--bg-surface);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border: 1px solid var(--border);
+    animation: slideUpFade 0.6s var(--ease-spring) 0.1s forwards;
+    opacity: 0;
+    transform: translateY(15px);
+}
 
-        /* Navigation - Compact */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
-            padding: var(--space-xs) 0;
-        }
+.contact-icon-large {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    margin: 0 auto 16px;
+}
 
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            justify-content: center;
-            gap: var(--space-lg);
-        }
+.email-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    color: white;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 16px;
+    transition: 0.3s var(--ease-spring);
+    box-shadow: 0 10px 20px rgba(37,99,235,0.25);
+    margin-bottom: 16px;
+    text-decoration: none;
+}
+.email-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 25px rgba(37,99,235,0.35); }
+.email-btn:active { transform: scale(0.96); box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
 
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
-        }
+.info-box {
+    background: #f0f7ff;
+    border-radius: 12px;
+    padding: 14px;
+    border-left: 4px solid var(--primary);
+    text-align: left;
+    margin-top: 16px;
+}
+.info-box h3 { font-size: 13px; color: var(--primary); margin-bottom: 4px; }
+.info-box p { font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
+/* ========================================================================== 
+   SOCIAL MEDIA BANNERS (Dopamine hits)
+   ========================================================================== */ 
+.social-grid {
+    padding: 0 20px;
+    display: grid;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+@media (min-width: 768px) {
+    .social-grid { grid-template-columns: 1fr 1fr; }
+}
 
-        /* Content - Compact */
-        .contact-content {
-            padding: var(--space-lg) 0;
-            flex: 1;
-        }
+.social-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+    transition: 0.3s var(--ease-spring);
+    opacity: 0;
+    transform: translateY(15px);
+    animation: slideUpFade 0.6s var(--ease-spring) forwards;
+}
+.social-banner:nth-child(1) { animation-delay: 0.2s; }
+.social-banner:nth-child(2) { animation-delay: 0.3s; }
 
-        .contact-header {
-            text-align: center;
-            margin-bottom: var(--space-lg);
-        }
+.social-banner:active { transform: scale(0.96); }
+.social-banner:hover { transform: translateY(-4px); }
 
-        .contact-title {
-            font-size: 1.5rem;
-            margin-bottom: var(--space-xs);
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
+/* Shimmer Effect on Banners */
+.social-banner::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: shimmer 3.5s infinite;
+}
+@keyframes shimmer {
+    0%, 50% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
 
-        .contact-card {
-            background: var(--surface);
-            border-radius: var(--radius-md);
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-sm);
-            margin-bottom: var(--space-lg);
-            text-align: center;
-        }
+/* Instagram Styles */
+.social-insta {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+.social-insta:hover { box-shadow: 0 12px 25px rgba(220,39,67,0.3); }
 
-        .contact-icon {
-            font-size: 3rem;
-            color: var(--primary-blue);
-            margin-bottom: var(--space-md);
-        }
+/* YouTube Styles */
+.social-yt {
+    background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+}
+.social-yt:hover { box-shadow: 0 12px 25px rgba(255,0,0,0.3); }
 
-        .contact-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
-            font-size: 0.95rem;
-        }
+.social-icon { font-size: 34px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); flex-shrink: 0; }
+.social-text { min-width: 0; }
+.social-text h3 { font-size: 16px; margin-bottom: 4px; line-height: 1.2; }
+.social-text p { font-size: 12px; font-weight: 600; opacity: 0.9; line-height: 1.3; }
+.social-arrow { margin-left: auto; font-size: 14px; background: rgba(255,255,255,0.2); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0;}
 
-        .email-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-sm);
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-            color: white;
-            text-decoration: none;
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-bottom: var(--space-lg);
-        }
+@keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
 
-        .email-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
-        }
+/* ========================================================================== 
+   LEGAL FOOTER (Moved from old Header)
+   ========================================================================== */ 
+.legal-footer {
+    margin-top: auto;
+    padding: 30px 20px 40px;
+    text-align: center;
+    opacity: 0;
+    animation: slideUpFade 0.6s var(--ease-spring) 0.4s forwards;
+}
+.legal-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+.legal-links a {
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s;
+    background: var(--primary-light);
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+.legal-links a:active { transform: scale(0.95); }
+.copyright {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+}
 
-        .contact-details {
-            background: var(--background);
-            border-radius: var(--radius-sm);
-            padding: var(--space-md);
-            margin-top: var(--space-lg);
-        }
+/* ========================================================================== 
+   APP BOTTOM NAVIGATION 
+   ========================================================================== */ 
+.nav-bottom { 
+    flex-shrink: 0; width: 100%; height: 85px; 
+    background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+    border-top: 1px solid var(--border); display: flex; justify-content: space-evenly; 
+    align-items: flex-end; padding-bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 1000; 
+} 
+.nav-item { 
+    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+    color: var(--text-muted); text-decoration: none; flex: 1; height: 100%; cursor: pointer; padding-top: 8px; 
+} 
+.nav-item .icon-wrapper { 
+    position: relative; width: 44px; height: 32px; display: flex; justify-content: center; 
+    align-items: center; transition: 0.4s var(--ease-spring); z-index: 2; border-radius: 50%; 
+} 
+.nav-item i { font-size: 22px; transition: 0.4s var(--ease-spring); color: inherit; } 
+.nav-item span { 
+    font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8; 
+    transition: 0.4s var(--ease-spring); color: inherit; 
+} 
+.nav-item::before { 
+    content: ''; position: absolute; top: 12px; left: 50%; transform: translate(-50%, 0) scale(0); 
+    width: 44px; height: 44px; background: var(--primary-light); border-radius: 50%; 
+    opacity: 0; transition: 0.4s var(--ease-spring); z-index: 1; 
+} 
+.nav-item.active { color: var(--primary); } 
+.nav-item.active .icon-wrapper { transform: translateY(-8px); } 
+.nav-item.active i { transform: scale(1.15); } 
+.nav-item.active span { opacity: 1; transform: translateY(-4px); } 
+.nav-item.active::before { transform: translate(-50%, -20px) scale(1); opacity: 1; } 
 
-        .contact-email {
-            color: var(--primary-blue);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
+/* "Üben" CTA Button */
+.nav-cta .cta-wrapper { 
+    position: absolute; top: -28px; left: 50%; transform: translateX(-50%); 
+    width: 62px; height: 62px; background: linear-gradient(135deg, var(--primary), var(--pink)); 
+    color: white; font-size: 26px; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4); 
+    border: 5px solid var(--bg-app); animation: floatCTA 3s ease-in-out infinite; 
+    z-index: 10; border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+    transition: all 0.6s var(--ease-spring); 
+} 
+.nav-cta span { margin-top: 36px; transition: 0.6s var(--ease-spring); } 
+.nav-cta:active .cta-wrapper { transform: translate(-50%, 4px) scale(0.92); box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); animation: none; } 
+@keyframes floatCTA { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } } 
+.nav-cta.normalized .cta-wrapper { 
+    position: relative; top: 0; left: 0; transform: none; width: 44px; height: 32px; 
+    background: transparent; color: inherit; font-size: 22px; box-shadow: none; border-width: 0; animation: none; 
+} 
+.nav-cta.normalized span { margin-top: 4px; } 
 
-        .response-info {
-            background: #f0f7ff;
-            border-radius: var(--radius-sm);
-            padding: var(--space-md);
-            margin-top: var(--space-lg);
-            border-left: 4px solid var(--primary-blue);
-            text-align: left;
-        }
+</style> 
+</head> 
+<body> 
+<div class="app-wrapper"> 
+    
+    <!-- Topbar -->
+    <header class="topbar"> 
+        <div class="brand"><i class="fa-solid fa-clipboard-list"></i> PflegefachProfi</div> 
+        <div class="stats"><div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span>240 XP</span></div></div> 
+    </header> 
+    
+    <!-- Scrollable Content -->
+    <div id="content-area"> 
+        <div class="view-header"> 
+            <h1>Kontakt & Support</h1> 
+            <p>Wir sind für dich da! Schreib uns eine Nachricht oder lerne mit unserer Community.</p> 
+        </div> 
 
-        .response-info h3 {
-            color: var(--primary-blue);
-            margin-bottom: var(--space-xs);
-            font-size: 1rem;
-        }
-
-        .disclaimer-text {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            line-height: 1.4;
-            margin-top: var(--space-lg);
-        }
-
-        /* Footer - Compact */
-        .footer {
-            padding: var(--space-lg) 0;
-            background: var(--text-primary);
-            color: white;
-            margin-top: auto;
-            font-size: 0.85rem;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: var(--space-md);
-        }
-
-        .footer-link {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: white;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .footer-content {
-                flex-direction: column;
-                gap: var(--space-sm);
-                text-align: center;
-            }
+        <!-- Direct Contact Card -->
+        <div class="contact-card">
+            <div class="contact-icon-large">
+                <i class="fa-solid fa-envelope-open-text"></i>
+            </div>
+            <h3 style="font-size: 18px; margin-bottom: 6px;">Direkter Kontakt</h3>
+            <p style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-bottom: 20px;">
+                Fragen zur Plattform, Feedback oder Fehler gefunden? Wir antworten meist in 24 Stunden.
+            </p>
             
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
+            <a href="mailto:dvbuggs@gmail.com?subject=Anfrage%20PflegefachProfi&body=Hallo%20PflegefachProfi-Team,%0D%0A%0D%0A" class="email-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                E-Mail schreiben
+            </a>
             
-            .nav-menu {
-                gap: var(--space-sm);
-            }
-            
-            .contact-card {
-                padding: var(--space-md);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav-menu {
-                justify-content: space-between;
-                gap: var(--space-xs);
-            }
-            
-            .nav-link span {
-                display: none;
-            }
-            
-            .nav-link i {
-                font-size: 1.1rem;
-            }
-            
-            .contact-title {
-                font-size: 1.3rem;
-            }
-            
-            .email-button {
-                padding: var(--space-sm) var(--space-md);
-                font-size: 0.9rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-star-of-life"></i>
-                    </div>
-                    <span>PflegefachProfi</span>
-                </a>
+            <div class="info-box">
+                <h3><i class="fa-solid fa-circle-info"></i> Adresse</h3>
+                <p>E-Mail: dvbuggs@gmail.com</p>
             </div>
         </div>
-    </header>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> <span>Startseite</span></a></li>
-                <li><a href="impressum.html" class="nav-link"><i class="fas fa-file-contract"></i> <span>Impressum</span></a></li>
-                <li><a href="datenschutz.html" class="nav-link"><i class="fas fa-shield-alt"></i> <span>Datenschutz</span></a></li>
-                <li><a href="kontakt.html" class="nav-link active"><i class="fas fa-envelope"></i> <span>Kontakt</span></a></li>
-            </ul>
+        <!-- Social Media Advertisements (Dopamine Hits) -->
+        <div class="social-grid">
+            <!-- Instagram -->
+            <a href="https://instagram.com" target="_blank" class="social-banner social-insta">
+                <div class="social-icon"><i class="fa-brands fa-instagram"></i></div>
+                <div class="social-text">
+                    <h3>Community</h3>
+                    <p>Tägliche Quizze & Motivation</p>
+                </div>
+                <div class="social-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+            
+            <!-- YouTube -->
+            <a href="https://youtube.com" target="_blank" class="social-banner social-yt">
+                <div class="social-icon"><i class="fa-brands fa-youtube"></i></div>
+                <div class="social-text">
+                    <h3>Lernvideos</h3>
+                    <p>Ausführliche Tutorials</p>
+                </div>
+                <div class="social-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
         </div>
-    </nav>
 
-    <!-- Contact Content -->
-    <main class="contact-content">
-        <div class="container">
-            <div class="contact-header">
-                <h1 class="contact-title">Kontaktieren Sie uns</h1>
-                <p class="contact-description">Wir freuen uns auf Ihre Nachricht</p>
+        <!-- Legal Links integrated neatly -->
+        <div class="legal-footer">
+            <div class="legal-links">
+                <a href="impressum.html"><i class="fa-solid fa-file-contract"></i> Impressum</a>
+                <a href="datenschutz.html"><i class="fa-solid fa-shield-halved"></i> Datenschutz</a>
             </div>
-
-            <div class="contact-card">
-                <div class="contact-icon">
-                    <i class="fas fa-envelope-open-text"></i>
-                </div>
-                
-                <p class="contact-description">
-                    Haben Sie Fragen, Anregungen oder benötigen Sie Unterstützung?<br>
-                    Klicken Sie auf den Button unten, um uns direkt eine E-Mail zu senden.
-                </p>
-
-                <a href="mailto:dvbuggs@gmail.com?subject=Anfrage%20PflegefachProfi&body=Sehr%20geehrte%20Damen%20und%20Herren,%0D%0A%0D%0A" class="email-button">
-                    <i class="fas fa-paper-plane"></i>
-                    E-Mail senden
-                </a>
-
-                <div class="contact-details">
-                    <p>Oder schreiben Sie uns direkt an:</p>
-                    <p class="contact-email">dvbuggs@gmail.com</p>
-                </div>
-
-                <div class="response-info">
-                    <h3><i class="fas fa-info-circle"></i> Was Sie erwarten können</h3>
-                    <p>Wir bemühen uns, alle Anfragen innerhalb von 24-48 Stunden zu beantworten. Bitte geben Sie in Ihrer Nachricht möglichst genaue Informationen an, damit wir Ihnen optimal helfen können.</p>
-                </div>
-
-                <p class="disclaimer-text">
-                    <i class="fas fa-shield-alt"></i> 
-                    Ihre Daten werden vertraulich behandelt. Weitere Informationen zum Datenschutz finden Sie in unserer 
-                    <a href="datenschutz.html" style="color: var(--primary-blue);">Datenschutzerklärung</a>.
-                </p>
+            <div class="copyright">
+                &copy; 2026 PflegefachProfi. Made with <i class="fa-solid fa-heart" style="color:var(--danger)"></i> for Nurses.
             </div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="copyright">
-                    &copy; 2025 PflegefachProfi. Alle Rechte vorbehalten.
-                </div>
-                <div class="footer-links">
-                    <a href="impressum.html" class="footer-link">Impressum</a>
-                    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
-                    <a href="kontakt.html" class="footer-link">Kontakt</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-</body>
+    </div> 
+    
+    <!-- Bottom App Navigation (Kontakt instead of Ketten) -->
+    <nav class="nav-bottom" aria-label="Hauptnavigation"> 
+        <a href="index.html" class="nav-item" aria-label="Startseite">
+            <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
+            <span>Home</span>
+        </a> 
+        <a href="/pruefungsthemen.html" class="nav-item" aria-label="Prüfungsthemen">
+            <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
+            <span>Themen</span>
+        </a> 
+        <a href="/lernen.html" class="nav-item nav-cta" id="cta-btn" aria-label="Üben">
+            <div class="icon-wrapper cta-wrapper"><i class="fa-solid fa-bolt"></i></div>
+            <span>Üben</span>
+        </a> 
+        <a href="/pflegeplanung.html" class="nav-item" aria-label="Pflegeplanung">
+            <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div>
+            <span>Planung</span>
+        </a> 
+        <!-- ACTIVE: Kontakt (Replaces Handlungsketten) -->
+        <a href="/kontakt.html" class="nav-item active" aria-current="page" aria-label="Kontakt">
+            <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i></div>
+            <span>Kontakt</span>
+        </a> 
+    </nav> 
+</div> 
+
+<script> 
+document.addEventListener('DOMContentLoaded', () => {
+    // Dopamine-Effekt: Normalisierung des CTA nach 10 Sekunden
+    setTimeout(() => {
+        const ctaBtn = document.getElementById('cta-btn');
+        if(ctaBtn) ctaBtn.classList.add('normalized');
+    }, 10000);
+});
+</script> 
+</body> 
 </html>
