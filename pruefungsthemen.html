@@ -65,7 +65,7 @@ button{cursor:pointer}
   flex:1;
   overflow-y:auto;
   overflow-x:hidden;
-  padding-bottom:calc(env(safe-area-inset-bottom) + 100px);
+  padding-bottom:calc(env(safe-area-inset-bottom) + 112px);
 }
 
 .wrap{width:100%;padding:0 20px}
@@ -481,45 +481,98 @@ button{cursor:pointer}
 }
 
 /* =============================================
-   BOTTOM MOBILE NAV  (lernen aesthetic, dark glass)
+   APP-LIKE BOTTOM NAVIGATION
+   Clean aligned PflegefachProfi app navbar
    ============================================= */
-.mobile-nav{
-  display:none;
+.nav-bottom{
   position:fixed;
-  left:12px;right:12px;
-  bottom:max(12px,env(safe-area-inset-bottom));
-  height:64px;
-  background:rgba(15,23,42,.88);
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:24px;
-  box-shadow:0 20px 50px rgba(15,23,42,.28);
-  z-index:300;
+  left:50%;
+  right:auto;
+  bottom:0;
+  width:min(100%,900px);
+  height:84px;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,.98);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--br);
+  display:flex;
+  justify-content:space-evenly;
   align-items:center;
-  justify-content:space-around;
+  padding:8px 8px calc(10px + env(safe-area-inset-bottom));
+  z-index:300;
+  box-shadow:0 -12px 34px rgba(15,23,42,.08);
 }
-.mobile-nav a,.mobile-nav button{
-  border:none;background:transparent;text-decoration:none;
-  color:rgba(255,255,255,.5);
-  font-size:9px;font-weight:900;letter-spacing:.03em;
-  display:grid;place-items:center;gap:3px;
-  padding:8px 14px;border-radius:16px;
-  transition:.2s var(--ease);
+.nav-item{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  width:20%;
+  height:62px;
+  border:0;
+  border-radius:22px;
+  background:transparent;
+  color:var(--mut);
+  text-decoration:none;
+  font-family:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:color .24s var(--ease), transform .24s var(--ease);
+}
+.nav-item .icon-wrapper{
+  position:relative;
+  width:44px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  z-index:1;
+  transition:transform .24s var(--ease);
+}
+.nav-item .icon-wrapper::before{
+  content:'';
+  position:absolute;
+  inset:-5px 0;
+  border-radius:999px;
+  background:#eff6ff;
+  opacity:0;
+  transform:scale(.74);
+  z-index:-1;
+  transition:opacity .24s var(--ease), transform .24s var(--ease);
+}
+.nav-item i{
+  font-size:21px;
+  color:inherit;
+  transition:transform .24s var(--ease);
+}
+.nav-item span{
+  font-size:10px;
+  font-weight:900;
+  line-height:1;
+  opacity:.82;
+  color:inherit;
   white-space:nowrap;
+  transition:opacity .24s var(--ease), color .24s var(--ease);
 }
-.mobile-nav i{font-size:18px}
-.mobile-nav a.active,.mobile-nav a:hover{
-  color:#fff;background:rgba(255,255,255,.1);
-}
-.mobile-nav .locked{opacity:.32;cursor:not-allowed}
+.nav-item.active{color:var(--p)}
+.nav-item.active .icon-wrapper{transform:translateY(-2px)}
+.nav-item.active .icon-wrapper::before{opacity:1;transform:scale(1)}
+.nav-item.active i{transform:scale(1.08)}
+.nav-item.active span{opacity:1;color:var(--p)}
+.nav-item:active .icon-wrapper{transform:scale(.94)}
+.nav-item.locked{opacity:.48;cursor:not-allowed}
+.nav-item.locked:active .icon-wrapper{transform:none}
 
 /* =============================================
    TOAST
    ============================================= */
 .toast{
   position:fixed;right:18px;
-  bottom:calc(max(12px, env(safe-area-inset-bottom)) + 74px);
+  bottom:calc(96px + env(safe-area-inset-bottom));
   z-index:400;
   background:var(--txt);color:#fff;
   border-radius:99px;
@@ -547,7 +600,6 @@ footer{
    ============================================= */
 @media(max-width:680px){
   .desk-nav{display:none}
-  .mobile-nav{display:flex}
   .app{max-width:100%}
 
   .compact-head{padding:14px 14px 0}
@@ -733,24 +785,28 @@ footer{
 
 </div><!-- /app -->
 
-<!-- Mobile bottom nav (lernen dark-glass style) -->
-<nav class="mobile-nav">
-  <a href="pflegefachprofi.html">
-    <i class="fa-solid fa-house"></i>Home
+<!-- App bottom navigation -->
+<nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation">
+  <a href="pflegefachprofi.html" class="nav-item" aria-label="Home öffnen">
+    <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
+    <span>Home</span>
   </a>
-  <a href="#" class="active">
-    <i class="fa-solid fa-layer-group"></i>Themen
+  <a href="#" class="nav-item active" aria-label="Prüfungsthemen öffnen" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
+    <span>Themen</span>
   </a>
-  <a href="lernen.html">
-    <i class="fa-solid fa-gamepad"></i>Üben
+  <a href="lernen.html" class="nav-item" aria-label="Üben öffnen">
+    <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+    <span>Üben</span>
   </a>
-   <a href="pflegeplanung.html">
-    <i class="fa-solid fa-gamepad"></i>Pflegeplanung
-   </a>
-  
-  <button class="locked" onclick="showToast('🔒 Dieser Bereich kommt später.')">
-    <i class="fa-solid fa-lock"></i>Fortschritt
-  </button>
+  <a href="pflegeplanung.html" class="nav-item" aria-label="Pflegeplanung öffnen">
+    <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div>
+    <span>Planung</span>
+  </a>
+  <a href="handlungsketten.html" class="nav-item" aria-label="Handlungsketten öffnen">
+    <div class="icon-wrapper"><i class="fa-solid fa-route"></i></div>
+    <span>Ketten</span>
+  </a>
 </nav>
 
 <script>
