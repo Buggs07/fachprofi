@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>PflegefachProfi | Planung</title>
+<title>PflegefachProfi | Pflegeplanung</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -11,16 +11,32 @@
    DESIGN SYSTEM & VARIABLES
    ========================================================================== */
 :root {
-  --primary: #2563eb; --primary-dark: #1e40af; --primary-light: #eff6ff;
-  --purple: #8b5cf6; --pink: #ec4899;
-  --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+  /* Updated Primary Colors from new Header Design */
+  --primary: #4361ee; 
+  --primary-dark: #314bce; 
+  --purple: #7209b7; 
+  --pink: #f72585;
+  --primary-light: #eff6ff;
+  
+  --success: #4ade80; 
+  --success-dark: #065f46; 
+  --success-light: #d1fae5;
+  
+  --warning: #f59e0b; 
+  --warning-dark: #92400e; 
+  --warning-light: #fef3c7;
+  
+  --danger: #ef4444; 
+  --danger-dark: #991b1b; 
+  --danger-light: #fee2e2;
+  
   --bg-app: #f8fafc; --bg-surface: #ffffff;
-  --text-main: #0f172a; --text-muted: #64748b; --border: #e2e8f0;
+  --text-main: #1e293b; --text-muted: #64748b; --border: #e2e8f0;
   
   --shadow-sm: 0 2px 4px rgba(15,23,42,0.04);
   --shadow-md: 0 8px 16px rgba(15,23,42,0.08);
-  --shadow-lg: 0 20px 40px rgba(37,99,235,0.12);
-  --shadow-glow: 0 0 20px rgba(37,99,235,0.25);
+  --shadow-lg: 0 20px 40px rgba(67,97,238,0.15);
+  --shadow-glow: 0 0 20px rgba(247,37,133,0.3);
   
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -42,26 +58,44 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 }
 
 /* ==========================================================================
-   TOPBAR
+   NEW MODERN HEADER (From Instructions)
    ========================================================================== */
-.topbar {
+.navbar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
   padding: max(16px, env(safe-area-inset-top)) 20px 16px;
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 4px 15px rgba(114, 9, 183, 0.2);
   z-index: 50; flex-shrink: 0;
 }
-.brand { font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
-.brand i { color: var(--primary); font-size: 22px; }
+.nav-container {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.logo {
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 800; font-size: 1.2rem; color: white; text-decoration: none;
+}
+.logo-icon {
+  width: 38px; height: 38px; background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  color: white; animation: pulseIcon 2.5s infinite;
+}
 .stats { display: flex; gap: 8px; }
-.stat-pill { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm); }
-.stat-pill .fa-bolt { color: var(--primary); }
+.stat-pill { 
+  background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(8px); color: white; padding: 6px 12px; border-radius: 99px; 
+  font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; 
+}
+.stat-pill .fa-bolt { color: var(--warning); }
+
+@keyframes pulseIcon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
 
 /* ==========================================================================
-   ROUTING VIEWS (Flexbox driven for no glitching)
+   ROUTING VIEWS
    ========================================================================== */
 #content-area { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; }
-
-.view { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; opacity: 0; transform: translateY(10px); transition: 0.4s var(--ease); }
+.view { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; opacity: 0; transform: translateY(10px); transition: 0.4s var(--ease); padding-bottom: 80px; }
 .view.active { display: flex; flex-direction: column; opacity: 1; transform: translateY(0); }
 
 /* ==========================================================================
@@ -91,7 +125,6 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .btn-back { width: 36px; height: 36px; border-radius: 10px; background: var(--bg-app); color: var(--text-main); display: grid; place-items: center; font-size: 14px; transition: 0.2s; }
 .btn-back:active { transform: scale(0.9); background: var(--border); }
 .shutter-title-text { font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
 .shutter-wrapper { flex: 1; position: relative; overflow: hidden; }
 .shutter-grid {
   display: grid; height: 100%; width: 100%;
@@ -121,8 +154,7 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
   border-bottom: 2px solid var(--primary);
 }
 .col.active .col-header-text { writing-mode: horizontal-tb; transform: none; font-size: 20px; }
-
-.col-content { flex: 1; padding: 20px; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease); padding-bottom: 40px;}
+.col-content { flex: 1; padding: 20px; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease); padding-bottom: 100px;}
 .col.active .col-content { opacity: 1; pointer-events: auto; }
 
 .rich-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); opacity: 0; transform: translateY(15px); }
@@ -133,14 +165,96 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .col.active .rich-card:nth-child(4) { animation-delay: 0.4s; }
 .col.active .rich-card:nth-child(5) { animation-delay: 0.5s; }
 
-@keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+.btn-start-training {
+  width: 100%; padding: 16px; margin-top: 12px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--purple));
+  color: white; font-weight: 800; font-size: 16px; box-shadow: 0 8px 20px rgba(114,9,183,0.3);
+  display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;
+  animation: slideUpFade 0.5s var(--ease-spring) forwards; opacity: 0; animation-delay: 0.6s;
+}
+.btn-start-training:active { transform: scale(0.96); box-shadow: 0 4px 10px rgba(114,9,183,0.2); }
 
+@keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
 .rich-card-title { font-size: 11px; text-transform: uppercase; font-weight: 900; color: var(--primary); margin-bottom: 6px; letter-spacing: 0.5px; }
 .rich-card-text { font-size: 14px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
-.rich-card-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 14px; }
 
 /* ==========================================================================
-   NEW ANIMATED BOTTOM NAVIGATION (FLEX ALIGNED)
+   TRAINING VIEW (THE EXAM SIMULATOR)
+   ========================================================================== */
+.train-header { padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--bg-surface); position: sticky; top: 0; z-index: 10; }
+.train-progress { display: flex; gap: 8px; margin-bottom: 16px; }
+.step-dot { flex: 1; height: 6px; border-radius: 99px; background: var(--border); transition: 0.4s var(--ease); }
+.step-dot.active { background: var(--primary); box-shadow: 0 0 10px rgba(67,97,238,0.4); }
+
+.instruction-tab { 
+  background: var(--bg-app); border: 2px solid var(--border); border-radius: 16px; 
+  padding: 16px; margin: 0 20px 8px; display: flex; align-items: center; justify-content: space-between; 
+  box-shadow: var(--shadow-sm); transition: 0.3s;
+}
+.instruction-tab.highlight { border-color: var(--primary); background: var(--primary-light); }
+.inst-content h3 { font-size: 16px; color: var(--text-main); margin-bottom: 4px; }
+.inst-content p { font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.3;}
+.inst-counter { background: var(--surface); border: 2px solid var(--border); padding: 8px 14px; border-radius: 12px; font-weight: 900; font-size: 16px; color: var(--primary); }
+
+.card-grid { padding: 12px 20px 40px; display: flex; flex-direction: column; gap: 12px; }
+.select-card {
+  background: var(--bg-surface); border: 2px solid var(--border); border-radius: 16px;
+  padding: 16px; cursor: pointer; transition: 0.2s var(--ease-spring); position: relative;
+  box-shadow: var(--shadow-sm); transform-origin: center;
+}
+.select-card:active { transform: scale(0.97); }
+.select-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: var(--shadow-glow); transform: translateY(-2px); }
+.card-text { font-size: 14px; font-weight: 600; line-height: 1.45; color: var(--text-main); transition: 0.3s; }
+.check-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s var(--ease-spring); }
+.select-card.selected .check-icon { opacity: 1; transform: scale(1); }
+.select-card.selected .card-text { padding-right: 24px; }
+
+/* Evaluation Animation States */
+.select-card.evaluating { transform: scale(0.95); opacity: 0.8; }
+.select-card.eval-correct { border-color: var(--success); background: var(--success-light); transform: scale(1); opacity: 1; }
+.select-card.eval-correct .check-icon { color: var(--success-dark); opacity: 1; transform: scale(1); content: "\f00c"; }
+.select-card.eval-wrong { border-color: var(--danger); background: var(--danger-light); transform: scale(1); opacity: 1; animation: shake 0.4s var(--ease-spring); }
+.select-card.eval-wrong .check-icon { color: var(--danger-dark); opacity: 1; transform: scale(1); }
+.select-card.eval-missed { border-color: var(--warning); background: var(--warning-light); transform: scale(1); opacity: 1; }
+
+.explanation { margin-top: 12px; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 10px; display: none; line-height: 1.4; animation: fadeSlideIn 0.4s var(--ease-spring); }
+.eval-correct .explanation { display: block; background: rgba(74,222,128,0.2); color: var(--success-dark); }
+.eval-wrong .explanation { display: block; background: rgba(239,68,68,0.2); color: var(--danger-dark); }
+.eval-missed .explanation { display: block; background: rgba(245,158,11,0.2); color: var(--warning-dark); }
+
+@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Footer CTA */
+.train-footer { position: fixed; bottom: 0; width: 100%; max-width: 500px; padding: 16px 20px; padding-bottom: max(16px, env(safe-area-inset-bottom)); background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-top: 1px solid var(--border); z-index: 100; }
+.btn-main { width: 100%; padding: 18px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--purple)); color: white; font-size: 16px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 10px 20px rgba(114,9,183,0.3); transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
+.btn-main:active { transform: scale(0.96); box-shadow: 0 4px 10px rgba(114,9,183,0.2); }
+.btn-main:disabled { background: var(--border); color: var(--text-muted); box-shadow: none; transform: none; cursor: not-allowed; }
+
+/* ==========================================================================
+   RESULT VIEW
+   ========================================================================== */
+.result-header { text-align: center; padding: 40px 20px 20px; }
+.score-circle { width: 140px; height: 140px; border-radius: 50%; border: 10px solid var(--primary-light); margin: 0 auto 20px; display: grid; place-items: center; background: var(--bg-surface); box-shadow: var(--shadow-lg); position: relative; }
+.score-circle.perfect { border-color: var(--success-light); box-shadow: 0 0 30px rgba(74,222,128,0.4); }
+.score-text { font-size: 42px; font-weight: 900; letter-spacing: -2px; color: var(--text-main); }
+.score-text span { font-size: 20px; }
+
+.feedback-msg { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+.coaching-msg { font-size: 14px; font-weight: 600; color: var(--text-muted); margin-bottom: 24px; line-height: 1.4; padding: 0 20px; }
+.xp-reward { font-size: 24px; font-weight: 900; color: var(--success); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 30px;}
+
+.ampel-box { background: var(--bg-surface); border-radius: 20px; padding: 20px; border: 1px solid var(--border); margin: 0 20px 30px; text-align: center; }
+.ampel-title { font-size: 13px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); margin-bottom: 12px; }
+.ampel-btns { display: flex; gap: 10px; }
+.ampel-btn { flex: 1; padding: 14px 0; border-radius: 12px; font-weight: 800; font-size: 14px; border: 2px solid transparent; transition: 0.2s; cursor: pointer;}
+.ampel-btn:active { transform: scale(0.95); }
+.btn-easy { background: var(--success-light); color: var(--success-dark); }
+.btn-med { background: var(--warning-light); color: var(--warning-dark); }
+.btn-hard { background: var(--danger-light); color: var(--danger-dark); }
+.ampel-btn.selected { border-color: currentColor; box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+/* ==========================================================================
+   BOTTOM NAVIGATION
    ========================================================================== */
 .nav-bottom {
   flex-shrink: 0; width: 100%; height: 85px;
@@ -149,45 +263,29 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
   align-items: flex-end; padding-bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 1000;
   transition: height 0.4s var(--ease-spring), padding 0.4s var(--ease-spring);
 }
-
-/* Compact Nav State */
 .nav-bottom.compact { height: 60px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
 .nav-bottom.compact span { opacity: 0; height: 0; margin-top: 0; transform: scale(0.5); pointer-events: none; }
 .nav-bottom.compact .nav-item { padding-top: 0; }
 .nav-bottom.compact .nav-item.active .icon-wrapper { transform: translateY(-2px) scale(1.1); }
 .nav-bottom.compact .nav-item.active::before { transform: translate(-50%, -14px) scale(0.8); }
 
-/* Normal Nav Items */
 .nav-item {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
   color: var(--text-muted); text-decoration: none; width: 20%; height: 100%;
   cursor: pointer; -webkit-tap-highlight-color: transparent; padding-top: 8px;
 }
-.nav-item .icon-wrapper {
-  position: relative; width: 44px; height: 32px; display: flex; justify-content: center; align-items: center;
-  transition: 0.4s var(--ease-spring); z-index: 2; border-radius: 50%;
-}
+.nav-item .icon-wrapper { position: relative; width: 44px; height: 32px; display: flex; justify-content: center; align-items: center; transition: 0.4s var(--ease-spring); z-index: 2; border-radius: 50%; }
 .nav-item i { font-size: 22px; transition: 0.4s var(--ease-spring); color: inherit; }
-.nav-item span {
-  font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8;
-  transition: 0.4s var(--ease-spring); color: inherit;
-}
+.nav-item span { font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8; transition: 0.4s var(--ease-spring); color: inherit; }
+.nav-item::before { content: ''; position: absolute; top: 12px; left: 50%; transform: translate(-50%, 0) scale(0); width: 44px; height: 44px; background: var(--primary-light); border-radius: 50%; opacity: 0; transition: 0.4s var(--ease-spring); z-index: 1; }
 
-/* Background Blob for Active State */
-.nav-item::before {
-  content: ''; position: absolute; top: 12px; left: 50%; transform: translate(-50%, 0) scale(0);
-  width: 44px; height: 44px; background: var(--primary-light); border-radius: 50%;
-  opacity: 0; transition: 0.4s var(--ease-spring); z-index: 1;
-}
-
-/* Active State Styles */
 .nav-item.active { color: var(--primary); }
 .nav-item.active .icon-wrapper { transform: translateY(-8px); }
 .nav-item.active i { transform: scale(1.15); }
 .nav-item.active span { opacity: 1; transform: translateY(-4px); }
 .nav-item.active::before { transform: translate(-50%, -20px) scale(1); opacity: 1; }
 
-/* --- THE CTA STATE ("Üben") --- */
+/* The Central CTA ("Üben") Button */
 .nav-cta .cta-wrapper {
   position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
   width: 62px; height: 62px; background: linear-gradient(135deg, var(--primary), var(--pink));
@@ -199,21 +297,19 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 .nav-cta span { margin-top: 36px; transition: 0.6s var(--ease-spring); }
 .nav-cta:active .cta-wrapper { transform: translate(-50%, 4px) scale(0.92); box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); animation: none; }
 
-@keyframes floatCTA {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-6px); }
-}
+@keyframes floatCTA { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
 
-/* --- NORMALIZED CTA (After 10 Seconds) --- */
-.nav-cta.normalized .cta-wrapper {
-  position: relative; top: 0; left: 0; transform: none; width: 44px; height: 32px;
-  background: transparent; color: inherit; font-size: 22px; box-shadow: none; border-width: 0; animation: none;
-}
+/* Normalized CTA (After 10s) */
+.nav-cta.normalized .cta-wrapper { position: relative; top: 0; left: 0; transform: none; width: 44px; height: 32px; background: transparent; color: inherit; font-size: 22px; box-shadow: none; border-width: 0; animation: none; }
 .nav-cta.normalized span { margin-top: 4px; }
 .nav-cta.normalized.active .cta-wrapper { transform: translateY(-8px); color: var(--primary); }
 .nav-cta.normalized.active i { transform: scale(1.15); }
 
-/* Toast */
+/* Animations & Toast */
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.floating-xp { position: fixed; font-size: 28px; font-weight: 900; color: var(--success); pointer-events: none; z-index: 9999; text-shadow: 0 4px 10px rgba(74,222,128,0.4); animation: floatUp 1.2s var(--ease) forwards; }
+.floating-xp.negative { color: var(--danger); text-shadow: 0 4px 10px rgba(239,68,68,0.4); }
+@keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-80px) scale(1.3); } }
 .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: white; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 800; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s var(--ease-spring); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
@@ -222,11 +318,16 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 
 <div class="app-wrapper">
 
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="brand"><i class="fa-solid fa-clipboard-list"></i> PflegefachProfi</div>
-    <div class="stats">
-      <div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span>240 XP</span></div>
+  <!-- NEW MODERN HEADER -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <div class="logo-icon"><i class="fas fa-stethoscope"></i></div>
+        <span>PflegefachProfi</span>
+      </a>
+      <div class="stats">
+        <div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span id="ui-xp">0 XP</span></div>
+      </div>
     </div>
   </header>
 
@@ -251,7 +352,6 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
       
       <div class="shutter-wrapper">
         <div class="shutter-grid" id="shutter-grid">
-          <!-- Column 1: Problem -->
           <div class="col active" data-col="1" onclick="Shutter.focus(1)">
             <div class="col-header">
               <i class="fa-solid fa-triangle-exclamation"></i>
@@ -260,8 +360,6 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
             </div>
             <div class="col-content" id="content-problem"></div>
           </div>
-          
-          <!-- Column 2: Ziele -->
           <div class="col" data-col="2" onclick="Shutter.focus(2)">
             <div class="col-header">
               <i class="fa-solid fa-bullseye"></i>
@@ -270,23 +368,74 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
             </div>
             <div class="col-content" id="content-goals"></div>
           </div>
-          
-          <!-- Column 3: Maßnahmen -->
           <div class="col" data-col="3" onclick="Shutter.focus(3)">
             <div class="col-header">
               <i class="fa-solid fa-list-check"></i>
               <span class="col-header-text">Maßnahmen</span>
               <div class="click-hint">Tippe zum Öffnen</div>
             </div>
-            <div class="col-content" id="content-measures"></div>
+            <div class="col-content" id="content-measures">
+               <!-- Auto-injected content + training CTA -->
+            </div>
           </div>
         </div>
       </div>
     </main>
-  </div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toastMsg">In Entwicklung</div>
+    <!-- VIEW 3: TRAINING (EXAM SIMULATOR) -->
+    <main class="view" id="view-train">
+      <div class="train-header">
+        <button class="btn-back" style="background:transparent; padding:0; width:auto; margin-bottom:12px; color:var(--text-muted);" onclick="App.nav('view-shutter', 3)"><i class="fa-solid fa-chevron-left"></i> Abbrechen</button>
+        <div class="train-progress">
+          <div class="step-dot active" id="dot-1"></div>
+          <div class="step-dot" id="dot-2"></div>
+        </div>
+      </div>
+
+      <!-- INSTRUCTION TAB -->
+      <div class="instruction-tab" id="inst-tab">
+        <div class="inst-content">
+          <h3 id="inst-heading">Prüfungsfrage</h3>
+          <p id="inst-sub">Wähle exakt 2 passende Ziele aus.</p>
+        </div>
+        <div class="inst-counter" id="train-counter">0/2</div>
+      </div>
+      
+      <div class="card-grid" id="train-cards">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="train-footer">
+        <button class="btn-main" id="btn-submit" disabled onclick="Trainer.submitStep()">Auswahl prüfen <i class="fa-solid fa-check"></i></button>
+      </div>
+    </main>
+
+    <!-- VIEW 4: RESULT -->
+    <main class="view" id="view-result">
+      <div class="result-header">
+        <div class="score-circle" id="res-circle">
+          <div class="score-text"><span id="res-score">0</span><span>%</span></div>
+        </div>
+        <div class="feedback-msg" id="res-feedback">Prüfungsreif!</div>
+        <div class="coaching-msg" id="res-coaching">Sehr sauber strukturiert.</div>
+        <div class="xp-reward" id="res-xp">+0 XP</div>
+      </div>
+
+      <div class="ampel-box">
+        <div class="ampel-title">Wie schwer war dieser Fall?</div>
+        <div class="ampel-btns">
+          <button class="ampel-btn btn-easy" onclick="Trainer.setDifficulty('easy')">🟢 Easy</button>
+          <button class="ampel-btn btn-med" onclick="Trainer.setDifficulty('medium')">🟡 Mittel</button>
+          <button class="ampel-btn btn-hard" onclick="Trainer.setDifficulty('hard')">🔴 Schwer</button>
+        </div>
+      </div>
+
+      <div style="padding: 0 20px;">
+        <button class="btn-main" style="margin-bottom: 12px; background: var(--bg-surface); color: var(--text-main); border: 2px solid var(--border); box-shadow: none;" onclick="Trainer.retry()">Nochmal üben <i class="fa-solid fa-rotate-right"></i></button>
+        <button class="btn-main" onclick="App.nav('view-catalog', 3)">Zurück zur Übersicht</button>
+      </div>
+    </main>
+  </div>
 
   <!-- BOTTOM NAVIGATION -->
   <nav class="nav-bottom" id="bottomNav">
@@ -294,7 +443,7 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
       <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
       <span>Home</span>
     </a>
-    <a href="#" class="nav-item" onclick="App.mockNav('Themen', 1)">
+    <a href="#" class="nav-item" onclick="App.mockNav('Prüfungsthemen', 1)">
       <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
       <span>Themen</span>
     </a>
@@ -317,6 +466,9 @@ h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
     </a>
   </nav>
 
+  <!-- TOAST -->
+  <div class="toast" id="toastMsg">In Entwicklung</div>
+
 </div>
 
 <script>
@@ -329,16 +481,20 @@ const DATA = [
     title: "Gefahr der Hypervolämie",
     problemText: "Der Pflegeempfänger hat eine fortgeschrittene Herzinsuffizienz (NYHA III). Es besteht die Gefahr einer kardialen Dekompensation mit akuter Überwässerung (Lungen-/Beinödeme).",
     goals: [
-      { type: "Nahziel", text: "PE zeigt innerhalb von 48h keine Zunahme der peripheren Ödeme." },
-      { type: "Fernziel", text: "PE hält sein Trockengewicht (+/- 500g) dauerhaft stabil." }
+      { id: "g1", type: "Nahziel", correct: true, text: "PE zeigt innerhalb von 48h keine Zunahme der peripheren Ödeme.", explanation: "SMART: messbar und zeitlich definiert." },
+      { id: "g2", type: "Fernziel", correct: true, text: "PE hält sein Trockengewicht (+/- 500g) dauerhaft stabil.", explanation: "Klinisch relevantes, messbares Erhaltungsziel." },
+      { id: "g3", correct: false, text: "PE soll weniger trinken.", explanation: "Vage und nicht patientenorientiert formuliert." },
+      { id: "g4", correct: false, text: "Kein Wasser in der Lunge.", explanation: "Unvollständiges Ziel, fehlender Zeitraum." }
     ],
     measures: [
-      "Pfk wiegt PE täglich morgens nüchtern zur Verlaufskontrolle.",
-      "Pfk führt im FD/SD/ND eine strenge Ein- und Ausfuhrbilanzierung durch.",
-      "Pfk kontrolliert 1x im FD Knöchel und Unterschenkel auf Ödembildung.",
-      "Pfk beschränkt die tägliche Trinkmenge nach ärztl. AO auf 1.500 ml.",
-      "Pfk positioniert PE bei Dyspnoe umgehend in Herzstuhllagerung zur Vorlastsenkung.",
-      "Pfk verabreicht angeordnete Diuretika pünktlich im FD zur Entlastung."
+      { id: "m1", correct: true, text: "Pfk wiegt PE täglich morgens nüchtern zur Verlaufskontrolle.", explanation: "Wer (Pfk) + Wann (täglich morgens) + Warum (Verlaufskontrolle)." },
+      { id: "m2", correct: true, text: "Pfk führt im FD/SD/ND eine strenge Ein- und Ausfuhrbilanzierung durch.", explanation: "Klare Delegation für alle Schichten." },
+      { id: "m3", correct: true, text: "Pfk kontrolliert 1x im FD Knöchel und Unterschenkel auf Ödembildung.", explanation: "Präzises Assessment." },
+      { id: "m4", correct: true, text: "Pfk beschränkt die tägliche Trinkmenge nach ärztl. AO auf 1.500 ml.", explanation: "Korrekt mit ärztlicher Anordnung." },
+      { id: "m5", correct: true, text: "Pfk positioniert PE bei Dyspnoe umgehend in Herzstuhllagerung zur Vorlastsenkung.", explanation: "Akutmaßnahme bei kardialer Überlastung." },
+      { id: "m6", correct: false, text: "Pfk achtet auf Ödeme.", explanation: "Zu ungenau. Wann? Wie oft? Wo?" },
+      { id: "m7", correct: false, text: "Patient soll sich schonen.", explanation: "Fehlt Wer, Wann, Warum." },
+      { id: "m8", correct: false, text: "Pfk gibt Entwässerungstabletten.", explanation: "Welche? Wann? Ärztliche Anordnung fehlt." }
     ]
   },
   {
@@ -346,45 +502,62 @@ const DATA = [
     title: "Aspirationsgefahr bei Dysphagie",
     problemText: "Nach einem ischämischen Apoplex leidet der PE an einer Schluckstörung. Es droht das Verschlucken von Nahrung oder Speichel mit Folge einer Aspirationspneumonie.",
     goals: [
-      { type: "Nahziel", text: "PE toleriert angedickte Flüssigkeiten ohne Hustenreiz während der Mahlzeit." },
-      { type: "Fernziel", text: "PE bleibt während des gesamten Aufenthalts pneumoniefrei." }
+      { id: "g1", type: "Nahziel", correct: true, text: "PE toleriert angedickte Flüssigkeiten ohne Hustenreiz während der Mahlzeit.", explanation: "Beobachtbares Verhaltensziel." },
+      { id: "g2", type: "Fernziel", correct: true, text: "PE bleibt während des gesamten Aufenthalts pneumoniefrei.", explanation: "Klassisches präventives Ziel." },
+      { id: "g3", correct: false, text: "PE verschluckt sich nicht mehr.", explanation: "Unrealistisch bei Dysphagie." },
+      { id: "g4", correct: false, text: "Essen anreichen.", explanation: "Das ist eine Maßnahme, kein Ziel." }
     ],
     measures: [
-      "Pfk lagert PE zu jeder Mahlzeit strikt im 90°-Winkel (Oberkörper hoch).",
-      "Pfk dickt alle Getränke auf Nektarkonsistenz an, um die Fließgeschwindigkeit zu senken.",
-      "Pfk reicht Nahrungsmittel nur teelöffelweise an.",
-      "Pfk führt nach jeder Mahlzeit eine Mundraumkontrolle auf Speisereste durch.",
-      "Pfk belässt PE nach dem Essen für weitere 30 Minuten in aufrechter Position.",
-      "Pfk saugt bei plötzlichem Husten/Verschlucken sofort ab."
-    ]
-  },
-  {
-    id: "p3", category: "Mobilität", icon: "🛏️",
-    title: "Hohes Dekubitusrisiko",
-    problemText: "Der PE ist stark immobil, kachektisch und stuhlinkontinent. Es besteht ein hohes Risiko für die Entstehung von Druckgeschwüren an den Prädilektionsstellen.",
-    goals: [
-      { type: "Nahziel", text: "Die Haut an Kreuzbein und Fersen zeigt bis zum Schichtende keine Rötung." },
-      { type: "Fernziel", text: "Die Hautintegrität des PE bleibt dauerhaft vollständig erhalten." }
-    ],
-    measures: [
-      "Pfk führt im FD und SD eine Hautinspektion aller Prädilektionsstellen durch.",
-      "Pfk positioniert PE alle 2 Stunden im Wechsel (Rücken, 30° Li, 30° Re).",
-      "Pfk lagert die Fersen des PE dauerhaft mit einem Kissen hohl.",
-      "Pfk reinigt die Haut bei Inkontinenzereignissen sofort mit klarem Wasser.",
-      "Pfk streicht gefährdete Hautstellen NICHT aus, um Mikrotraumen zu vermeiden.",
-      "Pfk reicht im FD und SD eiweißreiche Zusatznahrung zur Gewebeunterstützung an."
+      { id: "m1", correct: true, text: "Pfk lagert PE zu jeder Mahlzeit strikt im 90°-Winkel (Oberkörper hoch).", explanation: "Wichtige Basismaßnahme." },
+      { id: "m2", correct: true, text: "Pfk dickt alle Getränke auf Nektarkonsistenz an, um die Fließgeschwindigkeit zu senken.", explanation: "Konkrete Anweisung." },
+      { id: "m3", correct: true, text: "Pfk reicht Nahrungsmittel nur teelöffelweise an.", explanation: "Pflegerischer Detailfokus." },
+      { id: "m4", correct: true, text: "Pfk führt nach jeder Mahlzeit eine Mundraumkontrolle auf Speisereste durch.", explanation: "Prävention von stiller Aspiration." },
+      { id: "m5", correct: true, text: "Pfk belässt PE nach dem Essen für weitere 30 Minuten in aufrechter Position.", explanation: "Verhindert Reflux." },
+      { id: "m6", correct: false, text: "Pfk füttert Patient vorsichtig.", explanation: "Zu unpräzise." },
+      { id: "m7", correct: false, text: "Pfk gibt nur Suppe.", explanation: "Ärztliche/Logopädische Kostform fehlt." },
+      { id: "m8", correct: false, text: "Beim Essen aufpassen.", explanation: "Keine verwertbare Pflegeplanung." }
     ]
   }
 ];
 
 /* ==========================================================================
-   2. APP & NAVIGATION LOGIC
+   2. APP LOGIC & STATE
    ========================================================================== */
+const STORAGE_KEY = 'pfp.exam.v2';
+const State = {
+  xp: 0, streak: 0, history: {}, 
+  activeProb: null, step: 1, selGoals: [], selMeasures: []
+};
+
+function loadData() {
+  try {
+    const d = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(d) { State.xp = d.xp||0; State.history = d.history||{}; }
+  } catch(e) {}
+  document.getElementById('ui-xp').innerText = State.xp + " XP";
+}
+
+function addXP(amount) {
+  State.xp += amount;
+  document.getElementById('ui-xp').innerText = State.xp + " XP";
+  
+  const el = document.createElement('div');
+  el.className = `floating-xp ${amount < 0 ? 'negative' : ''}`;
+  el.innerText = amount > 0 ? `+${amount}` : amount;
+  el.style.left = (40 + Math.random()*20) + '%';
+  el.style.top = '50%';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1200);
+  
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({xp: State.xp, history: State.history}));
+}
+
 const App = {
   init() {
+    loadData();
     this.renderCatalog();
     
-    // Normalize CTA after 10 seconds (Dopamine effect settles)
+    // Normalize CTA after 10 seconds
     setTimeout(() => {
       const cta = document.getElementById('cta-btn');
       if (cta) cta.classList.add('normalized');
@@ -397,23 +570,20 @@ const App = {
     
     this.updateNav(navIndex);
     
-    // Shrink navbar when opening Shutter
     const bottomNav = document.getElementById('bottomNav');
-    if(id === 'view-shutter') {
+    if(id === 'view-shutter' || id === 'view-train' || id === 'view-result') {
       bottomNav.classList.add('compact');
     } else {
       bottomNav.classList.remove('compact');
     }
-    
     if(navigator.vibrate) navigator.vibrate(15);
   },
   
   mockNav(name, navIndex) {
     const toast = document.getElementById("toastMsg");
-    toast.textContent = `${name} Modul (kommt bald)`;
+    toast.textContent = `${name} (in Entwicklung)`;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2000);
-    
     this.updateNav(navIndex);
     if(navigator.vibrate) navigator.vibrate(15);
   },
@@ -454,24 +624,31 @@ const Shutter = {
     document.getElementById('content-problem').innerHTML = `
       <div class="rich-card">
         <div class="rich-card-icon"><i class="fa-solid fa-user-injured"></i></div>
-        <div class="rich-card-title">Situationsbeschreibung</div>
+        <div class="rich-card-title">Situation</div>
         <div class="rich-card-text">${data.problemText}</div>
       </div>
     `;
 
-    document.getElementById('content-goals').innerHTML = data.goals.map(g => `
+    document.getElementById('content-goals').innerHTML = data.goals.filter(g => g.type).map(g => `
       <div class="rich-card">
         <div class="rich-card-title">${g.type}</div>
         <div class="rich-card-text">${g.text}</div>
       </div>
     `).join('');
 
-    document.getElementById('content-measures').innerHTML = data.measures.map((m, i) => `
+    document.getElementById('content-measures').innerHTML = data.measures.filter(m => typeof m === "string").map((m, i) => `
       <div class="rich-card">
         <div class="rich-card-title">Maßnahme ${i+1}</div>
         <div class="rich-card-text">${m}</div>
       </div>
     `).join('');
+    
+    // Inject the Start Training CTA in the Measures column
+    document.getElementById('content-measures').innerHTML += `
+      <button class="btn-start-training" onclick="Trainer.start('${data.id}')">
+        Wissen prüfen <i class="fa-solid fa-bolt"></i>
+      </button>
+    `;
 
     this.focus(1);
     App.nav('view-shutter', 3);
@@ -482,7 +659,7 @@ const Shutter = {
       c.classList.remove('active');
       const content = c.querySelector('.col-content');
       content.style.animation = 'none';
-      content.offsetHeight; // trigger reflow
+      content.offsetHeight; 
       content.style.animation = null; 
     });
     
@@ -497,7 +674,215 @@ const Shutter = {
   }
 };
 
-// Boot App
+/* ==========================================================================
+   4. TRAINING ENGINE
+   ========================================================================== */
+const Trainer = {
+  start(id) {
+    State.activeProb = DATA.find(p => p.id === id);
+    State.step = 1; State.selGoals = []; State.selMeasures = [];
+    
+    State.activeProb.sGoals = [...State.activeProb.goals].sort(() => Math.random() - 0.5);
+    State.activeProb.sMeasures = [...State.activeProb.measures].sort(() => Math.random() - 0.5);
+
+    App.nav('view-train', 3);
+    this.renderStep();
+  },
+
+  renderStep() {
+    const isStep1 = State.step === 1;
+    
+    document.getElementById('dot-1').className = `step-dot active`;
+    document.getElementById('dot-2').className = `step-dot ${isStep1 ? '' : 'active'}`;
+    
+    const instTab = document.getElementById('inst-tab');
+    instTab.classList.remove('highlight');
+    void instTab.offsetWidth;
+    
+    if(isStep1) {
+        document.getElementById('inst-heading').innerText = `Pflegeziele für: ${State.activeProb.title}`;
+        document.getElementById('inst-sub').innerHTML = "Wählen Sie <b>2 korrekte</b> Ziele aus.";
+        document.getElementById('train-counter').innerText = `${State.selGoals.length}/2`;
+    } else {
+        document.getElementById('inst-heading').innerText = `Maßnahmen für: ${State.activeProb.title}`;
+        document.getElementById('inst-sub').innerHTML = "Wählen Sie <b>5 korrekte</b> Maßnahmen aus.";
+        document.getElementById('train-counter').innerText = `${State.selMeasures.length}/5`;
+    }
+    instTab.classList.add('highlight');
+
+    const items = isStep1 ? State.activeProb.sGoals : State.activeProb.sMeasures;
+    const selectedArr = isStep1 ? State.selGoals : State.selMeasures;
+
+    document.getElementById('train-cards').innerHTML = items.map(item => {
+      const isSelected = selectedArr.includes(item.id);
+      return `
+        <div class="select-card ${isSelected ? 'selected' : ''}" id="card-${item.id}" onclick="Trainer.toggleCard('${item.id}')">
+          <i class="fa-solid fa-check check-icon"></i>
+          <div class="card-text">${item.text}</div>
+          <div class="explanation" id="exp-${item.id}">${item.explanation}</div>
+        </div>
+      `;
+    }).join('');
+    
+    this.checkButtonState();
+  },
+
+  toggleCard(id) {
+    const isStep1 = State.step === 1;
+    const arr = isStep1 ? State.selGoals : State.selMeasures;
+    const limit = isStep1 ? 2 : 5;
+
+    if(arr.includes(id)) {
+      arr.splice(arr.indexOf(id), 1);
+      if(navigator.vibrate) navigator.vibrate(10);
+    } else {
+      if(arr.length >= limit) {
+        document.getElementById(`card-${id}`).classList.add('shake');
+        setTimeout(()=> document.getElementById(`card-${id}`).classList.remove('shake'), 400);
+        if(navigator.vibrate) navigator.vibrate([30,30]);
+        return; 
+      }
+      arr.push(id);
+      if(navigator.vibrate) navigator.vibrate(15);
+    }
+    
+    const card = document.getElementById(`card-${id}`);
+    card.classList.toggle('selected');
+    document.getElementById('train-counter').innerText = `${arr.length}/${limit}`;
+    
+    this.checkButtonState();
+  },
+
+  checkButtonState() {
+    const isStep1 = State.step === 1;
+    const arr = isStep1 ? State.selGoals : State.selMeasures;
+    const limit = isStep1 ? 2 : 5;
+    const btn = document.getElementById('btn-submit');
+    
+    if(arr.length === limit) {
+      btn.disabled = false;
+      btn.innerHTML = `Auswahl prüfen <i class="fa-solid fa-check"></i>`;
+    } else {
+      btn.disabled = true;
+      btn.innerHTML = `Noch ${limit - arr.length} wählen...`;
+    }
+  },
+
+  submitStep() {
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Werte aus...`;
+
+    const isStep1 = State.step === 1;
+    const items = isStep1 ? State.activeProb.sGoals : State.activeProb.sMeasures;
+    const selectedArr = isStep1 ? State.selGoals : State.selMeasures;
+    
+    let allCorrect = true;
+    let delay = 0;
+
+    items.forEach((item) => {
+      const card = document.getElementById(`card-${item.id}`);
+      const isSelected = selectedArr.includes(item.id);
+      card.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        card.classList.remove('selected');
+        card.classList.add('evaluating');
+        
+        setTimeout(() => {
+            card.classList.remove('evaluating');
+            if(isSelected && item.correct) {
+                card.classList.add('eval-correct');
+                addXP(isStep1 ? 10 : 8);
+                if(navigator.vibrate) navigator.vibrate(30);
+            } else if (isSelected && !item.correct) {
+                card.classList.add('eval-wrong');
+                addXP(isStep1 ? -5 : -4);
+                allCorrect = false;
+                if(navigator.vibrate) navigator.vibrate([40, 40]);
+            } else if (!isSelected && item.correct) {
+                card.classList.add('eval-missed');
+                allCorrect = false;
+                if(navigator.vibrate) navigator.vibrate(20);
+            }
+        }, 150); 
+      }, delay);
+      delay += 300; 
+    });
+
+    setTimeout(() => {
+        if(allCorrect) addXP(10); 
+        btn.disabled = false;
+        if(isStep1) {
+          btn.innerHTML = `Weiter zu Maßnahmen <i class="fa-solid fa-arrow-right"></i>`;
+          btn.onclick = () => { 
+              State.step = 2; 
+              document.getElementById('train-cards').innerHTML = ''; 
+              window.scrollTo(0,0);
+              Trainer.renderStep(); 
+          };
+        } else {
+          btn.innerHTML = `Ergebnis anzeigen <i class="fa-solid fa-flag-checkered"></i>`;
+          btn.onclick = () => { Trainer.finish(); };
+        }
+    }, delay + 200);
+  },
+
+  finish() {
+    App.nav('view-result', 3);
+    
+    let maxCorrect = 7; 
+    let actualCorrect = 0;
+    
+    State.activeProb.goals.forEach(g => { if(g.correct && State.selGoals.includes(g.id)) actualCorrect++; });
+    State.activeProb.measures.forEach(m => { if(m.correct && State.selMeasures.includes(m.id)) actualCorrect++; });
+    State.activeProb.goals.forEach(g => { if(!g.correct && State.selGoals.includes(g.id)) actualCorrect--; });
+    State.activeProb.measures.forEach(m => { if(!m.correct && State.selMeasures.includes(m.id)) actualCorrect--; });
+    
+    if(actualCorrect < 0) actualCorrect = 0;
+    let pct = Math.round((actualCorrect / maxCorrect) * 100);
+
+    document.getElementById('res-score').innerText = pct;
+    const circle = document.getElementById('res-circle');
+    const fb = document.getElementById('res-feedback');
+    const coach = document.getElementById('res-coaching');
+
+    if(pct >= 90) {
+      circle.className = "score-circle perfect";
+      fb.innerText = "Prüfungsreif!";
+      fb.style.color = "var(--success)";
+      coach.innerText = "Exzellente Struktur. WER, WANN, WIE und WARUM perfekt angewandt.";
+    } else if (pct >= 70) {
+      circle.className = "score-circle";
+      fb.innerText = "Solide!";
+      fb.style.color = "var(--warning)";
+      coach.innerText = "Gute Basis, aber achte genauer auf die Distraktoren in der Prüfung.";
+    } else {
+      circle.className = "score-circle";
+      fb.innerText = "Noch unsicher";
+      fb.style.color = "var(--danger)";
+      coach.innerText = "Einige Maßnahmen waren nicht messbar oder ungenau formuliert. Übe diesen Fall nochmal.";
+    }
+
+    document.querySelectorAll('.ampel-btn').forEach(b => b.classList.remove('selected'));
+    if(navigator.vibrate) navigator.vibrate([40,50,40]);
+  },
+
+  setDifficulty(status) {
+    if(navigator.vibrate) navigator.vibrate(20);
+    document.querySelectorAll('.ampel-btn').forEach(b => b.classList.remove('selected'));
+    event.target.classList.add('selected');
+    
+    if(!State.history[State.activeProb.id]) State.history[State.activeProb.id] = {};
+    State.history[State.activeProb.id].status = status;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({xp: State.xp, history: State.history}));
+  },
+
+  retry() {
+    this.start(State.activeProb.id);
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => App.init());
 </script>
 </body>
