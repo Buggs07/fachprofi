@@ -292,26 +292,26 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
 
 
 <nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation">
-    <button type="button" class="nav-item active" onclick="App.mockNav('#')" aria-label="Home öffnen">
+    <a class="nav-item" href="https://pflegefachprofi.de" aria-label="Startseite öffnen">
         <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
         <span>Home</span>
-    </button>
-    <button type="button" class="nav-item" onclick="App.mockNav('pruefungsthemen')" aria-label="Themen-Katalog öffnen">
+    </a>
+    <a class="nav-item" href="/pruefungsthemen.html" aria-label="Prüfungsthemen öffnen">
         <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
         <span>Themen</span>
-    </button>
-    <button type="button" class="nav-item nav-cta" id="cta-btn" onclick="Wizard.open()" aria-label="Training starten">
-        <div class="icon-wrapper cta-wrapper"><i class="fa-solid fa-bolt"></i></div>
-        <span>Üben</span>
-    </button>
-    <button type="button" class="nav-item" onclick="App.mockNav('Pflegeplanung')" aria-label="Pflegeplanung öffnen">
+    </a>
+    <a class="nav-item active" href="/lernen.html" aria-current="page" aria-label="Lernen öffnen">
+        <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+        <span>Lernen</span>
+    </a>
+    <a class="nav-item" href="/pflegeplanung.html" aria-label="Pflegeplanung öffnen">
         <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div>
         <span>Planung</span>
-    </button>
-    <button type="button" class="nav-item" onclick="App.mockNav('Handlungsketten')" aria-label="Handlungsketten öffnen">
+    </a>
+    <a class="nav-item" href="/handlungsketten.html" aria-label="Handlungsketten öffnen">
         <div class="icon-wrapper"><i class="fa-solid fa-route"></i></div>
         <span>Ketten</span>
-    </button>
+    </a>
 </nav>
 
 </div>
@@ -1317,10 +1317,10 @@ const App={
             bNav.style.display = (id === "play" || id === "result") ? "none" : "flex";
         }
         
-        // Update app-nav tabs
+        // Keep the Lernen app-nav item active on lernen.html.
+        // Home/Themen/Planung/Ketten are real page links; internal screens stay inside Lernen.
         $$("#bottomNav .nav-item").forEach(n => n.classList.remove("active"));
-        if(id === "home") $$("#bottomNav .nav-item")[0]?.classList.add("active");
-        if(id === "library") $$("#bottomNav .nav-item")[1]?.classList.add("active");
+        $$("#bottomNav .nav-item")[2]?.classList.add("active");
     },
     showStartCTA(){
         const btn = $("#startBtn");
