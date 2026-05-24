@@ -40,6 +40,8 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
 .lbl{font-size:12px;color:var(--mut);font-weight:800}
 .bar{height:7px;background:var(--br);border-radius:999px;overflow:hidden;margin-top:9px}
 .fill{height:100%;background:var(--s);width:0;transition:0.5s}
+
+/* CTA Home Floating Button */
 .start{
   position:fixed;
   left:50%;
@@ -95,8 +97,10 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
   pointer-events:none;
 }
 .start .big{position:relative;line-height:1;white-space:nowrap}
-.start i{position:relative;font-size:16px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.14))}
+/* BUGFIX 2: Specific targeting for the CTA shadow, so it doesn't leak to navbar */
+button.start > i {position:relative;font-size:16px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.14))}
 .start:active{transform:translate3d(-50%,0,0) scale(.975)}
+
 @keyframes ctaSwoopIn{
   0%{opacity:0;filter:blur(8px);transform:translate3d(calc(-50% + 42px),150%,0) scale(.86) rotate(4deg)}
   58%{opacity:1;filter:blur(0);transform:translate3d(calc(-50% - 5px),-8px,0) scale(1.035) rotate(-1deg)}
@@ -119,7 +123,7 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
 }
 
 /* ==========================================================================
-   APP-LIKE BOTTOM NAVIGATION — fixed active alignment
+   APP-LIKE BOTTOM NAVIGATION
    ========================================================================== */
 .nav-bottom{
   position:absolute;bottom:0;left:0;right:0;flex-shrink:0;width:100%;height:84px;
@@ -149,10 +153,12 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
 .nav-item.active span{opacity:1;color:var(--p)}
 .nav-item:active .icon-wrapper{transform:scale(.94)}
 .nav-item.locked{opacity:.5}
-/* Üben is intentionally normal — no 10-second floating/highlight state. */
+
+/* CTA "Üben" in Navbar remains flat */
 .nav-cta .cta-wrapper{background:transparent;box-shadow:none;border:0;animation:none;color:inherit}
 .nav-cta span{margin-top:0}
 
+/* General Cards */
 .card{background:white;border:2px solid var(--br);border-radius:23px;padding:15px;display:flex;gap:14px;align-items:center;text-align:left;width:100%;box-shadow:0 3px 8px #0f172a0a}
 .card:active{transform:scale(.98)}
 .icon{width:54px;height:54px;border-radius:17px;background:#f1f5f9;display:grid;place-items:center;font-size:27px;flex:none}
@@ -237,11 +243,10 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
         <div class="box"><div class="val" id="rounds">0</div><div class="lbl">Lektionen</div></div>
         <div class="box"><div class="val" id="best">0%</div><div class="lbl">Top-Score</div></div>
     </div>
-<button class="start" id="startBtn" onclick="Wizard.open()" aria-label="Start now">
-    <span class="big">Start now</span>
-    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-</button>
-
+    <button class="start" id="startBtn" onclick="Wizard.open()" aria-label="Start now">
+        <span class="big">Start now</span>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </button>
 </main>
 
 <main id="library" class="screen">
@@ -290,7 +295,6 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
     </div>
 </div>
 
-
 <nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation">
     <a class="nav-item" href="https://pflegefachprofi.de" aria-label="Startseite öffnen">
         <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
@@ -315,26 +319,10 @@ h1{font-size:30px;letter-spacing:-.05em;line-height:1.05;margin-bottom:8px}
 </nav>
 
 </div>
+
 <script>
 const SAVE="pfp.game.v5",$=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-/* ==========================================================================
-   EDITABLE CONTENT AREA
-   --------------------------------------------------------------------------
-   To add or change topics, edit only TOPIC_SOURCE below.
 
-   Field guide:
-   - id: short unique slug, no spaces
-   - title: disease/topic name shown in the app
-   - area: category shown in cards
-   - icon: emoji shown in cards
-   - definition: exam-safe short definition
-   - riskFactors: typical risks
-   - causes: common causes/pathophysiology
-   - symptoms: important symptoms/signs
-   - assessment: diagnostics, scales, monitoring, assessments
-   - therapy: medical therapy options
-   - care: concrete nursing measures
-   ========================================================================== */
 const TOPIC_SOURCE = [
   {
     "id": "diabetes",
@@ -1318,7 +1306,6 @@ const App={
         }
         
         // Keep the Lernen app-nav item active on lernen.html.
-        // Home/Themen/Planung/Ketten are real page links; internal screens stay inside Lernen.
         $$("#bottomNav .nav-item").forEach(n => n.classList.remove("active"));
         $$("#bottomNav .nav-item")[2]?.classList.add("active");
     },
@@ -1329,7 +1316,6 @@ const App={
         clearTimeout(this.ctaCleanupTimer);
         btn.hidden = false;
         btn.classList.remove("is-leaving");
-        // Restart animation cleanly every time Home is opened.
         void btn.offsetWidth;
         btn.classList.add("is-visible");
         this.ctaTimer = setTimeout(()=>this.hideStartCTA(false),7000);
