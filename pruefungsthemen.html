@@ -1,294 +1,399 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>PflegefachProfi • Themenbibliothek</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<title>PflegefachProfi | Themenbibliothek</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-/* =============================================
-   DESIGN TOKENS & SYSTEM
-   ============================================= */
-:root{
-  --p:#2563eb; --pd:#1e40af; --p-light:#eff6ff;
-  --a:#f43f5e; --s:#10b981; --w:#f59e0b; --d:#ef4444;
-  --bg:#f8fafc; --card:#fff; --txt:#0f172a; --mut:#64748b; --br:#e2e8f0;
-  --navH:72px; --ease:cubic-bezier(.175,.885,.32,1.275);
-  --shadow:0 10px 30px rgba(37,99,235,.14);
-  --shadow2:0 4px 16px rgba(15,23,42,.07);
-  --grad:linear-gradient(135deg,var(--p) 0%,var(--pd) 100%);
+/* ==========================================================================
+   DESIGN SYSTEM & VARIABLES
+   ========================================================================== */
+:root {
+  --primary: #2563eb; --primary-dark: #1e40af; --primary-light: #eff6ff;
+  --purple: #8b5cf6; --pink: #ec4899;
+  --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+  --bg-page: #cbd5e1; --bg-app: #f8fafc; --bg-surface: #ffffff;
+  --text-main: #0f172a; --text-muted: #64748b; --border: #e2e8f0;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --nav-height: 85px;
+  --header-height: 72px;
 }
 
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
-  background:#cbd5e1; color:var(--txt); min-height:100vh; min-height:100dvh;
-  overflow:hidden; display:flex; justify-content:center; align-items:flex-start;
+/* ==========================================================================
+   RESET & BASE (Fixes Mobile Scrolling & Desktop Scaling)
+   ========================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  /* Let the body scroll normally! No overflow: hidden here. */
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
-button,input{font-family:inherit}
-button{cursor:pointer;border:none;background:none;outline:none;}
-a{text-decoration:none;color:inherit}
+button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 
-/* =============================================
-   APP WRAPPER (Desktop & Mobile)
-   ============================================= */
-.app{
-  width:100%; max-width:1024px; height:100%; background:var(--bg);
-  display:flex; flex-direction:column; position:relative; 
-  box-shadow:0 0 60px rgba(0,0,0,0.2); overflow:hidden;
+/* ==========================================================================
+   APP CONTAINER
+   ========================================================================== */
+.app-container {
+  width: 100%;
+  max-width: 1200px; /* Adapts to large screens perfectly */
+  background-color: var(--bg-app);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(0,0,0,0.1);
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 20px);
 }
-@media (min-width: 768px) {
-  body { align-items: center; padding: 20px; }
-  .app { height: 95vh; max-height: 950px; border-radius: 24px; }
+
+/* ==========================================================================
+   HEADER (Sticky)
+   ========================================================================== */
+.topbar {
+  position: sticky; top: 0; z-index: 1000;
+  height: var(--header-height);
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: max(16px, env(safe-area-inset-top)) 20px 16px;
 }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 18px; }
+.logo { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; display: grid; place-items: center; font-size: 20px; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+.stats-pill { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 99px; padding: 6px 12px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-/* =============================================
-   TOP BAR
-   ============================================= */
-.top{
-  height:var(--navH); background:rgba(255,255,255,.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-  display:flex; align-items:center; justify-content:space-between; padding:max(16px, env(safe-area-inset-top)) 20px 16px;
-  border-bottom:1px solid var(--br); z-index:200; flex-shrink:0;
+/* ==========================================================================
+   PROGRESS DASHBOARD (Animated Banner)
+   ========================================================================== */
+.dashboard-wrapper { padding: 24px 20px; }
+.dashboard {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+  border-radius: 24px; padding: 24px; color: white; position: relative; overflow: hidden;
+  box-shadow: 0 15px 35px rgba(114, 9, 183, 0.25);
 }
-.brand{display:flex;align-items:center;gap:10px;color:var(--txt);font-weight:900;font-size:18px;}
-.logo{width:40px;height:40px;border-radius:14px;background:var(--grad);color:#fff;display:grid;place-items:center;box-shadow:0 4px 14px rgba(37,99,235,.35);}
-.desk-nav{display:none;}
-.stats{display:flex;gap:7px;flex-shrink:0}
-.pill{background:#fff;border:1px solid var(--br);border-radius:999px;padding:6px 11px;font-weight:900;font-size:12px;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.dashboard::before { content: ""; position: absolute; right: -40px; top: -40px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,0.1); pointer-events: none; }
+.dash-header h1 { font-size: 24px; margin-bottom: 6px; }
+.dash-header p { font-size: 13px; font-weight: 600; opacity: 0.9; margin-bottom: 24px; max-width: 600px; line-height: 1.4; }
 
-/* =============================================
-   PAGE SCROLL AREA
-   ============================================= */
-.page-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:100px; display:flex; flex-direction:column;}
+.trackers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (min-width: 768px) { .trackers { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
 
-/* =============================================
-   PROGRESS DASHBOARD (The New Banner)
-   ============================================= */
-.dashboard-wrapper { padding: 20px 20px 0; }
-.dashboard-panel {
-  background: var(--grad); border-radius: 24px; padding: 24px;
-  box-shadow: 0 15px 35px rgba(37,99,235,0.25); color: #fff; position: relative; overflow: hidden;
-}
-.dashboard-panel::before { content:"";position:absolute;right:-50px;top:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.07); pointer-events:none;}
-.dash-title h1 { font-size: clamp(1.4rem, 5vw, 2.2rem); letter-spacing: -0.04em; font-weight: 900; margin-bottom: 6px; position: relative; z-index: 2;}
-.dash-title p { font-size: 13px; color: rgba(255,255,255,.8); font-weight: 600; line-height: 1.4; margin-bottom: 20px; position: relative; z-index: 2;}
-
-.trackers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative; z-index: 2;}
-@media (min-width: 600px) { .trackers { grid-template-columns: repeat(4, 1fr); } }
-
-.track-box { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 12px; backdrop-filter: blur(8px); }
-.t-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+.tracker { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 12px; backdrop-filter: blur(8px); }
+.t-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; font-weight: 800; }
 .t-head span { opacity: 0.9; }
-.t-head b { font-size: 14px; }
-.t-bar { height: 6px; background: rgba(0,0,0,0.2); border-radius: 99px; overflow: hidden; }
-.t-fill { height: 100%; width: 0%; border-radius: 99px; transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.t-head b { font-size: 16px; }
+.t-bar-bg { width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 99px; overflow: hidden; }
+.t-bar-fill { height: 100%; width: 0%; border-radius: 99px; transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-.track-blue .t-head span { color: #93c5fd; } .track-blue .t-fill { background: #60a5fa; box-shadow: 0 0 10px #60a5fa;}
-.track-green .t-head span { color: #6ee7b7; } .track-green .t-fill { background: #34d399; box-shadow: 0 0 10px #34d399;}
-.track-yellow .t-head span { color: #fcd34d; } .track-yellow .t-fill { background: #fbbf24; box-shadow: 0 0 10px #fbbf24;}
-.track-red .t-head span { color: #fca5a5; } .track-red .t-fill { background: #f87171; box-shadow: 0 0 10px #f87171;}
+/* Tracker Colors */
+.tr-view span { color: #93c5fd; } .tr-view .t-bar-fill { background: #60a5fa; box-shadow: 0 0 10px #60a5fa;}
+.tr-easy span { color: #6ee7b7; } .tr-easy .t-bar-fill { background: #34d399; box-shadow: 0 0 10px #34d399;}
+.tr-mid span { color: #fcd34d; }  .tr-mid .t-bar-fill { background: #fbbf24; box-shadow: 0 0 10px #fbbf24;}
+.tr-hard span { color: #fca5a5; } .tr-hard .t-bar-fill { background: #f87171; box-shadow: 0 0 10px #f87171;}
 
-/* =============================================
-   FILTERS
-   ============================================= */
-.filters{ position:sticky; top:0; z-index:100; padding:16px 20px; background:rgba(248,250,252,.96); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid var(--br); margin-top: 10px;}
-.filter-card{ background:#fff; border:1px solid var(--br); border-radius:20px; box-shadow:var(--shadow2); padding:14px; display:flex; flex-direction: column; gap:12px; }
-.search-row{display:flex;align-items:center;gap:8px}
-.search{position:relative;flex:1;}
-.search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:13px;pointer-events:none;}
-.search input{height:44px;width:100%;border:1.5px solid var(--br);border-radius:14px;padding:0 14px 0 40px;font-size:13px;font-weight:700;background:var(--bg);color:var(--txt);transition:.2s;}
-.search input:focus{border-color:var(--p);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
-
-.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.fl-label{font-size:10px;letter-spacing:.05em;text-transform:uppercase;font-weight:900;color:var(--mut);margin-right:4px;flex-shrink:0;}
-.tab{border:1.5px solid var(--br);background:#fff;border-radius:999px;padding:8px 12px;font-size:11px;color:var(--mut);font-weight:800;transition:.2s var(--ease); cursor:pointer;}
-.tab:hover{border-color:rgba(37,99,235,.25);color:var(--p)}
-.tab.active{border-color:transparent;color:#fff;background:var(--grad);box-shadow:0 4px 12px rgba(37,99,235,.25);}
-
-/* =============================================
-   TOPIC LIST & CARDS
-   ============================================= */
-.list{display:grid;gap:12px;padding:20px; flex:1; align-content: flex-start;}
-@media (min-width: 768px) { .list { grid-template-columns: repeat(2, 1fr); align-items: start; } }
-
-.topic{background:#fff;border:1.5px solid var(--br);box-shadow:var(--shadow2);border-radius:20px;overflow:hidden;transition:.2s;position:relative;}
-.topic::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad);border-radius:4px 0 0 4px;}
-.topic.easy::before{background:var(--s)} .topic.mid::before{background:var(--w)} .topic.hard::before{background:var(--d)}
-.topic.open{border-color:rgba(37,99,235,.3);box-shadow:0 12px 30px rgba(37,99,235,.12);}
-
-.topic-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:16px 16px 16px 20px;cursor:pointer;user-select:none;}
-.disease-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:#f1f5f9;flex-shrink:0;}
-.topic-title{font-size:15px;font-weight:900;letter-spacing:-.02em;margin-bottom:6px; line-height:1.2;}
-.meta{display:flex;gap:4px;flex-wrap:wrap}
-.chip{display:inline-flex;align-items:center;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:800;}
-.cat{background:var(--catbg);color:var(--catcolor)}
-.status-chip{background:#f1f5f9;color:var(--mut)}
-.status-chip.easy{background:rgba(16,185,129,.1);color:var(--s)}
-.status-chip.mid{background:rgba(245,158,11,.13);color:#92400e}
-.status-chip.hard{background:rgba(239,68,68,.1);color:var(--d)}
-
-.actions{display:flex;align-items:center;gap:8px; position:relative;}
-.ampel{display:flex;gap:4px;background:#f1f5f9;padding:4px;border-radius:12px;}
-.ampel button{width:32px;height:32px;border-radius:8px;color:#fff;display:grid;place-items:center;transition:.2s var(--ease);opacity:.35;font-size:13px;}
-.ampel button:hover,.ampel button.active{opacity:1;transform:scale(1.1);}
-.ampel .easy{background:var(--s)} .ampel .mid{background:var(--w);color:#451a03} .ampel .hard{background:var(--d)}
-
-.arrow{width:36px;height:36px;border-radius:12px;background:var(--p-light);color:var(--p);display:grid;place-items:center;transition:.3s var(--ease);flex-shrink:0;}
-.topic.open .arrow{transform:rotate(180deg);background:var(--grad);color:#fff;box-shadow:0 4px 10px rgba(37,99,235,.25);}
-
-/* The Hint Tooltip */
-.ampel-hint {
-    position: absolute; bottom: 100%; right: 50%; transform: translateX(30%) translateY(-10px);
-    background: var(--txt); color: white; padding: 8px 12px; border-radius: 10px;
-    font-size: 11px; font-weight: 800; white-space: nowrap; pointer-events: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: floatHint 2s infinite; z-index: 10;
-    display: none;
+/* ==========================================================================
+   FILTERS (Sticky under Header)
+   ========================================================================== */
+.filters-wrapper {
+  position: sticky; top: var(--header-height); z-index: 900;
+  padding: 10px 20px; background: rgba(248,250,252,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 }
-.ampel-hint::after {
-    content: ''; position: absolute; top: 100%; right: 20px;
-    border-width: 6px; border-style: solid; border-color: var(--txt) transparent transparent transparent;
+.filters { display: flex; flex-direction: column; gap: 12px; }
+.search-box { position: relative; width: 100%; }
+.search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--mut); }
+.search-box input { width: 100%; height: 46px; border: 2px solid var(--border); border-radius: 16px; padding: 0 16px 0 44px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s; background: var(--bg-surface); }
+.search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+.cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.cat-tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 8px 14px; border-radius: 99px; border: 1.5px solid var(--border); background: var(--bg-surface); font-size: 12px; font-weight: 800; color: var(--text-muted); white-space: nowrap; transition: 0.2s; }
+.tab:hover { border-color: var(--primary-light); color: var(--primary); }
+.tab.active { background: var(--primary); border-color: var(--primary); color: white; box-shadow: 0 4px 10px rgba(37,99,235,0.3); }
+
+/* ==========================================================================
+   TOPIC GRID & CARDS
+   ========================================================================== */
+.grid-container { padding: 20px; display: grid; gap: 16px; align-content: start; }
+/* Grid magic for Desktop */
+@media (min-width: 768px) { .grid-container { grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); } }
+
+.topic-card {
+  background: var(--bg-surface); border: 2px solid var(--border); border-radius: 20px;
+  box-shadow: var(--shadow-sm); overflow: hidden; transition: 0.3s var(--ease-spring);
+  position: relative;
 }
-.show-hint .ampel-hint { display: block; }
-@keyframes floatHint { 0%, 100% { transform: translateX(30%) translateY(-10px); } 50% { transform: translateX(30%) translateY(-15px); } }
+.topic-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.topic-card.open { border-color: var(--primary); box-shadow: var(--shadow-lg); }
 
-/* Expand body */
-.body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease);}
-.topic.open .body{grid-template-rows:1fr}
-.body-inner{overflow:hidden}
-.content{padding:0 16px 20px 20px}
-.section-grid{border-top:1px solid var(--br);padding-top:16px;display:grid;gap:10px;}
-.section{background:#f8fafc;border:1px solid var(--br);border-radius:16px;padding:14px;}
-.section h4{display:flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;color:var(--mut);margin-bottom:8px;font-weight:900;}
-.section p{font-size:13px;font-weight:600;line-height:1.5;}
-.section ul{display:grid;gap:8px;}
-.section li{list-style:none;font-size:13px;line-height:1.4;font-weight:600;display:flex;gap:8px;align-items:flex-start;}
-.section li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--grad);flex:none;margin-top:6px;}
-mark{background:#fef9c3;border-radius:4px;padding:0 2px;color:var(--txt)}
+/* Card Header */
+.t-header { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; padding: 16px; align-items: center; cursor: pointer; user-select: none; }
+.t-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--bg-app); display: grid; place-items: center; font-size: 24px; }
+.t-title-area { min-width: 0; }
+.t-title-area h3 { font-size: 15px; margin-bottom: 4px; line-height: 1.3; color: var(--text-main); }
+.t-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-cat { background: var(--bg-app); color: var(--text-muted); border: 1px solid var(--border); }
 
-/* =============================================
-   BOTTOM NAVIGATION
-   ============================================= */
-.nav-bottom{
-  position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,1024px);height:84px;
-  background:rgba(255,255,255,.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-top:1px solid var(--br);display:flex;justify-content:space-evenly;align-items:center;
-  padding:8px 8px calc(10px + env(safe-area-inset-bottom));z-index:1000;
-  border-bottom-left-radius: inherit; border-bottom-right-radius: inherit; /* Für Desktop Ecken */
+/* Traffic Light Actions */
+.t-actions { display: flex; align-items: center; gap: 12px; position: relative; }
+.traffic-lights { display: flex; gap: 4px; background: var(--bg-app); padding: 4px; border-radius: 12px; border: 1px solid var(--border); }
+.light-btn { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; font-size: 14px; color: var(--text-muted); transition: 0.2s; }
+.light-btn:hover { background: white; transform: scale(1.05); }
+.light-btn.active.e-easy { background: var(--success); color: white; box-shadow: 0 4px 10px rgba(16,185,129,0.4); }
+.light-btn.active.e-mid { background: var(--warning); color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.4); }
+.light-btn.active.e-hard { background: var(--danger); color: white; box-shadow: 0 4px 10px rgba(239,68,68,0.4); }
+
+/* Tooltip Hint */
+.hint-tooltip {
+  position: absolute; bottom: 110%; right: 50%; transform: translateX(20%);
+  background: var(--text-main); color: white; font-size: 11px; font-weight: 800;
+  padding: 8px 12px; border-radius: 10px; white-space: nowrap; pointer-events: none;
+  animation: bounceHint 2s infinite; z-index: 10; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
-.nav-item{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--mut);width:20%;height:62px;cursor:pointer;transition:.2s;}
-.icon-wrapper{position:relative;width:44px;height:34px;display:flex;justify-content:center;align-items:center;transition:.3s;z-index:2;border-radius:999px;}
-.icon-wrapper::before{content:'';position:absolute;inset:-5px 0;background:#eff6ff;border-radius:999px;opacity:0;transform:scale(.7);transition:.3s;z-index:-1;}
-.nav-item i{font-size:21px;transition:.3s;color:inherit}
-.nav-item span{font-size:10px;font-weight:900;opacity:.8;transition:.3s;}
-.nav-item.active{color:var(--p)}
-.nav-item.active .icon-wrapper{transform:translateY(-2px)}
-.nav-item.active .icon-wrapper::before{opacity:1;transform:scale(1)}
-.nav-item.active i{transform:scale(1.1)}
-.nav-item.active span{opacity:1;color:var(--p)}
-.nav-item:active .icon-wrapper{transform:scale(.94)}
+.hint-tooltip::after { content:''; position:absolute; top:100%; right:20px; border-width:6px; border-style:solid; border-color: var(--text-main) transparent transparent transparent; }
+@keyframes bounceHint { 0%,100% {transform: translateX(20%) translateY(0);} 50% {transform: translateX(20%) translateY(-6px);} }
 
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--txt);color:#fff;border-radius:99px;padding:12px 20px;font-size:13px;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:2000;opacity:0;transition:.3s;pointer-events:none;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(10px);}
-.empty{display:none;text-align:center;padding:40px 20px;color:var(--mut);font-weight:800;font-size:14px;}
+/* Expandable Body */
+.t-body { display: grid; grid-template-rows: 0fr; transition: 0.4s var(--ease-spring); }
+.topic-card.open .t-body { grid-template-rows: 1fr; border-top: 1px solid var(--border); }
+.t-body-inner { overflow: hidden; }
+.t-content { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+/* Content Sections */
+.info-section { background: var(--bg-app); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
+.info-section h4 { display: flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.info-section p { font-size: 13px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
+.info-section ul { display: grid; gap: 8px; }
+.info-section li { list-style: none; font-size: 13px; font-weight: 600; line-height: 1.4; display: flex; gap: 8px; align-items: flex-start; }
+.info-section li::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--primary); flex-shrink:0; margin-top:6px; }
+
+mark { background: var(--warning-light); padding: 0 2px; border-radius: 4px; color: var(--warning-dark); }
+
+/* ==========================================================================
+   APP BOTTOM NAVIGATION
+   ========================================================================== */
+.nav-bottom {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 1200px;
+  height: var(--nav-height); background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border); display: flex; justify-content: space-evenly; align-items: flex-end;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 2000;
+  border-bottom-left-radius: inherit; border-bottom-right-radius: inherit;
+}
+.nav-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); width: 20%; height: 100%; cursor: pointer; padding-top: 8px; transition: 0.2s; }
+.icon-wrapper { position: relative; width: 44px; height: 32px; display: flex; justify-content: center; align-items: center; transition: 0.3s var(--ease-spring); z-index: 2; border-radius: 50%; }
+.nav-item i { font-size: 22px; transition: 0.3s var(--ease-spring); }
+.nav-item span { font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8; transition: 0.3s var(--ease-spring); }
+.nav-item.active { color: var(--primary); }
+.nav-item.active .icon-wrapper { transform: translateY(-6px); }
+.nav-item.active i { transform: scale(1.15); }
+
+/* ==========================================================================
+   EMPTY STATE & TOAST
+   ========================================================================== */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); font-weight: 800; display: none; }
+.empty-state i { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
+
+.toast { position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text-main); color: white; padding: 12px 24px; border-radius: 99px; font-size: 13px; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 3000; opacity: 0; pointer-events: none; transition: 0.4s var(--ease-spring); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="app">
+<div class="app-container">
 
-  <header class="top">
-    <a class="brand" href="index.html">
-      <div class="logo"><i class="fa-solid fa-book-open"></i></div>
-      <b>Bibliothek</b>
-    </a>
-    <div class="stats">
-      <div class="pill">🔥 <span id="streakCount">0</span></div>
-    </div>
+  <header class="topbar">
+    <div class="brand"><div class="logo"><i class="fa-solid fa-layer-group"></i></div>Bibliothek</div>
+    <div class="stats"><div class="stats-pill"><i class="fa-solid fa-bolt"></i> <span>Level 1</span></div></div>
   </header>
 
-  <div class="page-scroll">
-
-    <div class="dashboard-wrapper">
-      <div class="dashboard-panel">
-        <div class="dash-title">
-          <h1>Dein Wissen</h1>
-          <p>Verfolge deinen Lernfortschritt über alle Prüfungsbereiche.</p>
+  <div class="dashboard-wrapper">
+    <div class="dashboard">
+      <div class="dash-header">
+        <h1>Dein Lern-Tracker</h1>
+        <p>Verfolge deinen Fortschritt. Markiere Themen nach Schwierigkeit, um deinen Fokus zu optimieren.</p>
+      </div>
+      <div class="trackers">
+        <div class="tracker track-blue">
+          <div class="t-head"><span>👀 Angeschaut</span><b id="kViewed">0/0</b></div>
+          <div class="t-bar-bg"><div class="t-bar-fill" id="fViewed"></div></div>
         </div>
-        <div class="trackers">
-          <div class="track-box track-blue">
-            <div class="t-head"><span>👀 Angeschaut</span><b id="kViewed">0/0</b></div>
-            <div class="t-bar"><div class="t-fill" id="fViewed"></div></div>
-          </div>
-          <div class="track-box track-green">
-            <div class="t-head"><span>🟢 Gelernt</span><b id="kEasy">0/0</b></div>
-            <div class="t-bar"><div class="t-fill" id="fEasy"></div></div>
-          </div>
-          <div class="track-box track-yellow">
-            <div class="t-head"><span>🟡 Lernen</span><b id="kMid">0/0</b></div>
-            <div class="t-bar"><div class="t-fill" id="fMid"></div></div>
-          </div>
-          <div class="track-box track-red">
-            <div class="t-head"><span>🔴 Schwierig</span><b id="kHard">0/0</b></div>
-            <div class="t-bar"><div class="t-fill" id="fHard"></div></div>
-          </div>
+        <div class="tracker track-green">
+          <div class="t-head"><span>🟢 Gelernt</span><b id="kEasy">0/0</b></div>
+          <div class="t-bar-bg"><div class="t-bar-fill" id="fEasy"></div></div>
+        </div>
+        <div class="tracker track-yellow">
+          <div class="t-head"><span>🟡 Lernen</span><b id="kMid">0/0</b></div>
+          <div class="t-bar-bg"><div class="t-bar-fill" id="fMid"></div></div>
+        </div>
+        <div class="tracker track-red">
+          <div class="t-head"><span>🔴 Schwierig</span><b id="kHard">0/0</b></div>
+          <div class="t-bar-bg"><div class="t-bar-fill" id="fHard"></div></div>
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="filters-wrapper">
     <div class="filters">
-      <div class="filter-card">
-        <div class="search-row">
-          <div class="search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input id="searchInput" placeholder="Suche: COPD, Haftung, Krohwinkel...">
-          </div>
-        </div>
-        <div class="filter-row" id="catFilters">
-          <span class="fl-label">Bereich</span>
-          <button class="tab active" data-cat="all">Alle</button>
-          <button class="tab" data-cat="medizin">🩺 Medizin & Pflege</button>
-          <button class="tab" data-cat="recht">⚖️ Recht</button>
-          <button class="tab" data-cat="ethik">🕊️ Ethik</button>
-          <button class="tab" data-cat="modelle">📐 Modelle</button>
-          <button class="tab" data-cat="kommunikation">🗣️ Kommunikation</button>
-        </div>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Suchen (z.B. COPD, Ethik, Dekubitus...)">
+      </div>
+      <div class="cat-tabs" id="catFilters">
+        <button class="tab active" data-cat="all">Alle Themen</button>
+        <button class="tab" data-cat="medizin">🩺 Medizin & Pflege</button>
+        <button class="tab" data-cat="recht">⚖️ Recht</button>
+        <button class="tab" data-cat="ethik">🕊️ Ethik</button>
+        <button class="tab" data-cat="modelle">📐 Pflegemodelle</button>
+        <button class="tab" data-cat="kommunikation">🗣️ Kommunikation</button>
       </div>
     </div>
+  </div>
 
-    <div class="list" id="topicList"></div>
-    <div class="empty" id="empty">Keine Themen gefunden. Suchbegriff ändern.</div>
-
-  </div><nav class="nav-bottom">
-    <a href="index.html" class="nav-item">
-      <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div><span>Home</span>
-    </a>
-    <a href="#" class="nav-item active">
-      <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div><span>Themen</span>
-    </a>
-    <a href="lernen.html" class="nav-item">
-      <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div><span>Üben</span>
-    </a>
-    <a href="pflegeplanung.html" class="nav-item">
-      <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div><span>Planung</span>
-    </a>
-    <a href="kontakt.html" class="nav-item">
-      <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i></div><span>Kontakt</span>
-    </a>
-  </nav>
+  <div class="grid-container" id="topicGrid">
+    </div>
+  
+  <div class="empty-state" id="emptyState">
+    <i class="fa-solid fa-ghost"></i>
+    <p>Keine passenden Themen gefunden.<br>Ändere deinen Suchbegriff oder Filter.</p>
+  </div>
 
 </div>
-<div class="toast" id="toastMsg"></div>
+
+<nav class="nav-bottom">
+  <a href="index.html" class="nav-item">
+    <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div><span>Home</span>
+  </a>
+  <a href="#" class="nav-item active">
+    <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div><span>Themen</span>
+  </a>
+  <a href="lernen.html" class="nav-item">
+    <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div><span>Üben</span>
+  </a>
+  <a href="pflegeplanung.html" class="nav-item">
+    <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div><span>Planung</span>
+  </a>
+  <a href="kontakt.html" class="nav-item">
+    <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i></div><span>Kontakt</span>
+  </a>
+</nav>
+
+<div class="toast" id="toastMsg">Gespeichert!</div>
 
 <script>
-/* ============================================================
-   STORAGE
-   ============================================================ */
-const STORAGE_KEY = 'pfp.library.v2';
-const state = {
+/* ==========================================================================
+   1. EDITABLE DATA STRUCTURE
+   Hier können extrem einfach neue Themen eingefügt werden.
+   ========================================================================== */
+const TOPICS_DATA = [
+  // --- KATEGORIE: RECHT ---
+  {
+    id: "r1", category: "recht", title: "Haftungsrecht im Pflegealltag", icon: "⚖️",
+    definition: "Rechtliche Verantwortung von Pflegekräften für Schäden, die Patienten durch pflegerisches Handeln oder Unterlassen entstehen.",
+    sections: [
+      { title: "Kernbegriffe", icon: "📌", items: ["Zivilrechtliche Haftung (Schadensersatz/Schmerzensgeld)", "Strafrechtliche Haftung (Körperverletzung/Tötung)", "Übernahmeverschulden (Tätigkeiten übernehmen, für die man nicht qualifiziert ist)"] },
+      { title: "Häufige Risiken", icon: "⚠️", items: ["Stürze durch unzureichende Prophylaxe", "Medikationsfehler", "Dekubitus durch fehlende Lagerung"] },
+      { title: "Schutz & Prävention", icon: "🛡️", items: ["Lückenlose, zeitnahe Dokumentation (Beweislast!)", "Einhaltung von Expertenstandards", "Remonstrationsrecht nutzen (Anordnungen hinterfragen)"] }
+    ]
+  },
+  {
+    id: "r2", category: "recht", title: "Schweigepflicht & Datenschutz", icon: "🔒",
+    definition: "Gesetzliche und ethische Verpflichtung, Patientengeheimnisse zu wahren (§ 203 StGB).",
+    sections: [
+      { title: "Was fällt darunter?", icon: "🧩", items: ["Diagnosen & Befunde", "Persönliche Umstände", "Die bloße Tatsache, dass jemand Patient ist"] },
+      { title: "Ausnahmen", icon: "🔓", items: ["Ausdrückliche Einwilligung des Patienten", "Gesetzliche Meldepflichten (z.B. Infektionsschutzgesetz)", "Rechtfertigender Notstand"] },
+      { title: "Pflegerische Relevanz", icon: "🏥", items: ["Übergaben nur in geschützten Räumen", "Keine Auskünfte am Telefon ohne Identitätssicherung", "Patientenakten vor Dritten schützen"] }
+    ]
+  },
+
+  // --- KATEGORIE: ETHIK ---
+  {
+    id: "e1", category: "ethik", title: "4 Prinzipien (Beauchamp & Childress)", icon: "🕊️",
+    definition: "Das Standardmodell der Medizinethik zur Beurteilung moralischer Konflikte im Gesundheitswesen.",
+    sections: [
+      { title: "Die 4 Prinzipien", icon: "📌", items: ["Respekt vor der Autonomie (Selbstbestimmung)", "Schadensvermeidung (Non-Maleficence)", "Fürsorge / Wohltun (Beneficence)", "Gerechtigkeit (Justice)"] },
+      { title: "Typische Konflikte", icon: "⚠️", items: ["Patient lehnt Maßnahme ab (Autonomie vs. Fürsorge)", "Fixierung bei Sturzgefahr (Schadensvermeidung vs. Freiheitsentzug)"] },
+      { title: "Anwendung", icon: "🏥", items: ["Informiertes Einverständnis einholen (Informed Consent)", "Mutmaßlichen Willen prüfen", "Ethische Fallbesprechungen initiieren"] }
+    ]
+  },
+
+  // --- KATEGORIE: PFLEGEMODELLE ---
+  {
+    id: "p1", category: "modelle", title: "ABEDL nach Krohwinkel", icon: "📐",
+    definition: "Bedürfnisorientiertes Pflegemodell (13 Aktivitäten, Beziehungen und existenzielle Erfahrungen des Lebens).",
+    sections: [
+      { title: "Zentrale Konzepte", icon: "🧩", items: ["Mensch als ganzheitliches Wesen", "Fokus auf Ressourcen und Defizite", "Ziel: Unabhängigkeit fördern"] },
+      { title: "Wichtige ABEDLs", icon: "📋", items: ["Kommunizieren können", "Sich pflegen können", "Mit existenziellen Erfahrungen umgehen können"] },
+      { title: "Relevanz", icon: "🏥", items: ["Grundlage für die Strukturierte Informationssammlung (SIS)", "Hilft bei der Pflegeplanung"] }
+    ]
+  },
+
+  // --- KATEGORIE: KOMMUNIKATION ---
+  {
+    id: "k1", category: "kommunikation", title: "Vier-Ohren-Modell (Schulz von Thun)", icon: "🗣️",
+    definition: "Modell, das besagt, dass jede Nachricht vier Ebenen enthält.",
+    sections: [
+      { title: "Die 4 Ebenen", icon: "📌", items: ["Sachebene (Worüber ich informiere)", "Selbstkundgabe (Was ich preisgebe)", "Beziehungsseite (Was ich von dir halte)", "Appellseite (Wozu ich dich veranlassen möchte)"] },
+      { title: "Pflegerische Relevanz", icon: "🏥", items: ["Missverständnisse erkennen", "Aktives Zuhören anwenden", "Nachfragen, um die eigentliche Botschaft zu klären"] }
+    ]
+  },
+
+  // --- KATEGORIE: MEDIZIN & PFLEGE (Die Klassiker) ---
+  {
+    id: "m1", category: "medizin", title: "Diabetes mellitus", icon: "🩸",
+    definition: "Chronische Stoffwechselerkrankung mit Hyperglykämie durch Insulinmangel/Resistenz.",
+    sections: [
+      { title: "Risikofaktoren & Ursachen", icon: "⚠️", items: ["Adipositas, Bewegungsmangel, Genetik", "Typ 1: Autoimmunzerstörung", "Typ 2: Insulinresistenz"] },
+      { title: "Symptome", icon: "🔎", items: ["Hypo: Schwitzen, Zittern, Unruhe", "Hyper: Durst, Polyurie, Müdigkeit"] },
+      { title: "Pflegemaßnahmen", icon: "🏥", items: ["BZ nach Schema messen", "Füße täglich auf Läsionen prüfen", "Insulingabe nach 10-R-Regel"] }
+    ]
+  },
+  {
+    id: "m2", category: "medizin", title: "Herzinsuffizienz", icon: "💙",
+    definition: "Das Herz ist nicht fähig, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.",
+    sections: [
+      { title: "Ursachen", icon: "🧩", items: ["KHK, Hypertonie, Herzinfarkt", "Klappenerkrankungen"] },
+      { title: "Symptome", icon: "🔎", items: ["Dyspnoe, Beinödeme", "Gewichtszunahme, Leistungsminderung"] },
+      { title: "Pflegemaßnahmen", icon: "🏥", items: ["Täglich wiegen (gleiche Zeit/Kleidung)", "Ein-/Ausfuhr bilanzieren", "Oberkörper hochlagern bei Dyspnoe"] }
+    ]
+  },
+  {
+    id: "m3", category: "medizin", title: "COPD", icon: "🫁",
+    definition: "Chronisch progrediente Lungenerkrankung mit Obstruktion.",
+    sections: [
+      { title: "Risiken", icon: "⚠️", items: ["Rauchen, Feinstaub, Atemwegsinfekte"] },
+      { title: "Symptome", icon: "🔎", items: ["AHA-Symptome: Atemnot, Husten, Auswurf", "Zyanose, Fassthorax"] },
+      { title: "Pflegemaßnahmen", icon: "🏥", items: ["Kutschersitz anleiten", "Lippenbremse üben", "Inhalationstechnik kontrollieren"] }
+    ]
+  },
+  {
+    id: "m4", category: "medizin", title: "Apoplex (Schlaganfall)", icon: "🧠",
+    definition: "Akute neurologische Funktionsstörung durch Gefäßverschluss oder Hirnblutung.",
+    sections: [
+      { title: "Diagnostik", icon: "📋", items: ["FAST-Test (Face, Arms, Speech, Time)", "CCT / MRT", "Schluckscreening"] },
+      { title: "Symptome", icon: "🔎", items: ["Facialisparese, Hemiparese", "Sprach- und Schluckstörungen"] },
+      { title: "Pflegemaßnahmen", icon: "🏥", items: ["Aspirationsprophylaxe (Oberkörper hoch beim Essen)", "Bobath-Konzept anwenden", "Vitalzeichen engmaschig prüfen"] }
+    ]
+  }
+];
+
+/* ==========================================================================
+   2. APP STATE & LOCAL STORAGE
+   ========================================================================== */
+const STORAGE_KEY = 'pfp.tracker.v1';
+const State = {
   openId: null,
   search: '',
   cat: 'all',
-  data: loadData(), // { viewed: [], difficulty: {} }
+  data: loadData(),
   hintSeen: localStorage.getItem('pfp.hintSeen') === 'true'
 };
 
@@ -296,236 +401,194 @@ function loadData() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw) return JSON.parse(raw);
-  } catch(e){}
+  } catch(e) {}
   return { viewed: [], difficulty: {} };
 }
+
 function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(State.data));
 }
 
-/* ============================================================
-   CONTENT DATA (Expanded with new Categories)
-   ============================================================ */
-const CATEGORIES = {
-  medizin:       { label:'Krankheitslehre', icon:'🩺', color:'#e11d48', bg:'rgba(225,29,72,.12)' },
-  recht:         { label:'Recht',           icon:'⚖️', color:'#2563eb', bg:'rgba(37,99,235,.12)' },
-  ethik:         { label:'Ethik',           icon:'🕊️', color:'#059669', bg:'rgba(5,150,105,.12)' },
-  modelle:       { label:'Pflegemodelle',   icon:'📐', color:'#7c3aed', bg:'rgba(124,58,237,.12)' },
-  kommunikation: { label:'Kommunikation',   icon:'🗣️', color:'#d97706', bg:'rgba(217,119,6,.12)' }
-};
-
-const TOPICS = [
-  // --- MEDIZIN (Beispiele) ---
-  { id:'m1', cat:'medizin', title:'Diabetes mellitus', icon:'🩸',
-    def:'Chronische Stoffwechselerkrankung mit Hyperglykämie.',
-    sec1:{t:'Risikofaktoren', i:'⚠️', c:['Adipositas','Bewegungsmangel','Alter']},
-    sec2:{t:'Symptome', i:'🔎', c:['Polyurie','Durst','Müdigkeit']},
-    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['BZ-Kontrolle','Fußinspektion','Hypoglykämiezeichen erkennen']}
-  },
-  { id:'m2', cat:'medizin', title:'Herzinsuffizienz', icon:'💙',
-    def:'Unfähigkeit des Herzens, den Körper ausreichend mit Blut/Sauerstoff zu versorgen.',
-    sec1:{t:'Ursachen', i:'🧩', c:['KHK','Hypertonie','Klappenerkrankungen']},
-    sec2:{t:'Symptome', i:'🔎', c:['Dyspnoe','Ödeme','Gewichtszunahme','Nykturie']},
-    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Tägliches Wiegen','Bilanzierung','Oberkörperhochlagerung']}
-  },
-  
-  // --- RECHT ---
-  { id:'r1', cat:'recht', title:'Haftungsrecht im Pflegealltag', icon:'⚖️',
-    def:'Rechtliche Verantwortung von Pflegekräften für Schäden, die Patienten durch pflegerisches Handeln oder Unterlassen entstehen.',
-    sec1:{t:'Kernbegriffe', i:'📌', c:['Zivilrechtliche Haftung (Schadensersatz/Schmerzensgeld)','Strafrechtliche Haftung (Körperverletzung/Fahrlässige Tötung)','Übernahmeverschulden (Tätigkeiten übernehmen, für die man nicht qualifiziert ist)']},
-    sec2:{t:'Häufige Risiken', i:'⚠️', c:['Stürze durch unzureichende Prophylaxe','Medikationsfehler','Dekubitus durch fehlende Lagerung']},
-    sec3:{t:'Schutz & Prävention', i:'🛡️', c:['Lückenlose, zeitnahe Dokumentation (Beweislast!)','Einhaltung von Expertenstandards','Remonstrationsrecht nutzen (Anordnungen hinterfragen)']}
-  },
-  { id:'r2', cat:'recht', title:'Schweigepflicht & Datenschutz', icon:'🔒',
-    def:'Gesetzliche und ethische Verpflichtung, Patientengeheimnisse zu wahren (§ 203 StGB).',
-    sec1:{t:'Was fällt darunter?', i:'🧩', c:['Diagnosen & Befunde','Persönliche Umstände','Die bloße Tatsache, dass jemand Patient ist']},
-    sec2:{t:'Ausnahmen (Offenbarung)', i:'🔓', c:['Ausdrückliche Einwilligung des Patienten','Gesetzliche Meldepflichten (z.B. Infektionsschutzgesetz)','Rechtfertigender Notstand (Abwehr von Gefahr für Leib/Leben)']},
-    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Übergaben nur in geschützten Räumen','Keine Auskünfte am Telefon ohne Identitätssicherung','Patientenakten vor Dritten schützen']}
-  },
-
-  // --- ETHIK ---
-  { id:'e1', cat:'ethik', title:'4 Prinzipien (Beauchamp & Childress)', icon:'🕊️',
-    def:'Das Standardmodell der Medizinethik zur Beurteilung moralischer Konflikte im Gesundheitswesen.',
-    sec1:{t:'Die 4 Prinzipien', i:'📌', c:['Respekt vor der Autonomie (Selbstbestimmung)','Schadensvermeidung (Non-Maleficence)','Fürsorge / Wohltun (Beneficence)','Gerechtigkeit (Justice)']},
-    sec2:{t:'Typische Konflikte', i:'⚠️', c:['Patient lehnt lebensrettende Maßnahme ab (Autonomie vs. Fürsorge)','Fixierung bei Sturzgefahr (Schadensvermeidung vs. Freiheitsentzug)']},
-    sec3:{t:'Anwendung', i:'🏥', c:['Informiertes Einverständnis einholen (Informed Consent)','Mutmaßlichen Willen (Patientenverfügung) prüfen','Ethische Fallbesprechungen im Team initiieren']}
-  },
-
-  // --- MODELLE ---
-  { id:'p1', cat:'modelle', title:'ABEDL nach Monika Krohwinkel', icon:'📐',
-    def:'Bedürfnisorientiertes Pflegemodell, das den Menschen in 13 Aktivitäten, Beziehungen und existenziellen Erfahrungen des Lebens (ABEDL) erfasst.',
-    sec1:{t:'Zentrale Konzepte', i:'🧩', c:['Mensch als ganzheitliches Wesen','Fokus auf Ressourcen und Defizite','Primäres Ziel: Unabhängigkeit und Wohlbefinden fördern']},
-    sec2:{t:'Wichtige ABEDLs (Beispiele)', i:'📋', c:['Kommunizieren können','Sich pflegen können','Ruhen und schlafen können','Mit existenziellen Erfahrungen umgehen können (z.B. Angst, Schmerz)']},
-    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Grundlage für die Strukturierte Informationssammlung (SIS)','Hilft bei der ganzheitlichen Pflegeplanung','Fördert die ressourcenorientierte Pflege']}
-  },
-
-  // --- KOMMUNIKATION ---
-  { id:'k1', cat:'kommunikation', title:'Vier-Ohren-Modell (Schulz von Thun)', icon:'🗣️',
-    def:'Modell, das besagt, dass jede Nachricht vier Botschaften (Ebenen) enthält, die vom Sender gesendet und vom Empfänger gehört werden.',
-    sec1:{t:'Die 4 Ebenen', i:'📌', c:['Sachebene (Worüber ich informiere)','Selbstkundgabe (Was ich von mir preisgebe)','Beziehungsseite (Was ich von dir halte)','Appellseite (Wozu ich dich veranlassen möchte)']},
-    sec2:{t:'Praxisbeispiel', i:'💡', c:['Patient sagt: "Das Wasser steht aber weit weg!"','Sachebene: Distanz zum Wasserglas ist groß.','Appell: "Bitte reich mir das Wasser."','Beziehung: "Du hast dich nicht gut um mich gekümmert."']},
-    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Missverständnisse durch "falsches Hören" erkennen','Aktives Zuhören anwenden','Nachfragen, um die eigentliche Botschaft (Appell/Bedürfnis) zu klären']}
-  }
-];
-
-/* ============================================================
-   HELPERS & LOGIC
-   ============================================================ */
+/* ==========================================================================
+   3. RENDER LOGIC
+   ========================================================================== */
 const $ = s => document.querySelector(s);
-const $$ = s => Array.from(document.querySelectorAll(s));
-
-function getCat(id) { return CATEGORIES[id] || CATEGORIES.medizin; }
+const $$ = s => document.querySelectorAll(s);
 
 function highlight(text) {
-  const q = state.search.trim();
+  const q = State.search.trim();
   if(!q) return text;
   const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return String(text).replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
 }
 
-function secHTML(s) {
-  if(!s) return '';
-  return `<section class="section"><h4>${s.i} ${s.t}</h4><ul>${s.c.map(x=>`<li>${highlight(x)}</li>`).join('')}</ul></section>`;
-}
-
-/* ============================================================
-   RENDER
-   ============================================================ */
 function render() {
-  const q = state.search.trim().toLowerCase();
-  let data = TOPICS.filter(t => {
-    if(state.cat !== 'all' && t.cat !== state.cat) return false;
+  const q = State.search.trim().toLowerCase();
+  
+  // Filter Data
+  const filtered = TOPICS_DATA.filter(t => {
+    if(State.cat !== 'all' && t.category !== State.cat) return false;
     if(q && !JSON.stringify(t).toLowerCase().includes(q)) return false;
     return true;
   });
 
-  $('#topicList').innerHTML = data.map(t => {
-    const c = getCat(t.cat);
-    const d = state.data.difficulty[t.id] || 'unrated';
-    const open = state.openId === t.id;
-    const isNew = !state.data.viewed.includes(t.id);
-    const showHint = open && isNew && !state.hintSeen ? 'show-hint' : '';
+  // Build HTML
+  $('#topicGrid').innerHTML = filtered.map(t => {
+    const d = State.data.difficulty[t.id] || 'unrated';
+    const isOpen = State.openId === t.id;
+    const isNew = !State.data.viewed.includes(t.id);
+    
+    // Show hint only on the first opened, unrated, new topic
+    let showHint = '';
+    if(isOpen && isNew && !State.hintSeen) {
+      showHint = `<div class="hint-tooltip">☝️ Markiere deinen Lernstand!</div>`;
+    }
+
+    // Map Category to German Badge
+    const catLabels = { medizin: "Medizin", recht: "Recht", ethik: "Ethik", modelle: "Modell", kommunikation: "Komm." };
+
+    // Build Sections
+    const sectionsHTML = t.sections.map(s => `
+      <div class="info-section">
+        <h4>${s.icon} ${s.title}</h4>
+        <ul>${s.items.map(i => `<li>${highlight(i)}</li>`).join('')}</ul>
+      </div>
+    `).join('');
 
     return `
-<article class="topic ${open ? 'open' : ''} ${d !== 'unrated' ? d : ''}" id="topic-${t.id}">
-  <div class="topic-head" onclick="toggleOpen('${t.id}')">
-    <div class="disease-icon">${t.icon}</div>
-    <div>
-      <div class="topic-title">${highlight(t.title)}</div>
-      <div class="meta">
-        <span class="chip cat" style="--catbg:${c.bg};--catcolor:${c.color}">${c.icon} ${c.label}</span>
-        ${d==='easy'?'<span class="chip status-chip easy">🟢 Gelernt</span>':''}
-        ${d==='mid'?'<span class="chip status-chip mid">🟡 Lernen</span>':''}
-        ${d==='hard'?'<span class="chip status-chip hard">🔴 Schwer</span>':''}
-      </div>
-    </div>
-    <div class="actions ${showHint}" onclick="event.stopPropagation()">
-      <div class="ampel">
-        <button class="easy ${d==='easy'?'active':''}" onclick="setDiff('${t.id}','easy')"><i class="fa-solid fa-check"></i></button>
-        <button class="mid ${d==='mid'?'active':''}" onclick="setDiff('${t.id}','mid')"><i class="fa-solid fa-minus"></i></button>
-        <button class="hard ${d==='hard'?'active':''}" onclick="setDiff('${t.id}','hard')"><i class="fa-solid fa-fire"></i></button>
-      </div>
-      <div class="ampel-hint">Tipp: Markiere deinen Lernstand!</div>
-      <button class="arrow" onclick="toggleOpen('${t.id}')"><i class="fa-solid fa-chevron-down"></i></button>
-    </div>
-  </div>
-
-  <div class="body">
-    <div class="body-inner">
-      <div class="content">
-        <div class="section-grid" style="grid-template-columns: 1fr;">
-          <section class="section"><h4>📌 Definition</h4><p>${highlight(t.def)}</p></section>
-          ${secHTML(t.sec1)}
-          ${secHTML(t.sec2)}
-          ${secHTML(t.sec3)}
+      <article class="topic-card ${isOpen ? 'open' : ''}" id="card-${t.id}">
+        <div class="t-header" onclick="toggleCard('${t.id}')">
+          <div class="t-icon">${t.icon}</div>
+          <div class="t-title-area">
+            <h3>${highlight(t.title)}</h3>
+            <div class="t-meta">
+              <span class="badge badge-cat">${catLabels[t.category] || t.category}</span>
+            </div>
+          </div>
+          <div class="t-actions" onclick="event.stopPropagation()">
+            <div class="traffic-lights">
+              <button class="light-btn e-easy ${d==='easy'?'active':''}" onclick="setDiff('${t.id}', 'easy')"><i class="fa-solid fa-check"></i></button>
+              <button class="light-btn e-mid ${d==='mid'?'active':''}" onclick="setDiff('${t.id}', 'mid')"><i class="fa-solid fa-clock"></i></button>
+              <button class="light-btn e-hard ${d==='hard'?'active':''}" onclick="setDiff('${t.id}', 'hard')"><i class="fa-solid fa-fire"></i></button>
+            </div>
+            ${showHint}
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>`;
+        
+        <div class="t-body">
+          <div class="t-body-inner">
+            <div class="t-content">
+              <div class="info-section" style="border-color: var(--primary-light); background: var(--primary-light);">
+                <h4>📌 Definition</h4>
+                <p style="color: var(--primary-dark);">${highlight(t.definition)}</p>
+              </div>
+              ${sectionsHTML}
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
   }).join('');
 
-  $('#empty').style.display = data.length ? 'none' : 'block';
+  // Handle Empty State
+  $('#emptyState').style.display = filtered.length === 0 ? 'block' : 'none';
+
   updateDashboard();
 }
 
-function toggleOpen(id) {
-  state.openId = state.openId === id ? null : id;
-  if(state.openId && !state.data.viewed.includes(id)) {
-      state.data.viewed.push(id);
-      saveData();
+/* ==========================================================================
+   4. INTERACTIONS & DASHBOARD
+   ========================================================================== */
+function toggleCard(id) {
+  State.openId = State.openId === id ? null : id;
+  
+  if(State.openId && !State.data.viewed.includes(id)) {
+    State.data.viewed.push(id);
+    saveData();
   }
+  
   render();
-  if(state.openId) {
-      setTimeout(()=> document.getElementById('topic-'+id)?.scrollIntoView({behavior:'smooth', block:'nearest'}), 100);
+  
+  if(State.openId) {
+    setTimeout(() => {
+      document.getElementById('card-'+id).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 150);
   }
 }
 
-function setDiff(id, diff) {
-  if(!state.hintSeen) {
-      state.hintSeen = true;
-      localStorage.setItem('pfp.hintSeen', 'true');
+function setDiff(id, level) {
+  if(!State.hintSeen) {
+    State.hintSeen = true;
+    localStorage.setItem('pfp.hintSeen', 'true');
   }
-  const cur = state.data.difficulty[id];
-  if(cur === diff) delete state.data.difficulty[id];
-  else state.data.difficulty[id] = diff;
+
+  const cur = State.data.difficulty[id];
+  if(cur === level) {
+    delete State.data.difficulty[id]; // Toggle off
+    showToast('Markierung entfernt');
+  } else {
+    State.data.difficulty[id] = level;
+    showToast('Status gespeichert');
+  }
+  
   saveData();
   render();
-  showToast(cur === diff ? 'Markierung entfernt' : 'Status aktualisiert');
+  if(navigator.vibrate) navigator.vibrate(15);
 }
 
-/* ============================================================
-   UPDATE DASHBOARD (Progress Bars)
-   ============================================================ */
 function updateDashboard() {
-    const total = TOPICS.length;
-    const viewed = state.data.viewed.length;
-    let easy=0, mid=0, hard=0;
-    
-    Object.values(state.data.difficulty).forEach(val => {
-        if(val === 'easy') easy++;
-        if(val === 'mid') mid++;
-        if(val === 'hard') hard++;
-    });
+  const total = TOPICS_DATA.length;
+  const viewed = State.data.viewed.length;
+  let easy = 0, mid = 0, hard = 0;
 
-    $('#kViewed').innerText = `${viewed}/${total}`;
-    $('#fViewed').style.width = `${Math.round(viewed/total*100)}%`;
+  Object.values(State.data.difficulty).forEach(val => {
+    if(val === 'easy') easy++;
+    if(val === 'mid') mid++;
+    if(val === 'hard') hard++;
+  });
 
-    $('#kEasy').innerText = `${easy}/${total}`;
-    $('#fEasy').style.width = `${Math.round(easy/total*100)}%`;
+  // Update Texts
+  $('#kViewed').innerText = `${viewed}/${total}`;
+  $('#kEasy').innerText = `${easy}/${total}`;
+  $('#kMid').innerText = `${mid}/${total}`;
+  $('#kHard').innerText = `${hard}/${total}`;
 
-    $('#kMid').innerText = `${mid}/${total}`;
-    $('#fMid').style.width = `${Math.round(mid/total*100)}%`;
-
-    $('#kHard').innerText = `${hard}/${total}`;
-    $('#fHard').style.width = `${Math.round(hard/total*100)}%`;
-
-    $('#streakCount').innerText = hard; // Number of hard items to review
+  // Update Bars
+  $('#fViewed').style.width = `${Math.round(viewed/total*100)}%`;
+  $('#fEasy').style.width = `${Math.round(easy/total*100)}%`;
+  $('#fMid').style.width = `${Math.round(mid/total*100)}%`;
+  $('#fHard').style.width = `${Math.round(hard/total*100)}%`;
 }
 
 function showToast(msg) {
-  const el = document.getElementById('toastMsg');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 2000);
+  const t = $('#toastMsg');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
 }
 
-/* Listeners */
-$$('[data-cat]').forEach(b => b.addEventListener('click', () => {
-  state.cat = b.dataset.cat;
-  $$('[data-cat]').forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
-  state.openId = null;
-  render();
-}));
+/* ==========================================================================
+   5. LISTENERS
+   ========================================================================== */
+$$('.cat-tabs .tab').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    $$('.cat-tabs .tab').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    State.cat = e.target.getAttribute('data-cat');
+    State.openId = null;
+    render();
+    if(navigator.vibrate) navigator.vibrate(10);
+  });
+});
 
-$('#searchInput').addEventListener('input', e => {
-  state.search = e.target.value;
-  state.openId = null;
+$('#searchInput').addEventListener('input', (e) => {
+  State.search = e.target.value;
+  State.openId = null;
   render();
 });
 
-render();
+// Init
+document.addEventListener('DOMContentLoaded', render);
 </script>
 </body>
 </html>
