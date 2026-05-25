@@ -1,834 +1,1346 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>PflegefachProfi</title>
+<title>PflegefachProfi • Erkrankungen</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-:root{--p:#2563eb;--pd:#1e40af;--a:#f43f5e;--s:#10b981;--w:#f59e0b;--d:#ef4444;--bg:#f8fafc;--card:#fff;--txt:#0f172a;--mut:#64748b;--br:#e2e8f0;--ease:cubic-bezier(.175,.885,.32,1.275)}
+/* =============================================
+   DESIGN TOKENS — lernen.html system
+   ============================================= */
+:root{
+  --p:#2563eb;
+  --pd:#1e40af;
+  --a:#f43f5e;
+  --s:#10b981;
+  --w:#f59e0b;
+  --d:#ef4444;
+  --bg:#f8fafc;
+  --card:#fff;
+  --txt:#0f172a;
+  --mut:#64748b;
+  --br:#e2e8f0;
+  --navH:72px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --shadow:0 10px 30px rgba(37,99,235,.14);
+  --shadow2:0 4px 16px rgba(15,23,42,.07);
+  --grad:linear-gradient(135deg,var(--p) 0%,var(--pd) 100%);
+}
+
+/* =============================================
+   RESET + BASE
+   ============================================= */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;background:#cbd5e1;color:var(--txt);height:100vh;height:100dvh;overflow:hidden;display:flex;justify-content:center;align-items:flex-start}
-button{font:inherit;border:0;background:none;cursor:pointer}
-a{text-decoration:none;color:inherit}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  background:#cbd5e1;                /* lernen outer background */
+  color:var(--txt);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  justify-content:center;
+}
+button,input{font-family:inherit}
+button{cursor:pointer}
 
-/* ==========================================================================
-   APP WRAPPER (Desktop & Mobile Flex-Architecture)
-   ========================================================================== */
-.app{width:100%;max-width:1024px;height:100%;background:var(--bg);display:flex;flex-direction:column;position:relative;box-shadow:0 0 60px #0003;overflow:hidden}
-
-@media (min-width: 768px) {
-  body { align-items: center; padding: 20px; }
-  .app { height: 95vh; max-height: 900px; border-radius: 24px; }
+/* =============================================
+   APP SHELL  (lernen-style centred container,
+   but uncapped width so filters/topics breathe)
+   ============================================= */
+.app{
+  width:100%;
+  max-width:900px;         /* comfortable reading width */
+  background:var(--bg);
+  min-height:100vh;
+  position:relative;
+  box-shadow:0 0 80px rgba(15,23,42,.18);
+  display:flex;
+  flex-direction:column;
 }
 
-.top{height:72px;background:#fffffff2;display:flex;align-items:center;justify-content:space-between;padding:max(16px, env(safe-area-inset-top)) 20px 16px;border-bottom:1px solid var(--br);z-index:20;flex-shrink:0}
-.brand{font-weight:900;font-size:18px;display:flex;align-items:center;gap:10px}
-.logo{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--pd));color:white;display:grid;place-items:center}
-.stats{display:flex;gap:8px}
-.pill{background:white;border:1px solid var(--br);border-radius:999px;padding:6px 10px;font-weight:900;font-size:12px}
+/* inner scroll wrapper so the sticky bars work */
+.page-scroll{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-bottom:calc(env(safe-area-inset-bottom) + 112px);
+}
 
-/* ==========================================================================
-   SCREEN MANAGER
-   ========================================================================== */
-.screens-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-.screen{display:none;flex:1;overflow-y:auto;overflow-x:hidden;padding:20px}
-.screen.active{display:block}
-#home.active{padding-bottom:100px} /* Space for floating CTA */
+.wrap{width:100%;padding:0 20px}
 
-h1{font-size:30px;letter-spacing:-.05em;line-height:1.1;margin-bottom:8px}
-.muted{color:var(--mut);font-weight:650}
-.badge{display:inline-block;background:#eff6ff;color:#1e40af;padding:5px 11px;border-radius:9px;font-size:11px;font-weight:900;margin-bottom:12px}
-.mission{margin:22px 0;background:linear-gradient(135deg,#1e40af,#2563eb);color:white;border-radius:30px;padding:24px;box-shadow:0 20px 40px #2563eb44;position:relative;overflow:hidden}
-.mission:after{content:"🚨";position:absolute;right:-25px;top:-30px;font-size:150px;opacity:.14}
-.tag{display:inline-block;background:#ffffff33;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:900;letter-spacing:1px;margin-bottom:10px}
-.mission h2{font-size:26px;position:relative;z-index:2;line-height:1.2}
-.mission p{max-width:80%;margin:8px 0 20px;opacity:.9;position:relative;z-index:2}
-.btn-white{background:white;color:#1e40af;border-radius:18px;padding:15px 18px;font-weight:950;width:100%;display:flex;justify-content:space-between;position:relative;z-index:2}
+/* =============================================
+   TOP BAR  (exact lernen.html .top style)
+   ============================================= */
+.top{
+  height:var(--navH);
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  border-bottom:1px solid var(--br);
+  position:sticky;
+  top:0;
+  z-index:200;
+  gap:12px;
+}
 
-.section-title{font-weight:950;margin:20px 0 12px}
-.road{background:white;border:1px solid var(--br);border-radius:25px;padding:22px;display:grid;gap:17px}
-.step{display:flex;gap:14px}
-.num{width:30px;height:30px;border-radius:50%;background:#eff6ff;color:var(--p);display:grid;place-items:center;font-weight:950;flex:none}
-.step h3{font-size:15px}
-.step p{font-size:13px;color:var(--mut);font-weight:650}
+/* Brand */
+.brand{
+  display:flex;align-items:center;gap:10px;
+  color:var(--txt);text-decoration:none;flex-shrink:0;
+}
+.logo{
+  width:40px;height:40px;border-radius:14px;
+  background:var(--grad);
+  color:#fff;display:grid;place-items:center;
+  box-shadow:0 4px 14px rgba(37,99,235,.35);
+}
+.logo i{font-size:19px}
+.brand b{font-size:18px;font-weight:900;letter-spacing:-.04em}
 
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.box{background:white;border:1px solid var(--br);border-radius:22px;padding:17px}
-.wide{grid-column:span 2}
-.val{font-size:24px;font-weight:950}
-.lbl{font-size:12px;color:var(--mut);font-weight:800}
-.bar{height:7px;background:var(--br);border-radius:999px;overflow:hidden;margin-top:9px}
-.fill{height:100%;background:var(--s);width:0;transition:0.5s}
+/* Desktop nav links — hidden on mobile */
+.desk-nav{
+  display:flex;align-items:center;gap:4px;
+  flex:1;justify-content:center;
+}
+.desk-nav a,.desk-nav button{
+  border:0;text-decoration:none;
+  color:var(--mut);background:transparent;
+  font-weight:700;font-size:13px;
+  border-radius:12px;
+  padding:8px 12px;
+  display:flex;gap:7px;align-items:center;
+  transition:.2s var(--ease);
+  white-space:nowrap;
+}
+.desk-nav a.active{background:#eff6ff;color:var(--p)}
+.desk-nav a:hover:not(.active){background:#f1f5f9;color:var(--txt)}
+.desk-nav button.locked{opacity:.45;cursor:not-allowed}
+.desk-nav button.locked:hover{background:transparent;color:var(--mut)}
 
-/* ==========================================================================
-   FLOATING CTA
-   ========================================================================== */
-.start{
-  position:absolute;
-  left:50%;
-  bottom:24px;
-  width:min(268px,calc(100% - 40px));
-  height:56px;
+/* Stats pills */
+.stats{display:flex;gap:7px;flex-shrink:0}
+.pill{
+  background:#fff;
+  border:1px solid var(--br);
   border-radius:999px;
-  background:radial-gradient(circle at 18% 12%,rgba(255,255,255,.38),transparent 28%),linear-gradient(135deg,#34d399 0%,#10b981 45%,#059669 100%);
-  color:white;z-index:950;display:flex;align-items:center;justify-content:center;gap:10px;
-  font-size:17px;font-weight:950;letter-spacing:-.02em;
-  box-shadow:0 16px 34px rgba(5,150,105,.34),0 5px 12px rgba(15,23,42,.12),inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(4,120,87,.28);
-  overflow:hidden;opacity:0;pointer-events:none;
-  transform:translate3d(-50%,140%,0) scale(.92);
-  will-change:transform,opacity;
-}
-.start.is-visible{
-  pointer-events:auto;
-  animation:ctaSwoopIn .78s cubic-bezier(.16,1.18,.32,1) forwards, ctaSettlePulse 2.7s ease-in-out .92s infinite;
-}
-.start.is-leaving{
-  pointer-events:none;
-  animation:ctaSwoopOut .6s cubic-bezier(.72,0,.24,1) forwards;
-}
-.start:before{
-  content:"";position:absolute;inset:-90% -55%;
-  background:linear-gradient(112deg,transparent 38%,rgba(255,255,255,.46) 50%,transparent 62%);
-  transform:translateX(-62%) rotate(8deg);
-  animation:ctaShine 2.85s ease-in-out .45s infinite;
-}
-.start .big{position:relative;line-height:1;white-space:nowrap}
-button.start > i {position:relative;font-size:16px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.14))}
-.start:active{transform:translate3d(-50%,0,0) scale(.975); animation:none;}
-
-@keyframes ctaSwoopIn{
-  0%{opacity:0;transform:translate3d(calc(-50% + 42px),150%,0) scale(.86) rotate(4deg)}
-  58%{opacity:1;transform:translate3d(calc(-50% - 5px),-8px,0) scale(1.035) rotate(-1deg)}
-  100%{opacity:1;transform:translate3d(-50%,0,0) scale(1) rotate(0)}
-}
-@keyframes ctaSettlePulse{
-  0%,100%{transform:translate3d(-50%,0,0) scale(1);box-shadow:0 16px 34px rgba(5,150,105,.34),0 5px 12px rgba(15,23,42,.12),inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(4,120,87,.28)}
-  50%{transform:translate3d(-50%,-2px,0) scale(1.018);box-shadow:0 22px 42px rgba(5,150,105,.42),0 7px 16px rgba(15,23,42,.14),inset 0 1px 0 rgba(255,255,255,.46),inset 0 -1px 0 rgba(4,120,87,.24)}
-}
-@keyframes ctaSwoopOut{
-  0%{opacity:1;transform:translate3d(-50%,0,0) scale(1)}
-  100%{opacity:0;transform:translate3d(-50%,135%,0) scale(.9)}
-}
-@keyframes ctaShine{
-  0%,45%{transform:translateX(-62%) rotate(8deg);opacity:.35}
-  72%{transform:translateX(46%) rotate(8deg);opacity:.88}
-  100%{transform:translateX(68%) rotate(8deg);opacity:0}
+  padding:6px 11px;
+  font-weight:900;
+  font-size:12px;
+  display:flex;align-items:center;gap:5px;
+  white-space:nowrap;
+  transition:.3s var(--ease);
 }
 
-/* ==========================================================================
-   BOTTOM NAVIGATION
-   ========================================================================== */
+/* progress pill uses a layered fill */
+.pill-progress{
+  position:relative;overflow:hidden;
+  min-width:80px;justify-content:center;
+}
+.pill-progress .pfill{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(37,99,235,.12),rgba(30,64,175,.08));
+  border-radius:99px;
+  width:0;
+  transition:.6s var(--ease);
+}
+.pill-progress .plabel{position:relative;z-index:1}
+
+/* =============================================
+   HEADER PANEL
+   ============================================= */
+.compact-head{padding:18px 20px 0}
+.compact-panel{
+  background:var(--grad);
+  border-radius:28px;
+  padding:22px;
+  box-shadow:0 20px 40px rgba(37,99,235,.28);
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+.compact-panel::before{
+  content:"";position:absolute;
+  right:-55px;top:-75px;
+  width:230px;height:230px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+.compact-panel::after{
+  content:"";position:absolute;
+  left:-40px;bottom:-55px;
+  width:190px;height:190px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+.topline{
+  position:relative;z-index:1;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:14px;
+  flex-wrap:wrap;
+}
+.title-block h1{
+  font-size:clamp(1.3rem,5vw,2rem);
+  letter-spacing:-.05em;line-height:1.05;
+  font-weight:900;
+}
+.title-block p{
+  font-size:13px;color:rgba(255,255,255,.75);
+  font-weight:600;margin-top:5px;line-height:1.5;
+  max-width:380px;
+}
+.kpi-row{display:flex;gap:8px;flex-wrap:wrap}
+.kpi{
+  min-width:80px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:16px;padding:10px 13px;
+  backdrop-filter:blur(8px);
+}
+.kpi small{
+  display:block;font-size:10px;
+  text-transform:uppercase;letter-spacing:.07em;
+  color:rgba(255,255,255,.65);font-weight:800;
+  margin-bottom:2px;
+}
+.kpi b{font-size:20px;letter-spacing:-.04em;font-weight:900}
+
+/* =============================================
+   FILTER CARD
+   ============================================= */
+.filters{
+  position:sticky;
+  top:var(--navH);
+  z-index:100;
+  padding:12px 20px 14px;
+  background:rgba(248,250,252,.94);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--br);
+}
+.filter-card{
+  background:#fff;
+  border:1px solid var(--br);
+  border-radius:22px;
+  box-shadow:var(--shadow2);
+  padding:13px;
+  display:grid;gap:10px;
+}
+.search-row{display:flex;align-items:center;gap:8px}
+.search{position:relative;flex:1;min-width:180px;max-width:420px}
+.search i{
+  position:absolute;left:13px;top:50%;
+  transform:translateY(-50%);
+  color:var(--mut);font-size:13px;pointer-events:none;
+}
+.search input{
+  height:42px;width:100%;
+  border:1.5px solid var(--br);outline:none;
+  border-radius:14px;
+  padding:0 13px 0 38px;
+  font-size:13px;font-weight:700;
+  background:#f8fafc;color:var(--txt);
+  transition:.2s var(--ease);
+}
+.search input:focus{
+  border-color:var(--p);background:#fff;
+  box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+.clear{
+  display:none;border:none;border-radius:12px;
+  background:#eff6ff;color:var(--p);
+  padding:10px 13px;font-size:12px;font-weight:900;
+  transition:.2s var(--ease);
+}
+.clear:hover{background:var(--p);color:#fff}
+.count{
+  margin-left:auto;
+  font-size:12px;color:var(--mut);font-weight:900;white-space:nowrap;
+}
+
+.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fl-label{
+  font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;font-weight:800;
+  color:var(--mut);margin-right:2px;flex-shrink:0;
+}
+.tab{
+  border:1.5px solid var(--br);background:#fff;
+  border-radius:999px;padding:7px 11px;
+  font-size:11px;color:var(--mut);font-weight:800;
+  transition:.18s var(--ease);
+  line-height:1;
+}
+.tab:hover{border-color:rgba(37,99,235,.25);color:var(--p)}
+.tab.active{
+  border-color:transparent;color:#fff;
+  background:var(--grad);
+  box-shadow:0 6px 18px rgba(37,99,235,.25);
+  transform:translateY(-1px);
+}
+/* Ampel tabs */
+.ampel-tabs .tab.easy.active{
+  background:var(--s);
+  box-shadow:0 6px 16px rgba(16,185,129,.3);
+}
+.ampel-tabs .tab.mid.active{
+  background:var(--w);color:#451a03;
+  box-shadow:0 6px 16px rgba(245,158,11,.3);
+}
+.ampel-tabs .tab.hard.active{
+  background:var(--d);
+  box-shadow:0 6px 16px rgba(239,68,68,.3);
+}
+
+/* Sort toggle */
+.toggle{
+  margin-left:auto;display:flex;align-items:center;
+  gap:7px;font-size:11px;color:var(--mut);font-weight:800;
+  cursor:pointer;padding:5px 8px;border-radius:10px;
+  transition:.15s;user-select:none;
+}
+.toggle:hover{background:#f1f5f9}
+.switch{
+  width:36px;height:20px;background:#cbd5e1;
+  border-radius:999px;position:relative;
+  transition:.2s var(--ease);flex-shrink:0;
+}
+.switch::after{
+  content:"";width:14px;height:14px;
+  position:absolute;top:3px;left:3px;
+  background:#fff;border-radius:50%;
+  box-shadow:0 1px 4px rgba(0,0,0,.15);
+  transition:.2s var(--ease);
+}
+.switch.on{background:var(--grad)}
+.switch.on::after{transform:translateX(16px)}
+
+/* =============================================
+   TOPIC LIST
+   ============================================= */
+.list{display:grid;gap:10px;padding:16px 20px 20px}
+
+.topic{
+  background:#fff;
+  border:1.5px solid var(--br);
+  box-shadow:var(--shadow2);
+  border-radius:24px;
+  overflow:hidden;
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .2s;
+  position:relative;
+}
+.topic:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(37,99,235,.12);
+}
+.topic.open{
+  border-color:rgba(37,99,235,.22);
+  box-shadow:0 14px 36px rgba(37,99,235,.14);
+}
+/* Left accent strip */
+.topic::before{
+  content:"";position:absolute;
+  left:0;top:0;bottom:0;width:4px;
+  background:var(--grad);
+  border-radius:4px 0 0 4px;
+}
+.topic.easy::before{background:var(--s)}
+.topic.mid::before{background:var(--w)}
+.topic.hard::before{background:var(--d)}
+
+/* Topic head */
+.topic-head{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:12px;align-items:center;
+  padding:14px 14px 14px 18px;
+  cursor:pointer;user-select:none;
+}
+.disease-icon{
+  width:48px;height:48px;border-radius:16px;
+  display:grid;place-items:center;font-size:25px;
+  background:#f1f5f9;flex-shrink:0;
+}
+.topic-title{
+  font-size:15px;font-weight:900;
+  letter-spacing:-.025em;margin-bottom:6px;
+}
+.meta{display:flex;gap:5px;flex-wrap:wrap}
+.chip{
+  display:inline-flex;align-items:center;gap:4px;
+  border-radius:99px;padding:4px 9px;
+  font-size:10px;font-weight:800;
+}
+.cat{background:var(--catbg);color:var(--catcolor)}
+.day{background:#eff6ff;color:#1d4ed8}
+.prio{background:#fef2f2;color:#dc2626}
+.status-chip{background:#f1f5f9;color:var(--mut)}
+.status-chip.easy{background:rgba(16,185,129,.1);color:var(--s)}
+.status-chip.mid{background:rgba(245,158,11,.13);color:#92400e}
+.status-chip.hard{background:rgba(239,68,68,.1);color:var(--d)}
+
+/* Right side actions */
+.actions{display:flex;align-items:center;gap:7px}
+.ampel{
+  display:flex;gap:4px;
+  background:#f1f5f9;padding:4px;border-radius:14px;
+}
+.ampel button{
+  width:32px;height:32px;border:none;border-radius:10px;
+  color:#fff;display:grid;place-items:center;
+  transition:.18s var(--ease);opacity:.38;font-size:13px;
+}
+.ampel button:hover,.ampel button.active{
+  opacity:1;transform:scale(1.1);
+}
+.ampel .easy{background:var(--s)}
+.ampel .mid{background:var(--w);color:#451a03}
+.ampel .hard{background:var(--d)}
+
+.arrow{
+  width:36px;height:36px;border-radius:12px;
+  background:#eff6ff;color:var(--p);
+  display:grid;place-items:center;
+  transition:.28s var(--ease);border:none;
+  flex-shrink:0;
+}
+.topic.open .arrow{
+  transform:rotate(180deg);
+  background:var(--grad);color:#fff;
+  box-shadow:0 4px 12px rgba(37,99,235,.3);
+}
+
+/* Expand body */
+.body{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows .38s var(--ease);
+}
+.topic.open .body{grid-template-rows:1fr}
+.body-inner{overflow:hidden}
+.content{padding:0 14px 16px 18px}
+
+/* Content sections grid */
+.section-grid{
+  border-top:1px solid var(--br);
+  padding-top:13px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+.section{
+  background:#f8fafc;border:1.5px solid var(--br);
+  border-radius:18px;padding:13px;
+  transition:.2s var(--ease);
+}
+.section:hover{background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.06)}
+.section.full{grid-column:1/-1}
+.section h4{
+  display:flex;align-items:center;gap:7px;
+  font-size:11px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--mut);
+  margin-bottom:8px;font-weight:800;
+}
+.section p{font-size:13px;font-weight:700;line-height:1.6}
+.section ul{display:grid;gap:6px}
+.section li{
+  list-style:none;font-size:13px;
+  line-height:1.45;font-weight:700;
+  display:flex;gap:8px;
+}
+.section li::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--grad);flex:none;margin-top:6px;
+}
+.stage-list{display:grid;gap:7px}
+.stage{
+  background:#fff;border:1.5px solid var(--br);
+  border-radius:13px;padding:10px;
+}
+.stage b{display:block;margin-bottom:3px;font-size:13px;font-weight:800}
+.stage span{font-size:12px;color:var(--mut);font-weight:700}
+
+/* Keyword pills */
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
+.key{
+  background:#f1f5f9;border:1.5px solid var(--br);
+  border-radius:99px;padding:4px 9px;
+  font-size:11px;font-weight:800;color:var(--mut);
+}
+
+/* =============================================
+   EMPTY STATE
+   ============================================= */
+.empty{
+  display:none;text-align:center;
+  padding:60px 20px;
+  color:var(--mut);font-weight:800;font-size:14px;
+}
+
+/* =============================================
+   APP-LIKE BOTTOM NAVIGATION
+   Clean aligned PflegefachProfi app navbar
+   ============================================= */
 .nav-bottom{
-  flex-shrink:0;width:100%;height:84px;
-  background:rgba(255,255,255,.98);backdrop-filter:blur(20px);
-  border-top:1px solid var(--br);display:flex;justify-content:space-evenly;align-items:center;
-  padding:8px 8px calc(10px + env(safe-area-inset-bottom));z-index:1000;
+  position:fixed;
+  left:50%;
+  right:auto;
+  bottom:0;
+  width:min(100%,900px);
+  height:84px;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,.98);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--br);
+  display:flex;
+  justify-content:space-evenly;
+  align-items:center;
+  padding:8px 8px calc(10px + env(safe-area-inset-bottom));
+  z-index:300;
+  box-shadow:0 -12px 34px rgba(15,23,42,.08);
 }
 .nav-item{
-  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  color:var(--mut);width:20%;height:62px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  width:20%;
+  height:62px;
+  border:0;
+  border-radius:22px;
+  background:transparent;
+  color:var(--mut);
+  text-decoration:none;
+  font-family:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:color .24s var(--ease), transform .24s var(--ease);
 }
 .nav-item .icon-wrapper{
-  position:relative;width:44px;height:34px;display:flex;justify-content:center;align-items:center;
-  transition:transform .25s ease,color .25s ease;z-index:2;border-radius:999px;
+  position:relative;
+  width:44px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  z-index:1;
+  transition:transform .24s var(--ease);
 }
 .nav-item .icon-wrapper::before{
-  content:'';position:absolute;inset:-5px 0;background:#eff6ff;border-radius:999px;
-  opacity:0;transform:scale(.74);transition:opacity .25s ease,transform .25s ease;z-index:-1;
+  content:'';
+  position:absolute;
+  inset:-5px 0;
+  border-radius:999px;
+  background:#eff6ff;
+  opacity:0;
+  transform:scale(.74);
+  z-index:-1;
+  transition:opacity .24s var(--ease), transform .24s var(--ease);
 }
-.nav-item i{font-size:21px;transition:transform .25s ease;color:inherit}
-.nav-item span{font-size:10px;font-weight:850;line-height:1;opacity:.82;transition:opacity .25s ease,color .25s ease;white-space:nowrap}
+.nav-item i{
+  font-size:21px;
+  color:inherit;
+  transition:transform .24s var(--ease);
+}
+.nav-item span{
+  font-size:10px;
+  font-weight:900;
+  line-height:1;
+  opacity:.82;
+  color:inherit;
+  white-space:nowrap;
+  transition:opacity .24s var(--ease), color .24s var(--ease);
+}
 .nav-item.active{color:var(--p)}
 .nav-item.active .icon-wrapper{transform:translateY(-2px)}
 .nav-item.active .icon-wrapper::before{opacity:1;transform:scale(1)}
 .nav-item.active i{transform:scale(1.08)}
 .nav-item.active span{opacity:1;color:var(--p)}
 .nav-item:active .icon-wrapper{transform:scale(.94)}
-.nav-item.locked{opacity:.5;cursor:not-allowed}
+.nav-item.locked{opacity:.48;cursor:not-allowed}
+.nav-item.locked:active .icon-wrapper{transform:none}
 
-/* Library Cards */
-.cat-header { grid-column: 1 / -1; font-size: 13px; font-weight: 900; color: var(--mut); text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 4px; border-bottom: 2px solid var(--br); padding-bottom: 6px; }
-.card{background:white;border:2px solid var(--br);border-radius:23px;padding:15px;display:flex;gap:14px;align-items:center;text-align:left;width:100%;box-shadow:0 3px 8px #0f172a0a;cursor:pointer;transition:.2s}
-.card:active{transform:scale(.98); border-color:var(--p)}
-.icon{width:54px;height:54px;border-radius:17px;background:#f1f5f9;display:grid;place-items:center;font-size:27px;flex:none}
-.grow{flex:1; min-width:0}
-.prio{display:inline-block;font-size:10px;font-weight:950;padding:3px 8px;border-radius:7px;margin-bottom:5px;background:#fee2e2;color:#b91c1c}
-.card h3{font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.card p{font-size:13px;color:var(--mut);font-weight:650}
-.list{display:grid;gap:12px; grid-template-columns: 1fr;}
+/* =============================================
+   TOAST
+   ============================================= */
+.toast{
+  position:fixed;right:18px;
+  bottom:calc(96px + env(safe-area-inset-bottom));
+  z-index:400;
+  background:var(--txt);color:#fff;
+  border-radius:99px;
+  padding:11px 17px;font-size:13px;font-weight:800;
+  box-shadow:0 8px 24px rgba(15,23,42,.22);
+  animation:toastIn .25s var(--ease);
+  pointer-events:none;
+}
+@keyframes toastIn{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
 
-/* Wizard */
-.wizard{position:absolute;inset:0;background:var(--bg);z-index:1200;display:flex;flex-direction:column;transform:translateY(100%);transition:.45s var(--ease);pointer-events:none}
-.wizard.open{transform:translateY(0);pointer-events:auto}
-.wh{height:72px;background:white;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:12px;padding:max(16px, env(safe-area-inset-top)) 20px 16px; flex-shrink:0}
-.back{width:40px;height:40px;border-radius:14px;background:#eff6ff;color:var(--p);display:grid;place-items:center}
-.wt{font-weight:950;font-size:18px}
-.pane{display:none;flex:1;overflow:auto;padding:22px 20px 130px}
-.pane.active{display:block}
-.footer{position:absolute;bottom:0;left:0;right:0;padding:24px 20px max(24px,env(safe-area-inset-bottom));background:linear-gradient(to top,var(--bg) 75%,#f8fafc00);display:none}
-.footer.show{display:block}
-.mega{width:100%;border-radius:24px;background:linear-gradient(135deg,var(--a),#e11d48);color:white;padding:21px;font-size:20px;font-weight:950;box-shadow:0 15px 36px #f43f5e66}
+/* Highlight marks */
+mark{background:#fef9c3;border-radius:4px;padding:0 2px;color:var(--txt)}
 
-/* Training Game Components */
-.gamehead{display:flex;align-items:center;gap:12px;margin-bottom:22px}
-.prog{flex:1;height:10px;background:var(--br);border-radius:999px;overflow:hidden}
-.prog>div{height:100%;background:var(--p);width:0;transition:0.3s}
-.score{background:white;border:1px solid var(--br);border-radius:13px;padding:7px 11px;font-size:13px;font-weight:950}
-.play{background:white;border-radius:30px;padding:30px 22px;text-align:center;box-shadow:0 10px 24px #0f172a15}
-.kicker{font-size:11px;color:var(--p);font-weight:950;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px}
-.question{font-size:22px;font-weight:950;margin-bottom:22px;line-height:1.3}
-.opts{display:grid;gap:12px}
-.opt{border:2px solid var(--br);border-radius:18px;padding:17px;text-align:left;font-weight:850;background:white}
-.correct{background:#d1fae5!important;border-color:#10b981!important;color:#065f46}
-.wrong{background:#fee2e2!important;border-color:#ef4444!important;color:#7f1d1d}
+/* Footer */
+footer{
+  padding:16px 20px 20px;text-align:center;
+  color:var(--mut);font-size:11px;font-weight:700;
+}
 
-/* Flashcards */
-.flashscene{height:345px;perspective:1200px;margin-bottom:18px}
-.flash{height:100%;position:relative;transform-style:preserve-3d;transition:.55s}
-.flash.flip{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;backface-visibility:hidden;background:white;border:2px solid var(--br);border-radius:30px;padding:24px;display:grid;place-items:center;text-align:center;box-shadow:0 10px 24px #0f172a15}
-.face.backside{transform:rotateY(180deg);background:linear-gradient(135deg,var(--p),var(--pd));color:white;border:0}
-.rates{display:none;grid-template-columns:repeat(2,1fr);gap:12px}
-.rates.show{display:grid}
-.rate{border-radius:18px;color:white;padding:16px;font-weight:950}
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media(max-width:680px){
+  .desk-nav{display:none}
+  .app{max-width:100%}
 
-/* Memory Game */
-.mem{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.mem button{min-height:105px;border-radius:18px;background:linear-gradient(135deg,var(--p),#3b82f6);color:white;font-weight:900;padding:10px}
-.mem button.open{background:white;color:var(--txt);border:2px solid var(--p)}
-.mem button.done{background:#d1fae5;color:#10b981;opacity:.55;pointer-events:none}
+  .compact-head{padding:14px 14px 0}
+  .compact-panel{border-radius:22px;padding:16px}
+  .topline{flex-direction:column;align-items:flex-start}
+  .kpi-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
+  .kpi{min-width:0}
+  .kpi b{font-size:18px}
 
-/* Result Screen */
-.result{text-align:center;padding-top:35px}
-.ring{width:180px;height:180px;margin:auto;border-radius:50%;background:white;border:12px solid #eff6ff;display:grid;place-items:center;box-shadow:0 20px 45px #2563eb22}
-.percent{font-size:54px;font-weight:950;color:#1e40af}
-.xp{font-size:28px;color:var(--s);font-weight:950;margin-top:20px}
-.float{position:absolute;z-index:999;color:var(--s);font-weight:950;font-size:28px;animation:up 1s forwards}
-@keyframes up{to{transform:translateY(-80px) scale(1.2);opacity:0}}
-.conf{position:fixed;width:9px;height:9px;border-radius:3px;z-index:999;animation:fall linear forwards}
-@keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#0f172a;color:white;padding:12px 24px;border-radius:99px;font-size:13px;font-weight:800;z-index:2000;animation:fade 1.5s forwards}
-@keyframes fade{0%{opacity:0;transform:translate(-50%,15px)}10%{opacity:1;transform:translate(-50%,0)}90%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,15px)}}
+  .filters{padding:10px 14px 12px}
+  .filter-card{padding:11px}
+  .search-row{flex-wrap:wrap}
+  .search{width:100%;max-width:none;min-width:0}
+  .count{margin-left:0}
+  .toggle{margin-left:0}
 
-/* ==========================================================================
-   DESKTOP OPTIMIZATIONS (FLEXIBLE LAYOUT)
-   ========================================================================== */
-@media(min-width: 768px) {
-  .road { grid-template-columns: repeat(3, 1fr); }
-  .grid2 { grid-template-columns: 2fr 1fr 1fr; }
-  .box.wide { grid-column: span 1; }
-  .btn-white { width: max-content; padding-left: 30px; padding-right: 30px; gap: 20px; }
-  .list { grid-template-columns: repeat(2, 1fr); }
-  .opts { grid-template-columns: 1fr 1fr; }
-  .mem { grid-template-columns: repeat(4, 1fr); }
-  .rates.show { grid-template-columns: repeat(4, 1fr); max-width: 600px; margin: 0 auto; }
-  .flashscene { max-width: 600px; margin: 0 auto 24px; height: 400px; }
-  .play { max-width: 800px; margin: 0 auto; }
-  .pane { padding: 30px 30px 140px; }
-  .wh { padding: 20px 30px; }
-  .footer { padding-left: 30px; padding-right: 30px; }
+  .list{padding:12px 14px 16px}
+  .topic-head{
+    grid-template-columns:auto 1fr;
+    align-items:flex-start;
+    padding:13px 13px 13px 17px;
+  }
+  .actions{
+    grid-column:1/-1;
+    justify-content:space-between;margin-top:5px;
+  }
+  .ampel{flex:1;justify-content:space-around}
+  .ampel button{width:38px;height:38px;border-radius:12px}
+  .arrow{width:38px;height:38px}
+  .topic-title{font-size:14px}
+  .section-grid{grid-template-columns:1fr}
+}
+
+@media(min-width:681px){
+  .top{padding:0 24px}
+  .compact-head{padding:20px 24px 0}
+  .filters{padding:12px 24px 15px}
+  .list{padding:16px 24px 20px}
+  footer{padding:16px 24px 24px}
 }
 </style>
 </head>
 <body>
+
 <div class="app">
-<header class="top">
-    <div class="brand"><div class="logo"><i class="fa-solid fa-user-nurse"></i></div>PflegefachProfi</div>
-    <div class="stats"><div class="pill">🔥 <span id="streak">0</span></div><div class="pill">⚡ <span id="xp">0</span></div></div>
-</header>
 
-<div class="screens-wrapper">
-    <main id="home" class="screen active">
-        <div class="badge" id="level">Pflege-Azubi Lvl 1</div>
-        <h1>Dein Weg zum Examen</h1>
-        <p class="muted">Kurze, aktive Lerneinheiten für Erkrankungen.</p>
-        <div class="mission">
-            <div class="tag">Heutige Empfehlung</div>
-            <h2 id="mission">Akutes Abdomen</h2>
-            <p>Trainiere Definition, Symptome, Assessment, Therapie und Pflegeprioritäten.</p>
-            <button class="btn-white" onclick="App.startRecommended()">Training starten <i class="fa-solid fa-arrow-right"></i></button>
-        </div>
-        <div class="section-title">Dein Trainingsweg</div>
-        <div class="road">
-            <div class="step"><div class="num">1</div><div><h3>Wissen aufbauen</h3><p>Flashcards für schnelle Wiederholung.</p></div></div>
-            <div class="step"><div class="num">2</div><div><h3>Wissen testen</h3><p>Quiz und Lückentext gegen Prüfungslücken.</p></div></div>
-            <div class="step"><div class="num">3</div><div><h3>Klinisch verknüpfen</h3><p>Memory verbindet Befunde und Fachbegriffe.</p></div></div>
-        </div>
-        <div class="section-title">Fortschritt</div>
-        <div class="grid2">
-            <div class="box wide"><div class="val"><span id="daily">0</span><span style="font-size:14px;color:var(--mut)"> / 300 XP</span></div><div class="lbl">Tagesziel</div><div class="bar"><div class="fill" id="dailybar"></div></div></div>
-            <div class="box"><div class="val" id="rounds">0</div><div class="lbl">Lektionen</div></div>
-            <div class="box"><div class="val" id="best">0%</div><div class="lbl">Top-Score</div></div>
-        </div>
-    </main>
+  <!-- ==========================================
+       TOP BAR  (lernen.html .top exact style)
+       ========================================== -->
+  <header class="top">
 
-    <main id="library" class="screen">
-        <h1>Themen-Katalog</h1>
-        <p class="muted" style="margin-bottom:18px">Alle Erkrankungen im Training.</p>
-        <div class="list" id="lib"></div>
-    </main>
+    <a class="brand" href="pflegefachprofi.html">
+      <div class="logo"><i class="fa-solid fa-stethoscope"></i></div>
+      <b>PflegefachProfi</b>
+    </a>
 
-    <main id="play" class="screen">
-        <div class="gamehead">
-            <button class="back" onclick="Game.abort()"><i class="fa-solid fa-xmark"></i></button>
-            <div class="prog"><div id="bar"></div></div>
-            <div class="score" id="gscore">0/0</div>
-        </div>
-        <div id="game"></div>
-    </main>
+    <!-- Desktop nav links -->
+    <nav class="desk-nav">
+      <a href="pflegefachprofi.html">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+      <a href="#" class="active">
+        <i class="fa-solid fa-layer-group"></i> Themen
+      </a>
+      <a href="lernen.html">
+        <i class="fa-solid fa-gamepad"></i> Lernspiele
+      </a>
+       <a href="pflegeplanung.html">
+        <i class="fa-solid fa-gamepad"></i> Pflegeplanung 
+       </a>
+       <a href="/kontakt">
+        <i class="fa-solid fa-solid fa-envelope"></i> Kontakt
+       </a>
+    <!--  <button class="locked" onclick="showToast('🔒 Dieser Bereich kommt später.')">
+        <i class="fa-solid fa-lock"></i> Üben
+      </button>
+      <button class="locked" onclick="showToast('🔒 Dieser Bereich kommt später.')">
+        <i class="fa-solid fa-lock"></i> Fortschritt
+      </button>-->
+    </nav>
 
-    <main id="result" class="screen">
-        <div class="result">
-            <div class="ring"><div><span class="percent" id="resScore">0</span><span class="percent" style="font-size:24px">%</span></div></div>
-            <h1 id="resTitle" style="margin-top:28px">Stark!</h1>
-            <p class="muted" id="resSub">Training abgeschlossen.</p>
-            <div class="xp">⚡ <span id="resXp">+0 XP</span></div>
-            <button class="mega" style="margin-top:35px" onclick="App.nav('home')">Abschließen</button>
-        </div>
-    </main>
-
-    <div class="wizard" id="wizard">
-        <div class="wh">
-            <button class="back" onclick="Wizard.close()"><i class="fa-solid fa-arrow-down"></i></button>
-            <div class="wt">Lektion konfigurieren</div>
-        </div>
-        <div class="pane active" id="p1">
-            <h2 style="margin-bottom:16px">1. Thema wählen</h2>
-            <div class="list" id="topics"></div>
-        </div>
-        <div class="pane" id="p2">
-            <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px">
-                <button class="back" onclick="Wizard.back()"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>2. Lernmethode</h2>
-            </div>
-            <div class="list" id="modes"></div>
-        </div>
-        <div class="footer" id="foot">
-            <button class="mega" onclick="Wizard.start()">🚀 Lektion starten</button>
-        </div>
+    <!-- Stats pills (lernen style) -->
+    <div class="stats">
+      <div class="pill pill-progress" id="progressPill" title="Bewertete Themen">
+        <div class="pfill" id="topFill"></div>
+        <span class="plabel">⭐ <span id="topText">0/20</span></span>
+      </div>
+      <div class="pill" id="streakPill" title="Schwer-markierte Themen">
+        🔥 <span id="streakCount">0</span>
+      </div>
     </div>
 
-    <button class="start" id="startBtn" onclick="Wizard.open()" aria-label="Start now">
-        <span class="big">Start now</span>
-        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </button>
-</div>
+  </header>
 
+  <!-- ==========================================
+       PAGE SCROLL AREA
+       ========================================== -->
+  <div class="page-scroll">
+
+    <!-- Compact hero panel -->
+    <div class="compact-head">
+      <div class="compact-panel">
+        <div class="topline">
+          <div class="title-block">
+            <h1>Erkrankungen lernen</h1>
+            <p>Sortieren, markieren, öffnen, wiederholen. Deine Schwierigkeit bleibt gespeichert.</p>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi"><small>Themen</small><b id="kTotal">20</b></div>
+            <div class="kpi"><small>Bewertet</small><b id="kRated">0</b></div>
+            <div class="kpi"><small>Auswahl</small><b id="kShown">20</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         FILTERS
+         ========================================== -->
+    <div class="filters">
+      <div class="filter-card">
+
+        <!-- Search row -->
+        <div class="search-row">
+          <div class="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="searchInput" placeholder="Suche: COPD, Dyspnoe, Pflege, qSOFA, NYHA …">
+          </div>
+          <button class="clear" id="clearBtn">
+            <i class="fa-solid fa-xmark"></i> Zurücksetzen
+          </button>
+          <div class="count" id="countText">20 Themen</div>
+        </div>
+
+        <!-- Category filter -->
+        <div class="filter-row">
+          <span class="fl-label">Fachbereich</span>
+          <button class="tab active" data-cat="all">Alle</button>
+          <button class="tab" data-cat="endokrinologie">⚗️ Endo</button>
+          <button class="tab" data-cat="neurologie">🧠 Neuro</button>
+          <button class="tab" data-cat="pneumologie">🫁 Lunge</button>
+          <button class="tab" data-cat="kardiologie">❤️ Herz</button>
+          <button class="tab" data-cat="psychiatrie">🧬 Psyche</button>
+          <button class="tab" data-cat="wundversorgung">🩹 Wunde</button>
+          <button class="tab" data-cat="notfall">🚨 Notfall</button>
+        </div>
+
+        <!-- Day filter -->
+        <div class="filter-row">
+          <span class="fl-label">Prüfungstag</span>
+          <button class="tab active" data-day="all">Alle</button>
+          <button class="tab" data-day="1">Tag 1</button>
+          <button class="tab" data-day="2">Tag 2</button>
+          <button class="tab" data-day="3">Tag 3</button>
+        </div>
+
+        <!-- Difficulty filter + sort toggle -->
+        <div class="filter-row ampel-tabs">
+          <span class="fl-label">Schwierigkeit</span>
+          <button class="tab active" data-diff="all">Alle</button>
+          <button class="tab easy" data-diff="easy">🟢 Easy</button>
+          <button class="tab mid" data-diff="mid">🟡 Mittel</button>
+          <button class="tab hard" data-diff="hard">🔴 Schwer</button>
+          <button class="tab" data-diff="unrated">Unbewertet</button>
+          <div class="toggle" id="sortHardFirst">
+            <div class="switch" id="sortSwitch"></div>
+            Schwere zuerst
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TOPIC LIST
+         ========================================== -->
+    <div class="list" id="topicList"></div>
+    <div class="empty" id="empty">Keine Themen gefunden. Filter zurücksetzen oder Suchbegriff ändern.</div>
+
+    <footer>PflegefachProfi · Themenmodul · Markierungen werden lokal gespeichert.</footer>
+
+  </div><!-- /page-scroll -->
+
+</div><!-- /app -->
+
+<!-- App bottom navigation -->
 <nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation">
-    <a class="nav-item active" href="https://pflegefachprofi.de" aria-label="Startseite" onclick="event.preventDefault(); App.nav('home')">
-        <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
-        <span>Home</span>
-    </a>
-    <a class="nav-item" href="/pruefungsthemen.html" aria-label="Themen" onclick="event.preventDefault(); App.nav('library')">
-        <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
-        <span>Themen</span>
-    </a>
-    <a class="nav-item locked" href="#" aria-label="Üben" onclick="event.preventDefault(); App.mockNav('Spiele')">
-        <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
-        <span>Üben</span>
-    </a>
-    <a class="nav-item locked" href="#" aria-label="Pflegeplanung" onclick="event.preventDefault(); App.mockNav('Pflegeplanung')">
-        <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div>
-        <span>Planung</span>
-    </a>
-    <a class="nav-item locked" href="#" aria-label="Handlungsketten" onclick="event.preventDefault(); App.mockNav('Handlungsketten')">
-        <div class="icon-wrapper"><i class="fa-solid fa-route"></i></div>
-        <span>Ketten</span>
-    </a>
+  <a href="/" class="nav-item" aria-label="Home öffnen">
+    <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
+    <span>Home</span>
+  </a>
+  <a href="#" class="nav-item active" aria-label="Prüfungsthemen öffnen" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
+    <span>Themen</span>
+  </a>
+  <a href="/lernen" class="nav-item" aria-label="Üben öffnen">
+    <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+    <span>Üben</span>
+  </a>
+  <a href="/pflegeplanung" class="nav-item" aria-label="Pflegeplanung öffnen">
+    <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div>
+    <span>Planung</span>
+  </a>
+  <a href="/kontakt" class="nav-item" aria-label="Kontaktiere uns">
+    <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i></div>
+    <span>Kontakt</span>
+  </a>
 </nav>
 
-</div>
 <script>
-const SAVE="pfp.game.v6",$=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+/* ============================================================
+   STORAGE
+   ============================================================ */
+const STORAGE_KEY = 'pfp.topicDifficulty.v1';
 
-const TOPIC_SOURCE = [
-  {
-    "id": "diabetes",
-    "title": "Diabetes mellitus",
-    "area": "Endokrinologie",
-    "icon": "🩸",
-    "definition": "Chronische Stoffwechselerkrankung mit Hyperglykämie durch absoluten oder relativen Insulinmangel.",
-    "riskFactors": ["Adipositas","Bewegungsmangel","Alter","Genetik","ungesunde Ernährung"],
-    "causes": ["Autoimmunzerstörung Betazellen","Insulinresistenz"],
-    "symptoms": ["Schwitzen","Zittern","Durst","Polyurie","Müdigkeit","Azetongeruch"],
-    "assessment": ["BZ-Kontrolle","HbA1c","Urinstatus","Fußinspektion"],
-    "therapy": ["Insulin","orale Antidiabetika","Ernährung","Bewegung"],
-    "care": ["BZ messen und dokumentieren","Hypoglykämiezeichen prüfen","Hyperglykämiezeichen prüfen","Insulin nach 10-R-Regel überwachen","Füße täglich kontrollieren","Mahlzeiten und Insulin abstimmen"]
-  },
-  {
-    "id": "apoplex",
-    "title": "Schlaganfall / Apoplex",
-    "area": "Neurologie",
-    "icon": "🧠",
-    "definition": "Akute neurologische Funktionsstörung durch zerebralen Gefäßverschluss oder Hirnblutung.",
-    "riskFactors": ["Hypertonie","Vorhofflimmern","Diabetes","Rauchen","pAVK/KHK"],
-    "causes": ["Thrombus/Embolus","Hirnblutung"],
-    "symptoms": ["Facialisparese","Armparese","Sprachstörung","Dysphagie","Bewusstseinsveränderung"],
-    "assessment": ["FAST","GCS","Pupillen","CT/MRT","Schluckscreening"],
-    "therapy": ["Lyse","Thrombektomie","Blutdruckmanagement","Frühreha"],
-    "care": ["FAST beobachten","30° Oberkörperlagerung","Schluckfähigkeit prüfen","Aspirationsprophylaxe","Bobath anwenden","kurze Sätze verwenden"]
-  },
-  {
-    "id": "copd",
-    "title": "COPD",
-    "area": "Pneumologie",
-    "icon": "🫁",
-    "definition": "Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion.",
-    "riskFactors": ["Rauchen","Feinstaub","Schadstoffe","Infekte"],
-    "causes": ["chronische Bronchitis","Lungenemphysem"],
-    "symptoms": ["Atemnot","Husten","Auswurf","verlängerte Exspiration","Exazerbation"],
-    "assessment": ["Spirometrie","BGA","SpO2","Auskultation","mMRC"],
-    "therapy": ["Bronchodilatatoren","inhalative Kortikosteroide","Sauerstoff","Atemphysio"],
-    "care": ["AF und SpO2 kontrollieren","Kutschersitz anleiten","Lippenbremse üben","Inhalationstechnik prüfen","Sekret beobachten","Pflege in Etappen planen"]
-  },
-  {
-    "id": "herzinsuff",
-    "title": "Herzinsuffizienz",
-    "area": "Kardiologie",
-    "icon": "💙",
-    "definition": "Das Herz ist nicht fähig, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.",
-    "riskFactors": ["KHK","Hypertonie","Herzinfarkt","Diabetes","Klappenerkrankungen"],
-    "causes": ["Myokardschädigung","Druckbelastung","Volumenbelastung"],
-    "symptoms": ["Dyspnoe","Beinödeme","Gewichtszunahme","Leistungsminderung","Tachykardie"],
-    "assessment": ["EKG","Echo","BNP","Ödemkontrolle","Bilanz","NYHA"],
-    "therapy": ["Diuretika","ACE-Hemmer","Betablocker","Aldosteronantagonisten"],
-    "care": ["täglich wiegen","Ein-/Ausfuhr bilanzieren","Ödeme kontrollieren","Oberkörper hochlagern","Belastung dosieren","Trinkmenge überwachen"]
-  },
-  {
-    "id": "demenz",
-    "title": "Demenz",
-    "area": "Neurologie",
-    "icon": "🧩",
-    "definition": "Chronisch fortschreitende Störung von Gedächtnis, Orientierung, Denken und Alltagskompetenz.",
-    "riskFactors": ["Alter","Genetik","vaskuläre Risiken","Isolation"],
-    "causes": ["Alzheimer","vaskulär","Lewy-Körperchen","frontotemporal"],
-    "symptoms": ["Vergesslichkeit","Orientierungsstörung","Alltagsverlust","Weglauftendenz"],
-    "assessment": ["MMST","DemTect","Uhrentest","Biografie","Barthel"],
-    "therapy": ["Antidementiva","Ergotherapie","Aktivierung"],
-    "care": ["Tagesstruktur geben","Orientierungshilfen nutzen","Biografiearbeit einsetzen","kurze Sätze","Essen/Trinken begleiten","Umgebung sichern"]
-  },
-  {
-    "id": "dekubitus",
-    "title": "Dekubitus",
-    "area": "Wundversorgung",
-    "icon": "🩹",
-    "definition": "Lokale Schädigung von Haut und Gewebe durch Druck und/oder Scherkräfte.",
-    "riskFactors": ["Immobilität","Mangelernährung","Inkontinenz","Sensibilitätsstörung"],
-    "causes": ["Druck","Reibung","Feuchtigkeit","Minderdurchblutung"],
-    "symptoms": ["nicht wegdrückbare Rötung","Hautdefekt","Schmerz","Wundsekret"],
-    "assessment": ["Hautinspektion","Braden","Norton","Wundassessment"],
-    "therapy": ["Wundtherapie","Débridement","Ernährung","Schmerztherapie"],
-    "care": ["Haut inspizieren","Lagerungsplan durchführen","Hilfsmittel nutzen","Fersen freilagern","Haut schützen","Eiweiß/Flüssigkeit beobachten"]
-  },
-  {
-    "id": "pneumonie",
-    "title": "Pneumonie",
-    "area": "Pneumologie",
-    "icon": "🌬️",
-    "definition": "Entzündung des Lungengewebes, meist durch Bakterien, Viren oder Aspiration.",
-    "riskFactors": ["Immobilität","Alter","COPD","Dysphagie","Immunschwäche"],
-    "causes": ["Infektion","Aspiration","Sekretstau","Minderbelüftung"],
-    "symptoms": ["Fieber","Husten","Sputum","Dyspnoe","Tachypnoe"],
-    "assessment": ["Auskultation","SpO2","AF","Temperatur","CRP","Röntgen"],
-    "therapy": ["Antibiotika","Sauerstoff","Antipyretika","Atemtherapie"],
-    "care": ["AF/SpO2 kontrollieren","Oberkörper hoch","Frühmobilisation","Atemübungen","Flüssigkeit anbieten","Sputum beobachten"]
-  },
-  {
-    "id": "sepsis",
-    "title": "Sepsis",
-    "area": "Notfall",
-    "icon": "🚨",
-    "definition": "Lebensbedrohliche Organdysfunktion durch fehlregulierte Körperreaktion auf Infektion.",
-    "riskFactors": ["Alter","Immunsuppression","Katheter","Wunden","Pneumonie"],
-    "causes": ["Pneumonie","Urosepsis","Wundinfektion","intraabdominell"],
-    "symptoms": ["Fieber/Hypothermie","Tachykardie","Tachypnoe","Hypotonie","Verwirrtheit","Oligurie"],
-    "assessment": ["qSOFA","NEWS","Laktat","Blutkulturen","CRP/PCT"],
-    "therapy": ["Antibiotika sofort","Volumen","Sauerstoff","Katecholamine","Herdsanierung"],
-    "care": ["Vitalzeichen engmaschig","Bewusstsein beobachten","Urin bilanzieren","Temperatur dokumentieren","Infektquelle prüfen","sofort eskalieren"]
-  },
-  {
-    "id": "hypertonie",
-    "title": "Hypertonie",
-    "area": "Kardiologie",
-    "icon": "📈",
-    "definition": "Dauerhaft erhöhter arterieller Blutdruck.",
-    "riskFactors": ["Adipositas","Bewegungsmangel","Stress","Rauchen","Salz"],
-    "causes": ["primär multifaktoriell","sekundär renal/endokrin"],
-    "symptoms": ["oft asymptomatisch","Kopfschmerz","Schwindel","Sehstörung"],
-    "assessment": ["RR-Messung","Langzeit-RR","EKG","Nierenwerte"],
-    "therapy": ["ACE-Hemmer","ARB","Betablocker","Diuretika","Lebensstil"],
-    "care": ["RR korrekt messen","Puls dokumentieren","Schwindel beobachten","Orthostase beachten","Bewegung fördern","Nebenwirkungen beobachten"]
-  },
-  {
-    "id": "khk",
-    "title": "KHK",
-    "area": "Kardiologie",
-    "icon": "💓",
-    "definition": "Verengung der Herzkranzgefäße mit Minderdurchblutung des Herzmuskels.",
-    "riskFactors": ["Rauchen","Hypertonie","Diabetes","Hyperlipidämie","Adipositas"],
-    "causes": ["Arteriosklerose der Koronararterien"],
-    "symptoms": ["Brustschmerz","Angina pectoris","Belastungsdyspnoe","Ausstrahlung","Kaltschweißigkeit"],
-    "assessment": ["EKG","Belastungs-EKG","Troponin","Koronarangiografie","Schmerzassessment"],
-    "therapy": ["ASS","Statine","Betablocker","Nitrate","PCI/Stent","Bypass"],
-    "care": ["Schmerz erfassen","Vitalzeichen sofort kontrollieren","Ruhe herstellen","Oberkörper hoch","Nitro vorbereiten","Notfallzeichen erkennen"]
-  },
-  {
-    "id": "infarkt",
-    "title": "Myokardinfarkt",
-    "area": "Kardiologie",
-    "icon": "⚡",
-    "definition": "Absterben von Herzmuskelgewebe durch akuten Verschluss eines Koronargefäßes.",
-    "riskFactors": ["KHK","Rauchen","Hypertonie","Diabetes","Fettstoffwechselstörung"],
-    "causes": ["Plaqueruptur mit Thrombus"],
-    "symptoms": ["starker Thoraxschmerz","Dyspnoe","Todesangst","Kaltschweißigkeit","Übelkeit"],
-    "assessment": ["12-Kanal-EKG","Troponin","Vitalzeichen","Koronarangiografie"],
-    "therapy": ["PCI/Stent","ASS","Heparin","P2Y12-Hemmer","Schmerztherapie"],
-    "care": ["Notfallteam informieren","Oberkörper hoch","Vitalzeichen engmaschig","Schmerz dokumentieren","EKG vorbereiten","nüchtern lassen"]
-  },
-  {
-    "id": "pavk",
-    "title": "pAVK",
-    "area": "Kardiologie",
-    "icon": "🦶",
-    "definition": "Arterielle Durchblutungsstörung der Extremitäten, meist Beine, durch Gefäßverengung.",
-    "riskFactors": ["Rauchen","Diabetes","Hypertonie","Hyperlipidämie","Alter"],
-    "causes": ["Arteriosklerose"],
-    "symptoms": ["Claudicatio intermittens","Ruheschmerz","kalte Füße","Wunden","Nekrosen"],
-    "assessment": ["Fußpulse","Hauttemperatur","ABI","Doppler","Gehstrecke"],
-    "therapy": ["Gehtraining","TAH","Statine","Stent","Bypass"],
-    "care": ["Füße täglich prüfen","keine Wärmflasche","enge Schuhe vermeiden","Gehtraining begleiten","nicht hochlagern bei Minderperfusion","Schmerz/Gehstrecke dokumentieren"]
-  },
-  {
-    "id": "tvt",
-    "title": "TVT",
-    "area": "Kardiologie",
-    "icon": "🧦",
-    "definition": "Bildung eines Blutgerinnsels in einer tiefen Vene, meist Bein- oder Beckenvene.",
-    "riskFactors": ["Immobilität","OP","Tumor","Schwangerschaft","Exsikkose"],
-    "causes": ["Virchow-Trias"],
-    "symptoms": ["Schwellung","Schmerz","Überwärmung","Spannung","Umfangsdifferenz"],
-    "assessment": ["Beinumfang","Wells","D-Dimere","Kompressionssono"],
-    "therapy": ["Antikoagulation","Kompression","Mobilisation nach Freigabe"],
-    "care": ["nicht massieren","Umfang messen","Schwellung beobachten","Kompression korrekt","Mobilisation nach Freigabe","Emboliezeichen melden"]
-  },
-  {
-    "id": "asthma",
-    "title": "Asthma bronchiale",
-    "area": "Pneumologie",
-    "icon": "🌫️",
-    "definition": "Chronisch entzündliche Atemwegserkrankung mit anfallsweiser reversibler Bronchialobstruktion.",
-    "riskFactors": ["Allergien","Infekte","Rauch","Kälte","Belastung"],
-    "causes": ["Hyperreagibilität","Bronchospasmus","Schleimhautschwellung"],
-    "symptoms": ["Giemen","Sprechdyspnoe","Einziehungen","Husten","Atemnotattacke"],
-    "assessment": ["Peak-Flow","Spirometrie","SpO2","Auskultation"],
-    "therapy": ["SABA","ICS","LABA","Notfallmedikamente","Allergenkarenz"],
-    "care": ["Atemnotzeichen beobachten","Peak-Flow dokumentieren","Inhalation prüfen","Atemposition anbieten","Notfallspray griffbereit","Trigger vermeiden"]
-  },
-  {
-    "id": "pneuothorax",
-    "title": "Pneumothorax",
-    "area": "Pneumologie",
-    "icon": "🎈",
-    "definition": "Luft im Pleuraspalt führt zum teilweisen oder vollständigen Kollaps der Lunge.",
-    "riskFactors": ["Trauma","COPD","Beatmung","Thoraxeingriffe","Rauchen"],
-    "causes": ["Thoraxwandverletzung","Ruptur subpleuraler Bläschen"],
-    "symptoms": ["akute Atemnot","Thoraxschmerz","vermindertes Atemgeräusch","Tachypnoe","SpO2-Abfall"],
-    "assessment": ["Auskultation","SpO2","AF","Röntgen","CT"],
-    "therapy": ["Sauerstoff","Punktion","Thoraxdrainage","OP"],
-    "care": ["Atemnot sofort melden","SpO2/AF eng kontrollieren","Drainage unter Thoraxniveau","System prüfen","Einstichstelle prüfen","Schmerz erfassen"]
-  },
-  {
-    "id": "schock",
-    "title": "Schock",
-    "area": "Notfall",
-    "icon": "🆘",
-    "definition": "Akutes Kreislaufversagen mit unzureichender Gewebeperfusion und Sauerstoffversorgung.",
-    "riskFactors": ["Blutverlust","Sepsis","Herzinfarkt","Anaphylaxie","Dehydratation"],
-    "causes": ["hypovolämisch","kardiogen","septisch","anaphylaktisch","neurogen"],
-    "symptoms": ["Hypotonie","Tachykardie","kalte Haut","Bewusstseinsveränderung","Oligurie"],
-    "assessment": ["RR","Puls","Rekapillarisierung","Haut","Bewusstsein","Laktat"],
-    "therapy": ["Volumen","Sauerstoff","Katecholamine","Blutstillung","Adrenalin/Antibiotika"],
-    "care": ["Notfallteam informieren","Vitalzeichen engmaschig","Bewusstsein/Haut kontrollieren","Sauerstoff vorbereiten","Zugang vorbereiten","Lagerung nach Ursache"]
-  },
-  {
-    "id": "delir",
-    "title": "Delir",
-    "area": "Neurologie",
-    "icon": "🌀",
-    "definition": "Akute, meist wechselnde Störung von Aufmerksamkeit, Bewusstsein und Orientierung.",
-    "riskFactors": ["Alter","Demenz","Infekt","OP","Dehydratation","Medikamente"],
-    "causes": ["Infektion","Elektrolyte","Medikamente","Entzug","Hypoxie","Schmerz"],
-    "symptoms": ["Unruhe","Aufmerksamkeitsstörung","Orientierungsstörung","wechselnder Verlauf","hypoaktiv möglich"],
-    "assessment": ["CAM","4AT","DOS","Vitalzeichen","Labor"],
-    "therapy": ["Ursache behandeln","Flüssigkeit","Schmerztherapie","ggf. Antipsychotika"],
-    "care": ["Brille/Hörgerät bereitstellen","Tag-Nacht sichern","Reize reduzieren","Orientierungshilfen","Bilanz führen","Sturzprophylaxe"]
-  },
-  {
-    "id": "parkinson",
-    "title": "Parkinson",
-    "area": "Neurologie",
-    "icon": "🚶",
-    "definition": "Neurodegenerative Erkrankung mit Dopaminmangel und typischen Bewegungsstörungen.",
-    "riskFactors": ["Alter","Genetik","männliches Geschlecht"],
-    "causes": ["Untergang dopaminerger Nervenzellen"],
-    "symptoms": ["Rigor","Tremor","Akinese","posturale Instabilität","Freezing","Dysphagie"],
-    "assessment": ["Neurologie","L-Dopa-Test","Gangbild","Schluckassessment","Sturzassessment"],
-    "therapy": ["L-Dopa","Dopaminagonisten","Physio","tiefe Hirnstimulation"],
-    "care": ["Medikamente pünktlich","Startsignale bei Freezing","kleine Schritte","Dysphagie beobachten","Obstipation vorbeugen","Sturzrisiko reduzieren"]
-  },
-  {
-    "id": "epilepsie",
-    "title": "Epilepsie",
-    "area": "Neurologie",
-    "icon": "⚡",
-    "definition": "Wiederholte epileptische Anfälle durch übermäßige neuronale Entladungen.",
-    "riskFactors": ["Hirnverletzung","Tumor","Schlaganfall","Fieber","Alkoholentzug","Schlafmangel"],
-    "causes": ["genetisch","strukturell","metabolisch","infektiös"],
-    "symptoms": ["Aura","tonisch-klonisch","Bewusstseinsverlust","Einnässen","Nachphase"],
-    "assessment": ["EEG","MRT","Anfallsprotokoll","Fremdanamnese"],
-    "therapy": ["Antiepileptika","Notfallbenzodiazepine","Triggervermeidung"],
-    "care": ["Umgebung sichern","nichts in Mund stecken","Dauer messen","danach Seitenlage","Atmung/Bewusstsein prüfen","Anfall dokumentieren"]
-  },
-  {
-    "id": "depression",
-    "title": "Depression",
-    "area": "Psychiatrie",
-    "icon": "🌧️",
-    "definition": "Psychische Erkrankung mit gedrückter Stimmung, Interessenverlust und Antriebsminderung.",
-    "riskFactors": ["Belastung","Verluste","chronische Erkrankung","Genetik","Isolation"],
-    "causes": ["neurobiologisch","psychologisch","sozial"],
-    "symptoms": ["gedrückte Stimmung","Interessenverlust","Antriebsminderung","Schlafstörung","Suizidgedanken"],
-    "assessment": ["Anamnese","PHQ-9","Schlaf/Appetit/Antrieb","Suizidalität"],
-    "therapy": ["Psychotherapie","Antidepressiva","Aktivierung","stationär bei schwerer Form"],
-    "care": ["Tagesstruktur planen","Körperpflege anbahnen","Mahlzeiten begleiten","Schlafprotokoll","Suizidäußerungen weiterleiten","aktivieren ohne Überforderung"]
-  }
+/* ============================================================
+   CATEGORIES
+   ============================================================ */
+const CATEGORIES = {
+  endokrinologie: { label:'Endokrinologie', icon:'⚗️', color:'#6a5cff', bg:'rgba(106,92,255,.12)' },
+  neurologie:     { label:'Neurologie',     icon:'🧠', color:'#2563eb', bg:'rgba(37,99,235,.12)' },
+  pneumologie:    { label:'Pneumologie',    icon:'🫁', color:'#0891b2', bg:'rgba(8,145,178,.13)'  },
+  kardiologie:    { label:'Kardiologie',    icon:'❤️', color:'#e11d48', bg:'rgba(225,29,72,.12)'  },
+  psychiatrie:    { label:'Psychiatrie',    icon:'🧬', color:'#7c3aed', bg:'rgba(124,58,237,.12)' },
+  wundversorgung: { label:'Wunde',          icon:'🩹', color:'#059669', bg:'rgba(5,150,105,.12)'  },
+  notfall:        { label:'Notfall',        icon:'🚨', color:'#ea580c', bg:'rgba(234,88,12,.13)'  }
+};
+
+/* ============================================================
+   TOPICS  (all 20 — identical content, zero cuts)
+   ============================================================ */
+const TOPICS = [
+  { id:1, title:'Diabetes mellitus', cat:'endokrinologie', days:[2,3], priority:'high', icon:'🩸',
+    definition:'Chronische Stoffwechselerkrankung mit Hyperglykämie durch absoluten oder relativen Insulinmangel.',
+    risk:['Adipositas','Bewegungsmangel','Alter','Genetische Faktoren','ungesunde Ernährung'],
+    causes:['Typ 1: Autoimmunzerstörung der Betazellen.','Typ 2: Insulinresistenz mit relativer Insulinsekretionsstörung.'],
+    symptoms:['Hypoglykämiezeichen: Schwitzen, Zittern, Unruhe, Verwirrtheit.','Hyperglykämiezeichen: Durst, Polyurie, Müdigkeit, Azetongeruch.'],
+    assessment:['BZ-Kontrolle','HbA1c','Urinstatus auf Glukose/Ketone','Fußinspektion','Wundassessment bei Läsionen'],
+    stages:[['Typ 1','Autoimmunzerstörung der Betazellen mit absolutem Insulinmangel.'],['Typ 2','Insulinresistenz mit relativer Insulinsekretionsstörung.'],['Gestationsdiabetes','Diabetes während der Schwangerschaft.'],['Akute Entgleisung','Hypoglykämie, Hyperglykämie, Ketoazidose.']],
+    therapy:['Insulintherapie','orale Antidiabetika','Ernährungstherapie','Bewegung','Behandlung von Folgeerkrankungen'],
+    care:['BZ nach Schema messen und dokumentieren.','Hypoglykämiezeichen prüfen: Schwitzen, Zittern, Unruhe, Verwirrtheit.','Hyperglykämiezeichen prüfen: Durst, Polyurie, Müdigkeit, Azetongeruch.','Insulingabe nach 10-R-Regel vorbereiten/überwachen.','Füße täglich auf Druckstellen, Risse, Wunden kontrollieren.','Mahlzeiten, BE/KE und Insulinzeitpunkt abstimmen.'] },
+
+  { id:2, title:'Schlaganfall / Apoplex', cat:'neurologie', days:[1,3], priority:'high', icon:'🧠',
+    definition:'Akute neurologische Funktionsstörung durch zerebralen Gefäßverschluss oder Hirnblutung.',
+    risk:['Hypertonie','Vorhofflimmern','Diabetes','Rauchen','pAVK/KHK','Hyperlipidämie'],
+    causes:['Ischämischer Infarkt durch Thrombus/Embolus.','Hämorrhagischer Insult durch Gefäßruptur.'],
+    symptoms:['Facialisparese','Armparese','Sprachstörung','Dysphagie','Bewusstseinsveränderung','plötzliche neurologische Ausfälle'],
+    assessment:['FAST-Test','neurologischer Status','Pupillenkontrolle','GCS','CT/MRT','Schluckscreening'],
+    stages:[['TIA','Vorübergehende neurologische Ausfälle.'],['Ischämischer Schlaganfall','Zerebraler Gefäßverschluss.'],['Hämorrhagischer Schlaganfall','Hirnblutung.'],['Phasen','Akutphase und Reha-Phase.']],
+    therapy:['Lyse','Thrombektomie','Blutdruckmanagement','Antikoagulation/Thrombozytenhemmung','Frührehabilitation'],
+    care:['FAST-Zeichen beobachten: Face, Arms, Speech, Time.','Oberkörper ca. 30° lagern, außer ärztlich anders angeordnet.','Vor Essen/Trinken Schluckfähigkeit beachten.','Aspirationsprophylaxe: aufrechte Position, angepasste Kost, Mundkontrolle.','Mobilisation nach Bobath-Prinzip, betroffene Seite einbeziehen.','Kommunikation anpassen: kurze Sätze, Zeit lassen, Blickkontakt.'] },
+
+  { id:3, title:'COPD', cat:'pneumologie', days:[2,3], priority:'high', icon:'🫁',
+    definition:'Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion.',
+    risk:['Rauchen','Feinstaub','berufliche Schadstoffe','häufige Atemwegsinfekte'],
+    causes:['Chronische Bronchitis und/oder Lungenemphysem durch dauerhafte Entzündung.'],
+    symptoms:['Atemnot','Husten','Auswurf','verlängerte Exspiration','Belastungsintoleranz','Exazerbation'],
+    assessment:['Spirometrie','BGA','SpO₂','Auskultation','mMRC-Dyspnoe-Skala','CAT-Test'],
+    stages:[['GOLD-Stadien','Einteilung nach FEV1.'],['Stabile COPD','Chronischer Verlauf.'],['Exazerbation','Akute Verschlechterung der Symptome.']],
+    therapy:['Bronchodilatatoren','inhalative Kortikosteroide bei Indikation','Sauerstofflangzeittherapie','Atemphysiotherapie'],
+    care:['Atemfrequenz, SpO₂ und Atemmuster kontrollieren.','Kutschersitz oder Torwartstellung anleiten.','Lippenbremse üben lassen.','Inhalationstechnik kontrollieren.','Sekretmenge, Farbe und Konsistenz beobachten.','Belastungen planen: Pflegehandlungen in Etappen mit Pausen.'] },
+
+  { id:4, title:'Herzinsuffizienz', cat:'kardiologie', days:[2,3], priority:'high', icon:'💙',
+    definition:'Das Herz ist nicht fähig, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.',
+    risk:['KHK','Hypertonie','Herzinfarkt','Diabetes','Klappenerkrankungen'],
+    causes:['Myokardschädigung','Druckbelastung','Volumenbelastung','Rhythmusstörungen'],
+    symptoms:['Dyspnoe','Beinödeme','Gewichtszunahme','Leistungsminderung','Tachykardie','Belastungsintoleranz'],
+    assessment:['EKG','Echokardiografie','BNP/NT-proBNP','Ödemkontrolle','Bilanz','NYHA-Klassifikation'],
+    stages:[['NYHA I','Keine Beschwerden bei normaler Belastung.'],['NYHA II','Beschwerden bei stärkerer Belastung.'],['NYHA III','Beschwerden bei leichter Belastung.'],['NYHA IV','Beschwerden in Ruhe.']],
+    therapy:['Diuretika','ACE-Hemmer/ARB/ARNI','Betablocker','Aldosteronantagonisten','ggf. Schrittmacher/ICD'],
+    care:['Täglich zur gleichen Zeit wiegen.','Ein- und Ausfuhr bilanzieren.','Beinödeme und Gewichtszunahme kontrollieren.','Oberkörperhochlagerung bei Dyspnoe.','Belastung nach NYHA-Symptomatik dosieren.','Trinkmengenbegrenzung nach ärztlicher Anordnung überwachen.'] },
+
+  { id:5, title:'Demenz', cat:'neurologie', days:[1,3], priority:'high', icon:'🧩',
+    definition:'Chronisch fortschreitende Störung von Gedächtnis, Orientierung, Denken und Alltagskompetenz.',
+    risk:['Hohes Alter','genetische Faktoren','vaskuläre Risiken','soziale Isolation'],
+    causes:['Alzheimer-Demenz','vaskuläre Demenz','Lewy-Körperchen-Demenz','frontotemporale Demenz'],
+    symptoms:['Vergesslichkeit','Orientierungsstörung','Denkstörung','Alltagskompetenzverlust','Weglauftendenz','Kommunikationsprobleme'],
+    assessment:['MMST','DemTect','Uhrentest','Biografieanamnese','Fremdanamnese','Barthel-Index'],
+    stages:[['Leicht','Vergesslichkeit.'],['Mittel','Hilfebedarf im Alltag.'],['Schwer','Vollständige Pflegeabhängigkeit.']],
+    therapy:['Antidementiva','Behandlung von Begleitsymptomen','Ergotherapie','Aktivierung'],
+    care:['Feste Tagesstruktur mit wiederkehrenden Abläufen geben.','Orientierungshilfen nutzen: Uhr, Kalender, Fotos, Beschilderung.','Biografiearbeit in Pflegehandlungen einbauen.','Kurze, einfache Sätze verwenden.','Essen und Trinken aktiv anbieten und begleiten.','Weglauf- und Sturzrisiko einschätzen und Umgebung sichern.'] },
+
+  { id:6, title:'Dekubitus', cat:'wundversorgung', days:[1,3], priority:'high', icon:'🩹',
+    definition:'Lokale Schädigung von Haut und Gewebe durch Druck und/oder Scherkräfte.',
+    risk:['Immobilität','Mangelernährung','Inkontinenz','Sensibilitätsstörung','schlechter Allgemeinzustand'],
+    causes:['Längerer Druck auf Knochenvorsprünge','Reibung','Feuchtigkeit','reduzierte Durchblutung'],
+    symptoms:['nicht wegdrückbare Rötung','Hautdefekt','Schmerzen','Gewebeverlust','Wundsekret'],
+    assessment:['Hautinspektion','Braden-Skala/Norton-Skala','Wundassessment','Schmerzassessment'],
+    stages:[['Kategorie 1','Nicht wegdrückbare Rötung.'],['Kategorie 2','Teilverlust der Haut.'],['Kategorie 3','Vollständiger Hautverlust.'],['Kategorie 4','Gewebeverlust bis Muskel/Knochen.']],
+    therapy:['Wundtherapie','chirurgisches Débridement bei Bedarf','Ernährungstherapie','Schmerztherapie'],
+    care:['Haut täglich gezielt über Knochenvorsprüngen inspizieren.','Individuellen Bewegungs-/Lagerungsplan durchführen.','Druckentlastende Hilfsmittel korrekt einsetzen.','Fersen freilagern.','Haut bei Inkontinenz sofort reinigen und schützen.','Eiweiß- und Flüssigkeitszufuhr beobachten.'] },
+
+  { id:7, title:'Pneumonie', cat:'pneumologie', days:[1,3], priority:'high', icon:'🌬️',
+    definition:'Entzündung des Lungengewebes, meist durch Bakterien, Viren oder Aspiration.',
+    risk:['Immobilität','Alter','COPD','Dysphagie','Immunschwäche','Bettlägerigkeit'],
+    causes:['Infektion','Aspiration','Sekretstau','verminderte Belüftung'],
+    symptoms:['Fieber','Husten','Sputum','Dyspnoe','Tachypnoe','reduzierter Allgemeinzustand'],
+    assessment:['Auskultation','SpO₂','Atemfrequenz','Temperatur','CRP/Leukozyten','Röntgen-Thorax'],
+    stages:[['Ambulant erworben','Außerhalb des Krankenhauses erworben.'],['Nosokomial','Im Krankenhaus/Pflegekontext erworben.'],['Aspirationspneumonie','Durch Aspiration ausgelöst.']],
+    therapy:['Antibiotika bei bakterieller Ursache','Sauerstoff','Antipyretika','Atemtherapie'],
+    care:['Atemfrequenz und SpO₂ regelmäßig kontrollieren.','Oberkörperhochlagerung durchführen.','Frühmobilisation fördern.','Atemübungen anleiten, z. B. Kontaktatmung oder Atemtrainer.','Ausreichende Flüssigkeit anbieten, wenn erlaubt.','Sputum auf Menge, Farbe, Geruch beobachten.'] },
+
+  { id:8, title:'Sepsis', cat:'notfall', days:[3], priority:'high', icon:'🚨',
+    definition:'Lebensbedrohliche Organdysfunktion durch fehlregulierte Körperreaktion auf eine Infektion.',
+    risk:['Alter','Immunsuppression','Katheter','Wunden','Pneumonie','Harnwegsinfekt'],
+    causes:['Bakterielle Infektionen','Pneumonie','Urosepsis','Wundinfektion','intraabdominelle Infektion'],
+    symptoms:['Fieber/Hypothermie','Tachykardie','Tachypnoe','Hypotonie','Verwirrtheit','Oligurie'],
+    assessment:['qSOFA','NEWS/MEWS','Vitalzeichen','Laktat','Blutkulturen','CRP/PCT','Urinausscheidung'],
+    stages:[['Infektion','Lokale oder systemische Infektion.'],['Sepsis','Organdysfunktion.'],['Septischer Schock','Kreislaufversagen.']],
+    therapy:['Sofortige Antibiotikagabe','Volumentherapie','Sauerstoff','Katecholamine','Herdsanierung'],
+    care:['Vitalzeichen engmaschig kontrollieren.','Bewusstseinslage beobachten.','Urinausscheidung bilanzieren.','Temperaturverlauf dokumentieren.','Infektquelle kontrollieren: Wunde, Katheter, Atemwege, Urin.','Bei Verschlechterung sofort ärztlich eskalieren.'] },
+
+  { id:9, title:'Hypertonie', cat:'kardiologie', days:[2], priority:'medium', icon:'📈',
+    definition:'Dauerhaft erhöhter arterieller Blutdruck.',
+    risk:['Adipositas','Bewegungsmangel','Stress','Rauchen','salzreiche Ernährung','Alter'],
+    causes:['Primär meist multifaktoriell.','Sekundär durch Nieren-, Hormon- oder Gefäßerkrankungen.'],
+    symptoms:['oft asymptomatisch','Kopfschmerz','Schwindel','Sehstörungen','Nasenbluten möglich'],
+    assessment:['standardisierte RR-Messung','Langzeit-RR','EKG','Nierenwerte','kardiovaskuläres Risikoprofil'],
+    stages:[['Grad 1','leichte Blutdruckerhöhung.'],['Grad 2','moderate Blutdruckerhöhung.'],['Grad 3','schwere Blutdruckerhöhung.'],['Hypertensive Krise','Notfall.']],
+    therapy:['ACE-Hemmer/ARB','Betablocker','Calciumantagonisten','Diuretika','Lebensstiländerung'],
+    care:['RR korrekt und vergleichbar messen.','Werte mit Puls dokumentieren.','Kopfschmerz, Schwindel, Sehstörungen beobachten.','Orthostase nach Medikamentengabe beachten.','Salzreduktion und Bewegung im Alltag unterstützen.','Medikamenteneinnahme und Nebenwirkungen beobachten.'] },
+
+  { id:10, title:'KHK', cat:'kardiologie', days:[2,3], priority:'high', icon:'💓',
+    definition:'Verengung der Herzkranzgefäße mit Minderdurchblutung des Herzmuskels.',
+    risk:['Rauchen','Hypertonie','Diabetes','Hyperlipidämie','Adipositas'],
+    causes:['Arteriosklerose der Koronararterien'],
+    symptoms:['Brustschmerz','Angina pectoris','Belastungsdyspnoe','Ausstrahlung','Kaltschweißigkeit'],
+    assessment:['EKG','Belastungs-EKG','Troponin bei Akutverdacht','Koronarangiografie','Schmerzassessment'],
+    stages:[['Stabile Angina pectoris','Belastungsabhängig.'],['Instabile Angina pectoris','Auch in Ruhe/neu/stärker.'],['Akutes Koronarsyndrom','Notfall.']],
+    therapy:['ASS','Statine','Betablocker','Nitrate','PCI/Stent','Bypass-OP'],
+    care:['Brustschmerz nach Lokalisation, Dauer, Ausstrahlung erfassen.','Vitalzeichen bei Schmerzen sofort kontrollieren.','Körperliche Ruhe herstellen.','Oberkörper hochlagern.','Nitro-Gabe nach Anordnung vorbereiten.','Notfallzeichen erkennen: Kaltschweißigkeit, Dyspnoe, Todesangst.'] },
+
+  { id:11, title:'Myokardinfarkt', cat:'kardiologie', days:[3], priority:'high', icon:'⚡',
+    definition:'Absterben von Herzmuskelgewebe durch akuten Verschluss eines Koronargefäßes.',
+    risk:['KHK','Rauchen','Hypertonie','Diabetes','Fettstoffwechselstörung'],
+    causes:['Plaqueruptur mit Thrombusbildung'],
+    symptoms:['starker Thoraxschmerz','Ausstrahlung','Dyspnoe','Todesangst','Kaltschweißigkeit','Übelkeit'],
+    assessment:['12-Kanal-EKG','Troponin','Schmerzassessment','Vitalzeichen','Koronarangiografie'],
+    stages:[['STEMI','ST-Hebungsinfarkt.'],['NSTEMI','Nicht-ST-Hebungsinfarkt.'],['Instabile Angina','Vorstufe des akuten Koronarsyndroms.']],
+    therapy:['PCI/Stent','ASS','Heparin','P2Y12-Hemmer','Schmerztherapie','Sauerstoff bei Hypoxie'],
+    care:['Sofort Arzt/Notfallteam informieren.','Oberkörperhochlagerung durchführen.','Vitalzeichen engmaschig messen.','Schmerzintensität und Ausstrahlung dokumentieren.','EKG vorbereiten/Monitoring anschließen.','Patient nüchtern lassen wegen möglicher Intervention.'] },
+
+  { id:12, title:'pAVK', cat:'kardiologie', days:[2,3], priority:'high', icon:'🦶',
+    definition:'Arterielle Durchblutungsstörung der Extremitäten, meist Beine, durch Gefäßverengung.',
+    risk:['Rauchen','Diabetes','Hypertonie','Hyperlipidämie','Alter'],
+    causes:['Arteriosklerose'],
+    symptoms:['Claudicatio intermittens','Ruheschmerz','kalte Füße','Wunden','Nekrosen'],
+    assessment:['Fußpulse','Hauttemperatur','ABI','Doppler-Sonografie','schmerzfreie Gehstrecke'],
+    stages:[['Fontaine I','Beschwerdefrei.'],['Fontaine II','Claudicatio intermittens.'],['Fontaine III','Ruheschmerz.'],['Fontaine IV','Nekrose/Ulkus/Gangrän.']],
+    therapy:['Gehtraining','Thrombozytenaggregationshemmer','Statine','Angioplastie/Stent','Bypass'],
+    care:['Füße täglich auf Wunden und Druckstellen kontrollieren.','Keine Wärmflasche anwenden.','Enge Schuhe/Socken vermeiden.','Gehtraining nach Plan begleiten.','Beine bei starker arterieller Minderperfusion nicht hochlagern.','Schmerzen und Gehstrecke dokumentieren.'] },
+
+  { id:13, title:'TVT', cat:'kardiologie', days:[2,3], priority:'high', icon:'🧦',
+    definition:'Bildung eines Blutgerinnsels in einer tiefen Vene, meist Bein- oder Beckenvene.',
+    risk:['Immobilität','OP','Tumor','Schwangerschaft','Exsikkose','Thrombophilie'],
+    causes:['Virchow-Trias: verlangsamter Blutfluss, Gefäßwandschaden, erhöhte Gerinnbarkeit'],
+    symptoms:['Schwellung','Schmerz','Überwärmung','Spannungsgefühl','Umfangsdifferenz'],
+    assessment:['Beinumfang','Schmerz/Schwellung','Wells-Score','D-Dimere','Kompressionssonografie'],
+    stages:[['Distale TVT','Unterschenkelvenen.'],['Proximale TVT','Oberschenkel-/Beckenvenen.'],['Komplikation','Lungenembolie.']],
+    therapy:['Antikoagulation','Kompression','Mobilisation nach Freigabe','ggf. Lyse/Intervention'],
+    care:['Betroffenes Bein nicht massieren.','Beinumfang seitenvergleichend messen.','Schmerzen, Schwellung, Überwärmung beobachten.','Kompressionsstrümpfe korrekt anlegen.','Mobilisation nur nach ärztlicher Freigabe.','Atemnot/Thoraxschmerz als Emboliezeichen sofort melden.'] },
+
+  { id:14, title:'Asthma bronchiale', cat:'pneumologie', days:[2,3], priority:'medium', icon:'🌫️',
+    definition:'Chronisch entzündliche Atemwegserkrankung mit anfallsweiser, meist reversibler Bronchialobstruktion.',
+    risk:['Allergien','Infekte','Rauch','Kälte','Belastung','berufliche Reizstoffe'],
+    causes:['Bronchiale Hyperreagibilität mit Schleimhautschwellung, Bronchospasmus und Sekretbildung'],
+    symptoms:['Giemen','Sprechdyspnoe','Einziehungen','Husten','Atemnotattacke'],
+    assessment:['Peak-Flow','Spirometrie','SpO₂','Auskultation','Asthma-Kontrolltest'],
+    stages:[['Allergisches Asthma','Triggerabhängig.'],['Nicht-allergisches Asthma','Nicht allergisch.'],['Belastungsasthma','Unter Belastung.'],['Akuter Asthmaanfall','Notfallsituation.']],
+    therapy:['SABA als Bedarfsspray','inhalative Kortikosteroide','LABA','Notfallmedikamente','Allergenkarenz'],
+    care:['Atemnotzeichen beobachten: Giemen, Sprechdyspnoe, Einziehungen.','Peak-Flow-Werte dokumentieren.','Inhalationstechnik praktisch kontrollieren.','Atemerleichternde Position anbieten.','Notfallspray griffbereit halten.','Bekannte Trigger vermeiden helfen.'] },
+
+  { id:15, title:'Pneumothorax', cat:'pneumologie', days:[3], priority:'medium', icon:'🎈',
+    definition:'Luft im Pleuraspalt führt zum teilweisen oder vollständigen Kollaps der Lunge.',
+    risk:['Trauma','COPD','Beatmung','thorakale Eingriffe','Rauchen'],
+    causes:['Verletzung der Lunge/Thoraxwand','spontane Ruptur subpleuraler Bläschen'],
+    symptoms:['akute Atemnot','Thoraxschmerz','vermindertes Atemgeräusch','Tachypnoe','SpO₂-Abfall'],
+    assessment:['Auskultation','SpO₂','Atemfrequenz','Röntgen-Thorax','CT bei Bedarf'],
+    stages:[['Spontanpneumothorax','Spontan.'],['Traumatischer Pneumothorax','Nach Trauma.'],['Spannungspneumothorax','Notfall.']],
+    therapy:['Sauerstoff','Punktion','Thoraxdrainage','OP bei Rezidiv'],
+    care:['Akute Atemnot sofort melden.','SpO₂ und Atemfrequenz eng kontrollieren.','Thoraxdrainage unter Thoraxniveau halten.','Drainagesystem auf Sog, Pendeln, Sekret prüfen.','Einstichstelle auf Luftleckage/Entzündung kontrollieren.','Schmerzen beim Atmen erfassen.'] },
+
+  { id:16, title:'Schock', cat:'notfall', days:[3], priority:'high', icon:'🆘',
+    definition:'Akutes Kreislaufversagen mit unzureichender Gewebeperfusion und Sauerstoffversorgung.',
+    risk:['Blutverlust','Sepsis','Herzinfarkt','Anaphylaxie','Dehydratation'],
+    causes:['Hypovolämisch','kardiogen','septisch','anaphylaktisch','neurogen'],
+    symptoms:['Hypotonie','Tachykardie','kalte Haut','Bewusstseinsveränderung','Oligurie'],
+    assessment:['RR','Puls','Rekapillarisierungszeit','Haut','Bewusstsein','Schockindex','Laktat'],
+    stages:[['Kompensierter Schock','Kompensation möglich.'],['Dekompensierter Schock','Kreislaufversagen.'],['Irreversibler Schock','Organversagen.']],
+    therapy:['Volumengabe','Sauerstoff','Katecholamine','Blutstillung','Antibiotika oder Adrenalin je nach Ursache'],
+    care:['Notfallteam/Arzt sofort informieren.','Vitalzeichen engmaschig messen.','Bewusstsein und Hautfarbe kontrollieren.','Sauerstoffgabe vorbereiten.','Venösen Zugang/Infusion vorbereiten.','Schocklagerung nur passend zur Ursache durchführen.'] },
+
+  { id:17, title:'Delir', cat:'neurologie', days:[1,3], priority:'high', icon:'🌀',
+    definition:'Akute, meist wechselnde Störung von Aufmerksamkeit, Bewusstsein und Orientierung.',
+    risk:['Alter','Demenz','Infekt','OP','Dehydratation','Medikamente','Schmerz'],
+    causes:['Infektionen','Elektrolytstörungen','Medikamente','Entzug','Hypoxie','Schmerzen'],
+    symptoms:['Unruhe','Aufmerksamkeitsstörung','Orientierungsstörung','wechselnder Verlauf','hypoaktive Form möglich'],
+    assessment:['CAM','4AT','Delirium Observation Screening Scale','Vitalzeichen','Labor','Medikamentenanalyse'],
+    stages:[['Hyperaktives Delir','Unruhe, Agitation.'],['Hypoaktives Delir','Rückzug, Apathie.'],['Gemischtes Delir','Wechselnde Symptomatik.']],
+    therapy:['Ursache behandeln','Flüssigkeit/Elektrolyte ausgleichen','Schmerztherapie','ggf. Antipsychotika'],
+    care:['Brille und Hörgerät bereitstellen.','Tag-Nacht-Rhythmus sichern.','Reizüberflutung reduzieren.','Orientierungshilfen gut sichtbar platzieren.','Flüssigkeits- und Ausscheidungsbilanz führen.','Sturzprophylaxe engmaschig durchführen.'] },
+
+  { id:18, title:'Parkinson', cat:'neurologie', days:[2,3], priority:'high', icon:'🚶',
+    definition:'Neurodegenerative Erkrankung mit Dopaminmangel und typischen Bewegungsstörungen.',
+    risk:['Alter','genetische Faktoren','männliches Geschlecht'],
+    causes:['Untergang dopaminerger Nervenzellen in der Substantia nigra'],
+    symptoms:['Rigor','Tremor','Akinese','posturale Instabilität','Freezing','Dysphagie'],
+    assessment:['Neurologische Untersuchung','L-Dopa-Test','Gangbild','Schluckassessment','Sturzassessment'],
+    stages:[['Hoehn-und-Yahr-Stadien','Stadieneinteilung.'],['Leitsymptome','Rigor, Tremor, Akinese, posturale Instabilität.']],
+    therapy:['L-Dopa','Dopaminagonisten','MAO-B-Hemmer','Physiotherapie','tiefe Hirnstimulation'],
+    care:['Parkinson-Medikamente exakt pünktlich geben.','Freezing-Situationen mit Startsignalen unterstützen.','Kleine Schritte und sichere Mobilisation anleiten.','Schluckstörungen beobachten.','Obstipationsprophylaxe durchführen.','Sturzrisiko durch Hilfsmittel und Umgebungssicherung reduzieren.'] },
+
+  { id:19, title:'Epilepsie', cat:'neurologie', days:[3], priority:'medium', icon:'⚡',
+    definition:'Erkrankung mit wiederholten epileptischen Anfällen durch übermäßige neuronale Entladungen.',
+    risk:['Hirnverletzung','Tumor','Schlaganfall','Fieber','Alkoholentzug','Schlafmangel'],
+    causes:['Genetisch','strukturell','metabolisch','infektiös','unbekannt'],
+    symptoms:['Aura','tonisch-klonische Bewegungen','Bewusstseinsverlust','Einnässen','Nachphase'],
+    assessment:['EEG','MRT','Anfallsbeschreibung','Anfallsprotokoll','Fremdanamnese'],
+    stages:[['Fokale Anfälle','Lokal begrenzt.'],['Generalisierte Anfälle','Beide Hemisphären.'],['Status epilepticus','Notfall.']],
+    therapy:['Antiepileptika','Notfallbenzodiazepine','Triggervermeidung','ggf. OP'],
+    care:['Umgebung sichern und Verletzungen verhindern.','Nichts in den Mund stecken.','Anfallsbeginn und Dauer messen.','Nach dem Anfall stabile Seitenlage.','Atmung und Bewusstsein kontrollieren.','Anfall genau dokumentieren: Dauer, Bewegungen, Aura, Einnässen, Nachphase.'] },
+
+  { id:20, title:'Depression', cat:'psychiatrie', days:[2,3], priority:'high', icon:'🌧️',
+    definition:'Psychische Erkrankung mit gedrückter Stimmung, Interessenverlust und Antriebsminderung.',
+    risk:['Belastung','Verluste','chronische Erkrankung','genetische Disposition','soziale Isolation'],
+    causes:['Multifaktoriell: neurobiologisch, psychologisch, sozial'],
+    symptoms:['gedrückte Stimmung','Interessenverlust','Antriebsminderung','Schlafstörung','Appetitveränderung','Suizidgedanken'],
+    assessment:['Anamnese','PHQ-9','Beobachtung von Schlaf/Appetit/Antrieb','Suizidalitätsassessment'],
+    stages:[['Leichte Episode','Geringe Einschränkung.'],['Mittelgradige Episode','Deutliche Einschränkung.'],['Schwere Episode','Starke Einschränkung/Suizidgefahr.'],['Rezidivierende Depression','Wiederkehrend.']],
+    therapy:['Psychotherapie','Antidepressiva','Aktivierung','bei schwerer Depression stationäre Behandlung'],
+    care:['Konkrete Tagesstruktur mit kleinen erreichbaren Aufgaben planen.','Körperpflege schrittweise anbahnen.','Mahlzeiten begleiten und Trinkmenge beobachten.','Schlafprotokoll führen.','Suizidäußerungen direkt ansprechen und sofort weiterleiten.','Aktivierende Pflege ohne Überforderung durchführen.'] }
 ];
 
-const CONTENT = TOPIC_SOURCE.map(makeTopic);
-
-function makeTopic(source){
-  const {id,title,area,icon,definition,riskFactors,causes,symptoms,assessment,therapy,care}=source;
-  return {id,title,area,icon,priority:"Sehr hohe Priorität",flash:[
-{front:`Definition: ${title}`,back:definition},
-{front:`Risikofaktoren: ${title}`,back:riskFactors.join(", ")},
-{front:`Ursachen: ${title}`,back:causes.join(", ")},
-{front:`Symptome: ${title}`,back:symptoms.join(", ")},
-{front:`Assessment/Diagnostik: ${title}`,back:assessment.join(", ")},
-{front:`Pflege: ${title}`,back:care.join(" ")}
-],quiz:[
-{q:`Was beschreibt ${title} am besten?`,a:definition,o:[riskFactors[0],therapy[0],care[0]]},
-{q:`Was ist ein typisches Symptom bei ${title}?`,a:symptoms[0],o:[assessment[0],therapy[0],riskFactors[0]]},
-{q:`Welche Pflegemaßnahme passt zu ${title}?`,a:care[0],o:[causes[0],therapy[0],riskFactors[0]]}
-],blank:[
-{text:`Bei ${title} ist wichtig: _____.`,answer:assessment[0],options:[assessment[0],riskFactors[0],therapy[0],causes[0]]},
-{text:`Typische Pflege bei ${title}: _____.`,answer:care[0],options:[care[0],symptoms[0],definition,riskFactors[0]]}
-],memory:[[symptoms[0],"Symptom"],[assessment[0],"Assessment"],[therapy[0],"Therapie"],[riskFactors[0],"Risikofaktor"],[care[0],"Pflege"]]}}
-
-const AppState={data:{xp:0,rounds:0,best:0,streak:0,daily:0,last:new Date().toDateString(),history:{}},load(){try{Object.assign(this.data,JSON.parse(localStorage.getItem(SAVE)||"{}"))}catch(e){}if(this.data.last!==new Date().toDateString()){this.data.daily=0;this.data.last=new Date().toDateString()}},save(){localStorage.setItem(SAVE,JSON.stringify(this.data));UI.update();UI.library()},reward(xp,score,key){this.data.xp+=xp;this.data.daily+=xp;this.data.rounds++;this.data.best=Math.max(this.data.best,score);this.data.streak=score>=80?this.data.streak+1:0;this.data.history[key]=Math.max(this.data.history[key]||0,score);this.save()}};
-const UI={update(){AppState.load();$("#xp").textContent=AppState.data.xp;$("#streak").textContent=AppState.data.streak;$("#rounds").textContent=AppState.data.rounds;$("#best").textContent=AppState.data.best+"%";$("#daily").textContent=AppState.data.daily;$("#dailybar").style.width=Math.min(100,AppState.data.daily/300*100)+"%";$("#level").textContent="Pflege-Azubi Lvl "+(Math.floor(AppState.data.xp/500)+1)},library(){
-    const grouped = CONTENT.reduce((acc, t) => {
-        if(!acc[t.area]) acc[t.area] = [];
-        acc[t.area].push(t);
-        return acc;
-    }, {});
-    let html = '';
-    for(const [area, items] of Object.entries(grouped)) {
-        html += `<div class="cat-header">${area}</div>`;
-        html += items.map(t=>{let s=["flash","quiz","blank","memory"].map(m=>AppState.data.history[t.id+"."+m]||0),p=Math.round(s.reduce((a,b)=>a+b,0)/4);return`<button class="card" onclick="Wizard.open('${t.id}')"><div class="icon">${t.icon}</div><div class="grow"><div class="prio">${t.priority}</div><h3>${t.title}</h3><div class="bar"><div class="fill" style="width:${p}%"></div></div></div><b style="color:var(--p)">${p}%</b></button>`}).join("");
-    }
-    $("#lib").innerHTML=html;
-}};
-
-const App={
-    rec:null,
-    ctaTimer:null,
-    ctaCleanupTimer:null,
-    init(){
-        AppState.load();Wizard.render();UI.update();UI.library();
-        this.rec=CONTENT[Math.floor(Math.random()*CONTENT.length)].id;
-        $("#mission").textContent=CONTENT.find(t=>t.id===this.rec).title;
-        this.showStartCTA();
-    },
-    nav(id){
-        $$(".screen").forEach(x=>x.classList.remove("active"));
-        $("#"+id).classList.add("active");
-        
-        const btn = $("#startBtn");
-        if(btn) {
-            if(id === "home" && !$("#wizard").classList.contains("open")) {
-                this.showStartCTA();
-            } else {
-                this.hideStartCTA(true);
-            }
-        }
-        
-        $$(".nav-item").forEach(n => n.classList.remove("active"));
-        if(id==="home") $$(".nav-item")[0]?.classList.add("active");
-        if(id==="library") $$(".nav-item")[1]?.classList.add("active");
-    },
-    showStartCTA(){
-        const btn = $("#startBtn");
-        if(!btn) return;
-        clearTimeout(this.ctaTimer);
-        clearTimeout(this.ctaCleanupTimer);
-        btn.style.display = "flex";
-        btn.classList.remove("is-leaving");
-        void btn.offsetWidth; // reflow
-        btn.classList.add("is-visible");
-    },
-    hideStartCTA(instant=false){
-        const btn = $("#startBtn");
-        if(!btn) return;
-        clearTimeout(this.ctaTimer);
-        clearTimeout(this.ctaCleanupTimer);
-        btn.classList.remove("is-visible");
-        if(instant){
-            btn.classList.remove("is-leaving");
-            btn.style.display = "none";
-            return;
-        }
-        btn.classList.add("is-leaving");
-        this.ctaCleanupTimer = setTimeout(()=>{
-            btn.classList.remove("is-leaving");
-            btn.style.display = "none";
-        }, 600);
-    },
-    startRecommended(){Wizard.open(this.rec)},
-    mockNav(name){
-        const t = document.createElement("div"); 
-        t.className="toast"; 
-        t.textContent = name + " kommt bald!";
-        document.body.appendChild(t); 
-        setTimeout(()=>t.remove(), 1500);
-    }
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  openId:    null,
+  search:    '',
+  cat:       'all',
+  day:       'all',
+  diff:      'all',
+  hardFirst: false,
+  difficulty: loadDifficulty()
 };
 
-const Wizard={
-    topic:null,mode:null,
-    render(){
-        $("#topics").innerHTML=CONTENT.map(t=>`<button class="card" onclick="Wizard.pickTopic('${t.id}')"><div class="icon">${t.icon}</div><div class="grow"><div class="prio">${t.priority}</div><h3>${t.title}</h3><p>${t.area}</p></div><i class="fa-solid fa-chevron-right"></i></button>`).join("");
-        $("#modes").innerHTML=[["flash","🃏","Smart Flashcards","Wissen aufbauen"],["quiz","⚡","Speed Quiz","Prüfungsfragen"],["blank","✍️","Lückentext","Fachbegriffe"],["memory","🧠","Clinical Memory","Verknüpfen"]].map(m=>`<button class="card" onclick="Wizard.pickMode('${m[0]}')"><div class="icon">${m[1]}</div><div class="grow"><h3>${m[2]}</h3><p>${m[3]}</p></div></button>`).join("");
-    },
-    open(id){
-        App.hideStartCTA(true);
-        $$(".nav-item").forEach(n=>n.classList.remove("active"));
-        $("#wizard").classList.add("open");
-        $("#p1").classList.add("active");
-        $("#p2").classList.remove("active");
-        $("#foot").classList.remove("show");
-        if(id)setTimeout(()=>this.pickTopic(id),150);
-    },
-    close(){
-        $("#wizard").classList.remove("open");
-        if($("#home").classList.contains("active")) {
-            App.nav("home");
-        } else if($("#library").classList.contains("active")) {
-            App.nav("library");
-        }
-    },
-    pickTopic(id){this.topic=CONTENT.find(t=>t.id===id);$("#p1").classList.remove("active");$("#p2").classList.add("active")},
-    back(){$("#p2").classList.remove("active");$("#p1").classList.add("active");$("#foot").classList.remove("show")},
-    pickMode(id){this.mode=id;$("#foot").classList.add("show")},
-    start(){this.close();Game.start(this.topic,this.mode)}
-};
+/* ============================================================
+   STORAGE HELPERS
+   ============================================================ */
+function loadDifficulty() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+    // fallback: cookie
+    const ck = document.cookie.split('; ').find(x => x.startsWith(STORAGE_KEY + '='));
+    return ck ? JSON.parse(decodeURIComponent(ck.split('=')[1])) : {};
+  } catch (e) { return {}; }
+}
 
-const Game={
-    topic:null,mode:null,i:0,score:0,total:0,locked:false,mem:null,
-    start(t,m){
-        this.topic=t;this.mode=m;this.i=0;this.score=0;this.locked=false;this.mem=null;
-        this.total=m==="memory"?t.memory.length:t[m].length;
-        App.nav("play");this.render();
-    },
-    head(){
-        let p=this.total?(this.i/this.total*100):0;
-        $("#bar").style.width=p+"%";
-        $("#gscore").textContent=Math.floor(this.score)+"/"+this.total;
-    },
-    abort(){App.nav("home")},
-    render(){
-        this.head();
-        if(this.i>=this.total)return this.finish();
-        if(this.mode==="flash")return this.flash();
-        if(this.mode==="quiz")return this.choice(this.topic.quiz[this.i],"Multiple Choice");
-        if(this.mode==="blank")return this.blank();
-        if(this.mode==="memory")return this.memory();
-    },
-    flash(){
-        let x=this.topic.flash[this.i];
-        $("#game").innerHTML=`<div class="flashscene"><div class="flash" id="fc" onclick="this.classList.add('flip');document.getElementById('rates').classList.add('show')"><div class="face"><div><div class="kicker">Wissensabfrage</div><div class="question">${x.front}</div><p class="muted">Tippen zum Drehen</p></div></div><div class="face backside"><div><div class="kicker" style="color:white">Antwort</div><div style="font-size:18px;font-weight:800">${x.back}</div></div></div></div></div><div class="rates" id="rates"><button class="rate" style="background:#64748b" onclick="Game.rate(0)">Nochmal</button><button class="rate" style="background:#ef4444" onclick="Game.rate(.5)">Schwer</button><button class="rate" style="background:#f59e0b" onclick="Game.rate(1)">Gut</button><button class="rate" style="background:#10b981" onclick="Game.rate(1.2)">Leicht</button></div>`;
-    },
-    rate(p){this.score+=p;this.float(10);this.i++;this.render()},
-    choice(x,k){
-        let opts=this.shuffle([x.a,...x.o]);
-        $("#game").innerHTML=`<div class="play"><div class="kicker">${k}</div><div class="question">${x.q}</div><div class="opts">${opts.map(o=>`<button class="opt" onclick="Game.eval(this,\`${o.replace(/`/g,"")}\`,\`${x.a.replace(/`/g,"")}\`)">${o}</button>`).join("")}</div></div>`;
-    },
-    blank(){
-        let x=this.topic.blank[this.i];
-        this.choice({q:x.text,a:x.answer,o:x.options.filter(o=>o!==x.answer).slice(0,3)},"Lückentext");
-    },
-    eval(btn,c,a){
-        if(this.locked)return;
-        this.locked=true;
-        if(c===a){
-            btn.classList.add("correct");this.score++;this.float(15);
-        }else{
-            btn.classList.add("wrong");
-            $$(".opt").forEach(b=>{if(b.textContent===a)b.classList.add("correct")});
-        }
-        setTimeout(()=>{this.i++;this.locked=false;this.render()},900);
-    },
-    memory(){
-        if(!this.mem){
-            let d=[];this.topic.memory.forEach((p,i)=>{d.push({p:i,t:p[0]},{p:i,t:p[1]})});
-            this.mem={deck:this.shuffle(d),open:[]};
-        }
-        $("#game").innerHTML=`<div class="play"><div class="kicker">Clinical Memory</div><div class="mem">${this.mem.deck.map((c,i)=>`<button class="${c.o?'open':''} ${c.d?'done':''}" onclick="Game.memPick(${i})">${c.o||c.d?c.t:"❔"}</button>`).join("")}</div></div>`;
-    },
-    memPick(i){
-        let c=this.mem.deck[i];
-        if(this.locked||c.o||c.d)return;
-        c.o=true;this.mem.open.push(i);
-        if(this.mem.open.length<2)return this.memory();
-        this.locked=true;this.memory();
-        setTimeout(()=>{
-            let[a,b]=this.mem.open,ca=this.mem.deck[a],cb=this.mem.deck[b];
-            if(ca.p===cb.p){
-                ca.d=cb.d=true;this.score++;this.i++;this.float(25);
-            }else{ca.o=cb.o=false;}
-            this.mem.open=[];this.locked=false;
-            if(this.i>=this.total)this.finish();else this.memory();
-        },700);
-    },
-    finish(){
-        let pct=Math.round(this.score/this.total*100),xp=Math.round(this.score*15)+(pct>=80?25:0);
-        AppState.reward(xp,pct,this.topic.id+"."+this.mode);
-        $("#resScore").textContent=pct;$("#resXp").textContent="+"+xp+" XP";
-        $("#resTitle").textContent=pct>=85?"Exzellent!":pct>=65?"Stark!":"Weiterüben!";
-        if(pct>=70)this.confetti();
-        App.nav("result");
-    },
-    shuffle(a){return[...a].sort(()=>Math.random()-.5)},
-    float(x){
-        let e=document.createElement("div");e.className="float";e.textContent="+"+x;
-        e.style.left="45%";e.style.top="45%";
-        document.body.appendChild(e);
-        setTimeout(()=>e.remove(),1000);
-    },
-    confetti(){
-        ["#2563eb","#f43f5e","#10b981","#f59e0b"].forEach((c)=>{
-            for(let i=0;i<12;i++){
-                let e=document.createElement("div");e.className="conf";
-                e.style.left=Math.random()*100+"vw";e.style.background=c;
-                e.style.animationDuration=1.5+Math.random()*1.5+"s";
-                document.body.appendChild(e);
-                setTimeout(()=>e.remove(),3000);
-            }
-        });
-    }
-};
+function saveDifficulty() {
+  const data = JSON.stringify(state.difficulty);
+  localStorage.setItem(STORAGE_KEY, data);
+  document.cookie = STORAGE_KEY + '=' + encodeURIComponent(data) + '; max-age=31536000; path=/; SameSite=Lax';
+}
 
-document.addEventListener("DOMContentLoaded",()=>App.init());
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+function category(t) {
+  return CATEGORIES[t.cat] || CATEGORIES.neurologie;
+}
+
+function getDiff(id) {
+  return state.difficulty[id] || 'unrated';
+}
+
+function setDiff(id, diff) {
+  const cur = getDiff(id);
+  if (cur === diff) delete state.difficulty[id];
+  else state.difficulty[id] = diff;
+  saveDifficulty();
+  render();
+  const msgs = {
+    easy: '🟢 Als easy markiert',
+    mid:  '🟡 Als mittel markiert',
+    hard: '🔴 Als schwer markiert'
+  };
+  showToast(cur === diff ? 'Markierung entfernt' : msgs[diff]);
+}
+
+function highlight(text) {
+  text = String(text);
+  const q = state.search.trim();
+  if (!q) return text;
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
+}
+
+function li(arr) {
+  return `<ul>${arr.map(x => `<li>${highlight(x)}</li>`).join('')}</ul>`;
+}
+
+function stageList(arr) {
+  return `<div class="stage-list">${arr.map(s =>
+    `<div class="stage"><b>${highlight(s[0])}</b><span>${highlight(s[1])}</span></div>`
+  ).join('')}</div>`;
+}
+
+function sec(title, icon, body, full = false) {
+  return `<section class="section${full ? ' full' : ''}">
+    <h4>${icon} ${title}</h4>${body}
+  </section>`;
+}
+
+function statusChip(d) {
+  if (d === 'easy') return `<span class="chip status-chip easy">🟢 Easy</span>`;
+  if (d === 'mid')  return `<span class="chip status-chip mid">🟡 Mittel</span>`;
+  if (d === 'hard') return `<span class="chip status-chip hard">🔴 Schwer</span>`;
+  return `<span class="chip status-chip">○ unbewertet</span>`;
+}
+
+/* ============================================================
+   FILTER & SORT
+   ============================================================ */
+function filteredTopics() {
+  const q = state.search.trim().toLowerCase();
+  let data = TOPICS.filter(t => {
+    if (state.cat !== 'all' && t.cat !== state.cat) return false;
+    if (state.day !== 'all' && !t.days.includes(Number(state.day))) return false;
+    const d = getDiff(t.id);
+    if (state.diff !== 'all' && d !== state.diff) return false;
+    if (q && !JSON.stringify(t).toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  if (state.hardFirst) {
+    const rank = { hard: 0, mid: 1, unrated: 2, easy: 3 };
+    data.sort((a, b) =>
+      (rank[getDiff(a.id)] ?? 2) - (rank[getDiff(b.id)] ?? 2) || a.id - b.id
+    );
+  } else {
+    data.sort((a, b) => a.id - b.id);
+  }
+  return data;
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render() {
+  const data = filteredTopics();
+
+  $('#topicList').innerHTML = data.map(t => {
+    const c   = category(t);
+    const d   = getDiff(t.id);
+    const open = state.openId === t.id;
+
+    return `
+<article class="topic${open ? ' open' : ''}${d !== 'unrated' ? ' ' + d : ''}" id="topic-${t.id}">
+
+  <div class="topic-head" onclick="toggleOpen(${t.id})">
+
+    <div class="disease-icon">${t.icon}</div>
+
+    <div>
+      <div class="topic-title">
+        ${String(t.id).padStart(2,'0')} · ${highlight(t.title)}
+      </div>
+      <div class="meta">
+        <span class="chip cat" style="--catbg:${c.bg};--catcolor:${c.color}">
+          ${c.icon} ${c.label}
+        </span>
+        ${t.days.map(x => `<span class="chip day">Tag ${x}</span>`).join('')}
+        ${t.priority === 'high' ? `<span class="chip prio">🔥 Priorität</span>` : ''}
+        ${statusChip(d)}
+      </div>
+    </div>
+
+    <div class="actions" onclick="event.stopPropagation()">
+      <div class="ampel">
+        <button class="easy${d==='easy'?' active':''}" title="Easy"
+          onclick="setDiff(${t.id},'easy')">
+          <i class="fa-solid fa-check"></i>
+        </button>
+        <button class="mid${d==='mid'?' active':''}" title="Mittel"
+          onclick="setDiff(${t.id},'mid')">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <button class="hard${d==='hard'?' active':''}" title="Schwer"
+          onclick="setDiff(${t.id},'hard')">
+          <i class="fa-solid fa-fire"></i>
+        </button>
+      </div>
+      <button class="arrow" onclick="toggleOpen(${t.id})">
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="body">
+    <div class="body-inner">
+      <div class="content">
+        <div class="section-grid">
+          ${sec('Definition',        '📌', `<p>${highlight(t.definition)}</p>`, true)}
+          ${sec('Risikofaktoren',    '⚠️', li(t.risk))}
+          ${sec('Ursachen',          '🧩', li(t.causes))}
+          ${sec('Symptome',          '🔎', li(t.symptoms))}
+          ${sec('Diagnostik / Assessment', '📋', li(t.assessment))}
+          ${sec('Stadien / Formen',  '🧭', stageList(t.stages), true)}
+          ${sec('Medizinische Therapie', '💊', li(t.therapy))}
+          ${sec('Pflege – konkret prüfungsrelevant', '🏥', li(t.care), true)}
+        </div>
+        <div class="keys">
+          ${[...t.assessment, ...t.symptoms].slice(0, 9)
+            .map(x => `<span class="key">${highlight(x)}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</article>`;
+  }).join('');
+
+  $('#empty').style.display = data.length ? 'none' : 'block';
+  updateCounters(data.length);
+}
+
+/* ============================================================
+   COUNTERS + PILLS
+   ============================================================ */
+function updateCounters(shown) {
+  const total  = TOPICS.length;
+  const rated  = Object.keys(state.difficulty)
+    .filter(id => TOPICS.some(t => t.id == id)).length;
+  const pct    = Math.round(rated / total * 100);
+  const streak = Object.values(state.difficulty).filter(v => v === 'hard').length;
+
+  $('#kTotal').textContent  = total;
+  $('#kRated').textContent  = rated;
+  $('#kShown').textContent  = shown;
+  $('#countText').textContent = `${shown} Themen`;
+
+  // top bar pills
+  $('#topText').textContent   = `${rated}/${total}`;
+  $('#streakCount').textContent = streak;
+  $('#topFill').style.width   = pct + '%';
+}
+
+/* ============================================================
+   TOGGLE OPEN
+   ============================================================ */
+function toggleOpen(id) {
+  state.openId = state.openId === id ? null : id;
+  render();
+  if (state.openId) {
+    requestAnimationFrame(() =>
+      document.getElementById('topic-' + id)?.scrollIntoView({
+        behavior: 'smooth', block: 'nearest'
+      })
+    );
+  }
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function showToast(msg) {
+  document.querySelector('.toast')?.remove();
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1900);
+}
+
+/* ============================================================
+   FILTER BUTTONS — Category
+   ============================================================ */
+$$('[data-cat]').forEach(b => b.addEventListener('click', () => {
+  state.cat = b.dataset.cat;
+  $$('[data-cat]').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  state.openId = null;
+  render();
+}));
+
+/* Day */
+$$('[data-day]').forEach(b => b.addEventListener('click', () => {
+  state.day = b.dataset.day;
+  $$('[data-day]').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  state.openId = null;
+  render();
+}));
+
+/* Difficulty */
+$$('[data-diff]').forEach(b => b.addEventListener('click', () => {
+  state.diff = b.dataset.diff;
+  $$('[data-diff]').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  state.openId = null;
+  render();
+}));
+
+/* Search */
+$('#searchInput').addEventListener('input', e => {
+  state.search = e.target.value;
+  $('#clearBtn').style.display = state.search ? 'block' : 'none';
+  state.openId = null;
+  render();
+});
+
+/* Clear */
+$('#clearBtn').addEventListener('click', () => {
+  state.search = '';
+  $('#searchInput').value = '';
+  $('#clearBtn').style.display = 'none';
+  render();
+});
+
+/* Sort toggle */
+$('#sortHardFirst').addEventListener('click', () => {
+  state.hardFirst = !state.hardFirst;
+  $('#sortSwitch').classList.toggle('on', state.hardFirst);
+  render();
+});
+
+/* Keyboard: Escape closes open topic */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'Escape') { state.openId = null; render(); }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+render();
 </script>
 </body>
 </html>
