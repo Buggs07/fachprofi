@@ -1,1287 +1,516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>PflegefachProfi • Erkrankungen</title>
+<title>PflegefachProfi • Themenbibliothek</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 /* =============================================
-   DESIGN TOKENS — lernen.html system
+   DESIGN TOKENS & SYSTEM
    ============================================= */
 :root{
-  --p:#2563eb;
-  --pd:#1e40af;
-  --a:#f43f5e;
-  --s:#10b981;
-  --w:#f59e0b;
-  --d:#ef4444;
-  --bg:#f8fafc;
-  --card:#fff;
-  --txt:#0f172a;
-  --mut:#64748b;
-  --br:#e2e8f0;
-  --navH:72px;
-  --ease:cubic-bezier(.2,.8,.2,1);
+  --p:#2563eb; --pd:#1e40af; --p-light:#eff6ff;
+  --a:#f43f5e; --s:#10b981; --w:#f59e0b; --d:#ef4444;
+  --bg:#f8fafc; --card:#fff; --txt:#0f172a; --mut:#64748b; --br:#e2e8f0;
+  --navH:72px; --ease:cubic-bezier(.175,.885,.32,1.275);
   --shadow:0 10px 30px rgba(37,99,235,.14);
   --shadow2:0 4px 16px rgba(15,23,42,.07);
   --grad:linear-gradient(135deg,var(--p) 0%,var(--pd) 100%);
 }
 
-/* =============================================
-   RESET + BASE
-   ============================================= */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
-  background:#cbd5e1;                /* lernen outer background */
-  color:var(--txt);
-  min-height:100vh;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  display:flex;
-  justify-content:center;
+  background:#cbd5e1; color:var(--txt); min-height:100vh; min-height:100dvh;
+  overflow:hidden; display:flex; justify-content:center; align-items:flex-start;
 }
 button,input{font-family:inherit}
-button{cursor:pointer}
+button{cursor:pointer;border:none;background:none;outline:none;}
+a{text-decoration:none;color:inherit}
 
 /* =============================================
-   APP SHELL  (lernen-style centred container,
-   but uncapped width so filters/topics breathe)
+   APP WRAPPER (Desktop & Mobile)
    ============================================= */
 .app{
-  width:100%;
-  max-width:900px;         /* comfortable reading width */
-  background:var(--bg);
-  min-height:100vh;
-  position:relative;
-  box-shadow:0 0 80px rgba(15,23,42,.18);
-  display:flex;
-  flex-direction:column;
+  width:100%; max-width:1024px; height:100%; background:var(--bg);
+  display:flex; flex-direction:column; position:relative; 
+  box-shadow:0 0 60px rgba(0,0,0,0.2); overflow:hidden;
 }
-
-/* inner scroll wrapper so the sticky bars work */
-.page-scroll{
-  flex:1;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-bottom:calc(env(safe-area-inset-bottom) + 112px);
+@media (min-width: 768px) {
+  body { align-items: center; padding: 20px; }
+  .app { height: 95vh; max-height: 950px; border-radius: 24px; }
 }
-
-.wrap{width:100%;padding:0 20px}
 
 /* =============================================
-   TOP BAR  (exact lernen.html .top style)
+   TOP BAR
    ============================================= */
 .top{
-  height:var(--navH);
-  background:rgba(255,255,255,.97);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 20px;
-  border-bottom:1px solid var(--br);
-  position:sticky;
-  top:0;
-  z-index:200;
-  gap:12px;
+  height:var(--navH); background:rgba(255,255,255,.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  display:flex; align-items:center; justify-content:space-between; padding:max(16px, env(safe-area-inset-top)) 20px 16px;
+  border-bottom:1px solid var(--br); z-index:200; flex-shrink:0;
 }
-
-/* Brand */
-.brand{
-  display:flex;align-items:center;gap:10px;
-  color:var(--txt);text-decoration:none;flex-shrink:0;
-}
-.logo{
-  width:40px;height:40px;border-radius:14px;
-  background:var(--grad);
-  color:#fff;display:grid;place-items:center;
-  box-shadow:0 4px 14px rgba(37,99,235,.35);
-}
-.logo i{font-size:19px}
-.brand b{font-size:18px;font-weight:900;letter-spacing:-.04em}
-
-/* Desktop nav links — hidden on mobile */
-.desk-nav{
-  display:flex;align-items:center;gap:4px;
-  flex:1;justify-content:center;
-}
-.desk-nav a,.desk-nav button{
-  border:0;text-decoration:none;
-  color:var(--mut);background:transparent;
-  font-weight:700;font-size:13px;
-  border-radius:12px;
-  padding:8px 12px;
-  display:flex;gap:7px;align-items:center;
-  transition:.2s var(--ease);
-  white-space:nowrap;
-}
-.desk-nav a.active{background:#eff6ff;color:var(--p)}
-.desk-nav a:hover:not(.active){background:#f1f5f9;color:var(--txt)}
-.desk-nav button.locked{opacity:.45;cursor:not-allowed}
-.desk-nav button.locked:hover{background:transparent;color:var(--mut)}
-
-/* Stats pills */
+.brand{display:flex;align-items:center;gap:10px;color:var(--txt);font-weight:900;font-size:18px;}
+.logo{width:40px;height:40px;border-radius:14px;background:var(--grad);color:#fff;display:grid;place-items:center;box-shadow:0 4px 14px rgba(37,99,235,.35);}
+.desk-nav{display:none;}
 .stats{display:flex;gap:7px;flex-shrink:0}
-.pill{
-  background:#fff;
-  border:1px solid var(--br);
-  border-radius:999px;
-  padding:6px 11px;
-  font-weight:900;
-  font-size:12px;
-  display:flex;align-items:center;gap:5px;
-  white-space:nowrap;
-  transition:.3s var(--ease);
-}
-
-/* progress pill uses a layered fill */
-.pill-progress{
-  position:relative;overflow:hidden;
-  min-width:80px;justify-content:center;
-}
-.pill-progress .pfill{
-  position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(37,99,235,.12),rgba(30,64,175,.08));
-  border-radius:99px;
-  width:0;
-  transition:.6s var(--ease);
-}
-.pill-progress .plabel{position:relative;z-index:1}
+.pill{background:#fff;border:1px solid var(--br);border-radius:999px;padding:6px 11px;font-weight:900;font-size:12px;display:flex;align-items:center;gap:5px;white-space:nowrap;}
 
 /* =============================================
-   HEADER PANEL
+   PAGE SCROLL AREA
    ============================================= */
-.compact-head{padding:18px 20px 0}
-.compact-panel{
-  background:var(--grad);
-  border-radius:28px;
-  padding:22px;
-  box-shadow:0 20px 40px rgba(37,99,235,.28);
-  color:#fff;
-  position:relative;
-  overflow:hidden;
-}
-.compact-panel::before{
-  content:"";position:absolute;
-  right:-55px;top:-75px;
-  width:230px;height:230px;border-radius:50%;
-  background:rgba(255,255,255,.07);
-}
-.compact-panel::after{
-  content:"";position:absolute;
-  left:-40px;bottom:-55px;
-  width:190px;height:190px;border-radius:50%;
-  background:rgba(255,255,255,.05);
-}
-.topline{
-  position:relative;z-index:1;
-  display:flex;align-items:center;
-  justify-content:space-between;gap:14px;
-  flex-wrap:wrap;
-}
-.title-block h1{
-  font-size:clamp(1.3rem,5vw,2rem);
-  letter-spacing:-.05em;line-height:1.05;
-  font-weight:900;
-}
-.title-block p{
-  font-size:13px;color:rgba(255,255,255,.75);
-  font-weight:600;margin-top:5px;line-height:1.5;
-  max-width:380px;
-}
-.kpi-row{display:flex;gap:8px;flex-wrap:wrap}
-.kpi{
-  min-width:80px;
-  background:rgba(255,255,255,.14);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:16px;padding:10px 13px;
-  backdrop-filter:blur(8px);
-}
-.kpi small{
-  display:block;font-size:10px;
-  text-transform:uppercase;letter-spacing:.07em;
-  color:rgba(255,255,255,.65);font-weight:800;
-  margin-bottom:2px;
-}
-.kpi b{font-size:20px;letter-spacing:-.04em;font-weight:900}
+.page-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:100px; display:flex; flex-direction:column;}
 
 /* =============================================
-   FILTER CARD
+   PROGRESS DASHBOARD (The New Banner)
    ============================================= */
-.filters{
-  position:sticky;
-  top:var(--navH);
-  z-index:100;
-  padding:12px 20px 14px;
-  background:rgba(248,250,252,.94);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--br);
+.dashboard-wrapper { padding: 20px 20px 0; }
+.dashboard-panel {
+  background: var(--grad); border-radius: 24px; padding: 24px;
+  box-shadow: 0 15px 35px rgba(37,99,235,0.25); color: #fff; position: relative; overflow: hidden;
 }
-.filter-card{
-  background:#fff;
-  border:1px solid var(--br);
-  border-radius:22px;
-  box-shadow:var(--shadow2);
-  padding:13px;
-  display:grid;gap:10px;
-}
+.dashboard-panel::before { content:"";position:absolute;right:-50px;top:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.07); pointer-events:none;}
+.dash-title h1 { font-size: clamp(1.4rem, 5vw, 2.2rem); letter-spacing: -0.04em; font-weight: 900; margin-bottom: 6px; position: relative; z-index: 2;}
+.dash-title p { font-size: 13px; color: rgba(255,255,255,.8); font-weight: 600; line-height: 1.4; margin-bottom: 20px; position: relative; z-index: 2;}
+
+.trackers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative; z-index: 2;}
+@media (min-width: 600px) { .trackers { grid-template-columns: repeat(4, 1fr); } }
+
+.track-box { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 12px; backdrop-filter: blur(8px); }
+.t-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+.t-head span { opacity: 0.9; }
+.t-head b { font-size: 14px; }
+.t-bar { height: 6px; background: rgba(0,0,0,0.2); border-radius: 99px; overflow: hidden; }
+.t-fill { height: 100%; width: 0%; border-radius: 99px; transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+.track-blue .t-head span { color: #93c5fd; } .track-blue .t-fill { background: #60a5fa; box-shadow: 0 0 10px #60a5fa;}
+.track-green .t-head span { color: #6ee7b7; } .track-green .t-fill { background: #34d399; box-shadow: 0 0 10px #34d399;}
+.track-yellow .t-head span { color: #fcd34d; } .track-yellow .t-fill { background: #fbbf24; box-shadow: 0 0 10px #fbbf24;}
+.track-red .t-head span { color: #fca5a5; } .track-red .t-fill { background: #f87171; box-shadow: 0 0 10px #f87171;}
+
+/* =============================================
+   FILTERS
+   ============================================= */
+.filters{ position:sticky; top:0; z-index:100; padding:16px 20px; background:rgba(248,250,252,.96); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid var(--br); margin-top: 10px;}
+.filter-card{ background:#fff; border:1px solid var(--br); border-radius:20px; box-shadow:var(--shadow2); padding:14px; display:flex; flex-direction: column; gap:12px; }
 .search-row{display:flex;align-items:center;gap:8px}
-.search{position:relative;flex:1;min-width:180px;max-width:420px}
-.search i{
-  position:absolute;left:13px;top:50%;
-  transform:translateY(-50%);
-  color:var(--mut);font-size:13px;pointer-events:none;
-}
-.search input{
-  height:42px;width:100%;
-  border:1.5px solid var(--br);outline:none;
-  border-radius:14px;
-  padding:0 13px 0 38px;
-  font-size:13px;font-weight:700;
-  background:#f8fafc;color:var(--txt);
-  transition:.2s var(--ease);
-}
-.search input:focus{
-  border-color:var(--p);background:#fff;
-  box-shadow:0 0 0 3px rgba(37,99,235,.1);
-}
-.clear{
-  display:none;border:none;border-radius:12px;
-  background:#eff6ff;color:var(--p);
-  padding:10px 13px;font-size:12px;font-weight:900;
-  transition:.2s var(--ease);
-}
-.clear:hover{background:var(--p);color:#fff}
-.count{
-  margin-left:auto;
-  font-size:12px;color:var(--mut);font-weight:900;white-space:nowrap;
-}
+.search{position:relative;flex:1;}
+.search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:13px;pointer-events:none;}
+.search input{height:44px;width:100%;border:1.5px solid var(--br);border-radius:14px;padding:0 14px 0 40px;font-size:13px;font-weight:700;background:var(--bg);color:var(--txt);transition:.2s;}
+.search input:focus{border-color:var(--p);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
 
-.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.fl-label{
-  font-size:10px;letter-spacing:.07em;
-  text-transform:uppercase;font-weight:800;
-  color:var(--mut);margin-right:2px;flex-shrink:0;
-}
-.tab{
-  border:1.5px solid var(--br);background:#fff;
-  border-radius:999px;padding:7px 11px;
-  font-size:11px;color:var(--mut);font-weight:800;
-  transition:.18s var(--ease);
-  line-height:1;
-}
+.filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.fl-label{font-size:10px;letter-spacing:.05em;text-transform:uppercase;font-weight:900;color:var(--mut);margin-right:4px;flex-shrink:0;}
+.tab{border:1.5px solid var(--br);background:#fff;border-radius:999px;padding:8px 12px;font-size:11px;color:var(--mut);font-weight:800;transition:.2s var(--ease); cursor:pointer;}
 .tab:hover{border-color:rgba(37,99,235,.25);color:var(--p)}
-.tab.active{
-  border-color:transparent;color:#fff;
-  background:var(--grad);
-  box-shadow:0 6px 18px rgba(37,99,235,.25);
-  transform:translateY(-1px);
-}
-/* Ampel tabs */
-.ampel-tabs .tab.easy.active{
-  background:var(--s);
-  box-shadow:0 6px 16px rgba(16,185,129,.3);
-}
-.ampel-tabs .tab.mid.active{
-  background:var(--w);color:#451a03;
-  box-shadow:0 6px 16px rgba(245,158,11,.3);
-}
-.ampel-tabs .tab.hard.active{
-  background:var(--d);
-  box-shadow:0 6px 16px rgba(239,68,68,.3);
-}
-
-/* Sort toggle */
-.toggle{
-  margin-left:auto;display:flex;align-items:center;
-  gap:7px;font-size:11px;color:var(--mut);font-weight:800;
-  cursor:pointer;padding:5px 8px;border-radius:10px;
-  transition:.15s;user-select:none;
-}
-.toggle:hover{background:#f1f5f9}
-.switch{
-  width:36px;height:20px;background:#cbd5e1;
-  border-radius:999px;position:relative;
-  transition:.2s var(--ease);flex-shrink:0;
-}
-.switch::after{
-  content:"";width:14px;height:14px;
-  position:absolute;top:3px;left:3px;
-  background:#fff;border-radius:50%;
-  box-shadow:0 1px 4px rgba(0,0,0,.15);
-  transition:.2s var(--ease);
-}
-.switch.on{background:var(--grad)}
-.switch.on::after{transform:translateX(16px)}
+.tab.active{border-color:transparent;color:#fff;background:var(--grad);box-shadow:0 4px 12px rgba(37,99,235,.25);}
 
 /* =============================================
-   TOPIC LIST
+   TOPIC LIST & CARDS
    ============================================= */
-.list{display:grid;gap:10px;padding:16px 20px 20px}
+.list{display:grid;gap:12px;padding:20px; flex:1; align-content: flex-start;}
+@media (min-width: 768px) { .list { grid-template-columns: repeat(2, 1fr); align-items: start; } }
 
-.topic{
-  background:#fff;
-  border:1.5px solid var(--br);
-  box-shadow:var(--shadow2);
-  border-radius:24px;
-  overflow:hidden;
-  transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .2s;
-  position:relative;
-}
-.topic:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 28px rgba(37,99,235,.12);
-}
-.topic.open{
-  border-color:rgba(37,99,235,.22);
-  box-shadow:0 14px 36px rgba(37,99,235,.14);
-}
-/* Left accent strip */
-.topic::before{
-  content:"";position:absolute;
-  left:0;top:0;bottom:0;width:4px;
-  background:var(--grad);
-  border-radius:4px 0 0 4px;
-}
-.topic.easy::before{background:var(--s)}
-.topic.mid::before{background:var(--w)}
-.topic.hard::before{background:var(--d)}
+.topic{background:#fff;border:1.5px solid var(--br);box-shadow:var(--shadow2);border-radius:20px;overflow:hidden;transition:.2s;position:relative;}
+.topic::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--grad);border-radius:4px 0 0 4px;}
+.topic.easy::before{background:var(--s)} .topic.mid::before{background:var(--w)} .topic.hard::before{background:var(--d)}
+.topic.open{border-color:rgba(37,99,235,.3);box-shadow:0 12px 30px rgba(37,99,235,.12);}
 
-/* Topic head */
-.topic-head{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  gap:12px;align-items:center;
-  padding:14px 14px 14px 18px;
-  cursor:pointer;user-select:none;
-}
-.disease-icon{
-  width:48px;height:48px;border-radius:16px;
-  display:grid;place-items:center;font-size:25px;
-  background:#f1f5f9;flex-shrink:0;
-}
-.topic-title{
-  font-size:15px;font-weight:900;
-  letter-spacing:-.025em;margin-bottom:6px;
-}
-.meta{display:flex;gap:5px;flex-wrap:wrap}
-.chip{
-  display:inline-flex;align-items:center;gap:4px;
-  border-radius:99px;padding:4px 9px;
-  font-size:10px;font-weight:800;
-}
+.topic-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:16px 16px 16px 20px;cursor:pointer;user-select:none;}
+.disease-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:#f1f5f9;flex-shrink:0;}
+.topic-title{font-size:15px;font-weight:900;letter-spacing:-.02em;margin-bottom:6px; line-height:1.2;}
+.meta{display:flex;gap:4px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:800;}
 .cat{background:var(--catbg);color:var(--catcolor)}
-.day{background:#eff6ff;color:#1d4ed8}
-.prio{background:#fef2f2;color:#dc2626}
 .status-chip{background:#f1f5f9;color:var(--mut)}
 .status-chip.easy{background:rgba(16,185,129,.1);color:var(--s)}
 .status-chip.mid{background:rgba(245,158,11,.13);color:#92400e}
 .status-chip.hard{background:rgba(239,68,68,.1);color:var(--d)}
 
-/* Right side actions */
-.actions{display:flex;align-items:center;gap:7px}
-.ampel{
-  display:flex;gap:4px;
-  background:#f1f5f9;padding:4px;border-radius:14px;
-}
-.ampel button{
-  width:32px;height:32px;border:none;border-radius:10px;
-  color:#fff;display:grid;place-items:center;
-  transition:.18s var(--ease);opacity:.38;font-size:13px;
-}
-.ampel button:hover,.ampel button.active{
-  opacity:1;transform:scale(1.1);
-}
-.ampel .easy{background:var(--s)}
-.ampel .mid{background:var(--w);color:#451a03}
-.ampel .hard{background:var(--d)}
+.actions{display:flex;align-items:center;gap:8px; position:relative;}
+.ampel{display:flex;gap:4px;background:#f1f5f9;padding:4px;border-radius:12px;}
+.ampel button{width:32px;height:32px;border-radius:8px;color:#fff;display:grid;place-items:center;transition:.2s var(--ease);opacity:.35;font-size:13px;}
+.ampel button:hover,.ampel button.active{opacity:1;transform:scale(1.1);}
+.ampel .easy{background:var(--s)} .ampel .mid{background:var(--w);color:#451a03} .ampel .hard{background:var(--d)}
 
-.arrow{
-  width:36px;height:36px;border-radius:12px;
-  background:#eff6ff;color:var(--p);
-  display:grid;place-items:center;
-  transition:.28s var(--ease);border:none;
-  flex-shrink:0;
+.arrow{width:36px;height:36px;border-radius:12px;background:var(--p-light);color:var(--p);display:grid;place-items:center;transition:.3s var(--ease);flex-shrink:0;}
+.topic.open .arrow{transform:rotate(180deg);background:var(--grad);color:#fff;box-shadow:0 4px 10px rgba(37,99,235,.25);}
+
+/* The Hint Tooltip */
+.ampel-hint {
+    position: absolute; bottom: 100%; right: 50%; transform: translateX(30%) translateY(-10px);
+    background: var(--txt); color: white; padding: 8px 12px; border-radius: 10px;
+    font-size: 11px; font-weight: 800; white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: floatHint 2s infinite; z-index: 10;
+    display: none;
 }
-.topic.open .arrow{
-  transform:rotate(180deg);
-  background:var(--grad);color:#fff;
-  box-shadow:0 4px 12px rgba(37,99,235,.3);
+.ampel-hint::after {
+    content: ''; position: absolute; top: 100%; right: 20px;
+    border-width: 6px; border-style: solid; border-color: var(--txt) transparent transparent transparent;
 }
+.show-hint .ampel-hint { display: block; }
+@keyframes floatHint { 0%, 100% { transform: translateX(30%) translateY(-10px); } 50% { transform: translateX(30%) translateY(-15px); } }
 
 /* Expand body */
-.body{
-  display:grid;
-  grid-template-rows:0fr;
-  transition:grid-template-rows .38s var(--ease);
-}
+.body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease);}
 .topic.open .body{grid-template-rows:1fr}
 .body-inner{overflow:hidden}
-.content{padding:0 14px 16px 18px}
-
-/* Content sections grid */
-.section-grid{
-  border-top:1px solid var(--br);
-  padding-top:13px;
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-}
-.section{
-  background:#f8fafc;border:1.5px solid var(--br);
-  border-radius:18px;padding:13px;
-  transition:.2s var(--ease);
-}
-.section:hover{background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.06)}
-.section.full{grid-column:1/-1}
-.section h4{
-  display:flex;align-items:center;gap:7px;
-  font-size:11px;text-transform:uppercase;
-  letter-spacing:.06em;color:var(--mut);
-  margin-bottom:8px;font-weight:800;
-}
-.section p{font-size:13px;font-weight:700;line-height:1.6}
-.section ul{display:grid;gap:6px}
-.section li{
-  list-style:none;font-size:13px;
-  line-height:1.45;font-weight:700;
-  display:flex;gap:8px;
-}
-.section li::before{
-  content:"";width:6px;height:6px;border-radius:50%;
-  background:var(--grad);flex:none;margin-top:6px;
-}
-.stage-list{display:grid;gap:7px}
-.stage{
-  background:#fff;border:1.5px solid var(--br);
-  border-radius:13px;padding:10px;
-}
-.stage b{display:block;margin-bottom:3px;font-size:13px;font-weight:800}
-.stage span{font-size:12px;color:var(--mut);font-weight:700}
-
-/* Keyword pills */
-.keys{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
-.key{
-  background:#f1f5f9;border:1.5px solid var(--br);
-  border-radius:99px;padding:4px 9px;
-  font-size:11px;font-weight:800;color:var(--mut);
-}
+.content{padding:0 16px 20px 20px}
+.section-grid{border-top:1px solid var(--br);padding-top:16px;display:grid;gap:10px;}
+.section{background:#f8fafc;border:1px solid var(--br);border-radius:16px;padding:14px;}
+.section h4{display:flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;color:var(--mut);margin-bottom:8px;font-weight:900;}
+.section p{font-size:13px;font-weight:600;line-height:1.5;}
+.section ul{display:grid;gap:8px;}
+.section li{list-style:none;font-size:13px;line-height:1.4;font-weight:600;display:flex;gap:8px;align-items:flex-start;}
+.section li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--grad);flex:none;margin-top:6px;}
+mark{background:#fef9c3;border-radius:4px;padding:0 2px;color:var(--txt)}
 
 /* =============================================
-   EMPTY STATE
-   ============================================= */
-.empty{
-  display:none;text-align:center;
-  padding:60px 20px;
-  color:var(--mut);font-weight:800;font-size:14px;
-}
-
-/* =============================================
-   APP-LIKE BOTTOM NAVIGATION
-   Clean aligned PflegefachProfi app navbar
+   BOTTOM NAVIGATION
    ============================================= */
 .nav-bottom{
-  position:fixed;
-  left:50%;
-  right:auto;
-  bottom:0;
-  width:min(100%,900px);
-  height:84px;
-  transform:translateX(-50%);
-  background:rgba(255,255,255,.98);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border-top:1px solid var(--br);
-  display:flex;
-  justify-content:space-evenly;
-  align-items:center;
-  padding:8px 8px calc(10px + env(safe-area-inset-bottom));
-  z-index:300;
-  box-shadow:0 -12px 34px rgba(15,23,42,.08);
+  position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,1024px);height:84px;
+  background:rgba(255,255,255,.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--br);display:flex;justify-content:space-evenly;align-items:center;
+  padding:8px 8px calc(10px + env(safe-area-inset-bottom));z-index:1000;
+  border-bottom-left-radius: inherit; border-bottom-right-radius: inherit; /* Für Desktop Ecken */
 }
-.nav-item{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  width:20%;
-  height:62px;
-  border:0;
-  border-radius:22px;
-  background:transparent;
-  color:var(--mut);
-  text-decoration:none;
-  font-family:inherit;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-  transition:color .24s var(--ease), transform .24s var(--ease);
-}
-.nav-item .icon-wrapper{
-  position:relative;
-  width:44px;
-  height:34px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:999px;
-  z-index:1;
-  transition:transform .24s var(--ease);
-}
-.nav-item .icon-wrapper::before{
-  content:'';
-  position:absolute;
-  inset:-5px 0;
-  border-radius:999px;
-  background:#eff6ff;
-  opacity:0;
-  transform:scale(.74);
-  z-index:-1;
-  transition:opacity .24s var(--ease), transform .24s var(--ease);
-}
-.nav-item i{
-  font-size:21px;
-  color:inherit;
-  transition:transform .24s var(--ease);
-}
-.nav-item span{
-  font-size:10px;
-  font-weight:900;
-  line-height:1;
-  opacity:.82;
-  color:inherit;
-  white-space:nowrap;
-  transition:opacity .24s var(--ease), color .24s var(--ease);
-}
+.nav-item{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--mut);width:20%;height:62px;cursor:pointer;transition:.2s;}
+.icon-wrapper{position:relative;width:44px;height:34px;display:flex;justify-content:center;align-items:center;transition:.3s;z-index:2;border-radius:999px;}
+.icon-wrapper::before{content:'';position:absolute;inset:-5px 0;background:#eff6ff;border-radius:999px;opacity:0;transform:scale(.7);transition:.3s;z-index:-1;}
+.nav-item i{font-size:21px;transition:.3s;color:inherit}
+.nav-item span{font-size:10px;font-weight:900;opacity:.8;transition:.3s;}
 .nav-item.active{color:var(--p)}
 .nav-item.active .icon-wrapper{transform:translateY(-2px)}
 .nav-item.active .icon-wrapper::before{opacity:1;transform:scale(1)}
-.nav-item.active i{transform:scale(1.08)}
+.nav-item.active i{transform:scale(1.1)}
 .nav-item.active span{opacity:1;color:var(--p)}
 .nav-item:active .icon-wrapper{transform:scale(.94)}
-.nav-item.locked{opacity:.48;cursor:not-allowed}
-.nav-item.locked:active .icon-wrapper{transform:none}
 
-/* =============================================
-   TOAST
-   ============================================= */
-.toast{
-  position:fixed;right:18px;
-  bottom:calc(96px + env(safe-area-inset-bottom));
-  z-index:400;
-  background:var(--txt);color:#fff;
-  border-radius:99px;
-  padding:11px 17px;font-size:13px;font-weight:800;
-  box-shadow:0 8px 24px rgba(15,23,42,.22);
-  animation:toastIn .25s var(--ease);
-  pointer-events:none;
-}
-@keyframes toastIn{
-  from{opacity:0;transform:translateY(6px)}
-  to{opacity:1;transform:none}
-}
-
-/* Highlight marks */
-mark{background:#fef9c3;border-radius:4px;padding:0 2px;color:var(--txt)}
-
-/* Footer */
-footer{
-  padding:16px 20px 20px;text-align:center;
-  color:var(--mut);font-size:11px;font-weight:700;
-}
-
-/* =============================================
-   RESPONSIVE
-   ============================================= */
-@media(max-width:680px){
-  .desk-nav{display:none}
-  .app{max-width:100%}
-
-  .compact-head{padding:14px 14px 0}
-  .compact-panel{border-radius:22px;padding:16px}
-  .topline{flex-direction:column;align-items:flex-start}
-  .kpi-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
-  .kpi{min-width:0}
-  .kpi b{font-size:18px}
-
-  .filters{padding:10px 14px 12px}
-  .filter-card{padding:11px}
-  .search-row{flex-wrap:wrap}
-  .search{width:100%;max-width:none;min-width:0}
-  .count{margin-left:0}
-  .toggle{margin-left:0}
-
-  .list{padding:12px 14px 16px}
-  .topic-head{
-    grid-template-columns:auto 1fr;
-    align-items:flex-start;
-    padding:13px 13px 13px 17px;
-  }
-  .actions{
-    grid-column:1/-1;
-    justify-content:space-between;margin-top:5px;
-  }
-  .ampel{flex:1;justify-content:space-around}
-  .ampel button{width:38px;height:38px;border-radius:12px}
-  .arrow{width:38px;height:38px}
-  .topic-title{font-size:14px}
-  .section-grid{grid-template-columns:1fr}
-}
-
-@media(min-width:681px){
-  .top{padding:0 24px}
-  .compact-head{padding:20px 24px 0}
-  .filters{padding:12px 24px 15px}
-  .list{padding:16px 24px 20px}
-  footer{padding:16px 24px 24px}
-}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--txt);color:#fff;border-radius:99px;padding:12px 20px;font-size:13px;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:2000;opacity:0;transition:.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(10px);}
+.empty{display:none;text-align:center;padding:40px 20px;color:var(--mut);font-weight:800;font-size:14px;}
 </style>
 </head>
 <body>
 
 <div class="app">
 
-  <!-- ==========================================
-       TOP BAR  (lernen.html .top exact style)
-       ========================================== -->
   <header class="top">
-
-    <a class="brand" href="pflegefachprofi.html">
-      <div class="logo"><i class="fa-solid fa-stethoscope"></i></div>
-      <b>PflegefachProfi</b>
+    <a class="brand" href="index.html">
+      <div class="logo"><i class="fa-solid fa-book-open"></i></div>
+      <b>Bibliothek</b>
     </a>
-
-    <!-- Desktop nav links -->
-    <nav class="desk-nav">
-      <a href="pflegefachprofi.html">
-        <i class="fa-solid fa-house"></i> Home
-      </a>
-      <a href="#" class="active">
-        <i class="fa-solid fa-layer-group"></i> Themen
-      </a>
-      <a href="lernen.html">
-        <i class="fa-solid fa-gamepad"></i> Lernspiele
-      </a>
-       <a href="pflegeplanung.html">
-        <i class="fa-solid fa-gamepad"></i> Pflegeplanung 
-       </a>
-       <a href="/kontakt">
-        <i class="fa-solid fa-solid fa-envelope"></i> Kontakt
-       </a>
-    <!--  <button class="locked" onclick="showToast('🔒 Dieser Bereich kommt später.')">
-        <i class="fa-solid fa-lock"></i> Üben
-      </button>
-      <button class="locked" onclick="showToast('🔒 Dieser Bereich kommt später.')">
-        <i class="fa-solid fa-lock"></i> Fortschritt
-      </button>-->
-    </nav>
-
-    <!-- Stats pills (lernen style) -->
     <div class="stats">
-      <div class="pill pill-progress" id="progressPill" title="Bewertete Themen">
-        <div class="pfill" id="topFill"></div>
-        <span class="plabel">⭐ <span id="topText">0/20</span></span>
-      </div>
-      <div class="pill" id="streakPill" title="Schwer-markierte Themen">
-        🔥 <span id="streakCount">0</span>
-      </div>
+      <div class="pill">🔥 <span id="streakCount">0</span></div>
     </div>
-
   </header>
 
-  <!-- ==========================================
-       PAGE SCROLL AREA
-       ========================================== -->
   <div class="page-scroll">
 
-    <!-- Compact hero panel -->
-    <div class="compact-head">
-      <div class="compact-panel">
-        <div class="topline">
-          <div class="title-block">
-            <h1>Erkrankungen lernen</h1>
-            <p>Sortieren, markieren, öffnen, wiederholen. Deine Schwierigkeit bleibt gespeichert.</p>
+    <div class="dashboard-wrapper">
+      <div class="dashboard-panel">
+        <div class="dash-title">
+          <h1>Dein Wissen</h1>
+          <p>Verfolge deinen Lernfortschritt über alle Prüfungsbereiche.</p>
+        </div>
+        <div class="trackers">
+          <div class="track-box track-blue">
+            <div class="t-head"><span>👀 Angeschaut</span><b id="kViewed">0/0</b></div>
+            <div class="t-bar"><div class="t-fill" id="fViewed"></div></div>
           </div>
-          <div class="kpi-row">
-            <div class="kpi"><small>Themen</small><b id="kTotal">20</b></div>
-            <div class="kpi"><small>Bewertet</small><b id="kRated">0</b></div>
-            <div class="kpi"><small>Auswahl</small><b id="kShown">20</b></div>
+          <div class="track-box track-green">
+            <div class="t-head"><span>🟢 Gelernt</span><b id="kEasy">0/0</b></div>
+            <div class="t-bar"><div class="t-fill" id="fEasy"></div></div>
+          </div>
+          <div class="track-box track-yellow">
+            <div class="t-head"><span>🟡 Lernen</span><b id="kMid">0/0</b></div>
+            <div class="t-bar"><div class="t-fill" id="fMid"></div></div>
+          </div>
+          <div class="track-box track-red">
+            <div class="t-head"><span>🔴 Schwierig</span><b id="kHard">0/0</b></div>
+            <div class="t-bar"><div class="t-fill" id="fHard"></div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ==========================================
-         FILTERS
-         ========================================== -->
     <div class="filters">
       <div class="filter-card">
-
-        <!-- Search row -->
         <div class="search-row">
           <div class="search">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input id="searchInput" placeholder="Suche: COPD, Dyspnoe, Pflege, qSOFA, NYHA …">
+            <input id="searchInput" placeholder="Suche: COPD, Haftung, Krohwinkel...">
           </div>
-          <button class="clear" id="clearBtn">
-            <i class="fa-solid fa-xmark"></i> Zurücksetzen
-          </button>
-          <div class="count" id="countText">20 Themen</div>
         </div>
-
-        <!-- Category filter -->
-        <div class="filter-row">
-          <span class="fl-label">Fachbereich</span>
+        <div class="filter-row" id="catFilters">
+          <span class="fl-label">Bereich</span>
           <button class="tab active" data-cat="all">Alle</button>
-          <button class="tab" data-cat="endokrinologie">⚗️ Endo</button>
-          <button class="tab" data-cat="neurologie">🧠 Neuro</button>
-          <button class="tab" data-cat="pneumologie">🫁 Lunge</button>
-          <button class="tab" data-cat="kardiologie">❤️ Herz</button>
-          <button class="tab" data-cat="psychiatrie">🧬 Psyche</button>
-          <button class="tab" data-cat="wundversorgung">🩹 Wunde</button>
-          <button class="tab" data-cat="notfall">🚨 Notfall</button>
+          <button class="tab" data-cat="medizin">🩺 Medizin & Pflege</button>
+          <button class="tab" data-cat="recht">⚖️ Recht</button>
+          <button class="tab" data-cat="ethik">🕊️ Ethik</button>
+          <button class="tab" data-cat="modelle">📐 Modelle</button>
+          <button class="tab" data-cat="kommunikation">🗣️ Kommunikation</button>
         </div>
-
-        <!-- Day filter -->
-        <div class="filter-row">
-          <span class="fl-label">Prüfungstag</span>
-          <button class="tab active" data-day="all">Alle</button>
-          <button class="tab" data-day="1">Tag 1</button>
-          <button class="tab" data-day="2">Tag 2</button>
-          <button class="tab" data-day="3">Tag 3</button>
-        </div>
-
-        <!-- Difficulty filter + sort toggle -->
-        <div class="filter-row ampel-tabs">
-          <span class="fl-label">Schwierigkeit</span>
-          <button class="tab active" data-diff="all">Alle</button>
-          <button class="tab easy" data-diff="easy">🟢 Easy</button>
-          <button class="tab mid" data-diff="mid">🟡 Mittel</button>
-          <button class="tab hard" data-diff="hard">🔴 Schwer</button>
-          <button class="tab" data-diff="unrated">Unbewertet</button>
-          <div class="toggle" id="sortHardFirst">
-            <div class="switch" id="sortSwitch"></div>
-            Schwere zuerst
-          </div>
-        </div>
-
       </div>
     </div>
 
-    <!-- ==========================================
-         TOPIC LIST
-         ========================================== -->
     <div class="list" id="topicList"></div>
-    <div class="empty" id="empty">Keine Themen gefunden. Filter zurücksetzen oder Suchbegriff ändern.</div>
+    <div class="empty" id="empty">Keine Themen gefunden. Suchbegriff ändern.</div>
 
-    <footer>PflegefachProfi · Themenmodul · Markierungen werden lokal gespeichert.</footer>
+  </div><nav class="nav-bottom">
+    <a href="index.html" class="nav-item">
+      <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div><span>Home</span>
+    </a>
+    <a href="#" class="nav-item active">
+      <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div><span>Themen</span>
+    </a>
+    <a href="lernen.html" class="nav-item">
+      <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div><span>Üben</span>
+    </a>
+    <a href="pflegeplanung.html" class="nav-item">
+      <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div><span>Planung</span>
+    </a>
+    <a href="kontakt.html" class="nav-item">
+      <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i></div><span>Kontakt</span>
+    </a>
+  </nav>
 
-  </div><!-- /page-scroll -->
-
-</div><!-- /app -->
-
-<!-- App bottom navigation -->
-<nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation">
-  <a href="/" class="nav-item" aria-label="Home öffnen">
-    <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div>
-    <span>Home</span>
-  </a>
-  <a href="#" class="nav-item active" aria-label="Prüfungsthemen öffnen" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-    <div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div>
-    <span>Themen</span>
-  </a>
-  <a href="/lernen" class="nav-item" aria-label="Üben öffnen">
-    <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
-    <span>Üben</span>
-  </a>
-  <a href="/pflegeplanung" class="nav-item" aria-label="Pflegeplanung öffnen">
-    <div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div>
-    <span>Planung</span>
-  </a>
-  <a href="/kontakt" class="nav-item" aria-label="Kontaktiere uns">
-    <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i></div>
-    <span>Kontakt</span>
-  </a>
-</nav>
+</div>
+<div class="toast" id="toastMsg"></div>
 
 <script>
 /* ============================================================
    STORAGE
    ============================================================ */
-const STORAGE_KEY = 'pfp.topicDifficulty.v1';
-
-/* ============================================================
-   CATEGORIES
-   ============================================================ */
-const CATEGORIES = {
-  endokrinologie: { label:'Endokrinologie', icon:'⚗️', color:'#6a5cff', bg:'rgba(106,92,255,.12)' },
-  neurologie:     { label:'Neurologie',     icon:'🧠', color:'#2563eb', bg:'rgba(37,99,235,.12)' },
-  pneumologie:    { label:'Pneumologie',    icon:'🫁', color:'#0891b2', bg:'rgba(8,145,178,.13)'  },
-  kardiologie:    { label:'Kardiologie',    icon:'❤️', color:'#e11d48', bg:'rgba(225,29,72,.12)'  },
-  psychiatrie:    { label:'Psychiatrie',    icon:'🧬', color:'#7c3aed', bg:'rgba(124,58,237,.12)' },
-  wundversorgung: { label:'Wunde',          icon:'🩹', color:'#059669', bg:'rgba(5,150,105,.12)'  },
-  notfall:        { label:'Notfall',        icon:'🚨', color:'#ea580c', bg:'rgba(234,88,12,.13)'  }
+const STORAGE_KEY = 'pfp.library.v2';
+const state = {
+  openId: null,
+  search: '',
+  cat: 'all',
+  data: loadData(), // { viewed: [], difficulty: {} }
+  hintSeen: localStorage.getItem('pfp.hintSeen') === 'true'
 };
 
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  } catch(e){}
+  return { viewed: [], difficulty: {} };
+}
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+}
+
 /* ============================================================
-   TOPICS  (all 20 — identical content, zero cuts)
+   CONTENT DATA (Expanded with new Categories)
    ============================================================ */
+const CATEGORIES = {
+  medizin:       { label:'Krankheitslehre', icon:'🩺', color:'#e11d48', bg:'rgba(225,29,72,.12)' },
+  recht:         { label:'Recht',           icon:'⚖️', color:'#2563eb', bg:'rgba(37,99,235,.12)' },
+  ethik:         { label:'Ethik',           icon:'🕊️', color:'#059669', bg:'rgba(5,150,105,.12)' },
+  modelle:       { label:'Pflegemodelle',   icon:'📐', color:'#7c3aed', bg:'rgba(124,58,237,.12)' },
+  kommunikation: { label:'Kommunikation',   icon:'🗣️', color:'#d97706', bg:'rgba(217,119,6,.12)' }
+};
+
 const TOPICS = [
-  { id:1, title:'Diabetes mellitus', cat:'endokrinologie', days:[2,3], priority:'high', icon:'🩸',
-    definition:'Chronische Stoffwechselerkrankung mit Hyperglykämie durch absoluten oder relativen Insulinmangel.',
-    risk:['Adipositas','Bewegungsmangel','Alter','Genetische Faktoren','ungesunde Ernährung'],
-    causes:['Typ 1: Autoimmunzerstörung der Betazellen.','Typ 2: Insulinresistenz mit relativer Insulinsekretionsstörung.'],
-    symptoms:['Hypoglykämiezeichen: Schwitzen, Zittern, Unruhe, Verwirrtheit.','Hyperglykämiezeichen: Durst, Polyurie, Müdigkeit, Azetongeruch.'],
-    assessment:['BZ-Kontrolle','HbA1c','Urinstatus auf Glukose/Ketone','Fußinspektion','Wundassessment bei Läsionen'],
-    stages:[['Typ 1','Autoimmunzerstörung der Betazellen mit absolutem Insulinmangel.'],['Typ 2','Insulinresistenz mit relativer Insulinsekretionsstörung.'],['Gestationsdiabetes','Diabetes während der Schwangerschaft.'],['Akute Entgleisung','Hypoglykämie, Hyperglykämie, Ketoazidose.']],
-    therapy:['Insulintherapie','orale Antidiabetika','Ernährungstherapie','Bewegung','Behandlung von Folgeerkrankungen'],
-    care:['BZ nach Schema messen und dokumentieren.','Hypoglykämiezeichen prüfen: Schwitzen, Zittern, Unruhe, Verwirrtheit.','Hyperglykämiezeichen prüfen: Durst, Polyurie, Müdigkeit, Azetongeruch.','Insulingabe nach 10-R-Regel vorbereiten/überwachen.','Füße täglich auf Druckstellen, Risse, Wunden kontrollieren.','Mahlzeiten, BE/KE und Insulinzeitpunkt abstimmen.'] },
+  // --- MEDIZIN (Beispiele) ---
+  { id:'m1', cat:'medizin', title:'Diabetes mellitus', icon:'🩸',
+    def:'Chronische Stoffwechselerkrankung mit Hyperglykämie.',
+    sec1:{t:'Risikofaktoren', i:'⚠️', c:['Adipositas','Bewegungsmangel','Alter']},
+    sec2:{t:'Symptome', i:'🔎', c:['Polyurie','Durst','Müdigkeit']},
+    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['BZ-Kontrolle','Fußinspektion','Hypoglykämiezeichen erkennen']}
+  },
+  { id:'m2', cat:'medizin', title:'Herzinsuffizienz', icon:'💙',
+    def:'Unfähigkeit des Herzens, den Körper ausreichend mit Blut/Sauerstoff zu versorgen.',
+    sec1:{t:'Ursachen', i:'🧩', c:['KHK','Hypertonie','Klappenerkrankungen']},
+    sec2:{t:'Symptome', i:'🔎', c:['Dyspnoe','Ödeme','Gewichtszunahme','Nykturie']},
+    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Tägliches Wiegen','Bilanzierung','Oberkörperhochlagerung']}
+  },
+  
+  // --- RECHT ---
+  { id:'r1', cat:'recht', title:'Haftungsrecht im Pflegealltag', icon:'⚖️',
+    def:'Rechtliche Verantwortung von Pflegekräften für Schäden, die Patienten durch pflegerisches Handeln oder Unterlassen entstehen.',
+    sec1:{t:'Kernbegriffe', i:'📌', c:['Zivilrechtliche Haftung (Schadensersatz/Schmerzensgeld)','Strafrechtliche Haftung (Körperverletzung/Fahrlässige Tötung)','Übernahmeverschulden (Tätigkeiten übernehmen, für die man nicht qualifiziert ist)']},
+    sec2:{t:'Häufige Risiken', i:'⚠️', c:['Stürze durch unzureichende Prophylaxe','Medikationsfehler','Dekubitus durch fehlende Lagerung']},
+    sec3:{t:'Schutz & Prävention', i:'🛡️', c:['Lückenlose, zeitnahe Dokumentation (Beweislast!)','Einhaltung von Expertenstandards','Remonstrationsrecht nutzen (Anordnungen hinterfragen)']}
+  },
+  { id:'r2', cat:'recht', title:'Schweigepflicht & Datenschutz', icon:'🔒',
+    def:'Gesetzliche und ethische Verpflichtung, Patientengeheimnisse zu wahren (§ 203 StGB).',
+    sec1:{t:'Was fällt darunter?', i:'🧩', c:['Diagnosen & Befunde','Persönliche Umstände','Die bloße Tatsache, dass jemand Patient ist']},
+    sec2:{t:'Ausnahmen (Offenbarung)', i:'🔓', c:['Ausdrückliche Einwilligung des Patienten','Gesetzliche Meldepflichten (z.B. Infektionsschutzgesetz)','Rechtfertigender Notstand (Abwehr von Gefahr für Leib/Leben)']},
+    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Übergaben nur in geschützten Räumen','Keine Auskünfte am Telefon ohne Identitätssicherung','Patientenakten vor Dritten schützen']}
+  },
 
-  { id:2, title:'Schlaganfall / Apoplex', cat:'neurologie', days:[1,3], priority:'high', icon:'🧠',
-    definition:'Akute neurologische Funktionsstörung durch zerebralen Gefäßverschluss oder Hirnblutung.',
-    risk:['Hypertonie','Vorhofflimmern','Diabetes','Rauchen','pAVK/KHK','Hyperlipidämie'],
-    causes:['Ischämischer Infarkt durch Thrombus/Embolus.','Hämorrhagischer Insult durch Gefäßruptur.'],
-    symptoms:['Facialisparese','Armparese','Sprachstörung','Dysphagie','Bewusstseinsveränderung','plötzliche neurologische Ausfälle'],
-    assessment:['FAST-Test','neurologischer Status','Pupillenkontrolle','GCS','CT/MRT','Schluckscreening'],
-    stages:[['TIA','Vorübergehende neurologische Ausfälle.'],['Ischämischer Schlaganfall','Zerebraler Gefäßverschluss.'],['Hämorrhagischer Schlaganfall','Hirnblutung.'],['Phasen','Akutphase und Reha-Phase.']],
-    therapy:['Lyse','Thrombektomie','Blutdruckmanagement','Antikoagulation/Thrombozytenhemmung','Frührehabilitation'],
-    care:['FAST-Zeichen beobachten: Face, Arms, Speech, Time.','Oberkörper ca. 30° lagern, außer ärztlich anders angeordnet.','Vor Essen/Trinken Schluckfähigkeit beachten.','Aspirationsprophylaxe: aufrechte Position, angepasste Kost, Mundkontrolle.','Mobilisation nach Bobath-Prinzip, betroffene Seite einbeziehen.','Kommunikation anpassen: kurze Sätze, Zeit lassen, Blickkontakt.'] },
+  // --- ETHIK ---
+  { id:'e1', cat:'ethik', title:'4 Prinzipien (Beauchamp & Childress)', icon:'🕊️',
+    def:'Das Standardmodell der Medizinethik zur Beurteilung moralischer Konflikte im Gesundheitswesen.',
+    sec1:{t:'Die 4 Prinzipien', i:'📌', c:['Respekt vor der Autonomie (Selbstbestimmung)','Schadensvermeidung (Non-Maleficence)','Fürsorge / Wohltun (Beneficence)','Gerechtigkeit (Justice)']},
+    sec2:{t:'Typische Konflikte', i:'⚠️', c:['Patient lehnt lebensrettende Maßnahme ab (Autonomie vs. Fürsorge)','Fixierung bei Sturzgefahr (Schadensvermeidung vs. Freiheitsentzug)']},
+    sec3:{t:'Anwendung', i:'🏥', c:['Informiertes Einverständnis einholen (Informed Consent)','Mutmaßlichen Willen (Patientenverfügung) prüfen','Ethische Fallbesprechungen im Team initiieren']}
+  },
 
-  { id:3, title:'COPD', cat:'pneumologie', days:[2,3], priority:'high', icon:'🫁',
-    definition:'Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion.',
-    risk:['Rauchen','Feinstaub','berufliche Schadstoffe','häufige Atemwegsinfekte'],
-    causes:['Chronische Bronchitis und/oder Lungenemphysem durch dauerhafte Entzündung.'],
-    symptoms:['Atemnot','Husten','Auswurf','verlängerte Exspiration','Belastungsintoleranz','Exazerbation'],
-    assessment:['Spirometrie','BGA','SpO₂','Auskultation','mMRC-Dyspnoe-Skala','CAT-Test'],
-    stages:[['GOLD-Stadien','Einteilung nach FEV1.'],['Stabile COPD','Chronischer Verlauf.'],['Exazerbation','Akute Verschlechterung der Symptome.']],
-    therapy:['Bronchodilatatoren','inhalative Kortikosteroide bei Indikation','Sauerstofflangzeittherapie','Atemphysiotherapie'],
-    care:['Atemfrequenz, SpO₂ und Atemmuster kontrollieren.','Kutschersitz oder Torwartstellung anleiten.','Lippenbremse üben lassen.','Inhalationstechnik kontrollieren.','Sekretmenge, Farbe und Konsistenz beobachten.','Belastungen planen: Pflegehandlungen in Etappen mit Pausen.'] },
+  // --- MODELLE ---
+  { id:'p1', cat:'modelle', title:'ABEDL nach Monika Krohwinkel', icon:'📐',
+    def:'Bedürfnisorientiertes Pflegemodell, das den Menschen in 13 Aktivitäten, Beziehungen und existenziellen Erfahrungen des Lebens (ABEDL) erfasst.',
+    sec1:{t:'Zentrale Konzepte', i:'🧩', c:['Mensch als ganzheitliches Wesen','Fokus auf Ressourcen und Defizite','Primäres Ziel: Unabhängigkeit und Wohlbefinden fördern']},
+    sec2:{t:'Wichtige ABEDLs (Beispiele)', i:'📋', c:['Kommunizieren können','Sich pflegen können','Ruhen und schlafen können','Mit existenziellen Erfahrungen umgehen können (z.B. Angst, Schmerz)']},
+    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Grundlage für die Strukturierte Informationssammlung (SIS)','Hilft bei der ganzheitlichen Pflegeplanung','Fördert die ressourcenorientierte Pflege']}
+  },
 
-  { id:4, title:'Herzinsuffizienz', cat:'kardiologie', days:[2,3], priority:'high', icon:'💙',
-    definition:'Das Herz ist nicht fähig, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.',
-    risk:['KHK','Hypertonie','Herzinfarkt','Diabetes','Klappenerkrankungen'],
-    causes:['Myokardschädigung','Druckbelastung','Volumenbelastung','Rhythmusstörungen'],
-    symptoms:['Dyspnoe','Beinödeme','Gewichtszunahme','Leistungsminderung','Tachykardie','Belastungsintoleranz'],
-    assessment:['EKG','Echokardiografie','BNP/NT-proBNP','Ödemkontrolle','Bilanz','NYHA-Klassifikation'],
-    stages:[['NYHA I','Keine Beschwerden bei normaler Belastung.'],['NYHA II','Beschwerden bei stärkerer Belastung.'],['NYHA III','Beschwerden bei leichter Belastung.'],['NYHA IV','Beschwerden in Ruhe.']],
-    therapy:['Diuretika','ACE-Hemmer/ARB/ARNI','Betablocker','Aldosteronantagonisten','ggf. Schrittmacher/ICD'],
-    care:['Täglich zur gleichen Zeit wiegen.','Ein- und Ausfuhr bilanzieren.','Beinödeme und Gewichtszunahme kontrollieren.','Oberkörperhochlagerung bei Dyspnoe.','Belastung nach NYHA-Symptomatik dosieren.','Trinkmengenbegrenzung nach ärztlicher Anordnung überwachen.'] },
-
-  { id:5, title:'Demenz', cat:'neurologie', days:[1,3], priority:'high', icon:'🧩',
-    definition:'Chronisch fortschreitende Störung von Gedächtnis, Orientierung, Denken und Alltagskompetenz.',
-    risk:['Hohes Alter','genetische Faktoren','vaskuläre Risiken','soziale Isolation'],
-    causes:['Alzheimer-Demenz','vaskuläre Demenz','Lewy-Körperchen-Demenz','frontotemporale Demenz'],
-    symptoms:['Vergesslichkeit','Orientierungsstörung','Denkstörung','Alltagskompetenzverlust','Weglauftendenz','Kommunikationsprobleme'],
-    assessment:['MMST','DemTect','Uhrentest','Biografieanamnese','Fremdanamnese','Barthel-Index'],
-    stages:[['Leicht','Vergesslichkeit.'],['Mittel','Hilfebedarf im Alltag.'],['Schwer','Vollständige Pflegeabhängigkeit.']],
-    therapy:['Antidementiva','Behandlung von Begleitsymptomen','Ergotherapie','Aktivierung'],
-    care:['Feste Tagesstruktur mit wiederkehrenden Abläufen geben.','Orientierungshilfen nutzen: Uhr, Kalender, Fotos, Beschilderung.','Biografiearbeit in Pflegehandlungen einbauen.','Kurze, einfache Sätze verwenden.','Essen und Trinken aktiv anbieten und begleiten.','Weglauf- und Sturzrisiko einschätzen und Umgebung sichern.'] },
-
-  { id:6, title:'Dekubitus', cat:'wundversorgung', days:[1,3], priority:'high', icon:'🩹',
-    definition:'Lokale Schädigung von Haut und Gewebe durch Druck und/oder Scherkräfte.',
-    risk:['Immobilität','Mangelernährung','Inkontinenz','Sensibilitätsstörung','schlechter Allgemeinzustand'],
-    causes:['Längerer Druck auf Knochenvorsprünge','Reibung','Feuchtigkeit','reduzierte Durchblutung'],
-    symptoms:['nicht wegdrückbare Rötung','Hautdefekt','Schmerzen','Gewebeverlust','Wundsekret'],
-    assessment:['Hautinspektion','Braden-Skala/Norton-Skala','Wundassessment','Schmerzassessment'],
-    stages:[['Kategorie 1','Nicht wegdrückbare Rötung.'],['Kategorie 2','Teilverlust der Haut.'],['Kategorie 3','Vollständiger Hautverlust.'],['Kategorie 4','Gewebeverlust bis Muskel/Knochen.']],
-    therapy:['Wundtherapie','chirurgisches Débridement bei Bedarf','Ernährungstherapie','Schmerztherapie'],
-    care:['Haut täglich gezielt über Knochenvorsprüngen inspizieren.','Individuellen Bewegungs-/Lagerungsplan durchführen.','Druckentlastende Hilfsmittel korrekt einsetzen.','Fersen freilagern.','Haut bei Inkontinenz sofort reinigen und schützen.','Eiweiß- und Flüssigkeitszufuhr beobachten.'] },
-
-  { id:7, title:'Pneumonie', cat:'pneumologie', days:[1,3], priority:'high', icon:'🌬️',
-    definition:'Entzündung des Lungengewebes, meist durch Bakterien, Viren oder Aspiration.',
-    risk:['Immobilität','Alter','COPD','Dysphagie','Immunschwäche','Bettlägerigkeit'],
-    causes:['Infektion','Aspiration','Sekretstau','verminderte Belüftung'],
-    symptoms:['Fieber','Husten','Sputum','Dyspnoe','Tachypnoe','reduzierter Allgemeinzustand'],
-    assessment:['Auskultation','SpO₂','Atemfrequenz','Temperatur','CRP/Leukozyten','Röntgen-Thorax'],
-    stages:[['Ambulant erworben','Außerhalb des Krankenhauses erworben.'],['Nosokomial','Im Krankenhaus/Pflegekontext erworben.'],['Aspirationspneumonie','Durch Aspiration ausgelöst.']],
-    therapy:['Antibiotika bei bakterieller Ursache','Sauerstoff','Antipyretika','Atemtherapie'],
-    care:['Atemfrequenz und SpO₂ regelmäßig kontrollieren.','Oberkörperhochlagerung durchführen.','Frühmobilisation fördern.','Atemübungen anleiten, z. B. Kontaktatmung oder Atemtrainer.','Ausreichende Flüssigkeit anbieten, wenn erlaubt.','Sputum auf Menge, Farbe, Geruch beobachten.'] },
-
-  { id:8, title:'Sepsis', cat:'notfall', days:[3], priority:'high', icon:'🚨',
-    definition:'Lebensbedrohliche Organdysfunktion durch fehlregulierte Körperreaktion auf eine Infektion.',
-    risk:['Alter','Immunsuppression','Katheter','Wunden','Pneumonie','Harnwegsinfekt'],
-    causes:['Bakterielle Infektionen','Pneumonie','Urosepsis','Wundinfektion','intraabdominelle Infektion'],
-    symptoms:['Fieber/Hypothermie','Tachykardie','Tachypnoe','Hypotonie','Verwirrtheit','Oligurie'],
-    assessment:['qSOFA','NEWS/MEWS','Vitalzeichen','Laktat','Blutkulturen','CRP/PCT','Urinausscheidung'],
-    stages:[['Infektion','Lokale oder systemische Infektion.'],['Sepsis','Organdysfunktion.'],['Septischer Schock','Kreislaufversagen.']],
-    therapy:['Sofortige Antibiotikagabe','Volumentherapie','Sauerstoff','Katecholamine','Herdsanierung'],
-    care:['Vitalzeichen engmaschig kontrollieren.','Bewusstseinslage beobachten.','Urinausscheidung bilanzieren.','Temperaturverlauf dokumentieren.','Infektquelle kontrollieren: Wunde, Katheter, Atemwege, Urin.','Bei Verschlechterung sofort ärztlich eskalieren.'] },
-
-  { id:9, title:'Hypertonie', cat:'kardiologie', days:[2], priority:'medium', icon:'📈',
-    definition:'Dauerhaft erhöhter arterieller Blutdruck.',
-    risk:['Adipositas','Bewegungsmangel','Stress','Rauchen','salzreiche Ernährung','Alter'],
-    causes:['Primär meist multifaktoriell.','Sekundär durch Nieren-, Hormon- oder Gefäßerkrankungen.'],
-    symptoms:['oft asymptomatisch','Kopfschmerz','Schwindel','Sehstörungen','Nasenbluten möglich'],
-    assessment:['standardisierte RR-Messung','Langzeit-RR','EKG','Nierenwerte','kardiovaskuläres Risikoprofil'],
-    stages:[['Grad 1','leichte Blutdruckerhöhung.'],['Grad 2','moderate Blutdruckerhöhung.'],['Grad 3','schwere Blutdruckerhöhung.'],['Hypertensive Krise','Notfall.']],
-    therapy:['ACE-Hemmer/ARB','Betablocker','Calciumantagonisten','Diuretika','Lebensstiländerung'],
-    care:['RR korrekt und vergleichbar messen.','Werte mit Puls dokumentieren.','Kopfschmerz, Schwindel, Sehstörungen beobachten.','Orthostase nach Medikamentengabe beachten.','Salzreduktion und Bewegung im Alltag unterstützen.','Medikamenteneinnahme und Nebenwirkungen beobachten.'] },
-
-  { id:10, title:'KHK', cat:'kardiologie', days:[2,3], priority:'high', icon:'💓',
-    definition:'Verengung der Herzkranzgefäße mit Minderdurchblutung des Herzmuskels.',
-    risk:['Rauchen','Hypertonie','Diabetes','Hyperlipidämie','Adipositas'],
-    causes:['Arteriosklerose der Koronararterien'],
-    symptoms:['Brustschmerz','Angina pectoris','Belastungsdyspnoe','Ausstrahlung','Kaltschweißigkeit'],
-    assessment:['EKG','Belastungs-EKG','Troponin bei Akutverdacht','Koronarangiografie','Schmerzassessment'],
-    stages:[['Stabile Angina pectoris','Belastungsabhängig.'],['Instabile Angina pectoris','Auch in Ruhe/neu/stärker.'],['Akutes Koronarsyndrom','Notfall.']],
-    therapy:['ASS','Statine','Betablocker','Nitrate','PCI/Stent','Bypass-OP'],
-    care:['Brustschmerz nach Lokalisation, Dauer, Ausstrahlung erfassen.','Vitalzeichen bei Schmerzen sofort kontrollieren.','Körperliche Ruhe herstellen.','Oberkörper hochlagern.','Nitro-Gabe nach Anordnung vorbereiten.','Notfallzeichen erkennen: Kaltschweißigkeit, Dyspnoe, Todesangst.'] },
-
-  { id:11, title:'Myokardinfarkt', cat:'kardiologie', days:[3], priority:'high', icon:'⚡',
-    definition:'Absterben von Herzmuskelgewebe durch akuten Verschluss eines Koronargefäßes.',
-    risk:['KHK','Rauchen','Hypertonie','Diabetes','Fettstoffwechselstörung'],
-    causes:['Plaqueruptur mit Thrombusbildung'],
-    symptoms:['starker Thoraxschmerz','Ausstrahlung','Dyspnoe','Todesangst','Kaltschweißigkeit','Übelkeit'],
-    assessment:['12-Kanal-EKG','Troponin','Schmerzassessment','Vitalzeichen','Koronarangiografie'],
-    stages:[['STEMI','ST-Hebungsinfarkt.'],['NSTEMI','Nicht-ST-Hebungsinfarkt.'],['Instabile Angina','Vorstufe des akuten Koronarsyndroms.']],
-    therapy:['PCI/Stent','ASS','Heparin','P2Y12-Hemmer','Schmerztherapie','Sauerstoff bei Hypoxie'],
-    care:['Sofort Arzt/Notfallteam informieren.','Oberkörperhochlagerung durchführen.','Vitalzeichen engmaschig messen.','Schmerzintensität und Ausstrahlung dokumentieren.','EKG vorbereiten/Monitoring anschließen.','Patient nüchtern lassen wegen möglicher Intervention.'] },
-
-  { id:12, title:'pAVK', cat:'kardiologie', days:[2,3], priority:'high', icon:'🦶',
-    definition:'Arterielle Durchblutungsstörung der Extremitäten, meist Beine, durch Gefäßverengung.',
-    risk:['Rauchen','Diabetes','Hypertonie','Hyperlipidämie','Alter'],
-    causes:['Arteriosklerose'],
-    symptoms:['Claudicatio intermittens','Ruheschmerz','kalte Füße','Wunden','Nekrosen'],
-    assessment:['Fußpulse','Hauttemperatur','ABI','Doppler-Sonografie','schmerzfreie Gehstrecke'],
-    stages:[['Fontaine I','Beschwerdefrei.'],['Fontaine II','Claudicatio intermittens.'],['Fontaine III','Ruheschmerz.'],['Fontaine IV','Nekrose/Ulkus/Gangrän.']],
-    therapy:['Gehtraining','Thrombozytenaggregationshemmer','Statine','Angioplastie/Stent','Bypass'],
-    care:['Füße täglich auf Wunden und Druckstellen kontrollieren.','Keine Wärmflasche anwenden.','Enge Schuhe/Socken vermeiden.','Gehtraining nach Plan begleiten.','Beine bei starker arterieller Minderperfusion nicht hochlagern.','Schmerzen und Gehstrecke dokumentieren.'] },
-
-  { id:13, title:'TVT', cat:'kardiologie', days:[2,3], priority:'high', icon:'🧦',
-    definition:'Bildung eines Blutgerinnsels in einer tiefen Vene, meist Bein- oder Beckenvene.',
-    risk:['Immobilität','OP','Tumor','Schwangerschaft','Exsikkose','Thrombophilie'],
-    causes:['Virchow-Trias: verlangsamter Blutfluss, Gefäßwandschaden, erhöhte Gerinnbarkeit'],
-    symptoms:['Schwellung','Schmerz','Überwärmung','Spannungsgefühl','Umfangsdifferenz'],
-    assessment:['Beinumfang','Schmerz/Schwellung','Wells-Score','D-Dimere','Kompressionssonografie'],
-    stages:[['Distale TVT','Unterschenkelvenen.'],['Proximale TVT','Oberschenkel-/Beckenvenen.'],['Komplikation','Lungenembolie.']],
-    therapy:['Antikoagulation','Kompression','Mobilisation nach Freigabe','ggf. Lyse/Intervention'],
-    care:['Betroffenes Bein nicht massieren.','Beinumfang seitenvergleichend messen.','Schmerzen, Schwellung, Überwärmung beobachten.','Kompressionsstrümpfe korrekt anlegen.','Mobilisation nur nach ärztlicher Freigabe.','Atemnot/Thoraxschmerz als Emboliezeichen sofort melden.'] },
-
-  { id:14, title:'Asthma bronchiale', cat:'pneumologie', days:[2,3], priority:'medium', icon:'🌫️',
-    definition:'Chronisch entzündliche Atemwegserkrankung mit anfallsweiser, meist reversibler Bronchialobstruktion.',
-    risk:['Allergien','Infekte','Rauch','Kälte','Belastung','berufliche Reizstoffe'],
-    causes:['Bronchiale Hyperreagibilität mit Schleimhautschwellung, Bronchospasmus und Sekretbildung'],
-    symptoms:['Giemen','Sprechdyspnoe','Einziehungen','Husten','Atemnotattacke'],
-    assessment:['Peak-Flow','Spirometrie','SpO₂','Auskultation','Asthma-Kontrolltest'],
-    stages:[['Allergisches Asthma','Triggerabhängig.'],['Nicht-allergisches Asthma','Nicht allergisch.'],['Belastungsasthma','Unter Belastung.'],['Akuter Asthmaanfall','Notfallsituation.']],
-    therapy:['SABA als Bedarfsspray','inhalative Kortikosteroide','LABA','Notfallmedikamente','Allergenkarenz'],
-    care:['Atemnotzeichen beobachten: Giemen, Sprechdyspnoe, Einziehungen.','Peak-Flow-Werte dokumentieren.','Inhalationstechnik praktisch kontrollieren.','Atemerleichternde Position anbieten.','Notfallspray griffbereit halten.','Bekannte Trigger vermeiden helfen.'] },
-
-  { id:15, title:'Pneumothorax', cat:'pneumologie', days:[3], priority:'medium', icon:'🎈',
-    definition:'Luft im Pleuraspalt führt zum teilweisen oder vollständigen Kollaps der Lunge.',
-    risk:['Trauma','COPD','Beatmung','thorakale Eingriffe','Rauchen'],
-    causes:['Verletzung der Lunge/Thoraxwand','spontane Ruptur subpleuraler Bläschen'],
-    symptoms:['akute Atemnot','Thoraxschmerz','vermindertes Atemgeräusch','Tachypnoe','SpO₂-Abfall'],
-    assessment:['Auskultation','SpO₂','Atemfrequenz','Röntgen-Thorax','CT bei Bedarf'],
-    stages:[['Spontanpneumothorax','Spontan.'],['Traumatischer Pneumothorax','Nach Trauma.'],['Spannungspneumothorax','Notfall.']],
-    therapy:['Sauerstoff','Punktion','Thoraxdrainage','OP bei Rezidiv'],
-    care:['Akute Atemnot sofort melden.','SpO₂ und Atemfrequenz eng kontrollieren.','Thoraxdrainage unter Thoraxniveau halten.','Drainagesystem auf Sog, Pendeln, Sekret prüfen.','Einstichstelle auf Luftleckage/Entzündung kontrollieren.','Schmerzen beim Atmen erfassen.'] },
-
-  { id:16, title:'Schock', cat:'notfall', days:[3], priority:'high', icon:'🆘',
-    definition:'Akutes Kreislaufversagen mit unzureichender Gewebeperfusion und Sauerstoffversorgung.',
-    risk:['Blutverlust','Sepsis','Herzinfarkt','Anaphylaxie','Dehydratation'],
-    causes:['Hypovolämisch','kardiogen','septisch','anaphylaktisch','neurogen'],
-    symptoms:['Hypotonie','Tachykardie','kalte Haut','Bewusstseinsveränderung','Oligurie'],
-    assessment:['RR','Puls','Rekapillarisierungszeit','Haut','Bewusstsein','Schockindex','Laktat'],
-    stages:[['Kompensierter Schock','Kompensation möglich.'],['Dekompensierter Schock','Kreislaufversagen.'],['Irreversibler Schock','Organversagen.']],
-    therapy:['Volumengabe','Sauerstoff','Katecholamine','Blutstillung','Antibiotika oder Adrenalin je nach Ursache'],
-    care:['Notfallteam/Arzt sofort informieren.','Vitalzeichen engmaschig messen.','Bewusstsein und Hautfarbe kontrollieren.','Sauerstoffgabe vorbereiten.','Venösen Zugang/Infusion vorbereiten.','Schocklagerung nur passend zur Ursache durchführen.'] },
-
-  { id:17, title:'Delir', cat:'neurologie', days:[1,3], priority:'high', icon:'🌀',
-    definition:'Akute, meist wechselnde Störung von Aufmerksamkeit, Bewusstsein und Orientierung.',
-    risk:['Alter','Demenz','Infekt','OP','Dehydratation','Medikamente','Schmerz'],
-    causes:['Infektionen','Elektrolytstörungen','Medikamente','Entzug','Hypoxie','Schmerzen'],
-    symptoms:['Unruhe','Aufmerksamkeitsstörung','Orientierungsstörung','wechselnder Verlauf','hypoaktive Form möglich'],
-    assessment:['CAM','4AT','Delirium Observation Screening Scale','Vitalzeichen','Labor','Medikamentenanalyse'],
-    stages:[['Hyperaktives Delir','Unruhe, Agitation.'],['Hypoaktives Delir','Rückzug, Apathie.'],['Gemischtes Delir','Wechselnde Symptomatik.']],
-    therapy:['Ursache behandeln','Flüssigkeit/Elektrolyte ausgleichen','Schmerztherapie','ggf. Antipsychotika'],
-    care:['Brille und Hörgerät bereitstellen.','Tag-Nacht-Rhythmus sichern.','Reizüberflutung reduzieren.','Orientierungshilfen gut sichtbar platzieren.','Flüssigkeits- und Ausscheidungsbilanz führen.','Sturzprophylaxe engmaschig durchführen.'] },
-
-  { id:18, title:'Parkinson', cat:'neurologie', days:[2,3], priority:'high', icon:'🚶',
-    definition:'Neurodegenerative Erkrankung mit Dopaminmangel und typischen Bewegungsstörungen.',
-    risk:['Alter','genetische Faktoren','männliches Geschlecht'],
-    causes:['Untergang dopaminerger Nervenzellen in der Substantia nigra'],
-    symptoms:['Rigor','Tremor','Akinese','posturale Instabilität','Freezing','Dysphagie'],
-    assessment:['Neurologische Untersuchung','L-Dopa-Test','Gangbild','Schluckassessment','Sturzassessment'],
-    stages:[['Hoehn-und-Yahr-Stadien','Stadieneinteilung.'],['Leitsymptome','Rigor, Tremor, Akinese, posturale Instabilität.']],
-    therapy:['L-Dopa','Dopaminagonisten','MAO-B-Hemmer','Physiotherapie','tiefe Hirnstimulation'],
-    care:['Parkinson-Medikamente exakt pünktlich geben.','Freezing-Situationen mit Startsignalen unterstützen.','Kleine Schritte und sichere Mobilisation anleiten.','Schluckstörungen beobachten.','Obstipationsprophylaxe durchführen.','Sturzrisiko durch Hilfsmittel und Umgebungssicherung reduzieren.'] },
-
-  { id:19, title:'Epilepsie', cat:'neurologie', days:[3], priority:'medium', icon:'⚡',
-    definition:'Erkrankung mit wiederholten epileptischen Anfällen durch übermäßige neuronale Entladungen.',
-    risk:['Hirnverletzung','Tumor','Schlaganfall','Fieber','Alkoholentzug','Schlafmangel'],
-    causes:['Genetisch','strukturell','metabolisch','infektiös','unbekannt'],
-    symptoms:['Aura','tonisch-klonische Bewegungen','Bewusstseinsverlust','Einnässen','Nachphase'],
-    assessment:['EEG','MRT','Anfallsbeschreibung','Anfallsprotokoll','Fremdanamnese'],
-    stages:[['Fokale Anfälle','Lokal begrenzt.'],['Generalisierte Anfälle','Beide Hemisphären.'],['Status epilepticus','Notfall.']],
-    therapy:['Antiepileptika','Notfallbenzodiazepine','Triggervermeidung','ggf. OP'],
-    care:['Umgebung sichern und Verletzungen verhindern.','Nichts in den Mund stecken.','Anfallsbeginn und Dauer messen.','Nach dem Anfall stabile Seitenlage.','Atmung und Bewusstsein kontrollieren.','Anfall genau dokumentieren: Dauer, Bewegungen, Aura, Einnässen, Nachphase.'] },
-
-  { id:20, title:'Depression', cat:'psychiatrie', days:[2,3], priority:'high', icon:'🌧️',
-    definition:'Psychische Erkrankung mit gedrückter Stimmung, Interessenverlust und Antriebsminderung.',
-    risk:['Belastung','Verluste','chronische Erkrankung','genetische Disposition','soziale Isolation'],
-    causes:['Multifaktoriell: neurobiologisch, psychologisch, sozial'],
-    symptoms:['gedrückte Stimmung','Interessenverlust','Antriebsminderung','Schlafstörung','Appetitveränderung','Suizidgedanken'],
-    assessment:['Anamnese','PHQ-9','Beobachtung von Schlaf/Appetit/Antrieb','Suizidalitätsassessment'],
-    stages:[['Leichte Episode','Geringe Einschränkung.'],['Mittelgradige Episode','Deutliche Einschränkung.'],['Schwere Episode','Starke Einschränkung/Suizidgefahr.'],['Rezidivierende Depression','Wiederkehrend.']],
-    therapy:['Psychotherapie','Antidepressiva','Aktivierung','bei schwerer Depression stationäre Behandlung'],
-    care:['Konkrete Tagesstruktur mit kleinen erreichbaren Aufgaben planen.','Körperpflege schrittweise anbahnen.','Mahlzeiten begleiten und Trinkmenge beobachten.','Schlafprotokoll führen.','Suizidäußerungen direkt ansprechen und sofort weiterleiten.','Aktivierende Pflege ohne Überforderung durchführen.'] }
+  // --- KOMMUNIKATION ---
+  { id:'k1', cat:'kommunikation', title:'Vier-Ohren-Modell (Schulz von Thun)', icon:'🗣️',
+    def:'Modell, das besagt, dass jede Nachricht vier Botschaften (Ebenen) enthält, die vom Sender gesendet und vom Empfänger gehört werden.',
+    sec1:{t:'Die 4 Ebenen', i:'📌', c:['Sachebene (Worüber ich informiere)','Selbstkundgabe (Was ich von mir preisgebe)','Beziehungsseite (Was ich von dir halte)','Appellseite (Wozu ich dich veranlassen möchte)']},
+    sec2:{t:'Praxisbeispiel', i:'💡', c:['Patient sagt: "Das Wasser steht aber weit weg!"','Sachebene: Distanz zum Wasserglas ist groß.','Appell: "Bitte reich mir das Wasser."','Beziehung: "Du hast dich nicht gut um mich gekümmert."']},
+    sec3:{t:'Pflegerische Relevanz', i:'🏥', c:['Missverständnisse durch "falsches Hören" erkennen','Aktives Zuhören anwenden','Nachfragen, um die eigentliche Botschaft (Appell/Bedürfnis) zu klären']}
+  }
 ];
 
 /* ============================================================
-   STATE
-   ============================================================ */
-const state = {
-  openId:    null,
-  search:    '',
-  cat:       'all',
-  day:       'all',
-  diff:      'all',
-  hardFirst: false,
-  difficulty: loadDifficulty()
-};
-
-/* ============================================================
-   STORAGE HELPERS
-   ============================================================ */
-function loadDifficulty() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-    // fallback: cookie
-    const ck = document.cookie.split('; ').find(x => x.startsWith(STORAGE_KEY + '='));
-    return ck ? JSON.parse(decodeURIComponent(ck.split('=')[1])) : {};
-  } catch (e) { return {}; }
-}
-
-function saveDifficulty() {
-  const data = JSON.stringify(state.difficulty);
-  localStorage.setItem(STORAGE_KEY, data);
-  document.cookie = STORAGE_KEY + '=' + encodeURIComponent(data) + '; max-age=31536000; path=/; SameSite=Lax';
-}
-
-/* ============================================================
-   HELPERS
+   HELPERS & LOGIC
    ============================================================ */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
-function category(t) {
-  return CATEGORIES[t.cat] || CATEGORIES.neurologie;
-}
-
-function getDiff(id) {
-  return state.difficulty[id] || 'unrated';
-}
-
-function setDiff(id, diff) {
-  const cur = getDiff(id);
-  if (cur === diff) delete state.difficulty[id];
-  else state.difficulty[id] = diff;
-  saveDifficulty();
-  render();
-  const msgs = {
-    easy: '🟢 Als easy markiert',
-    mid:  '🟡 Als mittel markiert',
-    hard: '🔴 Als schwer markiert'
-  };
-  showToast(cur === diff ? 'Markierung entfernt' : msgs[diff]);
-}
+function getCat(id) { return CATEGORIES[id] || CATEGORIES.medizin; }
 
 function highlight(text) {
-  text = String(text);
   const q = state.search.trim();
-  if (!q) return text;
+  if(!q) return text;
   const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return text.replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
+  return String(text).replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
 }
 
-function li(arr) {
-  return `<ul>${arr.map(x => `<li>${highlight(x)}</li>`).join('')}</ul>`;
-}
-
-function stageList(arr) {
-  return `<div class="stage-list">${arr.map(s =>
-    `<div class="stage"><b>${highlight(s[0])}</b><span>${highlight(s[1])}</span></div>`
-  ).join('')}</div>`;
-}
-
-function sec(title, icon, body, full = false) {
-  return `<section class="section${full ? ' full' : ''}">
-    <h4>${icon} ${title}</h4>${body}
-  </section>`;
-}
-
-function statusChip(d) {
-  if (d === 'easy') return `<span class="chip status-chip easy">🟢 Easy</span>`;
-  if (d === 'mid')  return `<span class="chip status-chip mid">🟡 Mittel</span>`;
-  if (d === 'hard') return `<span class="chip status-chip hard">🔴 Schwer</span>`;
-  return `<span class="chip status-chip">○ unbewertet</span>`;
-}
-
-/* ============================================================
-   FILTER & SORT
-   ============================================================ */
-function filteredTopics() {
-  const q = state.search.trim().toLowerCase();
-  let data = TOPICS.filter(t => {
-    if (state.cat !== 'all' && t.cat !== state.cat) return false;
-    if (state.day !== 'all' && !t.days.includes(Number(state.day))) return false;
-    const d = getDiff(t.id);
-    if (state.diff !== 'all' && d !== state.diff) return false;
-    if (q && !JSON.stringify(t).toLowerCase().includes(q)) return false;
-    return true;
-  });
-
-  if (state.hardFirst) {
-    const rank = { hard: 0, mid: 1, unrated: 2, easy: 3 };
-    data.sort((a, b) =>
-      (rank[getDiff(a.id)] ?? 2) - (rank[getDiff(b.id)] ?? 2) || a.id - b.id
-    );
-  } else {
-    data.sort((a, b) => a.id - b.id);
-  }
-  return data;
+function secHTML(s) {
+  if(!s) return '';
+  return `<section class="section"><h4>${s.i} ${s.t}</h4><ul>${s.c.map(x=>`<li>${highlight(x)}</li>`).join('')}</ul></section>`;
 }
 
 /* ============================================================
    RENDER
    ============================================================ */
 function render() {
-  const data = filteredTopics();
+  const q = state.search.trim().toLowerCase();
+  let data = TOPICS.filter(t => {
+    if(state.cat !== 'all' && t.cat !== state.cat) return false;
+    if(q && !JSON.stringify(t).toLowerCase().includes(q)) return false;
+    return true;
+  });
 
   $('#topicList').innerHTML = data.map(t => {
-    const c   = category(t);
-    const d   = getDiff(t.id);
+    const c = getCat(t.cat);
+    const d = state.data.difficulty[t.id] || 'unrated';
     const open = state.openId === t.id;
+    const isNew = !state.data.viewed.includes(t.id);
+    const showHint = open && isNew && !state.hintSeen ? 'show-hint' : '';
 
     return `
-<article class="topic${open ? ' open' : ''}${d !== 'unrated' ? ' ' + d : ''}" id="topic-${t.id}">
-
-  <div class="topic-head" onclick="toggleOpen(${t.id})">
-
+<article class="topic ${open ? 'open' : ''} ${d !== 'unrated' ? d : ''}" id="topic-${t.id}">
+  <div class="topic-head" onclick="toggleOpen('${t.id}')">
     <div class="disease-icon">${t.icon}</div>
-
     <div>
-      <div class="topic-title">
-        ${String(t.id).padStart(2,'0')} · ${highlight(t.title)}
-      </div>
+      <div class="topic-title">${highlight(t.title)}</div>
       <div class="meta">
-        <span class="chip cat" style="--catbg:${c.bg};--catcolor:${c.color}">
-          ${c.icon} ${c.label}
-        </span>
-        ${t.days.map(x => `<span class="chip day">Tag ${x}</span>`).join('')}
-        ${t.priority === 'high' ? `<span class="chip prio">🔥 Priorität</span>` : ''}
-        ${statusChip(d)}
+        <span class="chip cat" style="--catbg:${c.bg};--catcolor:${c.color}">${c.icon} ${c.label}</span>
+        ${d==='easy'?'<span class="chip status-chip easy">🟢 Gelernt</span>':''}
+        ${d==='mid'?'<span class="chip status-chip mid">🟡 Lernen</span>':''}
+        ${d==='hard'?'<span class="chip status-chip hard">🔴 Schwer</span>':''}
       </div>
     </div>
-
-    <div class="actions" onclick="event.stopPropagation()">
+    <div class="actions ${showHint}" onclick="event.stopPropagation()">
       <div class="ampel">
-        <button class="easy${d==='easy'?' active':''}" title="Easy"
-          onclick="setDiff(${t.id},'easy')">
-          <i class="fa-solid fa-check"></i>
-        </button>
-        <button class="mid${d==='mid'?' active':''}" title="Mittel"
-          onclick="setDiff(${t.id},'mid')">
-          <i class="fa-solid fa-minus"></i>
-        </button>
-        <button class="hard${d==='hard'?' active':''}" title="Schwer"
-          onclick="setDiff(${t.id},'hard')">
-          <i class="fa-solid fa-fire"></i>
-        </button>
+        <button class="easy ${d==='easy'?'active':''}" onclick="setDiff('${t.id}','easy')"><i class="fa-solid fa-check"></i></button>
+        <button class="mid ${d==='mid'?'active':''}" onclick="setDiff('${t.id}','mid')"><i class="fa-solid fa-minus"></i></button>
+        <button class="hard ${d==='hard'?'active':''}" onclick="setDiff('${t.id}','hard')"><i class="fa-solid fa-fire"></i></button>
       </div>
-      <button class="arrow" onclick="toggleOpen(${t.id})">
-        <i class="fa-solid fa-chevron-down"></i>
-      </button>
+      <div class="ampel-hint">Tipp: Markiere deinen Lernstand!</div>
+      <button class="arrow" onclick="toggleOpen('${t.id}')"><i class="fa-solid fa-chevron-down"></i></button>
     </div>
-
   </div>
 
   <div class="body">
     <div class="body-inner">
       <div class="content">
-        <div class="section-grid">
-          ${sec('Definition',        '📌', `<p>${highlight(t.definition)}</p>`, true)}
-          ${sec('Risikofaktoren',    '⚠️', li(t.risk))}
-          ${sec('Ursachen',          '🧩', li(t.causes))}
-          ${sec('Symptome',          '🔎', li(t.symptoms))}
-          ${sec('Diagnostik / Assessment', '📋', li(t.assessment))}
-          ${sec('Stadien / Formen',  '🧭', stageList(t.stages), true)}
-          ${sec('Medizinische Therapie', '💊', li(t.therapy))}
-          ${sec('Pflege – konkret prüfungsrelevant', '🏥', li(t.care), true)}
-        </div>
-        <div class="keys">
-          ${[...t.assessment, ...t.symptoms].slice(0, 9)
-            .map(x => `<span class="key">${highlight(x)}</span>`).join('')}
+        <div class="section-grid" style="grid-template-columns: 1fr;">
+          <section class="section"><h4>📌 Definition</h4><p>${highlight(t.def)}</p></section>
+          ${secHTML(t.sec1)}
+          ${secHTML(t.sec2)}
+          ${secHTML(t.sec3)}
         </div>
       </div>
     </div>
   </div>
-
 </article>`;
   }).join('');
 
   $('#empty').style.display = data.length ? 'none' : 'block';
-  updateCounters(data.length);
+  updateDashboard();
 }
 
-/* ============================================================
-   COUNTERS + PILLS
-   ============================================================ */
-function updateCounters(shown) {
-  const total  = TOPICS.length;
-  const rated  = Object.keys(state.difficulty)
-    .filter(id => TOPICS.some(t => t.id == id)).length;
-  const pct    = Math.round(rated / total * 100);
-  const streak = Object.values(state.difficulty).filter(v => v === 'hard').length;
-
-  $('#kTotal').textContent  = total;
-  $('#kRated').textContent  = rated;
-  $('#kShown').textContent  = shown;
-  $('#countText').textContent = `${shown} Themen`;
-
-  // top bar pills
-  $('#topText').textContent   = `${rated}/${total}`;
-  $('#streakCount').textContent = streak;
-  $('#topFill').style.width   = pct + '%';
-}
-
-/* ============================================================
-   TOGGLE OPEN
-   ============================================================ */
 function toggleOpen(id) {
   state.openId = state.openId === id ? null : id;
+  if(state.openId && !state.data.viewed.includes(id)) {
+      state.data.viewed.push(id);
+      saveData();
+  }
   render();
-  if (state.openId) {
-    requestAnimationFrame(() =>
-      document.getElementById('topic-' + id)?.scrollIntoView({
-        behavior: 'smooth', block: 'nearest'
-      })
-    );
+  if(state.openId) {
+      setTimeout(()=> document.getElementById('topic-'+id)?.scrollIntoView({behavior:'smooth', block:'nearest'}), 100);
   }
 }
 
-/* ============================================================
-   TOAST
-   ============================================================ */
-function showToast(msg) {
-  document.querySelector('.toast')?.remove();
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1900);
+function setDiff(id, diff) {
+  if(!state.hintSeen) {
+      state.hintSeen = true;
+      localStorage.setItem('pfp.hintSeen', 'true');
+  }
+  const cur = state.data.difficulty[id];
+  if(cur === diff) delete state.data.difficulty[id];
+  else state.data.difficulty[id] = diff;
+  saveData();
+  render();
+  showToast(cur === diff ? 'Markierung entfernt' : 'Status aktualisiert');
 }
 
 /* ============================================================
-   FILTER BUTTONS — Category
+   UPDATE DASHBOARD (Progress Bars)
    ============================================================ */
+function updateDashboard() {
+    const total = TOPICS.length;
+    const viewed = state.data.viewed.length;
+    let easy=0, mid=0, hard=0;
+    
+    Object.values(state.data.difficulty).forEach(val => {
+        if(val === 'easy') easy++;
+        if(val === 'mid') mid++;
+        if(val === 'hard') hard++;
+    });
+
+    $('#kViewed').innerText = `${viewed}/${total}`;
+    $('#fViewed').style.width = `${Math.round(viewed/total*100)}%`;
+
+    $('#kEasy').innerText = `${easy}/${total}`;
+    $('#fEasy').style.width = `${Math.round(easy/total*100)}%`;
+
+    $('#kMid').innerText = `${mid}/${total}`;
+    $('#fMid').style.width = `${Math.round(mid/total*100)}%`;
+
+    $('#kHard').innerText = `${hard}/${total}`;
+    $('#fHard').style.width = `${Math.round(hard/total*100)}%`;
+
+    $('#streakCount').innerText = hard; // Number of hard items to review
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toastMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 2000);
+}
+
+/* Listeners */
 $$('[data-cat]').forEach(b => b.addEventListener('click', () => {
   state.cat = b.dataset.cat;
   $$('[data-cat]').forEach(x => x.classList.remove('active'));
@@ -1290,56 +519,12 @@ $$('[data-cat]').forEach(b => b.addEventListener('click', () => {
   render();
 }));
 
-/* Day */
-$$('[data-day]').forEach(b => b.addEventListener('click', () => {
-  state.day = b.dataset.day;
-  $$('[data-day]').forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
-  state.openId = null;
-  render();
-}));
-
-/* Difficulty */
-$$('[data-diff]').forEach(b => b.addEventListener('click', () => {
-  state.diff = b.dataset.diff;
-  $$('[data-diff]').forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
-  state.openId = null;
-  render();
-}));
-
-/* Search */
 $('#searchInput').addEventListener('input', e => {
   state.search = e.target.value;
-  $('#clearBtn').style.display = state.search ? 'block' : 'none';
   state.openId = null;
   render();
 });
 
-/* Clear */
-$('#clearBtn').addEventListener('click', () => {
-  state.search = '';
-  $('#searchInput').value = '';
-  $('#clearBtn').style.display = 'none';
-  render();
-});
-
-/* Sort toggle */
-$('#sortHardFirst').addEventListener('click', () => {
-  state.hardFirst = !state.hardFirst;
-  $('#sortSwitch').classList.toggle('on', state.hardFirst);
-  render();
-});
-
-/* Keyboard: Escape closes open topic */
-document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT') return;
-  if (e.key === 'Escape') { state.openId = null; render(); }
-});
-
-/* ============================================================
-   INIT
-   ============================================================ */
 render();
 </script>
 </body>
