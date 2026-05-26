@@ -26,7 +26,7 @@ html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', sans-serif; background-color: var(--bg-page); color: var(--text-main);
   display: flex; justify-content: center; align-items: flex-start; 
-  height: 100vh; height: 100dvh; overflow: hidden;
+  min-height: 100vh; min-height: 100dvh; overflow: hidden;
 }
 button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
 a { color: inherit; text-decoration: none; }
@@ -69,7 +69,7 @@ a { color: inherit; text-decoration: none; }
 .stats-pill.level-up i { color: white; }
 
 /* ==========================================================================
-   SCROLL AREA (Fix for mobile scrolling)
+   SCROLL AREA
    ========================================================================== */
 .scroll-area { 
   flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; 
@@ -113,9 +113,9 @@ a { color: inherit; text-decoration: none; }
 .tr-hard .t-info span { color: #fca5a5; } .tr-hard .t-bar-fill { background-color: #ef4444; box-shadow: 0 0 8px #ef4444;}
 
 /* ==========================================================================
-   FILTERS
+   FILTERS (Natürliches Scrolling, kein Sticky-Blocker)
    ========================================================================== */
-.filters-wrapper { position: sticky; top: 0; z-index: 900; padding: 10px 20px 14px; background: rgba(248,250,252,0.96); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+.filters-wrapper { padding: 10px 20px 14px; position: relative; z-index: 10; }
 .filter-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
 
 .search-row { display: flex; align-items: center; gap: 8px; }
@@ -148,12 +148,12 @@ a { color: inherit; text-decoration: none; }
 /* ==========================================================================
    TOPIC GRID & CARDS
    ========================================================================== */
-.grid-container { padding: 20px; display: grid; gap: 16px; align-content: start; }
+.grid-container { padding: 0 20px 20px; display: grid; gap: 16px; align-content: start; }
 @media (min-width: 768px) { .grid-container { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); } }
 
 .topic-card { background: var(--bg-surface); border: 1.5px solid var(--border); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden; transition: 0.3s var(--ease-spring); position: relative; }
 .topic-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(37,99,235,0.1); }
-.topic-card.open { border-color: var(--primary); box-shadow: 0 14px 36px rgba(37,99,235,0.14); }
+.topic-card.open { border-color: rgba(37,99,235,0.4); box-shadow: 0 14px 36px rgba(37,99,235,0.14); }
 
 .topic-card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--primary); border-radius:4px 0 0 4px; transition: 0.3s; }
 .topic-card.status-easy::before { background: var(--success); }
@@ -164,16 +164,17 @@ a { color: inherit; text-decoration: none; }
 .t-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--bg-app); display: grid; place-items: center; font-size: 24px; flex-shrink: 0;}
 .t-title-area { min-width: 0; }
 .t-title-area h3 { font-size: 15px; margin-bottom: 6px; line-height: 1.3; color: var(--text-main); }
-.t-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+.t-meta { display: flex; gap: 5px; flex-wrap: wrap; }
 .badge { font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
 .badge-cat { background: var(--bg-app); color: var(--text-muted); border: 1px solid var(--border); }
 .badge-day { background: var(--primary-light); color: var(--primary); }
+.badge-prio { background: var(--danger-light); color: var(--danger-dark); }
 .badge-status { background: var(--bg-app); color: var(--mut); }
 .badge-status.s-easy { background: rgba(16,185,129,0.1); color: var(--success); }
 .badge-status.s-mid { background: rgba(245,158,11,0.13); color: #92400e; }
 .badge-status.s-hard { background: rgba(239,68,68,0.1); color: var(--danger); }
 
-/* Traffic Light Actions */
+/* Actions (Ampel) */
 .t-actions { display: flex; align-items: center; gap: 8px; position: relative; }
 .traffic-lights { display: flex; gap: 4px; background: var(--bg-app); padding: 4px; border-radius: 14px; }
 .light-btn { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 13px; color: var(--text-muted); transition: 0.2s; opacity: 0.4; }
@@ -186,13 +187,21 @@ a { color: inherit; text-decoration: none; }
 .arrow { width: 36px; height: 36px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; transition: 0.3s var(--ease-spring); flex-shrink: 0; }
 .topic-card.open .arrow { transform: rotate(180deg); background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
 
-/* 🌟 Bouncing Hint Tooltip (Auto hides) */
+/* 🌟 Bouncing Hint Tooltip (Hand animation) */
 .hint-tooltip {
-  position: absolute; bottom: 120%; right: 40px; background: var(--text-main); color: white; font-size: 11px; font-weight: 800; padding: 10px 14px; border-radius: 12px; white-space: nowrap; pointer-events: none; animation: bounceHint 1.5s infinite; z-index: 10; opacity: 1; transition: opacity 0.5s; box-shadow: 0 8px 20px rgba(15,23,42,0.3);
+  position: absolute; bottom: 130%; right: 40px; 
+  background: var(--primary); color: white; font-size: 13px; font-weight: 800; 
+  padding: 12px 16px; border-radius: 14px; white-space: nowrap; pointer-events: none; 
+  animation: bounceHint 1.5s infinite; z-index: 20; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 25px rgba(37,99,235,0.4); transition: opacity 0.5s ease;
 }
-.hint-tooltip::after { content:''; position:absolute; top:100%; right:24px; border-width:7px; border-style:solid; border-color: var(--text-main) transparent transparent transparent; }
-.hint-tooltip.fade-out { opacity: 0; }
-@keyframes bounceHint { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-6px);} }
+.hint-tooltip::after { 
+  content:''; position:absolute; top:100%; right:20px; 
+  border-width:8px; border-style:solid; border-color: var(--primary) transparent transparent transparent; 
+}
+.hint-tooltip span.hand { font-size: 24px; display: inline-block; animation: pointDown 0.6s infinite alternate ease-in-out; }
+@keyframes bounceHint { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
+@keyframes pointDown { 0% {transform: translateY(-4px) rotate(-10deg);} 100% {transform: translateY(4px) rotate(-10deg);} }
 
 /* Expandable Body */
 .t-body { display: grid; grid-template-rows: 0fr; transition: 0.4s var(--ease-spring); }
@@ -232,8 +241,8 @@ mark { background: #fef9c3; padding: 0 4px; border-radius: 4px; color: var(--war
 .nav-item.active { color: var(--primary); }
 .nav-item.active .icon-wrapper { transform: translateY(-6px); }
 .nav-item.active i { transform: scale(1.15); }
+.nav-item.locked { opacity: 0.5; }
 
-/* Toast & Confetti */
 .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 12px 24px; border-radius: 99px; font-size: 13px; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 3000; opacity: 0; pointer-events: none; transition: 0.4s var(--ease-spring); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(10px); }
 .confetti { position: fixed; width: 8px; height: 8px; border-radius: 3px; z-index: 9999; animation: fall linear forwards; }
@@ -244,6 +253,7 @@ mark { background: #fef9c3; padding: 0 4px; border-radius: 4px; color: var(--war
 
 <div class="app-container">
 
+  <!-- Header -->
   <header class="topbar">
     <a href="index.html" class="brand"><div class="logo"><i class="fa-solid fa-layer-group"></i></div>Bibliothek</a>
     <div class="stats-pill" id="levelPill" title="Basierend auf deinem Fortschritt">
@@ -251,8 +261,10 @@ mark { background: #fef9c3; padding: 0 4px; border-radius: 4px; color: var(--war
     </div>
   </header>
 
+  <!-- Scroll Area (Native Scrolling, smooth on mobile) -->
   <div class="scroll-area">
 
+    <!-- Gamified Dashboard -->
     <div class="dashboard-wrapper">
       <div class="dashboard">
         <div class="dash-header">
@@ -280,6 +292,7 @@ mark { background: #fef9c3; padding: 0 4px; border-radius: 4px; color: var(--war
       </div>
     </div>
 
+    <!-- Filters -->
     <div class="filters-wrapper">
       <div class="filter-card">
         <div class="search-row">
@@ -323,15 +336,20 @@ mark { background: #fef9c3; padding: 0 4px; border-radius: 4px; color: var(--war
       </div>
     </div>
 
+    <!-- Topic Grid -->
     <div class="grid-container" id="topicGrid">
-      </div>
+      <!-- Rendered via JS -->
+    </div>
     
     <div class="empty-state" id="emptyState">
       <i class="fa-solid fa-ghost"></i>
-      <p>Keine Themen gefunden.<br>Ändere deinen Suchbegriff oder Filter.</p>
+      <p>Keine passenden Themen gefunden.<br>Ändere deinen Suchbegriff oder Filter.</p>
     </div>
 
-  </div> <nav class="nav-bottom">
+  </div> <!-- /scroll-area -->
+
+  <!-- App Bottom Navigation -->
+  <nav class="nav-bottom">
     <a href="index.html" class="nav-item">
       <div class="icon-wrapper"><i class="fa-solid fa-house"></i></div><span>Home</span>
     </a>
@@ -355,12 +373,12 @@ mark { background: #fef9c3; padding: 0 4px; border-radius: 4px; color: var(--war
 
 <script>
 /* ==========================================================================
-   1. EDITABLE DATA STRUCTURE (Full Content, exactly structured)
+   1. EDITABLE DATA STRUCTURE (Full Content, easy to edit)
    ========================================================================== */
 const TOPICS_DATA = [
   // --- KATEGORIE: MEDIZIN & PFLEGE (Mind. 6 Pflegemaßnahmen) ---
   {
-    id: "m1", category: "medizin", days: [2,3], title: "Herzinsuffizienz", icon: "💙",
+    id: "m1", category: "medizin", days: [2,3], priority: "high", title: "Herzinsuffizienz", icon: "💙",
     definition: "Unfähigkeit des Herzens, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.",
     risiko: ["KHK", "Arterielle Hypertonie", "Herzinfarkt in der Vorgeschichte", "Diabetes mellitus", "Herzklappenerkrankungen"],
     ursachen: ["Myokardschädigung (z.B. Ischämie)", "Druckbelastung (Hypertonie)", "Volumenbelastung", "Rhythmusstörungen"],
@@ -378,7 +396,7 @@ const TOPICS_DATA = [
     ]
   },
   {
-    id: "m2", category: "medizin", days: [1,3], title: "Pneumonie", icon: "🌬️",
+    id: "m2", category: "medizin", days: [1,3], priority: "high", title: "Pneumonie", icon: "🌬️",
     definition: "Akute oder chronische Entzündung des Lungengewebes, meist durch Bakterien, Viren oder Aspiration ausgelöst.",
     risiko: ["Immobilität / Bettlägerigkeit", "Hohes Alter", "COPD / Vorerkrankungen", "Dysphagie (Schluckstörungen)", "Immunschwäche"],
     ursachen: ["Bakterielle Infektion (häufig Pneumokokken)", "Aspiration von Nahrung, Speichel oder Magensaft", "Sekretstau durch oberflächliche Atmung"],
@@ -396,7 +414,7 @@ const TOPICS_DATA = [
     ]
   },
   {
-    id: "m3", category: "medizin", days: [2,3], title: "Diabetes mellitus (Typ 2)", icon: "🩸",
+    id: "m3", category: "medizin", days: [2,3], priority: "high", title: "Diabetes mellitus (Typ 2)", icon: "🩸",
     definition: "Chronische Stoffwechselerkrankung mit Hyperglykämie durch Insulinresistenz und relativen Insulinmangel.",
     risiko: ["Adipositas (Stammfettsucht)", "Bewegungsmangel", "Hohes Alter", "Genetische Disposition", "Ungesunde, kohlenhydratreiche Ernährung"],
     ursachen: ["Insulinresistenz der Zielzellen (Leber, Muskel, Fett)", "Erschöpfung der B-Zellen im Pankreas (relativer Mangel)"],
@@ -413,7 +431,7 @@ const TOPICS_DATA = [
     ]
   },
   {
-    id: "m4", category: "medizin", days: [1,2], title: "Apoplex (Schlaganfall)", icon: "🧠",
+    id: "m4", category: "medizin", days: [1,2], priority: "high", title: "Apoplex (Schlaganfall)", icon: "🧠",
     definition: "Akute neurologische Funktionsstörung durch lokalen Durchblutungsmangel oder Blutungen im Gehirn.",
     risiko: ["Arterielle Hypertonie", "Vorhofflimmern", "Rauchen", "Diabetes mellitus", "Hypercholesterinämie"],
     ursachen: ["Ischämischer Infarkt (Thrombus oder Embolus, ca. 80-85%)", "Hämorrhagischer Infarkt (Hirnblutung, ca. 15-20%)"],
@@ -431,7 +449,7 @@ const TOPICS_DATA = [
     ]
   },
   {
-    id: "m5", category: "medizin", days: [2,3], title: "COPD", icon: "🫁",
+    id: "m5", category: "medizin", days: [2,3], priority: "high", title: "COPD", icon: "🫁",
     definition: "Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion.",
     risiko: ["Rauchen (Hauptrisikofaktor)", "Feinstaubbelastung", "Berufliche Schadstoffe", "Häufige Atemwegsinfekte im Kindesalter"],
     ursachen: ["Chronische Bronchitis (dauerhafte Entzündung)", "Lungenemphysem (Überblähung, Zerstörung der Alveolen)"],
@@ -448,9 +466,9 @@ const TOPICS_DATA = [
     ]
   },
 
-  // --- KATEGORIE: RECHT (Def, Kern, Bsp) ---
+  // --- KATEGORIE: RECHT ---
   {
-    id: "r1", category: "recht", days: [1], title: "Haftungsrecht im Pflegealltag", icon: "⚖️",
+    id: "r1", category: "recht", days: [1], priority: "high", title: "Haftungsrecht im Pflegealltag", icon: "⚖️",
     definition: "Rechtliche Verantwortung von Pflegekräften für Schäden, die Patienten durch pflegerisches Handeln oder Unterlassen entstehen.",
     kernaussagen: [
       "Zivilrechtliche Haftung zielt auf Schadensersatz und Schmerzensgeld ab (§ 823 BGB).",
@@ -463,7 +481,7 @@ const TOPICS_DATA = [
     ]
   },
   {
-    id: "r2", category: "recht", days: [1], title: "Schweigepflicht (§ 203 StGB)", icon: "🔒",
+    id: "r2", category: "recht", days: [1], priority: "high", title: "Schweigepflicht (§ 203 StGB)", icon: "🔒",
     definition: "Die gesetzliche Verpflichtung von Berufsgeheimnisträgern, fremde Geheimnisse, die ihnen im Rahmen ihrer Berufsausübung anvertraut wurden, nicht unbefugt zu offenbaren.",
     kernaussagen: [
       "Gilt auch nach dem Tod des Patienten uneingeschränkt weiter.",
@@ -478,7 +496,7 @@ const TOPICS_DATA = [
 
   // --- KATEGORIE: ETHIK ---
   {
-    id: "e1", category: "ethik", days: [1], title: "4 Prinzipien (Beauchamp & Childress)", icon: "🕊️",
+    id: "e1", category: "ethik", days: [1], priority: "high", title: "4 Prinzipien (Beauchamp & Childress)", icon: "🕊️",
     definition: "Das international anerkannte Standardmodell der Medizinethik zur systematischen Beurteilung moralischer Konflikte im Gesundheitswesen.",
     kernaussagen: [
       "1. Respekt vor der Autonomie: Das Selbstbestimmungsrecht und der Wille des Patienten haben oberste Priorität.",
@@ -493,7 +511,7 @@ const TOPICS_DATA = [
 
   // --- KATEGORIE: PFLEGEMODELLE ---
   {
-    id: "p1", category: "modelle", days: [1], title: "ABEDL nach Monika Krohwinkel", icon: "📐",
+    id: "p1", category: "modelle", days: [1], priority: "high", title: "ABEDL nach Monika Krohwinkel", icon: "📐",
     definition: "Ein bedürfnis- und ressourcenorientiertes Pflegemodell, das den Menschen ganzheitlich in 13 Aktivitäten, Beziehungen und existenziellen Erfahrungen des Lebens (ABEDL) erfasst.",
     kernaussagen: [
       "Der Mensch wird als ganzheitliches Wesen (Körper, Geist, Seele) betrachtet.",
@@ -506,7 +524,7 @@ const TOPICS_DATA = [
     ]
   },
   {
-    id: "p2", category: "modelle", days: [1], title: "Pflegemodell nach Roper, Logan & Tierney", icon: "📐",
+    id: "p2", category: "modelle", days: [1], priority: "medium", title: "Pflegemodell nach Roper, Logan & Tierney", icon: "📐",
     definition: "Ein Lebensmodell der Pflege, das auf 12 Lebensaktivitäten (LA) basiert und die Unabhängigkeit des Patienten ins Zentrum stellt.",
     kernaussagen: [
       "Das Modell besteht aus 5 Komponenten: Lebensaktivitäten, Lebensspanne, Abhängigkeits-/Unabhängigkeits-Kontinuum, beeinflussende Faktoren und Individualität.",
@@ -520,7 +538,7 @@ const TOPICS_DATA = [
 
   // --- KATEGORIE: KOMMUNIKATION ---
   {
-    id: "k1", category: "kommunikation", days: [1], title: "Vier-Ohren-Modell (Schulz von Thun)", icon: "🗣️",
+    id: "k1", category: "kommunikation", days: [1], priority: "medium", title: "Vier-Ohren-Modell (Schulz von Thun)", icon: "🗣️",
     definition: "Kommunikationsmodell, das besagt, dass jede Nachricht vier Botschaften (Ebenen) gleichzeitig enthält.",
     kernaussagen: [
       "1. Sachebene: Worüber ich informiere (reine Daten und Fakten).",
@@ -533,7 +551,7 @@ const TOPICS_DATA = [
     ]
   },
   {
-    id: "k2", category: "kommunikation", days: [1], title: "Axiome nach Paul Watzlawick", icon: "🗣️",
+    id: "k2", category: "kommunikation", days: [1], priority: "medium", title: "Axiome nach Paul Watzlawick", icon: "🗣️",
     definition: "Fünf pragmatische Axiome der menschlichen Kommunikation. Die Grundlage der zwischenmenschlichen Interaktion.",
     kernaussagen: [
       "Axiom 1: Man kann nicht nicht kommunizieren (auch Schweigen sendet eine Botschaft).",
@@ -551,7 +569,7 @@ const TOPICS_DATA = [
 /* ==========================================================================
    2. APP STATE & LOCAL STORAGE
    ========================================================================== */
-const STORAGE_KEY = 'pfp.library.v4';
+const STORAGE_KEY = 'pfp.library.v5';
 const State = {
   openId: null, search: '', cat: 'all', day: 'all', diff: 'all', hardFirst: false,
   data: loadData(),
@@ -614,17 +632,23 @@ function render() {
     const isOpen = State.openId === t.id;
     const isNew = !State.data.viewed.includes(t.id);
     
-    // Hint Logic
+    // Hint Logic (Animated Hand Tooltip)
     let showHint = '';
     if(isOpen && isNew && !State.hintSeen) {
-      showHint = `<div class="hint-tooltip" id="hint-${t.id}">☝️ Wie sicher bist du?<br>Markiere deinen Lernstand!</div>`;
+      showHint = `
+        <div class="hint-tooltip" id="hint-${t.id}">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="hand">👇</span>
+            <span>Markiere hier<br>deinen Lernstand!</span>
+          </div>
+        </div>`;
       // Auto Hide Hint
       setTimeout(() => {
         const hint = document.getElementById(`hint-${t.id}`);
-        if(hint) hint.style.display = 'none';
+        if(hint) hint.style.opacity = '0';
         State.hintSeen = true;
         localStorage.setItem('pfp.hintSeen', 'true');
-      }, 6000);
+      }, 7000);
     }
 
     const catLabels = { medizin: "Medizin", recht: "Recht", ethik: "Ethik", modelle: "Modelle", kommunikation: "Komm." };
@@ -665,8 +689,8 @@ function render() {
               <span class="badge badge-status s-${d}">${statusText}</span>
             </div>
           </div>
-          <div class="t-actions" onclick="event.stopPropagation()">
-            <div class="traffic-lights">
+          <div class="t-actions">
+            <div class="traffic-lights" onclick="event.stopPropagation()">
               <button class="light-btn e-easy ${d==='easy'?'active':''}" onclick="setDiff('${t.id}', 'easy')"><i class="fa-solid fa-check"></i></button>
               <button class="light-btn e-mid ${d==='mid'?'active':''}" onclick="setDiff('${t.id}', 'mid')"><i class="fa-solid fa-clock"></i></button>
               <button class="light-btn e-hard ${d==='hard'?'active':''}" onclick="setDiff('${t.id}', 'hard')"><i class="fa-solid fa-fire"></i></button>
@@ -696,31 +720,29 @@ function render() {
 }
 
 /* ==========================================================================
-   4. INTERACTIONS & DASHBOARD
+   4. INTERACTIONS
    ========================================================================== */
 function toggleCard(id) {
   State.openId = State.openId === id ? null : id;
-  
   if(State.openId && !State.data.viewed.includes(id)) {
-    State.data.viewed.push(id);
-    saveData();
+    State.data.viewed.push(id); saveData();
   }
-  
   render();
   
   if(State.openId) {
     setTimeout(() => {
       const el = document.getElementById('card-'+id);
-      const y = el.getBoundingClientRect().top + $('.scroll-area').scrollTop - 180;
-      $('.scroll-area').scrollTo({top: y, behavior: 'smooth'});
+      if(el) {
+        const y = el.getBoundingClientRect().top + $('.scroll-area').scrollTop - 180;
+        $('.scroll-area').scrollTo({top: y, behavior: 'smooth'});
+      }
     }, 150);
   }
 }
 
 function setDiff(id, level) {
   if(!State.hintSeen) {
-    State.hintSeen = true;
-    localStorage.setItem('pfp.hintSeen', 'true');
+    State.hintSeen = true; localStorage.setItem('pfp.hintSeen', 'true');
   }
   const cur = State.data.difficulty[id];
   if(cur === level) {
@@ -757,10 +779,10 @@ function updateDashboard() {
   $('#kHard').innerText = `${hard}/${total}`;
   $('#fHard').style.width = `${Math.round(hard/total*100)}%`;
 
-  // Calculate XP & Level
+  // Calculate XP & Level (Angeschaut: 5XP, Lernen: 20XP, Gelernt: 50XP)
   let currentLevel = State.data.level || 1;
   let xp = (viewed * 5) + (easy * 50) + (mid * 20) + (hard * 10);
-  let newLevel = Math.floor(xp / 200) + 1; // Level up every 200 XP
+  let newLevel = Math.floor(xp / 250) + 1; // Level up every 250 XP
   
   if(newLevel > currentLevel) {
       triggerLevelUp(newLevel);
@@ -776,16 +798,16 @@ function triggerLevelUp(level) {
     $('#levelText').innerText = `Level ${level}`;
     pill.classList.add('level-up');
     
-    // Confetti
+    // Confetti Rain
     const colors = ['#f59e0b', '#2563eb', '#10b981', '#ec4899'];
-    for(let i=0; i<30; i++) {
+    for(let i=0; i<35; i++) {
         let el = document.createElement('div');
         el.className = 'confetti';
-        el.style.left = (30 + Math.random()*40) + 'vw';
+        el.style.left = (20 + Math.random()*60) + 'vw';
         el.style.background = colors[Math.floor(Math.random()*colors.length)];
-        el.style.animationDuration = (1 + Math.random()) + 's';
+        el.style.animationDuration = (1 + Math.random()*1.5) + 's';
         document.body.appendChild(el);
-        setTimeout(() => el.remove(), 2000);
+        setTimeout(() => el.remove(), 2500);
     }
     
     setTimeout(() => pill.classList.remove('level-up'), 2000);
