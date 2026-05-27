@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PflegefachProfi Emergency Nurse Simulator</title>
+<style>
+    /* =========================================
+       CSS VARIABLES & THEME
+       ========================================= */
+    :root {
+        --bg-dark: #0f172a;
+        --bg-panel: #1e293b;
+        --bg-light: #f8fafc;
+        --text-light: #f1f5f9;
+        --text-dark: #0f172a;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --monitor-green: #22c55e;
+        --monitor-blue: #38bdf8;
+        --border-radius: 16px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        overflow-x: hidden;
+        overscroll-behavior-y: none;
+    }
+
+    /* =========================================
+       APP CONTAINER & SCREENS
+       ========================================= */
+    #app {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .screen {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        animation: fadeIn 0.4s ease-out forwards;
+    }
+    .screen.active {
+        display: flex;
+    }
+
+    header {
+        background: var(--bg-panel);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        z-index: 10;
+        flex-shrink: 0;
+    }
+    .brand { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+    .brand span { color: var(--primary); }
+    .stats-bar { display: flex; gap: 15px; font-weight: 600; font-size: 0.9rem; }
+    .stats-bar div { display: flex; align-items: center; gap: 5px; }
+
+    /* =========================================
+       LANDING & SELECTION
+       ========================================= */
+    .container {
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        width: 100%;
+        overflow-y: auto;
+    }
+    
+    .hero {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-dark) 100%);
+        border-radius: var(--border-radius);
+        margin-bottom: 30px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    .hero h1 { font-size: 2rem; margin-bottom: 10px; }
+    .hero p { color: #94a3b8; margin-bottom: 25px; line-height: 1.5; }
+
+    .btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 99px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+    .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+    .btn-success { background: var(--success); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); }
+    .btn-success:hover { background: #059669; }
+    .btn-outline { background: transparent; border: 2px solid var(--primary); box-shadow: none; }
+    .btn-outline:hover { background: rgba(59, 130, 246, 0.1); }
+
+    .case-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        padding-bottom: 40px;
+    }
+    .case-card {
+        background: var(--bg-panel);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: var(--transition);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+    }
+    .case-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: var(--shadow); }
+    .case-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .case-cat { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 800; }
+    .case-diff { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; background: rgba(255,255,255,0.1); font-weight: 600; }
+    .diff-Schwer { color: var(--danger); background: rgba(239,68,68,0.1); }
+    .diff-Mittel { color: var(--warning); background: rgba(245,158,11,0.1); }
+    .case-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+    .case-footer { margin-top: auto; padding-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
+    .case-score { display: flex; gap: 4px; color: var(--warning); }
+    .score-empty { color: #334155; }
+
+    /* =========================================
+       SIMULATION VIEW (FIRST PERSON ER)
+       ========================================= */
+    .sim-layout {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 60px); /* header offset */
+        overflow: hidden;
+    }
+
+    /* ER Environment / Top Half */
+    .er-view {
+        flex: 0 0 45%;
+        min-height: 250px;
+        background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 100%);
+        position: relative;
+        border-bottom: 2px solid rgba(0,0,0,0.5);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    /* Monitor overlay */
+    .er-monitor {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #020617;
+        border: 2px solid #334155;
+        border-radius: 12px;
+        padding: 12px;
+        width: 140px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        z-index: 5;
+    }
+    .mon-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .mon-val { font-family: monospace; font-size: 1.4rem; font-weight: bold; }
+    .mon-lbl { font-size: 0.65rem; color: #64748b; }
+    .val-hr { color: var(--monitor-green); }
+    .val-spo2 { color: var(--monitor-blue); }
+    .val-rr { color: var(--warning); font-size: 1rem; }
+    .ecg-line {
+        width: 100%; height: 25px; margin-top: -5px; margin-bottom: 5px;
+    }
+    .ecg-path {
+        fill: none; stroke: var(--monitor-green); stroke-width: 2;
+        stroke-dasharray: 100; stroke-dashoffset: 100;
+        animation: dash 1.5s linear infinite;
+    }
+
+    /* Patient SVG & Bed */
+    .bed-frame {
+        position: absolute;
+        bottom: 0; left: 50%; transform: translateX(-50%);
+        width: 90%; max-width: 600px; height: 30%;
+        background: linear-gradient(to bottom, #f1f5f9, #cbd5e1);
+        border-radius: 40px 40px 0 0;
+        border-top: 6px solid #e2e8f0;
+        z-index: 2;
+    }
+    .patient-container {
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 240px;
+        height: 240px;
+        z-index: 3;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+    }
+    
+    .patient-svg { width: 100%; height: 100%; overflow: visible; }
+    .breathe { animation: breathe 4s infinite ease-in-out; transform-origin: bottom center; }
+    
+    /* Patient Condition Classes */
+    .cond-pale .skin { fill: #fdfbf7 !important; }
+    .cond-sweat .sweat-drop { opacity: 1 !important; animation: drip 2s infinite; }
+    .cond-cyanosis .lips { fill: #6366f1 !important; }
+    .cond-stroke .face-left { transform: translateY(6px); transition: 0.5s; }
+    .cond-pain .eyebrow { transform: rotate(15deg) translateY(5px); }
+    
+    /* Dialog Bubble */
+    .dialog-bubble {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255,255,255,0.95);
+        color: var(--text-dark);
+        padding: 12px 20px;
+        border-radius: 18px;
+        border-bottom-left-radius: 4px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        max-width: 85%;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .dialog-bubble.show { opacity: 1; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+    /* Interaction Area / Bottom Half */
+    .interaction-area {
+        flex: 1;
+        background: var(--bg-light);
+        color: var(--text-dark);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow-y: auto;
+    }
+    
+    .phase-header {
+        padding: 15px 20px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky; top: 0; z-index: 5;
+    }
+    .phase-title { font-weight: 800; font-size: 1.1rem; color: var(--primary); }
+    .phase-prog { font-size: 0.85rem; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 4px 10px; border-radius: 99px;}
+    
+    .instruction {
+        padding: 20px 20px 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .options-grid {
+        padding: 0 20px 30px;
+        display: grid;
+        gap: 12px;
+        grid-template-columns: 1fr;
+    }
+    @media(min-width: 600px) { .options-grid { grid-template-columns: 1fr 1fr; } }
+
+    .opt-btn {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #334155;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #f8fafc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .opt-btn:active:not(:disabled) { transform: scale(0.98); }
+    .opt-btn:disabled { cursor: default; opacity: 0.9; }
+
+    /* Action States */
+    .opt-correct {
+        background: #ecfdf5 !important;
+        border-color: var(--success) !important;
+        color: #065f46 !important;
+        animation: pulseGreen 0.4s;
+    }
+    .opt-wrong {
+        background: #fef2f2 !important;
+        border-color: var(--danger) !important;
+        color: #991b1b !important;
+        animation: shake 0.4s;
+    }
+
+    /* Feedback Modal Overlay */
+    .feedback-overlay {
+        position: absolute; inset: 0;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(4px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 50;
+        opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .feedback-overlay.show { opacity: 1; pointer-events: all; }
+    .feedback-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%; max-width: 500px;
+        text-align: center;
+        transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .feedback-overlay.show .feedback-card { transform: translateY(0); }
+    .fc-icon { font-size: 3rem; margin-bottom: 15px; }
+    .fc-title { font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
+    .fc-text { color: #475569; font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; }
+
+    /* Final Result Screen */
+    .result-container {
+        padding: 40px 20px;
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .res-circle {
+        width: 150px; height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(var(--primary) 0%, #e2e8f0 0%);
+        margin: 0 auto 20px;
+        display: flex; justify-content: center; align-items: center;
+        position: relative;
+    }
+    .res-circle-inner {
+        width: 130px; height: 130px;
+        background: var(--bg-dark);
+        border-radius: 50%;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .res-score-txt { font-size: 2.5rem; font-weight: 900; color: white; line-height: 1; }
+    .res-stars { color: var(--warning); font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 15px; }
+    .res-diagnosis { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; color: var(--success); }
+    .res-box { background: var(--bg-panel); padding: 20px; border-radius: var(--border-radius); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; text-align: left; }
+    .res-box h4 { color: var(--primary); margin-bottom: 8px; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;}
+    .res-box p { color: #cbd5e1; font-size: 0.9rem; line-height: 1.5; }
+    
+    .floating-xp {
+        position: fixed; font-weight: 900; font-size: 1.2rem; color: var(--success); z-index: 100;
+        pointer-events: none; animation: floatUp 1.2s forwards; text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popIn { 0% { transform: translate(-50%, 10px) scale(0.9); opacity: 0; } 100% { transform: translate(-50%, 0) scale(1); opacity: 1; } }
+    @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-50px) scale(1.2); opacity: 0; } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    @keyframes pulseGreen { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+    @keyframes dash { to { stroke-dashoffset: 0; } }
+    @keyframes drip { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(15px); opacity: 0; } }
+
+    .confetti { position: fixed; width: 10px; height: 10px; z-index: 999; pointer-events: none; animation: fall linear forwards; }
+    @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+</style>
+</head>
+<body>
+
+<div id="app">
+    <header>
+        <div class="brand"><span>✚</span> PflegefachProfi</div>
+        <div class="stats-bar">
+            <div title="Erfahrungspunkte">⚡ <span id="hdr-xp">0</span></div>
+            <div title="Lern-Streak">🔥 <span id="hdr-streak">0</span></div>
+        </div>
+    </header>
+
+    <main id="screen-home" class="screen active">
+        <div class="container">
+            <div class="hero">
+                <h1>Notaufnahme Simulator</h1>
+                <p>Trainiere klinisches Assessment, Diagnostik und Pflegemaßnahmen interaktiv für dein Pflegeexamen.</p>
+            </div>
+            
+            <h2 style="margin-bottom: 15px; font-size: 1.2rem;">Verfügbare Fälle</h2>
+            <div class="case-grid" id="case-grid">
+                </div>
+        </div>
+    </main>
+
+    <main id="screen-sim" class="screen">
+        <div class="sim-layout">
+            <div class="er-view">
+                <div class="er-monitor">
+                    <div class="mon-row"><span class="mon-lbl">HR</span><span class="mon-val val-hr" id="mon-hr">80</span></div>
+                    <svg class="ecg-line"><path class="ecg-path" d="M0,15 L10,15 L15,5 L20,25 L25,10 L30,15 L100,15"></path></svg>
+                    <div class="mon-row"><span class="mon-lbl">SpO2</span><span class="mon-val val-spo2" id="mon-spo2">98</span></div>
+                    <div class="mon-row" style="margin-bottom:0;"><span class="mon-lbl">RR</span><span class="mon-val val-rr" id="mon-rr">120/80</span></div>
+                </div>
+
+                <div class="patient-container breathe" id="patient-container">
+                    </div>
+                <div class="bed-frame"></div>
+                
+                <div class="dialog-bubble" id="dialog-bubble">...</div>
+            </div>
+
+            <div class="interaction-area">
+                <div class="phase-header">
+                    <div class="phase-title" id="phase-title">Phase 1: Ersteinschätzung</div>
+                    <div class="phase-prog" id="phase-prog">1/5</div>
+                </div>
+                <div class="instruction" id="phase-instruction">Was möchtest du tun?</div>
+                <div class="options-grid" id="options-grid">
+                    </div>
+            </div>
+        </div>
+
+        <div class="feedback-overlay" id="feedback-overlay">
+            <div class="feedback-card">
+                <div class="fc-icon" id="fc-icon">✅</div>
+                <div class="fc-title" id="fc-title">Gut gemacht!</div>
+                <div class="fc-text" id="fc-text">Feedback text here</div>
+                <button class="btn btn-success" style="width:100%" onclick="Engine.nextPhase()">Weiter</button>
+            </div>
+        </div>
+    </main>
+
+    <main id="screen-result" class="screen">
+        <div class="container result-container">
+            <h2 style="margin-bottom: 20px;">Fall abgeschlossen!</h2>
+            <div class="res-circle" id="res-circle">
+                <div class="res-circle-inner">
+                    <div class="res-score-txt" id="res-score-txt">0%</div>
+                </div>
+            </div>
+            <div class="res-stars" id="res-stars">☆☆☆</div>
+            <div class="res-diagnosis" id="res-diagnosis">Diagnose</div>
+            
+            <div class="res-box">
+                <h4>🎯 Auswertung</h4>
+                <p id="res-summary">Zusammenfassung...</p>
+                <div style="margin-top:10px; color:var(--success); font-weight:bold;">+ <span id="res-xp-gain">0</span> XP verdient!</div>
+            </div>
+            
+            <div class="res-box">
+                <h4>📚 Prüfungstipp (Pflege)</h4>
+                <p id="res-exam-tip">Tipp...</p>
+            </div>
+
+            <div style="display:flex; gap:15px; margin-top:30px; flex-direction:column;">
+                <button class="btn btn-success" onclick="Engine.showHome()">Zurück zur Fallauswahl</button>
+                <button class="btn btn-outline" style="color:var(--text-light); border-color:#334155;" onclick="Engine.retryCase()">Fall wiederholen</button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+/* ==========================================================================
+   DISEASE DATA (CASES)
+   Structure tailored for German Pflegefachkraft Exam Preparation
+   ========================================================================== */
+const CASES = [
+    {
+        id: "myokardinfarkt",
+        title: "Akuter Myokardinfarkt",
+        category: "Herz-Kreislauf",
+        difficulty: "Schwer",
+        vitals: { hr: 115, spo2: 91, rr: "160/95" },
+        patientModel: "olderMale",
+        condition: "cond-pale cond-sweat cond-pain",
+        introLine: "Ich... ich habe so einen furchtbaren Druck auf der Brust. Es schnürt mir alles zu...",
+        diagnosis: "Akuter Myokardinfarkt (STEMI/NSTEMI)",
+        examTip: "Beim Myokardinfarkt gilt: Jede Minute zählt (Time is muscle). Als Pflegefachkraft: MONA-Schema im Kopf haben, absolutes Mobilisationsverbot und beruhigende, nicht von der Seite weichende Haltung einnehmen.",
+        phases: [
+            {
+                title: "Symptome erfragen",
+                instruction: "Welche Symptome erfragst bzw. überprüfst du gezielt? (Wähle 3 korrekte)",
+                reqCorrect: 3,
+                options: [
+                    { text: "Ausstrahlung der Schmerzen (Arm, Kiefer, Rücken)", correct: true, points: 10, feedback: "Klassisches Zeichen für Ischämie des Herzmuskels." },
+                    { text: "Atemnot / Dyspnoe", correct: true, points: 10, feedback: "Oft Begleitsymptom durch akute Herzinsuffizienz." },
+                    { text: "Übelkeit / Erbrechen", correct: true, points: 10, feedback: "Vegetative Begleitsymptomatik, bes. bei Hinterwandinfarkt (und oft bei Frauen)." },
+                    { text: "Schmerzen beim Wasserlassen", correct: false, points: -5, feedback: "Dies deutet auf einen HWI hin, nicht auf das Herz." },
+                    { text: "Fieber & Schüttelfrost", correct: false, points: -5, feedback: "Typisch für Infektionen, untypisch für den akuten Infarkt." }
+                ],
+                successMsg: "Sehr gut. Du hast die kardiale Symptomatik mit Ausstrahlung und vegetativen Zeichen richtig erkannt.",
+                reaction: "Ja, der Schmerz zieht bis in meinen linken Arm und mir ist speiübel..."
+            },
+            {
+                title: "Risikofaktoren",
+                instruction: "Der Patient stabilisiert sich kurz. Welche Risikofaktoren fragst du ab? (Wähle 2)",
+                reqCorrect: 2,
+                options: [
+                    { text: "Arterielle Hypertonie & Diabetes", correct: true, points: 10, feedback: "Hauptrisikofaktoren für Arteriosklerose (Makroangiopathie)." },
+                    { text: "Nikotinabusus (Rauchen)", correct: true, points: 10, feedback: "Starkes kardiovaskuläres Risiko." },
+                    { text: "Regelmäßiger Ausdauersport", correct: false, points: -5, feedback: "Sport ist ein protektiver (schützender) Faktor." },
+                    { text: "Vegetarische Ernährung", correct: false, points: -5, feedback: "Eher schützend, kein klassischer Risikofaktor." }
+                ],
+                successMsg: "Korrekt! Das metabolische Syndrom und Rauchen sind Hauptauslöser für KHK und Infarkte.",
+                reaction: "Ich rauche seit 40 Jahren eine Schachtel am Tag und mein Blutdruck war immer zu hoch."
+            },
+            {
+                title: "Diagnostik",
+                instruction: "Der Arzt ist unterwegs. Welche Diagnostik bereitest du sofort vor? (Wähle 2)",
+                reqCorrect: 2,
+                options: [
+                    { text: "Schreiben eines 12-Kanal-EKG", correct: true, points: 15, feedback: "Goldstandard zur Erkennung von Hebungen (STEMI) oder Senkungen." },
+                    { text: "Blutentnahme (Fokus: Troponin, CK-MB)", correct: true, points: 15, feedback: "Herzspezifische Biomarker beweisen den Myokardschaden." },
+                    { text: "Urin-Stix", correct: false, points: -5, feedback: "Bringt im akuten kardiologischen Notfall keinen Erkenntnisgewinn." },
+                    { text: "EEG (Elektroenzephalogramm)", correct: false, points: -5, feedback: "Misst Hirnströme, nicht Herzströme." }
+                ],
+                successMsg: "Top! Das EKG muss innerhalb der ersten 10 Minuten geschrieben werden. Labor bestätigt die Diagnose.",
+                reaction: "Bitte helfen Sie mir, der Schmerz wird schlimmer!"
+            },
+            {
+                title: "Medizinische Therapie",
+                instruction: "Der Arzt ordnet Medikamente an. Was ist jetzt typisch? (Wähle 2)",
+                reqCorrect: 2,
+                options: [
+                    { text: "ASS / Heparin i.v.", correct: true, points: 10, feedback: "Thrombozytenaggregationshemmung und Antikoagulation." },
+                    { text: "Nitrospray / Nitrate", correct: true, points: 10, feedback: "Führt zur Vasodilatation (Gefäßerweiterung) und senkt die Vorlast." },
+                    { text: "Adrenalin i.m.", correct: false, points: -10, feedback: "Falsch! Adrenalin steigert den O2-Bedarf massiv und wird hier nicht gegeben (außer bei Reanimation)." },
+                    { text: "Ibuprofen oral", correct: false, points: -5, feedback: "Schmerztherapie erfolgt intravenös, meist mit Opioiden (Morphin), nicht mit oralen NSAR." }
+                ],
+                successMsg: "Richtig. Die Therapie zielt auf Gefäßerweiterung, Schmerzlinderung und Gerinnungshemmung ab.",
+                reaction: "(Atmet etwas ruhiger) Das Spray unter der Zunge hat ein wenig geholfen."
+            },
+            {
+                title: "Pflegerische Maßnahmen",
+                instruction: "Du bist als Pflegefachkraft verantwortlich. Was sind DEINE primären Aufgaben? (Wähle 3)",
+                reqCorrect: 3,
+                options: [
+                    { text: "Oberkörperhochlagerung (ca. 30°)", correct: true, points: 20, feedback: "Senkt den venösen Rückstrom (Vorlast) und erleichtert die Atmung." },
+                    { text: "Absolute Bettruhe wahren", correct: true, points: 20, feedback: "Jede körperliche Anstrengung erhöht den myokardialen Sauerstoffbedarf. Keine Toilettengänge!" },
+                    { text: "Patient beruhigen & nicht allein lassen", correct: true, points: 20, feedback: "Angst steigert den Sympathikotonus, was die Herzarbeit erhöht. Präsenz zeigt Sicherheit." },
+                    { text: "Patient sofort auf den Flur mobilisieren", correct: false, points: -15, feedback: "Lebensgefährlich! Mobilisation führt zum Anstieg des O2-Bedarfs im Herzmuskel." },
+                    { text: "Flüssigkeit oral zuführen (1 Liter Wasser)", correct: false, points: -10, feedback: "Erhöht das Blutvolumen (Vorlast steigt) und Patient muss für evtl. Herzkatheter/OP nüchtern bleiben." }
+                ],
+                successMsg: "Exzellente Pflege! Herz entlasten, O2-Bedarf senken und Sicherheit vermitteln sind hier lebensrettend.",
+                reaction: "Danke, dass Sie bei mir bleiben. Ich hatte wirklich Todesangst."
+            }
+        ]
+    },
+    {
+        id: "apoplex",
+        title: "Schlaganfall (Apoplex)",
+        category: "Neurologie",
+        difficulty: "Schwer",
+        vitals: { hr: 88, spo2: 96, rr: "190/105" },
+        patientModel: "middleFemale",
+        condition: "cond-stroke",
+        introLine: "M-meine... (lallt) rechte S-seite ist so schwer... ich k-kann kaum sprechen...",
+        diagnosis: "Akuter Apoplex (Ischämie oder Blutung)",
+        examTip: "Time is Brain! Bei Verdacht auf Schlaganfall sofort FAST-Test durchführen. Striktes Nahrungsverbot (Aspirationsgefahr durch Dysphagie) bis zur ärztlichen/logopädischen Freigabe. Blutdruck nicht sofort massiv senken (Perfusionsdruck!).",
+        phases: [
+            {
+                title: "Ersteinschätzung",
+                instruction: "Welches Assessment-Tool nutzt du sofort? (Wähle 1)",
+                reqCorrect: 1,
+                options: [
+                    { text: "FAST-Test (Face, Arms, Speech, Time)", correct: true, points: 15, feedback: "Richtig. Prüft Fazialisparese, Armhalteversuch und Sprachstörungen." },
+                    { text: "Braden-Skala", correct: false, points: -5, feedback: "Dient der Dekubitusrisikoerfassung, hier nicht akut." },
+                    { text: "DMS-Kontrolle der Füße", correct: false, points: -5, feedback: "Durchblutung/Motorik/Sensibilität meist bei Frakturen, hier ist der FAST-Test spezifischer." }
+                ],
+                successMsg: "Korrekt. Der FAST-Test ist internationaler Standard zur schnellen Schlaganfall-Erkennung.",
+                reaction: "(Versucht beide Arme zu heben, der rechte Arm sinkt sofort ab)."
+            },
+            {
+                title: "Risikofaktoren",
+                instruction: "Welche Grunderkrankungen begünstigen einen Apoplex? (Wähle 2)",
+                reqCorrect: 2,
+                options: [
+                    { text: "Vorhofflimmern", correct: true, points: 10, feedback: "Blutgerinnsel können sich im Herzen bilden und ins Gehirn gespült werden (Embolie)." },
+                    { text: "Arterielle Hypertonie", correct: true, points: 10, feedback: "Schädigt die Gefäße und ist Hauptrisikofaktor für Ischämien und Blutungen." },
+                    { text: "Gastritis", correct: false, points: -5, feedback: "Magenentzündung hat keinen direkten Einfluss auf Hirngefäße." },
+                    { text: "Hypotonie (Niedriger Blutdruck)", correct: false, points: -5, feedback: "Meist ist ein zu hoher Blutdruck das Problem." }
+                ],
+                successMsg: "Vorhofflimmern und Bluthochdruck sind die häufigsten Ursachen.",
+                reaction: "Mein A-arzt sagte m-mal... mein H-herz stolpert."
+            },
+            {
+                title: "Diagnostik",
+                instruction: "Was muss sofort ärztlich diagnostiziert werden, bevor behandelt wird? (Wähle 2)",
+                reqCorrect: 2,
+                options: [
+                    { text: "cCT (Craniales Computertomogramm)", correct: true, points: 15, feedback: "Entscheidend zur Unterscheidung: Ist es eine Ischämie (Gefäßverschluss) oder eine Hirnblutung?" },
+                    { text: "Blutzuckermessung", correct: true, points: 10, feedback: "Wichtig! Eine Hypoglykämie kann Schlaganfall-Symptome exakt imitieren." },
+                    { text: "Röntgen Thorax", correct: false, points: -5, feedback: "Liefert hier keine primären Erkenntnisse." },
+                    { text: "Lumbalpunktion", correct: false, points: -5, feedback: "Nicht zur primären Akutdiagnostik des Apoplex." }
+                ],
+                successMsg: "Exzellent. Das CT unterscheidet Blutung von Infarkt, was entscheidend für die Therapie (Lyse) ist.",
+                reaction: "(Wirkt ängstlich und schließt die Augen)."
+            },
+            {
+                title: "Pflegemaßnahmen Notaufnahme",
+                instruction: "Was sind die wichtigsten pflegerischen Akutmaßnahmen? (Wähle 3)",
+                reqCorrect: 3,
+                options: [
+                    { text: "Strikte Nahrungskarenz (Nichts essen/trinken)", correct: true, points: 20, feedback: "Sehr hohe Gefahr von Schluckstörungen (Dysphagie) und Aspiration!" },
+                    { text: "Oberkörperhochlagerung (ca. 30°)", correct: true, points: 15, feedback: "Fördert den venösen Rückfluss aus dem Gehirn und senkt/verhindert Hirndruckanstieg." },
+                    { text: "Vitalzeichen engmaschig prüfen", correct: true, points: 15, feedback: "Besonders Blutdruck, Puls und Sauerstoffsättigung." },
+                    { text: "Sofort ein Glas Wasser anbieten", correct: false, points: -20, feedback: "Gefährlich! Aspiration von Wasser in die Lunge kann zur Pneumonie führen." },
+                    { text: "Patienten flach auf den Bauch legen", correct: false, points: -10, feedback: "Fördert Hirndruck, behindert Atmung." }
+                ],
+                successMsg: "Sehr gute Gefahrenabwehr! Aspirationsschutz und Hirndruckmanagement stehen im Vordergrund.",
+                reaction: "D-danke... ich habe T-todesangst."
+            }
+        ]
+    },
+    {
+        id: "pneumonie",
+        title: "Pneumonie",
+        category: "Pneumologie",
+        difficulty: "Mittel",
+        vitals: { hr: 105, spo2: 92, rr: "110/70" },
+        patientModel: "olderMale",
+        condition: "cond-pale cond-sweat",
+        introLine: "(Hustet stark) Ich bekomme seit zwei Tagen Fieber und das Atmen tut beim Einatmen weh...",
+        diagnosis: "Ambulant erworbene Pneumonie",
+        examTip: "Bei Pneumonie an Sekretmanagement denken! Ausreichend Flüssigkeit (wenn keine Herzinsuffizienz vorliegt) verflüssigt den Schleim. Frühmobilisation und atemerleichternde Lagerung (V-A-T-I) nutzen.",
+        phases: [
+            {
+                title: "Symptome erfragen",
+                instruction: "Welche Leitsymptome erwartest du bei klassischer Pneumonie? (Wähle 3)",
+                reqCorrect: 3,
+                options: [
+                    { text: "Fieber & Schüttelfrost", correct: true, points: 10, feedback: "Typisch für bakterielle Infektionen." },
+                    { text: "Husten (oft produktiv mit Auswurf)", correct: true, points: 10, feedback: "Sekretbildung in den Alveolen." },
+                    { text: "Atemnot (Dyspnoe) & Tachypnoe", correct: true, points: 10, feedback: "Eingeschränkter Gasaustausch führt zu schneller Atmung." },
+                    { text: "Starker Juckreiz am ganzen Körper", correct: false, points: -5, feedback: "Kein Symptom einer Lungenentzündung." },
+                    { text: "Nackensteifigkeit", correct: false, points: -5, feedback: "Deutet eher auf Meningitis hin." }
+                ],
+                successMsg: "Richtig. Husten, Fieber und Atemnot bilden die typische Trias.",
+                reaction: "(Hustet zähen, gelblichen Schleim aus) Mein ganzer Brustkorb schmerzt."
+            },
+            {
+                title: "Diagnostik & Labor",
+                instruction: "Welche Untersuchungen liefert der Arzt an? (Wähle 2)",
+                reqCorrect: 2,
+                options: [
+                    { text: "Röntgen Thorax", correct: true, points: 15, feedback: "Sichert die Diagnose durch Nachweis von Infiltraten (Verschattungen) in der Lunge." },
+                    { text: "Labor (CRP, Leukos) & Blutkulturen", correct: true, points: 15, feedback: "Entzündungswerte und Erregernachweis." },
+                    { text: "Langzeit-EKG", correct: false, points: -5, feedback: "Nicht relevant für den akuten Lungeninfekt." },
+                    { text: "Koloskopie", correct: false, points: -10, feedback: "Das ist eine Darmspiegelung." }
+                ],
+                successMsg: "Röntgen und Infektlabor sind der Standard.",
+                reaction: "Wird das wieder gut? Ich fühle mich so schwach."
+            },
+            {
+                title: "Pflegemaßnahmen",
+                instruction: "Was sind zentrale pflegerische Interventionen? (Wähle 3)",
+                reqCorrect: 3,
+                options: [
+                    { text: "Atemerleichternde Lagerung (z.B. Oberkörper hoch, V-Lagerung)", correct: true, points: 15, feedback: "Dehnt den Thorax und verbessert die Belüftung der Lunge." },
+                    { text: "Flüssigkeitszufuhr sicherstellen", correct: true, points: 15, feedback: "Fieber erhöht den Flüssigkeitsbedarf; Flüssigkeit verflüssigt zähes Sekret." },
+                    { text: "Sekretmanagement (Inhalation, Abhusten anleiten)", correct: true, points: 15, feedback: "Wichtig zur Pneumonieprophylaxe und -therapie." },
+                    { text: "Strikt flach lagern", correct: false, points: -15, feedback: "Verschlechtert die Atmung massiv!" },
+                    { text: "Hustenblocker (Antitussiva) großzügig verabreichen", correct: false, points: -10, feedback: "Falsch! Der produktive Husten ist wichtig, um den Schleim loszuwerden." }
+                ],
+                successMsg: "Sehr gute Lungenpflege. Sekret muss raus, Belüftung muss verbessert werden.",
+                reaction: "(Atmet aufrecht sitzend tief durch) Das Sitzen tut schon etwas gut."
+            }
+        ]
+    },
+    {
+        id: "hypoglykaemie",
+        title: "Hypoglykämie (Diabetischer Notfall)",
+        category: "Endokrinologie",
+        difficulty: "Leicht",
+        vitals: { hr: 110, spo2: 98, rr: "130/80" },
+        patientModel: "youngMale",
+        condition: "cond-sweat cond-pale",
+        introLine: "Mir... mir ist ganz komisch. Ich zittere total und habe kalten Schweiß im Nacken...",
+        diagnosis: "Akute Hypoglykämie bei Diabetes Mellitus Typ 1",
+        examTip: "Typische Zeichen einer Unterzuckerung sind Tachykardie, kalter Schweiß, Unruhe, Heißhunger und Verwirrtheit. Therapie bei Bewusstsein: Schnelle Kohlenhydrate (Saft), dann langsame (Brot). Bewusstlos: Stabile Seitenlage und Glukose i.v. / Glukagon i.m.",
+        phases: [
+            {
+                title: "Ersteinschätzung",
+                instruction: "Welche Symptome sprechen für eine Hypoglykämie (Unterzucker)? (Wähle 3)",
+                reqCorrect: 3,
+                options: [
+                    { text: "Kalter Schweiß & Blässe", correct: true, points: 10, feedback: "Adrenerges Symptom durch Adrenalinausschüttung." },
+                    { text: "Zittern (Tremor) & Tachykardie", correct: true, points: 10, feedback: "Vegetative Warnzeichen des Körpers." },
+                    { text: "Heißhunger & Unruhe", correct: true, points: 10, feedback: "Das Gehirn fordert dringend Energie an." },
+                    { text: "Trockene Haut & Rotes Gesicht", correct: false, points: -5, feedback: "Dies sind eher Zeichen für eine HYPERglykämie (Überzucker)." },
+                    { text: "Acetongeruch aus dem Mund", correct: false, points: -5, feedback: "Zeichen der Ketoazidose (extremer Überzucker)." }
+                ],
+                successMsg: "Richtig. Die vegetativen Warnzeichen entstehen durch die Stresshormonausschüttung.",
+                reaction: "Ich habe vor 2 Stunden mein Insulin gespritzt, aber dann nichts gegessen..."
+            },
+            {
+                title: "Akutes Handeln",
+                instruction: "Der Patient ist noch ansprechbar, BZ liegt bei 45 mg/dl (2.5 mmol/l). Was tust du SOFORT? (Wähle 1)",
+                reqCorrect: 1,
+                options: [
+                    { text: "Schnelle Kohlenhydrate geben (z.B. Apfelsaft, Traubenzucker)", correct: true, points: 20, feedback: "Der Patient ist wach und schluckfähig. Oral ist der sicherste und schnellste Weg." },
+                    { text: "Sofort Insulin spritzen", correct: false, points: -20, feedback: "Lebensgefährlich! Das würde den Zucker noch weiter senken und zum Koma führen." },
+                    { text: "Stabile Seitenlage anwenden", correct: false, points: -5, feedback: "Er ist wach! Seitenlage nur bei Bewusstlosigkeit." }
+                ],
+                successMsg: "Korrekt! Solange der Patient schlucken kann, sind orale, schnell wirksame Kohlenhydrate die erste Wahl.",
+                reaction: "(Trinkt gierig den Saft) Puh... es wird langsam besser. Das Zittern lässt nach."
+            },
+            {
+                title: "Nachsorge",
+                instruction: "Der Patient hat Saft getrunken, der BZ steigt auf 80 mg/dl. Was ist der nächste Schritt? (Wähle 1)",
+                reqCorrect: 1,
+                options: [
+                    { text: "Langsam wirksame Kohlenhydrate geben (z.B. Brot)", correct: true, points: 15, feedback: "Verhindert den Rebound-Effekt (erneuter BZ-Abfall nach dem Saft)." },
+                    { text: "Sofort wieder entlassen", correct: false, points: -5, feedback: "Zu früh. BZ muss stabil sein." },
+                    { text: "Nichts weiter tun, Saft reicht für den Tag", correct: false, points: -10, feedback: "Falsch, der Zucker aus dem Saft ist schnell verbraucht, er wird wieder unterzuckern." }
+                ],
+                successMsg: "Sehr gut! Ein Brot oder eine kleine Mahlzeit stabilisiert den Blutzucker nachhaltig.",
+                reaction: "Danke! Ich werde in Zukunft aufpassen, dass ich Mahlzeiten nicht vergesse."
+            }
+        ]
+    }
+];
+
+/* ==========================================================================
+   GAME ENGINE & STATE MANAGEMENT
+   ========================================================================== */
+
+const SVG_MODELS = {
+    olderMale: `
+        <svg viewBox="0 0 100 100" class="patient-svg">
+            <path class="skin" d="M30,50 Q30,20 50,20 Q70,20 70,50 Q70,80 50,85 Q30,80 30,50" fill="#fcd34d" />
+            <path d="M35,25 Q50,15 65,25" fill="none" stroke="#9ca3af" stroke-width="2"/> <circle class="face-left" cx="42" cy="45" r="3" fill="#1e293b"/>
+            <circle class="face-right" cx="58" cy="45" r="3" fill="#1e293b"/>
+            <path class="eyebrow face-left" d="M38,40 Q42,38 46,40" fill="none" stroke="#64748b" stroke-width="2"/>
+            <path class="eyebrow face-right" d="M54,40 Q58,38 62,40" fill="none" stroke="#64748b" stroke-width="2"/>
+            <path d="M50,48 L50,58" fill="none" stroke="#d97706" stroke-width="2" opacity="0.4"/>
+            <path class="lips face-left face-right" d="M43,68 Q50,72 57,68" fill="none" stroke="#b45309" stroke-width="2"/>
+            <circle class="sweat-drop" cx="35" cy="35" r="2" fill="#bae6fd" opacity="0"/>
+            <circle class="sweat-drop" cx="65" cy="40" r="1.5" fill="#bae6fd" opacity="0" style="animation-delay: 1s"/>
+            <path d="M25,100 C25,80 40,75 50,75 C60,75 75,80 75,100" fill="#38bdf8"/>
+        </svg>
+    `,
+    middleFemale: `
+        <svg viewBox="0 0 100 100" class="patient-svg">
+            <path class="skin" d="M32,50 Q32,25 50,25 Q68,25 68,50 Q68,78 50,82 Q32,78 32,50" fill="#fed7aa" />
+            <path d="M30,50 Q30,15 50,15 Q70,15 70,50 Q60,10 30,50" fill="#451a03"/>
+            <circle class="face-left" cx="43" cy="47" r="3" fill="#1e293b"/>
+            <circle class="face-right" cx="57" cy="47" r="3" fill="#1e293b"/>
+            <path class="lips face-left face-right" d="M44,68 Q50,70 56,68" fill="none" stroke="#ea580c" stroke-width="2.5"/>
+            <circle class="sweat-drop" cx="35" cy="35" r="2" fill="#bae6fd" opacity="0"/>
+            <path d="M25,100 C25,80 40,77 50,77 C60,77 75,80 75,100" fill="#a78bfa"/>
+        </svg>
+    `,
+    youngMale: `
+        <svg viewBox="0 0 100 100" class="patient-svg">
+            <path class="skin" d="M33,50 Q33,25 50,25 Q67,25 67,50 Q67,80 50,85 Q33,80 33,50" fill="#ffedd5" />
+            <path d="M30,35 Q50,15 70,35 Q60,20 40,25 Z" fill="#78350f"/>
+            <circle class="face-left" cx="43" cy="45" r="2.5" fill="#1e293b"/>
+            <circle class="face-right" cx="57" cy="45" r="2.5" fill="#1e293b"/>
+            <path class="eyebrow face-left" d="M39,41 Q43,39 47,41" fill="none" stroke="#78350f" stroke-width="2"/>
+            <path class="eyebrow face-right" d="M53,41 Q57,39 61,41" fill="none" stroke="#78350f" stroke-width="2"/>
+            <path class="lips face-left face-right" d="M45,67 Q50,69 55,67" fill="none" stroke="#c2410c" stroke-width="2"/>
+            <circle class="sweat-drop" cx="38" cy="32" r="2" fill="#bae6fd" opacity="0"/>
+            <circle class="sweat-drop" cx="62" cy="35" r="1.5" fill="#bae6fd" opacity="0" style="animation-delay: 0.5s"/>
+            <path d="M28,100 C28,82 40,78 50,78 C60,78 72,82 72,100" fill="#4ade80"/>
+        </svg>
+    `
+};
+
+const Engine = {
+    state: {
+        xp: 0,
+        streak: 0,
+        completed: {}, // id: bestScore
+        activeCaseId: null,
+        phaseIdx: 0,
+        currentPhaseScore: 0,
+        maxPhaseScore: 0,
+        caseTotalScore: 0,
+        caseMaxScore: 0,
+        correctPicksInPhase: 0,
+    },
+
+    init() {
+        this.loadData();
+        this.renderHome();
+        this.updateHeader();
+    },
+
+    loadData() {
+        try {
+            const saved = localStorage.getItem('pfp_emergency_sim_v1');
+            if(saved) this.state = Object.assign(this.state, JSON.parse(saved));
+        } catch(e) { console.warn("Could not load save data"); }
+    },
+
+    saveData() {
+        try { localStorage.setItem('pfp_emergency_sim_v1', JSON.stringify(this.state)); } 
+        catch(e) {}
+        this.updateHeader();
+    },
+
+    updateHeader() {
+        document.getElementById('hdr-xp').innerText = this.state.xp;
+        document.getElementById('hdr-streak').innerText = this.state.streak;
+    },
+
+    switchScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    },
+
+    showHome() {
+        this.switchScreen('screen-home');
+        this.renderHome();
+    },
+
+    renderHome() {
+        const grid = document.getElementById('case-grid');
+        grid.innerHTML = '';
+        
+        CASES.forEach(c => {
+            const best = this.state.completed[c.id];
+            const scoreHtml = best !== undefined ? 
+                `<span class="case-score">⭐ ${best}%</span>` : 
+                `<span class="case-score score-empty">Noch nicht absolviert</span>`;
+            
+            grid.innerHTML += `
+                <div class="case-card" onclick="Engine.startCase('${c.id}')">
+                    <div class="case-header">
+                        <span class="case-cat">${c.category}</span>
+                        <span class="case-diff diff-${c.difficulty}">${c.difficulty}</span>
+                    </div>
+                    <h3>${c.title}</h3>
+                    <div class="case-footer">
+                        ${scoreHtml}
+                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Start</button>
+                    </div>
+                </div>
+            `;
+        });
+    },
+
+    startCase(id) {
+        this.state.activeCaseId = id;
+        this.state.phaseIdx = 0;
+        this.state.caseTotalScore = 0;
+        this.state.caseMaxScore = 0;
+        
+        const c = this.getActiveCase();
+        
+        // Setup ER Environment
+        document.getElementById('patient-container').innerHTML = SVG_MODELS[c.patientModel] || SVG_MODELS.youngMale;
+        document.getElementById('patient-container').className = `patient-container breathe ${c.condition}`;
+        
+        document.getElementById('mon-hr').innerText = c.vitals.hr;
+        document.getElementById('mon-spo2').innerText = c.vitals.spo2;
+        document.getElementById('mon-rr').innerText = c.vitals.rr;
+
+        this.switchScreen('screen-sim');
+        this.showPatientDialog(c.introLine, 4000);
+        
+        setTimeout(() => this.renderPhase(), 1500);
+    },
+    
+    retryCase() {
+        if(this.state.activeCaseId) this.startCase(this.state.activeCaseId);
+    },
+
+    getActiveCase() {
+        return CASES.find(c => c.id === this.state.activeCaseId);
+    },
+
+    showPatientDialog(text, duration = 3000) {
+        const b = document.getElementById('dialog-bubble');
+        b.innerText = `"${text}"`;
+        b.classList.add('show');
+        setTimeout(() => { b.classList.remove('show'); }, duration);
+    },
+
+    renderPhase() {
+        const c = this.getActiveCase();
+        if(this.state.phaseIdx >= c.phases.length) {
+            return this.showFinalResult();
+        }
+
+        const phase = c.phases[this.state.phaseIdx];
+        this.state.correctPicksInPhase = 0;
+        
+        // Calculate max possible score for this phase
+        this.state.maxPhaseScore = phase.options.filter(o => o.correct).reduce((sum, o) => sum + o.points, 0);
+        this.state.caseMaxScore += this.state.maxPhaseScore;
+
+        document.getElementById('phase-title').innerText = phase.title;
+        document.getElementById('phase-prog').innerText = `${this.state.phaseIdx + 1} / ${c.phases.length}`;
+        document.getElementById('phase-instruction').innerText = phase.instruction;
+
+        const grid = document.getElementById('options-grid');
+        grid.innerHTML = '';
+        
+        // Shuffle options
+        const opts = [...phase.options].sort(() => Math.random() - 0.5);
+        
+        opts.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => this.handleOptionClick(btn, opt, phase);
+            grid.appendChild(btn);
+        });
+    },
+
+    handleOptionClick(btn, opt, phase) {
+        btn.disabled = true;
+        
+        if(opt.correct) {
+            btn.classList.add('opt-correct');
+            this.state.caseTotalScore += opt.points;
+            this.state.correctPicksInPhase++;
+            this.showFloatingXP(opt.points, btn);
+        } else {
+            btn.classList.add('opt-wrong');
+            this.state.caseTotalScore += opt.points; // Penalty
+            this.showFloatingXP(opt.points, btn, true);
+            // Slight visual punishment on patient
+            const p = document.getElementById('patient-container');
+            p.style.filter = 'sepia(0.5) hue-rotate(-30deg)';
+            setTimeout(() => p.style.filter = '', 500);
+        }
+
+        // Check if phase is complete
+        if(this.state.correctPicksInPhase >= phase.reqCorrect) {
+            // Disable remaining
+            document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            setTimeout(() => this.showPhaseFeedback(phase), 1000);
+        }
+    },
+
+    showFloatingXP(points, element, isNegative=false) {
+        const rect = element.getBoundingClientRect();
+        const el = document.createElement('div');
+        el.className = 'floating-xp';
+        el.innerText = isNegative ? points : `+${points}`;
+        el.style.color = isNegative ? 'var(--danger)' : 'var(--success)';
+        el.style.left = (rect.left + rect.width/2 - 10) + 'px';
+        el.style.top = rect.top + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1200);
+    },
+
+    showPhaseFeedback(phase) {
+        document.getElementById('fc-title').innerText = "Phase abgeschlossen";
+        document.getElementById('fc-text').innerText = phase.successMsg;
+        document.getElementById('feedback-overlay').classList.add('show');
+        
+        if(phase.reaction) {
+            this.showPatientDialog(phase.reaction, 4000);
+        }
+    },
+
+    nextPhase() {
+        document.getElementById('feedback-overlay').classList.remove('show');
+        this.state.phaseIdx++;
+        setTimeout(() => this.renderPhase(), 300);
+    },
+
+    showFinalResult() {
+        this.switchScreen('screen-result');
+        const c = this.getActiveCase();
+        
+        let percent = Math.max(0, Math.round((this.state.caseTotalScore / this.state.caseMaxScore) * 100));
+        if(isNaN(percent)) percent = 100;
+        
+        document.getElementById('res-score-txt').innerText = `${percent}%`;
+        document.getElementById('res-diagnosis').innerText = c.diagnosis;
+        document.getElementById('res-exam-tip').innerText = c.examTip;
+        
+        let stars = "☆☆☆";
+        let summary = "Du musst noch üben. Einige Maßnahmen waren gefährlich für den Patienten.";
+        if(percent >= 90) { stars = "⭐⭐⭐"; summary = "Exzellente Arbeit! Der Patient wurde leitliniengerecht und sicher versorgt."; }
+        else if(percent >= 70) { stars = "⭐⭐☆"; summary = "Gute Arbeit! Die wichtigsten Maßnahmen hast du getroffen."; }
+        else if(percent >= 50) { stars = "⭐☆☆"; summary = "Ausreichend. Achte beim nächsten Mal genauer auf die Red Flags."; }
+        
+        document.getElementById('res-stars').innerText = stars;
+        document.getElementById('res-summary').innerText = summary;
+        
+        // XP Calculation
+        let xpGained = Math.round(this.state.caseTotalScore * 1.5);
+        if(xpGained < 0) xpGained = 10;
+        document.getElementById('res-xp-gain').innerText = xpGained;
+        
+        // Update State
+        this.state.xp += xpGained;
+        if(percent >= 50) this.state.streak++; else this.state.streak = 0;
+        
+        const prevBest = this.state.completed[c.id] || 0;
+        if(percent > prevBest) this.state.completed[c.id] = percent;
+        
+        this.saveData();
+
+        if(percent >= 70) this.triggerConfetti();
+    },
+
+    triggerConfetti() {
+        const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+        for (let i = 0; i < 50; i++) {
+            let conf = document.createElement('div');
+            conf.className = 'confetti';
+            conf.style.left = Math.random() * 100 + 'vw';
+            conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+            conf.style.animationDuration = (Math.random() * 1 + 1.5) + 's';
+            document.body.appendChild(conf);
+            setTimeout(() => conf.remove(), 3000);
+        }
+    }
+};
+
+// Initialize App
+document.addEventListener('DOMContentLoaded', () => {
+    Engine.init();
+});
+
+</script>
+</body>
+</html>
