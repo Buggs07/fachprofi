@@ -397,18 +397,15 @@ a {
 
 /* FILTERS */
 .filters-wrapper {
-  position: sticky;
-  top: 0;
-  z-index: 900;
+  position: relative;
+  z-index: 10;
   width: 100%;
   flex-shrink: 0;
   padding: 8px 18px 12px;
-  background: rgba(248, 250, 252, 0.98);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: var(--bg-app);
   border-bottom: 1px solid var(--border);
 }
-
+  
 .filter-card {
   background: var(--bg-surface);
   border: 1.5px solid var(--border);
