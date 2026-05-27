@@ -1,2050 +1,2302 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>PflegefachProfi • Themenbibliothek</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --primary-light: #eff6ff;
-            --purple: #8b5cf6;
-            --pink: #ec4899;
-            --success: #10b981;
-            --success-light: #d1fae5;
-            --warning: #f59e0b;
-            --warning-light: #fef3c7;
-            --danger: #ef4444;
-            --danger-light: #fee2e2;
-            --bg-page: #cbd5e1;
-            --bg-app: #f8fafc;
-            --bg-surface: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            --nav-height: 80px;
-            --header-height: 64px;
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>PflegefachProfi • Themenbibliothek</title>
 
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-        }
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --primary-light: #eff6ff;
+  --purple: #8b5cf6;
+  --pink: #ec4899;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --bg-page: #cbd5e1;
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --nav-height: 80px;
+  --header-height: 64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-page);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
 
-        button {
-            border: none;
-            background: none;
-            font-family: inherit;
-            cursor: pointer;
-            outline: none;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
 
-        /* ── APP CONTAINER ── */
-        .app-container {
-            width: 100%;
-            max-width: 1024px;
-            height: 100%;
-            height: 100dvh;
-            background-color: var(--bg-app);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 60px rgba(15, 23, 42, 0.18);
-            overflow: hidden;
-        }
-        @media (min-width: 768px) {
-            body {
-                align-items: center;
-                padding: 16px;
-            }
-            .app-container {
-                height: 96vh;
-                height: 96dvh;
-                max-height: 960px;
-                border-radius: 28px;
-            }
-        }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-        /* ── HEADER ── */
-        .topbar {
-            height: var(--header-height);
-            flex-shrink: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 18px;
-            gap: 12px;
-        }
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 900;
-            font-size: 17px;
-            letter-spacing: -0.3px;
-            white-space: nowrap;
-        }
-        .logo {
-            width: 38px;
-            height: 38px;
-            border-radius: 11px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            display: grid;
-            place-items: center;
-            font-size: 19px;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-            flex-shrink: 0;
-        }
-        .stats-pill {
-            background: var(--bg-surface);
-            border: 1.5px solid var(--border);
-            border-radius: 99px;
-            padding: 7px 14px;
-            font-size: 12px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-            transition: all 0.45s var(--ease-spring);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .stats-pill i {
-            color: var(--warning);
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-        .stats-pill.level-up {
-            background: var(--warning);
-            color: #fff;
-            border-color: var(--warning);
-            box-shadow: 0 0 28px rgba(245, 158, 11, 0.7), 0 0 60px rgba(245, 158, 11, 0.35);
-            transform: scale(1.08);
-            animation: pulseLevel 0.6s ease-out;
-        }
-        .stats-pill.level-up i {
-            color: #fff;
-            animation: starSpin 0.6s var(--ease-spring);
-        }
-        @keyframes pulseLevel {
-            0%,
-            100% {
-                transform: scale(1.08);
-            }
-            40% {
-                transform: scale(1.18);
-            }
-        }
-        @keyframes starSpin {
-            0% {
-                transform: rotate(0deg) scale(1);
-            }
-            50% {
-                transform: rotate(180deg) scale(1.5);
-            }
-            100% {
-                transform: rotate(360deg) scale(1);
-            }
-        }
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
 
-        /* ── SCROLL AREA ── */
-        .scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-        }
-        .scroll-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        .scroll-area::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .scroll-area::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 99px;
-        }
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-        /* ── DASHBOARD (Compact) ── */
-        .dashboard-wrapper {
-            padding: 16px 18px 6px;
-            flex-shrink: 0;
-        }
-        .dashboard {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 20px;
-            padding: 18px 20px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
-        }
-        .dashboard::before {
-            content: "";
-            position: absolute;
-            right: -40px;
-            top: -60px;
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.04);
-            pointer-events: none;
-        }
-        .dashboard::after {
-            content: "";
-            position: absolute;
-            left: -30px;
-            bottom: -40px;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.03);
-            pointer-events: none;
-        }
-        .dash-header {
-            position: relative;
-            z-index: 2;
-            margin-bottom: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .dash-header h1 {
-            font-size: 19px;
-            letter-spacing: -0.2px;
-        }
-        .dash-header p {
-            font-size: 11px;
-            font-weight: 600;
-            opacity: 0.7;
-            line-height: 1.4;
-            max-width: 420px;
-        }
-        .xp-badge {
-            font-size: 10px;
-            font-weight: 900;
-            background: rgba(255, 255, 255, 0.13);
-            padding: 5px 10px;
-            border-radius: 99px;
-            letter-spacing: 0.4px;
-            white-space: nowrap;
-            animation: xpGlow 3s ease-in-out infinite;
-        }
-        @keyframes xpGlow {
-            0%,
-            100% {
-                box-shadow: 0 0 0px rgba(255, 255, 255, 0);
-            }
-            50% {
-                box-shadow: 0 0 14px rgba(245, 158, 11, 0.5);
-            }
-        }
-        .trackers {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            position: relative;
-            z-index: 2;
-        }
-        .tracker {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .t-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-        .t-info span {
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .t-info b {
-            font-size: 11px;
-            background: rgba(255, 255, 255, 0.14);
-            padding: 2px 9px;
-            border-radius: 6px;
-            font-weight: 800;
-            min-width: 36px;
-            text-align: center;
-        }
-        .t-bar-bg {
-            width: 100%;
-            height: 6px;
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 99px;
-            overflow: hidden;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        .t-bar-fill {
-            height: 100%;
-            width: 0%;
-            border-radius: 99px;
-            transition: width 0.9s var(--ease-spring);
-            position: relative;
-            overflow: hidden;
-        }
-        .t-bar-fill::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg,
-                    transparent 0%,
-                    rgba(255, 255, 255, 0.3) 30%,
-                    rgba(255, 255, 255, 0.5) 50%,
-                    rgba(255, 255, 255, 0.3) 70%,
-                    transparent 100%);
-            animation: shimmerBar 2s linear infinite;
-            border-radius: 99px;
-        }
-        @keyframes shimmerBar {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-        .tr-view .t-info span {
-            color: #93c5fd;
-        }
-        .tr-view .t-bar-fill {
-            background-color: #3b82f6;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
-        }
-        .tr-easy .t-info span {
-            color: #6ee7b7;
-        }
-        .tr-easy .t-bar-fill {
-            background-color: #10b981;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
-        }
-        .tr-mid .t-info span {
-            color: #fcd34d;
-        }
-        .tr-mid .t-bar-fill {
-            background-color: #f59e0b;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
-        }
-        .tr-hard .t-info span {
-            color: #fca5a5;
-        }
-        .tr-hard .t-bar-fill {
-            background-color: #ef4444;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
-        }
+/* APP CONTAINER */
+.app-container {
+  width: 100%;
+  max-width: 1024px;
+  height: 100%;
+  height: 100dvh;
+  background-color: var(--bg-app);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 60px rgba(15, 23, 42, 0.18);
+  overflow: hidden;
+}
 
-        /* ── FILTERS ── */
-        .filters-wrapper {
-            position: sticky;
-            top: 0;
-            z-index: 900;
-            padding: 8px 18px 12px;
-            background: rgba(248, 250, 252, 0.95);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--border);
-        }
-        .filter-card {
-            background: var(--bg-surface);
-            border: 1.5px solid var(--border);
-            border-radius: 18px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .search-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .search-box {
-            position: relative;
-            flex: 1;
-            min-width: 0;
-        }
-        .search-box i {
-            position: absolute;
-            left: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 13px;
-            pointer-events: none;
-        }
-        .search-box input {
-            width: 100%;
-            height: 42px;
-            border: 1.5px solid var(--border);
-            border-radius: 13px;
-            padding: 0 12px 0 38px;
-            font-size: 13px;
-            font-weight: 600;
-            outline: none;
-            transition: 0.25s;
-            background: var(--bg-app);
-            color: var(--text-main);
-        }
-        .search-box input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            background: #fff;
-        }
-        .clear-btn {
-            display: none;
-            background: var(--primary-light);
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 12px;
-            padding: 0 13px;
-            border-radius: 11px;
-            height: 42px;
-            transition: 0.2s;
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-        .clear-btn:hover {
-            background: var(--primary);
-            color: #fff;
-        }
-        .clear-btn.visible {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .filter-row {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-        .fl-label {
-            font-size: 9px;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            font-weight: 900;
-            color: var(--text-muted);
-            margin-right: 2px;
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-        @media (min-width: 600px) {
-            .fl-label {
-                width: auto;
-                margin-bottom: 0;
-                margin-right: 6px;
-            }
-        }
-        .tab {
-            padding: 6px 11px;
-            border-radius: 99px;
-            border: 1.5px solid var(--border);
-            background: var(--bg-surface);
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            white-space: nowrap;
-            transition: all 0.2s;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .tab:hover {
-            border-color: rgba(37, 99, 235, 0.35);
-            color: var(--primary);
-        }
-        .tab.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #fff;
-            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
-            font-weight: 800;
-        }
-        .tab.e-easy.active {
-            background: var(--success);
-            border-color: var(--success);
-            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);
-        }
-        .tab.e-mid.active {
-            background: var(--warning);
-            border-color: var(--warning);
-            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
-            color: #1e293b;
-        }
-        .tab.e-hard.active {
-            background: var(--danger);
-            border-color: var(--danger);
-            box-shadow: 0 3px 10px rgba(239, 68, 68, 0.35);
-        }
-        .toggle-wrapper {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 10px;
-            font-weight: 800;
-            color: var(--text-muted);
-            cursor: pointer;
-            user-select: none;
-            white-space: nowrap;
-            flex-shrink: 0;
-            padding: 4px 0;
-        }
-        .toggle-switch {
-            width: 34px;
-            height: 19px;
-            background: #cbd5e1;
-            border-radius: 99px;
-            position: relative;
-            transition: 0.3s var(--ease);
-            flex-shrink: 0;
-        }
-        .toggle-switch::after {
-            content: "";
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 13px;
-            height: 13px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: 0.3s var(--ease);
-        }
-        .toggle-wrapper.on .toggle-switch {
-            background: var(--primary);
-        }
-        .toggle-wrapper.on .toggle-switch::after {
-            transform: translateX(15px);
-        }
+@media (min-width: 768px) {
+  body {
+    align-items: center;
+    padding: 16px;
+  }
 
-        /* ── TOPIC GRID ── */
-        .grid-container {
-            padding: 14px 18px;
-            display: grid;
-            gap: 14px;
-            align-content: start;
-        }
-        @media (min-width: 700px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-            }
-        }
-        @media (min-width: 900px) {
-            .grid-container {
-                gap: 18px;
-            }
-        }
+  .app-container {
+    height: 96vh;
+    height: 96dvh;
+    max-height: 960px;
+    border-radius: 28px;
+  }
+}
 
-        /* ── TOPIC CARD ── */
-        .topic-card {
-            background: var(--bg-surface);
-            border: 1.5px solid var(--border);
-            border-radius: 18px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-            overflow: hidden;
-            transition: all 0.35s var(--ease-spring);
-            position: relative;
-        }
-        .topic-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 26px rgba(37, 99, 235, 0.09);
-        }
-        .topic-card.open {
-            border-color: var(--primary);
-            box-shadow: 0 12px 34px rgba(37, 99, 235, 0.13);
-        }
-        .topic-card::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--primary);
-            border-radius: 3px 0 0 3px;
-            transition: 0.3s;
-            z-index: 1;
-        }
-        .topic-card.status-easy::before {
-            background: var(--success);
-            box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
-        }
-        .topic-card.status-mid::before {
-            background: var(--warning);
-            box-shadow: 0 0 14px rgba(245, 158, 11, 0.5);
-        }
-        .topic-card.status-hard::before {
-            background: var(--danger);
-            box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
-        }
-        .topic-card.status-unrated::before {
-            background: #cbd5e1;
-            box-shadow: none;
-        }
-        .topic-card.new-highlight {
-            animation: newCardGlow 2s ease-out;
-        }
-        @keyframes newCardGlow {
-            0% {
-                box-shadow: 0 0 0px rgba(37, 99, 235, 0.5), 0 0 30px rgba(37, 99, 235, 0.25);
-            }
-            100% {
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-            }
-        }
+/* HEADER */
+.topbar {
+  height: var(--header-height);
+  flex-shrink: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px;
+  gap: 12px;
+}
 
-        .t-header {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            gap: 10px;
-            padding: 14px 14px 14px 18px;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            z-index: 2;
-        }
-        @media (min-width: 700px) {
-            .t-header {
-                gap: 12px;
-                padding: 15px 15px 15px 20px;
-            }
-        }
-        .t-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 13px;
-            background: var(--bg-app);
-            display: grid;
-            place-items: center;
-            font-size: 22px;
-            flex-shrink: 0;
-            transition: transform 0.3s var(--ease-spring);
-        }
-        .topic-card.open .t-icon {
-            transform: scale(1.08);
-        }
-        .t-title-area {
-            min-width: 0;
-        }
-        .t-title-area h3 {
-            font-size: 14px;
-            margin-bottom: 5px;
-            line-height: 1.3;
-            color: var(--text-main);
-            font-weight: 800;
-            letter-spacing: -0.2px;
-            word-break: break-word;
-        }
-        @media (min-width: 700px) {
-            .t-title-area h3 {
-                font-size: 15px;
-            }
-        }
-        .t-meta {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .badge {
-            font-size: 10px;
-            font-weight: 700;
-            padding: 3px 7px;
-            border-radius: 6px;
-            white-space: nowrap;
-            letter-spacing: 0.2px;
-        }
-        .badge-cat {
-            background: var(--bg-app);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-        }
-        .badge-day {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        .badge-status {
-            background: var(--bg-app);
-            color: var(--text-muted);
-            font-weight: 800;
-        }
-        .badge-status.s-easy {
-            background: var(--success-light);
-            color: #065f46;
-        }
-        .badge-status.s-mid {
-            background: var(--warning-light);
-            color: #92400e;
-        }
-        .badge-status.s-hard {
-            background: var(--danger-light);
-            color: #991b1b;
-        }
-        .badge-status.s-unrated {
-            background: #f1f5f9;
-            color: #94a3b8;
-            animation: pulseUnrated 2s ease-in-out infinite;
-        }
-        @keyframes pulseUnrated {
-            0%,
-            100% {
-                opacity: 0.7;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
 
-        /* Traffic Lights */
-        .t-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            position: relative;
-            flex-shrink: 0;
-        }
-        .traffic-lights {
-            display: flex;
-            gap: 3px;
-            background: #f1f5f9;
-            padding: 3px;
-            border-radius: 12px;
-        }
-        .light-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 9px;
-            display: grid;
-            place-items: center;
-            font-size: 11px;
-            color: #94a3b8;
-            transition: all 0.25s var(--ease-spring);
-            cursor: pointer;
-            position: relative;
-        }
-        @media (min-width: 700px) {
-            .light-btn {
-                width: 33px;
-                height: 33px;
-                font-size: 12px;
-            }
-        }
-        .light-btn:hover {
-            background: #fff;
-            transform: scale(1.12);
-            color: var(--text-main);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-        .light-btn:active {
-            transform: scale(0.9);
-            transition: 0.1s;
-        }
-        .light-btn.active.e-easy {
-            background: var(--success);
-            color: #fff;
-            box-shadow: 0 3px 12px rgba(16, 185, 129, 0.45);
-            animation: popLight 0.4s var(--ease-spring);
-        }
-        .light-btn.active.e-mid {
-            background: var(--warning);
-            color: #fff;
-            box-shadow: 0 3px 12px rgba(245, 158, 11, 0.45);
-            animation: popLight 0.4s var(--ease-spring);
-        }
-        .light-btn.active.e-hard {
-            background: var(--danger);
-            color: #fff;
-            box-shadow: 0 3px 12px rgba(239, 68, 68, 0.45);
-            animation: popLight 0.4s var(--ease-spring);
-        }
-        @keyframes popLight {
-            0% {
-                transform: scale(0.7);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
+.logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  flex-shrink: 0;
+}
 
-        /* Chevron Arrow */
-        .arrow {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            background: #f1f5f9;
-            color: var(--text-muted);
-            display: grid;
-            place-items: center;
-            transition: all 0.4s var(--ease-spring);
-            flex-shrink: 0;
-            font-size: 12px;
-        }
-        .topic-card.open .arrow {
-            transform: rotate(180deg);
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);
-        }
+.stats-pill {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.45s var(--ease-spring);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
-        /* Hint Tooltip */
-        .hint-tooltip {
-            position: absolute;
-            bottom: calc(100% + 10px);
-            right: 0;
-            background: #1e293b;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 9px 13px;
-            border-radius: 10px;
-            white-space: nowrap;
-            pointer-events: none;
-            animation: bounceHint 1.6s ease-in-out infinite;
-            z-index: 20;
-            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.4);
-            letter-spacing: 0.2px;
-        }
-        .hint-tooltip::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            right: 18px;
-            border-width: 6px;
-            border-style: solid;
-            border-color: #1e293b transparent transparent transparent;
-        }
-        .hint-tooltip.fading {
-            animation: fadeOutHint 0.6s ease-out forwards;
-            pointer-events: none;
-        }
-        @keyframes bounceHint {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-7px);
-            }
-            60% {
-                transform: translateY(-2px);
-            }
-        }
-        @keyframes fadeOutHint {
-            to {
-                opacity: 0;
-                transform: translateY(-12px);
-            }
-        }
+.stats-pill i {
+  color: var(--warning);
+  font-size: 14px;
+  transition: color 0.3s;
+}
 
-        /* Expandable Body */
-        .t-body {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.45s var(--ease-spring);
-        }
-        .topic-card.open .t-body {
-            grid-template-rows: 1fr;
-            border-top: 1px solid var(--border);
-        }
-        .t-body-inner {
-            overflow: hidden;
-        }
-        .t-content {
-            padding: 14px 14px 18px 18px;
-            display: grid;
-            gap: 10px;
-        }
-        @media (min-width: 600px) {
-            .t-content {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-            .info-section.full {
-                grid-column: 1 / -1;
-            }
-        }
+.stats-pill.level-up {
+  background: var(--warning);
+  color: #fff;
+  border-color: var(--warning);
+  box-shadow: 0 0 28px rgba(245, 158, 11, 0.7), 0 0 60px rgba(245, 158, 11, 0.35);
+  transform: scale(1.08);
+  animation: pulseLevel 0.6s ease-out;
+}
 
-        /* Info Sections */
-        .info-section {
-            background: #f8fafc;
-            border: 1.5px solid #e8ecf1;
-            border-radius: 14px;
-            padding: 12px 14px;
-            transition: 0.2s;
-        }
-        .info-section:hover {
-            background: #fff;
-            box-shadow: 0 5px 16px rgba(15, 23, 42, 0.05);
-            border-color: #dde2e8;
-        }
-        .info-section.highlight {
-            background: #eff6ff;
-            border-color: #bfdbfe;
-        }
-        .info-section.highlight p {
-            color: #1e40af;
-        }
-        .info-section h4 {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #64748b;
-            margin-bottom: 7px;
-            font-weight: 900;
-            letter-spacing: 0.05em;
-        }
-        .info-section p {
-            font-size: 12px;
-            font-weight: 600;
-            line-height: 1.6;
-            color: #1e293b;
-        }
-        .info-section ul {
-            display: grid;
-            gap: 7px;
-        }
-        .info-section li {
-            list-style: none;
-            font-size: 12px;
-            font-weight: 600;
-            line-height: 1.5;
-            display: flex;
-            gap: 8px;
-            align-items: flex-start;
-            color: #334155;
-        }
-        .info-section li::before {
-            content: "";
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--primary);
-            flex-shrink: 0;
-            margin-top: 6px;
-        }
-        mark {
-            background: #fef9c3;
-            padding: 0 3px;
-            border-radius: 3px;
-            color: #854d0e;
-            font-weight: 700;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #94a3b8;
-            font-weight: 700;
-            display: none;
-            font-size: 14px;
-        }
-        .empty-state i {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
+.stats-pill.level-up i {
+  color: #fff;
+  animation: starSpin 0.6s var(--ease-spring);
+}
 
-        /* ── BOTTOM NAV ── */
-        .nav-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 1024px;
-            height: var(--nav-height);
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            padding-bottom: var(--safe-bottom);
-            z-index: 2000;
-            border-bottom-left-radius: inherit;
-            border-bottom-right-radius: inherit;
-        }
-        @media (min-width: 768px) {
-            .nav-bottom {
-                border-bottom-left-radius: 28px;
-                border-bottom-right-radius: 28px;
-            }
-        }
-        .nav-item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            flex: 1;
-            cursor: pointer;
-            padding: 6px 0;
-            transition: 0.25s;
-            -webkit-tap-highlight-color: transparent;
-            gap: 3px;
-        }
-        .icon-wrapper {
-            position: relative;
-            width: 40px;
-            height: 28px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s var(--ease-spring);
-            z-index: 2;
-            border-radius: 50%;
-        }
-        .nav-item i {
-            font-size: 20px;
-            transition: 0.3s var(--ease-spring);
-        }
-        .nav-item span {
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: 0.3px;
-            transition: 0.3s var(--ease-spring);
-        }
-        .nav-item.active {
-            color: var(--primary);
-        }
-        .nav-item.active .icon-wrapper {
-            transform: translateY(-5px);
-        }
-        .nav-item.active i {
-            transform: scale(1.2);
-        }
-        .nav-dot {
-            position: absolute;
-            bottom: -2px;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--primary);
-            opacity: 0;
-            transition: 0.3s;
-        }
-        .nav-item.active .nav-dot {
-            opacity: 1;
-        }
+@keyframes pulseLevel {
+  0%, 100% { transform: scale(1.08); }
+  40% { transform: scale(1.18); }
+}
 
-        /* ── TOAST ── */
-        .toast {
-            position: fixed;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            background: #1e293b;
-            color: #fff;
-            padding: 11px 22px;
-            border-radius: 99px;
-            font-size: 12px;
-            font-weight: 800;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
-            z-index: 3000;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.45s var(--ease-spring);
-            white-space: nowrap;
-            letter-spacing: 0.3px;
-        }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
+@keyframes starSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.5); }
+  100% { transform: rotate(360deg) scale(1); }
+}
 
-        /* ── CONFETTI ── */
-        .confetti-piece {
-            position: fixed;
-            width: 7px;
-            height: 7px;
-            border-radius: 2px;
-            z-index: 9999;
-            pointer-events: none;
-            animation: confettiFall linear forwards;
-        }
-        @keyframes confettiFall {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            70% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(105vh) rotate(720deg) scale(0.3);
-                opacity: 0;
-            }
-        }
-        .particle-burst {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            z-index: 9998;
-            pointer-events: none;
-            animation: burstOut 0.7s ease-out forwards;
-        }
-        @keyframes burstOut {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--bx), var(--by)) scale(0);
-                opacity: 0;
-            }
-        }
+/* SCROLL AREA */
+.scroll-area {
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
 
-        /* ── RESPONSIVE FINE-TUNING ── */
-        @media (max-width: 380px) {
-            .t-header {
-                gap: 8px;
-                padding: 12px 10px 12px 14px;
-            }
-            .t-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-                border-radius: 10px;
-            }
-            .t-title-area h3 {
-                font-size: 13px;
-            }
-            .light-btn {
-                width: 28px;
-                height: 28px;
-                font-size: 10px;
-                border-radius: 7px;
-            }
-            .arrow {
-                width: 30px;
-                height: 30px;
-                font-size: 10px;
-            }
-            .traffic-lights {
-                gap: 2px;
-                padding: 2px;
-                border-radius: 10px;
-            }
-            .dashboard {
-                padding: 14px 15px;
-                border-radius: 16px;
-            }
-            .dash-header h1 {
-                font-size: 16px;
-            }
-            .tab {
-                font-size: 10px;
-                padding: 5px 9px;
-            }
-        }
-        @media (min-width: 768px) {
-            .dashboard-wrapper {
-                padding: 20px 22px 8px;
-            }
-            .filters-wrapper {
-                padding: 10px 22px 14px;
-            }
-            .grid-container {
-                padding: 16px 22px;
-            }
-            .t-content {
-                padding: 16px 16px 20px 20px;
-            }
-            .light-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 13px;
-            }
-        }
-    </style>
+.scroll-area::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+}
+
+/* DASHBOARD */
+.dashboard-wrapper {
+  padding: 16px 18px 6px;
+  flex-shrink: 0;
+}
+
+.dashboard {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 20px;
+  padding: 18px 20px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
+}
+
+.dashboard::before {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -60px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+}
+
+.dashboard::after {
+  content: "";
+  position: absolute;
+  left: -30px;
+  bottom: -40px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+}
+
+.dash-header {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dash-header h1 {
+  font-size: 19px;
+  letter-spacing: -0.2px;
+}
+
+.dash-header p {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.7;
+  line-height: 1.4;
+  max-width: 420px;
+}
+
+.xp-badge {
+  font-size: 10px;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.13);
+  padding: 5px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  animation: xpGlow 3s ease-in-out infinite;
+}
+
+@keyframes xpGlow {
+  0%, 100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+  50% { box-shadow: 0 0 14px rgba(245, 158, 11, 0.5); }
+}
+
+.trackers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.t-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.t-info span {
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.t-info b {
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.14);
+  padding: 2px 9px;
+  border-radius: 6px;
+  font-weight: 800;
+  min-width: 36px;
+  text-align: center;
+}
+
+.t-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 99px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.t-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 99px;
+  transition: width 0.9s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+}
+
+.t-bar-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.3) 70%, transparent 100%);
+  animation: shimmerBar 2s linear infinite;
+  border-radius: 99px;
+}
+
+@keyframes shimmerBar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.tr-view .t-info span { color: #93c5fd; }
+.tr-view .t-bar-fill {
+  background-color: #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+}
+
+.tr-easy .t-info span { color: #6ee7b7; }
+.tr-easy .t-bar-fill {
+  background-color: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+.tr-mid .t-info span { color: #fcd34d; }
+.tr-mid .t-bar-fill {
+  background-color: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+}
+
+.tr-hard .t-info span { color: #fca5a5; }
+.tr-hard .t-bar-fill {
+  background-color: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+}
+
+/* FILTERS */
+.filters-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  width: 100%;
+  flex-shrink: 0;
+  padding: 8px 18px 12px;
+  background: rgba(248, 250, 252, 0.98);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-box i {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.search-box input {
+  width: 100%;
+  height: 42px;
+  border: 1.5px solid var(--border);
+  border-radius: 13px;
+  padding: 0 12px 0 38px;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  transition: 0.25s;
+  background: var(--bg-app);
+  color: var(--text-main);
+}
+
+.search-box input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #fff;
+}
+
+.clear-btn {
+  display: none;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 12px;
+  padding: 0 13px;
+  border-radius: 11px;
+  height: 42px;
+  transition: 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.clear-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.clear-btn.visible {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.fl-label {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--text-muted);
+  margin-right: 2px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (min-width: 600px) {
+  .fl-label {
+    width: auto;
+    margin-bottom: 0;
+    margin-right: 6px;
+  }
+}
+
+.tab {
+  padding: 6px 11px;
+  border-radius: 99px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-surface);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: all 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  border-color: rgba(37, 99, 235, 0.35);
+  color: var(--primary);
+}
+
+.tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+  font-weight: 800;
+}
+
+.tab.e-easy.active {
+  background: var(--success);
+  border-color: var(--success);
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);
+}
+
+.tab.e-mid.active {
+  background: var(--warning);
+  border-color: var(--warning);
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
+  color: #1e293b;
+}
+
+.tab.e-hard.active {
+  background: var(--danger);
+  border-color: var(--danger);
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.35);
+}
+
+.toggle-wrapper {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 4px 0;
+}
+
+.toggle-switch {
+  width: 34px;
+  height: 19px;
+  background: #cbd5e1;
+  border-radius: 99px;
+  position: relative;
+  transition: 0.3s var(--ease);
+  flex-shrink: 0;
+}
+
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: 0.3s var(--ease);
+}
+
+.toggle-wrapper.on .toggle-switch {
+  background: var(--primary);
+}
+
+.toggle-wrapper.on .toggle-switch::after {
+  transform: translateX(15px);
+}
+
+/* TOPIC GRID */
+.grid-container {
+  padding: 14px 18px;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+@media (min-width: 700px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 900px) {
+  .grid-container {
+    gap: 18px;
+  }
+}
+
+/* TOPIC CARD */
+.topic-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  transition: all 0.35s var(--ease-spring);
+  position: relative;
+}
+
+.topic-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(37, 99, 235, 0.09);
+}
+
+.topic-card.open {
+  border-color: var(--primary);
+  box-shadow: 0 12px 34px rgba(37, 99, 235, 0.13);
+}
+
+.topic-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--primary);
+  border-radius: 3px 0 0 3px;
+  transition: 0.3s;
+  z-index: 1;
+}
+
+.topic-card.status-easy::before {
+  background: var(--success);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+}
+
+.topic-card.status-mid::before {
+  background: var(--warning);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.5);
+}
+
+.topic-card.status-hard::before {
+  background: var(--danger);
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+}
+
+.topic-card.status-unrated::before {
+  background: #cbd5e1;
+  box-shadow: none;
+}
+
+.topic-card.new-highlight {
+  animation: newCardGlow 2s ease-out;
+}
+
+@keyframes newCardGlow {
+  0% {
+    box-shadow: 0 0 0px rgba(37, 99, 235, 0.5), 0 0 30px rgba(37, 99, 235, 0.25);
+  }
+  100% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+}
+
+.t-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  padding: 14px 14px 14px 18px;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 700px) {
+  .t-header {
+    gap: 12px;
+    padding: 15px 15px 15px 20px;
+  }
+}
+
+.t-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: var(--bg-app);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.topic-card.open .t-icon {
+  transform: scale(1.08);
+}
+
+.t-title-area {
+  min-width: 0;
+}
+
+.t-title-area h3 {
+  font-size: 14px;
+  margin-bottom: 5px;
+  line-height: 1.3;
+  color: var(--text-main);
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  word-break: break-word;
+}
+
+@media (min-width: 700px) {
+  .t-title-area h3 {
+    font-size: 15px;
+  }
+}
+
+.t-meta {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.badge-cat {
+  background: var(--bg-app);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.badge-day {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.badge-status {
+  background: var(--bg-app);
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+.badge-status.s-easy {
+  background: var(--success-light);
+  color: #065f46;
+}
+
+.badge-status.s-mid {
+  background: var(--warning-light);
+  color: #92400e;
+}
+
+.badge-status.s-hard {
+  background: var(--danger-light);
+  color: #991b1b;
+}
+
+.badge-status.s-unrated {
+  background: #f1f5f9;
+  color: #94a3b8;
+  animation: pulseUnrated 2s ease-in-out infinite;
+}
+
+@keyframes pulseUnrated {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* ACTIONS */
+.t-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.difficulty-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.traffic-lights {
+  display: flex;
+  gap: 3px;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 12px;
+}
+
+.light-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  color: #94a3b8;
+  transition: all 0.25s var(--ease-spring);
+  cursor: pointer;
+  position: relative;
+}
+
+@media (min-width: 700px) {
+  .light-btn {
+    width: 33px;
+    height: 33px;
+    font-size: 12px;
+  }
+}
+
+.light-btn:hover {
+  background: #fff;
+  transform: scale(1.12);
+  color: var(--text-main);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.light-btn:active {
+  transform: scale(0.9);
+  transition: 0.1s;
+}
+
+.light-btn.active.e-easy {
+  background: var(--success);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.45);
+  animation: activeEasyPulse 1.8s ease-in-out infinite;
+}
+
+.light-btn.active.e-mid {
+  background: var(--warning);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.45);
+  animation: activeMidPulse 1.8s ease-in-out infinite;
+}
+
+.light-btn.active.e-hard {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(239, 68, 68, 0.45);
+  animation: activeHardPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes activeEasyPulse {
+  0%, 100% { box-shadow: 0 3px 12px rgba(16,185,129,.45); transform: scale(1); }
+  50% { box-shadow: 0 0 20px rgba(16,185,129,.75); transform: scale(1.08); }
+}
+
+@keyframes activeMidPulse {
+  0%, 100% { box-shadow: 0 3px 12px rgba(245,158,11,.45); transform: scale(1); }
+  50% { box-shadow: 0 0 20px rgba(245,158,11,.75); transform: scale(1.08); }
+}
+
+@keyframes activeHardPulse {
+  0%, 100% { box-shadow: 0 3px 12px rgba(239,68,68,.45); transform: scale(1); }
+  50% { box-shadow: 0 0 20px rgba(239,68,68,.75); transform: scale(1.08); }
+}
+
+.difficulty-guide {
+  font-size: 9px;
+  font-weight: 900;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.2;
+  max-width: 118px;
+}
+
+.difficulty-guide.unrated {
+  color: var(--primary);
+  animation: guidePulse 1.4s ease-in-out infinite;
+}
+
+.difficulty-guide.unrated::before {
+  content: "➜ ";
+  display: inline-block;
+  animation: pointToButtons 1s ease-in-out infinite;
+}
+
+@keyframes guidePulse {
+  0%, 100% { opacity: .65; }
+  50% { opacity: 1; }
+}
+
+@keyframes pointToButtons {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+/* CHEVRON */
+.arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: var(--text-muted);
+  display: grid;
+  place-items: center;
+  transition: all 0.4s var(--ease-spring);
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.topic-card.open .arrow {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);
+}
+
+.topic-card.open .arrow i {
+  transform: rotate(180deg);
+}
+
+.arrow i {
+  transition: transform 0.4s var(--ease-spring);
+}
+
+/* HINT TOOLTIP */
+.hint-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: #1e293b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 9px 13px;
+  border-radius: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: bounceHint 1.6s ease-in-out infinite;
+  z-index: 20;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.4);
+  letter-spacing: 0.2px;
+}
+
+.hint-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 18px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #1e293b transparent transparent transparent;
+}
+
+.hint-tooltip.fading {
+  animation: fadeOutHint 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes bounceHint {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-7px); }
+  60% { transform: translateY(-2px); }
+}
+
+@keyframes fadeOutHint {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+/* EXPANDABLE BODY */
+.t-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--ease-spring);
+}
+
+.topic-card.open .t-body {
+  grid-template-rows: 1fr;
+  border-top: 1px solid var(--border);
+}
+
+.t-body-inner {
+  overflow: hidden;
+}
+
+.t-content {
+  padding: 14px 14px 18px 18px;
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 600px) {
+  .t-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .info-section.full {
+    grid-column: 1 / -1;
+  }
+}
+
+/* INFO SECTIONS */
+.info-section {
+  background: #f8fafc;
+  border: 1.5px solid #e8ecf1;
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: 0.2s;
+}
+
+.info-section:hover {
+  background: #fff;
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.05);
+  border-color: #dde2e8;
+}
+
+.info-section.highlight {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.info-section.highlight p {
+  color: #1e40af;
+}
+
+.info-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 7px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+.info-section p {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #1e293b;
+}
+
+.info-section ul {
+  display: grid;
+  gap: 7px;
+}
+
+.info-section li {
+  list-style: none;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: #334155;
+}
+
+.info-section li::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+mark {
+  background: #fef9c3;
+  padding: 0 3px;
+  border-radius: 3px;
+  color: #854d0e;
+  font-weight: 700;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: #94a3b8;
+  font-weight: 700;
+  display: none;
+  font-size: 14px;
+}
+
+.empty-state i {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+/* BOTTOM NAV */
+.nav-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1024px;
+  height: var(--nav-height);
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-bottom: var(--safe-bottom);
+  z-index: 2000;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+@media (min-width: 768px) {
+  .nav-bottom {
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+  }
+}
+
+.nav-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  flex: 1;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: 0.25s;
+  -webkit-tap-highlight-color: transparent;
+  gap: 3px;
+}
+
+.icon-wrapper {
+  position: relative;
+  width: 40px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s var(--ease-spring);
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.nav-item i {
+  font-size: 20px;
+  transition: 0.3s var(--ease-spring);
+}
+
+.nav-item span {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  transition: 0.3s var(--ease-spring);
+}
+
+.nav-item.active {
+  color: var(--primary);
+}
+
+.nav-item.active .icon-wrapper {
+  transform: translateY(-5px);
+}
+
+.nav-item.active i {
+  transform: scale(1.2);
+}
+
+.nav-dot {
+  position: absolute;
+  bottom: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.nav-item.active .nav-dot {
+  opacity: 1;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  background: #1e293b;
+  color: #fff;
+  padding: 11px 22px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.45s var(--ease-spring);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* CONFETTI */
+.confetti-piece {
+  position: fixed;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  z-index: 9999;
+  pointer-events: none;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(720deg) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.particle-burst {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  z-index: 9998;
+  pointer-events: none;
+  animation: burstOut 0.7s ease-out forwards;
+}
+
+@keyframes burstOut {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--bx), var(--by)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 380px) {
+  .t-header {
+    gap: 8px;
+    padding: 12px 10px 12px 14px;
+  }
+
+  .t-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    border-radius: 10px;
+  }
+
+  .t-title-area h3 {
+    font-size: 13px;
+  }
+
+  .light-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+    border-radius: 7px;
+  }
+
+  .arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 10px;
+  }
+
+  .traffic-lights {
+    gap: 2px;
+    padding: 2px;
+    border-radius: 10px;
+  }
+
+  .difficulty-guide {
+    max-width: 96px;
+    font-size: 8px;
+  }
+
+  .dashboard {
+    padding: 14px 15px;
+    border-radius: 16px;
+  }
+
+  .dash-header h1 {
+    font-size: 16px;
+  }
+
+  .tab {
+    font-size: 10px;
+    padding: 5px 9px;
+  }
+}
+
+@media (min-width: 768px) {
+  .dashboard-wrapper {
+    padding: 20px 22px 8px;
+  }
+
+  .filters-wrapper {
+    padding: 10px 22px 14px;
+  }
+
+  .grid-container {
+    padding: 16px 22px;
+  }
+
+  .t-content {
+    padding: 16px 16px 20px 20px;
+  }
+
+  .light-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 13px;
+  }
+}
+</style>
 </head>
+
 <body>
+<div class="app-container">
 
-    <div class="app-container">
-        <!-- HEADER -->
-        <header class="topbar">
-            <div class="brand">
-                <div class="logo"><i class="fa-solid fa-book-medical"></i></div>
-                <span>PflegefachProfi</span>
-            </div>
-            <div class="stats-pill" id="levelPill">
-                <i class="fa-solid fa-star"></i>
-                <span id="levelText">Level 1</span>
-            </div>
-        </header>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"><i class="fa-solid fa-book-medical"></i></div>
+      <span>PflegefachProfi</span>
+    </div>
+    <div class="stats-pill" id="levelPill">
+      <i class="fa-solid fa-star"></i>
+      <span id="levelText">Level 1</span>
+    </div>
+  </header>
 
-        <!-- SCROLL AREA -->
-        <div class="scroll-area" id="scrollArea">
-            <!-- Dashboard -->
-            <div class="dashboard-wrapper">
-                <div class="dashboard">
-                    <div class="dash-header">
-                        <div>
-                            <h1>📊 Lern-Tracker</h1>
-                            <p>Öffne Themen & markiere die Schwierigkeit, um deinen Fortschritt zu sehen.</p>
-                        </div>
-                        <span class="xp-badge" id="xpBadge">✨ 0 XP</span>
-                    </div>
-                    <div class="trackers">
-                        <div class="tracker tr-view">
-                            <div class="t-info"><span>👀 Angeschaut</span><b id="kViewed">0/0</b></div>
-                            <div class="t-bar-bg"><div class="t-bar-fill" id="fViewed"></div></div>
-                        </div>
-                        <div class="tracker tr-easy">
-                            <div class="t-info"><span>🟢 Gelernt</span><b id="kEasy">0/0</b></div>
-                            <div class="t-bar-bg"><div class="t-bar-fill" id="fEasy"></div></div>
-                        </div>
-                        <div class="tracker tr-mid">
-                            <div class="t-info"><span>🟡 Lernen</span><b id="kMid">0/0</b></div>
-                            <div class="t-bar-bg"><div class="t-bar-fill" id="fMid"></div></div>
-                        </div>
-                        <div class="tracker tr-hard">
-                            <div class="t-info"><span>🔴 Schwierig</span><b id="kHard">0/0</b></div>
-                            <div class="t-bar-bg"><div class="t-bar-fill" id="fHard"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="scroll-area" id="scrollArea">
 
-            <!-- Filters -->
-            <div class="filters-wrapper" id="filtersWrapper">
-                <div class="filter-card">
-                    <div class="search-row">
-                        <div class="search-box">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="searchInput" placeholder="Suche (z.B. COPD, Ethik, Haftung...)" autocomplete="off">
-                        </div>
-                        <button class="clear-btn" id="clearBtn"><i class="fa-solid fa-xmark"></i> <span>Leeren</span></button>
-                    </div>
-                    <div class="filter-row">
-                        <span class="fl-label">Fachbereich</span>
-                        <button class="tab active" data-cat="all">Alle</button>
-                        <button class="tab" data-cat="medizin">🩺 Medizin</button>
-                        <button class="tab" data-cat="recht">⚖️ Recht</button>
-                        <button class="tab" data-cat="ethik">🕊️ Ethik</button>
-                        <button class="tab" data-cat="modelle">📐 Modelle</button>
-                        <button class="tab" data-cat="kommunikation">🗣️ Komm.</button>
-                    </div>
-                    <div class="filter-row">
-                        <span class="fl-label">Prüfungstag</span>
-                        <button class="tab active" data-day="all">Alle Tage</button>
-                        <button class="tab" data-day="1">Tag 1</button>
-                        <button class="tab" data-day="2">Tag 2</button>
-                        <button class="tab" data-day="3">Tag 3</button>
-                    </div>
-                    <div class="filter-row">
-                        <span class="fl-label">Lernstand</span>
-                        <button class="tab active" data-diff="all">Alle</button>
-                        <button class="tab e-easy" data-diff="easy">🟢 Gelernt</button>
-                        <button class="tab e-mid" data-diff="mid">🟡 Lernen</button>
-                        <button class="tab e-hard" data-diff="hard">🔴 Schwer</button>
-                        <button class="tab" data-diff="unrated">Unbewertet</button>
-                        <div class="toggle-wrapper" id="sortToggle">
-                            <div class="toggle-switch"></div>
-                            <span>Schwere zuerst</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Topic Grid -->
-            <div class="grid-container" id="topicGrid"></div>
-            <div class="empty-state" id="emptyState">
-                <i class="fa-solid fa-ghost"></i>
-                <p>Keine Themen gefunden.<br>Ändere deinen Suchbegriff oder Filter.</p>
-            </div>
+    <div class="dashboard-wrapper">
+      <div class="dashboard">
+        <div class="dash-header">
+          <div>
+            <h1>📊 Lern-Tracker</h1>
+            <p>Öffne Themen & markiere die Schwierigkeit, um deinen Fortschritt zu sehen.</p>
+          </div>
+          <span class="xp-badge" id="xpBadge">✨ 0 XP</span>
         </div>
 
-        <!-- BOTTOM NAV -->
-        <nav class="nav-bottom">
-            <div class="nav-item active" data-nav="bibliothek">
-                <div class="icon-wrapper"><i class="fa-solid fa-book-open"></i><div class="nav-dot"></div></div>
-                <span>Bibliothek</span>
-            </div>
-            <div class="nav-item" data-nav="home">
-                <div class="icon-wrapper"><i class="fa-solid fa-house"></i><div class="nav-dot"></div></div>
-                <span>Home</span>
-            </div>
-            <div class="nav-item" data-nav="themen">
-                <div class="icon-wrapper"><i class="fa-solid fa-layer-group"></i><div class="nav-dot"></div></div>
-                <span>Themen</span>
-            </div>
-            <div class="nav-item" data-nav="ueben">
-                <div class="icon-wrapper"><i class="fa-solid fa-dumbbell"></i><div class="nav-dot"></div></div>
-                <span>Üben</span>
-            </div>
-            <div class="nav-item" data-nav="kontakt">
-                <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i><div class="nav-dot"></div></div>
-                <span>Kontakt</span>
-            </div>
-        </nav>
+        <div class="trackers">
+          <div class="tracker tr-view">
+            <div class="t-info"><span>👀 Angeschaut</span><b id="kViewed">0/0</b></div>
+            <div class="t-bar-bg"><div class="t-bar-fill" id="fViewed"></div></div>
+          </div>
+
+          <div class="tracker tr-easy">
+            <div class="t-info"><span>🟢 Gelernt</span><b id="kEasy">0/0</b></div>
+            <div class="t-bar-bg"><div class="t-bar-fill" id="fEasy"></div></div>
+          </div>
+
+          <div class="tracker tr-mid">
+            <div class="t-info"><span>🟡 Lernen</span><b id="kMid">0/0</b></div>
+            <div class="t-bar-bg"><div class="t-bar-fill" id="fMid"></div></div>
+          </div>
+
+          <div class="tracker tr-hard">
+            <div class="t-info"><span>🔴 Schwierig</span><b id="kHard">0/0</b></div>
+            <div class="t-bar-bg"><div class="t-bar-fill" id="fHard"></div></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- TOAST -->
-    <div class="toast" id="toastMsg">Gespeichert!</div>
+    <div class="filters-wrapper" id="filtersWrapper">
+      <div class="filter-card">
+        <div class="search-row">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Suche (z.B. COPD, Ethik, Haftung...)" autocomplete="off">
+          </div>
+          <button class="clear-btn" id="clearBtn"><i class="fa-solid fa-xmark"></i> <span>Leeren</span></button>
+        </div>
 
-    <script>
-        (function() {
-            /* ==========================================================================
-               DATA
-               ========================================================================== */
-            const TOPICS_DATA = [
-                { id: "m1", category: "medizin", days: [2, 3], title: "Herzinsuffizienz", icon: "💙",
-                    definition: "Unfähigkeit des Herzens, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.",
-                    risiko: ["KHK", "Arterielle Hypertonie", "Herzinfarkt in der Vorgeschichte", "Diabetes mellitus",
-                        "Herzklappenerkrankungen"
-                    ], ursachen: ["Myokardschädigung (z.B. Ischämie)", "Druckbelastung (Hypertonie)", "Volumenbelastung",
-                        "Rhythmusstörungen"
-                    ], symptome: ["Dyspnoe (Atemnot, Orthopnoe)", "Beinödeme (Rechtsherz)",
-                        "Gewichtszunahme (Wassereinlagerung)", "Leistungsminderung", "Nykturie"
-                    ], diagnostik: ["12-Kanal-EKG", "Echokardiografie (EF-Messung)", "BNP / NT-proBNP Blutwert",
-                        "Röntgen-Thorax", "NYHA-Klassifikation"
-                    ], therapie: ["Diuretika (Entwässerung)", "ACE-Hemmer / Sartane", "Betablocker",
-                        "Aldosteronantagonisten", "ggf. Schrittmacher/ICD"
-                    ], pflege: ["Täglich zur gleichen Zeit, mit gleicher Kleidung nüchtern wiegen.",
-                        "Strikte Ein- und Ausfuhrbilanzierung im FD/SD/ND durchführen.",
-                        "Trinkmengenbegrenzung (z.B. 1.5L/Tag) nach ärztlicher Anordnung streng überwachen.",
-                        "Beine und Knöchel einmal pro Schicht auf Ödembildung kontrollieren.",
-                        "Oberkörperhochlagerung (Herzstuhllagerung) bei akuter Dyspnoe zur Vorlastsenkung.",
-                        "Belastung im Alltag streng nach NYHA-Symptomatik dosieren (Pausen einplanen).",
-                        "Hautpflege bei gespannter Ödem-Haut zur Vermeidung von Mikroläsionen durchführen."
-                    ] },
-                { id: "m2", category: "medizin", days: [1, 3], title: "Pneumonie", icon: "🌬️",
-                    definition: "Akute oder chronische Entzündung des Lungengewebes, meist durch Bakterien, Viren oder Aspiration ausgelöst.",
-                    risiko: ["Immobilität / Bettlägerigkeit", "Hohes Alter", "COPD / Vorerkrankungen",
-                        "Dysphagie (Schluckstörungen)", "Immunschwäche"
-                    ], ursachen: ["Bakterielle Infektion (häufig Pneumokokken)",
-                        "Aspiration von Nahrung, Speichel oder Magensaft", "Sekretstau durch oberflächliche Atmung"
-                    ], symptome: ["Fieber und Schüttelfrost", "Husten (produktiv oder trocken)",
-                        "Eitriger, gelblich-grüner Sputum", "Dyspnoe (Atemnot)", "Tachypnoe",
-                        "Thoraxschmerzen beim Atmen"
-                    ], diagnostik: ["Auskultation (Rasselgeräusche)", "SpO₂ und Atemfrequenz", "Röntgen-Thorax",
-                        "Entzündungsparameter (CRP, Leukozyten, PCT)"
-                    ], therapie: ["Kalkulierte Antibiotikatherapie", "Sauerstoffgabe bei Hypoxie",
-                        "Antipyretika (fiebersenkend)", "Atem- und Physiotherapie", "Sekretolytika"
-                    ], pflege: ["Atemfrequenz und SpO₂ regelmäßig nach Standard kontrollieren.",
-                        "Oberkörperhochlagerung (VATI-Lagerung) zur Ventilationsverbesserung durchführen.",
-                        "Frühmobilisation fördern (z.B. an die Bettkante setzen).",
-                        "Atemübungen anleiten (z.B. Lippenbremse, Kontaktatmung, Atemtrainer).",
-                        "Ausreichende Flüssigkeit anbieten (zur Sekretverflüssigung), sofern keine KI besteht.",
-                        "Sputum täglich auf Menge, Farbe und Geruch beobachten und dokumentieren.",
-                        "Mundpflege zur Vermeidung aufsteigender Keime intensivieren."
-                    ] },
-                { id: "m3", category: "medizin", days: [2, 3], title: "Diabetes mellitus (Typ 2)", icon: "🩸",
-                    definition: "Chronische Stoffwechselerkrankung mit Hyperglykämie durch Insulinresistenz und relativen Insulinmangel.",
-                    risiko: ["Adipositas (Stammfettsucht)", "Bewegungsmangel", "Hohes Alter", "Genetische Disposition",
-                        "Ungesunde, kohlenhydratreiche Ernährung"
-                    ], ursachen: ["Insulinresistenz der Zielzellen (Leber, Muskel, Fett)",
-                        "Erschöpfung der B-Zellen im Pankreas (relativer Mangel)"
-                    ], symptome: ["Oft schleichend und asymptomatisch", "Polyurie (vermehrtes Wasserlassen)",
-                        "Polydipsie (starker Durst)", "Müdigkeit und Leistungsschwäche", "Pruritus und Infektneigung",
-                        "Schlecht heilende Wunden"
-                    ], diagnostik: ["Nüchternblutzucker", "HbA1c-Wert (Langzeitzucker)",
-                    "Oraler Glukosetoleranztest (oGTT)", "Urinstatus (Glukosurie)"], therapie: [
-                        "Lebensstilintervention (Gewichtsreduktion, Sport)",
-                        "Orale Antidiabetika (z.B. Metformin)", "Insulintherapie bei Erschöpfung", "Schulung"
-                    ], pflege: ["Blutzucker nach ärztlichem Schema messen und exakt dokumentieren.",
-                        "Füße täglich auf Druckstellen, Risse und Wunden (DFS) kontrollieren.",
-                        "Hypoglykämiezeichen (Schwitzen, Zittern, Unruhe, Heißhunger) sofort erkennen.",
-                        "Insulingabe exakt nach 10-R-Regel vorbereiten und applizieren (Spritzen-Ess-Abstand beachten).",
-                        "Patient zur hautschonenden Fußpflege (nicht einweichen, gerade Nägel) anleiten.",
-                        "Mahlzeiten, Kohlenhydrate (BE/KE) und Insulinzeitpunkt genau aufeinander abstimmen."
-                    ] },
-                { id: "m4", category: "medizin", days: [1, 2], title: "Apoplex (Schlaganfall)", icon: "🧠",
-                    definition: "Akute neurologische Funktionsstörung durch lokalen Durchblutungsmangel oder Blutungen im Gehirn.",
-                    risiko: ["Arterielle Hypertonie", "Vorhofflimmern", "Rauchen", "Diabetes mellitus",
-                        "Hypercholesterinämie"
-                    ], ursachen: ["Ischämischer Infarkt (Thrombus oder Embolus, ca. 80-85%)",
-                        "Hämorrhagischer Infarkt (Hirnblutung, ca. 15-20%)"
-                    ], symptome: ["Plötzliche Hemiparese (Halbseitenlähmung)", "Facialisparese (hängender Mundwinkel)",
-                        "Aphasie oder Dysarthrie (Sprachstörung)", "Dysphagie (Schluckstörung)",
-                        "Bewusstseinsstörungen", "Sehstörungen"
-                    ], diagnostik: ["FAST-Test", "CCT oder MRT des Schädels", "Neurologischer Status (NIHSS)",
-                        "Schluckscreening", "Doppler-Sonographie"
-                    ], therapie: ["Systemische Thrombolyse", "Mechanische Thrombektomie", "Blutdruckmanagement",
-                        "Logopädie und Physiotherapie", "Antikoagulation (Sekundärprävention)"
-                    ], pflege: [
-                        "Vitalzeichen (v.a. Blutdruck) und Bewusstseinslage engmaschig überwachen.",
-                        "Aspirationsprophylaxe: Vor dem ersten Essen/Trinken strenges Schluckscreening durchführen.",
-                        "Patient beim Essen in aufrechte Position (90 Grad) bringen, andicken bei Bedarf.",
-                        "Mobilisation nach dem Bobath-Konzept (betroffene Seite in Handlungen einbeziehen).",
-                        "Gezieltes Positionieren zur Vermeidung von Spastiken und Schulter-Subluxationen.",
-                        "Kommunikation bei Aphasie anpassen (kurze Sätze, Ja/Nein-Fragen, Zeit lassen).",
-                        "Thromboseprophylaxe bei Parese sicherstellen (Mobilisation, MTS nach AO)."
-                    ] },
-                { id: "m5", category: "medizin", days: [2, 3], title: "COPD", icon: "🫁",
-                    definition: "Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion.",
-                    risiko: ["Rauchen (Hauptrisikofaktor)", "Feinstaubbelastung", "Berufliche Schadstoffe",
-                        "Häufige Atemwegsinfekte im Kindesalter"
-                    ], ursachen: ["Chronische Bronchitis (dauerhafte Entzündung)",
-                        "Lungenemphysem (Überblähung, Zerstörung der Alveolen)"
-                    ], symptome: ["AHA-Symptome: Atemnot, Husten, Auswurf", "Belastungsdyspnoe", "Zyanose", "Fassthorax",
-                        "Exazerbationen (akute Verschlechterung)"
-                    ], diagnostik: ["Spirometrie (FEV1)", "Blutgasanalyse (BGA)", "SpO2 Messung", "Röntgen-Thorax",
-                        "mMRC-Dyspnoe-Skala"
-                    ], therapie: ["Rauchstopp", "Inhalative Bronchodilatatoren", "Kortikosteroide bei Exazerbation",
-                        "Sauerstofflangzeittherapie (LTOT)", "Atemphysiotherapie"
-                    ], pflege: ["Atemerleichternde Positionen anleiten (Kutschersitz, Torwartstellung).",
-                        "Technik der Lippenbremse bei Dyspnoe anleiten und gemeinsam üben.",
-                        "Inhalationstechnik des Patienten regelmäßig überprüfen.",
-                        "Sauerstoffgabe exakt nach AO überwachen (Gefahr der CO2-Narkose bei zu viel O2).",
-                        "Pflegehandlungen in Etappen planen, um Erschöpfung zu vermeiden (Pacing).",
-                        "Sputumbeobachtung (Menge, Farbe, Konsistenz) zur Früherkennung einer Exazerbation."
-                    ] },
-                { id: "r1", category: "recht", days: [1], title: "Haftungsrecht im Pflegealltag", icon: "⚖️",
-                    definition: "Rechtliche Verantwortung von Pflegekräften für Schäden, die Patienten durch pflegerisches Handeln oder Unterlassen entstehen.",
-                    kernaussagen: [
-                        "Zivilrechtliche Haftung zielt auf Schadensersatz und Schmerzensgeld ab (§ 823 BGB).",
-                        "Strafrechtliche Haftung droht bei Körperverletzung oder Tötung durch Fahrlässigkeit (persönliche Strafe).",
-                        "Übernahmeverschulden: Eine Pflegekraft haftet, wenn sie Tätigkeiten übernimmt, für die sie nicht qualifiziert ist.",
-                        "Beweislastumkehr: Bei groben Dokumentationslücken geht das Gericht davon aus, dass die Maßnahme nicht stattgefunden hat."
-                    ],
-                    beispiel: [
-                        "Ein Patient stürzt nachts und bricht sich die Hüfte. Die Pflegekraft hatte vergessen, das ärztlich angeordnete Bettgitter hochzufahren. Dies ist ein Unterlassungsdelikt, das verfolgt werden kann."
-                    ] },
-                { id: "r2", category: "recht", days: [1], title: "Schweigepflicht (§ 203 StGB)", icon: "🔒",
-                    definition: "Die gesetzliche Verpflichtung von Berufsgeheimnisträgern, fremde Geheimnisse, die ihnen im Rahmen ihrer Berufsausübung anvertraut wurden, nicht unbefugt zu offenbaren.",
-                    kernaussagen: [
-                        "Gilt auch nach dem Tod des Patienten uneingeschränkt weiter.",
-                        "Gilt auch gegenüber Familienangehörigen, wenn keine Entbindung/Vollmacht vorliegt.",
-                        "Die bloße Tatsache, DASS jemand Patient in der Einrichtung ist, unterliegt der Schweigepflicht.",
-                        "Ausnahmen: Ausdrückliche Einwilligung, gesetzliche Meldepflicht (IfSG) oder rechtfertigender Notstand."
-                    ],
-                    beispiel: [
-                        "Ein Nachbar ruft auf der Station an und fragt, wie es Herr Müller nach der OP geht. Die Pflegekraft darf weder bestätigen, dass Herr Müller auf Station liegt, noch Auskunft erteilen."
-                    ] },
-                { id: "e1", category: "ethik", days: [1], title: "4 Prinzipien (Beauchamp & Childress)", icon: "🕊️",
-                    definition: "Das international anerkannte Standardmodell der Medizinethik zur systematischen Beurteilung moralischer Konflikte im Gesundheitswesen.",
-                    kernaussagen: [
-                        "1. Respekt vor der Autonomie: Das Selbstbestimmungsrecht und der Wille des Patienten haben oberste Priorität.",
-                        "2. Schadensvermeidung (Non-Maleficence): Der Grundsatz 'primum non nocere' (zuerst nicht schaden).",
-                        "3. Fürsorge / Wohltun (Beneficence): Die Pflicht, aktiv zum Wohl des Patienten zu handeln.",
-                        "4. Gerechtigkeit (Justice): Faire und gleichheitliche Verteilung von Gesundheitsressourcen."
-                    ],
-                    beispiel: [
-                        "Ein kognitiv völlig klarer Patient lehnt eine lebensrettende Operation ab. Der Konflikt besteht zwischen Autonomie (sein Wille) und Fürsorge (Leben retten). Nach moderner Ethik hat die Autonomie hier Vorrang."
-                    ] },
-                { id: "p1", category: "modelle", days: [1], title: "ABEDL nach Monika Krohwinkel", icon: "📐",
-                    definition: "Ein bedürfnis- und ressourcenorientiertes Pflegemodell, das den Menschen ganzheitlich in 13 Aktivitäten, Beziehungen und existenziellen Erfahrungen des Lebens (ABEDL) erfasst.",
-                    kernaussagen: [
-                        "Der Mensch wird als ganzheitliches Wesen (Körper, Geist, Seele) betrachtet.",
-                        "Der Fokus liegt primär auf den erhaltenen Fähigkeiten (Ressourcen), nicht nur auf den Defiziten.",
-                        "Das oberste Pflegeziel ist es, die Unabhängigkeit und das Wohlbefinden zu erhalten oder wiederherzustellen.",
-                        "Dient in vielen Einrichtungen als strukturelle Basis für die Pflegeanamnese und die SIS."
-                    ],
-                    beispiel: [
-                        "In der ABEDL 'Sich pflegen können' wird dokumentiert, dass der Patient sein Gesicht selbstständig waschen kann (Ressource), jedoch bei der Fußpflege Anleitung benötigt (Defizit)."
-                    ] },
-                { id: "p2", category: "modelle", days: [1], title: "Pflegemodell nach Roper, Logan & Tierney", icon: "📐",
-                    definition: "Ein Lebensmodell der Pflege, das auf 12 Lebensaktivitäten (LA) basiert und die Unabhängigkeit des Patienten ins Zentrum stellt.",
-                    kernaussagen: [
-                        "Das Modell besteht aus 5 Komponenten: Lebensaktivitäten, Lebensspanne, Abhängigkeits-/Unabhängigkeits-Kontinuum, beeinflussende Faktoren und Individualität.",
-                        "Ermittelt den Grad der Unabhängigkeit bei jeder Lebensaktivität.",
-                        "Pflege greift nur ein, wenn eine LA nicht selbstständig durchgeführt werden kann."
-                    ],
-                    beispiel: [
-                        "Bei der LA 'Für eine sichere Umgebung sorgen' wird festgestellt, dass der Patient aufgrund von Schwindel sturzgefährdet ist. Die Pflegekraft plant prophylaktische Maßnahmen, um die Unabhängigkeit in dieser LA zu sichern."
-                    ] },
-                { id: "k1", category: "kommunikation", days: [1], title: "Vier-Ohren-Modell (Schulz von Thun)", icon: "🗣️",
-                    definition: "Kommunikationsmodell, das besagt, dass jede Nachricht vier Botschaften (Ebenen) gleichzeitig enthält.",
-                    kernaussagen: [
-                        "1. Sachebene: Worüber ich informiere (reine Daten und Fakten).",
-                        "2. Selbstkundgabe: Was ich von mir selbst preisgebe (Gefühle, Zustand).",
-                        "3. Beziehungsseite: Was ich von dir halte und wie wir zueinander stehen.",
-                        "4. Appellseite: Wozu ich dich veranlassen möchte (Wunsch/Befehl)."
-                    ],
-                    beispiel: [
-                        "Patient: 'Das Wasser steht aber weit weg!'. Sachebene: Distanz ist groß. Appell: 'Gib mir das Wasser.' Beziehung: 'Du sorgst schlecht für mich.' Selbstkundgabe: 'Ich habe Durst.'"
-                    ] },
-                { id: "k2", category: "kommunikation", days: [1], title: "Axiome nach Paul Watzlawick", icon: "🗣️",
-                    definition: "Fünf pragmatische Axiome der menschlichen Kommunikation. Die Grundlage der zwischenmenschlichen Interaktion.",
-                    kernaussagen: [
-                        "Axiom 1: Man kann nicht nicht kommunizieren (auch Schweigen sendet eine Botschaft).",
-                        "Axiom 2: Jede Kommunikation hat einen Inhalts- und einen Beziehungsaspekt.",
-                        "Axiom 3: Kommunikation ist immer Ursache und Wirkung (Interpunktion).",
-                        "Axiom 4: Menschliche Kommunikation bedient sich analoger und digitaler Modalitäten (Worte vs. Körpersprache).",
-                        "Axiom 5: Kommunikation ist symmetrisch oder komplementär (gleichwertig oder ungleich hierarchisch)."
-                    ],
-                    beispiel: [
-                        "Ein Patient dreht sich bei der Pflegeübergabe stumm zur Wand weg. Gemäß Axiom 1 ('Man kann nicht nicht kommunizieren') drückt er durch sein Schweigen und seine Körpersprache Ablehnung oder Schmerz aus."
-                    ] }
-            ];
+        <div class="filter-row">
+          <span class="fl-label">Fachbereich</span>
+          <button class="tab active" data-cat="all">Alle</button>
+          <button class="tab" data-cat="medizin">🩺 Medizin</button>
+          <button class="tab" data-cat="recht">⚖️ Recht</button>
+          <button class="tab" data-cat="ethik">🕊️ Ethik</button>
+          <button class="tab" data-cat="modelle">📐 Modelle</button>
+          <button class="tab" data-cat="kommunikation">🗣️ Komm.</button>
+        </div>
 
-            /* ==========================================================================
-               STATE & LOCAL STORAGE
-               ========================================================================== */
-            const STORAGE_KEY = 'pfp.library.v5';
-            const State = {
-                openId: null,
-                search: '',
-                cat: 'all',
-                day: 'all',
-                diff: 'all',
-                hardFirst: false,
-                data: loadData(),
-                hintSeen: localStorage.getItem('pfp.hintSeen.v2') === 'true',
-                hintTimeoutId: null,
-            };
+        <div class="filter-row">
+          <span class="fl-label">Prüfungstag</span>
+          <button class="tab active" data-day="all">Alle Tage</button>
+          <button class="tab" data-day="1">Tag 1</button>
+          <button class="tab" data-day="2">Tag 2</button>
+          <button class="tab" data-day="3">Tag 3</button>
+        </div>
 
-            function loadData() {
-                try {
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (raw) return JSON.parse(raw);
-                } catch (e) {}
-                return { viewed: [], difficulty: {}, level: 1 };
-            }
+        <div class="filter-row">
+          <span class="fl-label">Lernstand</span>
+          <button class="tab active" data-diff="all">Alle</button>
+          <button class="tab e-easy" data-diff="easy">🟢 Gelernt</button>
+          <button class="tab e-mid" data-diff="mid">🟡 Lernen</button>
+          <button class="tab e-hard" data-diff="hard">🔴 Schwer</button>
+          <button class="tab" data-diff="unrated">Unbewertet</button>
+          <div class="toggle-wrapper" id="sortToggle">
+            <div class="toggle-switch"></div>
+            <span>Schwere zuerst</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            function saveData() {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(State.data));
-            }
+    <div class="grid-container" id="topicGrid"></div>
 
-            /* ==========================================================================
-               DOM HELPERS
-               ========================================================================== */
-            const $ = s => document.querySelector(s);
-            const $$ = s => document.querySelectorAll(s);
+    <div class="empty-state" id="emptyState">
+      <i class="fa-solid fa-ghost"></i>
+      <p>Keine Themen gefunden.<br>Ändere deinen Suchbegriff oder Filter.</p>
+    </div>
 
-            function highlight(text) {
-                const q = State.search.trim();
-                if (!q) return text;
-                const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                return String(text).replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
-            }
+  </div>
 
-            function secHTML(title, icon, arr, isFull = false) {
-                if (!arr || arr.length === 0) return '';
-                return `
-            <div class="info-section ${isFull ? 'full' : ''}">
-              <h4>${icon} ${title}</h4>
-              <ul>${arr.map(i => `<li>${highlight(i)}</li>`).join('')}</ul>
-            </div>`;
-            }
+  <nav class="nav-bottom">
+    <div class="nav-item active" data-nav="bibliothek">
+      <div class="icon-wrapper"><i class="fa-solid fa-book-open"></i><div class="nav-dot"></div></div>
+      <span>Bibliothek</span>
+    </div>
+    <div class="nav-item" data-nav="home">
+      <div class="icon-wrapper"><i class="fa-solid fa-house"></i><div class="nav-dot"></div></div>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" data-nav="themen">
+      <div class="icon-wrapper"><i class="fa-solid fa-layer-group"></i><div class="nav-dot"></div></div>
+      <span>Themen</span>
+    </div>
+    <div class="nav-item" data-nav="ueben">
+      <div class="icon-wrapper"><i class="fa-solid fa-dumbbell"></i><div class="nav-dot"></div></div>
+      <span>Üben</span>
+    </div>
+    <div class="nav-item" data-nav="kontakt">
+      <div class="icon-wrapper"><i class="fa-solid fa-envelope"></i><div class="nav-dot"></div></div>
+      <span>Kontakt</span>
+    </div>
+  </nav>
 
-            /* ==========================================================================
-               RENDER
-               ========================================================================== */
-            function render() {
-                const q = State.search.trim().toLowerCase();
-                let filtered = TOPICS_DATA.filter(t => {
-                    if (State.cat !== 'all' && t.category !== State.cat) return false;
-                    if (State.day !== 'all' && !t.days.includes(Number(State.day))) return false;
-                    const d = State.data.difficulty[t.id] || 'unrated';
-                    if (State.diff !== 'all' && d !== State.diff) return false;
-                    if (q && !JSON.stringify(t).toLowerCase().includes(q)) return false;
-                    return true;
-                });
+</div>
 
-                if (State.hardFirst) {
-                    const rank = { hard: 0, mid: 1, unrated: 2, easy: 3 };
-                    filtered.sort((a, b) =>
-                        (rank[State.data.difficulty[a.id]] ?? 2) - (rank[State.data.difficulty[b.id]] ?? 2) ||
-                        a.id.localeCompare(b.id)
-                    );
-                } else {
-                    filtered.sort((a, b) => a.id.localeCompare(b.id));
-                }
+<div class="toast" id="toastMsg">Gespeichert!</div>
 
-                $('#topicGrid').innerHTML = filtered.map(t => {
-                    const d = State.data.difficulty[t.id] || 'unrated';
-                    const isOpen = State.openId === t.id;
-                    const isNew = !State.data.viewed.includes(t.id);
-                    const catLabels = { medizin: "Medizin", recht: "Recht", ethik: "Ethik", modelle: "Modelle",
-                        kommunikation: "Komm." };
-                    const dayBadges = t.days.map(day =>
-                        `<span class="badge badge-day">Tag ${day}</span>`).join('');
-                    let statusText = "○ Unbewertet";
-                    let statusClass = "s-unrated";
-                    if (d === 'easy') { statusText = "🟢 Gelernt";
-                        statusClass = "s-easy"; }
-                    if (d === 'mid') { statusText = "🟡 Lernen";
-                        statusClass = "s-mid"; }
-                    if (d === 'hard') { statusText = "🔴 Schwer";
-                        statusClass = "s-hard"; }
+<script>
+(function() {
+  const TOPICS_DATA = [
+    {
+      id: "m1",
+      category: "medizin",
+      days: [2, 3],
+      title: "Herzinsuffizienz",
+      icon: "💙",
+      definition: "Unfähigkeit des Herzens, den Körper ausreichend mit Blut und Sauerstoff zu versorgen.",
+      risiko: ["KHK", "Arterielle Hypertonie", "Herzinfarkt in der Vorgeschichte", "Diabetes mellitus", "Herzklappenerkrankungen"],
+      ursachen: ["Myokardschädigung (z.B. Ischämie)", "Druckbelastung (Hypertonie)", "Volumenbelastung", "Rhythmusstörungen"],
+      symptome: ["Dyspnoe (Atemnot, Orthopnoe)", "Beinödeme (Rechtsherz)", "Gewichtszunahme (Wassereinlagerung)", "Leistungsminderung", "Nykturie"],
+      diagnostik: ["12-Kanal-EKG", "Echokardiografie (EF-Messung)", "BNP / NT-proBNP Blutwert", "Röntgen-Thorax", "NYHA-Klassifikation"],
+      therapie: ["Diuretika (Entwässerung)", "ACE-Hemmer / Sartane", "Betablocker", "Aldosteronantagonisten", "ggf. Schrittmacher/ICD"],
+      pflege: [
+        "Täglich zur gleichen Zeit, mit gleicher Kleidung nüchtern wiegen.",
+        "Strikte Ein- und Ausfuhrbilanzierung im FD/SD/ND durchführen.",
+        "Trinkmengenbegrenzung (z.B. 1.5L/Tag) nach ärztlicher Anordnung streng überwachen.",
+        "Beine und Knöchel einmal pro Schicht auf Ödembildung kontrollieren.",
+        "Oberkörperhochlagerung (Herzstuhllagerung) bei akuter Dyspnoe zur Vorlastsenkung.",
+        "Belastung im Alltag streng nach NYHA-Symptomatik dosieren (Pausen einplanen).",
+        "Hautpflege bei gespannter Ödem-Haut zur Vermeidung von Mikroläsionen durchführen."
+      ]
+    },
+    {
+      id: "m2",
+      category: "medizin",
+      days: [1, 3],
+      title: "Pneumonie",
+      icon: "🌬️",
+      definition: "Akute oder chronische Entzündung des Lungengewebes, meist durch Bakterien, Viren oder Aspiration ausgelöst.",
+      risiko: ["Immobilität / Bettlägerigkeit", "Hohes Alter", "COPD / Vorerkrankungen", "Dysphagie (Schluckstörungen)", "Immunschwäche"],
+      ursachen: ["Bakterielle Infektion (häufig Pneumokokken)", "Aspiration von Nahrung, Speichel oder Magensaft", "Sekretstau durch oberflächliche Atmung"],
+      symptome: ["Fieber und Schüttelfrost", "Husten (produktiv oder trocken)", "Eitriger, gelblich-grüner Sputum", "Dyspnoe (Atemnot)", "Tachypnoe", "Thoraxschmerzen beim Atmen"],
+      diagnostik: ["Auskultation (Rasselgeräusche)", "SpO₂ und Atemfrequenz", "Röntgen-Thorax", "Entzündungsparameter (CRP, Leukozyten, PCT)"],
+      therapie: ["Kalkulierte Antibiotikatherapie", "Sauerstoffgabe bei Hypoxie", "Antipyretika (fiebersenkend)", "Atem- und Physiotherapie", "Sekretolytika"],
+      pflege: [
+        "Atemfrequenz und SpO₂ regelmäßig nach Standard kontrollieren.",
+        "Oberkörperhochlagerung (VATI-Lagerung) zur Ventilationsverbesserung durchführen.",
+        "Frühmobilisation fördern (z.B. an die Bettkante setzen).",
+        "Atemübungen anleiten (z.B. Lippenbremse, Kontaktatmung, Atemtrainer).",
+        "Ausreichende Flüssigkeit anbieten (zur Sekretverflüssigung), sofern keine KI besteht.",
+        "Sputum täglich auf Menge, Farbe und Geruch beobachten und dokumentieren.",
+        "Mundpflege zur Vermeidung aufsteigender Keime intensivieren."
+      ]
+    },
+    {
+      id: "m3",
+      category: "medizin",
+      days: [2, 3],
+      title: "Diabetes mellitus (Typ 2)",
+      icon: "🩸",
+      definition: "Chronische Stoffwechselerkrankung mit Hyperglykämie durch Insulinresistenz und relativen Insulinmangel.",
+      risiko: ["Adipositas (Stammfettsucht)", "Bewegungsmangel", "Hohes Alter", "Genetische Disposition", "Ungesunde, kohlenhydratreiche Ernährung"],
+      ursachen: ["Insulinresistenz der Zielzellen (Leber, Muskel, Fett)", "Erschöpfung der B-Zellen im Pankreas (relativer Mangel)"],
+      symptome: ["Oft schleichend und asymptomatisch", "Polyurie (vermehrtes Wasserlassen)", "Polydipsie (starker Durst)", "Müdigkeit und Leistungsschwäche", "Pruritus und Infektneigung", "Schlecht heilende Wunden"],
+      diagnostik: ["Nüchternblutzucker", "HbA1c-Wert (Langzeitzucker)", "Oraler Glukosetoleranztest (oGTT)", "Urinstatus (Glukosurie)"],
+      therapie: ["Lebensstilintervention (Gewichtsreduktion, Sport)", "Orale Antidiabetika (z.B. Metformin)", "Insulintherapie bei Erschöpfung", "Schulung"],
+      pflege: [
+        "Blutzucker nach ärztlichem Schema messen und exakt dokumentieren.",
+        "Füße täglich auf Druckstellen, Risse und Wunden (DFS) kontrollieren.",
+        "Hypoglykämiezeichen (Schwitzen, Zittern, Unruhe, Heißhunger) sofort erkennen.",
+        "Insulingabe exakt nach 10-R-Regel vorbereiten und applizieren (Spritzen-Ess-Abstand beachten).",
+        "Patient zur hautschonenden Fußpflege (nicht einweichen, gerade Nägel) anleiten.",
+        "Mahlzeiten, Kohlenhydrate (BE/KE) und Insulinzeitpunkt genau aufeinander abstimmen."
+      ]
+    },
+    {
+      id: "m4",
+      category: "medizin",
+      days: [1, 2],
+      title: "Apoplex (Schlaganfall)",
+      icon: "🧠",
+      definition: "Akute neurologische Funktionsstörung durch lokalen Durchblutungsmangel oder Blutungen im Gehirn.",
+      risiko: ["Arterielle Hypertonie", "Vorhofflimmern", "Rauchen", "Diabetes mellitus", "Hypercholesterinämie"],
+      ursachen: ["Ischämischer Infarkt (Thrombus oder Embolus, ca. 80-85%)", "Hämorrhagischer Infarkt (Hirnblutung, ca. 15-20%)"],
+      symptome: ["Plötzliche Hemiparese (Halbseitenlähmung)", "Facialisparese (hängender Mundwinkel)", "Aphasie oder Dysarthrie (Sprachstörung)", "Dysphagie (Schluckstörung)", "Bewusstseinsstörungen", "Sehstörungen"],
+      diagnostik: ["FAST-Test", "CCT oder MRT des Schädels", "Neurologischer Status (NIHSS)", "Schluckscreening", "Doppler-Sonographie"],
+      therapie: ["Systemische Thrombolyse", "Mechanische Thrombektomie", "Blutdruckmanagement", "Logopädie und Physiotherapie", "Antikoagulation (Sekundärprävention)"],
+      pflege: [
+        "Vitalzeichen (v.a. Blutdruck) und Bewusstseinslage engmaschig überwachen.",
+        "Aspirationsprophylaxe: Vor dem ersten Essen/Trinken strenges Schluckscreening durchführen.",
+        "Patient beim Essen in aufrechte Position (90 Grad) bringen, andicken bei Bedarf.",
+        "Mobilisation nach dem Bobath-Konzept (betroffene Seite in Handlungen einbeziehen).",
+        "Gezieltes Positionieren zur Vermeidung von Spastiken und Schulter-Subluxationen.",
+        "Kommunikation bei Aphasie anpassen (kurze Sätze, Ja/Nein-Fragen, Zeit lassen).",
+        "Thromboseprophylaxe bei Parese sicherstellen (Mobilisation, MTS nach AO)."
+      ]
+    },
+    {
+      id: "m5",
+      category: "medizin",
+      days: [2, 3],
+      title: "COPD",
+      icon: "🫁",
+      definition: "Chronisch progrediente Lungenerkrankung mit nicht vollständig reversibler Atemwegsobstruktion.",
+      risiko: ["Rauchen (Hauptrisikofaktor)", "Feinstaubbelastung", "Berufliche Schadstoffe", "Häufige Atemwegsinfekte im Kindesalter"],
+      ursachen: ["Chronische Bronchitis (dauerhafte Entzündung)", "Lungenemphysem (Überblähung, Zerstörung der Alveolen)"],
+      symptome: ["AHA-Symptome: Atemnot, Husten, Auswurf", "Belastungsdyspnoe", "Zyanose", "Fassthorax", "Exazerbationen (akute Verschlechterung)"],
+      diagnostik: ["Spirometrie (FEV1)", "Blutgasanalyse (BGA)", "SpO2 Messung", "Röntgen-Thorax", "mMRC-Dyspnoe-Skala"],
+      therapie: ["Rauchstopp", "Inhalative Bronchodilatatoren", "Kortikosteroide bei Exazerbation", "Sauerstofflangzeittherapie (LTOT)", "Atemphysiotherapie"],
+      pflege: [
+        "Atemerleichternde Positionen anleiten (Kutschersitz, Torwartstellung).",
+        "Technik der Lippenbremse bei Dyspnoe anleiten und gemeinsam üben.",
+        "Inhalationstechnik des Patienten regelmäßig überprüfen.",
+        "Sauerstoffgabe exakt nach AO überwachen (Gefahr der CO2-Narkose bei zu viel O2).",
+        "Pflegehandlungen in Etappen planen, um Erschöpfung zu vermeiden (Pacing).",
+        "Sputumbeobachtung (Menge, Farbe, Konsistenz) zur Früherkennung einer Exazerbation."
+      ]
+    },
+    {
+      id: "r1",
+      category: "recht",
+      days: [1],
+      title: "Haftungsrecht im Pflegealltag",
+      icon: "⚖️",
+      definition: "Rechtliche Verantwortung von Pflegekräften für Schäden, die Patienten durch pflegerisches Handeln oder Unterlassen entstehen.",
+      kernaussagen: [
+        "Zivilrechtliche Haftung zielt auf Schadensersatz und Schmerzensgeld ab (§ 823 BGB).",
+        "Strafrechtliche Haftung droht bei Körperverletzung oder Tötung durch Fahrlässigkeit (persönliche Strafe).",
+        "Übernahmeverschulden: Eine Pflegekraft haftet, wenn sie Tätigkeiten übernimmt, für die sie nicht qualifiziert ist.",
+        "Beweislastumkehr: Bei groben Dokumentationslücken geht das Gericht davon aus, dass die Maßnahme nicht stattgefunden hat."
+      ],
+      beispiel: [
+        "Ein Patient stürzt nachts und bricht sich die Hüfte. Die Pflegekraft hatte vergessen, das ärztlich angeordnete Bettgitter hochzufahren. Dies ist ein Unterlassungsdelikt, das verfolgt werden kann."
+      ]
+    },
+    {
+      id: "r2",
+      category: "recht",
+      days: [1],
+      title: "Schweigepflicht (§ 203 StGB)",
+      icon: "🔒",
+      definition: "Die gesetzliche Verpflichtung von Berufsgeheimnisträgern, fremde Geheimnisse, die ihnen im Rahmen ihrer Berufsausübung anvertraut wurden, nicht unbefugt zu offenbaren.",
+      kernaussagen: [
+        "Gilt auch nach dem Tod des Patienten uneingeschränkt weiter.",
+        "Gilt auch gegenüber Familienangehörigen, wenn keine Entbindung/Vollmacht vorliegt.",
+        "Die bloße Tatsache, DASS jemand Patient in der Einrichtung ist, unterliegt der Schweigepflicht.",
+        "Ausnahmen: Ausdrückliche Einwilligung, gesetzliche Meldepflicht (IfSG) oder rechtfertigender Notstand."
+      ],
+      beispiel: [
+        "Ein Nachbar ruft auf der Station an und fragt, wie es Herr Müller nach der OP geht. Die Pflegekraft darf weder bestätigen, dass Herr Müller auf Station liegt, noch Auskunft erteilen."
+      ]
+    },
+    {
+      id: "e1",
+      category: "ethik",
+      days: [1],
+      title: "4 Prinzipien (Beauchamp & Childress)",
+      icon: "🕊️",
+      definition: "Das international anerkannte Standardmodell der Medizinethik zur systematischen Beurteilung moralischer Konflikte im Gesundheitswesen.",
+      kernaussagen: [
+        "1. Respekt vor der Autonomie: Das Selbstbestimmungsrecht und der Wille des Patienten haben oberste Priorität.",
+        "2. Schadensvermeidung (Non-Maleficence): Der Grundsatz 'primum non nocere' (zuerst nicht schaden).",
+        "3. Fürsorge / Wohltun (Beneficence): Die Pflicht, aktiv zum Wohl des Patienten zu handeln.",
+        "4. Gerechtigkeit (Justice): Faire und gleichheitliche Verteilung von Gesundheitsressourcen."
+      ],
+      beispiel: [
+        "Ein kognitiv völlig klarer Patient lehnt eine lebensrettende Operation ab. Der Konflikt besteht zwischen Autonomie (sein Wille) und Fürsorge (Leben retten). Nach moderner Ethik hat die Autonomie hier Vorrang."
+      ]
+    },
+    {
+      id: "p1",
+      category: "modelle",
+      days: [1],
+      title: "ABEDL nach Monika Krohwinkel",
+      icon: "📐",
+      definition: "Ein bedürfnis- und ressourcenorientiertes Pflegemodell, das den Menschen ganzheitlich in 13 Aktivitäten, Beziehungen und existenziellen Erfahrungen des Lebens (ABEDL) erfasst.",
+      kernaussagen: [
+        "Der Mensch wird als ganzheitliches Wesen (Körper, Geist, Seele) betrachtet.",
+        "Der Fokus liegt primär auf den erhaltenen Fähigkeiten (Ressourcen), nicht nur auf den Defiziten.",
+        "Das oberste Pflegeziel ist es, die Unabhängigkeit und das Wohlbefinden zu erhalten oder wiederherzustellen.",
+        "Dient in vielen Einrichtungen als strukturelle Basis für die Pflegeanamnese und die SIS."
+      ],
+      beispiel: [
+        "In der ABEDL 'Sich pflegen können' wird dokumentiert, dass der Patient sein Gesicht selbstständig waschen kann (Ressource), jedoch bei der Fußpflege Anleitung benötigt (Defizit)."
+      ]
+    },
+    {
+      id: "p2",
+      category: "modelle",
+      days: [1],
+      title: "Pflegemodell nach Roper, Logan & Tierney",
+      icon: "📐",
+      definition: "Ein Lebensmodell der Pflege, das auf 12 Lebensaktivitäten (LA) basiert und die Unabhängigkeit des Patienten ins Zentrum stellt.",
+      kernaussagen: [
+        "Das Modell besteht aus 5 Komponenten: Lebensaktivitäten, Lebensspanne, Abhängigkeits-/Unabhängigkeits-Kontinuum, beeinflussende Faktoren und Individualität.",
+        "Ermittelt den Grad der Unabhängigkeit bei jeder Lebensaktivität.",
+        "Pflege greift nur ein, wenn eine LA nicht selbstständig durchgeführt werden kann."
+      ],
+      beispiel: [
+        "Bei der LA 'Für eine sichere Umgebung sorgen' wird festgestellt, dass der Patient aufgrund von Schwindel sturzgefährdet ist. Die Pflegekraft plant prophylaktische Maßnahmen, um die Unabhängigkeit in dieser LA zu sichern."
+      ]
+    },
+    {
+      id: "k1",
+      category: "kommunikation",
+      days: [1],
+      title: "Vier-Ohren-Modell (Schulz von Thun)",
+      icon: "🗣️",
+      definition: "Kommunikationsmodell, das besagt, dass jede Nachricht vier Botschaften (Ebenen) gleichzeitig enthält.",
+      kernaussagen: [
+        "1. Sachebene: Worüber ich informiere (reine Daten und Fakten).",
+        "2. Selbstkundgabe: Was ich von mir selbst preisgebe (Gefühle, Zustand).",
+        "3. Beziehungsseite: Was ich von dir halte und wie wir zueinander stehen.",
+        "4. Appellseite: Wozu ich dich veranlassen möchte (Wunsch/Befehl)."
+      ],
+      beispiel: [
+        "Patient: 'Das Wasser steht aber weit weg!'. Sachebene: Distanz ist groß. Appell: 'Gib mir das Wasser.' Beziehung: 'Du sorgst schlecht für mich.' Selbstkundgabe: 'Ich habe Durst.'"
+      ]
+    },
+    {
+      id: "k2",
+      category: "kommunikation",
+      days: [1],
+      title: "Axiome nach Paul Watzlawick",
+      icon: "🗣️",
+      definition: "Fünf pragmatische Axiome der menschlichen Kommunikation. Die Grundlage der zwischenmenschlichen Interaktion.",
+      kernaussagen: [
+        "Axiom 1: Man kann nicht nicht kommunizieren (auch Schweigen sendet eine Botschaft).",
+        "Axiom 2: Jede Kommunikation hat einen Inhalts- und einen Beziehungsaspekt.",
+        "Axiom 3: Kommunikation ist immer Ursache und Wirkung (Interpunktion).",
+        "Axiom 4: Menschliche Kommunikation bedient sich analoger und digitaler Modalitäten (Worte vs. Körpersprache).",
+        "Axiom 5: Kommunikation ist symmetrisch oder komplementär (gleichwertig oder ungleich hierarchisch)."
+      ],
+      beispiel: [
+        "Ein Patient dreht sich bei der Pflegeübergabe stumm zur Wand weg. Gemäß Axiom 1 ('Man kann nicht nicht kommunizieren') drückt er durch sein Schweigen und seine Körpersprache Ablehnung oder Schmerz aus."
+      ]
+    }
+  ];
 
-                    let contentBody = '';
-                    if (t.category === 'medizin') {
-                        contentBody = `
-                  ${secHTML('Risikofaktoren', '⚠️', t.risiko)}
-                  ${secHTML('Ursachen', '🧩', t.ursachen)}
-                  ${secHTML('Symptome', '🔎', t.symptome)}
-                  ${secHTML('Diagnostik / Assessment', '📋', t.diagnostik)}
-                  ${secHTML('Medizinische Therapie', '💊', t.therapie)}
-                  ${secHTML('Pflegemaßnahmen (Examen)', '🏥', t.pflege, true)}`;
-                    } else {
-                        contentBody = `
-                  ${secHTML('Kernaussagen', '📌', t.kernaussagen, true)}
-                  ${secHTML('Praxis-Beispiel', '💡', t.beispiel, true)}`;
-                    }
+  const STORAGE_KEY = 'pfp.library.v5';
 
-                    return `
-            <article class="topic-card ${isOpen ? 'open' : ''} status-${d} ${isNew && isOpen ? 'new-highlight' : ''}"
-                     id="card-${t.id}">
-              <div class="t-header" data-card-header="${t.id}">
-                <div class="t-icon">${t.icon}</div>
-                <div class="t-title-area">
-                  <h3>${highlight(t.title)}</h3>
-                  <div class="t-meta">
-                    <span class="badge badge-cat">${catLabels[t.category] || t.category}</span>
-                    ${dayBadges}
-                    <span class="badge badge-status ${statusClass}">${statusText}</span>
-                  </div>
+  const State = {
+    openId: null,
+    search: '',
+    cat: 'all',
+    day: 'all',
+    diff: 'all',
+    hardFirst: false,
+    data: loadData(),
+    hintSeen: localStorage.getItem('pfp.hintSeen.v2') === 'true',
+    hintTimeoutId: null
+  };
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return { viewed: [], difficulty: {}, level: 1 };
+  }
+
+  function saveData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(State.data));
+  }
+
+  const $ = s => document.querySelector(s);
+  const $$ = s => document.querySelectorAll(s);
+
+  function highlight(text) {
+    const q = State.search.trim();
+    if (!q) return text;
+    const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return String(text).replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
+  }
+
+  function secHTML(title, icon, arr, isFull = false) {
+    if (!arr || arr.length === 0) return '';
+    return `
+      <div class="info-section ${isFull ? 'full' : ''}">
+        <h4>${icon} ${title}</h4>
+        <ul>${arr.map(i => `<li>${highlight(i)}</li>`).join('')}</ul>
+      </div>`;
+  }
+
+  function render() {
+    const q = State.search.trim().toLowerCase();
+
+    let filtered = TOPICS_DATA.filter(t => {
+      if (State.cat !== 'all' && t.category !== State.cat) return false;
+      if (State.day !== 'all' && !t.days.includes(Number(State.day))) return false;
+
+      const d = State.data.difficulty[t.id] || 'unrated';
+      if (State.diff !== 'all' && d !== State.diff) return false;
+
+      if (q && !JSON.stringify(t).toLowerCase().includes(q)) return false;
+
+      return true;
+    });
+
+    if (State.hardFirst) {
+      const rank = { hard: 0, mid: 1, unrated: 2, easy: 3 };
+      filtered.sort((a, b) =>
+        (rank[State.data.difficulty[a.id] || 'unrated'] ?? 2) -
+        (rank[State.data.difficulty[b.id] || 'unrated'] ?? 2) ||
+        a.id.localeCompare(b.id)
+      );
+    } else {
+      filtered.sort((a, b) => a.id.localeCompare(b.id));
+    }
+
+    $('#topicGrid').innerHTML = filtered.map(t => {
+      const d = State.data.difficulty[t.id] || 'unrated';
+      const isOpen = State.openId === t.id;
+      const isNew = !State.data.viewed.includes(t.id);
+
+      const catLabels = {
+        medizin: "Medizin",
+        recht: "Recht",
+        ethik: "Ethik",
+        modelle: "Modelle",
+        kommunikation: "Komm."
+      };
+
+      const dayBadges = t.days.map(day => `<span class="badge badge-day">Tag ${day}</span>`).join('');
+
+      let statusText = "○ Unbewertet";
+      let statusClass = "s-unrated";
+
+      if (d === 'easy') {
+        statusText = "🟢 Gelernt";
+        statusClass = "s-easy";
+      }
+
+      if (d === 'mid') {
+        statusText = "🟡 Lernen";
+        statusClass = "s-mid";
+      }
+
+      if (d === 'hard') {
+        statusText = "🔴 Schwer";
+        statusClass = "s-hard";
+      }
+
+      let contentBody = '';
+
+      if (t.category === 'medizin') {
+        contentBody = `
+          ${secHTML('Risikofaktoren', '⚠️', t.risiko)}
+          ${secHTML('Ursachen', '🧩', t.ursachen)}
+          ${secHTML('Symptome', '🔎', t.symptome)}
+          ${secHTML('Diagnostik / Assessment', '📋', t.diagnostik)}
+          ${secHTML('Medizinische Therapie', '💊', t.therapie)}
+          ${secHTML('Pflegemaßnahmen (Examen)', '🏥', t.pflege, true)}`;
+      } else {
+        contentBody = `
+          ${secHTML('Kernaussagen', '📌', t.kernaussagen, true)}
+          ${secHTML('Praxis-Beispiel', '💡', t.beispiel, true)}`;
+      }
+
+      return `
+        <article class="topic-card ${isOpen ? 'open' : ''} status-${d} ${isNew && isOpen ? 'new-highlight' : ''}" id="card-${t.id}">
+          <div class="t-header" data-card-header="${t.id}">
+            <div class="t-icon">${t.icon}</div>
+
+            <div class="t-title-area">
+              <h3>${highlight(t.title)}</h3>
+              <div class="t-meta">
+                <span class="badge badge-cat">${catLabels[t.category] || t.category}</span>
+                ${dayBadges}
+                <span class="badge badge-status ${statusClass}">${statusText}</span>
+              </div>
+            </div>
+
+            <div class="t-actions" data-actions="${t.id}">
+              <div class="difficulty-zone">
+                <div class="traffic-lights">
+                  <button class="light-btn e-easy ${d === 'easy' ? 'active' : ''}" data-diff-btn="${t.id}-easy" aria-label="Gelernt markieren">
+                    <i class="fa-solid fa-check"></i>
+                  </button>
+                  <button class="light-btn e-mid ${d === 'mid' ? 'active' : ''}" data-diff-btn="${t.id}-mid" aria-label="Lernen markieren">
+                    <i class="fa-solid fa-clock"></i>
+                  </button>
+                  <button class="light-btn e-hard ${d === 'hard' ? 'active' : ''}" data-diff-btn="${t.id}-hard" aria-label="Schwierig markieren">
+                    <i class="fa-solid fa-fire"></i>
+                  </button>
                 </div>
-                <div class="t-actions" data-actions="${t.id}">
-                  <div class="traffic-lights">
-                    <button class="light-btn e-easy ${d==='easy'?'active':''}" data-diff-btn="${t.id}-easy" aria-label="Gelernt markieren">
-                      <i class="fa-solid fa-check"></i>
-                    </button>
-                    <button class="light-btn e-mid ${d==='mid'?'active':''}" data-diff-btn="${t.id}-mid" aria-label="Lernen markieren">
-                      <i class="fa-solid fa-clock"></i>
-                    </button>
-                    <button class="light-btn e-hard ${d==='hard'?'active':''}" data-diff-btn="${t.id}-hard" aria-label="Schwierig markieren">
-                      <i class="fa-solid fa-fire"></i>
-                    </button>
-                  </div>
-                  <div class="arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                <div class="difficulty-guide ${d === 'unrated' ? 'unrated' : ''}">
+                  ${d === 'unrated' ? 'Lernstand markieren' : 'Lernstand gespeichert'}
                 </div>
               </div>
-              <div class="t-body">
-                <div class="t-body-inner">
-                  <div class="t-content">
-                    <div class="info-section highlight full">
-                      <h4>📌 Definition</h4>
-                      <p>${highlight(t.definition)}</p>
-                    </div>
-                    ${contentBody}
-                  </div>
+
+              <button class="arrow" data-arrow="${t.id}" aria-label="Thema öffnen oder schließen">
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="t-body">
+            <div class="t-body-inner">
+              <div class="t-content">
+                <div class="info-section highlight full">
+                  <h4>📌 Definition</h4>
+                  <p>${highlight(t.definition)}</p>
                 </div>
+                ${contentBody}
               </div>
-            </article>`;
-                }).join('');
+            </div>
+          </div>
+        </article>`;
+    }).join('');
 
-                $('#emptyState').style.display = filtered.length === 0 ? 'block' : 'none';
-                updateDashboard();
-                attachCardListeners();
-                manageHintTooltip();
-            }
+    $('#emptyState').style.display = filtered.length === 0 ? 'block' : 'none';
 
-            /* ==========================================================================
-               CARD EVENT LISTENERS
-               ========================================================================== */
-            function attachCardListeners() {
-                // Card header clicks (toggle open)
-                $$('[data-card-header]').forEach(header => {
-                    header.addEventListener('click', function(e) {
-                        // Don't toggle if clicking on actions area
-                        if (e.target.closest('[data-actions]')) return;
-                        const id = this.getAttribute('data-card-header');
-                        toggleCard(id);
-                    });
-                });
+    updateDashboard();
+    attachCardListeners();
+    manageHintTooltip();
+  }
 
-                // Difficulty buttons
-                $$('[data-diff-btn]').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const [topicId, level] = this.getAttribute('data-diff-btn').split('-');
-                        setDiff(topicId, level, this);
-                    });
-                });
+  function attachCardListeners() {
+    $$('[data-card-header]').forEach(header => {
+      header.addEventListener('click', function(e) {
+        if (e.target.closest('[data-actions]')) return;
+        const id = this.getAttribute('data-card-header');
+        toggleCard(id);
+      });
+    });
 
-                // Actions area - prevent card toggle but allow difficulty clicks
-                $$('[data-actions]').forEach(actions => {
-                    actions.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                    });
-                });
-            }
+    $$('[data-arrow]').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const id = this.getAttribute('data-arrow');
+        toggleCard(id);
+      });
+    });
 
-            /* ==========================================================================
-               INTERACTIONS
-               ========================================================================== */
-            function toggleCard(id) {
-                const wasOpen = State.openId === id;
-                State.openId = wasOpen ? null : id;
+    $$('[data-diff-btn]').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const value = this.getAttribute('data-diff-btn');
+        const lastDash = value.lastIndexOf('-');
+        const topicId = value.substring(0, lastDash);
+        const level = value.substring(lastDash + 1);
+        setDiff(topicId, level, this);
+      });
+    });
 
-                if (State.openId && !State.data.viewed.includes(id)) {
-                    State.data.viewed.push(id);
-                    saveData();
-                    // Brief highlight animation
-                    setTimeout(() => {
-                        const card = document.getElementById('card-' + id);
-                        if (card) card.classList.add('new-highlight');
-                        setTimeout(() => {
-                            if (card) card.classList.remove('new-highlight');
-                        }, 2000);
-                    }, 100);
-                }
+    $$('[data-actions]').forEach(actions => {
+      actions.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    });
+  }
 
-                // Dismiss hint if user interacts
-                if (!State.hintSeen && State.openId) {
-                    // Keep hint visible for this card
-                }
+  function toggleCard(id) {
+    const wasOpen = State.openId === id;
+    State.openId = wasOpen ? null : id;
 
-                render();
+    if (State.openId && !State.data.viewed.includes(id)) {
+      State.data.viewed.push(id);
+      saveData();
 
-                if (State.openId) {
-                    setTimeout(() => {
-                        const card = document.getElementById('card-' + id);
-                        if (card) {
-                            const scrollArea = $('#scrollArea');
-                            const filtersWrapper = $('#filtersWrapper');
-                            const filterHeight = filtersWrapper ? filtersWrapper.offsetHeight : 0;
-                            const cardTop = card.getBoundingClientRect().top;
-                            const scrollAreaTop = scrollArea.getBoundingClientRect().top;
-                            const offset = cardTop - scrollAreaTop + scrollArea.scrollTop - filterHeight -
-                                20;
-                            scrollArea.scrollTo({ top: Math.max(0, offset), behavior: 'smooth' });
-                        }
-                    }, 200);
-                }
+      setTimeout(() => {
+        const card = document.getElementById('card-' + id);
+        if (card) card.classList.add('new-highlight');
 
-                if (navigator.vibrate) navigator.vibrate(8);
-            }
+        setTimeout(() => {
+          if (card) card.classList.remove('new-highlight');
+        }, 2000);
+      }, 100);
+    }
 
-            function setDiff(id, level, btnElement) {
-                if (!State.hintSeen) {
-                    State.hintSeen = true;
-                    localStorage.setItem('pfp.hintSeen.v2', 'true');
-                    dismissAllHints();
-                }
+    render();
 
-                const cur = State.data.difficulty[id];
-                if (cur === level) {
-                    delete State.data.difficulty[id];
-                    showToast('✅ Markierung entfernt');
-                } else {
-                    State.data.difficulty[id] = level;
-                    const labels = { easy: '🟢 Gelernt', mid: '🟡 Lernen', hard: '🔴 Schwierig' };
-                    showToast(`📌 ${labels[level]} gespeichert!`);
-                    spawnParticles(btnElement);
-                }
-                saveData();
-                render();
-                if (navigator.vibrate) navigator.vibrate(12);
-            }
+    if (State.openId) {
+      setTimeout(() => {
+        const card = document.getElementById('card-' + id);
 
-            /* ==========================================================================
-               HINT TOOLTIP MANAGEMENT
-               ========================================================================== */
-            function manageHintTooltip() {
-                // Remove any existing tooltips from the DOM (they're rendered inline)
-                const existingHints = $$('.hint-tooltip');
-                existingHints.forEach(h => h.remove());
+        if (card) {
+          const scrollArea = $('#scrollArea');
+          const filtersWrapper = $('#filtersWrapper');
+          const filterHeight = filtersWrapper ? filtersWrapper.offsetHeight : 0;
+          const cardTop = card.getBoundingClientRect().top;
+          const scrollAreaTop = scrollArea.getBoundingClientRect().top;
+          const offset = cardTop - scrollAreaTop + scrollArea.scrollTop - filterHeight - 20;
 
-                if (State.hintSeen) return;
-                if (!State.openId) return;
+          scrollArea.scrollTo({
+            top: Math.max(0, offset),
+            behavior: 'smooth'
+          });
+        }
+      }, 200);
+    }
 
-                const card = document.getElementById('card-' + State.openId);
-                if (!card) return;
-                const actionsEl = card.querySelector('[data-actions]');
-                if (!actionsEl) return;
+    if (navigator.vibrate) navigator.vibrate(8);
+  }
 
-                // Check if this card already has a difficulty set
-                const d = State.data.difficulty[State.openId];
-                if (d) return; // Already rated, no need for hint
+  function setDiff(id, level, btnElement) {
+    if (!State.hintSeen) {
+      State.hintSeen = true;
+      localStorage.setItem('pfp.hintSeen.v2', 'true');
+      dismissAllHints();
+    }
 
-                const hint = document.createElement('div');
-                hint.className = 'hint-tooltip';
-                hint.id = 'activeHint';
-                hint.innerHTML = '👆<b> Wie sicher?</b><br><small>Hier Lernstand markieren!</small>';
-                actionsEl.appendChild(hint);
+    const cur = State.data.difficulty[id];
 
-                // Auto-dismiss after 7 seconds
-                State.hintTimeoutId = setTimeout(() => {
-                    dismissHint(hint);
-                }, 7000);
+    if (cur === level) {
+      delete State.data.difficulty[id];
+      showToast('✅ Markierung entfernt');
+    } else {
+      State.data.difficulty[id] = level;
 
-                // Also dismiss on scroll
-                const scrollArea = $('#scrollArea');
-                const onScroll = () => {
-                    dismissHint(hint);
-                    scrollArea.removeEventListener('scroll', onScroll);
-                };
-                scrollArea.addEventListener('scroll', onScroll, { once: true });
-            }
+      const labels = {
+        easy: '🟢 Gelernt',
+        mid: '🟡 Lernen',
+        hard: '🔴 Schwierig'
+      };
 
-            function dismissHint(hintEl) {
-                if (!hintEl || hintEl.classList.contains('fading')) return;
-                hintEl.classList.add('fading');
-                if (State.hintTimeoutId) {
-                    clearTimeout(State.hintTimeoutId);
-                    State.hintTimeoutId = null;
-                }
-                setTimeout(() => {
-                    if (hintEl.parentNode) hintEl.remove();
-                }, 600);
-            }
+      showToast(`📌 ${labels[level]} gespeichert!`);
+      spawnParticles(btnElement);
+    }
 
-            function dismissAllHints() {
-                const hints = $$('.hint-tooltip');
-                hints.forEach(h => {
-                    h.classList.add('fading');
-                    setTimeout(() => { if (h.parentNode) h.remove(); }, 600);
-                });
-                if (State.hintTimeoutId) {
-                    clearTimeout(State.hintTimeoutId);
-                    State.hintTimeoutId = null;
-                }
-            }
+    saveData();
+    render();
 
-            /* ==========================================================================
-               DASHBOARD UPDATE
-               ========================================================================== */
-            function updateDashboard() {
-                const total = TOPICS_DATA.length;
-                const viewed = State.data.viewed.length;
-                let easy = 0,
-                    mid = 0,
-                    hard = 0;
-                Object.values(State.data.difficulty).forEach(val => {
-                    if (val === 'easy') easy++;
-                    if (val === 'mid') mid++;
-                    if (val === 'hard') hard++;
-                });
+    if (navigator.vibrate) navigator.vibrate(12);
+  }
 
-                $('#kViewed').innerText = `${viewed}/${total}`;
-                $('#fViewed').style.width = `${Math.round(viewed/total*100)}%`;
-                $('#kEasy').innerText = `${easy}/${total}`;
-                $('#fEasy').style.width = `${Math.round(easy/total*100)}%`;
-                $('#kMid').innerText = `${mid}/${total}`;
-                $('#fMid').style.width = `${Math.round(mid/total*100)}%`;
-                $('#kHard').innerText = `${hard}/${total}`;
-                $('#fHard').style.width = `${Math.round(hard/total*100)}%`;
+  function manageHintTooltip() {
+    $$('.hint-tooltip').forEach(h => h.remove());
 
-                let currentLevel = State.data.level || 1;
-                let xp = (viewed * 5) + (easy * 50) + (mid * 20) + (hard * 10);
-                let newLevel = Math.floor(xp / 200) + 1;
+    if (State.hintSeen) return;
+    if (!State.openId) return;
 
-                $('#xpBadge').innerText = `✨ ${xp} XP`;
-                $('#levelText').innerText = `Level ${newLevel}`;
+    const card = document.getElementById('card-' + State.openId);
+    if (!card) return;
 
-                if (newLevel > currentLevel) {
-                    triggerLevelUp(newLevel);
-                    State.data.level = newLevel;
-                    saveData();
-                }
-            }
+    const actionsEl = card.querySelector('[data-actions]');
+    if (!actionsEl) return;
 
-            function triggerLevelUp(level) {
-                const pill = $('#levelPill');
-                $('#levelText').innerText = `Level ${level}`;
-                pill.classList.add('level-up');
-                spawnConfetti();
-                showToast(`🎉 Level Up! Du bist jetzt Level ${level}!`);
-                setTimeout(() => pill.classList.remove('level-up'), 2200);
-                if (navigator.vibrate) navigator.vibrate([30, 50, 30, 50, 30]);
-            }
+    const d = State.data.difficulty[State.openId];
+    if (d) return;
 
-            /* ==========================================================================
-               PARTICLES & CONFETTI
-               ========================================================================== */
-            function spawnParticles(btnElement) {
-                const rect = btnElement.getBoundingClientRect();
-                const cx = rect.left + rect.width / 2;
-                const cy = rect.top + rect.height / 2;
-                const colors = ['#f59e0b', '#10b981', '#ef4444', '#2563eb', '#8b5cf6', '#ec4899'];
+    const hint = document.createElement('div');
+    hint.className = 'hint-tooltip';
+    hint.id = 'activeHint';
+    hint.innerHTML = '👆<b> Wie sicher?</b><br><small>Hier Lernstand markieren!</small>';
+    actionsEl.appendChild(hint);
 
-                for (let i = 0; i < 14; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle-burst';
-                    const angle = (Math.PI * 2 * i) / 14;
-                    const dist = 30 + Math.random() * 40;
-                    particle.style.cssText = `
-              left: ${cx}px;
-              top: ${cy}px;
-              background: ${colors[Math.floor(Math.random()*colors.length)]};
-              --bx: ${Math.cos(angle)*dist}px;
-              --by: ${Math.sin(angle)*dist}px;
-              width: ${3+Math.random()*5}px;
-              height: ${3+Math.random()*5}px;
-            `;
-                    document.body.appendChild(particle);
-                    setTimeout(() => particle.remove(), 750);
-                }
-            }
+    if (State.hintTimeoutId) {
+      clearTimeout(State.hintTimeoutId);
+    }
 
-            function spawnConfetti() {
-                const colors = ['#f59e0b', '#2563eb', '#10b981', '#ec4899', '#8b5cf6', '#f43f5e', '#06b6d4',
-                '#f97316'];
-                for (let i = 0; i < 40; i++) {
-                    const piece = document.createElement('div');
-                    piece.className = 'confetti-piece';
-                    piece.style.cssText = `
-              left: ${5 + Math.random()*85}vw;
-              top: -20px;
-              background: ${colors[Math.floor(Math.random()*colors.length)]};
-              animation-duration: ${1.2 + Math.random()*2}s;
-              animation-delay: ${Math.random()*0.6}s;
-              width: ${5+Math.random()*8}px;
-              height: ${5+Math.random()*8}px;
-              border-radius: ${Math.random()>0.5 ? '50%' : '2px'};
-            `;
-                    document.body.appendChild(piece);
-                    setTimeout(() => piece.remove(), 3500);
-                }
-            }
+    State.hintTimeoutId = setTimeout(() => {
+      dismissHint(hint);
+    }, 7000);
+  }
 
-            /* ==========================================================================
-               TOAST
-               ========================================================================== */
-            function showToast(msg) {
-                const t = $('#toastMsg');
-                t.innerText = msg;
-                t.classList.add('show');
-                clearTimeout(t._timeout);
-                t._timeout = setTimeout(() => t.classList.remove('show'), 2000);
-            }
+  function dismissHint(hintEl) {
+    if (!hintEl || hintEl.classList.contains('fading')) return;
 
-            /* ==========================================================================
-               FILTER LISTENERS
-               ========================================================================== */
-            function setupTabs(selector, stateKey) {
-                $$(selector).forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        $$(selector).forEach(b => b.classList.remove('active'));
-                        this.classList.add('active');
-                        State[stateKey] = this.getAttribute(`data-${stateKey}`);
-                        State.openId = null;
-                        dismissAllHints();
-                        render();
-                        if (navigator.vibrate) navigator.vibrate(6);
-                    });
-                });
-            }
-            setupTabs('[data-cat]', 'cat');
-            setupTabs('[data-day]', 'day');
-            setupTabs('[data-diff]', 'diff');
+    hintEl.classList.add('fading');
 
-            $('#sortToggle').addEventListener('click', function() {
-                State.hardFirst = !State.hardFirst;
-                this.classList.toggle('on', State.hardFirst);
-                State.openId = null;
-                render();
-            });
+    if (State.hintTimeoutId) {
+      clearTimeout(State.hintTimeoutId);
+      State.hintTimeoutId = null;
+    }
 
-            const searchInput = $('#searchInput');
-            const clearBtn = $('#clearBtn');
+    setTimeout(() => {
+      if (hintEl.parentNode) hintEl.remove();
+    }, 600);
+  }
 
-            searchInput.addEventListener('input', function() {
-                State.search = this.value;
-                if (State.search.trim()) {
-                    clearBtn.classList.add('visible');
-                } else {
-                    clearBtn.classList.remove('visible');
-                }
-                State.openId = null;
-                dismissAllHints();
-                render();
-            });
+  function dismissAllHints() {
+    $$('.hint-tooltip').forEach(h => {
+      h.classList.add('fading');
+      setTimeout(() => {
+        if (h.parentNode) h.remove();
+      }, 600);
+    });
 
-            clearBtn.addEventListener('click', function() {
-                State.search = '';
-                searchInput.value = '';
-                clearBtn.classList.remove('visible');
-                State.openId = null;
-                dismissAllHints();
-                render();
-                searchInput.focus();
-            });
+    if (State.hintTimeoutId) {
+      clearTimeout(State.hintTimeoutId);
+      State.hintTimeoutId = null;
+    }
+  }
 
-            /* ==========================================================================
-               BOTTOM NAV
-               ========================================================================== */
-            $$('.nav-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    $$('.nav-item').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    showToast(`📂 ${this.querySelector('span').innerText} ist in der Demo deaktiviert.`);
-                    if (navigator.vibrate) navigator.vibrate(8);
-                });
-            });
+  function updateDashboard() {
+    const total = TOPICS_DATA.length;
+    const viewed = State.data.viewed.length;
 
-            /* ==========================================================================
-               INIT
-               ========================================================================== */
-            function init() {
-                // Set initial toggle state
-                if (State.hardFirst) {
-                    $('#sortToggle').classList.add('on');
-                }
-                render();
-                // Scroll to top
-                $('#scrollArea').scrollTop = 0;
-            }
+    let easy = 0;
+    let mid = 0;
+    let hard = 0;
 
-            document.addEventListener('DOMContentLoaded', init);
+    Object.values(State.data.difficulty).forEach(val => {
+      if (val === 'easy') easy++;
+      if (val === 'mid') mid++;
+      if (val === 'hard') hard++;
+    });
 
-            // Expose for potential debugging
-            window.PflegefachApp = { State, render, toggleCard, setDiff, TOPICS_DATA };
-        })();
-    </script>
+    $('#kViewed').innerText = `${viewed}/${total}`;
+    $('#fViewed').style.width = `${Math.round(viewed / total * 100)}%`;
+
+    $('#kEasy').innerText = `${easy}/${total}`;
+    $('#fEasy').style.width = `${Math.round(easy / total * 100)}%`;
+
+    $('#kMid').innerText = `${mid}/${total}`;
+    $('#fMid').style.width = `${Math.round(mid / total * 100)}%`;
+
+    $('#kHard').innerText = `${hard}/${total}`;
+    $('#fHard').style.width = `${Math.round(hard / total * 100)}%`;
+
+    const currentLevel = State.data.level || 1;
+    const xp = viewed * 5 + easy * 50 + mid * 20 + hard * 10;
+    const newLevel = Math.floor(xp / 200) + 1;
+
+    $('#xpBadge').innerText = `✨ ${xp} XP`;
+    $('#levelText').innerText = `Level ${newLevel}`;
+
+    if (newLevel > currentLevel) {
+      triggerLevelUp(newLevel);
+      State.data.level = newLevel;
+      saveData();
+    }
+  }
+
+  function triggerLevelUp(level) {
+    const pill = $('#levelPill');
+
+    $('#levelText').innerText = `Level ${level}`;
+    pill.classList.add('level-up');
+
+    spawnConfetti();
+    showToast(`🎉 Level Up! Du bist jetzt Level ${level}!`);
+
+    setTimeout(() => pill.classList.remove('level-up'), 2200);
+
+    if (navigator.vibrate) navigator.vibrate([30, 50, 30, 50, 30]);
+  }
+
+  function spawnParticles(btnElement) {
+    const rect = btnElement.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const colors = ['#f59e0b', '#10b981', '#ef4444', '#2563eb', '#8b5cf6', '#ec4899'];
+
+    for (let i = 0; i < 14; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle-burst';
+
+      const angle = (Math.PI * 2 * i) / 14;
+      const dist = 30 + Math.random() * 40;
+
+      particle.style.cssText = `
+        left: ${cx}px;
+        top: ${cy}px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        --bx: ${Math.cos(angle) * dist}px;
+        --by: ${Math.sin(angle) * dist}px;
+        width: ${3 + Math.random() * 5}px;
+        height: ${3 + Math.random() * 5}px;
+      `;
+
+      document.body.appendChild(particle);
+
+      setTimeout(() => particle.remove(), 750);
+    }
+  }
+
+  function spawnConfetti() {
+    const colors = ['#f59e0b', '#2563eb', '#10b981', '#ec4899', '#8b5cf6', '#f43f5e', '#06b6d4', '#f97316'];
+
+    for (let i = 0; i < 40; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+
+      piece.style.cssText = `
+        left: ${5 + Math.random() * 85}vw;
+        top: -20px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration: ${1.2 + Math.random() * 2}s;
+        animation-delay: ${Math.random() * 0.6}s;
+        width: ${5 + Math.random() * 8}px;
+        height: ${5 + Math.random() * 8}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      `;
+
+      document.body.appendChild(piece);
+
+      setTimeout(() => piece.remove(), 3500);
+    }
+  }
+
+  function showToast(msg) {
+    const t = $('#toastMsg');
+
+    t.innerText = msg;
+    t.classList.add('show');
+
+    clearTimeout(t._timeout);
+
+    t._timeout = setTimeout(() => {
+      t.classList.remove('show');
+    }, 2000);
+  }
+
+  function setupTabs(selector, stateKey) {
+    $$(selector).forEach(btn => {
+      btn.addEventListener('click', function() {
+        $$(selector).forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        State[stateKey] = this.getAttribute(`data-${stateKey}`);
+        State.openId = null;
+
+        dismissAllHints();
+        render();
+
+        if (navigator.vibrate) navigator.vibrate(6);
+      });
+    });
+  }
+
+  setupTabs('[data-cat]', 'cat');
+  setupTabs('[data-day]', 'day');
+  setupTabs('[data-diff]', 'diff');
+
+  $('#sortToggle').addEventListener('click', function() {
+    State.hardFirst = !State.hardFirst;
+    this.classList.toggle('on', State.hardFirst);
+    State.openId = null;
+    render();
+  });
+
+  const searchInput = $('#searchInput');
+  const clearBtn = $('#clearBtn');
+
+  searchInput.addEventListener('input', function() {
+    State.search = this.value;
+
+    if (State.search.trim()) {
+      clearBtn.classList.add('visible');
+    } else {
+      clearBtn.classList.remove('visible');
+    }
+
+    State.openId = null;
+    dismissAllHints();
+    render();
+  });
+
+  clearBtn.addEventListener('click', function() {
+    State.search = '';
+    searchInput.value = '';
+    clearBtn.classList.remove('visible');
+    State.openId = null;
+    dismissAllHints();
+    render();
+    searchInput.focus();
+  });
+
+  $$('.nav-item').forEach(item => {
+    item.addEventListener('click', function() {
+      $$('.nav-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+
+      const label = this.querySelector('span')?.innerText || 'Bereich';
+      showToast(`📂 ${label} ist in der Demo deaktiviert.`);
+
+      if (navigator.vibrate) navigator.vibrate(8);
+    });
+  });
+
+  function init() {
+    if (State.hardFirst) {
+      $('#sortToggle').classList.add('on');
+    }
+
+    render();
+
+    $('#scrollArea').scrollTop = 0;
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+
+  window.PflegefachApp = {
+    State,
+    render,
+    toggleCard,
+    setDiff,
+    TOPICS_DATA
+  };
+})();
+</script>
 </body>
 </html>
