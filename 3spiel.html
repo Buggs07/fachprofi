@@ -1,2028 +1,829 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PflegefachProfi – Emergency Nurse Simulator</title>
-    <style>
-        :root {
-            --bg: #0a0f14;
-            --surface: #141c24;
-            --surface2: #1a2430;
-            --border: #2a3644;
-            --text: #e0e8f0;
-            --text2: #a0b4c8;
-            --accent: #00c9a7;
-            --accent2: #00e6bf;
-            --danger: #e0556a;
-            --warning: #f0a050;
-            --gold: #f0c040;
-            --xp: #5cb8ff;
-            --monitor-bg: #0a0c10;
-            --ecg-green: #2eff6e;
-            --patient-skin: #e8c9a0;
-            --patient-skin-pale: #d4b896;
-            --patient-skin-older: #d9bfa0;
-            --bed-rail: #c0c8d0;
-            --sheet: #e8f0f5;
-            --pillow: #f0f4f8;
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --radius: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            min-height: 100dvh;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        #app {
-            max-width: 800px;
-            margin: 0 auto;
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-        .screen {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            padding: 16px;
-            animation: fadeSlideIn 0.4s ease;
-        }
-        .screen.active {
-            display: flex;
-        }
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes pulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.04);
-            }
-        }
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            20% {
-                transform: translateX(-8px);
-            }
-            40% {
-                transform: translateX(8px);
-            }
-            60% {
-                transform: translateX(-6px);
-            }
-            80% {
-                transform: translateX(4px);
-            }
-        }
-        @keyframes breathe {
-            0%,
-            100% {
-                transform: scaleY(1);
-            }
-            25% {
-                transform: scaleY(1.06);
-            }
-            75% {
-                transform: scaleY(0.96);
-            }
-        }
-        @keyframes ecgLine {
-            0% {
-                stroke-dashoffset: 300;
-            }
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-        @keyframes floatUp {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-50px) scale(1.3);
-            }
-        }
-        @keyframes confettiDrop {
-            0% {
-                transform: translateY(-120px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        @keyframes glowPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent2);
-            }
-            50% {
-                box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent2);
-            }
-        }
-        @keyframes typewriter {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-        .shake {
-            animation: shake 0.5s ease;
-        }
-        .pulse-green {
-            animation: glowPulse 0.8s ease 2;
-        }
-
-        /* Header */
-        .app-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .app-header .logo-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #00c9a7, #009b80);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-        .app-header .title {
-            font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: -0.3px;
-            line-height: 1.2;
-        }
-        .app-header .subtitle {
-            font-size: 0.7rem;
-            color: var(--text2);
-            font-weight: 400;
-        }
-        .xp-badge {
-            margin-left: auto;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--xp);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            white-space: nowrap;
-        }
-        .streak-badge {
-            background: var(--surface2);
-            border: 1px solid #f0a05044;
-            border-radius: 20px;
-            padding: 6px 10px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            color: var(--warning);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 10px;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        .card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 1px var(--accent);
-        }
-        .card:active {
-            transform: scale(0.98);
-        }
-        .card.selected {
-            border-color: var(--accent);
-            background: #00c9a711;
-            box-shadow: 0 0 0 2px var(--accent);
-        }
-        .card.correct-flash {
-            border-color: #2eff6e !important;
-            background: #2eff6e15 !important;
-            box-shadow: 0 0 0 3px #2eff6e66 !important;
-        }
-        .card.wrong-flash {
-            border-color: #e0556a !important;
-            background: #e0556a15 !important;
-            box-shadow: 0 0 0 3px #e0556a55 !important;
-        }
-        .card.disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-        .case-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        .case-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-        .case-card.completed {
-            border-color: #2eff6e44;
-        }
-        .case-card .difficulty {
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            display: inline-block;
-            font-weight: 600;
-        }
-        .difficulty.leicht {
-            background: #2eff6e22;
-            color: #2eff6e;
-        }
-        .difficulty.mittel {
-            background: #f0a05022;
-            color: #f0a050;
-        }
-        .difficulty.schwer {
-            background: #e0556a22;
-            color: #e0556a;
-        }
-        .stars {
-            color: var(--gold);
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-size: 0.95rem;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font);
-            min-height: 44px;
-            min-width: 44px;
-            white-space: nowrap;
-            letter-spacing: -0.2px;
-            outline: none;
-        }
-        .btn:focus-visible {
-            outline: 3px solid var(--accent);
-            outline-offset: 2px;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 4px 14px #00c9a744;
-        }
-        .btn-primary:hover {
-            background: var(--accent2);
-            box-shadow: 0 6px 20px #00c9a755;
-            transform: translateY(-1px);
-        }
-        .btn-primary:active {
-            transform: scale(0.96);
-        }
-        .btn-secondary {
-            background: var(--surface2);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover {
-            border-color: var(--accent);
-            background: #1e2a38;
-        }
-        .btn-danger {
-            background: #e0556a22;
-            color: var(--danger);
-            border: 1px solid #e0556a44;
-        }
-        .btn-large {
-            padding: 16px 28px;
-            font-size: 1.05rem;
-            border-radius: var(--radius);
-            width: 100%;
-            max-width: 400px;
-            letter-spacing: -0.3px;
-        }
-        .btn:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            cursor: not-allowed;
-        }
-
-        /* ER Room */
-        .er-room {
-            background: linear-gradient(180deg, #1a2838 0%, #141e2a 40%, #0f1820 100%);
-            border-radius: var(--radius);
-            padding: 10px;
-            position: relative;
-            min-height: 280px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        .er-room .wall-light {
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 6px;
-            background: linear-gradient(90deg, transparent, #ffe8c8, #ffe8c8, transparent);
-            border-radius: 3px;
-            opacity: 0.7;
-            filter: blur(2px);
-        }
-        .patient-area {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            height: 240px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-        }
-        .hospital-bed {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 85%;
-            height: 50px;
-            background: linear-gradient(180deg, #d0d8e0, #a8b4c0);
-            border-radius: 8px 8px 2px 2px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        .bed-mattress {
-            position: absolute;
-            bottom: 14px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 78%;
-            height: 18px;
-            background: linear-gradient(180deg, #e8f0f5, #c8d4de);
-            border-radius: 4px;
-        }
-        .bed-pillow {
-            position: absolute;
-            bottom: 38px;
-            left: 22%;
-            width: 20%;
-            height: 22px;
-            background: linear-gradient(180deg, #f8fafc, #dce4ec);
-            border-radius: 50%;
-            transform: rotate(-5deg);
-        }
-        .bed-rail-left,
-        .bed-rail-right {
-            position: absolute;
-            bottom: 12px;
-            width: 6px;
-            height: 70px;
-            background: var(--bed-rail);
-            border-radius: 3px;
-        }
-        .bed-rail-left {
-            left: 10%;
-        }
-        .bed-rail-right {
-            right: 10%;
-        }
-        .bed-rail-horizontal {
-            position: absolute;
-            bottom: 70px;
-            left: 9%;
-            width: 82%;
-            height: 4px;
-            background: var(--bed-rail);
-            border-radius: 2px;
-        }
-
-        /* Patient Figure */
-        .patient-figure {
-            position: absolute;
-            bottom: 42px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            transition: all 0.5s ease;
-        }
-        .patient-body {
-            position: relative;
-            width: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .patient-head {
-            width: 44px;
-            height: 50px;
-            border-radius: 50% 50% 40% 40%;
-            background: var(--patient-skin);
-            position: relative;
-            transition: background 0.5s;
-        }
-        .patient-head.pale {
-            background: var(--patient-skin-pale);
-        }
-        .patient-head .eye {
-            position: absolute;
-            width: 6px;
-            height: 7px;
-            background: #1a1a1a;
-            border-radius: 50%;
-            top: 18px;
-        }
-        .patient-head .eye.left {
-            left: 11px;
-        }
-        .patient-head .eye.right {
-            right: 11px;
-        }
-        .patient-head .eye.closed {
-            height: 2px;
-            border-radius: 1px;
-            top: 21px;
-        }
-        .patient-head .mouth {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 3px;
-            background: #c05550;
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-        .patient-head .mouth.pain {
-            width: 14px;
-            height: 6px;
-            border-radius: 0 0 8px 8px;
-            background: #a04040;
-        }
-        .patient-head .mouth.open {
-            height: 6px;
-            border-radius: 0 0 5px 5px;
-            width: 12px;
-        }
-        .patient-head .eyebrow {
-            position: absolute;
-            width: 12px;
-            height: 2px;
-            background: #5a4030;
-            top: 12px;
-            border-radius: 1px;
-            transition: all 0.3s;
-        }
-        .patient-head .eyebrow.left {
-            left: 7px;
-            transform: rotate(0deg);
-        }
-        .patient-head .eyebrow.right {
-            right: 7px;
-            transform: rotate(0deg);
-        }
-        .patient-head .eyebrow.worried {
-            transform: rotate(-15deg);
-        }
-        .patient-head .eyebrow.worried.right {
-            transform: rotate(15deg);
-        }
-        .patient-head.hair-dark {
-            box-shadow: inset 0 -30px 0 #3a2a1a;
-        }
-        .patient-head.hair-gray {
-            box-shadow: inset 0 -30px 0 #8a8a8a;
-        }
-        .patient-head.hair-blonde {
-            box-shadow: inset 0 -30px 0 #c8a060;
-        }
-        .patient-head .wrinkle {
-            position: absolute;
-            width: 8px;
-            height: 1px;
-            background: #b09080;
-            border-radius: 1px;
-        }
-        .patient-neck {
-            width: 20px;
-            height: 8px;
-            background: var(--patient-skin);
-            border-radius: 2px;
-            margin-top: -2px;
-            transition: background 0.5s;
-        }
-        .patient-torso {
-            width: 56px;
-            height: 70px;
-            background: var(--sheet);
-            border-radius: 10px 10px 4px 4px;
-            position: relative;
-            border: 1px solid #d0d8e0;
-        }
-        .patient-torso .blanket-stripe {
-            position: absolute;
-            top: 20px;
-            left: 4px;
-            right: 4px;
-            height: 3px;
-            background: #c8d4de;
-            border-radius: 2px;
-        }
-        .breathing-indicator {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 8px;
-            background: #c8d8e8;
-            border-radius: 4px;
-            animation: breathe 3s ease-in-out infinite;
-            transform-origin: center;
-        }
-        .breathing-indicator.labored {
-            animation-duration: 1.5s;
-            background: #d0b0a0;
-        }
-        .breathing-indicator.rapid {
-            animation-duration: 1s;
-        }
-        .sweat-drop {
-            position: absolute;
-            width: 4px;
-            height: 6px;
-            background: #a0d8f0;
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .sweat-drop.visible {
-            opacity: 0.8;
-            animation: floatUp 2s ease-in-out infinite;
-        }
-        .sweat-drop:nth-child(1) {
-            top: -5px;
-            left: 8px;
-            animation-delay: 0s;
-        }
-        .sweat-drop:nth-child(2) {
-            top: -8px;
-            left: 28px;
-            animation-delay: 0.7s;
-        }
-        .sweat-drop:nth-child(3) {
-            top: -3px;
-            left: 48px;
-            animation-delay: 1.3s;
-        }
-        .pain-indicator {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.2rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .pain-indicator.visible {
-            opacity: 1;
-            animation: floatUp 2s ease-in-out infinite;
-        }
-
-        /* Monitor */
-        .vital-monitor {
-            position: absolute;
-            top: 10px;
-            right: 8px;
-            width: 90px;
-            background: var(--monitor-bg);
-            border-radius: var(--radius-sm);
-            padding: 8px;
-            border: 1px solid #1a3028;
-            z-index: 3;
-            font-family: 'Courier New', monospace;
-        }
-        .vital-monitor .ecg-display {
-            width: 100%;
-            height: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-        .vital-monitor .ecg-display svg {
-            width: 100%;
-            height: 100%;
-        }
-        .vital-monitor .ecg-path {
-            fill: none;
-            stroke: var(--ecg-green);
-            stroke-width: 1.5;
-            animation: ecgLine 2s linear infinite;
-        }
-        .vital-monitor .vital-label {
-            font-size: 0.5rem;
-            color: #6a8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .vital-monitor .vital-value {
-            font-size: 0.75rem;
-            color: #0f0;
-            font-weight: bold;
-        }
-        .vital-monitor .vital-value.warning {
-            color: #f0a050;
-            animation: pulse 1s infinite;
-        }
-        .vital-monitor .vital-value.critical {
-            color: #f04040;
-            animation: pulse 0.5s infinite;
-        }
-
-        /* Speech Bubble */
-        .speech-bubble {
-            background: #fff;
-            color: #1a1a1a;
-            border-radius: 16px 16px 16px 4px;
-            padding: 12px 16px;
-            position: relative;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            max-width: 320px;
-            margin: 8px auto;
-            min-height: 40px;
-            word-break: break-word;
-        }
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 16px;
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 10px solid #fff;
-        }
-        .speech-bubble .speaker-label {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #666;
-            display: block;
-            margin-bottom: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .typewriter-cursor::after {
-            content: '|';
-            animation: pulse 0.8s infinite;
-            color: #333;
-            font-weight: bold;
-        }
-
-        /* Phase indicator */
-        .phase-indicator {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--accent);
-            display: inline-block;
-            margin-bottom: 8px;
-            letter-spacing: 0.3px;
-        }
-        .progress-bar-wrap {
-            background: var(--border);
-            border-radius: 10px;
-            height: 8px;
-            overflow: hidden;
-            margin: 8px 0;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
-
-        /* Feedback overlay */
-        .feedback-toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            pointer-events: none;
-            animation: floatUp 1.5s ease forwards;
-            white-space: nowrap;
-        }
-        .feedback-toast.success {
-            background: #2eff6e;
-            color: #000;
-        }
-        .feedback-toast.error {
-            background: #e0556a;
-            color: #fff;
-        }
-        .feedback-toast.warning-toast {
-            background: #f0a050;
-            color: #000;
-        }
-        .xp-float {
-            position: fixed;
-            z-index: 101;
-            pointer-events: none;
-            font-weight: 700;
-            font-size: 1rem;
-            animation: floatUp 1.8s ease forwards;
-            color: var(--xp);
-        }
-
-        /* Confetti */
-        .confetti-piece {
-            position: fixed;
-            z-index: 200;
-            pointer-events: none;
-            width: 10px;
-            height: 10px;
-            border-radius: 2px;
-            animation: confettiDrop 2.5s ease-in forwards;
-        }
-
-        /* Result screen */
-        .result-score-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 6px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 10px auto;
-            background: var(--surface2);
-        }
-        .star-display {
-            font-size: 2rem;
-            letter-spacing: 4px;
-            text-align: center;
-        }
-
-        /* Grid */
-        .option-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-        @media(min-width:500px) {
-            .option-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .case-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-        @media(min-width:600px) {
-            .case-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .btn-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .info-chip {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            margin: 2px;
-        }
-        .info-chip.correct-chip {
-            border-color: #2eff6e;
-            color: #2eff6e;
-        }
-        .info-chip.wrong-chip {
-            border-color: #e0556a;
-            color: #e0556a;
-        }
-
-        /* Scrollable content */
-        .scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px 0;
-            -webkit-overflow-scrolling: touch;
-        }
-        .scroll-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        .scroll-area::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 2px;
-        }
-
-        /* Accessibility */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>PflegefachProfi Pflege-Simulator</title>
+<style>
+:root{
+  --bg:#07111f;--surface:#0f1d31;--card:#13233a;--card2:#182b46;
+  --text:#eef6ff;--muted:#9fb2c7;--line:rgba(255,255,255,.11);
+  --blue:#3b82f6;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;
+  --purple:#8b5cf6;--cyan:#06b6d4;--shadow:0 24px 70px rgba(0,0,0,.35);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#12325c 0,#07111f 48%,#050914 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button{font:inherit}
+.app{max-width:1220px;margin:0 auto;padding:18px 14px 90px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900}
+.logo{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,var(--green),var(--blue));display:grid;place-items:center;box-shadow:0 10px 30px rgba(34,197,94,.25)}
+.pill{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:999px;padding:8px 11px;color:var(--muted);font-size:13px}
+.screen{display:none;animation:fade .25s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{min-height:76vh;display:grid;align-items:center}
+.hero-card{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:34px;padding:28px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.hero h1{font-size:clamp(34px,7vw,76px);line-height:.95;margin:0 0 16px;font-weight:950;letter-spacing:-.06em}
+.hero p{font-size:18px;color:var(--muted);max-width:680px;line-height:1.6}
+.cta{border:0;border-radius:22px;background:linear-gradient(135deg,#16a34a,#22c55e,#86efac);color:#04200f;font-weight:950;padding:18px 22px;min-height:62px;font-size:18px;box-shadow:0 18px 45px rgba(34,197,94,.38);cursor:pointer;transition:.2s;animation:pulse 2s infinite}
+.cta:hover,.btn:hover,.card:hover{transform:translateY(-2px)}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(34,197,94,.09),0 18px 45px rgba(34,197,94,.38)}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+.stat,.card{background:rgba(255,255,255,.065);border:1px solid var(--line);border-radius:22px;padding:16px}
+.stat b{display:block;font-size:24px}
+.stat span,.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));box-shadow:0 10px 35px rgba(0,0,0,.18);transition:.2s}
+.card h3{margin:0 0 8px;font-size:20px}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:16px;padding:12px 14px;font-weight:800;cursor:pointer;transition:.18s}
+.btn.primary{background:linear-gradient(135deg,var(--blue),var(--purple));border:0}
+.btn.green{background:linear-gradient(135deg,#16a34a,#22c55e);color:#05200f;border:0}
+.btn.red{background:rgba(239,68,68,.13);border-color:rgba(239,68,68,.35)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin:16px 0}
+.header h2{margin:0;font-size:30px}
+.sim-layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr);gap:14px}
+.scene{background:linear-gradient(180deg,#142949,#091527);border:1px solid var(--line);border-radius:30px;padding:14px;min-height:480px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.room-light{position:absolute;inset:-40% -20% auto auto;width:360px;height:360px;background:radial-gradient(circle,rgba(96,165,250,.22),transparent 65%)}
+.speech{position:absolute;z-index:5;left:18px;right:18px;top:18px;background:rgba(255,255,255,.92);color:#0f172a;border-radius:22px;padding:14px 16px;font-weight:750;box-shadow:0 18px 40px rgba(0,0,0,.2)}
+.monitor{position:absolute;right:18px;top:96px;width:150px;background:#06111f;border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:10px;z-index:4}
+.ecg{height:42px;border-radius:10px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.12));overflow:hidden;margin-bottom:8px}
+.ecg svg{width:220px;height:42px;animation:ecg 1.5s linear infinite}
+@keyframes ecg{to{transform:translateX(-70px)}}
+.vital{display:flex;justify-content:space-between;font-size:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:5px;color:#dbeafe}
+.bed{position:absolute;left:4%;right:4%;bottom:7%;height:250px;background:linear-gradient(180deg,#e9f2ff,#a8bdd7);border-radius:36px 36px 26px 26px;box-shadow:0 28px 80px rgba(0,0,0,.38)}
+.mattress{position:absolute;left:4%;right:4%;top:16%;height:60%;background:linear-gradient(180deg,#f8fbff,#dbeafe);border-radius:30px}
+.blanket{position:absolute;left:16%;right:11%;bottom:7%;height:44%;background:linear-gradient(135deg,#9cc7ff,#4779c6);border-radius:30px;box-shadow:inset 0 10px 25px rgba(255,255,255,.28)}
+.rail{position:absolute;left:3%;right:3%;bottom:42%;height:12px;background:rgba(220,235,255,.7);border-radius:999px}
+.patient{position:absolute;z-index:3;left:50%;bottom:33%;transform:translateX(-50%);width:min(410px,82%);height:260px}
+.body{position:absolute;left:24%;right:24%;bottom:0;height:142px;background:linear-gradient(180deg,#dae6f7,#a8bdd7);border-radius:60px 60px 24px 24px}
+.head{position:absolute;left:50%;top:22px;transform:translateX(-50%);width:104px;height:120px;background:linear-gradient(135deg,#d6a175,#f0c19c);border-radius:48% 48% 44% 44%;box-shadow:inset -14px -10px 26px rgba(75,45,20,.13)}
+.hair{position:absolute;left:23px;right:23px;top:-4px;height:30px;background:#4b3426;border-radius:34px 34px 12px 12px}
+.eye{position:absolute;top:51px;width:10px;height:6px;background:#111827;border-radius:999px}
+.eye.l{left:31px}.eye.r{right:31px}
+.mouth{position:absolute;left:39px;top:81px;width:27px;height:9px;border-bottom:3px solid #7f1d1d;border-radius:0 0 20px 20px}
+.arm{position:absolute;top:128px;width:105px;height:34px;background:linear-gradient(135deg,#d6a175,#efc19d);border-radius:999px}
+.arm.l{left:48px;transform:rotate(12deg)}.arm.r{right:48px;transform:rotate(-12deg)}
+.patient.dyspnea .body{animation:breathe .75s infinite ease-in-out}
+.patient.coughing .head{animation:cough .8s infinite}
+.patient.pale .head,.patient.pale .arm{filter:saturate(.45) brightness(1.15)}
+.patient.sweaty .head:after{content:"";position:absolute;right:18px;top:42px;width:8px;height:18px;background:#7dd3fc;border-radius:50%}
+.patient.confused:before{content:"?";position:absolute;left:60%;top:0;color:#fde68a;font-size:42px;font-weight:900;animation:float 1.4s infinite}
+.patient.anxious .eye{height:10px}
+.patient.pain .mouth{border-bottom:0;border-top:3px solid #7f1d1d;top:88px}
+.patient.stroke .arm.r{transform:rotate(34deg);opacity:.55}
+.patient.hypoglycemic .head{filter:saturate(.7) brightness(1.08)}
+@keyframes breathe{50%{transform:scaleY(1.05)}}@keyframes cough{50%{transform:translateX(-50%) rotate(2deg)}}@keyframes float{50%{transform:translateY(-7px)}}
+.panel{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:30px;padding:16px;box-shadow:var(--shadow)}
+.progress{height:10px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));width:0;transition:.35s}
+.option{width:100%;text-align:left;margin:8px 0;border:1px solid var(--line);background:rgba(255,255,255,.075);color:var(--text);border-radius:18px;padding:14px;cursor:pointer;transition:.15s}
+.option.selected{border-color:var(--blue);background:rgba(59,130,246,.19)}
+.option.correct{border-color:rgba(34,197,94,.65);background:rgba(34,197,94,.16)}
+.option.wrong{border-color:rgba(239,68,68,.65);background:rgba(239,68,68,.14);animation:shake .25s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.feedback-list{display:grid;gap:8px}
+.fb{padding:11px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.fb.good{border-color:rgba(34,197,94,.5)}.fb.bad{border-color:rgba(239,68,68,.5)}.fb.miss{border-color:rgba(245,158,11,.5)}
+.stars{font-size:40px;letter-spacing:4px;color:#fbbf24}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+.confetti i{position:absolute;width:9px;height:14px;background:var(--green);top:-20px;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.disclaimer{position:fixed;left:10px;right:10px;bottom:10px;background:rgba(2,6,23,.84);border:1px solid var(--line);border-radius:16px;padding:9px 12px;color:#cbd5e1;font-size:12px;z-index:20}
+:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+@media(max-width:850px){.grid,.stats,.sim-layout{grid-template-columns:1fr}.scene{min-height:430px}.monitor{top:92px;width:128px}.header{display:block}.hero-card{padding:20px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
-    <div id="app">
-        <header class="app-header" role="banner">
-            <div class="logo-icon" aria-hidden="true">🏥</div>
-            <div><span class="title">PflegefachProfi</span><br><span class="subtitle">Emergency Nurse Simulator</span></div>
-            <div class="streak-badge" id="streakBadge" style="display:none;">🔥 <span id="streakCount">0</span></div>
-            <div class="xp-badge">⭐ <span id="totalXP">0</span> XP</div>
-        </header>
-        <div id="screenContainer" style="flex:1;display:flex;flex-direction:column;"></div>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="logo">⚕</div><div>PflegefachProfi gpt<br><span class="muted">Pflege-Simulator</span></div></div>
+    <div class="row">
+      <span class="pill" id="topXp">XP 0</span>
+      <button class="btn" onclick="showLanding()">Home</button>
     </div>
-    <script>
-        // ==================== DISEASE DATA ====================
-        const CASES = [{
-            id: "myokardinfarkt",
-            title: "Myokardinfarkt",
-            category: "Herz-Kreislauf",
-            difficulty: "Schwer",
-            patientModel: "olderMale",
-            patient: { name: "Herr Schneider", age: 67, gender: "männlich",
-                openingLine: "Ich habe seit etwa einer Stunde starke Schmerzen in der Brust... es fühlt sich an wie ein riesiger Druck, und mir ist übel. Können Sie mir helfen?" },
-            initialSymptoms: [
-                { label: "Akuter Brustschmerz (retrosternal)", correct: true, points: 15,
-                    feedback: "Leitsymptom – retrosternaler Druck/Engegefühl ist klassisch." },
-                { label: "Ausstrahlung in linken Arm & Kiefer", correct: true, points: 12,
-                    feedback: "Typische Ausstrahlung bei Myokardinfarkt." },
-                { label: "Übelkeit & Erbrechen", correct: true, points: 8, feedback: "Häufige vegetative Begleitsymptome." },
-                { label: "Starke Kopfschmerzen", correct: false, points: -5,
-                feedback: "Kopfschmerzen sind kein Leitsymptom des MI." }
-            ],
-            hiddenSymptoms: [
-                { label: "Kaltschweißigkeit", correct: true, points: 10,
-                    feedback: "Patient ist blass und kalt schwitzig – typisches vegetatives Zeichen." },
-                { label: "Atemnot / Dyspnoe", correct: true, points: 10,
-                feedback: "Kann auf beginnende Herzinsuffizienz hinweisen." },
-                { label: "Todesangst", correct: true, points: 8, feedback: "Patienten berichten oft von Vernichtungsgefühl." },
-                { label: "Juckreiz am ganzen Körper", correct: false, points: -5,
-                feedback: "Kein typisches Symptom eines MI." }
-            ],
-            riskFactors: [
-                { label: "Arterielle Hypertonie", correct: true, points: 8, feedback: "Wichtiger kardiovaskulärer Risikofaktor." },
-                { label: "Nikotinabusus (langjährig)", correct: true, points: 8,
-                feedback: "Rauchen erhöht das MI-Risiko erheblich." },
-                { label: "Diabetes mellitus Typ 2", correct: true, points: 8, feedback: "Diabetiker haben erhöhtes kardiovaskuläres Risiko." },
-                { label: "Regelmäßige sportliche Betätigung", correct: false, points: -3,
-                    feedback: "Sport ist protektiv, kein Risikofaktor." }
-            ],
-            causes: [
-                { label: "Plaqueruptur mit Thrombusbildung", correct: true, points: 10,
-                    feedback: "Häufigste Ursache: instabile Plaque → Thrombus → Gefäßverschluss." },
-                { label: "Koronarspasmus", correct: true, points: 6, feedback: "Seltener, aber möglicher Auslöser." },
-                { label: "Allergische Reaktion", correct: false, points: -5, feedback: "Keine typische MI-Ursache." }
-            ],
-            diagnostics: [
-                { label: "12-Kanal-EKG (STEMI/NSTEMI)", correct: true, points: 12,
-                    feedback: "Goldstandard – ST-Hebungen oder -Senkungen erkennen." },
-                { label: "Troponin-T/I-Bestimmung", correct: true, points: 12,
-                    feedback: "Hochempfindlicher Marker für Myokardschaden." },
-                { label: "Echokardiografie", correct: true, points: 6,
-                feedback: "Zur Beurteilung von Wandbewegungsstörungen." },
-                { label: "Röntgen-Thorax (als alleinige Diagnostik)", correct: false, points: -5,
-                    feedback: "Rö-Thorax allein ist nicht ausreichend zur MI-Diagnostik." }
-            ],
-            therapies: [
-                { label: "PCI (Herzkatheter) innerhalb 90 min", correct: true, points: 12,
-                    feedback: "Standardtherapie bei STEMI – schnelle Reperfusion." },
-                { label: "ASS + P2Y12-Hemmer (duale Plättchenhemmung)", correct: true, points: 10,
-                    feedback: "Antithrombozytäre Therapie sofort einleiten." },
-                { label: "Sauerstoffgabe bei Sättigung <90%", correct: true, points: 6,
-                feedback: "Nur bei Hypoxämie, nicht routinemäßig." },
-                { label: "Hochdosiertes Kortison", correct: false, points: -5,
-                feedback: "Keine Indikation bei akutem MI." }
-            ],
-            nursingMeasures: [
-                { label: "Oberkörperhochlagerung (30-45°)", correct: true, points: 12,
-                    feedback: "Entlastet das Herz und erleichtert Atmung." },
-                { label: "Engmaschige Vitalzeichenkontrolle (RR, Puls, SpO₂)", correct: true, points: 14,
-                    feedback: "Alle 5-15 min überwachen, Veränderungen sofort melden." },
-                { label: "Venösen Zugang sichern & Blutentnahme", correct: true, points: 10,
-                feedback: "Für Labor (Troponin) und Medikamentengabe." },
-                { label: "Patienten allein zur Toilette gehen lassen", correct: false, points: -8,
-                    feedback: "Absolute Bettruhe! Jede Belastung kann Infarktausdehnung verursachen." },
-                { label: "Psychische Betreuung & Angst nehmen", correct: true, points: 8,
-                    feedback: "Ruhig erklären, Sicherheit vermitteln, Angehörige informieren." }
-            ],
-            redFlags: [
-                "Anhaltender Brustschmerz >20 min",
-                "ST-Hebungen im EKG",
-                "Kardiogener Schock (Hypotonie, Tachykardie)",
-                "Maligne Herzrhythmusstörungen"
-            ],
-            education: [
-                "Nach dem Infarkt: Lebensstiländerung (Rauchen stoppen, Ernährung, Bewegung)",
-                "Medikamentenadhärenz (duale Plättchenhemmung, Statine, Betablocker)",
-                "Reha-Maßnahmen wahrnehmen",
-                "Warnsymptome für erneuten Infarkt kennen"
-            ],
-            explanation: "Akuter Myokardinfarkt entsteht durch Verschluss einer Koronararterie, meist nach Plaqueruptur. Die Folge ist eine Myokardnekrose. Schnelle Reperfusion (PCI) ist entscheidend.",
-            examTip: "In der Prüfung: STEMI vs. NSTEMI unterscheiden können. Pflege: Oberkörperhochlagern, Vitalzeichen-Monitoring, venösen Zugang, psychische Betreuung."
-        }, {
-            id: "schlaganfall",
-            title: "Schlaganfall (ischämisch)",
-            category: "Neurologie",
-            difficulty: "Schwer",
-            patientModel: "olderFemale",
-            patient: { name: "Frau Krüger", age: 74, gender: "weiblich",
-                openingLine: "Ich kann meinen rechten Arm nicht mehr richtig bewegen... und mein Mund fühlt sich so komisch an. Alles ist so plötzlich passiert..." },
-            initialSymptoms: [
-                { label: "Akute Hemiparese rechts", correct: true, points: 15,
-                    feedback: "Plötzliche einseitige Schwäche – Leitsymptom." },
-                { label: "Fazialisparese (hängender Mundwinkel)", correct: true, points: 12,
-                feedback: "Einseitig hängender Mundwinkel, typisch." },
-                { label: "Sprachstörung (Dysarthrie)", correct: true, points: 10,
-                    feedback: "Verwaschene Sprache – häufiges Symptom." },
-                { label: "Starke Bauchschmerzen", correct: false, points: -5,
-                feedback: "Kein typisches Schlaganfallsymptom." }
-            ],
-            hiddenSymptoms: [
-                { label: "Hemianopsie (Gesichtsfeldausfall)", correct: true, points: 8,
-                    feedback: "Patient sieht auf einer Seite nichts." },
-                { label: "Neglect (Vernachlässigung einer Körperseite)", correct: true, points: 8,
-                    feedback: "Patient nimmt betroffene Seite nicht wahr." },
-                { label: "Kopfschmerz", correct: true, points: 5, feedback: "Kann begleitend auftreten." },
-                { label: "Starkes Durstgefühl", correct: false, points: -3, feedback: "Kein typisches Symptom." }
-            ],
-            riskFactors: [
-                { label: "Vorhofflimmern", correct: true, points: 10,
-                    feedback: "Häufigste kardiale Emboliequelle für Schlaganfall." },
-                { label: "Arterielle Hypertonie", correct: true, points: 8, feedback: "Wichtigster vaskulärer Risikofaktor." },
-                { label: "Diabetes mellitus", correct: true, points: 6, feedback: "Erhöht das Schlaganfallrisiko." },
-                { label: "Junges Alter", correct: false, points: -3,
-                feedback: "Hohes Alter ist Risikofaktor, nicht junges Alter." }
-            ],
-            causes: [
-                { label: "Thromboembolischer Verschluss einer Hirnarterie", correct: true, points: 10,
-                    feedback: "Häufigste Ursache des ischämischen Schlaganfalls." },
-                { label: "Intrazerebrale Blutung", correct: false, points: -2,
-                    feedback: "Das wäre hämorrhagischer Schlaganfall (15% der Fälle)." },
-                { label: "Cardioembolie bei Vorhofflimmern", correct: true, points: 8,
-                    feedback: "Thrombus aus linkem Vorhof wandert ins Gehirn." }
-            ],
-            diagnostics: [
-                { label: "cCT (kraniale Computertomographie)", correct: true, points: 12,
-                    feedback: "Schnellste Methode zum Ausschluss einer Blutung." },
-                { label: "CT-Angiographie", correct: true, points: 8, feedback: "Darstellung des Gefäßverschlusses." },
-                { label: "NIHSS (Schlaganfall-Skala)", correct: true, points: 8,
-                feedback: "Standardisierte neurologische Beurteilung." },
-                { label: "Röntgen-Schädel", correct: false, points: -5,
-                feedback: "Röntgen zeigt keine Hirnischämie oder Blutung." }
-            ],
-            therapies: [
-                { label: "Systemische Thrombolyse (rt-PA) im Zeitfenster 4,5h", correct: true, points: 12,
-                    feedback: "Goldstandard – Lyse innerhalb des Zeitfensters." },
-                { label: "Mechanische Thrombektomie", correct: true, points: 10,
-                feedback: "Bei großem Gefäßverschluss – Katheter-basierte Entfernung." },
-                { label: "Thrombozytenaggregationshemmer (ASS)", correct: true, points: 8,
-                feedback: "Sekundärprophylaxe nach ischämischem Schlaganfall." },
-                { label: "Hochdosiertes Vitamin K", correct: false, points: -5,
-                feedback: "Keine Therapie des ischämischen Schlaganfalls." }
-            ],
-            nursingMeasures: [
-                { label: "Oberkörper 30° hochlagern", correct: true, points: 12,
-                    feedback: "Fördert venösen Abfluss und senkt Hirndruck." },
-                { label: "Neurologische Überwachung (NIHSS, Pupillen, Vigilanz)", correct: true, points: 14,
-                    feedback: "Engmaschige Kontrolle – Verschlechterung sofort melden." },
-                { label: "Aspirationsprophylaxe (Schlucktest vor oraler Gabe)", correct: true, points: 12,
-                    feedback: "Wegen Schluckstörungen – Aspirationsgefahr!" },
-                { label: "Patienten sofort mobilisieren", correct: false, points: -6,
-                    feedback: "Zunächst Bettruhe, langsame Mobilisation nach ärztlicher Anordnung." },
-                { label: "Betroffene Extremitäten positionieren & Lagerung", correct: true, points: 8,
-                    feedback: "Kontrakturenprophylaxe, physiologische Lagerung." }
-            ],
-            redFlags: [
-                "Plötzliche Bewusstseinsverschlechterung",
-                "Zunehmende Hemiparese",
-                "Pupillendifferenz",
-                "Ateminsuffizienz"
-            ],
-            education: [
-                "Risikofaktoren kontrollieren (RR, Blutzucker, Cholesterin)",
-                "Antikoagulation bei Vorhofflimmern",
-                "Sekundärprophylaxe mit Thrombozytenhemmern",
-                "Reha-Maßnahmen (Physio-, Ergotherapie, Logopädie)"
-            ],
-            explanation: "Der ischämische Schlaganfall entsteht durch einen Gefäßverschluss im Gehirn. 'Time is brain' – jede Minute zählt. Die Pflegekraft muss den FAST-Test kennen und neurologische Veränderungen sofort melden.",
-            examTip: "FAST-Schema kennen: Face, Arms, Speech, Time. Pflegeschwerpunkte: Aspirationsprophylaxe, Lagerung, neurologisches Monitoring."
-        }, {
-            id: "pneumonie",
-            title: "Pneumonie",
-            category: "Atemwege",
-            difficulty: "Mittel",
-            patientModel: "olderMale",
-            patient: { name: "Herr Bergmann", age: 72, gender: "männlich",
-                openingLine: "Ich fühle mich so schwach und habe hohes Fieber... der Husten tut weh und ich bekomme kaum Luft. Seit drei Tagen geht das schon..." },
-            initialSymptoms: [
-                { label: "Produktiver Husten mit grünlichem Auswurf", correct: true, points: 12,
-                    feedback: "Typisches Zeichen einer bakteriellen Pneumonie." },
-                { label: "Fieber >38,5°C", correct: true, points: 10, feedback: "Systemisches Entzündungszeichen." },
-                { label: "Dyspnoe & Tachypnoe", correct: true, points: 12,
-                    feedback: "Atemnot durch verminderten Gasaustausch." },
-                { label: "Durchfall", correct: false, points: -3, feedback: "Kein Leitsymptom der Pneumonie." }
-            ],
-            hiddenSymptoms: [
-                { label: "Atemabhängige Thoraxschmerzen", correct: true, points: 8,
-                    feedback: "Pleuritische Schmerzen bei Begleitpleuritis." },
-                { label: "Verwirrtheit (gerade bei Älteren)", correct: true, points: 10,
-                    feedback: "Delir kann einziges Symptom bei älteren Patienten sein!" },
-                { label: "Tachykardie", correct: true, points: 6, feedback: "Kompensatorisch bei Fieber und Hypoxie." },
-                { label: "Hautausschlag", correct: false, points: -3, feedback: "Kein typisches Pneumonie-Symptom." }
-            ],
-            riskFactors: [
-                { label: "COPD als Vorerkrankung", correct: true, points: 8,
-                    feedback: "Chronische Lungenerkrankung erhöht Pneumonie-Risiko." },
-                { label: "Bettlägerigkeit / Immobilität", correct: true, points: 8,
-                feedback: "Fördert Sekretstau und Atelektasen." },
-                { label: "Nikotinabusus", correct: true, points: 6, feedback: "Schädigt die mukoziliäre Clearance." },
-                { label: "Vegetarische Ernährung", correct: false, points: -3,
-                feedback: "Kein Risikofaktor für Pneumonie." }
-            ],
-            causes: [
-                { label: "Bakterielle Infektion (Streptococcus pneumoniae)", correct: true, points: 10,
-                    feedback: "Häufigster Erreger der ambulant erworbenen Pneumonie." },
-                { label: "Virale Infektion", correct: true, points: 6, feedback: "Auch virale Pneumonien sind möglich." },
-                { label: "Aspiration", correct: true, points: 8,
-                feedback: "Aspiration von Mageninhalt kann chemische Pneumonitis verursachen." }
-            ],
-            diagnostics: [
-                { label: "Auskultation (Rasselgeräusche, Bronchialatmen)", correct: true, points: 10,
-                    feedback: "Pflegerische Basisuntersuchung." },
-                { label: "Röntgen-Thorax", correct: true, points: 12, feedback: "Goldstandard – Infiltrate sichtbar." },
-                { label: "Labor (CRP, Leukozyten, Blutkultur)", correct: true, points: 10,
-                feedback: "Entzündungsparameter & Erregernachweis." },
-                { label: "EKG (als primäre Diagnostik)", correct: false, points: -3,
-                feedback: "EKG allein diagnostiziert keine Pneumonie." }
-            ],
-            therapies: [
-                { label: "Antibiotika (nach Antibiogramm)", correct: true, points: 12,
-                    feedback: "Gezielte antibiotische Therapie." },
-                { label: "Sauerstoffgabe bei SpO₂ <90%", correct: true, points: 10,
-                feedback: "Ziel: SpO₂ 92-96%." },
-                { label: "Fiebersenkung (Paracetamol)", correct: true, points: 6,
-                feedback: "Symptomatische Therapie bei hohem Fieber." },
-                { label: "Bettruhe ohne jede Mobilisation", correct: false, points: -5,
-                    feedback: "Frühmobilisation ist wichtig zur Pneumonieprophylaxe und -therapie." }
-            ],
-            nursingMeasures: [
-                { label: "Atemstimulierende Einreibung (ASE)", correct: true, points: 12,
-                    feedback: "Fördert Durchlüftung und Sekretlösung." },
-                { label: "Oberkörperhochlagerung", correct: true, points: 10,
-                feedback: "Erleichtert Atmung und Zwerchfellbeweglichkeit." },
-                { label: "Trinkmenge erhöhen (wenn keine KI)", correct: true, points: 8,
-                    feedback: "Sekretolyse durch ausreichende Hydrierung." },
-                { label: "Kaltes Wasser über den Kopf gießen", correct: false, points: -6,
-                feedback: "Keine evidenzbasierte Maßnahme." },
-                { label: "Regelmäßige SpO₂-Kontrolle", correct: true, points: 12,
-                    feedback: "Verschlechterung sofort erkennen und melden." }
-            ],
-            redFlags: [
-                "SpO₂-Abfall <88%",
-                "Zunehmende Atemnot",
-                "Septischer Schock (Hypotonie, Tachykardie)",
-                "Verwirrtheit / Delir"
-            ],
-            education: [
-                "Ausreichend trinken zur Sekretolyse",
-                "Frühmobilisation nach Fieberfreiheit",
-                "Atemübungen & ASE weiterführen",
-                "Arztkontakt bei erneuten Symptomen"
-            ],
-            explanation: "Pneumonie ist eine Entzündung des Lungengewebes, meist infektiös. Pflegerisch sind ASE, Oberkörperhochlagerung, SpO₂-Monitoring und Frühmobilisation zentral.",
-            examTip: "Pflegeschwerpunkte: ASE, Atmung überwachen, Flüssigkeitsbilanz, Frühmobilisation. Achtung: Bei älteren Patienten kann Delir einziges Symptom sein!"
-        }, {
-            id: "copd_exazerbation",
-            title: "COPD-Exazerbation",
-            category: "Atemwege",
-            difficulty: "Mittel",
-            patientModel: "olderMale",
-            patient: { name: "Herr Wagner", age: 69, gender: "männlich",
-                openingLine: "Ich kriege keine Luft mehr... mein Inhalator hilft gar nicht. Der Husten ist so schlimm und der Auswurf ist viel mehr als sonst..." },
-            initialSymptoms: [
-                { label: "Akute Atemnot mit verlängertem Exspirium", correct: true, points: 15,
-                    feedback: "Leitsymptom der COPD-Exazerbation." },
-                { label: "Verstärkter Husten mit zähem Auswurf", correct: true, points: 10,
-                    feedback: "Sekretvermehrung ist typisch." },
-                { label: "Zyanose (Lippen, Finger)", correct: true, points: 10,
-                feedback: "Zeichen der Hypoxämie." },
-                { label: "Stechende Augenschmerzen", correct: false, points: -5,
-                feedback: "Kein typisches Symptom." }
-            ],
-            hiddenSymptoms: [
-                { label: "Einsatz der Atemhilfsmuskulatur", correct: true, points: 10,
-                    feedback: "Sichtbare Hals- und Schultermuskulatur bei Atmung." },
-                { label: "Thorax in Inspirationsstellung (Fassthorax)", correct: true, points: 8,
-                    feedback: "Typisch bei fortgeschrittener COPD." },
-                { label: "Unruhe & Angst", correct: true, points: 6, feedback: "Durch Atemnot ausgelöst." },
-                { label: "Heißhunger", correct: false, points: -3, feedback: "Kein Symptom der COPD-Exazerbation." }
-            ],
-            riskFactors: [
-                { label: "Langjähriger Nikotinabusus", correct: true, points: 10,
-                    feedback: "Hauptrisikofaktor für COPD." },
-                { label: "Infekte der Atemwege", correct: true, points: 8,
-                feedback: "Häufigster Auslöser einer Exazerbation." },
-                { label: "Feinstaubbelastung / Berufsnoxen", correct: true, points: 6,
-                feedback: "Chronische Exposition schädigt die Lunge." },
-                { label: "Regelmäßiges Schwimmen", correct: false, points: -3,
-                feedback: "Schwimmen ist protektiv und kein Risikofaktor." }
-            ],
-            causes: [
-                { label: "Bakterielle oder virale Infektion", correct: true, points: 10,
-                    feedback: "Häufigster Trigger der Exazerbation." },
-                { label: "Medikamenten-Nonadhärenz", correct: true, points: 6,
-                feedback: "Wenn Dauermedikation nicht eingenommen wird." },
-                { label: "Wetterumschwung / Kaltluft", correct: true, points: 5,
-                feedback: "Kann Bronchokonstriktion auslösen." }
-            ],
-            diagnostics: [
-                { label: "Auskultation (Giemen, Brummen, abgeschwächtes Atemgeräusch)", correct: true, points: 10,
-                    feedback: "Pflegerische Basisuntersuchung." },
-                { label: "SpO₂-Messung", correct: true, points: 12, feedback: "Schnellste Orientierung über Oxygenierung." },
-                { label: "Blutgasanalyse (BGA)", correct: true, points: 12,
-                    feedback: "Beurteilung von Oxygenierung und CO₂-Retention." },
-                { label: "Magenendoskopie", correct: false, points: -5,
-                feedback: "Keine relevante Diagnostik bei COPD." }
-            ],
-            therapies: [
-                { label: "Bronchodilatatoren (SABA/SAMA) – Inhalation", correct: true, points: 12,
-                    feedback: "Kurzzeit-Bronchodilatatoren sind First-Line." },
-                { label: "Systemische Kortikosteroide", correct: true, points: 10,
-                    feedback: "Prednisolon für 5-7 Tage." },
-                { label: "Sauerstoffgabe (Ziel: SpO₂ 88-92%)", correct: true, points: 10,
-                    feedback: "Vorsicht: Zu viel O₂ kann CO₂-Retention verstärken!" },
-                { label: "Betablocker hochdosiert", correct: false, points: -5,
-                    feedback: "Betablocker können Bronchokonstriktion verstärken." }
-            ],
-            nursingMeasures: [
-                { label: "Oberkörperhochlagerung (Herzbettlage)", correct: true, points: 12,
-                    feedback: "Erleichtert Atmung und Zwerchfellbeweglichkeit." },
-                { label: "Lippenbremse & atemerleichternde Positionen", correct: true, points: 12,
-                    feedback: "Lippenbremse vermindert Bronchialkollaps." },
-                { label: "Atemstimulierende Einreibung (ASE)", correct: true, points: 10,
-                    feedback: "Unterstützt Sekretlösung." },
-                { label: "Patienten flach lagern", correct: false, points: -8,
-                    feedback: "Flachlagerung verschlechtert die Atmung erheblich." },
-                { label: "Engmaschige SpO₂-Überwachung", correct: true, points: 12,
-                    feedback: "Verschlechterung sofort melden." }
-            ],
-            redFlags: [
-                "SpO₂ <85% trotz O₂-Gabe",
-                "Bewusstseinstrübung (CO₂-Narkose)",
-                "Erschöpfung der Atemmuskulatur",
-                "Kreislaufinstabilität"
-            ],
-            education: [
-                "Raucherentwöhnung – wichtigste Maßnahme",
-                "Inhalationstechnik regelmäßig prüfen",
-                "Atemtechniken (Lippenbremse) täglich üben",
-                "Impfung (Influenza, Pneumokokken) wahrnehmen"
-            ],
-            explanation: "COPD-Exazerbation ist eine akute Verschlechterung mit verstärkter Atemnot und Sekretproduktion. Pflegerisch sind Oberkörperhochlagerung, Lippenbremse und SpO₂-Monitoring entscheidend.",
-            examTip: "Achtung: COPD-Patienten SpO₂ 88-92% anstreben, nicht höher! Zu viel O₂ kann Atemantrieb unterdrücken. Pflege: ASE, Lippenbremse, atemerleichternde Positionen."
-        }, {
-            id: "hypoglykaemie",
-            title: "Hypoglykämie bei Diabetes mellitus",
-            category: "Stoffwechsel",
-            difficulty: "Mittel",
-            patientModel: "middleAged",
-            patient: { name: "Frau Yilmaz", age: 45, gender: "weiblich",
-                openingLine: "Mir ist so schwindelig... ich zittere am ganzen Körper und schwitze. Ich habe heute früh meine Insulin gespritzt aber dann nichts gegessen..." },
-            initialSymptoms: [
-                { label: "Zittern / Tremor", correct: true, points: 12,
-                feedback: "Adrenerge Gegenregulation bei Hypoglykämie." },
-                { label: "Schwitzen & Blässe", correct: true, points: 12,
-                feedback: "Vegetative Symptome der Hypoglykämie." },
-                { label: "Schwindel & Schwäche", correct: true, points: 10,
-                    feedback: "Neuroglukopenische Symptome." },
-                { label: "Starkes Durstgefühl", correct: false, points: -5,
-                    feedback: "Durst ist eher ein Hyperglykämie-Symptom." }
-            ],
-            hiddenSymptoms: [
-                { label: "Konzentrationsstörungen / Verwirrtheit", correct: true, points: 10,
-                    feedback: "Gehirn benötigt Glukose – neuroglukopenisches Zeichen." },
-                { label: "Herzrasen / Tachykardie", correct: true, points: 8,
-                feedback: "Adrenerge Reaktion." },
-                { label: "Heißhunger", correct: true, points: 6, feedback: "Typisches Warnsignal." },
-                { label: "Erhöhte Körpertemperatur", correct: false, points: -3,
-                feedback: "Kein typisches Hypoglykämie-Symptom." }
-            ],
-            riskFactors: [
-                { label: "Insulin-Überdosierung", correct: true, points: 10,
-                feedback: "Häufigste Ursache bei insulinpflichtigem Diabetes." },
-                { label: "Ausgelassene Mahlzeit nach Insulin", correct: true, points: 10,
-                    feedback: "Insulin wirkt, aber keine Glukosezufuhr." },
-                { label: "Erhöhte körperliche Aktivität", correct: true, points: 6,
-                    feedback: "Erhöhter Glukoseverbrauch." },
-                { label: "Regelmäßige Blutzuckerkontrollen", correct: false, points: -3,
-                    feedback: "Regelmäßige Kontrollen sind protektiv, kein Risikofaktor." }
-            ],
-            causes: [
-                { label: "Zu hohe Insulindosis", correct: true, points: 10,
-                feedback: "Häufigste Ursache." },
-                { label: "Fehlende Kohlenhydrataufnahme", correct: true, points: 8,
-                feedback: "Insulin wirkt, aber keine Glukose." },
-                { label: "Alkoholkonsum (hemmt Glukoneogenese)", correct: true, points: 8,
-                feedback: "Alkohol blockiert Glukoseproduktion der Leber." }
-            ],
-            diagnostics: [
-                { label: "Blutzuckermessung (BZ <70 mg/dl)", correct: true, points: 12,
-                    feedback: "Sofort messen – Goldstandard." },
-                { label: "Klinische Beurteilung (Whipple-Trias)", correct: true, points: 10,
-                    feedback: "Symptome + niedriger BZ + Besserung nach Glukose." },
-                { label: "HbA1c-Bestimmung (Langzeitwert)", correct: false, points: -3,
-                    feedback: "HbA1c zeigt Langzeitwert, nicht akute Hypoglykämie." }
-            ],
-            therapies: [
-                { label: "Schnell resorbierbare Kohlenhydrate oral (Traubenzucker, Saft)", correct: true, points: 12,
-                    feedback: "Bei bewusstseinsklarem Patienten: 20-30g Glukose oral." },
-                { label: "Glukose i.v. (40% Glukoselösung)", correct: true, points: 10,
-                    feedback: "Bei Bewusstlosigkeit oder Schluckunfähigkeit." },
-                { label: "Glukagon i.m. (wenn i.v.-Zugang schwierig)", correct: true, points: 8,
-                feedback: "Alternative bei fehlendem Zugang." },
-                { label: "Insulin s.c. nachspritzen", correct: false, points: -8,
-                    feedback: "Insulin würde BZ weiter senken – lebensgefährlich!" }
-            ],
-            nursingMeasures: [
-                { label: "Sofort Blutzucker messen", correct: true, points: 14,
-                    feedback: "Erste pflegerische Maßnahme – Wert bestimmen." },
-                { label: "Bewusstseinslage prüfen & Schluckfähigkeit testen", correct: true, points: 12,
-                    feedback: "Entscheidend für orale vs. i.v.-Therapie." },
-                { label: "Traubenzucker/Saft geben bei BZ <70 und Schluckfähigkeit", correct: true, points: 14,
-                    feedback: "Schnelle Kohlenhydrate – zentrale pflegerische Maßnahme." },
-                { label: "Patienten allein lassen zum Ausruhen", correct: false, points: -10,
-                    feedback: "Hypoglykämie kann sich verschlechtern – Überwachung nötig!" },
-                { label: "BZ nach 15 min kontrollieren & ggf. wiederholen", correct: true, points: 12,
-                    feedback: "Schema: messen – KH geben – nach 15 min kontrollieren." }
-            ],
-            redFlags: [
-                "Bewusstlosigkeit",
-                "Schluckunfähigkeit",
-                "BZ <40 mg/dl",
-                "Anhaltende Hypoglykämie trotz KH-Gabe"
-            ],
-            education: [
-                "Hypoglykämie-Warnsymptome kennen",
-                "Immer Traubenzucker/Saft griffbereit haben",
-                "Nach Insulin immer essen",
-                "BZ vor/nach Sport messen"
-            ],
-            explanation: "Hypoglykämie (BZ <70 mg/dl) ist ein akuter Notfall. Pflegerisch: sofort BZ messen, bei Schluckfähigkeit orale Kohlenhydrate geben, nach 15 min kontrollieren. Bei Bewusstlosigkeit: Glukose i.v. oder Glukagon.",
-            examTip: "Merke: BZ <70 = Hypoglykämie. Pflege: messen → KH oral (wenn möglich) → 15 min warten → erneut messen. Niemals Insulin geben!"
-        }];
+  </div>
 
-        // ==================== GAME STATE ====================
-        const STORAGE_KEY = 'pflegefachprofi_save';
-        let gameState = {
-            totalXP: 0,
-            streak: 0,
-            casesCompleted: {}, // { caseId: { bestScore, stars, completedAt } }
-            currentCaseId: null,
-            currentPhase: 0,
-            phaseResults: [],
-            currentScore: 0,
-            maxPossibleScore: 0,
-            selectedOptions: [],
-            phaseData: null,
-            screen: 'landing', // landing | caseSelect | simulation | feedback | result
-            patientCondition: 'default',
-            speechText: '',
-            isTypewriting: false,
-        };
+  <main id="landing" class="screen active">
+    <section class="hero">
+      <div class="hero-card">
+        <h1>PflegefachProfi<br>Pflege-Simulator</h1>
+        <p>Trainiere klinisches Denken, Pflegemaßnahmen, Kommunikation, Recht, Expertenstandards und Pflegeplanung in realistischen Fallsituationen.</p>
+        <button class="cta" onclick="showModules()">Simulation starten</button>
+        <div class="stats" id="landingStats"></div>
+      </div>
+    </section>
+  </main>
 
-        function loadState() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    gameState.totalXP = parsed.totalXP || 0;
-                    gameState.streak = parsed.streak || 0;
-                    gameState.casesCompleted = parsed.casesCompleted || {};
-                }
-            } catch (e) { /* ignore */ }
-        }
+  <main id="modules" class="screen">
+    <div class="header">
+      <div><h2>Lernbereich wählen</h2><p class="muted">Wähle ein Modul. Jeder Fall ist als klinische Simulation aufgebaut.</p></div>
+      <button class="btn" onclick="showLanding()">Zurück</button>
+    </div>
+    <div class="grid" id="moduleGrid"></div>
+  </main>
 
-        function saveState() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                    totalXP: gameState.totalXP,
-                    streak: gameState.streak,
-                    casesCompleted: gameState.casesCompleted,
-                }));
-            } catch (e) { /* ignore */ }
-        }
-        loadState();
+  <main id="cases" class="screen">
+    <div class="header">
+      <div><h2 id="caseTitle">Fälle</h2><p class="muted">Wähle einen Fall und starte die Simulation.</p></div>
+      <button class="btn" onclick="showModules()">Module</button>
+    </div>
+    <div class="grid" id="caseGrid"></div>
+  </main>
 
-        // ==================== DOM HELPERS ====================
-        const app = document.getElementById('app');
-        const screenContainer = document.getElementById('screenContainer');
-        const totalXPEl = document.getElementById('totalXP');
-        const streakBadge = document.getElementById('streakBadge');
-        const streakCountEl = document.getElementById('streakCount');
+  <main id="simulation" class="screen">
+    <div class="header">
+      <div><h2 id="simTitle"></h2><p class="muted" id="simSub"></p></div>
+      <button class="btn red" onclick="showCases(currentModule)">Fall verlassen</button>
+    </div>
+    <div class="sim-layout">
+      <section class="scene" aria-label="Klinische Patientensimulation">
+        <div class="room-light"></div>
+        <div class="speech" id="speech"></div>
+        <div class="monitor">
+          <div class="ecg"><svg viewBox="0 0 220 42"><polyline points="0,22 24,22 32,8 42,34 54,22 80,22 90,15 98,22 128,22 136,5 149,37 160,22 220,22" fill="none" stroke="#22c55e" stroke-width="3"/></svg></div>
+          <div id="vitals"></div>
+        </div>
+        <div class="bed"><div class="mattress"></div><div class="rail"></div><div id="patient"></div><div class="blanket"></div></div>
+      </section>
+      <section class="panel">
+        <div class="row">
+          <span class="pill" id="phaseCounter"></span>
+          <span class="pill" id="scorePill"></span>
+          <span class="pill" id="xpPill"></span>
+        </div>
+        <div class="progress"><div id="phaseProgress"></div></div>
+        <h3 id="phaseTitle"></h3>
+        <p class="muted" id="phaseInstruction"></p>
+        <div id="options"></div>
+        <button class="btn green" id="submitBtn" onclick="submitPhase()">Antwort prüfen</button>
+      </section>
+    </div>
+  </main>
 
-        function updateHeader() {
-            totalXPEl.textContent = gameState.totalXP;
-            if (gameState.streak >= 2) {
-                streakBadge.style.display = 'flex';
-                streakCountEl.textContent = gameState.streak;
-            } else {
-                streakBadge.style.display = 'none';
-            }
-        }
+  <main id="feedback" class="screen">
+    <div class="panel">
+      <h2 id="fbTitle">Auswertung</h2>
+      <p class="muted" id="fbText"></p>
+      <div class="feedback-list" id="fbList"></div>
+      <br>
+      <button class="btn green" onclick="nextPhase()">Weiter</button>
+    </div>
+  </main>
 
-        function renderScreen(html) {
-            screenContainer.innerHTML = html;
-            updateHeader();
-            // Re-attach event listeners after render
-            setTimeout(attachScreenListeners, 50);
-        }
+  <main id="result" class="screen">
+    <div class="panel" id="resultBox"></div>
+  </main>
+</div>
 
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = 'feedback-toast ' + (type === 'success' ? 'success' : type === 'error' ? 'error' :
-                'warning-toast');
-            toast.textContent = message;
-            toast.setAttribute('role', 'status');
-            toast.setAttribute('aria-live', 'polite');
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 1600);
-        }
+<div class="disclaimer">Trainingssimulation für die Ausbildung. Keine medizinische Anleitung für reale Notfälle. In echten Notfällen gelten Hausstandard, ärztliche Anordnung und Notfallalgorithmus.</div>
+<div class="confetti" id="confetti"></div>
 
-        function showXPFloat(xp, x, y) {
-            const el = document.createElement('div');
-            el.className = 'xp-float';
-            el.textContent = '+' + xp + ' XP';
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 1900);
-        }
+<script>
+const MODULES=["Medizinische Notfälle","Erkrankungen","Pflegeprobleme","Recht & Ethik","Kommunikation","Expertenstandards","Pflegeplanung"];
 
-        function spawnConfetti(count = 40) {
-            const colors = ['#00c9a7', '#2eff6e', '#f0c040', '#5cb8ff', '#f0a050', '#e0556a', '#c084fc', '#ff6b9d'];
-            for (let i = 0; i < count; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'confetti-piece';
-                piece.style.left = Math.random() * 100 + '%';
-                piece.style.top = -(Math.random() * 60 + 10) + 'px';
-                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.width = (Math.random() * 8 + 6) + 'px';
-                piece.style.height = (Math.random() * 8 + 6) + 'px';
-                piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                piece.style.animationDelay = Math.random() * 0.8 + 's';
-                document.body.appendChild(piece);
-                setTimeout(() => piece.remove(), 3500);
-            }
-        }
+function opt(label,correct,points,feedback,critical=false,danger=false){
+  return{label,correct,points,feedback,critical,danger};
+}
+function makeCase(id,module,title,category,difficulty,setting,patientModel,patient,vitals,finalDiagnosis,definition,redFlags,nursingSummary,examTip,phases){
+  return{id,module,title,category,difficulty,setting,patientModel,patient,vitals,finalDiagnosis,definition,redFlags,nursingSummary,examTip,phases};
+}
 
-        // ==================== PATIENT RENDERER ====================
-        function getPatientModelConfig(modelName) {
-            const configs = {
-                youngAdult: { headClass: 'hair-blonde', skinTone: 'var(--patient-skin)', ageFeatures: '', age: 'young' },
-                olderMale: { headClass: 'hair-gray', skinTone: 'var(--patient-skin-older)', ageFeatures: 'wrinkles',
-                    age: 'older' },
-                olderFemale: { headClass: 'hair-gray', skinTone: 'var(--patient-skin-older)', ageFeatures: 'wrinkles',
-                    age: 'older' },
-                middleAged: { headClass: 'hair-dark', skinTone: 'var(--patient-skin)', ageFeatures: '', age: 'middle' },
-            };
-            return configs[modelName] || configs['youngAdult'];
-        }
+const CASES=[
+makeCase("myokardinfarkt","Medizinische Notfälle","Myokardinfarkt","Herz-Kreislauf","Schwer","Notaufnahme","olderMale",
+{name:"Herr Schneider",age:67,gender:"männlich",openingLine:"Ich habe seit einer Stunde starken Druck auf der Brust. Es zieht in den linken Arm.",conditionState:["pain","pale","sweaty","anxious"]},
+{RR:"24/min",SpO2:"93%",Puls:"118/min",BD:"165/95",Temp:"36.9°C"},"Akuter Myokardinfarkt",
+"Akuter Verschluss oder kritische Minderdurchblutung eines Koronargefäßes mit Sauerstoffmangel des Herzmuskels.",
+["Starker Thoraxschmerz","Kaltschweißigkeit","Atemnot","Bewusstseinsveränderung","Kreislaufinstabilität"],
+["Oberkörper erhöht lagern und Patient nicht allein lassen","Vitalzeichen, Schmerz, SpO₂ und Bewusstsein engmaschig beobachten","12-Kanal-EKG/Monitoring vorbereiten und Arzt/Notfallteam informieren","i.v.-Zugang, Notfallmaterial und Dokumentation vorbereiten"],
+"Bei Brustschmerz zählt Zeit: Symptome ernst nehmen, Belastung vermeiden, Monitoring und strukturierte Weitergabe.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 sofort relevante Beobachtungen.",type:"multiple",requiredCorrect:3,options:[
+opt("Starker retrosternaler Druckschmerz mit Ausstrahlung",true,20,"Leitsymptom eines akuten Koronarsyndroms.",true),
+opt("Kaltschweißigkeit und Blässe erkennen",true,15,"Vegetative Symptome sind ernst zu nehmen."),
+opt("Atemnot und Unruhe als Warnzeichen werten",true,15,"Atemnot kann beim Infarkt auftreten."),
+opt("Erst nach der Mittagspause erneut kontrollieren",false,-10,"Gefährlich. Brustschmerz ist akut abklärungsbedürftig.",false,true)
+]},
+{title:"Phase 2: Assessment",instruction:"Welche Fragen sind jetzt sinnvoll? 3 Antworten sind richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Schmerzbeginn, Schmerzqualität, Ausstrahlung und Stärke erfragen",true,15,"Das strukturiert die Ersteinschätzung."),
+opt("Übelkeit, Atemnot, Schwindel und Todesangst erfragen",true,10,"Begleitsymptome helfen bei der Einordnung."),
+opt("Vorerkrankungen, Medikamente, Allergien und Antikoagulation erfragen",true,10,"Wichtig für Therapie und Übergabe."),
+opt("Ausführlich nach Lieblingsessen fragen",false,-5,"Nicht prioritär in der Akutsituation.")
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle die wichtigsten Pflegeprobleme/Risiken. 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Akuter Schmerz und Angst",true,15,"Beides muss beobachtet und pflegerisch begleitet werden."),
+opt("Risiko für lebensbedrohliche Rhythmusstörungen",true,20,"Monitoring ist deshalb zentral.",true),
+opt("Beeinträchtigte Sauerstoffversorgung",true,15,"SpO₂ und Atmung beobachten."),
+opt("Primär Dekubitusrisiko als Hauptproblem",false,-5,"Kann später relevant sein, ist hier aber nicht vorrangig.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 konkrete pflegerische Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Oberkörper hoch lagern, Ruhe schaffen und Patient nicht allein lassen",true,20,"Entlastet und ermöglicht schnelle Reaktion.",true),
+opt("Vitalzeichen, SpO₂, Schmerzskala und Bewusstsein engmaschig kontrollieren",true,20,"Basis der Verlaufskontrolle.",true),
+opt("EKG/Monitoring und Notfallwagen nach Hausstandard vorbereiten",true,20,"Zeitkritisch bei ACS."),
+opt("Nüchternheit beachten und i.v.-Zugang/Labor nach Anordnung vorbereiten",true,15,"Relevant für weitere Diagnostik/Therapie."),
+opt("Patient zum Gehen motivieren, damit der Kreislauf stabil bleibt",false,-15,"Gefährlich. Körperliche Belastung vermeiden.",false,true)
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 passende Kommunikationsreaktionen.",type:"multiple",requiredCorrect:2,options:[
+opt("Kurz erklären: Wir überwachen Sie eng und informieren sofort das Notfallteam.",true,15,"Klar, ruhig, sicherheitsorientiert."),
+opt("Beim Patienten bleiben und in kurzen Sätzen sprechen",true,10,"Reduziert Angst ohne falsche Sicherheit."),
+opt("Sagen: Das ist bestimmt nur Stress.",false,-10,"Bagatellisiert gefährliche Symptome."),
+opt("Lange medizinische Vorlesung halten",false,-5,"In der Akutsituation überfordernd.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Welche SBAR-Inhalte gehören in die Übergabe? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Situation: akuter Thoraxschmerz mit Ausstrahlung seit ca. 1 Stunde",true,15,"Kerninformation."),
+opt("Background: KHK-Risiken, Medikamente, Allergien",true,10,"Relevant für ärztliche Entscheidung."),
+opt("Assessment/Recommendation: Vitalwerte, Schmerz, EKG vorbereiten, sofortige ärztliche Vorstellung",true,15,"SBAR wird handlungsorientiert."),
+opt("Nur notieren: Patient wirkt komisch",false,-5,"Zu unpräzise.")
+]}]),
 
-        function renderPatientHTML(caseData, condition) {
-            const cfg = getPatientModelConfig(caseData.patientModel || 'olderMale');
-            const paleClass = (condition === 'pain' || condition === 'shock') ? ' pale' : '';
-            const mouthClass = condition === 'pain' ? ' pain' : condition === 'dyspnea' ? ' open' : '';
-            const eyebrowClass = condition === 'pain' ? ' worried' : '';
-            const eyeClass = condition === 'tired' ? ' closed' : '';
-            const breathingClass = condition === 'dyspnea' ? ' labored' : condition === 'tachypnea' ? ' rapid' : '';
-            const sweatVisible = (condition === 'pain' || condition === 'hypoglycemia') ? ' visible' : '';
-            const painVisible = condition === 'pain' ? ' visible' : '';
-            const wrinkleHTML = cfg.ageFeatures === 'wrinkles' ?
-                '<div class="wrinkle" style="top:26px;left:8px;"></div><div class="wrinkle" style="top:28px;right:7px;"></div>' :
-                '';
+makeCase("schlaganfall","Medizinische Notfälle","Schlaganfall","Neurologie","Schwer","Stroke Unit / Notaufnahme","confusedElderly",
+{name:"Frau Weber",age:78,gender:"weiblich",openingLine:"Ich... ich kann nicht richtig sprechen. Mein rechter Arm fühlt sich komisch an.",conditionState:["confused","stroke","anxious"]},
+{RR:"18/min",SpO2:"96%",Puls:"92/min",BD:"190/100",Temp:"36.7°C"},"Verdacht auf akuten Schlaganfall",
+"Akute Durchblutungsstörung oder Blutung im Gehirn mit neurologischen Ausfällen.",
+["FAST positiv","Plötzliche Sprachstörung","Einseitige Schwäche","Bewusstseinsveränderung","Schluckstörung"],
+["FAST prüfen und Zeitpunkt des Symptombeginns sichern","Nichts oral geben bis Schluckscreening erfolgt ist","Vitalzeichen/Bewusstsein engmaschig beobachten","Notfallweitergabe mit genauer Uhrzeit"],
+"Time is brain: Symptombeginn, FAST und Schluckstörung sind prüfungsrelevant.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 typische Warnzeichen.",type:"multiple",requiredCorrect:3,options:[
+opt("Einseitige Armschwäche",true,20,"FAST-Kriterium.",true),
+opt("Sprachstörung",true,20,"Akutes Warnzeichen.",true),
+opt("Plötzlicher Beginn",true,15,"Zeitfenster entscheidend."),
+opt("Langsam gewachsene Fußnägel",false,-5,"Nicht relevant.")
+]},
+{title:"Phase 2: Assessment",instruction:"Welche Assessments/Fragen sind wichtig? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("FAST-Test durchführen",true,20,"Zentral in der Erkennung.",true),
+opt("Zeitpunkt: zuletzt symptomfrei erfragen",true,20,"Wichtig für Lyse/Thrombektomie-Zeitfenster.",true),
+opt("Schluckfähigkeit beachten und Aspirationsrisiko einschätzen",true,15,"Schluckstörung ist häufig und gefährlich."),
+opt("Sofort Wasser zum Trinken geben",false,-15,"Gefährlich wegen Aspiration.",false,true)
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 Pflegeprobleme/Risiken.",type:"multiple",requiredCorrect:3,options:[
+opt("Aspirationsrisiko",true,20,"Bei Dysphagie hoch relevant.",true),
+opt("Sturzrisiko durch Hemiparese",true,15,"Mobilität eingeschränkt."),
+opt("Kommunikationsbeeinträchtigung",true,15,"Aphasie/Dysarthrie beachten."),
+opt("Hauptproblem: Langeweile",false,-5,"Nicht prioritär.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Patient sicher lagern, Sturz verhindern, Klingel erreichbar",true,15,"Sicherheit zuerst."),
+opt("Nichts essen/trinken lassen bis Schluckscreening",true,25,"Kritische Maßnahme.",true),
+opt("Vitalzeichen, Bewusstsein, Pupillen und Neurologie beobachten",true,20,"Verlauf kann sich verschlechtern."),
+opt("Notfallteam/Arzt mit Symptombeginn informieren",true,25,"Zeitkritisch.",true),
+opt("Patient allein zur Toilette schicken",false,-15,"Sturz- und Sicherheitsrisiko.",false,true)
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 passende Reaktionen.",type:"multiple",requiredCorrect:2,options:[
+opt("Langsam sprechen, einfache Ja/Nein-Fragen stellen",true,15,"Hilft bei Aphasie."),
+opt("Angehörige nach Beginn und Vorerkrankungen fragen",true,10,"Wichtig, wenn Patient eingeschränkt ist."),
+opt("Korrigieren: Sprechen Sie doch ordentlich.",false,-10,"Unprofessionell und beschämend."),
+opt("Symptome ignorieren, weil sie alt ist",false,-20,"Gefährlich und diskriminierend.",false,true)
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Was muss dokumentiert/weitergegeben werden? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("FAST-Befund und neurologische Ausfälle",true,15,"Objektiv und relevant."),
+opt("Exakter Zeitpunkt Symptombeginn/zuletzt gesund",true,20,"Therapieentscheidend.",true),
+opt("Schluckstatus, Vitalwerte, Bewusstseinslage",true,15,"Pflege- und Sicherheitsrelevant."),
+opt("Nur: Patientin war unruhig",false,-5,"Unzureichend.")
+]}]),
 
-            return `
-            <div class="er-room" aria-label="Notaufnahme-Raum mit Patient im Bett">
-              <div class="wall-light"></div>
-              <div class="vital-monitor" aria-label="Vitalzeichen-Monitor">
-                <div class="ecg-display">
-                  <svg viewBox="0 0 90 40" preserveAspectRatio="none">
-                    <path class="ecg-path" d="M0,28 L15,28 L17,28 L19,8 L21,32 L23,28 L35,28 L37,26 L38,28 L90,28" stroke-dasharray="300" stroke-dashoffset="0"/>
-                  </svg>
-                </div>
-                <div style="display:flex;justify-content:space-between;margin-top:2px;">
-                  <span class="vital-label">SpO₂</span>
-                  <span class="vital-value${condition==='dyspnea'?' warning':''}">${condition==='dyspnea'?'89':'96'}%</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;">
-                  <span class="vital-label">HF</span>
-                  <span class="vital-value${condition==='tachypnea'||condition==='pain'?' warning':''}">${condition==='pain'?'104':condition==='tachypnea'?'110':'78'} bpm</span>
-                </div>
-              </div>
-              <div class="patient-area">
-                <div class="bed-rail-horizontal"></div>
-                <div class="bed-rail-left"></div>
-                <div class="bed-rail-right"></div>
-                <div class="bed-pillow"></div>
-                <div class="bed-mattress"></div>
-                <div class="hospital-bed"></div>
-                <div class="patient-figure">
-                  <div class="patient-body">
-                    <div class="patient-head${paleClass} ${cfg.headClass}" style="background:${cfg.skinTone};">
-                      <div class="eye left${eyeClass}"></div>
-                      <div class="eye right${eyeClass}"></div>
-                      <div class="eyebrow left${eyebrowClass}"></div>
-                      <div class="eyebrow right${eyebrowClass}"></div>
-                      <div class="mouth${mouthClass}"></div>
-                      ${wrinkleHTML}
-                      <div class="sweat-drop${sweatVisible}" style="top:-3px;left:6px;"></div>
-                      <div class="sweat-drop${sweatVisible}" style="top:-6px;left:26px;"></div>
-                      <div class="sweat-drop${sweatVisible}" style="top:-2px;left:44px;"></div>
-                    </div>
-                    <div class="patient-neck" style="background:${cfg.skinTone};"></div>
-                    <div class="patient-torso">
-                      <div class="blanket-stripe"></div>
-                      <div class="breathing-indicator${breathingClass}"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="pain-indicator${painVisible}">⚡</div>
-              </div>
-            </div>`;
-        }
+makeCase("pneumonie","Erkrankungen","Pneumonie","Atmung","Mittel","Innere Station","middleFemale",
+{name:"Frau Keller",age:56,gender:"weiblich",openingLine:"Ich huste gelblichen Schleim und fühle mich fiebrig und schwach.",conditionState:["coughing","tired","pale"]},
+{RR:"23/min",SpO2:"91%",Puls:"104/min",BD:"128/78",Temp:"38.7°C"},"Pneumonie",
+"Entzündung des Lungengewebes, häufig durch Erreger, mit Husten, Fieber und eingeschränkter Oxygenierung.",
+["SpO₂-Abfall","Atemnot","hohes Fieber","Verwirrtheit bei Älteren","Sepsiszeichen"],
+["Atembeobachtung und SpO₂-Kontrolle","Oberkörperhochlagerung, Mobilisation nach Zustand","Sekretmanagement und Trinkmenge nach Anordnung fördern","Fieber, Flüssigkeitsbilanz und Allgemeinzustand beobachten"],
+"Pneumoniepflege: Atmung beobachten, Sekret lösen, Mobilisation und Verschlechterung früh erkennen.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 relevante Zeichen.",type:"multiple",requiredCorrect:3,options:[
+opt("Produktiver Husten mit gelblichem Auswurf",true,15,"Typisches Symptom."),
+opt("Fieber und Schwäche",true,10,"Infektzeichen."),
+opt("SpO₂ 91% beachten",true,20,"Oxygenierung eingeschränkt.",true),
+opt("Fieber ignorieren, wenn Patientin jung wirkt",false,-10,"Falsch.")
+]},
+{title:"Phase 2: Assessment",instruction:"Welche Fragen/Beobachtungen sind sinnvoll? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Atemfrequenz, Atemgeräusche, Dyspnoe und SpO₂ beobachten",true,20,"Atmung steht im Fokus."),
+opt("Auswurf: Menge, Farbe, Geruch, Blutbeimengung erfassen",true,15,"Sekretbeobachtung ist relevant."),
+opt("Trinkmenge, Fieberverlauf und Schmerzen beim Atmen erfassen",true,10,"Hilft bei Pflegeplanung."),
+opt("Nur Körpergewicht messen und dann abwarten",false,-5,"Nicht ausreichend.")
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 Risiken/Pflegeprobleme.",type:"multiple",requiredCorrect:3,options:[
+opt("Beeinträchtigte Atemfunktion",true,20,"Zentrales Problem."),
+opt("Risiko für Flüssigkeitsdefizit durch Fieber",true,15,"Bilanz beachten."),
+opt("Erschöpfung und reduzierte Belastbarkeit",true,10,"Aktivitäten anpassen."),
+opt("Primär rechtliches Problem FEM",false,-5,"Nicht passend.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 Pflegemaßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Oberkörper hoch lagern und atemerleichternde Position anbieten",true,15,"Erleichtert Ventilation."),
+opt("SpO₂, Atemfrequenz, Temperatur und Bewusstsein regelmäßig kontrollieren",true,20,"Verschlechterung erkennen.",true),
+opt("Mobilisation und Atemübungen nach Belastbarkeit fördern",true,15,"Pneumonieprophylaxe und Sekretlösung."),
+opt("Ausreichende Flüssigkeit nach Anordnung fördern und Bilanz beachten",true,15,"Unterstützt Sekretlösung."),
+opt("Bettruhe ohne Positionswechsel für mehrere Tage",false,-10,"Fördert Komplikationen.")
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 passende Inhalte.",type:"multiple",requiredCorrect:2,options:[
+opt("Husten- und Atemtechnik erklären, Pausen einplanen",true,10,"Praktisch und prüfungsrelevant."),
+opt("Über Trinkmenge, Mobilisation und Warnzeichen informieren",true,10,"Fördert Selbstmanagement."),
+opt("Sagen: Antibiotika braucht man nie",false,-10,"Falsch."),
+opt("Patientin wegen Husten beschämen",false,-10,"Unprofessionell.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 wichtige Punkte.",type:"multiple",requiredCorrect:3,options:[
+opt("Vitalwerte inklusive SpO₂ und Temperatur",true,15,"Verlaufsparameter."),
+opt("Auswurfbeobachtung und Dyspnoe",true,15,"Pflegerelevant."),
+opt("Trinkmenge, Mobilisation, Reaktion auf Maßnahmen",true,10,"Evaluation."),
+opt("Nur: Husten vorhanden",false,-5,"Zu ungenau.")
+]}]),
 
-        function renderSpeechBubble(text, speakerName, isTypewriter = false) {
-            const speakerLabel = speakerName ? `<span class="speaker-label">${speakerName}</span>` : '';
-            const cursorClass = isTypewriter ? ' typewriter-cursor' : '';
-            return `<div class="speech-bubble${cursorClass}" aria-live="polite">${speakerLabel}${text}</div>`;
-        }
+makeCase("copd","Erkrankungen","COPD-Exazerbation","Atmung","Schwer","Notaufnahme","breathlessOlderMale",
+{name:"Herr Becker",age:72,gender:"männlich",openingLine:"Ich bekomme kaum Luft... es wird immer schlimmer.",conditionState:["dyspnea","pale","anxious"]},
+{RR:"28/min",SpO2:"86%",Puls:"112/min",BD:"155/90",Temp:"37.8°C"},"COPD-Exazerbation",
+"Akute Verschlechterung einer chronisch obstruktiven Lungenerkrankung mit verstärkter Dyspnoe, Husten und Sekret.",
+["SpO₂ 86%","Zunehmende Atemnot","Erschöpfung","Zyanose","Somnolenz"],
+["Kutschersitz/Torwartstellung ermöglichen","Lippenbremse anleiten","SpO₂ und Atemarbeit eng beobachten","Sauerstoffgabe nur nach Hausstandard/ärztlicher Anordnung"],
+"Bei COPD ist Atemerleichterung zentral; Sauerstoffgabe kontrolliert und nach Standard.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 Sofortbeobachtungen.",type:"multiple",requiredCorrect:3,options:[
+opt("Atemnot mit hoher Atemfrequenz",true,20,"Akutes Warnzeichen.",true),
+opt("SpO₂ 86% erkennen",true,20,"Kritisch niedrig.",true),
+opt("Angst und Erschöpfung wahrnehmen",true,10,"Beeinflusst Atmung."),
+opt("Patient flach hinlegen",false,-15,"Verschlechtert Atemarbeit.",false,true)
+]},
+{title:"Phase 2: Assessment",instruction:"Welche Einschätzungen sind wichtig? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Atemarbeit, Einsatz Atemhilfsmuskulatur, Sprechdyspnoe beobachten",true,20,"Schweregrad einschätzen."),
+opt("SpO₂ und Bewusstseinslage kontrollieren",true,20,"CO₂-Retention/Verschlechterung beachten.",true),
+opt("Auswurfmenge/-farbe und Infektzeichen erfragen",true,10,"Exazerbationshinweise."),
+opt("Erst ausführliche Biografie erheben",false,-5,"Nicht akut prioritär.")
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 zentrale Probleme.",type:"multiple",requiredCorrect:3,options:[
+opt("Beeinträchtigte Atmung",true,20,"Hauptproblem."),
+opt("Angst durch Dyspnoe",true,10,"Verstärkt Atemnot."),
+opt("Risiko respiratorischer Erschöpfung",true,20,"Red Flag.",true),
+opt("Hauptproblem: Nagelpflege",false,-5,"Nicht vorrangig.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Kutschersitz/Torwartstellung ermöglichen",true,20,"Atemerleichternd."),
+opt("Lippenbremse ruhig anleiten",true,15,"Verhindert Atemwegskollaps."),
+opt("SpO₂, Atemfrequenz, Hautfarbe, Bewusstsein engmaschig kontrollieren",true,20,"Verlauf kritisch.",true),
+opt("Arzt informieren und Inhalation/O₂ nach Standard vorbereiten",true,20,"Therapie vorbereiten."),
+opt("Atemnot durch langes Gespräch analysieren",false,-10,"Überfordert den Patienten.")
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 passende Reaktionen.",type:"multiple",requiredCorrect:2,options:[
+opt("Kurz und ruhig: Atmen Sie langsam durch die Nase ein, durch gespitzte Lippen aus.",true,15,"Konkrete Anleitung."),
+opt("Beim Patienten bleiben und Panik reduzieren",true,10,"Sicherheit hilft."),
+opt("Sagen: Sie stellen sich an.",false,-20,"Unprofessionell und gefährlich.",false,true),
+opt("Alle Fenster schließen und Raum überhitzen",false,-5,"Nicht sinnvoll.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 Übergabepunkte.",type:"multiple",requiredCorrect:3,options:[
+opt("SpO₂, Atemfrequenz, Atemarbeit und Bewusstsein",true,20,"Kernwerte."),
+opt("Auslöser, Infektzeichen, Sputum",true,10,"Ursachenhinweise."),
+opt("Durchgeführte Maßnahmen und Wirkung",true,10,"Evaluation."),
+opt("Nur Diagnose ohne Beobachtung",false,-5,"Unzureichend.")
+]}]),
 
-        // ==================== SCREEN RENDERERS ====================
-        function renderLandingScreen() {
-            const completedCount = Object.keys(gameState.casesCompleted).length;
-            const totalCases = CASES.length;
-            const html = `
-            <div class="screen active" id="screen-landing" style="justify-content:center;align-items:center;text-align:center;gap:20px;">
-              <div style="font-size:4rem;margin-bottom:8px;" aria-hidden="true">🏥</div>
-              <h1 style="font-size:1.6rem;font-weight:700;letter-spacing:-0.5px;color:var(--accent);">PflegefachProfi</h1>
-              <p style="font-size:1.05rem;color:var(--text2);max-width:360px;line-height:1.5;">Emergency Nurse Simulator – Interaktive Notfallsimulation für die Pflegeausbildung</p>
-              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 24px;margin:8px 0;">
-                <p style="font-size:0.9rem;color:var(--text2);">Fortschritt: <strong style="color:var(--text);">${completedCount}/${totalCases}</strong> Fälle abgeschlossen</p>
-                <p style="font-size:0.9rem;color:var(--text2);">Gesamt-XP: <strong style="color:var(--xp);">${gameState.totalXP}</strong></p>
-                ${gameState.streak>=2?`<p style="font-size:0.85rem;color:var(--warning);">🔥 ${gameState.streak}er-Streak!</p>`:''}
-              </div>
-              <button class="btn btn-primary btn-large" id="btnStartSim" aria-label="Simulation starten">🚀 Simulation starten</button>
-              <p style="font-size:0.7rem;color:var(--text2);margin-top:8px;">Dies ist eine Trainingssimulation. Im Notfall immer 112 rufen.</p>
-            </div>`;
-            renderScreen(html);
-        }
+makeCase("hypoglykaemie","Medizinische Notfälle","Hypoglykämie bei Diabetes mellitus","Stoffwechsel","Mittel","Station","youngAdult",
+{name:"Herr Yilmaz",age:34,gender:"männlich",openingLine:"Mir ist zittrig und ich schwitze. Ich kann kaum klar denken.",conditionState:["hypoglycemic","sweaty","confused"]},
+{RR:"18/min",SpO2:"98%",Puls:"108/min",BD:"135/80",BZ:"48 mg/dl"},"Hypoglykämie",
+"Zu niedriger Blutzucker, der zu Schwitzen, Zittern, Heißhunger, Verwirrtheit bis Bewusstlosigkeit führen kann.",
+["BZ stark niedrig","Bewusstseinsstörung","Krampfanfall","Schluckunfähigkeit"],
+["Blutzucker sofort kontrollieren","Bei wachem schluckfähigem Patienten schnelle Kohlenhydrate geben","Bei Bewusstseinsstörung nichts oral geben, Hilfe holen","Ursache prüfen: Insulin, Mahlzeit, Belastung"],
+"Erst BZ messen, dann sicher handeln: oral nur bei sicherer Schluckfähigkeit.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 Hinweise.",type:"multiple",requiredCorrect:3,options:[
+opt("Schwitzen und Zittern",true,10,"Typisch adrenerg."),
+opt("Verwirrtheit",true,15,"Neuroglykopenes Zeichen."),
+opt("BZ 48 mg/dl",true,25,"Hypoglykämie bestätigt.",true),
+opt("Warten bis Visite",false,-15,"Akut behandeln.",false,true)
+]},
+{title:"Phase 2: Assessment",instruction:"Was prüfst du? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Blutzucker sofort kontrollieren",true,25,"Priorität.",true),
+opt("Bewusstsein und Schluckfähigkeit prüfen",true,20,"Entscheidet über orale Gabe.",true),
+opt("Insulin, Mahlzeit, Aktivität und Symptome erfragen",true,10,"Ursachenklärung."),
+opt("Insulin zusätzlich geben",false,-25,"Gefährlich.",false,true)
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 Probleme/Risiken.",type:"multiple",requiredCorrect:3,options:[
+opt("Akute Unterzuckerung",true,20,"Hauptproblem."),
+opt("Risiko Bewusstseinsverlust/Krampfanfall",true,20,"Red Flag.",true),
+opt("Sturzrisiko durch Schwäche/Verwirrtheit",true,10,"Sicherheit beachten."),
+opt("Primär Infektionsrisiko",false,-5,"Nicht führend.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Patient hinsetzen/liegen lassen und nicht allein lassen",true,15,"Sturzschutz."),
+opt("Bei wachem schluckfähigem Patienten schnelle Kohlenhydrate geben",true,20,"Akute Maßnahme."),
+opt("BZ nach kurzer Zeit erneut kontrollieren",true,15,"Wirkung prüfen."),
+opt("Bei Bewusstseinsstörung Notfallhilfe holen und nichts oral geben",true,25,"Aspirationsschutz.",true),
+opt("Patient zum Spaziergang schicken",false,-15,"Verschlechtert Situation.",false,true)
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 Schulungsinhalte.",type:"multiple",requiredCorrect:2,options:[
+opt("Hypoglykämiezeichen und Sofortmaßnahmen besprechen",true,10,"Selbstmanagement."),
+opt("Mahlzeiten, Insulin und Belastung in Zusammenhang erklären",true,10,"Prävention."),
+opt("Empfehlen, BZ nie zu messen",false,-10,"Falsch."),
+opt("Schuldzuweisungen machen",false,-5,"Nicht professionell.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 Inhalte.",type:"multiple",requiredCorrect:3,options:[
+opt("BZ-Werte, Symptome und Bewusstseinslage",true,15,"Objektiv."),
+opt("Gegebene Kohlenhydrate/Intervention und Wirkung",true,15,"Evaluation."),
+opt("Mögliche Ursache: Insulin/Mahlzeit/Aktivität",true,10,"Für Anpassung relevant."),
+opt("Nur: Patient war komisch",false,-5,"Zu unpräzise.")
+]}]),
 
-        function renderCaseSelectScreen() {
-            let cardsHTML = '';
-            CASES.forEach(c => {
-                const completed = gameState.casesCompleted[c.id];
-                const bestScore = completed ? completed.bestScore : null;
-                const stars = completed ? completed.stars : 0;
-                const starStr = completed ? '★'.repeat(stars) + '☆'.repeat(3 - stars) : '☆☆☆';
-                const completedClass = completed ? ' completed' : '';
-                const diffClass = c.difficulty === 'Schwer' ? 'schwer' : c.difficulty === 'Mittel' ? 'mittel' :
-                    'leicht';
-                cardsHTML += `
-              <div class="case-card${completedClass}" data-case-id="${c.id}" role="button" tabindex="0" aria-label="Fall: ${c.title}, Schwierigkeit: ${c.difficulty}">
-                <div style="display:flex;justify-content:space-between;align-items:start;">
-                  <strong style="font-size:1rem;">${c.title}</strong>
-                  <span class="difficulty ${diffClass}">${c.difficulty}</span>
-                </div>
-                <div style="font-size:0.75rem;color:var(--text2);margin:4px 0;">${c.category} · ${c.patient.name}, ${c.patient.age} J.</div>
-                <div class="stars">${starStr}</div>
-                ${completed?`<div style="font-size:0.7rem;color:#2eff6e;">Beste: ${bestScore}%</div>`:''}
-              </div>`;
-            });
-            const html = `
-            <div class="screen active" id="screen-caseselect">
-              <h2 style="font-size:1.2rem;margin-bottom:4px;">Fallauswahl</h2>
-              <p style="font-size:0.8rem;color:var(--text2);margin-bottom:12px;">Wähle einen Notfallfall für deine Simulation.</p>
-              <div class="scroll-area" style="flex:1;">
-                <div class="case-grid">${cardsHTML}</div>
-              </div>
-              <button class="btn btn-secondary" id="btnBackToLanding" style="margin-top:10px;">← Zurück</button>
-            </div>`;
-            renderScreen(html);
-        }
+makeCase("dekubitus","Expertenstandards","Dekubitusrisiko","Expertenstandard","Mittel","Pflegeheim","confusedElderly",
+{name:"Frau Braun",age:84,gender:"weiblich",openingLine:"Ich liege lieber im Bett. Aufstehen ist mir zu anstrengend.",conditionState:["tired"]},
+{Mobilität:"stark eingeschränkt",Haut:"gerötet sakral",Schmerz:"3/10",Ernährung:"reduziert"},"Dekubitusrisiko",
+"Risiko für lokale Schädigung der Haut und des darunterliegenden Gewebes durch Druck und Scherkräfte.",
+["Nicht wegdrückbare Rötung","Schmerzen an Druckstellen","Feuchtigkeit","Mangelernährung","Immobilität"],
+["Risikoeinschätzung und Hautinspektion","Druckentlastung und bewegungsfördernde Maßnahmen","Feuchtigkeitsmanagement","Ernährung/Flüssigkeit beobachten und interprofessionell weitergeben"],
+"Dekubitusprophylaxe heißt: Risiko erkennen, Druck reduzieren, Bewegung fördern, Haut kontrollieren.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 Risikohinweise.",type:"multiple",requiredCorrect:3,options:[
+opt("Stark eingeschränkte Mobilität",true,15,"Hauptrisiko."),
+opt("Sakrale Rötung",true,20,"Muss geprüft werden.",true),
+opt("Reduzierte Ernährung",true,10,"Beeinflusst Hautintegrität."),
+opt("Gute Orientierung als Hauptrisiko",false,-5,"Nicht passend.")
+]},
+{title:"Phase 2: Assessment",instruction:"Welche Einschätzungen sind richtig? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Dekubitusrisiko strukturiert einschätzen",true,15,"Expertenstandard."),
+opt("Hautinspektion an gefährdeten Stellen",true,20,"Früherkennung.",true),
+opt("Mobilität, Ernährung, Feuchtigkeit und Schmerz erfassen",true,15,"Mehrdimensionale Einschätzung."),
+opt("Rötung massieren",false,-15,"Schädigt Gewebe zusätzlich.",false,true)
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 Pflegeprobleme.",type:"multiple",requiredCorrect:3,options:[
+opt("Dekubitusrisiko durch Immobilität",true,20,"PESR-relevant."),
+opt("Beeinträchtigte Hautintegrität möglich",true,15,"Rötung prüfen."),
+opt("Selbstversorgungsdefizit bei Mobilität",true,10,"Ressourcen beachten."),
+opt("Akuter Myokardinfarkt",false,-5,"Nicht erkennbar.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 konkrete Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Individuellen Bewegungs-/Lagerungsplan erstellen und evaluieren",true,20,"Konkret und überprüfbar."),
+opt("Druckentlastende Hilfsmittel fachgerecht einsetzen",true,15,"Nicht Ersatz für Bewegung."),
+opt("Haut täglich beobachten und Befunde dokumentieren",true,20,"Verlauf sichern.",true),
+opt("Feuchtigkeit reduzieren, Hautschutz anwenden, Ernährung beobachten",true,15,"Risikofaktoren bearbeiten."),
+opt("Rötung kräftig einreiben",false,-15,"Falsch und gefährlich.",false,true)
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 passende Beratungsinhalte.",type:"multiple",requiredCorrect:2,options:[
+opt("Bedeutung kleiner Positionswechsel erklären",true,10,"Aktiviert Ressourcen."),
+opt("Bewohnerin in Bewegungsplan einbeziehen",true,10,"Adhärenz."),
+opt("Drohung: Wenn Sie nicht aufstehen, sind Sie schuld",false,-10,"Nicht professionell."),
+opt("Keine Beratung, weil alt",false,-10,"Falsch.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 Inhalte.",type:"multiple",requiredCorrect:3,options:[
+opt("Risikoeinschätzung, Hautbefund und Lokalisation",true,15,"Pflichtrelevant."),
+opt("Lagerung, Mobilisation, Hilfsmittel und Wirkung",true,15,"Evaluation."),
+opt("Ernährung, Feuchtigkeit, Schmerzen",true,10,"Risikofaktoren."),
+opt("Nur: Haut okay",false,-5,"Unpräzise.")
+]}]),
 
-        function getPhaseInfo(phaseIndex) {
-            const phases = [
-                { id: 'intro', title: 'Phase 1: Ersteinschätzung',
-                    instruction: 'Höre dem Patienten zu und erfasse die initialen Symptome. Wähle die zutreffenden aus.',
-                    dataKey: 'initialSymptoms', selectCount: null, multiSelect: true, minCorrect: 2 },
-                { id: 'hidden', title: 'Phase 2: Symptome gezielt erfragen',
-                    instruction: 'Stelle gezielte Fragen, um versteckte Symptome zu entdecken. Wähle 3 passende.',
-                    dataKey: 'hiddenSymptoms', selectCount: 3, multiSelect: true, minCorrect: 2 },
-                { id: 'risks', title: 'Phase 3: Risikofaktoren erkennen',
-                    instruction: 'Erfrage die relevanten Risikofaktoren. 3 Antworten sind richtig.',
-                    dataKey: 'riskFactors', selectCount: 3, multiSelect: true, minCorrect: 2 },
-                { id: 'causes', title: 'Phase 4: Ursachen verstehen',
-                    instruction: 'Überlege, welche Ursachen infrage kommen. Wähle die korrekten aus.',
-                    dataKey: 'causes', selectCount: null, multiSelect: true, minCorrect: 1 },
-                { id: 'diagnostics', title: 'Phase 5: Diagnostik vorbereiten',
-                    instruction: 'Wähle die passenden diagnostischen Methoden aus.',
-                    dataKey: 'diagnostics', selectCount: null, multiSelect: true, minCorrect: 2 },
-                { id: 'therapies', title: 'Phase 6: Therapie verstehen',
-                    instruction: 'Welche medizinischen Therapieoptionen sind angezeigt?',
-                    dataKey: 'therapies', selectCount: null, multiSelect: true, minCorrect: 2 },
-                { id: 'nursing', title: 'Phase 7: Pflegerische Maßnahmen planen',
-                    instruction: 'Wähle die korrekten pflegerischen Maßnahmen aus. (Diese Phase wird stark gewichtet!)',
-                    dataKey: 'nursingMeasures', selectCount: null, multiSelect: true, minCorrect: 3, heavyWeight: true },
-            ];
-            return phases[phaseIndex] || phases[0];
-        }
+makeCase("sturzrisiko","Pflegeprobleme","Sturzrisiko bei älterer Patientin","Sicherheit","Mittel","Geriatrie","confusedElderly",
+{name:"Frau Novak",age:81,gender:"weiblich",openingLine:"Ich wollte nur kurz allein zur Toilette. Mir wird manchmal schwindelig.",conditionState:["tired","confused"]},
+{RR:"16/min",SpO2:"97%",Puls:"88/min",BD:"105/65",Schmerz:"2/10"},"Erhöhtes Sturzrisiko",
+"Erhöhte Wahrscheinlichkeit zu stürzen durch Faktoren wie Schwindel, Gangunsicherheit, Medikamente oder Umgebung.",
+["Akuter Schwindel","Synkope","Kopfverletzung nach Sturz","Antikoagulation","Neurologische Ausfälle"],
+["Sturzrisiko strukturiert einschätzen","Umgebung sichern","Hilfsmittel/Klingel erreichbar machen","Toilettengänge planen und dokumentieren"],
+"Sturzprophylaxe ist konkret: Risiko erfassen, Umgebung anpassen, Mobilität sicher begleiten.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 Risikohinweise.",type:"multiple",requiredCorrect:3,options:[
+opt("Schwindel beim Aufstehen",true,15,"Sturzrisiko."),
+opt("Alleingang zur Toilette",true,15,"Typische Situation."),
+opt("Niedriger Blutdruck",true,10,"Orthostase möglich."),
+opt("Guter Appetit",false,-5,"Nicht führend.")
+]},
+{title:"Phase 2: Assessment",instruction:"Was prüfst du? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Sturzanamnese und Sturzangst",true,10,"Wichtig."),
+opt("Gangbild, Hilfsmittel, Schuhe, Sehfähigkeit",true,15,"Risikofaktoren."),
+opt("Medikamente und orthostatische Vitalzeichen",true,15,"Schwindelursachen."),
+opt("Klingel außer Reichweite legen",false,-15,"Erhöht Risiko.",false,true)
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 Probleme/Risiken.",type:"multiple",requiredCorrect:3,options:[
+opt("Sturzrisiko",true,20,"Hauptproblem."),
+opt("Mögliche orthostatische Dysregulation",true,10,"Schwindel + BD."),
+opt("Unsicherheit beim Toilettengang",true,10,"Konkrete Alltagssituation."),
+opt("Aspirationsrisiko als Hauptproblem",false,-5,"Nicht führend.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Klingel, Brille, Gehhilfe und Schuhe erreichbar positionieren",true,15,"Umgebung sichern."),
+opt("Toilettengänge anbieten/planen und Begleitung organisieren",true,20,"Konkrete Prävention."),
+opt("Langsames Aufstehen anleiten, Schwindel beobachten",true,15,"Orthostase beachten."),
+opt("Sturzrisiko und Maßnahmen dokumentieren/evaluieren",true,15,"Pflegeprozess."),
+opt("Bettgitter ohne Prüfung als Dauerlösung hochziehen",false,-15,"Kann FEM sein.",false,true)
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 passende Aussagen.",type:"multiple",requiredCorrect:2,options:[
+opt("Bitte klingeln Sie, bevor Sie aufstehen. Ich komme lieber einmal zu oft.",true,10,"Wertschätzend und klar."),
+opt("Gemeinsam sichere Wege und Hilfsmittel besprechen",true,10,"Beratung."),
+opt("Sie dürfen gar nicht mehr aufstehen",false,-10,"Fördert Immobilität und kann rechtlich problematisch sein."),
+opt("Schimpfen, weil sie allein aufstand",false,-5,"Nicht professionell.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 Inhalte.",type:"multiple",requiredCorrect:3,options:[
+opt("Risikofaktoren und Assessmentergebnis",true,15,"Grundlage."),
+opt("Vereinbarte Maßnahmen und Hilfsmittel",true,10,"Nachvollziehbar."),
+opt("Schwindel, Vitalwerte, Beinahe-Sturz/Sturzereignis",true,15,"Relevant."),
+opt("Nur: passt schon",false,-5,"Unprofessionell.")
+]}]),
 
-        function renderSimulationScreen() {
-            const caseData = CASES.find(c => c.id === gameState.currentCaseId);
-            if (!caseData) { renderCaseSelectScreen(); return; }
-            const phaseInfo = getPhaseInfo(gameState.currentPhase);
-            const phaseOptions = caseData[phaseInfo.dataKey] || [];
-            const isLastPhase = gameState.currentPhase >= 6;
-            const selSet = new Set(gameState.selectedOptions);
+makeCase("angst-op","Kommunikation","Angst vor Operation","Kommunikation","Leicht","Chirurgie","middleFemale",
+{name:"Frau Meier",age:49,gender:"weiblich",openingLine:"Ich habe Angst vor der OP. Was, wenn ich nicht mehr aufwache?",conditionState:["anxious","tired"]},
+{RR:"18/min",SpO2:"98%",Puls:"96/min",BD:"145/85",Schmerz:"1/10"},"Angst vor Operation",
+"Emotionale Belastung vor einem Eingriff mit Sorgen, Kontrollverlust und Informationsbedarf.",
+["Panikattacke","Ablehnung notwendiger Maßnahmen","starke vegetative Symptome","Suizidale Aussagen"],
+["Aktiv zuhören und Gefühle validieren","Informationsbedarf klären und zuständige Berufsgruppe einbeziehen","Ressourcen und Coping besprechen","Nicht bagatellisieren"],
+"Kommunikation ist Pflegehandlung: validieren, informieren, Sicherheit geben, Grenzen kennen.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 relevante Beobachtungen.",type:"multiple",requiredCorrect:3,options:[
+opt("Angst verbalisiert",true,15,"Direkter Pflegebedarf."),
+opt("Sorge vor Narkose/Kontrollverlust",true,10,"Typisch präoperativ."),
+opt("Erhöhter Puls/BD möglich stressbedingt",true,10,"Vegetative Reaktion."),
+opt("Angst ignorieren, weil OP Routine ist",false,-10,"Falsch.")
+]},
+{title:"Phase 2: Assessment",instruction:"Welche Fragen sind passend? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Wovor genau haben Sie am meisten Angst?",true,10,"Öffnet Gespräch."),
+opt("Was hat Ihnen früher in belastenden Situationen geholfen?",true,10,"Ressourcenorientiert."),
+opt("Welche Informationen fehlen Ihnen noch?",true,10,"Informationsbedarf."),
+opt("Warum stellen Sie sich so an?",false,-15,"Unprofessionell.")
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 pflegerische Aspekte.",type:"multiple",requiredCorrect:3,options:[
+opt("Angst im Zusammenhang mit bevorstehender OP",true,15,"Pflegeproblem."),
+opt("Informationsdefizit möglich",true,10,"Beratung/Weiterleitung."),
+opt("Ressourcen zur Angstbewältigung nutzen",true,10,"Pflegeplanung."),
+opt("Akute Atemwegsobstruktion",false,-5,"Nicht erkennbar.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Ruhiges Gespräch anbieten und aktiv zuhören",true,15,"Basis."),
+opt("Gefühle validieren: Ihre Sorge ist nachvollziehbar.",true,10,"Reduziert Scham."),
+opt("Fragen zur Narkose an Anästhesie/Arzt weiterleiten",true,15,"Kompetenzgrenzen beachten."),
+opt("Atemübung oder kurze Entspannung anleiten, wenn Patientin möchte",true,10,"Konkrete Unterstützung."),
+opt("Falsche Garantie geben: Es kann nichts passieren",false,-15,"Nicht ehrlich/ethisch.")
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 beste Aussagen.",type:"multiple",requiredCorrect:2,options:[
+opt("Ich bleibe kurz bei Ihnen. Was ist gerade der schlimmste Gedanke?",true,15,"Validierend und konkret."),
+opt("Ich organisiere, dass offene medizinische Fragen geklärt werden.",true,10,"Sicher und professionell."),
+opt("Sie müssen keine Angst haben.",false,-5,"Bagatellisiert."),
+opt("Andere haben es auch geschafft.",false,-5,"Nicht individuell.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 Inhalte.",type:"multiple",requiredCorrect:3,options:[
+opt("Geäußerte Angst und konkrete Sorgen",true,10,"Nachvollziehbar."),
+opt("Durchgeführte Gespräche/Maßnahmen und Wirkung",true,10,"Evaluation."),
+opt("Offene Fragen an Arzt/Anästhesie weitergegeben",true,10,"Interprofessionell."),
+opt("Private Meinung zur OP",false,-5,"Nicht dokumentationsrelevant.")
+]}]),
 
-            let optionsHTML = '';
-            phaseOptions.forEach((opt, i) => {
-                const selClass = selSet.has(i) ? ' selected' : '';
-                optionsHTML += `
-              <div class="card option-card${selClass}" data-opt-index="${i}" role="checkbox" aria-checked="${selSet.has(i)}" tabindex="0">
-                ${opt.label}
-              </div>`;
-            });
+makeCase("fem","Recht & Ethik","Freiheitsentziehende Maßnahmen","Recht","Schwer","Pflegeheim","confusedElderly",
+{name:"Herr Lang",age:86,gender:"männlich",openingLine:"Ich will nach Hause! Warum darf ich nicht aufstehen?",conditionState:["confused","anxious"]},
+{Orientierung:"zeitlich/örtlich desorientiert",Mobilität:"unsicher",Sturz:"Beinahe-Sturz nachts",Einwilligung:"unklar"},"Prüfung freiheitsentziehender Maßnahmen",
+"Maßnahmen, die die Bewegungsfreiheit einschränken, sind nur unter engen rechtlichen Voraussetzungen zulässig.",
+["Akute Eigen-/Fremdgefährdung","Sturz mit Verletzung","Delir","Fixierung ohne Grundlage"],
+["Alternativen prüfen","Einwilligung/gesetzliche Grundlage klären","Richterliche Genehmigung bei längerfristiger FEM","Lückenlose Dokumentation und Evaluation"],
+"FEM ist nie Komfortlösung. Immer Alternativen, Verhältnismäßigkeit, Rechtgrundlage, Dokumentation.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 relevante Aspekte.",type:"multiple",requiredCorrect:3,options:[
+opt("Desorientierung und Weglauftendenz erkennen",true,10,"Sicherheitsrelevant."),
+opt("Sturzrisiko einschätzen",true,10,"Alternativen planen."),
+opt("FEM rechtlich kritisch prüfen",true,20,"Zentral.",true),
+opt("Bettgitter automatisch hochstellen",false,-20,"Kann rechtswidrige FEM sein.",false,true)
+]},
+{title:"Phase 2: Assessment",instruction:"Was klärst du? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Akute Gefahr und Ursache der Unruhe prüfen",true,15,"Delir, Schmerz, Harndrang etc."),
+opt("Einwilligungsfähigkeit/Betreuung/Vollmacht klären",true,20,"Rechtsgrundlage.",true),
+opt("Alternativen wie Niederflurbett, Sensormatte, Begleitung prüfen",true,15,"Milderes Mittel."),
+opt("Fixieren, damit weniger Arbeit entsteht",false,-25,"Rechtswidrig/ethisch falsch.",false,true)
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 Probleme/ethische Konflikte.",type:"multiple",requiredCorrect:3,options:[
+opt("Autonomie versus Sicherheit",true,15,"Klassischer ethischer Konflikt."),
+opt("Sturzrisiko",true,10,"Pflegeproblem."),
+opt("Mögliches Delir/Unruheursache",true,10,"Ursache klären."),
+opt("Hauptproblem: Patient ist unbequem",false,-10,"Unprofessionell.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 professionelle Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Ursachenorientiert handeln: Schmerz, Harndrang, Angst, Delir prüfen",true,15,"Nicht nur Symptom begrenzen."),
+opt("Mildere Alternativen einsetzen und evaluieren",true,20,"Verhältnismäßigkeit.",true),
+opt("Team/Arzt/Betreuung einbeziehen und Rechtsgrundlage klären",true,20,"Erforderlich."),
+opt("Bei FEM: Dauer, Grund, Kontrollen und Wirkung dokumentieren",true,20,"Pflicht.",true),
+opt("Dauerhaft ohne Anordnung fixieren",false,-30,"Gefährlich und rechtswidrig.",false,true)
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 passende Reaktionen.",type:"multiple",requiredCorrect:2,options:[
+opt("Ruhig orientieren und validierend erklären, was gerade passiert",true,10,"Deeskalierend."),
+opt("Angehörige/Betreuung einbeziehen, wenn passend",true,10,"Ressourcen."),
+opt("Drohen: Wenn Sie nicht hören, werden Sie fixiert",false,-20,"Unprofessionell."),
+opt("Patient lächerlich machen",false,-15,"Würdeverletzend.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 Inhalte.",type:"multiple",requiredCorrect:3,options:[
+opt("Gefährdungslage und geprüfte Alternativen",true,20,"Zentral."),
+opt("Einwilligung/Rechtsgrundlage/Anordnung",true,20,"Rechtlich wichtig.",true),
+opt("Kontrollen, Dauer, Wirkung und erneute Evaluation",true,15,"Pflegefachlich notwendig."),
+opt("Nur: Bettgitter hoch",false,-10,"Unzureichend.")
+]}]),
 
-            const selectHint = phaseInfo.selectCount ?
-                `Wähle ${phaseInfo.selectCount} aus.` :
-                (phaseInfo.multiSelect ? 'Mehrere Antworten möglich.' : 'Wähle die beste Antwort.');
+makeCase("pflegeplanung","Pflegeplanung","Pflegeplanung bei Selbstversorgungsdefizit","PESR / SMART","Mittel","Station","olderMale",
+{name:"Herr Roth",age:74,gender:"männlich",openingLine:"Seit der OP schaffe ich Waschen und Anziehen nicht allein. Das macht mich fertig.",conditionState:["tired","anxious"]},
+{Mobilität:"eingeschränkt",Schmerz:"5/10",Ressource:"kann Oberkörper mit Anleitung waschen",Ziel:"mehr Selbstständigkeit"},"Selbstversorgungsdefizit Körperpflege/Ankleiden",
+"Pflegeplanung beschreibt Pflegeproblem, Einflussfaktoren, Symptome, Ressourcen, Ziele und konkrete Maßnahmen.",
+["Schmerzanstieg","Depressive Reaktion","Sturzrisiko","Wund-/OP-Komplikation"],
+["PESR sauber formulieren","SMART-Ziele messbar formulieren","Ressourcen aktiv nutzen","Maßnahmen konkret und evaluierbar planen"],
+"PESR + SMART = prüfungssicher: Problem, Einfluss, Symptome, Ressourcen, messbares Ziel.",
+[
+{title:"Phase 1: Ersteindruck",instruction:"Wähle 3 relevante Informationen.",type:"multiple",requiredCorrect:3,options:[
+opt("Patient schafft Körperpflege/Ankleiden nicht vollständig",true,15,"Pflegeproblem."),
+opt("Schmerz nach OP beeinflusst Selbstpflege",true,10,"Einflussfaktor."),
+opt("Ressource: Oberkörper mit Anleitung möglich",true,15,"Wichtig für Planung."),
+opt("Ressourcen ignorieren",false,-10,"Falsch.")
+]},
+{title:"Phase 2: Assessment",instruction:"Welche Daten brauchst du? 3 richtig.",type:"multiple",requiredCorrect:3,options:[
+opt("Was kann der Patient selbstständig, teilweise oder gar nicht?",true,15,"Selbstpflegefähigkeit."),
+opt("Schmerz, Beweglichkeit, Hilfsmittelbedarf erfassen",true,10,"Einflussfaktoren."),
+opt("Motivation, Scham und Wunsch nach Unterstützung erfragen",true,10,"Patientenzentriert."),
+opt("Nur Diagnose abschreiben",false,-5,"Keine Pflegeplanung.")
+]},
+{title:"Phase 3: Problem erkennen",instruction:"Wähle 3 passende PESR-Bausteine.",type:"multiple",requiredCorrect:3,options:[
+opt("P: Selbstversorgungsdefizit bei Körperpflege/Ankleiden",true,20,"Problem."),
+opt("E: eingeschränkte Mobilität und Schmerzen nach OP",true,15,"Einflussfaktoren."),
+opt("S/R: braucht Teilhilfe, kann Oberkörper mit Anleitung waschen",true,15,"Symptom und Ressource."),
+opt("P: akute Lebensgefahr durch Hypoglykämie",false,-5,"Nicht passend.")
+]},
+{title:"Phase 4: Maßnahmen auswählen",instruction:"Wähle 4 konkrete Maßnahmen.",type:"multiple",requiredCorrect:4,options:[
+opt("Waschutensilien vorbereiten und Patient Oberkörper selbst waschen lassen",true,15,"Ressourcenfördernd."),
+opt("Teilhilfe nur dort geben, wo Selbstpflege nicht möglich ist",true,15,"Aktivierende Pflege."),
+opt("Schmerz vor Aktivität einschätzen und Maßnahmen nach Anordnung abstimmen",true,15,"Schmerz beeinflusst Pflege."),
+opt("Fortschritt täglich evaluieren und Ziel anpassen",true,10,"Pflegeprozess."),
+opt("Alles komplett übernehmen, damit es schneller geht",false,-10,"Fördert Abhängigkeit.")
+]},
+{title:"Phase 5: Kommunikation / Edukation",instruction:"Wähle 2 gute Aussagen.",type:"multiple",requiredCorrect:2,options:[
+opt("Wir machen nur so viel Hilfe wie nötig, damit Sie wieder sicherer werden.",true,10,"Aktivierend."),
+opt("Sie entscheiden mit, welche Schritte heute realistisch sind.",true,10,"Partizipation."),
+opt("Sie müssen das allein schaffen.",false,-10,"Überfordernd."),
+opt("Ich mache alles, Sie brauchen nichts tun.",false,-5,"Nicht fördernd.")
+]},
+{title:"Phase 6: Dokumentation / Weitergabe",instruction:"Wähle 3 Inhalte.",type:"multiple",requiredCorrect:3,options:[
+opt("PESR-Formulierung mit Ressourcen",true,15,"Prüfungsrelevant."),
+opt("SMART-Ziel: z.B. wäscht Oberkörper in 3 Tagen mit verbaler Anleitung",true,20,"Messbar."),
+opt("Maßnahmen und Evaluation des Fortschritts",true,15,"Pflegeprozess."),
+opt("Nur: braucht Hilfe",false,-5,"Zu ungenau.")
+]}])
+];
 
-            const speechText = gameState.currentPhase === 0 ? caseData.patient.openingLine :
-                (gameState.speechText || 'Was untersuchen Sie als Nächstes?');
-            const speakerName = gameState.currentPhase === 0 ? caseData.patient.name + ' · ' + caseData.patient.age +
-                ' J.' : '';
+let state=loadState();
+let currentModule=null,currentCase=null,phaseIndex=0,selected=[],phaseResults=[],caseScore=0,caseMax=0,xpGained=0,typingTimer=null;
 
-            const html = `
-            <div class="screen active" id="screen-simulation">
-              <div class="phase-indicator">${phaseInfo.title}</div>
-              <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${((gameState.currentPhase)/7)*100}%;"></div></div>
-              ${renderPatientHTML(caseData, gameState.patientCondition)}
-              ${renderSpeechBubble(speechText, speakerName, gameState.currentPhase===0)}
-              <p style="font-size:0.8rem;color:var(--text2);margin:6px 0;">${phaseInfo.instruction} <em>(${selectHint})</em></p>
-              <div class="scroll-area" style="max-height:40vh;">
-                <div class="option-grid">${optionsHTML}</div>
-              </div>
-              <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center;">
-                <button class="btn btn-primary" id="btnSubmitPhase" ${gameState.selectedOptions.length===0?'disabled':''}>✅ Auswahl bestätigen</button>
-                ${gameState.currentPhase>0?`<button class="btn btn-secondary" id="btnSkipPhase">Überspringen</button>`:''}
-              </div>
-              <div style="font-size:0.7rem;color:var(--text2);text-align:center;margin-top:6px;">Punkte: ${gameState.currentScore} | Phase ${gameState.currentPhase+1}/7</div>
-            </div>`;
-            renderScreen(html);
-            gameState.phaseData = { phaseInfo, phaseOptions, caseData };
-        }
-
-        function renderFeedbackScreen(feedbackItems, phaseInfo) {
-            let itemsHTML = '';
-            feedbackItems.forEach(item => {
-                const chipClass = item.correct ? 'correct-chip' : 'wrong-chip';
-                const icon = item.correct ? '✅' : '❌';
-                itemsHTML += `
-              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;margin:4px 0;">
-                <span class="info-chip ${chipClass}">${icon} ${item.correct?'Richtig':'Falsch'}</span>
-                <strong style="display:block;margin-top:4px;">${item.label}</strong>
-                <span style="font-size:0.75rem;color:var(--text2);">${item.feedback}</span>
-                ${item.points!==undefined?`<span style="font-size:0.7rem;color:${item.points>0?'var(--accent)':'var(--danger)'};">${item.points>0?'+':''}${item.points} Punkte</span>`:''}
-              </div>`;
-            });
-            const html = `
-            <div class="screen active" id="screen-feedback">
-              <h3 style="color:var(--accent);">📋 Rückmeldung – ${phaseInfo.title}</h3>
-              <div class="scroll-area" style="flex:1;max-height:55vh;">${itemsHTML}</div>
-              <button class="btn btn-primary btn-large" id="btnContinue">Weiter →</button>
-            </div>`;
-            renderScreen(html);
-        }
-
-        function renderResultScreen() {
-            const caseData = CASES.find(c => c.id === gameState.currentCaseId);
-            if (!caseData) { renderCaseSelectScreen(); return; }
-            const scorePercent = gameState.maxPossibleScore > 0 ? Math.round((gameState.currentScore / gameState
-                .maxPossibleScore) * 100) : 0;
-            const clampedScore = Math.max(0, Math.min(100, scorePercent));
-            const stars = clampedScore >= 85 ? 3 : clampedScore >= 60 ? 2 : clampedScore >= 30 ? 1 : 0;
-            const xpGained = Math.round(clampedScore * 1.5);
-            const starStr = '★'.repeat(stars) + '☆'.repeat(3 - stars);
-
-            // Save completion
-            const prev = gameState.casesCompleted[caseData.id];
-            if (!prev || clampedScore > prev.bestScore) {
-                gameState.casesCompleted[caseData.id] = { bestScore: clampedScore, stars, completedAt: Date.now() };
-            }
-            if (stars >= 2) gameState.streak++;
-            else gameState.streak = 0;
-            gameState.totalXP += xpGained;
-            saveState();
-
-            let missedHTML = '';
-            const allPhases = ['initialSymptoms', 'hiddenSymptoms', 'riskFactors', 'causes', 'diagnostics', 'therapies',
-                'nursingMeasures'
-            ];
-            allPhases.forEach(key => {
-                const opts = caseData[key] || [];
-                opts.forEach(opt => {
-                    if (opt.correct && !gameState.phaseResults.some(r => r.label === opt.label && r
-                            .wasSelected)) {
-                        missedHTML +=
-                            `<span class="info-chip wrong-chip" style="margin:2px;">⚠️ ${opt.label}</span>`;
-                    }
-                });
-            });
-
-            const html = `
-            <div class="screen active" id="screen-result" style="text-align:center;gap:12px;">
-              <h2 style="color:var(--accent);">🏁 Fall abgeschlossen!</h2>
-              <div class="result-score-circle">${clampedScore}%</div>
-              <div class="star-display">${starStr}</div>
-              <p style="color:var(--xp);font-weight:700;">+${xpGained} XP</p>
-              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:left;">
-                <strong>📌 Diagnose: ${caseData.title}</strong>
-                <p style="font-size:0.8rem;margin-top:4px;">${caseData.explanation}</p>
-                ${missedHTML?`<div style="margin-top:6px;"><strong style="font-size:0.75rem;color:var(--danger);">⚠️ Verpasste Punkte:</strong><br>${missedHTML}</div>`:''}
-                <div style="margin-top:8px;font-size:0.8rem;color:var(--gold);"><strong>📝 Prüfungstipp:</strong> ${caseData.examTip}</div>
-              </div>
-              <div class="btn-row">
-                <button class="btn btn-secondary" id="btnRepeatCase">🔄 Fall wiederholen</button>
-                <button class="btn btn-primary" id="btnNextCase">▶️ Nächster Fall</button>
-                <button class="btn btn-secondary" id="btnHome">🏠 Zur Fallauswahl</button>
-              </div>
-            </div>`;
-            renderScreen(html);
-            spawnConfetti(50);
-            updateHeader();
-        }
-
-        // ==================== GAME LOGIC ====================
-        function startCase(caseId) {
-            const caseData = CASES.find(c => c.id === caseId);
-            if (!caseData) return;
-            gameState.currentCaseId = caseId;
-            gameState.currentPhase = 0;
-            gameState.currentScore = 0;
-            gameState.maxPossibleScore = 0;
-            gameState.phaseResults = [];
-            gameState.selectedOptions = [];
-            gameState.patientCondition = 'pain';
-            gameState.speechText = '';
-            gameState.screen = 'simulation';
-            // Calculate max possible score
-            const allKeys = ['initialSymptoms', 'hiddenSymptoms', 'riskFactors', 'causes', 'diagnostics', 'therapies',
-                'nursingMeasures'
-            ];
-            allKeys.forEach(key => {
-                const opts = caseData[key] || [];
-                opts.forEach(opt => {
-                    if (opt.correct) gameState.maxPossibleScore += Math.abs(opt.points);
-                });
-            });
-            // Set condition based on case
-            if (caseId === 'myokardinfarkt') gameState.patientCondition = 'pain';
-            else if (caseId === 'schlaganfall') gameState.patientCondition = 'tired';
-            else if (caseId === 'pneumonie') gameState.patientCondition = 'dyspnea';
-            else if (caseId === 'copd_exazerbation') gameState.patientCondition = 'dyspnea';
-            else if (caseId === 'hypoglykaemie') gameState.patientCondition = 'hypoglycemia';
-            renderSimulationScreen();
-        }
-
-        function submitPhase() {
-            const { phaseInfo, phaseOptions, caseData } = gameState.phaseData || {};
-            if (!phaseInfo || !phaseOptions) return;
-            const selIndices = [...gameState.selectedOptions];
-            if (selIndices.length === 0) return;
-
-            // If selectCount is specified, enforce it
-            if (phaseInfo.selectCount && selIndices.length !== phaseInfo.selectCount) {
-                showToast(`Bitte wähle genau ${phaseInfo.selectCount} Optionen aus.`, 'warning-toast');
-                return;
-            }
-
-            let feedbackItems = [];
-            let phasePoints = 0;
-            const weight = phaseInfo.heavyWeight ? 2 : 1;
-
-            phaseOptions.forEach((opt, i) => {
-                const wasSelected = selIndices.includes(i);
-                let effectivePoints = 0;
-                if (wasSelected && opt.correct) {
-                    effectivePoints = opt.points * weight;
-                    phasePoints += effectivePoints;
-                } else if (wasSelected && !opt.correct) {
-                    effectivePoints = opt.points; // negative
-                    phasePoints += effectivePoints;
-                } else if (!wasSelected && opt.correct) {
-                    // Missed correct answer
-                    effectivePoints = -Math.abs(opt.points) * 0.5;
-                    phasePoints += effectivePoints;
-                }
-                feedbackItems.push({
-                    label: opt.label,
-                    correct: opt.correct,
-                    wasSelected,
-                    feedback: opt.feedback,
-                    points: Math.round(effectivePoints),
-                });
-            });
-
-            gameState.currentScore += Math.round(phasePoints);
-            gameState.phaseResults.push(...feedbackItems.filter(f => f.wasSelected || f.correct));
-
-            // Show feedback
-            gameState.screen = 'feedback';
-            gameState.pendingFeedback = { feedbackItems, phaseInfo };
-            renderFeedbackScreen(feedbackItems, phaseInfo);
-
-            // Show toast
-            if (phasePoints > 0) showToast(`+${Math.round(phasePoints)} Punkte!`, 'success');
-            else if (phasePoints < 0) showToast(`${Math.round(phasePoints)} Punkte`, 'error');
-
-            // Flash correct/wrong on simulation screen cards (they're already rendered in feedback screen now)
-            gameState.selectedOptions = [];
-        }
-
-        function advancePhase() {
-            gameState.currentPhase++;
-            gameState.selectedOptions = [];
-            if (gameState.currentPhase >= 7) {
-                // All phases complete
-                renderResultScreen();
-                gameState.screen = 'result';
-            } else {
-                // Update patient condition for new phase
-                const caseId = gameState.currentCaseId;
-                if (caseId === 'myokardinfarkt' && gameState.currentPhase >= 4) gameState.patientCondition = 'tachypnea';
-                if (caseId === 'schlaganfall' && gameState.currentPhase >= 3) gameState.patientCondition = 'tired';
-                gameState.screen = 'simulation';
-                renderSimulationScreen();
-            }
-        }
-
-        function skipPhase() {
-            gameState.selectedOptions = [];
-            gameState.currentPhase++;
-            if (gameState.currentPhase >= 7) {
-                renderResultScreen();
-                gameState.screen = 'result';
-            } else {
-                gameState.screen = 'simulation';
-                renderSimulationScreen();
-            }
-        }
-
-        // ==================== EVENT HANDLERS ====================
-        function attachScreenListeners() {
-            // Landing
-            const btnStart = document.getElementById('btnStartSim');
-            if (btnStart) btnStart.addEventListener('click', () => {
-                gameState.screen = 'caseSelect';
-                renderCaseSelectScreen();
-            });
-            const btnBackLanding = document.getElementById('btnBackToLanding');
-            if (btnBackLanding) btnBackLanding.addEventListener('click', () => {
-                gameState.screen = 'landing';
-                renderLandingScreen();
-            });
-
-            // Case cards
-            document.querySelectorAll('.case-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const caseId = this.getAttribute('data-case-id');
-                    if (caseId) startCase(caseId);
-                });
-                card.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const caseId = this.getAttribute('data-case-id');
-                        if (caseId) startCase(caseId);
-                    }
-                });
-            });
-
-            // Option cards in simulation
-            document.querySelectorAll('.option-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const idx = parseInt(this.getAttribute('data-opt-index'));
-                    if (isNaN(idx)) return;
-                    const selSet = new Set(gameState.selectedOptions);
-                    const phaseInfo = getPhaseInfo(gameState.currentPhase);
-                    if (selSet.has(idx)) {
-                        selSet.delete(idx);
-                    } else {
-                        if (phaseInfo.selectCount && selSet.size >= phaseInfo.selectCount) {
-                            // Remove first selected to make room
-                            const firstSel = [...selSet][0];
-                            selSet.delete(firstSel);
-                        }
-                        selSet.add(idx);
-                    }
-                    gameState.selectedOptions = [...selSet];
-                    // Re-render to update selection visuals
-                    const caseData = CASES.find(c => c.id === gameState.currentCaseId);
-                    if (caseData) renderSimulationScreen();
-                });
-                card.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        this.click();
-                    }
-                });
-            });
-
-            // Submit button
-            const btnSubmit = document.getElementById('btnSubmitPhase');
-            if (btnSubmit) btnSubmit.addEventListener('click', submitPhase);
-
-            // Skip button
-            const btnSkip = document.getElementById('btnSkipPhase');
-            if (btnSkip) btnSkip.addEventListener('click', skipPhase);
-
-            // Continue button on feedback screen
-            const btnContinue = document.getElementById('btnContinue');
-            if (btnContinue) btnContinue.addEventListener('click', advancePhase);
-
-            // Result screen buttons
-            const btnRepeat = document.getElementById('btnRepeatCase');
-            if (btnRepeat) btnRepeat.addEventListener('click', () => {
-                if (gameState.currentCaseId) startCase(gameState.currentCaseId);
-            });
-            const btnNext = document.getElementById('btnNextCase');
-            if (btnNext) btnNext.addEventListener('click', () => {
-                const currentIdx = CASES.findIndex(c => c.id === gameState.currentCaseId);
-                const nextIdx = (currentIdx + 1) % CASES.length;
-                startCase(CASES[nextIdx].id);
-            });
-            const btnHome = document.getElementById('btnHome');
-            if (btnHome) btnHome.addEventListener('click', () => {
-                gameState.screen = 'caseSelect';
-                renderCaseSelectScreen();
-            });
-        }
-
-        // ==================== INITIALIZATION ====================
-        function init() {
-            updateHeader();
-            gameState.screen = 'landing';
-            renderLandingScreen();
-        }
-
-        // Handle back button / history
-        window.addEventListener('popstate', () => {
-            if (gameState.screen === 'simulation' || gameState.screen === 'feedback') {
-                gameState.screen = 'caseSelect';
-                renderCaseSelectScreen();
-            }
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (gameState.screen === 'simulation' || gameState.screen === 'feedback') {
-                    gameState.screen = 'caseSelect';
-                    renderCaseSelectScreen();
-                }
-            }
-            // Number keys for quick option selection
-            if (gameState.screen === 'simulation' && e.key >= '1' && e.key <= '9') {
-                const idx = parseInt(e.key) - 1;
-                const phaseInfo = getPhaseInfo(gameState.currentPhase);
-                const caseData = CASES.find(c => c.id === gameState.currentCaseId);
-                if (caseData && phaseInfo) {
-                    const opts = caseData[phaseInfo.dataKey] || [];
-                    if (idx < opts.length) {
-                        const selSet = new Set(gameState.selectedOptions);
-                        if (selSet.has(idx)) selSet.delete(idx);
-                        else {
-                            if (phaseInfo.selectCount && selSet.size >= phaseInfo.selectCount) {
-                                const firstSel = [...selSet][0];
-                                selSet.delete(firstSel);
-                            }
-                            selSet.add(idx);
-                        }
-                        gameState.selectedOptions = [...selSet];
-                        renderSimulationScreen();
-                    }
-                }
-            }
-            if (gameState.screen === 'simulation' && e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                if (gameState.selectedOptions.length > 0) submitPhase();
-            }
-        });
-
-        init();
-        console.log('🏥 PflegefachProfi Emergency Nurse Simulator – Bereit.');
-        console.log('Alle ' + CASES.length + ' Fälle geladen. localStorage aktiv. Kein externes Backend.');
-    </script>
+function loadState(){
+  try{return JSON.parse(localStorage.getItem("pfp.sim.state.v1"))||{xp:0,completed:{},best:{},streak:0,last:null}}catch(e){return{xp:0,completed:{},best:{},streak:0,last:null}}
+}
+function saveState(){localStorage.setItem("pfp.sim.state.v1",JSON.stringify(state));updateTop()}
+function updateTop(){document.getElementById("topXp").textContent="XP "+state.xp}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");updateTop()}
+function showLanding(){
+  show("landing");
+  const done=Object.keys(state.completed).length;
+  const bestVals=Object.values(state.best);
+  const best=bestVals.length?Math.max(...bestVals):0;
+  document.getElementById("landingStats").innerHTML=[
+    ["Total XP",state.xp],["Abgeschlossen",done+"/"+CASES.length],["Bester Score",best+"%"],["Streak",state.streak]
+  ].map(x=>`<div class="stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join("");
+}
+function showModules(){
+  show("modules");
+  document.getElementById("moduleGrid").innerHTML=MODULES.map(m=>{
+    const list=CASES.filter(c=>c.module===m),done=list.filter(c=>state.completed[c.id]).length;
+    return `<article class="card"><h3>${m}</h3><p class="muted">${list.length} Fälle · ${done}/${list.length} abgeschlossen</p><div class="progress"><div style="width:${list.length?done/list.length*100:0}%"></div></div><button class="btn primary" onclick="showCases('${m}')">Modul öffnen</button></article>`;
+  }).join("");
+}
+function showCases(module){
+  currentModule=module;show("cases");
+  document.getElementById("caseTitle").textContent=module;
+  document.getElementById("caseGrid").innerHTML=CASES.filter(c=>c.module===module).map(c=>{
+    const best=state.best[c.id]||0,done=state.completed[c.id]?"✅ Abgeschlossen":"Noch offen";
+    return `<article class="card"><h3>${c.title}</h3><p class="muted">${c.category} · ${c.difficulty} · ${c.setting}</p><p>${c.patient.name}, ${c.patient.age} Jahre</p><div class="row"><span class="pill">Best ${best}%</span><span class="pill">${done}</span></div><br><button class="btn green" onclick="startCase('${c.id}')">Fall starten</button></article>`;
+  }).join("");
+}
+function startCase(id){
+  currentCase=CASES.find(c=>c.id===id);
+  phaseIndex=0;selected=[];phaseResults=[];caseScore=0;caseMax=0;xpGained=0;
+  renderSimulation();
+}
+function patientHTML(c){
+  return `<div class="patient ${c.patient.conditionState.join(" ")}">
+    <div class="arm l"></div><div class="arm r"></div><div class="body"></div>
+    <div class="head"><div class="hair"></div><div class="eye l"></div><div class="eye r"></div><div class="mouth"></div></div>
+  </div>`;
+}
+function renderSimulation(){
+  show("simulation");
+  const c=currentCase,p=c.phases[phaseIndex];
+  selected=[];
+  document.getElementById("simTitle").textContent=c.title;
+  document.getElementById("simSub").textContent=`${c.patient.name}, ${c.patient.age} Jahre · ${c.setting}`;
+  document.getElementById("patient").innerHTML=patientHTML(c);
+  document.getElementById("vitals").innerHTML=Object.entries(c.vitals).map(([k,v])=>`<div class="vital"><b>${k}</b><span>${v}</span></div>`).join("");
+  typeSpeech(phaseIndex===0?c.patient.openingLine:reactionLine(c));
+  document.getElementById("phaseCounter").textContent=`Phase ${phaseIndex+1}/${c.phases.length}`;
+  document.getElementById("scorePill").textContent=`Score ${Math.max(0,caseScore)}`;
+  document.getElementById("xpPill").textContent=`+${xpGained} XP`;
+  document.getElementById("phaseProgress").style.width=(phaseIndex/c.phases.length*100)+"%";
+  document.getElementById("phaseTitle").textContent=p.title;
+  document.getElementById("phaseInstruction").textContent=p.instruction+" · Wähle "+p.requiredCorrect+" richtige Antwort(en).";
+  document.getElementById("submitBtn").disabled=false;
+  document.getElementById("options").innerHTML=p.options.map((o,i)=>`<button class="option" id="opt${i}" onclick="toggleOption(${i})">${o.label}</button>`).join("");
+}
+function reactionLine(c){
+  const lines=[
+    "Was machen Sie jetzt als Nächstes?",
+    "Ich vertraue Ihnen. Bitte sagen Sie mir, was passiert.",
+    "Mir geht es noch nicht gut. Was ist wichtig?",
+    "Bitte bleiben Sie kurz bei mir."
+  ];
+  return lines[phaseIndex%lines.length];
+}
+function typeSpeech(text){
+  clearInterval(typingTimer);
+  const el=document.getElementById("speech");el.textContent="";
+  let i=0;typingTimer=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(typingTimer)},18);
+}
+function toggleOption(i){
+  const p=currentCase.phases[phaseIndex];
+  if(p.type==="single"){selected=[i];document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"))}
+  else selected.includes(i)?selected=selected.filter(x=>x!==i):selected.push(i);
+  document.getElementById("opt"+i).classList.toggle("selected");
+}
+function submitPhase(){
+  const p=currentCase.phases[phaseIndex];
+  if(selected.length===0){alert("Bitte mindestens eine Antwort auswählen.");return}
+  const correctIdx=p.options.map((o,i)=>o.correct?i:null).filter(i=>i!==null);
+  let gained=0,max=correctIdx.reduce((s,i)=>s+Math.max(0,p.options[i].points),0);
+  let criticalMiss=0;
+  p.options.forEach((o,i)=>{
+    const el=document.getElementById("opt"+i);
+    if(selected.includes(i)&&o.correct){gained+=o.points;el.classList.add("correct")}
+    if(selected.includes(i)&&!o.correct){gained+=o.points;el.classList.add("wrong")}
+    if(!selected.includes(i)&&o.correct&&o.critical)criticalMiss++;
+  });
+  if(criticalMiss)gained-=criticalMiss*10;
+  caseScore+=gained;caseMax+=max;
+  const xp=Math.max(0,Math.round(gained/2));
+  xpGained+=xp;
+  phaseResults.push({phase:p,selected:[...selected],gained,max,criticalMiss});
+  document.getElementById("submitBtn").disabled=true;
+  setTimeout(renderFeedback,450);
+}
+function renderFeedback(){
+  show("feedback");
+  const r=phaseResults[phaseResults.length-1],p=r.phase;
+  const good=[],bad=[],miss=[];
+  p.options.forEach((o,i)=>{
+    if(r.selected.includes(i)&&o.correct)good.push(o);
+    if(r.selected.includes(i)&&!o.correct)bad.push(o);
+    if(!r.selected.includes(i)&&o.correct)miss.push(o);
+  });
+  document.getElementById("fbTitle").textContent=r.gained>=r.max*.75?"Stark gelöst":"Auswertung";
+  document.getElementById("fbText").textContent=`Phase-Ergebnis: ${Math.max(0,r.gained)} von ${r.max} Punkten.`;
+  document.getElementById("fbList").innerHTML=[
+    ...good.map(o=>`<div class="fb good"><b>Richtig:</b> ${o.label}<br><span class="muted">${o.feedback}</span></div>`),
+    ...bad.map(o=>`<div class="fb bad"><b>Falsch:</b> ${o.label}<br><span class="muted">${o.feedback}</span></div>`),
+    ...miss.map(o=>`<div class="fb miss"><b>Verpasst:</b> ${o.label}<br><span class="muted">${o.feedback}</span></div>`)
+  ].join("")||"<div class='fb'>Keine Details.</div>";
+}
+function nextPhase(){
+  phaseIndex++;
+  if(phaseIndex>=currentCase.phases.length)showResult();
+  else renderSimulation();
+}
+function showResult(){
+  const percent=Math.max(0,Math.min(100,Math.round(caseScore/caseMax*100)));
+  const stars=percent>=90?3:percent>=70?2:percent>=50?1:0;
+  state.xp+=xpGained;
+  state.best[currentCase.id]=Math.max(state.best[currentCase.id]||0,percent);
+  state.completed[currentCase.id]=true;
+  state.streak=percent>=70?state.streak+1:0;
+  saveState();
+  if(percent>=70)confetti();
+  show("result");
+  document.getElementById("resultBox").innerHTML=`
+    <h2>${currentCase.finalDiagnosis}</h2>
+    <div class="stars">${"★".repeat(stars)}${"☆".repeat(3-stars)}</div>
+    <div class="stats">
+      <div class="stat"><b>${percent}%</b><span>Score</span></div>
+      <div class="stat"><b>+${xpGained}</b><span>XP</span></div>
+      <div class="stat"><b>${state.best[currentCase.id]}%</b><span>Bestscore</span></div>
+      <div class="stat"><b>${state.streak}</b><span>Streak</span></div>
+    </div>
+    <h3>Definition</h3><p>${currentCase.definition}</p>
+    <h3>Red Flags</h3><ul>${currentCase.redFlags.map(x=>`<li>${x}</li>`).join("")}</ul>
+    <h3>Pflegerische Zusammenfassung</h3><ul>${currentCase.nursingSummary.map(x=>`<li>${x}</li>`).join("")}</ul>
+    <h3>Pflegefachlicher Merksatz</h3><p><b>${currentCase.examTip}</b></p>
+    <div class="row">
+      <button class="btn green" onclick="startCase('${currentCase.id}')">Fall wiederholen</button>
+      <button class="btn primary" onclick="nextCase()">Nächster Fall</button>
+      <button class="btn" onclick="showCases(currentModule)">Zur Fallauswahl</button>
+    </div>`;
+}
+function nextCase(){
+  const list=CASES.filter(c=>c.module===currentModule);
+  const idx=list.findIndex(c=>c.id===currentCase.id);
+  startCase(list[(idx+1)%list.length].id);
+}
+function confetti(){
+  const box=document.getElementById("confetti");box.innerHTML="";
+  for(let i=0;i<70;i++){
+    const e=document.createElement("i");
+    e.style.left=Math.random()*100+"%";
+    e.style.background=["#22c55e","#3b82f6","#f59e0b","#ec4899","#8b5cf6"][i%5];
+    e.style.animationDelay=Math.random()*0.4+"s";
+    box.appendChild(e);
+  }
+  setTimeout(()=>box.innerHTML="",2200);
+}
+showLanding();
+</script>
 </body>
 </html>
