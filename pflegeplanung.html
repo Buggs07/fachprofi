@@ -1,455 +1,2773 @@
-<!DOCTYPE html> 
-<html lang="de"> 
-<head> 
-<meta charset="UTF-8"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"> 
-<title>PflegefachProfi | Planung</title> 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
-<style> 
+<!doctype html>
+<html lang="de">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>PflegefachProfi | Planung</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
 /* ========================================================================== 
    DESIGN SYSTEM & VARIABLES 
-   ========================================================================== */ 
-:root { 
-    --primary: #2563eb; 
-    --primary-dark: #1e40af; 
-    --primary-light: #eff6ff; 
-    --purple: #8b5cf6; 
-    --pink: #ec4899; 
-    --success: #10b981; 
-    --warning: #f59e0b; 
-    --danger: #ef4444; 
-    --bg-app: #f8fafc; 
-    --bg-surface: #ffffff; 
-    --text-main: #0f172a; 
-    --text-muted: #64748b; 
-    --border: #e2e8f0; 
-    --shadow-sm: 0 2px 4px rgba(15,23,42,0.04); 
-    --shadow-md: 0 8px 16px rgba(15,23,42,0.08); 
-    --shadow-lg: 0 20px 40px rgba(67,97,238,0.15); 
-    --shadow-glow: 0 0 20px rgba(247,37,133,0.3); 
-    --ease: cubic-bezier(0.2, 0.8, 0.2, 1); 
-    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    --shutter-width: 55px; 
-} 
+   ========================================================================== */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #eff6ff;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bg-app: #f8fafc;
+    --bg-surface: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow-sm: 0 2px 4px rgba(15,23,42,0.04);
+    --shadow-md: 0 8px 16px rgba(15,23,42,0.08);
+    --shadow-lg: 0 20px 40px rgba(67,97,238,0.15);
+    --shadow-glow: 0 0 20px rgba(247,37,133,0.3);
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --shutter-width: 55px;
+}
 
-/* ========================================================================== 
-   RESET & BODY 
-   ========================================================================== */ 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; } 
-html, body { width: 100%; height: 100%; } 
-body { 
-    font-family: 'Inter', sans-serif; 
-    background: #cbd5e1; 
-    color: var(--text-main); 
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-start; /* FIX: Verhindert Abschneiden auf kleinen Screens */
-    height: 100vh; 
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: #cbd5e1;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
     height: 100dvh;
-    overflow: hidden; 
-} 
-button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; } 
-a { color: inherit; text-decoration: none; } 
-h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; } 
+    overflow: hidden;
+}
+button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; }
 
-/* ========================================================================== 
-   APP WRAPPER (Mobile First & Desktop App Window)
-   ========================================================================== */ 
-.app-wrapper { 
-    width: 100%; 
-    max-width: 500px; /* FIX: Bewahrt das native App-Gefühl auf dem Desktop */
-    height: 100%; 
-    background: var(--bg-app); 
-    display: flex; 
-    flex-direction: column; 
-    position: relative; 
-    box-shadow: 0 0 50px rgba(0,0,0,0.15); 
-    overflow: hidden; 
-} 
-
-/* Desktop Optik (Zentriertes App-Fenster) */
+.app-wrapper {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    background: var(--bg-app);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
 @media (min-width: 600px) {
     body { align-items: center; padding: 20px; }
     .app-wrapper { height: 95vh; max-height: 900px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
 }
-
-/* ========================================================================== 
-   TOPBAR 
-   ========================================================================== */ 
-.topbar { 
-    padding: max(16px, env(safe-area-inset-top)) 20px 16px; 
-    background: rgba(255,255,255,0.9); 
+.topbar {
+    padding: max(16px, env(safe-area-inset-top)) 20px 16px;
+    background: rgba(255,255,255,0.9);
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border); 
-    display: flex; justify-content: space-between; align-items: center; 
-    z-index: 50; flex-shrink: 0; 
-} 
-.brand { font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 8px; color: var(--text-main); } 
-.brand i { color: var(--primary); font-size: 22px; } 
-.stats { display: flex; gap: 8px; } 
-.stat-pill { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm); white-space: nowrap; } 
-.stat-pill .fa-bolt { color: var(--primary); } 
-
-/* ========================================================================== 
-   ROUTING VIEWS 
-   ========================================================================== */ 
-#content-area { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; min-height: 0; } 
-.view { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; opacity: 0; transform: translateY(10px); transition: 0.4s var(--ease); min-height: 0; } 
-.view.active { display: flex; flex-direction: column; opacity: 1; transform: translateY(0); } 
-
-/* ========================================================================== 
-   CATALOG VIEW 
-   ========================================================================== */ 
-.view-header { padding: 24px 20px 14px; flex-shrink: 0; } 
-.view-header h1 { font-size: 26px; line-height: 1.2; margin-bottom: 8px; } 
-.view-header p { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1.45; } 
-
-.guidance-card { margin: 0 20px 14px; padding: 14px; border-radius: 18px; background: linear-gradient(135deg, #eff6ff, #f5f3ff); border: 1px solid rgba(37,99,235,0.14); box-shadow: var(--shadow-sm); display: flex; gap: 12px; align-items: flex-start; } 
-.guidance-card i { color: var(--primary); font-size: 18px; margin-top: 2px; } 
-.guidance-card strong { display:block; font-size: 13px; margin-bottom: 3px; } 
-.guidance-card span { display:block; font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; } 
-
-.catalog-list { padding: 0 20px 28px; display: flex; flex-direction: column; gap: 12px; } 
-.category-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow-sm); overflow: hidden; transition: 0.25s var(--ease); } 
-.category-card.open { border-color: rgba(37,99,235,0.25); box-shadow: var(--shadow-md); } 
-.category-toggle { width: 100%; padding: 16px; display: flex; align-items: center; justify-content: space-between; text-align: left; color: var(--text-main); } 
-.category-left { display: flex; align-items: center; gap: 12px; min-width: 0; } 
-.category-icon { width: 44px; height: 44px; border-radius: 14px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 20px; flex-shrink: 0; } 
-.category-title { min-width: 0; } 
-.category-title h3 { font-size: 16px; line-height: 1.3; } /* FIX: Wrapping erlaubt */
-.category-title p { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-top: 4px; } 
-.category-chevron { width: 34px; height: 34px; border-radius: 50%; background: var(--bg-app); color: var(--primary); display: grid; place-items: center; transition: 0.3s var(--ease-spring); flex-shrink: 0; } 
-.category-card.open .category-chevron { transform: rotate(180deg); background: var(--primary-light); } 
-
-.problem-list { max-height: 0; overflow: hidden; transition: max-height 0.45s var(--ease); border-top: 1px solid transparent; } 
-.category-card.open .problem-list { border-top-color: var(--border); } 
-.problem-list-inner { padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 8px; } 
-
-.topic-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 13px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 2px rgba(15,23,42,0.03); cursor: pointer; transition: 0.2s var(--ease-spring); } 
-.topic-card:active { transform: scale(0.98); border-color: var(--primary); box-shadow: var(--shadow-glow); } 
-.topic-info { display: flex; align-items: center; gap: 12px; min-width: 0; } 
-.topic-icon { width: 38px; height: 38px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; } 
-.topic-title { min-width: 0; } 
-.topic-title h3 { font-size: 14px; margin-bottom: 4px; line-height: 1.3; } /* FIX: Wrapping erlaubt */
-.topic-title p { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; } 
-.topic-arrow { color: var(--primary); font-size: 13px; width: 28px; height: 28px; background: var(--primary-light); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; } 
-
-/* ========================================================================== 
-   SHUTTER INTERFACE 
-   ========================================================================== */ 
-.shutter-header { padding: 12px 20px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0;} 
-.btn-back { width: 36px; height: 36px; border-radius: 10px; background: var(--bg-app); color: var(--text-main); display: grid; place-items: center; font-size: 14px; transition: 0.2s; flex-shrink: 0;} 
-.btn-back:active { transform: scale(0.9); background: var(--border); } 
-.shutter-title-text { font-size: 16px; font-weight: 800; line-height: 1.3; } 
-
-.shutter-wrapper { flex: 1; position: relative; overflow: hidden; min-height: 0; } 
-.shutter-grid { display: grid; height: 100%; width: 100%; grid-template-columns: 1fr var(--shutter-width) var(--shutter-width); transition: grid-template-columns 0.6s var(--ease); } 
-.col { border-right: 1px solid var(--border); background: var(--bg-app); display: flex; flex-direction: column; overflow: hidden; position: relative; } 
-.col:last-child { border-right: none; } 
-
-.col-header { height: 100%; width: var(--shutter-width); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: white; color: var(--text-muted); cursor: pointer; transition: 0.3s; padding: 20px 0; } 
-.col:hover .col-header { background: var(--primary-light); color: var(--primary); } 
-.col-header-text { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 800; font-size: 15px; letter-spacing: 1px; white-space: nowrap; } 
-.col-header i { font-size: 20px; transform: rotate(0deg); } 
-.click-hint { font-size: 10px; text-transform: uppercase; font-weight: 900; color: var(--primary); writing-mode: vertical-rl; transform: rotate(180deg); margin-top: auto; opacity: 0; transition: 0.3s; } 
-.col:not(.active) .click-hint { opacity: 1; animation: pulseHint 2s infinite; } 
-@keyframes pulseHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } } 
-
-.col.active { background: var(--bg-app); cursor: default; } 
-.col.active .col-header { height: auto; width: 100%; flex-direction: row; writing-mode: horizontal-tb; transform: none; justify-content: flex-start; padding: 20px; background: transparent; color: var(--primary); border-bottom: 2px solid var(--primary); } 
-.col.active .col-header-text { writing-mode: horizontal-tb; transform: none; font-size: 20px; } 
-
-.col-content { flex: 1; padding: 20px; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease); padding-bottom: 40px; display: flex; flex-direction: column; align-items: center; } 
-.col.active .col-content { opacity: 1; pointer-events: auto; } 
-
-.rich-card { width: 100%; max-width: 600px; background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); opacity: 0; transform: translateY(15px); } 
-.col.active .rich-card { animation: slideUpFade 0.5s var(--ease-spring) forwards; } 
-.col.active .rich-card:nth-child(1) { animation-delay: 0.1s; } 
-.col.active .rich-card:nth-child(2) { animation-delay: 0.18s; } 
-.col.active .rich-card:nth-child(3) { animation-delay: 0.26s; } 
-.col.active .rich-card:nth-child(4) { animation-delay: 0.34s; } 
-.col.active .rich-card:nth-child(5) { animation-delay: 0.42s; } 
-.col.active .rich-card:nth-child(6) { animation-delay: 0.5s; } 
-@keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } } 
-
-.rich-card-title { font-size: 11px; text-transform: uppercase; font-weight: 900; color: var(--primary); margin-bottom: 6px; letter-spacing: 0.5px; } 
-.rich-card-text { font-size: 14px; font-weight: 600; line-height: 1.5; color: var(--text-main); } 
-.rich-card-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 14px; } 
-
-/* ========================================================================== 
-   APP BOTTOM NAVIGATION - FUNCTIONAL LINKS 
-   ========================================================================== */ 
-.nav-bottom { flex-shrink: 0; width: 100%; height: 85px; background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; justify-content: space-evenly; align-items: flex-end; padding-bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 1000; transition: height 0.4s var(--ease-spring), padding 0.4s var(--ease-spring); } 
-.nav-bottom.compact { height: 60px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); } 
-.nav-bottom.compact span { opacity: 0; height: 0; margin-top: 0; transform: scale(0.5); pointer-events: none; } 
-.nav-bottom.compact .nav-item { padding-top: 0; } 
-.nav-bottom.compact .nav-item.active .icon-wrapper { transform: translateY(-2px) scale(1.1); } 
-.nav-bottom.compact .nav-item.active::before { transform: translate(-50%, -14px) scale(0.8); } 
-.nav-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; flex: 1; height: 100%; cursor: pointer; padding-top: 8px; } 
-.nav-item .icon-wrapper { position: relative; width: 44px; height: 32px; display: flex; justify-content: center; align-items: center; transition: 0.4s var(--ease-spring); z-index: 2; border-radius: 50%; } 
-.nav-item i { font-size: 22px; transition: 0.4s var(--ease-spring); color: inherit; } 
-.nav-item span { font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8; transition: 0.4s var(--ease-spring); color: inherit; } 
-.nav-item::before { content: ''; position: absolute; top: 12px; left: 50%; transform: translate(-50%, 0) scale(0); width: 44px; height: 44px; background: var(--primary-light); border-radius: 50%; opacity: 0; transition: 0.4s var(--ease-spring); z-index: 1; } 
-.nav-item.active { color: var(--primary); } 
-.nav-item.active .icon-wrapper { transform: translateY(-8px); } 
-.nav-item.active i { transform: scale(1.15); } 
-.nav-item.active span { opacity: 1; transform: translateY(-4px); } 
-.nav-item.active::before { transform: translate(-50%, -20px) scale(1); opacity: 1; } 
-
-.nav-cta .cta-wrapper { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 62px; height: 62px; background: linear-gradient(135deg, var(--primary), var(--pink)); color: white; font-size: 26px; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4); border: 5px solid var(--bg-app); animation: floatCTA 2s ease-in-out infinite; z-index: 5; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: all 0.6s var(--ease-spring); } 
-.nav-cta span { margin-top: 36px; transition: 0.6s var(--ease-spring); } 
-.nav-cta:active .cta-wrapper { transform: translate(-50%, 4px) scale(0.92); box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); animation: none; } 
-@keyframes floatCTA { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } } 
-.nav-cta.normalized .cta-wrapper { position: relative; top: 0; left: 0; transform: none; width: 44px; height: 32px; background: transparent; color: inherit; font-size: 22px; box-shadow: none; border-width: 0; animation: none; } 
-.nav-cta.normalized span { margin-top: 4px; } 
-.nav-cta.normalized.active .cta-wrapper { transform: translateY(-8px); color: var(--primary); } 
-.nav-cta.normalized.active i { transform: scale(1.15); } 
-
-.toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: white; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 800; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s var(--ease-spring); } 
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); } 
-
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } } 
-</style> 
-</head> 
-<body> 
-<div class="app-wrapper"> 
-    <header class="topbar"> 
-        <div class="brand"><i class="fa-solid fa-clipboard-list"></i> PflegefachProfi</div> 
-        <div class="stats"><div class="stat-pill"><i class="fa-solid fa-bolt"></i> <span>240 XP</span></div></div> 
-    </header> 
-    
-    <div id="content-area"> 
-        <main class="view active" id="view-catalog"> 
-            <div class="view-header"> 
-                <h1>Pflegeplanung<br>Bibliothek</h1> 
-                <p>Wähle zuerst eine Hauptkategorie. Danach öffnest du ein konkretes Pflegeproblem mit Problem, Zielen und Maßnahmen.</p> 
-            </div> 
-            <div class="guidance-card"> 
-                <i class="fa-solid fa-compass"></i> 
-                <div><strong>So nutzt du diese Seite</strong><span>1. Kategorie öffnen · 2. Pflegeproblem wählen · 3. Pflegeproblem, Ziele und Maßnahmen nacheinander prüfen.</span></div> 
-            </div> 
-            <div class="catalog-list" id="catalog-container"></div> 
-        </main> 
-        
-        <main class="view" id="view-shutter" style="padding-bottom: 0;"> 
-            <div class="shutter-header"> 
-                <button class="btn-back" type="button" onclick="App.nav('view-catalog', 3)" aria-label="Zurück zur Pflegeplanung"><i class="fa-solid fa-chevron-left"></i></button> 
-                <div class="shutter-title-text" id="shutter-main-title">Titel</div> 
-            </div> 
-            <div class="shutter-wrapper"> 
-                <div class="shutter-grid" id="shutter-grid"> 
-                    <div class="col active" data-col="1" onclick="Shutter.focus(1)"> 
-                        <div class="col-header"><i class="fa-solid fa-triangle-exclamation"></i><span class="col-header-text">Pflegeproblem</span><div class="click-hint">Tippe zum Öffnen</div></div> 
-                        <div class="col-content" id="content-problem"></div> 
-                    </div> 
-                    <div class="col" data-col="2" onclick="Shutter.focus(2)"> 
-                        <div class="col-header"><i class="fa-solid fa-bullseye"></i><span class="col-header-text">Pflegeziele</span><div class="click-hint">Tippe zum Öffnen</div></div> 
-                        <div class="col-content" id="content-goals"></div> 
-                    </div> 
-                    <div class="col" data-col="3" onclick="Shutter.focus(3)"> 
-                        <div class="col-header"><i class="fa-solid fa-list-check"></i><span class="col-header-text">Maßnahmen</span><div class="click-hint">Tippe zum Öffnen</div></div> 
-                        <div class="col-content" id="content-measures"></div> 
-                    </div> 
-                </div> 
-            </div> 
-        </main> 
-    </div> 
-    
-    <div class="toast" id="toastMsg">In Entwicklung</div> 
-    
-    <nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation"> 
-        <a href="/" class="nav-item" aria-label="Home"><div class="icon-wrapper"><i class="fa-solid fa-house"></i></div><span>Home</span></a> 
-        <a href="/pruefungsthemen.html" class="nav-item" aria-label="Prüfungsthemen"><div class="icon-wrapper"><i class="fa-solid fa-book-medical"></i></div><span>Themen</span></a> 
-        <a href="/lernen.html" class="nav-item" id="" aria-label="Üben"><div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div><span>Üben</span></a> 
-        <a href="#" class="nav-item active" aria-current="page" onclick="event.preventDefault(); App.nav('view-catalog', 3);"><div class="icon-wrapper"><i class="fa-solid fa-clipboard-list"></i></div><span>Planung</span></a> 
-        <a href="/kontakt" class="nav-item" aria-label="Kontakt"><div class="icon-wrapper"><i class="fa-solid fa-envelope"></i></div><span>Help</span></a> 
-    </nav> 
-</div> 
-
-<script> 
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 50; flex-shrink: 0;
+}
+.brand { font-weight: 900; font-size: 18px; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+.brand i { color: var(--primary); font-size: 22px; }
+.stats { display: flex; gap: 8px; }
+.stat-pill { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm); white-space: nowrap; }
+.stat-pill .fa-bolt { color: var(--primary); }
+#content-area { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; min-height: 0; }
+.view { flex: 1; overflow-y: auto; overflow-x: hidden; display: none; opacity: 0; transform: translateY(10px); transition: 0.4s var(--ease); min-height: 0; }
+.view.active { display: flex; flex-direction: column; opacity: 1; transform: translateY(0); }
+.view-header { padding: 24px 20px 14px; flex-shrink: 0; }
+.view-header h1 { font-size: 26px; line-height: 1.2; margin-bottom: 8px; }
+.view-header p { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1.45; }
+.guidance-card { margin: 0 20px 14px; padding: 14px; border-radius: 18px; background: linear-gradient(135deg, #eff6ff, #f5f3ff); border: 1px solid rgba(37,99,235,0.14); box-shadow: var(--shadow-sm); display: flex; gap: 12px; align-items: flex-start; }
+.guidance-card i { color: var(--primary); font-size: 18px; margin-top: 2px; }
+.guidance-card strong { display:block; font-size: 13px; margin-bottom: 3px; }
+.guidance-card span { display:block; font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
+.catalog-list { padding: 0 20px 28px; display: flex; flex-direction: column; gap: 12px; }
+.category-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow-sm); overflow: hidden; transition: 0.25s var(--ease); }
+.category-card.open { border-color: rgba(37,99,235,0.25); box-shadow: var(--shadow-md); }
+.category-toggle { width: 100%; padding: 16px; display: flex; align-items: center; justify-content: space-between; text-align: left; color: var(--text-main); }
+.category-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.category-icon { width: 44px; height: 44px; border-radius: 14px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 20px; flex-shrink: 0; }
+.category-title { min-width: 0; }
+.category-title h3 { font-size: 16px; line-height: 1.3; }
+.category-title p { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-top: 4px; }
+.category-chevron { width: 34px; height: 34px; border-radius: 50%; background: var(--bg-app); color: var(--primary); display: grid; place-items: center; transition: 0.3s var(--ease-spring); flex-shrink: 0; }
+.category-card.open .category-chevron { transform: rotate(180deg); background: var(--primary-light); }
+.problem-list { max-height: 0; overflow: hidden; transition: max-height 0.45s var(--ease); border-top: 1px solid transparent; }
+.category-card.open .problem-list { border-top-color: var(--border); }
+.problem-list-inner { padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.topic-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 13px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 2px rgba(15,23,42,0.03); cursor: pointer; transition: 0.2s var(--ease-spring); }
+.topic-card:active { transform: scale(0.98); border-color: var(--primary); box-shadow: var(--shadow-glow); }
+.topic-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.topic-icon { width: 38px; height: 38px; border-radius: 12px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+.topic-title { min-width: 0; }
+.topic-title h3 { font-size: 14px; margin-bottom: 4px; line-height: 1.3; }
+.topic-title p { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+.topic-arrow { color: var(--primary); font-size: 13px; width: 28px; height: 28px; background: var(--primary-light); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+.shutter-header { padding: 12px 20px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0;}
+.btn-back { width: 36px; height: 36px; border-radius: 10px; background: var(--bg-app); color: var(--text-main); display: grid; place-items: center; font-size: 14px; transition: 0.2s; flex-shrink: 0;}
+.btn-back:active { transform: scale(0.9); background: var(--border); }
+.shutter-title-text { font-size: 16px; font-weight: 800; line-height: 1.3; }
+.shutter-wrapper { flex: 1; position: relative; overflow: hidden; min-height: 0; }
+.shutter-grid { display: grid; height: 100%; width: 100%; grid-template-columns: 1fr var(--shutter-width) var(--shutter-width); transition: grid-template-columns 0.6s var(--ease); }
+.col { border-right: 1px solid var(--border); background: var(--bg-app); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.col:last-child { border-right: none; }
+.col-header { height: 100%; width: var(--shutter-width); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: white; color: var(--text-muted); cursor: pointer; transition: 0.3s; padding: 20px 0; }
+.col:hover .col-header { background: var(--primary-light); color: var(--primary); }
+.col-header-text { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 800; font-size: 15px; letter-spacing: 1px; white-space: nowrap; }
+.col-header i { font-size: 20px; transform: rotate(0deg); }
+.click-hint { font-size: 10px; text-transform: uppercase; font-weight: 900; color: var(--primary); writing-mode: vertical-rl; transform: rotate(180deg); margin-top: auto; opacity: 0; transition: 0.3s; }
+.col:not(.active) .click-hint { opacity: 1; animation: pulseHint 2s infinite; }
+@keyframes pulseHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+.col.active { background: var(--bg-app); cursor: default; }
+.col.active .col-header { height: auto; width: 100%; flex-direction: row; writing-mode: horizontal-tb; transform: none; justify-content: flex-start; padding: 20px; background: transparent; color: var(--primary); border-bottom: 2px solid var(--primary); }
+.col.active .col-header-text { writing-mode: horizontal-tb; transform: none; font-size: 20px; }
+.col-content { flex: 1; padding: 20px; overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease); padding-bottom: 40px; display: flex; flex-direction: column; align-items: center; }
+.col.active .col-content { opacity: 1; pointer-events: auto; }
+.rich-card { width: 100%; max-width: 600px; background: white; border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); opacity: 0; transform: translateY(15px); }
+.col.active .rich-card { animation: slideUpFade 0.5s var(--ease-spring) forwards; }
+.col.active .rich-card:nth-child(1) { animation-delay: 0.1s; }
+.col.active .rich-card:nth-child(2) { animation-delay: 0.18s; }
+.col.active .rich-card:nth-child(3) { animation-delay: 0.26s; }
+.col.active .rich-card:nth-child(4) { animation-delay: 0.34s; }
+.col.active .rich-card:nth-child(5) { animation-delay: 0.42s; }
+.col.active .rich-card:nth-child(6) { animation-delay: 0.5s; }
+.col.active .rich-card:nth-child(7) { animation-delay: 0.58s; }
+@keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+.rich-card-title { font-size: 11px; text-transform: uppercase; font-weight: 900; color: var(--primary); margin-bottom: 6px; letter-spacing: 0.5px; }
+.rich-card-text { font-size: 14px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
+.rich-card-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 14px; }
+.nav-bottom { flex-shrink: 0; width: 100%; height: 85px; background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; justify-content: space-evenly; align-items: flex-end; padding-bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 1000; transition: height 0.4s var(--ease-spring), padding 0.4s var(--ease-spring); }
+.nav-bottom.compact { height: 60px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+.nav-bottom.compact span { opacity: 0; height: 0; margin-top: 0; transform: scale(0.5); pointer-events: none; }
+.nav-bottom.compact .nav-item { padding-top: 0; }
+.nav-bottom.compact .nav-item.active .icon-wrapper { transform: translateY(-2px) scale(1.1); }
+.nav-bottom.compact .nav-item.active::before { transform: translate(-50%, -14px) scale(0.8); }
+.nav-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; flex: 1; height: 100%; cursor: pointer; padding-top: 8px; }
+.nav-item .icon-wrapper { position: relative; width: 44px; height: 32px; display: flex; justify-content: center; align-items: center; transition: 0.4s var(--ease-spring); z-index: 2; border-radius: 50%; }
+.nav-item i { font-size: 22px; transition: 0.4s var(--ease-spring); color: inherit; }
+.nav-item span { font-size: 10px; font-weight: 800; margin-top: 4px; opacity: 0.8; transition: 0.4s var(--ease-spring); color: inherit; }
+.nav-item::before { content: ''; position: absolute; top: 12px; left: 50%; transform: translate(-50%, 0) scale(0); width: 44px; height: 44px; background: var(--primary-light); border-radius: 50%; opacity: 0; transition: 0.4s var(--ease-spring); z-index: 1; }
+.nav-item.active { color: var(--primary); }
+.nav-item.active .icon-wrapper { transform: translateY(-8px); }
+.nav-item.active i { transform: scale(1.15); }
+.nav-item.active span { opacity: 1; transform: translateY(-4px); }
+.nav-item.active::before { transform: translate(-50%, -20px) scale(1); opacity: 1; }
+.toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: white; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 800; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.4s var(--ease-spring); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+</style>
+ </head>
+ <body>
+  <div class="app-wrapper">
+   <header class="topbar">
+    <div class="brand">
+     <i class="fa-solid fa-clipboard-list"></i> PflegefachProfi
+    </div>
+    <div class="stats">
+     <div class="stat-pill">
+      <i class="fa-solid fa-bolt"></i> <span>89 Probleme</span>
+     </div>
+    </div>
+   </header>
+   <div id="content-area">
+    <main class="view active" id="view-catalog">
+     <div class="view-header">
+      <h1>Pflegeplanung
+       <br>
+       Bibliothek</h1>
+      <p>89 prüfungsrelevante Pflegeprobleme mit objektiv formulierten Nah- und Fernzielen sowie konkreten Maßnahmen.</p>
+     </div>
+     <div class="guidance-card">
+      <i class="fa-solid fa-compass"></i>
+      <div>
+       <strong>So nutzt du diese Seite</strong><span>1. Kategorie öffnen · 2. Pflegeproblem wählen · 3. Pflegeproblem, Ziele und Maßnahmen nacheinander prüfen.</span>
+      </div>
+     </div>
+     <div class="catalog-list" id="catalog-container"></div>
+    </main>
+    <main class="view" id="view-shutter" style="padding-bottom: 0;">
+     <div class="shutter-header">
+      <button class="btn-back" type="button" onclick="App.nav('view-catalog', 3)" aria-label="Zurück zur Pflegeplanung"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="shutter-title-text" id="shutter-main-title">Titel</div>
+     </div>
+     <div class="shutter-wrapper">
+      <div class="shutter-grid" id="shutter-grid">
+       <div class="col active" data-col="1" onclick="Shutter.focus(1)">
+        <div class="col-header">
+         <i class="fa-solid fa-triangle-exclamation"></i><span class="col-header-text">Pflegeproblem</span>
+         <div class="click-hint">Tippe zum Öffnen</div>
+        </div>
+        <div class="col-content" id="content-problem"></div>
+       </div>
+       <div class="col" data-col="2" onclick="Shutter.focus(2)">
+        <div class="col-header">
+         <i class="fa-solid fa-bullseye"></i><span class="col-header-text">Pflegeziele</span>
+         <div class="click-hint">Tippe zum Öffnen</div>
+        </div>
+        <div class="col-content" id="content-goals"></div>
+       </div>
+       <div class="col" data-col="3" onclick="Shutter.focus(3)">
+        <div class="col-header">
+         <i class="fa-solid fa-list-check"></i><span class="col-header-text">Maßnahmen</span>
+         <div class="click-hint">Tippe zum Öffnen</div>
+        </div>
+        <div class="col-content" id="content-measures"></div>
+       </div>
+      </div>
+     </div>
+    </main>
+   </div>
+   <div class="toast" id="toastMsg">Gespeichert</div>
+   <nav class="nav-bottom" id="bottomNav" aria-label="Hauptnavigation">
+    <a href="/" class="nav-item" aria-label="Home">
+     <div class="icon-wrapper">
+      <i class="fa-solid fa-house"></i>
+     </div>
+     <span>Home</span>
+    </a> <a href="/pruefungsthemen.html" class="nav-item" aria-label="Prüfungsthemen">
+     <div class="icon-wrapper">
+      <i class="fa-solid fa-book-medical"></i>
+     </div>
+     <span>Themen</span>
+    </a> <a href="/lernen.html" class="nav-item" aria-label="Üben">
+     <div class="icon-wrapper">
+      <i class="fa-solid fa-bolt"></i>
+     </div>
+     <span>Üben</span>
+    </a> <a href="#" class="nav-item active" aria-current="page" onclick="event.preventDefault(); App.nav('view-catalog', 3);">
+     <div class="icon-wrapper">
+      <i class="fa-solid fa-clipboard-list"></i>
+     </div>
+     <span>Planung</span>
+    </a> <a href="/kontakt" class="nav-item" aria-label="Kontakt">
+     <div class="icon-wrapper">
+      <i class="fa-solid fa-envelope"></i>
+     </div>
+     <span>Help</span>
+    </a>
+   </nav>
+  </div>
+  <script>
 /* ========================================================================== 
    1. EASY EDIT CONTENT AREA 
-   ========================================================================== */ 
-const DATA = [ 
-  { id:'hypervolaemie', category:'Herz & Kreislauf', icon:'🫀', title:'Gefahr der Hypervolämie', problemText:'Der Pflegeempfänger hat eine fortgeschrittene Herzinsuffizienz. Es besteht die Gefahr einer kardialen Dekompensation mit Überwässerung, Beinödemen oder Lungenödem.', goals:[{type:'Nahziel',text:'PE zeigt innerhalb von 48 Stunden keine Zunahme der peripheren Ödeme.'},{type:'Fernziel',text:'PE hält sein Trockengewicht dauerhaft stabil (+/- 500 g).'}], measures:['Pfk wiegt PE täglich morgens nüchtern zur Verlaufskontrolle.','Pfk führt nach ärztlicher Anordnung eine Ein- und Ausfuhrbilanzierung durch.','Pfk kontrolliert im Frühdienst Knöchel und Unterschenkel auf Ödeme.','Pfk achtet auf Dyspnoe, Gewichtszunahme und feuchte Rasselgeräusche.','Pfk positioniert PE bei Dyspnoe in Herzstuhllagerung.','Pfk verabreicht angeordnete Diuretika pünktlich und beobachtet Wirkung.'] }, 
-  { id:'hypotonie-sturz', category:'Herz & Kreislauf', icon:'🫀', title:'Sturzgefahr bei orthostatischer Hypotonie', problemText:'Beim Lagewechsel kommt es zu Schwindel und Blutdruckabfall. Dadurch besteht ein erhöhtes Sturzrisiko.', goals:[{type:'Nahziel',text:'PE steht innerhalb der nächsten 24 Stunden nur mit Unterstützung sicher auf.'},{type:'Fernziel',text:'PE führt Lagewechsel sicher und ohne Sturzereignis durch.'}], measures:['Pfk misst Blutdruck und Puls vor und nach Mobilisation bei Schwindelangabe.','Pfk leitet PE zu langsamem Aufsetzen über die Bettkante an.','Pfk lässt PE vor dem Aufstehen 1–2 Minuten sitzen.','Pfk stellt Klingel, Schuhe und Gehhilfe griffbereit bereit.','Pfk begleitet Toilettengänge bei Schwindel.','Pfk dokumentiert Schwindelereignisse und informiert Arzt bei Verschlechterung.'] }, 
-  { id:'thromboserisiko', category:'Herz & Kreislauf', icon:'🫀', title:'Thromboserisiko bei Immobilität', problemText:'Durch eingeschränkte Mobilität und reduzierte Muskelpumpe besteht ein erhöhtes Risiko für eine tiefe Beinvenenthrombose.', goals:[{type:'Nahziel',text:'PE führt bis heute Abend angeleitete Venengymnastik durch.'},{type:'Fernziel',text:'PE bleibt während des Aufenthalts frei von Thrombosezeichen.'}], measures:['Pfk mobilisiert PE nach Ressourcen mehrmals täglich.','Pfk leitet Fußkreisen und Zehenbewegungen an.','Pfk beobachtet Beine auf Schwellung, Schmerz, Überwärmung und Umfangsdifferenz.','Pfk achtet auf ausreichende Flüssigkeitszufuhr gemäß Plan.','Pfk legt Kompressionsstrümpfe nach Anordnung korrekt an.','Pfk verabreicht Antikoagulanzien nach ärztlicher Anordnung und beobachtet Blutungszeichen.'] }, 
-  { id:'aspiration', category:'Atmung & Ernährung', icon:'🫁', title:'Aspirationsgefahr bei Dysphagie', problemText:'Nach einem Apoplex besteht eine Schluckstörung. Nahrung, Flüssigkeit oder Speichel können in die Atemwege gelangen.', goals:[{type:'Nahziel',text:'PE nimmt angedickte Flüssigkeit ohne Hustenreiz während der Mahlzeit zu sich.'},{type:'Fernziel',text:'PE bleibt während des Aufenthalts frei von Aspirationspneumonie.'}], measures:['Pfk lagert PE zu jeder Mahlzeit im 90°-Sitz.','Pfk dickt Flüssigkeiten nach Logopädie-/Arztvorgabe an.','Pfk reicht Nahrung langsam und teelöffelweise an.','Pfk achtet auf Husten, Räuspern, feuchte Stimme und Atemnot.','Pfk führt nach der Mahlzeit eine Mundraumkontrolle durch.','Pfk belässt PE nach dem Essen mindestens 30 Minuten aufrecht.'] }, 
-  { id:'pneumonierisiko', category:'Atmung & Ernährung', icon:'🫁', title:'Pneumonierisiko bei Immobilität', problemText:'Durch Immobilität, flache Atmung und Sekretstau besteht die Gefahr einer Pneumonie.', goals:[{type:'Nahziel',text:'PE führt heute mindestens 3 angeleitete Atemübungen durch.'},{type:'Fernziel',text:'PE bleibt afebril und zeigt keine Pneumoniezeichen.'}], measures:['Pfk leitet mehrmals täglich zur tiefen Ein- und Ausatmung an.','Pfk mobilisiert PE nach Möglichkeit an die Bettkante oder in den Stuhl.','Pfk führt atemerleichternde Lagerungen durch.','Pfk achtet auf Temperatur, Husten, Sputum und Atemfrequenz.','Pfk fördert ausreichende Flüssigkeitszufuhr gemäß Plan.','Pfk informiert Arzt bei Fieber, Dyspnoe oder eitrigem Sputum.'] }, 
-  { id:'mangelernaehrung', category:'Atmung & Ernährung', icon:'🍽️', title:'Risiko der Mangelernährung', problemText:'Durch Appetitlosigkeit, Erkrankung oder Schluck-/Kauprobleme nimmt der PE zu wenig Energie und Eiweiß auf.', goals:[{type:'Nahziel',text:'PE nimmt heute mindestens 50 % der angebotenen Mahlzeit zu sich.'},{type:'Fernziel',text:'PE hält sein Gewicht über die nächsten 14 Tage stabil.'}], measures:['Pfk erfasst Essmenge und Trinkmenge nachvollziehbar.','Pfk bietet kleine energiereiche Portionen an.','Pfk berücksichtigt Vorlieben und Abneigungen des PE.','Pfk führt wöchentliches Wiegen nach Standard durch.','Pfk bietet Zwischenmahlzeiten und Trinknahrung nach Anordnung an.','Pfk informiert Ernährungsberatung/Arzt bei anhaltend geringer Aufnahme.'] }, 
-  { id:'dekubitusrisiko', category:'Haut & Wunde', icon:'🛏️', title:'Hohes Dekubitusrisiko', problemText:'Der PE ist immobil, kachektisch oder inkontinent. Es besteht ein hohes Risiko für Druckschäden an Prädilektionsstellen.', goals:[{type:'Nahziel',text:'Die Haut an Kreuzbein und Fersen zeigt bis Schichtende keine Rötung.'},{type:'Fernziel',text:'Die Hautintegrität bleibt dauerhaft vollständig erhalten.'}], measures:['Pfk führt im Früh- und Spätdienst eine Hautinspektion durch.','Pfk positioniert PE nach individuellem Bewegungsplan.','Pfk lagert Fersen druckentlastend frei.','Pfk reinigt Haut nach Inkontinenzereignissen zeitnah und schonend.','Pfk vermeidet Massage gefährdeter Hautareale.','Pfk dokumentiert Hautzustand und Lagerungsintervalle.'] }, 
-  { id:'intertrigo', category:'Haut & Wunde', icon:'🧴', title:'Intertrigogefahr in Hautfalten', problemText:'In Hautfalten besteht durch Feuchtigkeit, Reibung und Wärme ein Risiko für Mazeration und Entzündung.', goals:[{type:'Nahziel',text:'Hautfalten sind nach der Körperpflege trocken und reizfrei.'},{type:'Fernziel',text:'PE entwickelt keine nässenden oder entzündeten Hautareale.'}], measures:['Pfk inspiziert Hautfalten täglich.','Pfk reinigt betroffene Bereiche pH-hautneutral.','Pfk trocknet Hautfalten sorgfältig durch Tupfen.','Pfk verwendet atmungsaktive textile Einlagen nach Standard.','Pfk vermeidet okklusive fettige Produkte in Hautfalten.','Pfk dokumentiert Rötung, Nässen oder Geruch.'] }, 
-  { id:'wundheilung', category:'Haut & Wunde', icon:'🩹', title:'Verzögerte Wundheilung', problemText:'Bei bestehender Wunde besteht durch Diabetes, Durchblutungsstörung oder Infektion das Risiko einer verzögerten Heilung.', goals:[{type:'Nahziel',text:'Die Wunde zeigt beim nächsten Verbandwechsel keine neuen Infektzeichen.'},{type:'Fernziel',text:'Die Wundfläche verkleinert sich im geplanten Verlauf.'}], measures:['Pfk führt Verbandwechsel aseptisch nach Standard durch.','Pfk beurteilt Wunde nach Größe, Exsudat, Geruch und Umgebungshaut.','Pfk achtet auf Schmerzen und Infektzeichen.','Pfk dokumentiert Wundzustand nachvollziehbar.','Pfk entlastet betroffene Körperstelle konsequent.','Pfk informiert Wundexperte/Arzt bei Verschlechterung.'] }, 
-  { id:'sturzrisiko', category:'Mobilität & Sicherheit', icon:'🚶', title:'Erhöhtes Sturzrisiko', problemText:'Durch Gangunsicherheit, Medikamente oder kognitive Einschränkung besteht ein erhöhtes Sturzrisiko.', goals:[{type:'Nahziel',text:'PE nutzt bis heute Abend bei jeder Mobilisation die Klingel.'},{type:'Fernziel',text:'PE bleibt während des Aufenthalts sturzfrei.'}], measures:['Pfk stellt Klingel und persönliche Gegenstände griffbereit.','Pfk achtet auf festes Schuhwerk und freie Laufwege.','Pfk begleitet unsichere Transfers.','Pfk stellt Bett auf niedrigste sichere Höhe.','Pfk nutzt geeignete Hilfsmittel nach Einweisung.','Pfk dokumentiert Sturzrisiko und evaluiert Maßnahmen regelmäßig.'] }, 
-  { id:'kontrakturrisiko', category:'Mobilität & Sicherheit', icon:'🤲', title:'Kontrakturrisiko', problemText:'Durch Immobilität oder Schonhaltung besteht die Gefahr einer dauerhaften Bewegungseinschränkung von Gelenken.', goals:[{type:'Nahziel',text:'PE bewegt betroffene Gelenke heute im schmerzarmen Bewegungsumfang.'},{type:'Fernziel',text:'Die vorhandene Gelenkbeweglichkeit bleibt erhalten.'}], measures:['Pfk führt aktive oder passive Bewegungsübungen nach Plan durch.','Pfk achtet auf schmerzfreie Bewegungsgrenzen.','Pfk lagert Extremitäten physiologisch.','Pfk vermeidet dauerhafte Spitzfußstellung.','Pfk fördert Alltagsbewegungen bei der Körperpflege.','Pfk bezieht Physiotherapie nach Plan ein.'] }, 
-  { id:'transferdefizit', category:'Mobilität & Sicherheit', icon:'♿', title:'Beeinträchtigter Transfer', problemText:'PE kann Positionswechsel oder Transfers nicht selbstständig und sicher durchführen.', goals:[{type:'Nahziel',text:'PE führt Transfer Bett-Stuhl heute mit Anleitung und Unterstützung durch.'},{type:'Fernziel',text:'PE erreicht größtmögliche sichere Selbstständigkeit beim Transfer.'}], measures:['Pfk erklärt jeden Transfersschritt vor Durchführung.','Pfk nutzt geeignete Hilfsmittel wie Rutschbrett oder Lifter.','Pfk aktiviert vorhandene Ressourcen des PE.','Pfk sichert Bremsen von Bett/Rollstuhl vor Transfer.','Pfk achtet auf rückenschonende Arbeitsweise.','Pfk dokumentiert Unterstützungsbedarf und Fortschritte.'] }, 
-  { id:'obstipationsrisiko', category:'Ausscheidung', icon:'🚽', title:'Obstipationsrisiko', problemText:'Durch Immobilität, geringe Trinkmenge oder opioidhaltige Medikamente besteht ein Risiko für Verstopfung.', goals:[{type:'Nahziel',text:'PE benennt heute zwei obstipationsfördernde Faktoren.'},{type:'Fernziel',text:'PE hat regelmäßig schmerzarmen Stuhlgang gemäß individuellem Rhythmus.'}], measures:['Pfk beobachtet und dokumentiert Stuhlgang nach Rhythmus und Konsistenz.','Pfk fördert Flüssigkeitszufuhr gemäß Plan.','Pfk bietet ballaststoffreiche Kost nach Verträglichkeit an.','Pfk mobilisiert PE regelmäßig.','Pfk ermöglicht ungestörte Toilettengänge.','Pfk verabreicht Laxanzien nur nach ärztlicher Anordnung.'] }, 
-  { id:'harnwegsinfekt', category:'Ausscheidung', icon:'💧', title:'Harnwegsinfektrisiko', problemText:'Durch Restharn, Inkontinenz oder Dauerkatheter besteht ein erhöhtes Risiko für Harnwegsinfektionen.', goals:[{type:'Nahziel',text:'PE zeigt heute keine Schmerzen/Brennen beim Wasserlassen.'},{type:'Fernziel',text:'PE bleibt frei von Fieber und klinischen Harnwegsinfektzeichen.'}], measures:['Pfk achtet auf Urinfarbe, Geruch, Schmerzen und Temperatur.','Pfk unterstützt ausreichende Trinkmenge gemäß Plan.','Pfk führt Intimpflege von vorne nach hinten durch.','Pfk hält geschlossenes Kathetersystem konsequent geschlossen.','Pfk positioniert Urinbeutel unter Blasenniveau ohne Bodenkontakt.','Pfk informiert Arzt bei Fieber, Flankenschmerz oder trübem Urin.'] }, 
-  { id:'inkontinenz', category:'Ausscheidung', icon:'🧻', title:'Belastung durch Inkontinenz', problemText:'PE verliert ungewollt Urin oder Stuhl. Dies belastet Haut, Würde und Teilhabe.', goals:[{type:'Nahziel',text:'PE nimmt geplante Toilettengänge heute an.'},{type:'Fernziel',text:'Haut bleibt intakt und PE erlebt mehr Sicherheit im Alltag.'}], measures:['Pfk bietet Toilettentraining nach individuellem Rhythmus an.','Pfk stellt passende Inkontinenzmaterialien bereit.','Pfk kontrolliert Hautzustand regelmäßig.','Pfk wechselt Material zeitnah und würdevoll.','Pfk dokumentiert Ausscheidungsmuster.','Pfk achtet auf diskrete Kommunikation und Intimsphäre.'] }, 
-  { id:'akutschmerz', category:'Schmerz & Ruhe', icon:'⚡', title:'Akuter Schmerz', problemText:'PE hat akute Schmerzen nach Operation, Verletzung oder Erkrankung mit Einschränkung von Bewegung und Wohlbefinden.', goals:[{type:'Nahziel',text:'PE gibt innerhalb von 60 Minuten nach Intervention eine Schmerzreduktion an.'},{type:'Fernziel',text:'PE kann notwendige Aktivitäten mit tolerierbarem Schmerz durchführen.'}], measures:['Pfk erfasst Schmerz regelmäßig mit NRS/VAS.','Pfk fragt Lokalisation, Qualität, Dauer und Auslöser ab.','Pfk lagert betroffene Region schmerzlindernd.','Pfk verabreicht Analgetika nach Anordnung rechtzeitig.','Pfk evaluiert Wirkung und Nebenwirkung nach 30–60 Minuten.','Pfk informiert Arzt bei unzureichender Wirkung.'] }, 
-  { id:'schlafstoerung', category:'Schmerz & Ruhe', icon:'🌙', title:'Schlafstörung', problemText:'PE schläft durch Schmerzen, Unruhe, Umgebung oder Sorgen schlecht ein oder durch.', goals:[{type:'Nahziel',text:'PE benennt heute einen schlaffördernden Faktor.'},{type:'Fernziel',text:'PE berichtet über erholsameren Schlaf über mehrere Nächte.'}], measures:['Pfk erfragt individuelle Schlafgewohnheiten.','Pfk reduziert nächtliche Störungen soweit möglich.','Pfk bietet Abendroutine und bequeme Lagerung an.','Pfk achtet auf Schmerzmanagement vor der Nacht.','Pfk vermeidet unnötiges Licht und Lärm.','Pfk dokumentiert Schlafdauer und Schlafqualität.'] }, 
-  { id:'fatigue', category:'Schmerz & Ruhe', icon:'🔋', title:'Erschöpfung/Fatigue', problemText:'PE zeigt ausgeprägte Müdigkeit und reduzierte Belastbarkeit im Alltag.', goals:[{type:'Nahziel',text:'PE plant heute Aktivität und Ruhepausen mit Unterstützung.'},{type:'Fernziel',text:'PE geht mit Energie ressourcenschonend um.'}], measures:['Pfk plant Pflegehandlungen gebündelt und mit Pausen.','Pfk priorisiert wichtige Aktivitäten mit PE.','Pfk beobachtet Belastungszeichen wie Dyspnoe oder Schwindel.','Pfk unterstützt energiesparende Techniken.','Pfk fördert kurze angepasste Mobilisation.','Pfk evaluiert Tagesform und passt Maßnahmen an.'] }, 
-  { id:'delirrisiko', category:'Kognition & Psyche', icon:'🧠', title:'Delirrisiko', problemText:'Durch Alter, Infekt, Operation, Schmerzen oder ungewohnte Umgebung besteht ein Risiko für akute Verwirrtheit.', goals:[{type:'Nahziel',text:'PE ist heute wiederholt zu Person und Ort orientiert.'},{type:'Fernziel',text:'PE bleibt frei von vermeidbaren Delirsymptomen.'}], measures:['Pfk orientiert PE regelmäßig zu Zeit, Ort und Situation.','Pfk stellt Brille und Hörgerät bereit.','Pfk fördert Tag-Nacht-Rhythmus mit Tageslicht.','Pfk achtet auf Schmerzen, Ausscheidung und Flüssigkeitsmangel.','Pfk vermeidet unnötige Reizüberflutung.','Pfk informiert Arzt bei akuter Verwirrtheit.'] }, 
-  { id:'angst', category:'Kognition & Psyche', icon:'🧠', title:'Angst vor Behandlung', problemText:'PE zeigt Sorge, Anspannung oder Vermeidungsverhalten im Zusammenhang mit Erkrankung oder Behandlung.', goals:[{type:'Nahziel',text:'PE benennt heute seine Hauptsorge in eigenen Worten.'},{type:'Fernziel',text:'PE nimmt notwendige Behandlung informierter und ruhiger an.'}], measures:['Pfk schafft ruhige Gesprächssituation.','Pfk erklärt Maßnahmen kurz, ehrlich und verständlich.','Pfk fragt nach konkreten Auslösern der Angst.','Pfk bietet Atem- oder Entspannungsimpulse an.','Pfk bezieht Bezugspersonen nach Wunsch ein.','Pfk informiert Arzt/Team bei starker anhaltender Angst.'] }, 
-  { id:'depressive-stimmung', category:'Kognition & Psyche', icon:'🧠', title:'Depressive Stimmung', problemText:'PE wirkt antriebsgemindert, traurig oder hoffnungslos und zieht sich zurück.', goals:[{type:'Nahziel',text:'PE nimmt heute an mindestens einer kurzen Aktivität teil.'},{type:'Fernziel',text:'PE erlebt mehr Tagesstruktur und soziale Teilhabe.'}], measures:['Pfk spricht PE wertschätzend und niedrigschwellig an.','Pfk bietet kleine erreichbare Tagesziele an.','Pfk fördert Kontakt zu Bezugspersonen nach Wunsch.','Pfk beobachtet Appetit, Schlaf, Antrieb und Stimmung.','Pfk achtet auf Hinweise auf Selbstgefährdung.','Pfk informiert Fachteam bei Verschlechterung.'] }, 
-  { id:'selbstpflege-waschen', category:'Selbstversorgung', icon:'🧼', title:'Selbstpflegedefizit Körperpflege', problemText:'PE kann Körperpflege aufgrund von Schwäche, Schmerz oder Einschränkung nicht vollständig selbst durchführen.', goals:[{type:'Nahziel',text:'PE übernimmt heute mindestens einen Teil der Körperpflege selbst.'},{type:'Fernziel',text:'PE erreicht größtmögliche Selbstständigkeit bei der Körperpflege.'}], measures:['Pfk stellt benötigte Materialien erreichbar bereit.','Pfk aktiviert vorhandene Ressourcen vor Übernahme.','Pfk gibt klare Schritt-für-Schritt-Anleitung.','Pfk übernimmt nur nicht leistbare Teilhandlungen.','Pfk achtet auf Intimsphäre und Wunschreihenfolge.','Pfk lobt selbstständig durchgeführte Schritte konkret.'] }, 
-  { id:'selbstpflege-ankleiden', category:'Selbstversorgung', icon:'👕', title:'Selbstpflegedefizit Ankleiden', problemText:'PE ist beim An- und Auskleiden eingeschränkt, z. B. durch Hemiparese, Schmerzen oder Erschöpfung.', goals:[{type:'Nahziel',text:'PE zieht heute ein Kleidungsstück mit Anleitung selbst an.'},{type:'Fernziel',text:'PE kleidet sich mit geeigneten Hilfsmitteln möglichst selbstständig.'}], measures:['Pfk legt Kleidung in sinnvoller Reihenfolge bereit.','Pfk achtet auf bequeme und passende Kleidung.','Pfk leitet bei Hemiparese an: betroffene Seite zuerst anziehen.','Pfk nutzt Hilfsmittel wie Greifzange nach Bedarf.','Pfk gibt ausreichend Zeit ohne Druck.','Pfk dokumentiert benötigte Unterstützung.'] }, 
-  { id:'mundpflege', category:'Selbstversorgung', icon:'🦷', title:'Mundpflegedefizit', problemText:'PE kann Mundpflege nicht ausreichend selbst durchführen. Es besteht Risiko für Beläge, Infektionen, Schmerzen oder Aspiration.', goals:[{type:'Nahziel',text:'Mundschleimhaut ist nach der Pflege sauber und feucht.'},{type:'Fernziel',text:'PE bleibt frei von Mundschleimhautentzündungen.'}], measures:['Pfk inspiziert Mundhöhle täglich.','Pfk führt Mundpflege nach Standard und Ressourcen durch.','Pfk befeuchtet trockene Schleimhäute.','Pfk reinigt Prothesen sorgfältig.','Pfk achtet auf Schmerzen, Beläge und Druckstellen.','Pfk dokumentiert Auffälligkeiten und informiert Arzt bei Soorverdacht.'] }, 
-  { id:'diabetes-hypo', category:'Stoffwechsel & Medikamente', icon:'💉', title:'Hypoglykämierisiko bei Diabetes', problemText:'Durch Insulin, Antidiabetika, reduzierte Nahrungsaufnahme oder Bewegung besteht ein Risiko für Unterzuckerung.', goals:[{type:'Nahziel',text:'PE zeigt heute keine Hypoglykämiezeichen.'},{type:'Fernziel',text:'PE erkennt eigene Warnzeichen und reagiert angemessen.'}], measures:['Pfk misst Blutzucker nach Schema.','Pfk achtet auf Schwitzen, Zittern, Hunger, Unruhe und Verwirrtheit.','Pfk stellt schnell wirksame Kohlenhydrate bereit.','Pfk koordiniert Insulingabe mit Mahlzeiten.','Pfk dokumentiert Werte und Maßnahmen.','Pfk informiert Arzt bei wiederholten Hypoglykämien.'] }, 
-  { id:'medikationsfehler', category:'Stoffwechsel & Medikamente', icon:'💊', title:'Risiko fehlerhafter Medikamenteneinnahme', problemText:'PE hat Schwierigkeiten mit Einnahmezeit, Dosierung oder Verständnis der Medikation.', goals:[{type:'Nahziel',text:'PE nimmt Medikamente heute korrekt nach Plan ein.'},{type:'Fernziel',text:'PE versteht Zweck und Einnahme wichtiger Dauermedikamente.'}], measures:['Pfk richtet Medikamente nach 6-R-Regel.','Pfk erklärt Einnahmezeit und Besonderheiten verständlich.','Pfk beobachtet Schluckfähigkeit und Nebenwirkungen.','Pfk kontrolliert vollständige Einnahme bei Bedarf.','Pfk nutzt Medikationsplan als Orientierung.','Pfk meldet Unklarheiten sofort an Arzt/Apotheke.'] }, 
-  { id:'exsikkose', category:'Stoffwechsel & Medikamente', icon:'💧', title:'Exsikkoserisiko', problemText:'Durch geringe Trinkmenge, Fieber, Diuretika oder kognitive Einschränkung besteht Risiko für Flüssigkeitsmangel.', goals:[{type:'Nahziel',text:'PE erreicht heute die vereinbarte Trinkmenge nach Plan.'},{type:'Fernziel',text:'PE zeigt keine Zeichen von Dehydratation.'}], measures:['Pfk bietet regelmäßig bevorzugte Getränke an.','Pfk stellt Getränke sichtbar und erreichbar bereit.','Pfk führt Trinkprotokoll bei Risiko.','Pfk achtet auf trockene Schleimhäute, stehende Hautfalten und Verwirrtheit.','Pfk berücksichtigt Schluckstörung und angedickte Getränke.','Pfk informiert Arzt bei anhaltend geringer Trinkmenge.'] }, 
-  { id:'soziale-isolation', category:'Kommunikation & Teilhabe', icon:'🤝', title:'Soziale Isolation', problemText:'PE nimmt wenig Kontakt auf oder zieht sich aufgrund Krankheit, Scham oder Mobilitätseinschränkung zurück.', goals:[{type:'Nahziel',text:'PE nimmt heute ein kurzes Gesprächsangebot an.'},{type:'Fernziel',text:'PE erlebt regelmäßige soziale Teilhabe nach Wunsch.'}], measures:['Pfk bietet kurze verbindliche Kontaktmomente an.','Pfk fragt nach gewünschten Bezugspersonen.','Pfk unterstützt Telefonat oder Besuchsplanung.','Pfk motiviert ohne Druck zu Gruppenangeboten.','Pfk berücksichtigt kulturelle und biografische Bedürfnisse.','Pfk dokumentiert Teilhabe und Rückzugstendenzen.'] }, 
-  { id:'kommunikation-eingeschraenkt', category:'Kommunikation & Teilhabe', icon:'💬', title:'Beeinträchtigte Kommunikation', problemText:'PE kann Bedürfnisse durch Aphasie, Hörminderung oder kognitive Einschränkung nur eingeschränkt mitteilen.', goals:[{type:'Nahziel',text:'PE kann heute Grundbedürfnisse mit Hilfsmittel anzeigen.'},{type:'Fernziel',text:'PE wird in Entscheidungen möglichst aktiv einbezogen.'}], measures:['Pfk spricht langsam, klar und in kurzen Sätzen.','Pfk stellt Ja/Nein-Fragen bei Bedarf.','Pfk nutzt Bildkarten, Schreibtafel oder Gestik.','Pfk stellt Brille/Hörgerät bereit.','Pfk gibt ausreichend Antwortzeit.','Pfk dokumentiert wirksame Kommunikationswege.'] }, 
-  { id:'wissensdefizit', category:'Kommunikation & Teilhabe', icon:'📘', title:'Wissensdefizit zur Erkrankung', problemText:'PE versteht Erkrankung, Risiken oder notwendige Maßnahmen noch nicht ausreichend.', goals:[{type:'Nahziel',text:'PE erklärt heute eine wichtige Maßnahme in eigenen Worten.'},{type:'Fernziel',text:'PE beteiligt sich informiert an Pflege und Therapie.'}], measures:['Pfk erfragt vorhandenes Wissen und Informationsbedarf.','Pfk erklärt in einfacher Sprache und kleinen Einheiten.','Pfk nutzt Teach-back-Methode.','Pfk gibt schriftliche Informationen nach Bedarf.','Pfk bezieht Angehörige nach Wunsch ein.','Pfk dokumentiert Beratung und Verständnis.'] } 
-]; 
+   ========================================================================== */
+const DATA = [
+  {
+    "id": "p01-beeintraechtigte-spontanatmung",
+    "nr": 1,
+    "category": "Atmung",
+    "icon": "🫁",
+    "title": "1. Beeinträchtigte Spontanatmung",
+    "problemText": "Der Pflegeempfänger zeigt eine eingeschränkte oder erschwerte eigenständige Atmung mit Risiko für unzureichende Oxygenierung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Atemfrequenz ist innerhalb von 24 Stunden zwischen 12 und 20 Atemzügen pro Minute gelegen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Sauerstoffsättigung ist bis zur Entlassung ohne akute Atemnot stabil bei mindestens 95 % gelegen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 3× täglich Atemfrequenz, Atemtiefe und Atemrhythmus und dokumentiert die Werte.",
+      "Pflegefachkraft kontrolliert 3× täglich die Sauerstoffsättigung mittels Pulsoxymetrie.",
+      "Pflegefachkraft unterstützt 4× täglich eine atemerleichternde Positionierung, zum Beispiel Oberkörperhochlagerung oder Kutschersitz.",
+      "Pflegefachkraft leitet 5× täglich tiefe Ein- und Ausatmung mit Lippenbremse an.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Zyanose, Einziehungen und Einsatz der Atemhilfsmuskulatur.",
+      "Pflegefachkraft informiert den Arzt unverzüglich bei SpO₂ unter 90 %, zunehmender Atemnot oder Bewusstseinseintrübung."
+    ]
+  },
+  {
+    "id": "p02-unwirksame-atemwegsreinigung",
+    "nr": 2,
+    "category": "Atmung",
+    "icon": "🫁",
+    "title": "2. Unwirksame Atemwegsreinigung",
+    "problemText": "Der Pflegeempfänger kann Sekret nicht ausreichend abhusten; dadurch besteht die Gefahr einer Sekretverlegung und Atemeinschränkung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 24 Stunden sind keine hörbaren Atemnebengeräusche durch Sekretverlegung aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Atemwege sind bis zur Entlassung frei von pflegerelevanten Sekretverlegungen geblieben."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft beurteilt 3× täglich Menge, Farbe und Konsistenz des Sputums anhand der pflegerischen Sputumbeobachtung.",
+      "Pflegefachkraft unterstützt 4× täglich effektive Hustentechniken, zum Beispiel Huffing-Technik und dosiertes Abhusten.",
+      "Pflegefachkraft bietet stündlich 150 ml Flüssigkeit an, sofern keine Kontraindikation besteht.",
+      "Pflegefachkraft führt 3× täglich sekretlösende Atemübungen durch.",
+      "Pflegefachkraft kontrolliert 3× täglich Atemgeräusche durch Auskultation oder strukturierte Atembeobachtung nach Hausstandard.",
+      "Pflegefachkraft dokumentiert jede relevante Sekretveränderung mit Zeitpunkt, Menge, Farbe und Konsistenz."
+    ]
+  },
+  {
+    "id": "p03-beeintraechtigter-gasaustausch",
+    "nr": 3,
+    "category": "Atmung",
+    "icon": "🫁",
+    "title": "3. Beeinträchtigter Gasaustausch",
+    "problemText": "Der Pflegeempfänger zeigt Anzeichen eines unzureichenden Sauerstoffaustauschs mit Risiko für Hypoxie.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Sauerstoffsättigung ist innerhalb von 24 Stunden auf mindestens 92 % angestiegen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Sauerstoffsättigung ist bis zur Entlassung dauerhaft bei mindestens 95 % gelegen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 3× täglich die Sauerstoffsättigung mittels Pulsoxymetrie.",
+      "Pflegefachkraft erhebt 3× täglich Atemfrequenz, Atemmuster und Atemarbeit.",
+      "Pflegefachkraft unterstützt 4× täglich eine Oberkörperhochlagerung oder andere atemerleichternde Position.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Dyspnoezeichen, Zyanose und Unruhe.",
+      "Pflegefachkraft kontrolliert 3× täglich Hautfarbe und Lippenfarbe als Hinweis auf Oxygenierungsstörungen.",
+      "Pflegefachkraft informiert den Arzt unverzüglich bei SpO₂ unter 90 %, zunehmender Zyanose oder Bewusstseinseintrübung."
+    ]
+  },
+  {
+    "id": "p04-dyspnoe",
+    "nr": 4,
+    "category": "Atmung",
+    "icon": "🫁",
+    "title": "4. Dyspnoe",
+    "problemText": "Der Pflegeempfänger erlebt subjektive Atemnot mit Belastung, Angst oder Einschränkung der Aktivität.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient gibt innerhalb von 30 Minuten eine Dyspnoe von höchstens 3 auf einer Skala von 0 bis 10 an."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung keine Atemnot in Ruhe an."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 3× täglich die Dyspnoe mittels mMRC-Skala oder subjektiver Dyspnoe-Skala 0–10.",
+      "Pflegefachkraft unterstützt bei jeder Dyspnoeepisode sofort eine atemerleichternde Haltung, zum Beispiel Kutschersitz.",
+      "Pflegefachkraft kontrolliert 3× täglich die Sauerstoffsättigung mittels Pulsoxymetrie.",
+      "Pflegefachkraft leitet bei jeder Dyspnoeepisode ruhige Atmung mit Lippenbremse an.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Atemhilfsmuskulatur, Nasenflügeln und Sprechdyspnoe.",
+      "Pflegefachkraft dokumentiert jede Dyspnoeepisode mit Auslöser, Dauer, SpO₂ und subjektiver Atemnotstärke."
+    ]
+  },
+  {
+    "id": "p05-aspirationsgefahr",
+    "nr": 5,
+    "category": "Atmung",
+    "icon": "🫁",
+    "title": "5. Aspirationsgefahr",
+    "problemText": "Durch Schluckstörung, Vigilanzminderung oder neurologische Einschränkungen besteht das Risiko, dass Speichel, Nahrung oder Flüssigkeit in die Atemwege gelangt.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind kein Hustenreiz und keine Verschluckereignisse während der Nahrungsaufnahme aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist keine Aspiration aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt bei Aufnahme und bei Veränderung der Schlucksituation ein Schluckassessment mittels GUSS durch.",
+      "Pflegefachkraft überprüft vor jeder Mahlzeit Wachheitszustand, Sitzfähigkeit und Schluckbereitschaft.",
+      "Pflegefachkraft beobachtet bei jeder Mahlzeit Husten, Räuspern, feuchte Stimme und Atemnot.",
+      "Pflegefachkraft kontrolliert nach jeder Mahlzeit die Mundhöhle auf Speisereste.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Temperatur, Husten und Atemgeräusche als Aspirationszeichen.",
+      "Pflegefachkraft dokumentiert jede Auffälligkeit beim Schlucken unmittelbar und informiert bei Verdacht den Arzt oder die Logopädie."
+    ]
+  },
+  {
+    "id": "p06-erstickungsgefahr",
+    "nr": 6,
+    "category": "Atmung",
+    "icon": "🫁",
+    "title": "6. Erstickungsgefahr",
+    "problemText": "Durch Fremdkörper, Sekret, Schluckstörung oder unzureichende Atemwegsfreiheit besteht das Risiko einer akuten Atemwegsverlegung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Atemwege sind innerhalb von 24 Stunden frei geblieben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist kein Erstickungsereignis aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft überprüft vor jeder Mahlzeit die Schlucksicherheit mittels strukturierter Schluckbeobachtung nach Hausstandard.",
+      "Pflegefachkraft kontrolliert 3× täglich Atemfrequenz, Atemgeräusche und SpO₂.",
+      "Pflegefachkraft beobachtet bei jeder Mahlzeit den Schluckvorgang und unterbricht die Nahrungsaufnahme bei Husten, Würgen oder Atemnot.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht die Durchgängigkeit der Atemwege bei sekretgefährdeten Patienten.",
+      "Pflegefachkraft entfernt sichtbare Fremdkörper aus der Mundhöhle sofort, wenn dies gefahrlos möglich ist.",
+      "Pflegefachkraft löst bei akuter Atemwegsverlegung unverzüglich den Notruf nach Hausstandard aus."
+    ]
+  },
+  {
+    "id": "p07-verminderte-kardiale-leistungsfaehigkeit",
+    "nr": 7,
+    "category": "Herz & Kreislauf",
+    "icon": "🫀",
+    "title": "7. Verminderte kardiale Leistungsfähigkeit",
+    "problemText": "Der Pflegeempfänger ist aufgrund eingeschränkter Herzleistung vermindert belastbar und zeigt Risikozeichen wie Dyspnoe, Ödeme oder schnelle Erschöpfung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient ist innerhalb von 3 Tagen in der Lage gewesen, 20 Meter ohne Dyspnoe zurückzulegen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient ist bis zur Entlassung in der Lage gewesen, 100 Meter ohne Belastungsdyspnoe zurückzulegen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 3× täglich Blutdruck, Puls und SpO₂.",
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index zur Einschätzung der Selbstständigkeit im Alltag.",
+      "Pflegefachkraft kontrolliert täglich morgens das Körpergewicht unter vergleichbaren Bedingungen.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Knöchel, Unterschenkel und Sakralbereich auf Ödeme.",
+      "Pflegefachkraft dokumentiert täglich die maximale belastungsfreie Gehstrecke in Metern.",
+      "Pflegefachkraft beobachtet bei jeder Mobilisation Dyspnoe, Erschöpfung, Zyanose und Thoraxbeschwerden."
+    ]
+  },
+  {
+    "id": "p08-kreislaufinstabilitaet",
+    "nr": 8,
+    "category": "Herz & Kreislauf",
+    "icon": "🫀",
+    "title": "8. Kreislaufinstabilität",
+    "problemText": "Der Pflegeempfänger zeigt schwankende Vitalparameter, Schwindel oder Kollapsneigung mit Risiko für Sturz und Minderperfusion.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Blutdruck ist innerhalb von 24 Stunden zwischen 100/60 mmHg und 140/90 mmHg gelegen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Vitalparameter sind bis zur Entlassung im individuell festgelegten Zielbereich geblieben."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 3× täglich Blutdruck und Puls sowie zusätzlich bei Schwindel.",
+      "Pflegefachkraft erhebt bei Schwindel 1× pro Ereignis orthostatische Vitalwerte im Liegen, Sitzen und Stehen.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Hautfarbe, Hauttemperatur und Kaltschweißigkeit.",
+      "Pflegefachkraft begleitet jeden Lagewechsel bei akuter Kreislaufinstabilität.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht die Rekapillarisierungszeit.",
+      "Pflegefachkraft dokumentiert kritische Vitalwertabweichungen sofort und informiert den Arzt nach Hausstandard."
+    ]
+  },
+  {
+    "id": "p09-verminderte-gewebeperfusion",
+    "nr": 9,
+    "category": "Herz & Kreislauf",
+    "icon": "🫀",
+    "title": "9. Verminderte Gewebeperfusion",
+    "problemText": "Durch Durchblutungsstörung oder Kreislaufprobleme besteht das Risiko einer unzureichenden Versorgung von Gewebe und Extremitäten.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Rekapillarisierungszeit hat innerhalb von 24 Stunden unter 2 Sekunden gelegen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Haut ist bis zur Entlassung warm, rosig und frei von neuen Durchblutungsstörungen gewesen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 3× täglich Hauttemperatur an den betroffenen Extremitäten im Seitenvergleich.",
+      "Pflegefachkraft kontrolliert 3× täglich Hautfarbe, Marmorierung, Blässe oder Zyanose.",
+      "Pflegefachkraft überprüft 3× täglich die Rekapillarisierungszeit an Fingern oder Zehen.",
+      "Pflegefachkraft erhebt 1× pro Schicht Schmerzen der Extremitäten mittels NRS.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht periphere Pulse, sofern tastbar, und dokumentiert Seitendifferenzen.",
+      "Pflegefachkraft informiert den Arzt unverzüglich bei kalter Extremität, fehlendem Puls, Ruheschmerz oder Sensibilitätsverlust."
+    ]
+  },
+  {
+    "id": "p10-blutungsgefahr",
+    "nr": 10,
+    "category": "Herz & Kreislauf",
+    "icon": "🩸",
+    "title": "10. Blutungsgefahr",
+    "problemText": "Durch Antikoagulation, Operation, Trauma oder Gerinnungsstörung besteht ein erhöhtes Risiko für äußere oder innere Blutungen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind keine Blutungszeichen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist keine behandlungsbedürftige Blutung aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 1× pro Schicht Haut, Schleimhäute, Punktionsstellen und Wunden auf Blutungszeichen.",
+      "Pflegefachkraft beobachtet jede Ausscheidung auf Blutbeimengungen, Teerstuhl oder Hämaturie.",
+      "Pflegefachkraft kontrolliert 3× täglich Blutdruck und Puls als Hinweis auf Kreislaufreaktionen.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht neue Hämatome, Petechien oder Nasenbluten.",
+      "Pflegefachkraft überprüft täglich gerinnungsrelevante Laborwerte gemäß ärztlicher Anordnung.",
+      "Pflegefachkraft dokumentiert Blutungszeichen sofort und informiert den Arzt unverzüglich."
+    ]
+  },
+  {
+    "id": "p11-beeintraechtigte-mobilitaet",
+    "nr": 11,
+    "category": "Mobilität & Sicherheit",
+    "icon": "🚶",
+    "title": "11. Beeinträchtigte Mobilität",
+    "problemText": "Der Pflegeempfänger ist in seiner Fortbewegung, Positionsveränderung oder körperlichen Aktivität eingeschränkt.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient ist innerhalb von 3 Tagen in der Lage gewesen, vom Bett zum Stuhl zu gelangen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient ist bis zur Entlassung in der Lage gewesen, 100 Meter zurückzulegen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index zur Einschätzung der Selbstständigkeit.",
+      "Pflegefachkraft mobilisiert den Patienten 3× täglich entsprechend der aktuellen Belastbarkeit.",
+      "Pflegefachkraft dokumentiert täglich die zurückgelegte Gehstrecke in Metern.",
+      "Pflegefachkraft erhebt bei jeder Mobilisation Schmerzen mittels NRS.",
+      "Pflegefachkraft beobachtet bei jeder Mobilisation Schwindel, Gangunsicherheit und Belastungsdyspnoe.",
+      "Pflegefachkraft stimmt bei deutlicher Mobilitätseinschränkung 1× werktäglich die Mobilisationsziele mit Physiotherapie ab."
+    ]
+  },
+  {
+    "id": "p12-beeintraechtigte-gehfaehigkeit",
+    "nr": 12,
+    "category": "Mobilität & Sicherheit",
+    "icon": "🚶",
+    "title": "12. Beeinträchtigte Gehfähigkeit",
+    "problemText": "Der Pflegeempfänger kann Gehstrecken nur eingeschränkt, unsicher oder mit schneller Ermüdung bewältigen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient ist innerhalb von 3 Tagen in der Lage gewesen, 20 Meter zurückzulegen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient ist bis zur Entlassung in der Lage gewesen, 100 Meter ohne Pause zurückzulegen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt 1× wöchentlich den Timed-Up-and-Go-Test zur Einschätzung der Gehfähigkeit durch.",
+      "Pflegefachkraft begleitet 3× täglich individuell festgelegte Gehstrecken.",
+      "Pflegefachkraft dokumentiert täglich die maximale Gehstrecke in Metern und benötigte Pausen.",
+      "Pflegefachkraft beobachtet bei jeder Gehübung Gangbild, Schrittlänge und Gleichgewicht.",
+      "Pflegefachkraft erhebt bei jeder Mobilisation Dyspnoe auf einer Skala von 0–10.",
+      "Pflegefachkraft kontrolliert vor jeder Gehübung geeignetes Schuhwerk und sichere Umgebung."
+    ]
+  },
+  {
+    "id": "p13-beeintraechtigte-transferfaehigkeit",
+    "nr": 13,
+    "category": "Mobilität & Sicherheit",
+    "icon": "♿",
+    "title": "13. Beeinträchtigte Transferfähigkeit",
+    "problemText": "Der Pflegeempfänger kann Transfers, zum Beispiel Bett–Stuhl, nicht sicher oder nicht selbstständig durchführen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient ist innerhalb von 3 Tagen in der Lage gewesen, sicher vom Bett auf einen Stuhl zu wechseln."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient ist bis zur Entlassung in der Lage gewesen, Transfers selbstständig durchzuführen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index mit Fokus auf Transferfähigkeit.",
+      "Pflegefachkraft unterstützt 3× täglich Transfers nach kinästhetischen Prinzipien und aktuellem Unterstützungsbedarf.",
+      "Pflegefachkraft kontrolliert vor jedem Transfer Bremsen, Standfläche und sichere Ausgangsposition.",
+      "Pflegefachkraft beobachtet bei jedem Transfer Gleichgewicht, Kraft und Koordination.",
+      "Pflegefachkraft erhebt bei jedem Transfer Schmerzen mittels NRS.",
+      "Pflegefachkraft dokumentiert täglich den benötigten Unterstützungsgrad."
+    ]
+  },
+  {
+    "id": "p14-sturzgefahr",
+    "nr": 14,
+    "category": "Mobilität & Sicherheit",
+    "icon": "⚠️",
+    "title": "14. Sturzgefahr",
+    "problemText": "Durch Gangunsicherheit, Medikamente, Schwindel, kognitive Einschränkung oder Umgebung besteht ein erhöhtes Sturzrisiko.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb der nächsten 72 Stunden ist kein Sturzereignis aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist Sturzfreiheit erhalten geblieben."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich das Sturzrisiko mittels Morse-Fall-Skala.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Zimmer, Bad und Laufwege auf Stolperfallen.",
+      "Pflegefachkraft überprüft 1× pro Schicht die Erreichbarkeit von Klingel, Brille, Hörgerät und persönlichen Gegenständen.",
+      "Pflegefachkraft begleitet den Patienten bei jedem erstmaligen Aufstehen nach längerer Bettruhe.",
+      "Pflegefachkraft kontrolliert täglich rutschfestes und passendes Schuhwerk.",
+      "Pflegefachkraft dokumentiert jedes Sturz- und Beinahe-Sturzereignis unmittelbar."
+    ]
+  },
+  {
+    "id": "p15-kontrakturgefahr",
+    "nr": 15,
+    "category": "Mobilität & Sicherheit",
+    "icon": "🤲",
+    "title": "15. Kontrakturgefahr",
+    "problemText": "Durch Immobilität, Schonhaltung oder neurologische Einschränkung besteht das Risiko dauerhafter Bewegungseinschränkungen der Gelenke.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Gelenke sind innerhalb von 7 Tagen frei im individuell vorhandenen Bewegungsumfang geblieben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist keine neue Kontraktur entstanden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erfasst 1× wöchentlich die Gelenkbeweglichkeit nach Neutral-Null-Methode, soweit im Setting vorgesehen.",
+      "Pflegefachkraft bewegt gefährdete Gelenke 2× täglich aktiv-assistiv oder passiv im schmerzfreien Bereich.",
+      "Pflegefachkraft integriert 3× täglich aktive Bewegungsübungen in Körperpflege, Ankleiden oder Mobilisation.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht physiologische Gelenkstellung und vermeidet Spitzfußstellung.",
+      "Pflegefachkraft erhebt bei Bewegungen Schmerzen mittels NRS.",
+      "Pflegefachkraft dokumentiert täglich neue Bewegungseinschränkungen oder Schonhaltungen."
+    ]
+  },
+  {
+    "id": "p16-thrombosegefahr",
+    "nr": 16,
+    "category": "Mobilität & Sicherheit",
+    "icon": "🦵",
+    "title": "16. Thrombosegefahr",
+    "problemText": "Durch Immobilität, reduzierte Muskelpumpe, Exsikkose oder Operation besteht ein erhöhtes Risiko für tiefe Venenthrombose.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen sind keine Schmerzen, Schwellungen oder Überwärmungen der Extremitäten aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist keine Thrombose aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 1× pro Schicht Umfang, Hautfarbe, Hauttemperatur und Schwellung der Extremitäten im Seitenvergleich.",
+      "Pflegefachkraft mobilisiert den Patienten 3× täglich entsprechend der Belastbarkeit.",
+      "Pflegefachkraft leitet 3× täglich Venengymnastik mit Fußkreisen und Zehenbewegungen an.",
+      "Pflegefachkraft kontrolliert täglich die Flüssigkeitsaufnahme anhand des Trinkprotokolls.",
+      "Pflegefachkraft erhebt Wadenschmerzen bei jeder Mobilisation mittels NRS und fragt nach Spannungsgefühl.",
+      "Pflegefachkraft informiert den Arzt bei einseitiger Schwellung, Überwärmung, Schmerz oder Atemnot sofort."
+    ]
+  },
+  {
+    "id": "p17-dekubitusgefahr",
+    "nr": 17,
+    "category": "Haut & Wunde",
+    "icon": "🛏️",
+    "title": "17. Dekubitusgefahr",
+    "problemText": "Durch Immobilität, Druck, Scherkräfte, Mangelernährung oder Inkontinenz besteht ein erhöhtes Risiko für Druckschädigungen der Haut.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Haut ist innerhalb von 7 Tagen intakt geblieben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist kein Dekubitus entstanden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich das Dekubitusrisiko mittels Braden-Skala.",
+      "Pflegefachkraft führt alle 2 Stunden einen druckentlastenden Lagewechsel nach individuellem Bewegungsplan durch.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht gefährdete Hautstellen, insbesondere Kreuzbein, Fersen, Trochanter und Ellenbogen.",
+      "Pflegefachkraft stellt bei jeder Lagerung Druckentlastung gefährdeter Körperstellen sicher.",
+      "Pflegefachkraft kontrolliert täglich Nahrungs- und Flüssigkeitsaufnahme als dekubitusrelevante Risikofaktoren.",
+      "Pflegefachkraft dokumentiert Hautveränderungen, Lagerungsposition und Uhrzeit unmittelbar."
+    ]
+  },
+  {
+    "id": "p18-harninkontinenz",
+    "nr": 18,
+    "category": "Ausscheidung",
+    "icon": "🚽",
+    "title": "18. Harninkontinenz",
+    "problemText": "Der Pflegeempfänger verliert unwillkürlich Urin; dadurch bestehen Risiken für Hautschädigung, Scham und Teilhabeeinschränkung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Anzahl der Inkontinenzepisoden ist innerhalb von 7 Tagen auf höchstens 2 pro Tag reduziert worden."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt innerhalb von 4 Wochen an, den Harndrang rechtzeitig wahrzunehmen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Miktionsprotokoll mit Uhrzeit, Menge, Harndrang und Inkontinenzepisoden.",
+      "Pflegefachkraft unterstützt alle 2 Stunden den Toilettengang nach individuellem Ausscheidungsrhythmus.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht den Hautzustand im Intimbereich.",
+      "Pflegefachkraft wechselt Inkontinenzmaterial nach jeder Inkontinenzepisode würdevoll und hautschonend.",
+      "Pflegefachkraft beobachtet bei jeder Ausscheidung Harndrangzeichen, Schmerzen und Urinauffälligkeiten.",
+      "Pflegefachkraft evaluiert 1× wöchentlich das Miktionsprotokoll und passt Toilettenzeiten an."
+    ]
+  },
+  {
+    "id": "p19-stuhlinkontinenz",
+    "nr": 19,
+    "category": "Ausscheidung",
+    "icon": "🚽",
+    "title": "19. Stuhlinkontinenz",
+    "problemText": "Der Pflegeempfänger verliert unkontrolliert Stuhl; dadurch bestehen Risiken für Hautschädigung, Geruchsbelastung, Scham und Isolation.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Anzahl unkontrollierter Stuhlabgänge ist innerhalb von 7 Tagen auf höchstens 1 pro Tag reduziert worden."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Innerhalb von 4 Wochen sind keine unkontrollierten Stuhlabgänge mehr aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Ausscheidungsprotokoll mit Uhrzeit, Menge und Konsistenz nach Bristol-Stuhlformen-Skala.",
+      "Pflegefachkraft kontrolliert nach jeder Ausscheidung den Hautzustand im Anal- und Intimbereich.",
+      "Pflegefachkraft unterstützt Toilettengänge nach individuellem Ausscheidungsrhythmus und dokumentiert Annahme oder Ablehnung.",
+      "Pflegefachkraft wechselt Inkontinenzmaterial nach jeder Episode diskret und hautschonend.",
+      "Pflegefachkraft beobachtet jede Stuhlentleerung hinsichtlich Blut, Schleim, Geruch und Schmerzen.",
+      "Pflegefachkraft evaluiert 1× wöchentlich das Ausscheidungsmuster anhand des Protokolls."
+    ]
+  },
+  {
+    "id": "p20-harnverhalt",
+    "nr": 20,
+    "category": "Ausscheidung",
+    "icon": "💧",
+    "title": "20. Harnverhalt",
+    "problemText": "Der Pflegeempfänger kann die Blase nicht vollständig oder nicht zeitgerecht entleeren; es besteht Risiko für Schmerzen, Restharn und Infektion.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 24 Stunden ist eine vollständige Blasenentleerung erfolgt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung sind keine Restharnzeichen aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Miktionsprotokoll mit Uhrzeit, Urinmenge und Beschwerden.",
+      "Pflegefachkraft erhebt 1× pro Schicht Unterbauchschmerzen mittels NRS.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Zeichen einer Blasenüberdehnung, Unruhe und Harndrang ohne Miktion.",
+      "Pflegefachkraft kontrolliert nach jeder Miktion die Ausscheidungsmenge und dokumentiert Auffälligkeiten.",
+      "Pflegefachkraft unterstützt Toilettengang oder Miktion in vertrauter Position 4× täglich.",
+      "Pflegefachkraft informiert den Arzt bei ausbleibender Miktion, starkem Unterbauchschmerz oder Restharnverdacht gemäß Hausstandard."
+    ]
+  },
+  {
+    "id": "p21-obstipation",
+    "nr": 21,
+    "category": "Ausscheidung",
+    "icon": "🚽",
+    "title": "21. Obstipation",
+    "problemText": "Der Pflegeempfänger hat erschwerte, seltene oder schmerzhafte Darmentleerungen, häufig begünstigt durch Immobilität, Flüssigkeitsmangel oder Medikamente.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 3 Tagen ist eine schmerzfreie Darmentleerung erfolgt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist mindestens alle 2 Tage eine geformte Darmentleerung erfolgt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Stuhlprotokoll mit Häufigkeit, Menge und Konsistenz nach Bristol-Stuhlformen-Skala.",
+      "Pflegefachkraft erfasst täglich die Trinkmenge mittels Trinkprotokoll.",
+      "Pflegefachkraft unterstützt den Patienten 3× täglich bei Mobilisation entsprechend seiner Belastbarkeit.",
+      "Pflegefachkraft bietet täglich ballaststoffreiche Kost entsprechend Ernährungsplan oder ärztlicher Anordnung an.",
+      "Pflegefachkraft beobachtet bei jeder Ausscheidung Schmerzen, Pressen und Gefühl unvollständiger Entleerung.",
+      "Pflegefachkraft informiert den Arzt bei ausbleibender Darmentleerung über 3 Tage oder starken Bauchschmerzen."
+    ]
+  },
+  {
+    "id": "p22-diarrhoe",
+    "nr": 22,
+    "category": "Ausscheidung",
+    "icon": "🚽",
+    "title": "22. Diarrhoe",
+    "problemText": "Der Pflegeempfänger hat häufige, dünnflüssige Stühle mit Risiko für Exsikkose, Elektrolytverlust und Hautschädigung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Stuhlfrequenz ist innerhalb von 48 Stunden auf höchstens 3 Entleerungen pro Tag reduziert worden."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist geformter Stuhl ausgeschieden worden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Stuhlprotokoll nach Bristol-Stuhlformen-Skala.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Hautzustand und Hautirritationen im Analbereich.",
+      "Pflegefachkraft erfasst jede Flüssigkeitsaufnahme in ml im Trinkprotokoll.",
+      "Pflegefachkraft beobachtet jede Ausscheidung auf Blut-, Schleim- oder Eiterbeimengungen.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Exsikkosezeichen, insbesondere Schleimhäute, Hautturgor und Schwindel.",
+      "Pflegefachkraft informiert den Arzt bei Fieber, Blut im Stuhl, Kreislaufproblemen oder mehr als 6 dünnflüssigen Stühlen pro Tag."
+    ]
+  },
+  {
+    "id": "p23-beeintraechtigte-ausscheidung",
+    "nr": 23,
+    "category": "Ausscheidung",
+    "icon": "🚽",
+    "title": "23. Beeinträchtigte Ausscheidung",
+    "problemText": "Der Pflegeempfänger zeigt eine unklare oder gemischte Störung der Harn- oder Stuhlausscheidung mit Risiko für Beschwerden und Komplikationen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 48 Stunden ist eine alters- und situationsentsprechende Ausscheidung erfolgt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist eine Ausscheidung im individuell normalen Rhythmus erfolgt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Ausscheidungsprotokoll für Miktion und Stuhlgang.",
+      "Pflegefachkraft beobachtet jede Ausscheidung hinsichtlich Menge, Farbe, Geruch und Konsistenz.",
+      "Pflegefachkraft erhebt 1× pro Schicht Unterbauchbeschwerden mittels NRS.",
+      "Pflegefachkraft erfasst täglich Trinkmenge und Flüssigkeitsbilanz nach Hausstandard.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Ödeme, Exsikkosezeichen und Unruhe als Hinweise auf Ausscheidungsprobleme.",
+      "Pflegefachkraft informiert den Arzt bei Anurie, Blutbeimengung, Fieber oder starken Schmerzen."
+    ]
+  },
+  {
+    "id": "p24-unzureichende-orale-nahrungsaufnahme",
+    "nr": 24,
+    "category": "Ernährung & Flüssigkeit",
+    "icon": "🍽️",
+    "title": "24. Unzureichende orale Nahrungsaufnahme",
+    "problemText": "Der Pflegeempfänger nimmt oral zu wenig Nahrung auf; dadurch besteht Risiko für Gewichtsverlust, Schwäche und Mangelernährung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 3 Tagen sind mindestens 75 % der angebotenen Mahlzeiten verzehrt worden."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist der tägliche Energiebedarf nach Ernährungsplan gedeckt worden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Ernährungsprotokoll.",
+      "Pflegefachkraft erhebt 1× wöchentlich den Ernährungsstatus mittels Mini Nutritional Assessment (MNA).",
+      "Pflegefachkraft dokumentiert bei jeder Mahlzeit die verzehrte Nahrungsmenge in Prozent.",
+      "Pflegefachkraft erfragt vor jeder Hauptmahlzeit Appetit, Übelkeit und individuelle Essenswünsche.",
+      "Pflegefachkraft kontrolliert 1× wöchentlich das Körpergewicht unter vergleichbaren Bedingungen.",
+      "Pflegefachkraft beobachtet bei jeder Mahlzeit Kau- und Schluckprobleme und informiert bei Auffälligkeiten Logopädie oder Arzt."
+    ]
+  },
+  {
+    "id": "p25-mangelernaehrung",
+    "nr": 25,
+    "category": "Ernährung & Flüssigkeit",
+    "icon": "🍽️",
+    "title": "25. Mangelernährung",
+    "problemText": "Der Pflegeempfänger weist ein Risiko oder Zeichen einer unzureichenden Energie- oder Nährstoffversorgung auf.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen ist keine weitere Gewichtsabnahme erfolgt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Innerhalb von 4 Wochen ist eine Gewichtszunahme von mindestens 1 kg erreicht worden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Ernährungsstatus mittels MNA oder MUST nach Hausstandard.",
+      "Pflegefachkraft kontrolliert 1× wöchentlich das Körpergewicht unter vergleichbaren Bedingungen.",
+      "Pflegefachkraft führt täglich ein Ernährungsprotokoll mit Portionsanteilen und Zwischenmahlzeiten.",
+      "Pflegefachkraft dokumentiert bei jeder Mahlzeit die aufgenommene Nahrungsmenge in Prozent.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Zeichen von Muskelschwäche, Müdigkeit und Wundheilungsstörung.",
+      "Pflegefachkraft informiert Ernährungsberatung oder Arzt bei Aufnahme unter 50 % der Mahlzeiten über 3 Tage."
+    ]
+  },
+  {
+    "id": "p26-fluessigkeitsdefizit",
+    "nr": 26,
+    "category": "Ernährung & Flüssigkeit",
+    "icon": "💧",
+    "title": "26. Flüssigkeitsdefizit",
+    "problemText": "Der Pflegeempfänger nimmt zu wenig Flüssigkeit auf oder verliert vermehrt Flüssigkeit; dadurch besteht Risiko für Exsikkose und Kreislaufprobleme.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 24 Stunden sind mindestens 1500 ml Flüssigkeit aufgenommen worden, sofern keine ärztliche Trinkmengenbegrenzung besteht."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung sind keine Exsikkosezeichen aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Trinkprotokoll mit ml-Angaben.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Hautturgor, Schleimhautfeuchtigkeit und Durstgefühl.",
+      "Pflegefachkraft bietet stündlich 150 ml bevorzugte Flüssigkeit an, sofern keine Kontraindikation besteht.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Urinfarbe und Urinmenge.",
+      "Pflegefachkraft kontrolliert täglich das Körpergewicht bei Bilanzierungsbedarf.",
+      "Pflegefachkraft informiert den Arzt bei Trinkmenge unter 1000 ml pro 24 Stunden, Schwindel oder zunehmender Verwirrtheit."
+    ]
+  },
+  {
+    "id": "p27-exsikkosegefahr",
+    "nr": 27,
+    "category": "Ernährung & Flüssigkeit",
+    "icon": "💧",
+    "title": "27. Exsikkosegefahr",
+    "problemText": "Durch geringe Trinkmenge, Fieber, Diuretika, Durchfall oder kognitive Einschränkung besteht das Risiko einer Austrocknung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind Schleimhäute feucht geblieben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist keine Exsikkose aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Trinkprotokoll mit ml-Angaben.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Schleimhäute, Hautturgor und Durstzeichen.",
+      "Pflegefachkraft kontrolliert 3× täglich Blutdruck und Puls.",
+      "Pflegefachkraft bilanziert Ein- und Ausfuhr täglich, wenn dies ärztlich angeordnet oder pflegerisch erforderlich ist.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Konzentration, Vigilanz und neue Verwirrtheit.",
+      "Pflegefachkraft informiert den Arzt bei Exsikkosezeichen, ausbleibender Miktion oder Kreislaufinstabilität."
+    ]
+  },
+  {
+    "id": "p28-schluckstoerung",
+    "nr": 28,
+    "category": "Ernährung & Flüssigkeit",
+    "icon": "🥣",
+    "title": "28. Schluckstörung",
+    "problemText": "Der Pflegeempfänger kann Nahrung, Flüssigkeit oder Speichel nicht sicher schlucken; dadurch besteht Aspirations- und Mangelernährungsrisiko.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind beim Essen keine Hustenanfälle aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist eine sichere orale Nahrungsaufnahme erfolgt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt bei Aufnahme und bei Veränderung ein Schluckassessment mittels GUSS durch.",
+      "Pflegefachkraft beobachtet bei jeder Mahlzeit Husten, Räuspern, feuchte Stimme und verlängerte Schluckdauer.",
+      "Pflegefachkraft kontrolliert nach jeder Mahlzeit die Mundhöhle auf Speisereste.",
+      "Pflegefachkraft überprüft vor jeder Mahlzeit Wachheitszustand und aufrechte Sitzposition.",
+      "Pflegefachkraft dokumentiert jede Auffälligkeit beim Schluckvorgang unmittelbar.",
+      "Pflegefachkraft informiert Logopädie oder Arzt bei neuem Husten, feuchter Stimme, Fieber oder Verdacht auf Aspiration."
+    ]
+  },
+  {
+    "id": "p29-aspirationsgefahr-bei-nahrungsaufnahme",
+    "nr": 29,
+    "category": "Ernährung & Flüssigkeit",
+    "icon": "🫁",
+    "title": "29. Aspirationsgefahr bei Nahrungsaufnahme",
+    "problemText": "Bei der Nahrungs- oder Flüssigkeitsaufnahme besteht das Risiko, dass Speisen, Flüssigkeit oder Speichel in die Atemwege gelangen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind keine Aspirationszeichen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist keine Aspiration aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt bei Aufnahme ein GUSS-Screening oder ein hausinternes Schluckscreening durch.",
+      "Pflegefachkraft beobachtet bei jeder Mahlzeit Schluckvorgang, Husten, Räuspern und Atemnot.",
+      "Pflegefachkraft kontrolliert nach jeder Mahlzeit die Mundhöhle auf Speisereste.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Husten, Fieber, Atemgeräusche und SpO₂.",
+      "Pflegefachkraft stellt bei jeder Mahlzeit eine aufrechte Sitzposition sicher und belässt den Patienten danach 30 Minuten aufrecht.",
+      "Pflegefachkraft dokumentiert Aspirationszeichen unmittelbar und stoppt die orale Gabe bei akuter Gefährdung."
+    ]
+  },
+  {
+    "id": "p30-beeintraechtigte-nahrungsaufnahme",
+    "nr": 30,
+    "category": "Ernährung & Flüssigkeit",
+    "icon": "🍽️",
+    "title": "30. Beeinträchtigte Nahrungsaufnahme",
+    "problemText": "Der Pflegeempfänger kann Nahrung nicht ausreichend aufnehmen, zum Beispiel wegen Appetitlosigkeit, Schwäche, Schmerzen, Kau- oder Schluckproblemen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 3 Tagen sind mindestens 75 % der Mahlzeiten aufgenommen worden."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist der individuelle Kalorienbedarf nach Ernährungsplan gedeckt worden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Ernährungsprotokoll.",
+      "Pflegefachkraft dokumentiert bei jeder Mahlzeit die Nahrungsaufnahme in Prozent.",
+      "Pflegefachkraft erhebt 1× wöchentlich das Mini Nutritional Assessment (MNA).",
+      "Pflegefachkraft kontrolliert 1× wöchentlich das Körpergewicht.",
+      "Pflegefachkraft erfragt vor jeder Hauptmahlzeit Übelkeit, Schmerzen, Appetit und Essenswünsche.",
+      "Pflegefachkraft informiert Ernährungsberatung oder Arzt bei Nahrungsaufnahme unter 50 % über 3 Tage."
+    ]
+  },
+  {
+    "id": "p31-beeintraechtigte-hautintegritaet",
+    "nr": 31,
+    "category": "Haut & Wunde",
+    "icon": "🧴",
+    "title": "31. Beeinträchtigte Hautintegrität",
+    "problemText": "Die Schutzfunktion der Haut ist durch Rötung, Läsion, Mazeration, Trockenheit oder Reizung beeinträchtigt.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen ist keine Vergrößerung der betroffenen Hautstelle aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist die Hautläsion vollständig abgeheilt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 1× pro Schicht die betroffene Hautstelle auf Größe, Farbe, Exsudat und Schmerz.",
+      "Pflegefachkraft dokumentiert täglich Größe, Farbe und Beschaffenheit der Läsion.",
+      "Pflegefachkraft erhebt 1× wöchentlich das Dekubitusrisiko mittels Braden-Skala, wenn Druck als Ursache möglich ist.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Infektionszeichen wie Rötung, Überwärmung, Schwellung und Sekret.",
+      "Pflegefachkraft schützt die Haut nach jeder Reinigung mit geeigneter Hautschutzmaßnahme nach Hausstandard.",
+      "Pflegefachkraft informiert Wundexperte oder Arzt bei Vergrößerung, Geruch, Eiter oder Fieber."
+    ]
+  },
+  {
+    "id": "p32-beeintraechtigte-gewebeintegritaet",
+    "nr": 32,
+    "category": "Haut & Wunde",
+    "icon": "🩹",
+    "title": "32. Beeinträchtigte Gewebeintegrität",
+    "problemText": "Tiefere Gewebeschichten sind geschädigt oder gefährdet, zum Beispiel durch Wunde, Druck, Durchblutungsstörung oder Trauma.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen sind keine neuen Gewebeschäden aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist die Gewebeintegrität wiederhergestellt worden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 1× pro Schicht betroffene Gewebeareale auf Farbe, Temperatur, Schmerz und Sekretion.",
+      "Pflegefachkraft dokumentiert täglich Wundgröße, Wundrand, Wundumgebung und Exsudat.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Infektionszeichen und Durchblutungsstörungen.",
+      "Pflegefachkraft kontrolliert täglich Eiweiß- und Flüssigkeitsaufnahme anhand Ernährungs- und Trinkprotokoll.",
+      "Pflegefachkraft erhebt 1× wöchentlich den PUSH-Score bei chronischen Wunden oder Dekubitus.",
+      "Pflegefachkraft informiert Wundexperte oder Arzt bei Nekrose, zunehmendem Schmerz, Geruch oder Wundvergrößerung."
+    ]
+  },
+  {
+    "id": "p33-wundheilungsstoerung",
+    "nr": 33,
+    "category": "Haut & Wunde",
+    "icon": "🩹",
+    "title": "33. Wundheilungsstörung",
+    "problemText": "Die Wunde heilt verzögert oder zeigt Risikofaktoren wie Infektion, Diabetes, Durchblutungsstörung oder Mangelernährung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen ist die Wundfläche um mindestens 20 % verkleinert worden."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist die Wunde reizlos verheilt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft misst 1× wöchentlich Wundlänge, Wundbreite und Wundtiefe.",
+      "Pflegefachkraft erhebt 1× wöchentlich den PUSH-Score zur Verlaufskontrolle, wenn passend.",
+      "Pflegefachkraft dokumentiert bei jedem Verbandwechsel Wundgrund, Wundrand, Exsudat, Geruch und Umgebungshaut.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Entzündungszeichen, Schmerzen und Fieber.",
+      "Pflegefachkraft kontrolliert täglich ausreichende Nahrungs- und Flüssigkeitsaufnahme als wundheilungsrelevante Faktoren.",
+      "Pflegefachkraft informiert Wundexperte oder Arzt bei zunehmender Exsudation, Geruch, Nekrose oder Fieber."
+    ]
+  },
+  {
+    "id": "p34-infektionsgefahr",
+    "nr": 34,
+    "category": "Haut & Wunde",
+    "icon": "🦠",
+    "title": "34. Infektionsgefahr",
+    "problemText": "Durch Wunden, invasive Zugänge, Katheter, reduzierte Abwehr oder hygienische Risiken besteht ein erhöhtes Infektionsrisiko.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen sind keine Infektionszeichen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist keine Infektion aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 3× täglich die Körpertemperatur.",
+      "Pflegefachkraft beobachtet 1× pro Schicht lokale Entzündungszeichen an Wunden, Zugängen oder Kathetereintrittsstellen.",
+      "Pflegefachkraft kontrolliert 3× täglich Puls, Blutdruck und Allgemeinzustand.",
+      "Pflegefachkraft führt vor und nach jedem Patientenkontakt Händedesinfektion nach den 5 Momenten der WHO durch.",
+      "Pflegefachkraft dokumentiert Temperaturabweichungen und Infektionszeichen sofort.",
+      "Pflegefachkraft informiert den Arzt unverzüglich bei Fieber, Schüttelfrost, eitrigem Sekret oder akuter Verschlechterung."
+    ]
+  },
+  {
+    "id": "p35-dekubitus",
+    "nr": 35,
+    "category": "Haut & Wunde",
+    "icon": "🛏️",
+    "title": "35. Dekubitus",
+    "problemText": "Es besteht bereits ein Druckgeschwür mit Risiko für Wundausbreitung, Infektion, Schmerz und verzögerte Heilung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen ist keine Vergrößerung des Dekubitus aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Bis zur Entlassung ist eine vollständige Wundheilung erreicht worden oder ein klarer Heilungstrend dokumentiert gewesen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich das Dekubitusrisiko mittels Braden-Skala.",
+      "Pflegefachkraft führt alle 2 Stunden einen druckentlastenden Lagewechsel nach individuellem Plan durch.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Wundgrund, Wundrand, Exsudat und Wundumgebung.",
+      "Pflegefachkraft misst 1× wöchentlich die Wundgröße in Länge, Breite und Tiefe.",
+      "Pflegefachkraft erhebt 1× wöchentlich den PUSH-Score zur Verlaufskontrolle.",
+      "Pflegefachkraft dokumentiert den Wundverlauf nach jedem Verbandwechsel und informiert Wundexperte oder Arzt bei Verschlechterung."
+    ]
+  },
+  {
+    "id": "p36-schlafstoerung",
+    "nr": 36,
+    "category": "Schmerz & Ruhe",
+    "icon": "🌙",
+    "title": "36. Schlafstörung",
+    "problemText": "Der Pflegeempfänger schläft schlecht ein oder durch und erlebt dadurch Tagesmüdigkeit, Reizbarkeit oder verminderte Erholung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient gibt innerhalb von 3 Nächten an, mindestens 5 Stunden geschlafen zu haben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt innerhalb von 14 Tagen an, mindestens 6 Stunden erholsam zu schlafen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Schlafprotokoll mit Einschlafzeit, Wachphasen und Schlafdauer.",
+      "Pflegefachkraft erfragt jeden Morgen die subjektive Schlafqualität auf einer Skala von 0–10.",
+      "Pflegefachkraft dokumentiert nächtliche Wachphasen mit Uhrzeit und möglichem Auslöser.",
+      "Pflegefachkraft kontrolliert 1× pro Spätdienst schlafstörende Faktoren wie Schmerzen, Harndrang, Lärm oder Licht.",
+      "Pflegefachkraft bündelt nächtliche Pflegemaßnahmen, soweit medizinisch vertretbar, zur Reduktion von Unterbrechungen.",
+      "Pflegefachkraft evaluiert täglich Schlafdauer und subjektive Erholung."
+    ]
+  },
+  {
+    "id": "p37-beeintraechtigter-schlaf-wach-rhythmus",
+    "nr": 37,
+    "category": "Schmerz & Ruhe",
+    "icon": "🌙",
+    "title": "37. Beeinträchtigter Schlaf-Wach-Rhythmus",
+    "problemText": "Der Pflegeempfänger zeigt einen verschobenen Tag-Nacht-Rhythmus mit Wachphasen nachts und Müdigkeit am Tag.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient gibt innerhalb von 3 Tagen an, nachts überwiegend zu schlafen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung einen geregelten Tag-Nacht-Rhythmus an."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Schlaf-Wach-Protokoll.",
+      "Pflegefachkraft dokumentiert tägliche Schlafzeiten und Tagesruhephasen.",
+      "Pflegefachkraft erfragt täglich die subjektive Schlafqualität auf einer Skala von 0–10.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Tagesmüdigkeit, Unruhe und Konzentration.",
+      "Pflegefachkraft fördert morgens und mittags Tageslichtkontakt und Aktivierung nach Belastbarkeit.",
+      "Pflegefachkraft evaluiert täglich nächtliche Wachphasen und Tagesschlaf."
+    ]
+  },
+  {
+    "id": "p38-akuter-schmerz",
+    "nr": 38,
+    "category": "Schmerz & Ruhe",
+    "icon": "⚡",
+    "title": "38. Akuter Schmerz",
+    "problemText": "Der Pflegeempfänger hat neu aufgetretene Schmerzen, zum Beispiel postoperativ, nach Verletzung oder bei akuter Erkrankung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Schmerzscore ist innerhalb von 6 Stunden von NRS 8 auf NRS 3 reduziert worden."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Schmerzscore ist bis zur Entlassung dauerhaft bei höchstens NRS 3 gewesen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt den Schmerzscore mittels NRS 3× täglich und bei jeder Schmerzäußerung.",
+      "Pflegefachkraft kontrolliert 30 Minuten nach Analgetikagabe erneut den NRS-Wert.",
+      "Pflegefachkraft erfragt bei jeder Schmerzerhebung Lokalisation, Qualität, Dauer und Auslöser.",
+      "Pflegefachkraft unterstützt 3× täglich eine schmerzarme Positionierung nach Patientenangabe.",
+      "Pflegefachkraft beobachtet 1× pro Schicht vegetative Schmerzzeichen wie Schwitzen, Schonhaltung oder Tachykardie.",
+      "Pflegefachkraft informiert den Arzt bei NRS über 4 trotz angeordneter Schmerztherapie."
+    ]
+  },
+  {
+    "id": "p39-chronischer-schmerz",
+    "nr": 39,
+    "category": "Schmerz & Ruhe",
+    "icon": "⚡",
+    "title": "39. Chronischer Schmerz",
+    "problemText": "Der Pflegeempfänger hat länger bestehende Schmerzen, die Alltag, Schlaf, Mobilität oder Stimmung beeinträchtigen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient gibt innerhalb von 7 Tagen einen Schmerzscore von höchstens NRS 4 an."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt innerhalb von 4 Wochen an, Alltagsaktivitäten mit höchstens NRS 3 durchführen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 3× täglich den Schmerzscore mittels NRS.",
+      "Pflegefachkraft führt täglich ein Schmerzprotokoll mit Schmerzort, Dauer, Auslösern und lindernden Faktoren.",
+      "Pflegefachkraft kontrolliert täglich schmerzbedingte Einschränkungen bei Mobilität, Körperpflege und Schlaf.",
+      "Pflegefachkraft kontrolliert täglich Nebenwirkungen der Schmerzmedikation wie Müdigkeit, Übelkeit oder Obstipation.",
+      "Pflegefachkraft unterstützt 2× täglich vereinbarte nichtmedikamentöse Maßnahmen wie Wärme, Kälte oder Entspannung nach Verträglichkeit.",
+      "Pflegefachkraft evaluiert täglich die Wirksamkeit der Schmerztherapie und meldet unzureichende Wirkung."
+    ]
+  },
+  {
+    "id": "p40-angst",
+    "nr": 40,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "40. Angst",
+    "problemText": "Der Pflegeempfänger erlebt Angst im Zusammenhang mit Erkrankung, Behandlung, Schmerzen, Kontrollverlust oder unbekannter Situation.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient gibt innerhalb von 24 Stunden an, seine Angst mit höchstens 3 von 10 Punkten zu bewerten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, keine situationsbezogene Angst mehr zu verspüren."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Angststärke auf einer Skala von 0–10.",
+      "Pflegefachkraft bietet 1× pro Schicht ein strukturiertes Gespräch in ruhiger Umgebung an.",
+      "Pflegefachkraft beobachtet 1× pro Schicht vegetative Angstzeichen wie Tremor, Schwitzen, Tachykardie oder Unruhe.",
+      "Pflegefachkraft erfragt täglich konkrete angstauslösende Faktoren.",
+      "Pflegefachkraft erklärt vor jeder pflegerischen Maßnahme kurz Zweck, Ablauf und Dauer.",
+      "Pflegefachkraft dokumentiert täglich Angstbewertung, Auslöser und wirksame Entlastungsfaktoren."
+    ]
+  },
+  {
+    "id": "p41-furcht",
+    "nr": 41,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "41. Furcht",
+    "problemText": "Der Pflegeempfänger erlebt Furcht vor einer konkreten, benennbaren Situation oder Behandlung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient gibt innerhalb von 24 Stunden an, die auslösende Situation benennen zu können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, sich der Situation gewachsen zu fühlen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Furcht auf einer Skala von 0–10.",
+      "Pflegefachkraft erfragt 1× pro Schicht konkrete Auslöser der Furcht.",
+      "Pflegefachkraft beobachtet 1× pro Schicht vegetative Reaktionen wie Tremor, Schwitzen oder Tachykardie.",
+      "Pflegefachkraft bietet 1× pro Schicht ein strukturiertes Gespräch zur konkreten Situation an.",
+      "Pflegefachkraft erklärt vor der gefürchteten Situation Ablauf, Dauer und Einflussmöglichkeiten.",
+      "Pflegefachkraft dokumentiert täglich Furchtauslöser, subjektive Bewertung und Bewältigungsreaktionen."
+    ]
+  },
+  {
+    "id": "p42-hoffnungslosigkeit",
+    "nr": 42,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "42. Hoffnungslosigkeit",
+    "problemText": "Der Pflegeempfänger äußert fehlende Zukunftsperspektive oder erlebt seine Situation als aussichtslos.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient nennt innerhalb von 3 Tagen mindestens eine persönliche Zukunftsperspektive."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, Hoffnung für seine weitere Lebenssituation zu empfinden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Hoffnungslosigkeit auf einer Skala von 0–10.",
+      "Pflegefachkraft führt 1× pro Schicht ein ressourcenorientiertes Gespräch.",
+      "Pflegefachkraft erfragt täglich persönliche Wünsche, Werte oder erreichbare nächste Schritte.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Rückzug, Passivität und hoffnungslose Aussagen.",
+      "Pflegefachkraft dokumentiert täglich Aussagen zur Zukunftsperspektive und vorhandene Ressourcen.",
+      "Pflegefachkraft informiert Arzt oder psychosozialen Dienst bei Suizidäußerungen oder massiver Verschlechterung sofort."
+    ]
+  },
+  {
+    "id": "p43-hilflosigkeit",
+    "nr": 43,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "43. Hilflosigkeit",
+    "problemText": "Der Pflegeempfänger erlebt sich als machtlos und nimmt eigene Handlungsmöglichkeiten kaum wahr.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient benennt innerhalb von 3 Tagen mindestens zwei eigene Handlungsmöglichkeiten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, Einfluss auf seine Situation nehmen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Hilflosigkeit auf einer Skala von 0–10.",
+      "Pflegefachkraft erfasst 1× wöchentlich die Selbstständigkeit mittels Barthel-Index.",
+      "Pflegefachkraft erfragt täglich wahrgenommene Handlungsmöglichkeiten und Entscheidungswünsche.",
+      "Pflegefachkraft ermöglicht bei jeder Pflegehandlung mindestens eine Wahlmöglichkeit, zum Beispiel Zeitpunkt oder Reihenfolge.",
+      "Pflegefachkraft dokumentiert täglich Ressourcen, Eigenaktivität und selbst getroffene Entscheidungen.",
+      "Pflegefachkraft evaluiert täglich die subjektive Hilflosigkeit und passt Unterstützungsangebote an."
+    ]
+  },
+  {
+    "id": "p44-trauer",
+    "nr": 44,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "44. Trauer",
+    "problemText": "Der Pflegeempfänger verarbeitet einen Verlust und zeigt emotionale Belastung, Rückzug oder Gesprächsbedarf.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient spricht innerhalb von 72 Stunden über seine Verlusterfahrung."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, den Verlust schrittweise in sein Leben einordnen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft bietet 1× pro Schicht ein Gesprächsangebot ohne Gesprächszwang an.",
+      "Pflegefachkraft erfragt täglich belastende Gedanken, Gefühle und aktuelle Bedürfnisse.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Rückzugsverhalten, Weinen, Schlaf und Appetit.",
+      "Pflegefachkraft dokumentiert täglich geäußerte Bedürfnisse und entlastende Faktoren.",
+      "Pflegefachkraft erhebt täglich die subjektive Trauerintensität auf einer Skala von 0–10.",
+      "Pflegefachkraft vermittelt bei Wunsch Kontakt zu Seelsorge, psychosozialem Dienst oder Angehörigen."
+    ]
+  },
+  {
+    "id": "p45-chronische-trauer",
+    "nr": 45,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "45. Chronische Trauer",
+    "problemText": "Der Pflegeempfänger erlebt anhaltende Trauer, die Alltag, Beziehungen oder Selbstfürsorge dauerhaft beeinträchtigt.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient benennt innerhalb von 7 Tagen belastende Gefühle im Zusammenhang mit dem Verlust."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt innerhalb von 4 Wochen an, mindestens zwei Strategien zur Bewältigung seiner Trauer nutzen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Trauerintensität auf einer Skala von 0–10.",
+      "Pflegefachkraft führt 1× pro Schicht ein unterstützendes Gespräch mit Fokus auf Ressourcen und Belastung.",
+      "Pflegefachkraft beobachtet 1× pro Schicht soziale Rückzugstendenzen und Selbstvernachlässigung.",
+      "Pflegefachkraft dokumentiert täglich belastende Themen und Bewältigungsversuche.",
+      "Pflegefachkraft erfragt täglich vorhandene Bewältigungsstrategien und unterstützende Personen.",
+      "Pflegefachkraft regt 1× wöchentlich Kontakt zu Trauerberatung, Seelsorge oder psychosozialem Dienst an, wenn gewünscht."
+    ]
+  },
+  {
+    "id": "p46-depressive-verstimmung",
+    "nr": 46,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "46. Depressive Verstimmung",
+    "problemText": "Der Pflegeempfänger wirkt traurig, antriebsgemindert oder hoffnungslos und zeigt vermindertes Interesse an Aktivitäten.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient bewertet seine Stimmung innerhalb von 7 Tagen mit mindestens 5 von 10 Punkten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, wieder Freude an mindestens einer Aktivität zu empfinden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die Stimmung auf einer Skala von 0–10.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Antrieb, Aktivitätsniveau und Rückzug.",
+      "Pflegefachkraft dokumentiert täglich Schlafdauer, Appetit und Tagesstruktur.",
+      "Pflegefachkraft bietet 1× täglich eine kurze, erreichbare Aktivität nach Interesse des Patienten an.",
+      "Pflegefachkraft achtet 1× pro Schicht auf Hinweise auf Selbstgefährdung oder Suizidäußerungen.",
+      "Pflegefachkraft informiert Arzt oder Fachteam bei deutlicher Verschlechterung oder Selbstgefährdung sofort."
+    ]
+  },
+  {
+    "id": "p47-beeintraechtigtes-coping",
+    "nr": 47,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "47. Beeinträchtigtes Coping",
+    "problemText": "Der Pflegeempfänger kann Belastungen, Erkrankung oder Veränderungen nur eingeschränkt bewältigen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient benennt innerhalb von 3 Tagen zwei individuelle Bewältigungsstrategien."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, belastende Situationen mit mindestens einer Strategie bewältigen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Belastung auf einer Skala von 0–10.",
+      "Pflegefachkraft erfragt täglich bisher erfolgreiche Bewältigungsstrategien.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Umgang mit Belastungssituationen, Rückzug oder Überforderung.",
+      "Pflegefachkraft führt 1× pro Schicht ein reflektierendes Gespräch über Belastung, Ressourcen und nächste Schritte.",
+      "Pflegefachkraft dokumentiert erfolgreiche Bewältigungsversuche und Auslöser von Überforderung.",
+      "Pflegefachkraft evaluiert 1× wöchentlich die subjektive Bewältigungsfähigkeit."
+    ]
+  },
+  {
+    "id": "p48-stressbelastung",
+    "nr": 48,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "48. Stressbelastung",
+    "problemText": "Der Pflegeempfänger erlebt körperliche oder psychische Anspannung durch Krankheit, Pflegeabhängigkeit, Schmerzen oder private Belastung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient bewertet seine Stressbelastung innerhalb von 3 Tagen mit höchstens 4 von 10 Punkten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, seine Belastung mit mindestens einer Strategie kontrollieren zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Stressbelastung auf einer Skala von 0–10.",
+      "Pflegefachkraft beobachtet 1× pro Schicht vegetative Stresszeichen wie Unruhe, Schwitzen, Tachykardie oder Schlafprobleme.",
+      "Pflegefachkraft erfragt täglich Stressauslöser und entlastende Faktoren.",
+      "Pflegefachkraft bietet 1× pro Schicht eine kurze Atem- oder Entspannungsübung an.",
+      "Pflegefachkraft dokumentiert Stressspitzen, Auslöser und hilfreiche Interventionen.",
+      "Pflegefachkraft evaluiert täglich die Stressintensität und passt Reizabschirmung oder Gesprächsangebote an."
+    ]
+  },
+  {
+    "id": "p49-geringes-selbstwertgefuehl",
+    "nr": 49,
+    "category": "Psyche",
+    "icon": "🧠",
+    "title": "49. Geringes Selbstwertgefühl",
+    "problemText": "Der Pflegeempfänger äußert Selbstabwertung, Scham oder Zweifel an eigenen Fähigkeiten.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient nennt innerhalb von 3 Tagen drei persönliche Stärken."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, sich selbst positiver wahrzunehmen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Selbstzufriedenheit auf einer Skala von 0–10.",
+      "Pflegefachkraft dokumentiert täglich positive Selbstaussagen und selbstständig bewältigte Situationen.",
+      "Pflegefachkraft beobachtet 1× pro Schicht selbstabwertende Äußerungen oder Schamverhalten.",
+      "Pflegefachkraft erfragt täglich persönliche Stärken, Ressourcen und frühere Bewältigungserfolge.",
+      "Pflegefachkraft ermöglicht 1× täglich eine realistisch erreichbare Aktivität mit Erfolgserlebnis.",
+      "Pflegefachkraft evaluiert 1× wöchentlich die Selbstwahrnehmung anhand subjektiver Skala und Aussagen."
+    ]
+  },
+  {
+    "id": "p50-akute-verwirrtheit",
+    "nr": 50,
+    "category": "Kognition & Kommunikation",
+    "icon": "🧠",
+    "title": "50. Akute Verwirrtheit",
+    "problemText": "Der Pflegeempfänger zeigt plötzlich auftretende Desorientierung, Aufmerksamkeitsstörung oder Bewusstseinsveränderung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient ist innerhalb von 48 Stunden zur Person orientiert gewesen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient ist bis zur Entlassung zu Person, Ort und Zeit orientiert gewesen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× pro Schicht die Orientierung zu Person, Ort, Zeit und Situation.",
+      "Pflegefachkraft führt 1× pro Schicht ein Delir-Screening mittels DOS-Skala oder CAM durch.",
+      "Pflegefachkraft kontrolliert 3× täglich Blutdruck, Puls, Temperatur und SpO₂.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Veränderungen von Bewusstsein, Aufmerksamkeit und Verhalten.",
+      "Pflegefachkraft stellt 1× pro Schicht Brille, Hörgerät, Uhr und Kalender sichtbar und funktionsfähig bereit.",
+      "Pflegefachkraft informiert den Arzt bei akuter Verschlechterung oder positivem Delir-Screening unverzüglich."
+    ]
+  },
+  {
+    "id": "p51-chronische-verwirrtheit",
+    "nr": 51,
+    "category": "Kognition & Kommunikation",
+    "icon": "🧠",
+    "title": "51. Chronische Verwirrtheit",
+    "problemText": "Der Pflegeempfänger zeigt länger bestehende kognitive Einschränkungen mit Orientierungs- oder Gedächtnisproblemen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient ist innerhalb von 7 Tagen zur Person orientiert gewesen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient ist bis zur Entlassung überwiegend zu Person und Ort orientiert gewesen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× monatlich den MMST oder Uhrentest nach Hausstandard.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht die Orientierung zu Person und Ort.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Gedächtnisprobleme, Suchverhalten und Überforderung.",
+      "Pflegefachkraft nutzt bei jedem Kontakt kurze, klare Sätze und nennt Name, Ort und Situation.",
+      "Pflegefachkraft dokumentiert Veränderungen der kognitiven Fähigkeiten und auslösende Situationen.",
+      "Pflegefachkraft evaluiert monatlich die kognitive Entwicklung anhand Beobachtung und Assessment."
+    ]
+  },
+  {
+    "id": "p52-delirrisiko",
+    "nr": 52,
+    "category": "Kognition & Kommunikation",
+    "icon": "🧠",
+    "title": "52. Delirrisiko",
+    "problemText": "Durch Alter, Infekt, Operation, Schmerzen, Medikamente oder ungewohnte Umgebung besteht ein Risiko für ein akutes Delir.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind keine Delirzeichen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist kein Delir aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt 1× pro Schicht ein Delir-Screening mittels DOS-Skala oder CAM durch.",
+      "Pflegefachkraft kontrolliert 3× täglich Temperatur, Blutdruck, Puls und SpO₂.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Vigilanz, Aufmerksamkeit, Unruhe und Halluzinationen.",
+      "Pflegefachkraft kontrolliert täglich Trinkmenge, Ausscheidung, Schmerzen und Schlaf als Delirrisiken.",
+      "Pflegefachkraft fördert 1× pro Schicht Orientierung durch Uhr, Kalender, Tagesstruktur, Brille und Hörgerät.",
+      "Pflegefachkraft informiert den Arzt bei positivem Delir-Screening oder akuter Bewusstseinsänderung sofort."
+    ]
+  },
+  {
+    "id": "p53-gedaechtnisstoerung",
+    "nr": 53,
+    "category": "Kognition & Kommunikation",
+    "icon": "🧠",
+    "title": "53. Gedächtnisstörung",
+    "problemText": "Der Pflegeempfänger kann Informationen, Termine oder Alltagsabläufe nicht ausreichend behalten oder abrufen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen drei vereinbarte Informationen wiedergegeben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung wichtige Alltagsinformationen wiedergeben können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× monatlich den MMST oder Uhrentest nach Hausstandard.",
+      "Pflegefachkraft überprüft täglich die Erinnerungsfähigkeit anhand drei vereinbarter Alltagsinformationen.",
+      "Pflegefachkraft dokumentiert Gedächtnisdefizite, Auslöser und erfolgreiche Hilfen zeitnah.",
+      "Pflegefachkraft nutzt bei wichtigen Informationen 1× pro Gespräch die Teach-Back-Methode.",
+      "Pflegefachkraft unterstützt täglich mit sichtbaren Orientierungshilfen wie Tagesplan, Kalender oder Namensschild.",
+      "Pflegefachkraft evaluiert monatlich die Gedächtnisleistung anhand Assessment und Alltagsbeobachtung."
+    ]
+  },
+  {
+    "id": "p54-orientierungsstoerung",
+    "nr": 54,
+    "category": "Kognition & Kommunikation",
+    "icon": "🧭",
+    "title": "54. Orientierungsstörung",
+    "problemText": "Der Pflegeempfänger ist zu Person, Ort, Zeit oder Situation eingeschränkt orientiert.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient ist innerhalb von 48 Stunden zur Person und zum Ort orientiert gewesen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient ist bis zur Entlassung zu Person, Ort und Zeit orientiert gewesen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft kontrolliert 1× pro Schicht die Orientierung zu Person, Ort, Zeit und Situation.",
+      "Pflegefachkraft erhebt 1× monatlich den MMST oder Uhrentest nach Hausstandard.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Weglauftendenz, Suchverhalten und Fehlhandlungen.",
+      "Pflegefachkraft nutzt bei jedem Kontakt orientierende Informationen zu Name, Ort, Datum und Tagesstruktur.",
+      "Pflegefachkraft stellt 1× pro Schicht Uhr, Kalender, Brille und Hörgerät sichtbar und funktionsfähig bereit.",
+      "Pflegefachkraft dokumentiert Orientierungsstörungen mit Situation, Uhrzeit und Auslöser."
+    ]
+  },
+  {
+    "id": "p55-wahrnehmungsstoerung",
+    "nr": 55,
+    "category": "Kognition & Kommunikation",
+    "icon": "👁️",
+    "title": "55. Wahrnehmungsstörung",
+    "problemText": "Der Pflegeempfänger nimmt Reize verändert, vermindert oder fehlerhaft wahr, zum Beispiel durch Seh-, Hör- oder neurologische Einschränkungen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen Wahrnehmungsveränderungen benennen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, seine Umgebung sicher wahrnehmen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× täglich die subjektive Wahrnehmung des Patienten durch gezielte Fragen.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Halluzinationen, Fehlwahrnehmungen oder Reizüberforderung.",
+      "Pflegefachkraft überprüft täglich Brille, Hörgerät und andere Sinneshilfen auf Funktion und Verfügbarkeit.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht die Umgebung auf ausreichende Beleuchtung und reduzierte Stolpergefahr.",
+      "Pflegefachkraft dokumentiert jede Wahrnehmungsveränderung mit Situation und möglichem Auslöser.",
+      "Pflegefachkraft informiert den Arzt bei plötzlich auftretenden Wahrnehmungsstörungen oder neurologischen Auffälligkeiten."
+    ]
+  },
+  {
+    "id": "p56-beeintraechtigte-verbale-kommunikation",
+    "nr": 56,
+    "category": "Kognition & Kommunikation",
+    "icon": "💬",
+    "title": "56. Beeinträchtigte verbale Kommunikation",
+    "problemText": "Der Pflegeempfänger kann Bedürfnisse, Informationen oder Gefühle verbal nur eingeschränkt ausdrücken oder verstehen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen grundlegende Bedürfnisse verständlich äußern können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung Gespräche situationsgerecht führen können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich die Kommunikationsfähigkeit mit einem strukturierten Sprach- und Kommunikationsscreening nach Hausstandard.",
+      "Pflegefachkraft überprüft täglich Sprachverständnis durch Ja/Nein-Fragen und kurze Rückfragen.",
+      "Pflegefachkraft nutzt bei jedem Gespräch kurze Sätze, Blickkontakt und ausreichend Antwortzeit.",
+      "Pflegefachkraft stellt täglich Brille, Hörgerät, Schreibtafel oder Bildkarten verfügbar bereit.",
+      "Pflegefachkraft dokumentiert Kommunikationsbarrieren und wirksame Kommunikationswege.",
+      "Pflegefachkraft informiert Logopädie oder Arzt bei neu aufgetretener Sprachstörung oder Verschlechterung."
+    ]
+  },
+  {
+    "id": "p57-kommunikationsstoerung",
+    "nr": 57,
+    "category": "Kognition & Kommunikation",
+    "icon": "💬",
+    "title": "57. Kommunikationsstörung",
+    "problemText": "Der Pflegeempfänger kann Informationen nur eingeschränkt senden, empfangen oder verarbeiten; dadurch entstehen Missverständnisse und Pflegeabhängigkeit.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen Wünsche und Bedürfnisse verständlich mitteilen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung erfolgreich an Gesprächen teilnehmen können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich Kommunikationsfähigkeit und Hilfsmittelbedarf anhand strukturierter Beobachtung nach Hausstandard.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Kommunikationshindernisse wie Hörminderung, Aphasie, Unruhe oder Sprachbarriere.",
+      "Pflegefachkraft nutzt bei jedem Informationsgespräch die Teach-Back-Methode zur Verständnissicherung.",
+      "Pflegefachkraft stellt täglich notwendige Kommunikationshilfen wie Brille, Hörgerät, Bildkarten oder Schreibmaterial bereit.",
+      "Pflegefachkraft dokumentiert Missverständnisse, erfolgreiche Strategien und bevorzugte Kommunikationsform zeitnah.",
+      "Pflegefachkraft bezieht bei Bedarf 1× werktäglich Logopädie, Angehörige oder Dolmetschdienst nach Hausstandard ein."
+    ]
+  },
+  {
+    "id": "p58-sprachstoerung",
+    "nr": 58,
+    "category": "Kognition & Kommunikation",
+    "icon": "🗣️",
+    "title": "58. Sprachstörung",
+    "problemText": "Der Pflegeempfänger zeigt Schwierigkeiten bei Artikulation, Wortfindung, Sprachverständnis oder Satzbildung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 7 Tagen einfache Wörter verständlich äußern können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung einfache Sätze verständlich formulieren können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft beobachtet 1× pro Schicht Sprachverständnis, Wortfindung und Sprachproduktion.",
+      "Pflegefachkraft überprüft täglich einfache Aufforderungen und dokumentiert das Sprachverständnis.",
+      "Pflegefachkraft gibt bei jedem Gespräch ausreichend Antwortzeit und vermeidet Unterbrechen.",
+      "Pflegefachkraft nutzt täglich ergänzende Kommunikationsmittel wie Gestik, Bildkarten oder Schreibtafel.",
+      "Pflegefachkraft dokumentiert Sprachauffälligkeiten und erfolgreiche Verständigungswege zeitnah.",
+      "Pflegefachkraft informiert Logopädie oder Arzt bei neu aufgetretener oder zunehmender Sprachstörung."
+    ]
+  },
+  {
+    "id": "p59-aphasie",
+    "nr": 59,
+    "category": "Kognition & Kommunikation",
+    "icon": "🗣️",
+    "title": "59. Aphasie",
+    "problemText": "Der Pflegeempfänger hat nach neurologischer Schädigung eine Störung von Sprachproduktion oder Sprachverständnis.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 7 Tagen mindestens fünf alltagsrelevante Begriffe korrekt benennen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung einfache Gesprächsinhalte verständlich vermitteln können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich alltagsnahe Kommunikationsfähigkeit anhand eines Aphasie-Screenings nach logopädischem oder hausinternem Standard.",
+      "Pflegefachkraft überprüft täglich Sprachverständnis mit einfachen Ja/Nein-Fragen.",
+      "Pflegefachkraft nutzt bei jedem Gespräch kurze Sätze, eindeutige Fragen und ausreichend Antwortzeit.",
+      "Pflegefachkraft stellt täglich Bildkarten, Schreibtafel oder Kommunikationsmappe bereit.",
+      "Pflegefachkraft dokumentiert Wortfindungsstörungen, Verständnisschwierigkeiten und erfolgreiche Strategien.",
+      "Pflegefachkraft stimmt 1× werktäglich Kommunikationsstrategien mit Logopädie oder Therapeutenteam ab."
+    ]
+  },
+  {
+    "id": "p60-eingeschraenkte-informationsverarbeitung",
+    "nr": 60,
+    "category": "Kognition & Kommunikation",
+    "icon": "🧠",
+    "title": "60. Eingeschränkte Informationsverarbeitung",
+    "problemText": "Der Pflegeempfänger kann Informationen nur verlangsamt, unvollständig oder fehlerhaft aufnehmen und umsetzen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen zwei wichtige Informationen korrekt wiedergeben können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung pflegerelevante Informationen nachvollziehen können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft überprüft täglich das Verständnis wichtiger Informationen durch Teach-Back-Methode.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Konzentrationsstörungen, Überforderung und Rückfragenbedarf.",
+      "Pflegefachkraft teilt jede Beratung in kurze Informationseinheiten mit maximal 2–3 Kernaussagen auf.",
+      "Pflegefachkraft erhebt 1× monatlich MMST oder Uhrentest, wenn kognitive Einschränkung vermutet wird.",
+      "Pflegefachkraft überprüft täglich die Merkfähigkeit anhand zuvor besprochener Inhalte.",
+      "Pflegefachkraft dokumentiert Verständnisprobleme, erfolgreiche Erklärformen und offene Fragen."
+    ]
+  },
+  {
+    "id": "p61-selbstpflegedefizit-koerperpflege",
+    "nr": 61,
+    "category": "Selbstpflege",
+    "icon": "🧼",
+    "title": "61. Selbstpflegedefizit Körperpflege",
+    "problemText": "Der Pflegeempfänger kann die Körperpflege aufgrund von Schwäche, Schmerzen, Bewegungseinschränkung oder Kognition nicht vollständig selbst durchführen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen mindestens 50 % der Körperpflege selbst durchgeführt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung mindestens 80 % der Körperpflege selbst durchgeführt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index mit Fokus auf Körperpflege.",
+      "Pflegefachkraft erfasst täglich den Grad der Selbstständigkeit bei Gesicht, Oberkörper, Intimbereich und Unterkörper.",
+      "Pflegefachkraft stellt vor jeder Körperpflege benötigte Materialien in erreichbarer Nähe bereit.",
+      "Pflegefachkraft gibt bei jeder Körperpflege klare Schritt-für-Schritt-Anleitung und übernimmt nur nicht leistbare Teilhandlungen.",
+      "Pflegefachkraft überprüft bei jeder Körperpflege Hautintegrität, Schmerzen und Belastbarkeit.",
+      "Pflegefachkraft dokumentiert täglich selbstständig übernommene Pflegeschritte und Unterstützungsbedarf."
+    ]
+  },
+  {
+    "id": "p62-selbstpflegedefizit-duschen-baden",
+    "nr": 62,
+    "category": "Selbstpflege",
+    "icon": "🚿",
+    "title": "62. Selbstpflegedefizit Duschen/Baden",
+    "problemText": "Der Pflegeempfänger kann Duschen oder Baden wegen Kraftmangel, Unsicherheit, Schmerzen oder kognitiver Einschränkung nicht selbstständig durchführen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen Oberkörper und Gesicht selbst gereinigt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung die Körperreinigung weitgehend selbst übernommen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index mit Fokus auf Waschen und Baden.",
+      "Pflegefachkraft kontrolliert vor jeder Dusche oder jedem Bad Kreislaufstabilität, Belastbarkeit und Rutschgefahr.",
+      "Pflegefachkraft stellt vor jeder Körperreinigung Material, Handtuch und Kleidung in sinnvoller Reihenfolge bereit.",
+      "Pflegefachkraft beobachtet bei jeder Körperpflege Kraft, Ausdauer, Koordination und Schwindel.",
+      "Pflegefachkraft achtet bei jeder Körperreinigung auf Intimsphäre, Temperaturwunsch und Schamgrenzen.",
+      "Pflegefachkraft dokumentiert täglich selbstständig durchgeführte Hygieneschritte und benötigte Unterstützung."
+    ]
+  },
+  {
+    "id": "p63-selbstpflegedefizit-ankleiden",
+    "nr": 63,
+    "category": "Selbstpflege",
+    "icon": "👕",
+    "title": "63. Selbstpflegedefizit Ankleiden",
+    "problemText": "Der Pflegeempfänger kann Kleidung nicht vollständig auswählen, anlegen oder ausziehen, zum Beispiel durch Hemiparese, Schmerzen oder Erschöpfung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen den Oberkörper selbstständig angekleidet."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung die Kleidung vollständig selbst angelegt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index mit Fokus auf An- und Auskleiden.",
+      "Pflegefachkraft legt Kleidung täglich in passender Reihenfolge und griffbereit bereit.",
+      "Pflegefachkraft beobachtet bei jedem Ankleiden Feinmotorik, Beweglichkeit und Belastbarkeit.",
+      "Pflegefachkraft leitet bei Hemiparese jedes Ankleiden mit der Regel 'betroffene Seite zuerst anziehen, zuletzt ausziehen' an.",
+      "Pflegefachkraft gibt bei jedem Ankleiden ausreichend Zeit und übernimmt nur nicht leistbare Schritte.",
+      "Pflegefachkraft dokumentiert täglich selbstständig angelegte Kleidungsstücke und Unterstützungsbedarf."
+    ]
+  },
+  {
+    "id": "p64-selbstpflegedefizit-essen",
+    "nr": 64,
+    "category": "Selbstpflege",
+    "icon": "🍽️",
+    "title": "64. Selbstpflegedefizit Essen",
+    "problemText": "Der Pflegeempfänger kann Mahlzeiten nicht ausreichend selbstständig einnehmen, zum Beispiel durch Tremor, Schwäche, Koordinations- oder Schluckprobleme.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen mindestens 75 % der Mahlzeiten selbstständig eingenommen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung alle Mahlzeiten selbstständig eingenommen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index mit Fokus auf Essen.",
+      "Pflegefachkraft dokumentiert bei jeder Mahlzeit den Grad der Selbstständigkeit.",
+      "Pflegefachkraft beobachtet bei jeder Mahlzeit Feinmotorik, Hand-Mund-Koordination und Ermüdung.",
+      "Pflegefachkraft kontrolliert bei jeder Mahlzeit die verzehrte Nahrungsmenge in Prozent.",
+      "Pflegefachkraft beobachtet bei jeder Mahlzeit Kau- und Schluckprobleme.",
+      "Pflegefachkraft passt bei jeder Mahlzeit Unterstützung an Ressourcen an und übernimmt nur notwendige Teilhandlungen."
+    ]
+  },
+  {
+    "id": "p65-selbstpflegedefizit-trinken",
+    "nr": 65,
+    "category": "Selbstpflege",
+    "icon": "💧",
+    "title": "65. Selbstpflegedefizit Trinken",
+    "problemText": "Der Pflegeempfänger kann Flüssigkeit nicht ausreichend selbstständig aufnehmen, zum Beispiel wegen Schwäche, Tremor, Vergessen oder Schluckstörung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen Getränke selbstständig aufgenommen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung seinen Flüssigkeitsbedarf selbstständig gedeckt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt täglich ein Trinkprotokoll mit ml-Angaben.",
+      "Pflegefachkraft dokumentiert bei jeder Flüssigkeitsaufnahme den Grad der Selbstständigkeit.",
+      "Pflegefachkraft beobachtet bei jeder Trinksituation Greiffähigkeit, Schluckfähigkeit und Hustenreiz.",
+      "Pflegefachkraft kontrolliert täglich die aufgenommene Trinkmenge im Verhältnis zur vereinbarten Trinkmenge.",
+      "Pflegefachkraft überprüft 1× pro Schicht Exsikkosezeichen wie trockene Schleimhäute, Hautturgor und Schwindel.",
+      "Pflegefachkraft stellt stündlich ein geeignetes Getränk erreichbar bereit, sofern keine Kontraindikation besteht."
+    ]
+  },
+  {
+    "id": "p66-selbstpflegedefizit-toilettengang",
+    "nr": 66,
+    "category": "Selbstpflege",
+    "icon": "🚽",
+    "title": "66. Selbstpflegedefizit Toilettengang",
+    "problemText": "Der Pflegeempfänger kann den Toilettengang nicht vollständig selbstständig bewältigen, zum Beispiel wegen Mobilität, Gleichgewicht oder Orientierung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen den Toilettengang aktiv mitgestaltet."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung den Toilettengang selbstständig durchgeführt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index mit Fokus auf Toilettenbenutzung.",
+      "Pflegefachkraft dokumentiert jede selbstständig durchgeführte oder teilselbstständige Toilettennutzung.",
+      "Pflegefachkraft beobachtet bei jedem Toilettengang Mobilität, Transferfähigkeit, Gleichgewicht und Sicherheit.",
+      "Pflegefachkraft unterstützt Toilettengänge zu individuell festgelegten Zeiten nach Ausscheidungsprotokoll.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Hautzustand im Intimbereich.",
+      "Pflegefachkraft evaluiert 1× wöchentlich Selbstständigkeit und Unterstützungsbedarf beim Toilettengang."
+    ]
+  },
+  {
+    "id": "p67-selbstpflegedefizit-mundpflege",
+    "nr": 67,
+    "category": "Selbstpflege",
+    "icon": "🦷",
+    "title": "67. Selbstpflegedefizit Mundpflege",
+    "problemText": "Der Pflegeempfänger kann die Mundpflege nicht ausreichend selbst durchführen; Risiko für Beläge, Infektionen, Schmerzen oder Mundschleimhautschäden besteht.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen die Mundpflege teilweise selbst durchgeführt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung die Mundpflege selbstständig durchgeführt."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich den Barthel-Index mit Fokus auf Selbstpflegefähigkeit.",
+      "Pflegefachkraft beurteilt 1× pro Schicht die Mundgesundheit anhand des Oral Health Assessment Tool (OHAT), wenn im Hausstandard vorgesehen.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Mundschleimhaut, Zunge, Zähne, Prothesen und Druckstellen.",
+      "Pflegefachkraft leitet 2× täglich Mundpflege schrittweise an und übernimmt nur nicht leistbare Teilhandlungen.",
+      "Pflegefachkraft reinigt Prothesen 2× täglich oder unterstützt den Patienten dabei.",
+      "Pflegefachkraft dokumentiert Auffälligkeiten wie Beläge, Soorverdacht, Schmerzen oder Blutungen."
+    ]
+  },
+  {
+    "id": "p68-soziale-isolation",
+    "nr": 68,
+    "category": "Soziales & Angehörige",
+    "icon": "🤝",
+    "title": "68. Soziale Isolation",
+    "problemText": "Der Pflegeempfänger hat wenige soziale Kontakte oder zieht sich krankheits-, scham- oder mobilitätsbedingt zurück.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen an mindestens einem sozialen Kontakt teilgenommen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, sich sozial eingebunden zu fühlen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich soziale Kontakte, Besuchswünsche und Teilhabebedarf in einem strukturierten Gespräch.",
+      "Pflegefachkraft dokumentiert täglich soziale Kontakte, Besuch, Telefonate oder Gruppenangebote.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Rückzug, Ablehnung von Kontakt und Stimmung.",
+      "Pflegefachkraft bietet 1× täglich einen kurzen verbindlichen Kontaktmoment an.",
+      "Pflegefachkraft unterstützt 1× täglich auf Wunsch Telefonat, Besuchsplanung oder Kontaktaufnahme.",
+      "Pflegefachkraft evaluiert 1× wöchentlich subjektives Eingebundensein auf einer Skala von 0–10."
+    ]
+  },
+  {
+    "id": "p69-einsamkeit",
+    "nr": 69,
+    "category": "Soziales & Angehörige",
+    "icon": "🤝",
+    "title": "69. Einsamkeit",
+    "problemText": "Der Pflegeempfänger erlebt subjektiv fehlende Nähe, Zugehörigkeit oder Unterstützung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen mindestens ein Gespräch mit einer Bezugsperson geführt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, sich nicht einsam zu fühlen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt täglich die subjektive Einsamkeit auf einer Skala von 0–10.",
+      "Pflegefachkraft dokumentiert täglich soziale Kontakte und Gesprächsdauer.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Rückzugsverhalten, Traurigkeit und Kontaktwunsch.",
+      "Pflegefachkraft erfragt täglich gewünschte Bezugspersonen und bevorzugte Kontaktform.",
+      "Pflegefachkraft unterstützt 1× täglich Telefonat, Videotelefonat oder Besuchsorganisation nach Wunsch.",
+      "Pflegefachkraft evaluiert 1× wöchentlich die Entwicklung der Einsamkeit anhand Skala und Patientenaussage."
+    ]
+  },
+  {
+    "id": "p70-beeintraechtigte-soziale-interaktion",
+    "nr": 70,
+    "category": "Soziales & Angehörige",
+    "icon": "🤝",
+    "title": "70. Beeinträchtigte soziale Interaktion",
+    "problemText": "Der Pflegeempfänger hat Schwierigkeiten, angemessen Kontakte aufzunehmen, zu halten oder in Gesprächen zu reagieren.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen aktiv an einem Gespräch teilgenommen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung täglich mindestens einen sozialen Kontakt wahrgenommen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft dokumentiert täglich Anzahl und Art sozialer Interaktionen.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Kommunikationsverhalten, Blickkontakt, Rückzug und Konflikte.",
+      "Pflegefachkraft bietet 1× täglich ein kurzes Gespräch mit klarer Struktur an.",
+      "Pflegefachkraft unterstützt 1× täglich Teilnahme an einem geeigneten Gruppen- oder Kontaktangebot, wenn gewünscht.",
+      "Pflegefachkraft dokumentiert Konflikte, Überforderung oder gelungene Interaktionen zeitnah.",
+      "Pflegefachkraft evaluiert 1× wöchentlich soziale Interaktion anhand Beobachtung und Patientenaussage."
+    ]
+  },
+  {
+    "id": "p71-beeintraechtigte-familienprozesse",
+    "nr": 71,
+    "category": "Soziales & Angehörige",
+    "icon": "👪",
+    "title": "71. Beeinträchtigte Familienprozesse",
+    "problemText": "Familiäre Kommunikation, Rollen oder Unterstützung sind durch Erkrankung, Pflegebedürftigkeit oder Belastung beeinträchtigt.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Familie hat innerhalb von 7 Tagen gemeinsame Belastungen benennen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Familie gibt bis zur Entlassung an, konstruktiv miteinander umgehen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft führt 1× wöchentlich ein geplantes Angehörigengespräch mit Einwilligung des Patienten.",
+      "Pflegefachkraft dokumentiert familiäre Belastungen, Rollen und Unterstützungsressourcen.",
+      "Pflegefachkraft erfasst 1× wöchentlich Kommunikationsprobleme, Konflikte und offene Fragen der Familie.",
+      "Pflegefachkraft klärt bei jedem Angehörigengespräch konkrete Informationsbedarfe und Grenzen der Einbeziehung.",
+      "Pflegefachkraft vermittelt bei Bedarf Kontakt zu Sozialdienst, Pflegeberatung oder Familienberatung.",
+      "Pflegefachkraft evaluiert 1× monatlich oder vor Entlassung die familiäre Unterstützungssituation."
+    ]
+  },
+  {
+    "id": "p72-angehoerigenbelastung",
+    "nr": 72,
+    "category": "Soziales & Angehörige",
+    "icon": "👪",
+    "title": "72. Angehörigenbelastung",
+    "problemText": "Angehörige erleben körperliche, psychische, organisatorische oder finanzielle Belastung durch Pflege und Sorge.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Angehörigen haben innerhalb von 7 Tagen eigene Belastungen benennen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Angehörigen geben bis zur Entlassung an, ihre Belastung als bewältigbar zu erleben."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× monatlich oder vor Entlassung die Belastung mittels Zarit Burden Interview, wenn passend.",
+      "Pflegefachkraft dokumentiert Belastungsäußerungen, Überforderung und Unterstützungsbedarf.",
+      "Pflegefachkraft erfasst 1× wöchentlich vorhandene Ressourcen und Entlastungsmöglichkeiten.",
+      "Pflegefachkraft informiert Angehörige 1× vor Entlassung über Pflegeberatung, Kurzzeitpflege, Verhinderungspflege oder Sozialdienst.",
+      "Pflegefachkraft beobachtet bei Gesprächen Überforderungszeichen wie Weinen, Gereiztheit oder Erschöpfung.",
+      "Pflegefachkraft evaluiert vor Entlassung, ob die Angehörigen konkrete Entlastungsangebote benennen können."
+    ]
+  },
+  {
+    "id": "p73-ueberforderung-pflegender-angehoeriger",
+    "nr": 73,
+    "category": "Soziales & Angehörige",
+    "icon": "👪",
+    "title": "73. Überforderung pflegender Angehöriger",
+    "problemText": "Pflegende Angehörige sind durch Pflegeaufgaben, Verantwortung oder fehlende Unterstützung überlastet.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Die Angehörigen haben innerhalb von 7 Tagen mindestens zwei Entlastungsmöglichkeiten benannt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Die Angehörigen geben bis zur Entlassung an, die Pflegesituation bewältigen zu können."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× monatlich oder vor Entlassung das Zarit Burden Interview, wenn passend.",
+      "Pflegefachkraft dokumentiert Überlastungsanzeichen, Pflegeaufgaben und Belastungsfaktoren.",
+      "Pflegefachkraft erfasst 1× wöchentlich vorhandene Unterstützungsnetzwerke.",
+      "Pflegefachkraft vermittelt 1× vor Entlassung Kontakt zu Sozialdienst oder Pflegeberatung.",
+      "Pflegefachkraft überprüft vor Entlassung, ob Entlastungsangebote wie Tagespflege, Kurzzeitpflege oder ambulanter Dienst bekannt sind.",
+      "Pflegefachkraft evaluiert vor Entlassung die subjektive Bewältigbarkeit der Pflegesituation auf einer Skala von 0–10."
+    ]
+  },
+  {
+    "id": "p74-selbstgefaehrdung",
+    "nr": 74,
+    "category": "Sicherheit",
+    "icon": "🛡️",
+    "title": "74. Selbstgefährdung",
+    "problemText": "Der Pflegeempfänger zeigt Risiko für selbstschädigendes Verhalten, Suizidalität, Weglaufen, Fehlhandlungen oder gefährdende Impulse.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind keine selbstgefährdenden Handlungen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts sind keine selbstgefährdenden Handlungen aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× pro Schicht das Suizidrisiko mittels NGASR, wenn Suizidalität vermutet wird und das Instrument im Hausstandard vorgesehen ist.",
+      "Pflegefachkraft beobachtet 1× pro Schicht selbstgefährdende Aussagen, Handlungen, Rückzug und Impulsivität.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht potenziell gefährliche Gegenstände nach Hausstandard und rechtlicher Zulässigkeit.",
+      "Pflegefachkraft führt 1× pro Schicht ein Sicherheitsgespräch mit klarer Absprache zu Hilfeholen und Notfallkontakt.",
+      "Pflegefachkraft dokumentiert jede Risikosituation sofort mit Auslöser, Verhalten und Schutzmaßnahme.",
+      "Pflegefachkraft informiert Arzt oder Krisendienst bei Risikosteigerung unverzüglich."
+    ]
+  },
+  {
+    "id": "p75-fremdgefaehrdung",
+    "nr": 75,
+    "category": "Sicherheit",
+    "icon": "🛡️",
+    "title": "75. Fremdgefährdung",
+    "problemText": "Der Pflegeempfänger zeigt Risiko, andere Personen verbal, körperlich oder situativ zu gefährden.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden sind keine fremdgefährdenden Handlungen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts sind keine fremdgefährdenden Handlungen aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× pro Schicht das Aggressionsrisiko mittels Brøset Violence Checklist.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Drohungen, Anspannung, motorische Unruhe und Grenzverletzungen.",
+      "Pflegefachkraft erfasst 1× pro Schicht Auslöser aggressiven Verhaltens, zum Beispiel Schmerz, Angst oder Überforderung.",
+      "Pflegefachkraft reduziert bei Anspannung sofort Reize, wahrt Abstand und nutzt deeskalierende Kommunikation.",
+      "Pflegefachkraft dokumentiert jede Eskalationssituation unmittelbar mit Auslöser, Verlauf und Maßnahme.",
+      "Pflegefachkraft informiert Arzt oder Sicherheits-/Krisenteam bei Risikosteigerung unverzüglich."
+    ]
+  },
+  {
+    "id": "p76-weglauftendenz",
+    "nr": 76,
+    "category": "Sicherheit",
+    "icon": "🚪",
+    "title": "76. Weglauftendenz",
+    "problemText": "Der Pflegeempfänger verlässt aufgrund von Desorientierung, Unruhe oder Suchverhalten gefährdet den sicheren Bereich.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden hat der Patient die Station nicht unbeaufsichtigt verlassen."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist kein Weglaufen aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× pro Schicht Orientierung zu Person, Ort, Zeit und Situation.",
+      "Pflegefachkraft dokumentiert jeden Weglaufversuch oder jedes Verlassen des sicheren Bereichs sofort.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Suchverhalten, Unruhe, Türfixierung und Bewegungsdrang.",
+      "Pflegefachkraft erfasst täglich Auslöser für Weglauftendenz, zum Beispiel Toilettendrang, Schmerz, Angst oder Heimweh.",
+      "Pflegefachkraft überprüft 1× pro Schicht den Aufenthaltsort des Patienten im Rahmen der zulässigen Aufsichtspflicht.",
+      "Pflegefachkraft leitet bei akuter Weglaufgefährdung unverzüglich das hausinterne Schutz- und Suchschema ein."
+    ]
+  },
+  {
+    "id": "p77-gewaltgefaehrdung",
+    "nr": 77,
+    "category": "Sicherheit",
+    "icon": "🛡️",
+    "title": "77. Gewaltgefährdung",
+    "problemText": "Es besteht Risiko für Gewalt durch oder gegen den Pflegeempfänger, zum Beispiel bei Aggression, Überforderung oder eskalierenden Situationen.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen sind keine Gewalthandlungen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist keine Gewaltsituation aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× pro Schicht das Aggressionsrisiko mittels Brøset Violence Checklist.",
+      "Pflegefachkraft beobachtet 1× pro Schicht verbale Aggression, Drohungen, Abwehrverhalten und körperliche Anspannung.",
+      "Pflegefachkraft erfasst täglich auslösende Faktoren wie Schmerz, Scham, Angst, Wartezeit oder Reizüberflutung.",
+      "Pflegefachkraft nutzt bei Anspannung sofort deeskalierende Kommunikation mit ruhiger Stimme, Abstand und klaren Grenzen.",
+      "Pflegefachkraft dokumentiert jede Gewaltsituation unmittelbar mit Verlauf, Beteiligten und Schutzmaßnahmen.",
+      "Pflegefachkraft informiert Teamleitung, Arzt oder Krisenteam bei Eskalationsrisiko unverzüglich."
+    ]
+  },
+  {
+    "id": "p78-medikationsfehler-risiko",
+    "nr": 78,
+    "category": "Sicherheit",
+    "icon": "💊",
+    "title": "78. Medikationsfehler-Risiko",
+    "problemText": "Durch Polypharmazie, Verständnisprobleme, Schluckstörung, Verordnungswechsel oder Selbstmanagementprobleme besteht ein Risiko für Medikationsfehler.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 7 Tagen sind keine Medikationsabweichungen aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts sind keine Medikationsfehler aufgetreten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft überprüft vor jeder Medikamentengabe die 6-R-Regel.",
+      "Pflegefachkraft kontrolliert jede ärztliche Verordnung auf Patient, Wirkstoff, Dosis, Applikationsform, Zeitpunkt und Besonderheiten.",
+      "Pflegefachkraft dokumentiert jede Medikamentengabe unmittelbar nach Durchführung.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht unerwünschte Arzneimittelwirkungen und Schluckprobleme.",
+      "Pflegefachkraft überprüft täglich die Aktualität des Medikationsplans bei Verordnungsänderungen.",
+      "Pflegefachkraft meldet Medikationsabweichungen nach Hausstandard, zum Beispiel über CIRS, und informiert zuständige Stelle sofort."
+    ]
+  },
+  {
+    "id": "p79-verletzungsgefahr",
+    "nr": 79,
+    "category": "Sicherheit",
+    "icon": "⚠️",
+    "title": "79. Verletzungsgefahr",
+    "problemText": "Durch Sturz, Desorientierung, Umgebung, Sensibilitätsstörung oder Risikoverhalten besteht erhöhte Verletzungsgefahr.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Innerhalb von 72 Stunden ist keine Verletzung aufgetreten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Während des Aufenthalts ist Verletzungsfreiheit erhalten geblieben."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich die Morse-Fall-Skala, wenn Sturz als Verletzungsrisiko relevant ist.",
+      "Pflegefachkraft kontrolliert 1× pro Schicht Zimmer, Bad, Bettumgebung und Laufwege auf Gefahrenquellen.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Risikoverhalten, Unruhe, Desorientierung und unsichere Bewegungen.",
+      "Pflegefachkraft überprüft täglich Schutzmaßnahmen wie passende Schuhe, niedrige Betthöhe und erreichbare Klingel.",
+      "Pflegefachkraft dokumentiert jede Verletzung oder Beinahe-Verletzung unmittelbar.",
+      "Pflegefachkraft evaluiert 1× wöchentlich die Verletzungsgefährdung anhand Ereignissen und Assessment."
+    ]
+  },
+  {
+    "id": "p80-wissensdefizit",
+    "nr": 80,
+    "category": "Wissen & Beratung",
+    "icon": "📘",
+    "title": "80. Wissensdefizit",
+    "problemText": "Der Pflegeempfänger verfügt nicht über ausreichende Informationen zu Erkrankung, Pflege, Risiken, Therapie oder Selbstmanagement.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen drei wesentliche Informationen zur Erkrankung korrekt wiedergegeben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung alle relevanten Therapieinhalte korrekt wiedergegeben."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt vor jeder Beratung den Wissensstand mit offenen Fragen.",
+      "Pflegefachkraft erklärt 1× täglich maximal 2–3 Kernaussagen in einfacher Sprache.",
+      "Pflegefachkraft überprüft nach jeder Beratung das Verständnis mittels Teach-Back-Methode.",
+      "Pflegefachkraft dokumentiert Wissenslücken, vermittelte Inhalte und offene Fragen.",
+      "Pflegefachkraft stellt nach Bedarf schriftliche Informationen in verständlicher Form bereit.",
+      "Pflegefachkraft evaluiert 1× wöchentlich den Wissenszuwachs anhand korrekt wiedergegebener Inhalte."
+    ]
+  },
+  {
+    "id": "p81-schulungsbedarf",
+    "nr": 81,
+    "category": "Wissen & Beratung",
+    "icon": "📘",
+    "title": "81. Schulungsbedarf",
+    "problemText": "Der Pflegeempfänger benötigt praktische Anleitung, um eine gesundheits- oder pflegerelevante Handlung sicher durchführen zu können.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 7 Tagen die vermittelten Inhalte korrekt wiedergegeben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung die erlernten Inhalte sicher angewendet."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt vor jeder Schulung den individuellen Lernbedarf und vorhandene Vorerfahrung.",
+      "Pflegefachkraft demonstriert die Handlung 1× langsam und schrittweise.",
+      "Pflegefachkraft lässt den Patienten die Handlung nach jeder Demonstration selbst durchführen, soweit möglich.",
+      "Pflegefachkraft überprüft nach jeder Schulung das Verständnis mittels Teach-Back-Methode.",
+      "Pflegefachkraft dokumentiert Schulungsinhalt, Durchführung, Fehlerquellen und Lernerfolg.",
+      "Pflegefachkraft evaluiert den Schulungserfolg nach jeder Schulung anhand sicherer Durchführung."
+    ]
+  },
+  {
+    "id": "p82-beratungsbedarf",
+    "nr": 82,
+    "category": "Wissen & Beratung",
+    "icon": "📘",
+    "title": "82. Beratungsbedarf",
+    "problemText": "Der Pflegeempfänger benötigt Entscheidungshilfe, Orientierung oder Informationen zu Pflege, Therapie, Alltag oder Entlassung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 3 Tagen offene Fragen formuliert."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, ausreichend informiert zu sein."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt vor jeder Beratung den konkreten Informationsbedarf und die gewünschte Entscheidungshilfe.",
+      "Pflegefachkraft erklärt 1× pro Beratung Chancen, Risiken und alltagsrelevante Konsequenzen verständlich.",
+      "Pflegefachkraft überprüft nach jeder Beratung das Verständnis durch Rückfragen.",
+      "Pflegefachkraft dokumentiert Beratungsinhalte, offene Themen und vereinbarte nächste Schritte.",
+      "Pflegefachkraft bezieht Angehörige nach Wunsch und Einwilligung des Patienten in Beratung ein.",
+      "Pflegefachkraft evaluiert den Beratungserfolg nach jeder Beratung anhand Patientenaussage und offener Fragen."
+    ]
+  },
+  {
+    "id": "p83-unwirksames-gesundheitsmanagement",
+    "nr": 83,
+    "category": "Wissen & Beratung",
+    "icon": "📘",
+    "title": "83. Unwirksames Gesundheitsmanagement",
+    "problemText": "Der Pflegeempfänger kann gesundheitsfördernde oder therapeutische Maßnahmen im Alltag nicht ausreichend planen, umsetzen oder aufrechterhalten.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 7 Tagen zwei gesundheitsfördernde Verhaltensweisen benannt."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung mindestens zwei gesundheitsfördernde Verhaltensweisen in seinen Alltag eingeplant."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich gesundheitsbezogene Gewohnheiten, Ressourcen und Barrieren im strukturierten Gespräch.",
+      "Pflegefachkraft dokumentiert vereinbarte gesundheitsbezogene Verhaltensweisen und Hindernisse.",
+      "Pflegefachkraft überprüft täglich die Umsetzung vereinbarter Schritte anhand Patientenaussage.",
+      "Pflegefachkraft formuliert mit dem Patienten 1× wöchentlich konkrete, alltagsnahe Teilziele.",
+      "Pflegefachkraft bezieht bei Bedarf Sozialdienst, Ernährungsberatung oder Therapeutenteam nach Einwilligung ein.",
+      "Pflegefachkraft evaluiert 1× wöchentlich Zielerreichung und Barrieren."
+    ]
+  },
+  {
+    "id": "p84-therapienonadhaerenz",
+    "nr": 84,
+    "category": "Wissen & Beratung",
+    "icon": "💊",
+    "title": "84. Therapienonadhärenz",
+    "problemText": "Der Pflegeempfänger hält Therapieempfehlungen oder Medikation nicht wie vereinbart ein, zum Beispiel wegen Nebenwirkungen, Wissensdefizit oder Ablehnung.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 7 Tagen die vereinbarten Therapieziele benennen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient hat bis zur Entlassung die vereinbarten Therapieempfehlungen eingehalten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich die Therapieadhärenz mittels Morisky Medication Adherence Scale (MMAS-8), wenn medikamentöse Adhärenz im Fokus steht.",
+      "Pflegefachkraft erfragt täglich Gründe für Abweichungen, zum Beispiel Nebenwirkungen, Angst, Kosten oder Unverständnis.",
+      "Pflegefachkraft überprüft bei jeder Medikamentengabe die korrekte Einnahme verordneter Medikamente.",
+      "Pflegefachkraft erklärt 1× täglich Zweck, Einnahmezeit und relevante Nebenwirkungen der wichtigsten Therapiebausteine.",
+      "Pflegefachkraft dokumentiert Therapieabweichungen, Gründe und getroffene Absprachen.",
+      "Pflegefachkraft informiert Arzt oder Team bei wiederholter Ablehnung, Nebenwirkungen oder Sicherheitsrisiko."
+    ]
+  },
+  {
+    "id": "p85-sterbeangst",
+    "nr": 85,
+    "category": "Palliativ & Spiritualität",
+    "icon": "🕯️",
+    "title": "85. Sterbeangst",
+    "problemText": "Der Pflegeempfänger erlebt Angst im Zusammenhang mit Sterben, Tod, Schmerzen, Alleinsein oder Kontrollverlust.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient gibt innerhalb von 72 Stunden an, über seine Ängste gesprochen zu haben."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient bewertet seine Sterbeangst bis zur Entlassung mit höchstens 3 von 10 Punkten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt täglich die Angstintensität auf einer Skala von 0–10.",
+      "Pflegefachkraft bietet 1× pro Schicht ein Gesprächsangebot ohne Gesprächszwang an.",
+      "Pflegefachkraft dokumentiert belastende Themen, Wünsche und entlastende Faktoren.",
+      "Pflegefachkraft erfasst täglich spirituelle, religiöse oder biografische Bedürfnisse.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Angstzeichen wie Unruhe, Weinen, Schlaflosigkeit oder Atemnot.",
+      "Pflegefachkraft vermittelt bei Wunsch Kontakt zu Seelsorge, Palliativteam oder Angehörigen."
+    ]
+  },
+  {
+    "id": "p86-spirituelle-belastung",
+    "nr": 86,
+    "category": "Palliativ & Spiritualität",
+    "icon": "🕯️",
+    "title": "86. Spirituelle Belastung",
+    "problemText": "Der Pflegeempfänger erlebt Belastung im Bereich Sinn, Glaube, Werte, Schuld, Hoffnung oder innerer Frieden.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 7 Tagen spirituelle Bedürfnisse benennen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, inneren Frieden zu empfinden."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt spirituelle Bedürfnisse mittels SPIR-Assessment bei Aufnahme oder bei geäußertem Bedarf.",
+      "Pflegefachkraft dokumentiert spirituelle Belastungen, Wünsche, Rituale und Ressourcen.",
+      "Pflegefachkraft erfasst 1× pro Schicht vorhandene Ressourcen wie Gebet, Musik, Gespräche oder Rituale.",
+      "Pflegefachkraft bietet 1× täglich Raum für spirituelle oder biografische Themen an.",
+      "Pflegefachkraft vermittelt bei Wunsch Kontakt zu Seelsorge oder religiöser Bezugsperson.",
+      "Pflegefachkraft evaluiert 1× wöchentlich die spirituelle Belastung anhand Patientenaussage."
+    ]
+  },
+  {
+    "id": "p87-sinnkrise",
+    "nr": 87,
+    "category": "Palliativ & Spiritualität",
+    "icon": "🕯️",
+    "title": "87. Sinnkrise",
+    "problemText": "Der Pflegeempfänger erlebt seine aktuelle Lebenssituation als sinnlos, leer oder nicht mehr verstehbar.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient hat innerhalb von 7 Tagen persönliche Lebensziele oder bedeutsame Werte benennen können."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient gibt bis zur Entlassung an, mindestens einen Sinnaspekt in seiner aktuellen Situation zu sehen."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt 1× wöchentlich die subjektive Sinnwahrnehmung auf einer Skala von 0–10.",
+      "Pflegefachkraft führt 1× pro Schicht ein ressourcen- oder biografieorientiertes Gespräch, wenn der Patient dies wünscht.",
+      "Pflegefachkraft erfasst persönliche Werte, Beziehungen, Lebensleistungen und bedeutsame Rituale.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Rückzug, Hoffnungslosigkeit und belastende Aussagen.",
+      "Pflegefachkraft dokumentiert Ressourcen, Sinnquellen und belastende Themen.",
+      "Pflegefachkraft vermittelt bei Wunsch Kontakt zu Seelsorge, Psychologie oder Palliativdienst."
+    ]
+  },
+  {
+    "id": "p88-existenzielle-angst",
+    "nr": 88,
+    "category": "Palliativ & Spiritualität",
+    "icon": "🕯️",
+    "title": "88. Existenzielle Angst",
+    "problemText": "Der Pflegeempfänger erlebt grundlegende Angst vor Krankheit, Sterben, Verlust von Kontrolle, Zukunft oder Identität.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient bewertet seine Angst innerhalb von 7 Tagen mit höchstens 5 von 10 Punkten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient bewertet seine Angst bis zur Entlassung mit höchstens 3 von 10 Punkten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt täglich die Angstintensität auf einer Skala von 0–10.",
+      "Pflegefachkraft dokumentiert angstauslösende Themen, Situationen und entlastende Faktoren.",
+      "Pflegefachkraft beobachtet 1× pro Schicht vegetative Angstzeichen wie Unruhe, Schwitzen, Tachykardie oder Schlaflosigkeit.",
+      "Pflegefachkraft erfasst täglich individuelle Bewältigungsstrategien und unterstützende Personen.",
+      "Pflegefachkraft bietet 1× pro Schicht ein ruhiges Gespräch oder stille Anwesenheit nach Wunsch an.",
+      "Pflegefachkraft vermittelt bei Wunsch Kontakt zu Seelsorge, Psychologie oder Palliativteam."
+    ]
+  },
+  {
+    "id": "p89-beeintraechtigtes-wohlbefinden",
+    "nr": 89,
+    "category": "Palliativ & Spiritualität",
+    "icon": "🌿",
+    "title": "89. Beeinträchtigtes Wohlbefinden",
+    "problemText": "Der Pflegeempfänger erlebt körperliches, psychisches, soziales oder spirituelles Unwohlsein.",
+    "goals": [
+      {
+        "type": "Nahziel",
+        "text": "Der Patient bewertet sein Wohlbefinden innerhalb von 7 Tagen mit mindestens 5 von 10 Punkten."
+      },
+      {
+        "type": "Fernziel",
+        "text": "Der Patient bewertet sein Wohlbefinden bis zur Entlassung mit mindestens 8 von 10 Punkten."
+      }
+    ],
+    "measures": [
+      "Pflegefachkraft erhebt täglich das subjektive Wohlbefinden auf einer Skala von 0–10.",
+      "Pflegefachkraft erfragt täglich Einflussfaktoren wie Schmerz, Schlaf, Angst, Hunger, Durst, Einsamkeit oder Umgebung.",
+      "Pflegefachkraft beobachtet 1× pro Schicht Stimmung, Aktivitätsniveau, Rückzug und Belastungszeichen.",
+      "Pflegefachkraft ermöglicht 1× täglich eine individuell positive Aktivität, zum Beispiel Musik, Gespräch, Mobilisation oder Ruhezeit.",
+      "Pflegefachkraft dokumentiert Veränderungen des Wohlbefindens und wirksame Einflussfaktoren.",
+      "Pflegefachkraft evaluiert täglich die subjektive Wohlbefindensskala und passt unterstützende Maßnahmen an."
+    ]
+  }
+];
 
-const CATEGORY_META = { 
-  'Herz & Kreislauf': { icon: 'fa-heart-pulse', hint: 'Ödeme, Sturz durch Blutdruck, Thrombose' }, 
-  'Atmung & Ernährung': { icon: 'fa-lungs', hint: 'Aspiration, Pneumonie, Mangelernährung' }, 
-  'Haut & Wunde': { icon: 'fa-bandage', hint: 'Dekubitus, Intertrigo, Wundheilung' }, 
-  'Mobilität & Sicherheit': { icon: 'fa-person-walking', hint: 'Sturz, Kontraktur, Transfer' }, 
-  'Ausscheidung': { icon: 'fa-toilet', hint: 'Obstipation, HWI, Inkontinenz' }, 
-  'Schmerz & Ruhe': { icon: 'fa-moon', hint: 'Schmerz, Schlaf, Erschöpfung' }, 
-  'Kognition & Psyche': { icon: 'fa-brain', hint: 'Delir, Angst, Stimmung' }, 
-  'Selbstversorgung': { icon: 'fa-hands-holding', hint: 'Waschen, Ankleiden, Mundpflege' }, 
-  'Stoffwechsel & Medikamente': { icon: 'fa-pills', hint: 'Diabetes, Medikamente, Flüssigkeit' }, 
-  'Kommunikation & Teilhabe': { icon: 'fa-comments', hint: 'Isolation, Kommunikation, Beratung' } 
-}; 
+const CATEGORY_META = {
+  "Atmung": {
+    "icon": "fa-lungs",
+    "hint": "Atmung, Sekret, Dyspnoe, Aspiration"
+  },
+  "Herz & Kreislauf": {
+    "icon": "fa-heart-pulse",
+    "hint": "Herzleistung, Kreislauf, Perfusion, Blutung"
+  },
+  "Mobilität & Sicherheit": {
+    "icon": "fa-person-walking",
+    "hint": "Mobilität, Transfer, Sturz, Thrombose"
+  },
+  "Haut & Wunde": {
+    "icon": "fa-bandage",
+    "hint": "Dekubitus, Haut, Wunden, Infektion"
+  },
+  "Ausscheidung": {
+    "icon": "fa-toilet",
+    "hint": "Harn, Stuhl, Kontinenz, Obstipation"
+  },
+  "Ernährung & Flüssigkeit": {
+    "icon": "fa-utensils",
+    "hint": "Essen, Trinken, Schlucken, Mangelernährung"
+  },
+  "Schmerz & Ruhe": {
+    "icon": "fa-moon",
+    "hint": "Schmerz, Schlaf, Schlaf-Wach-Rhythmus"
+  },
+  "Psyche": {
+    "icon": "fa-brain",
+    "hint": "Angst, Furcht, Stimmung, Coping"
+  },
+  "Kognition & Kommunikation": {
+    "icon": "fa-comments",
+    "hint": "Delir, Orientierung, Sprache, Verstehen"
+  },
+  "Selbstpflege": {
+    "icon": "fa-hands-holding",
+    "hint": "Körperpflege, Essen, Trinken, Toilettengang"
+  },
+  "Soziales & Angehörige": {
+    "icon": "fa-people-group",
+    "hint": "Isolation, Einsamkeit, Angehörigenbelastung"
+  },
+  "Sicherheit": {
+    "icon": "fa-shield-heart",
+    "hint": "Gefährdung, Weglaufen, Gewalt, Medikamente"
+  },
+  "Wissen & Beratung": {
+    "icon": "fa-book-medical",
+    "hint": "Wissen, Schulung, Beratung, Adhärenz"
+  },
+  "Palliativ & Spiritualität": {
+    "icon": "fa-candle-holder",
+    "hint": "Sterbeangst, Sinn, Spiritualität, Wohlbefinden"
+  }
+};
 
 /* ========================================================================== 
    2. APP & NAVIGATION LOGIC 
-   ========================================================================== */ 
-const App = { 
-  init() { 
-    this.renderCatalog(); 
-    setTimeout(() => { 
-      const cta = document.getElementById('cta-btn'); 
-      if (cta) cta.classList.add('normalized'); 
-    }, 10000); 
-  }, 
-  nav(id, navIndex = 3) { 
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
-    document.getElementById(id).classList.add('active'); 
-    this.updateNav(navIndex); 
-    const bottomNav = document.getElementById('bottomNav'); 
-    if (id === 'view-shutter') bottomNav.classList.add('compact'); 
-    else bottomNav.classList.remove('compact'); 
-    if (navigator.vibrate) navigator.vibrate(15); 
-  }, 
-  updateNav(index) { 
-    const navItems = document.querySelectorAll('.nav-bottom > a'); 
-    navItems.forEach(i => i.classList.remove('active')); 
-    if (navItems[index]) navItems[index].classList.add('active'); 
-  }, 
-  renderCatalog() { 
-    const list = document.getElementById('catalog-container'); 
-    const grouped = DATA.reduce((acc, item) => { 
-      if (!acc[item.category]) acc[item.category] = []; 
-      acc[item.category].push(item); 
-      return acc; 
-    }, {}); 
-    list.innerHTML = Object.entries(grouped).map(([category, items], index) => { 
-      const meta = CATEGORY_META[category] || { icon: 'fa-folder', hint: 'Pflegeprobleme' }; 
-      return ` 
-        <section class="category-card ${index === 0 ? 'open' : ''}" data-category="${escapeHtml(category)}"> 
-          <button class="category-toggle" type="button" onclick="App.toggleCategory(this)" aria-expanded="${index === 0 ? 'true' : 'false'}"> 
-            <div class="category-left"> 
-              <div class="category-icon"><i class="fa-solid ${meta.icon}"></i></div> 
-              <div class="category-title"> 
-                <h3>${escapeHtml(category)}</h3> 
-                <p>${items.length} Pflegeprobleme · ${escapeHtml(meta.hint)}</p> 
-              </div> 
-            </div> 
-            <div class="category-chevron"><i class="fa-solid fa-chevron-down"></i></div> 
-          </button> 
-          <div class="problem-list"> 
-            <div class="problem-list-inner"> 
-              ${items.map(item => ` 
-                <article class="topic-card" onclick="Shutter.open('${item.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Shutter.open('${item.id}');}"> 
-                  <div class="topic-info"> 
-                    <div class="topic-icon">${item.icon}</div> 
-                    <div class="topic-title"> 
-                      <p>${escapeHtml(item.category)}</p> 
-                      <h3>${escapeHtml(item.title)}</h3> 
-                    </div> 
-                  </div> 
-                  <div class="topic-arrow"><i class="fa-solid fa-chevron-right"></i></div> 
-                </article> 
-              `).join('')} 
-            </div> 
-          </div> 
-        </section> 
-      `; 
-    }).join(''); 
-    requestAnimationFrame(() => { 
-      document.querySelectorAll('.category-card').forEach(card => this.syncCategoryHeight(card)); 
-    }); 
-  }, 
-  toggleCategory(button) { 
-    const card = button.closest('.category-card'); 
-    const isOpen = card.classList.toggle('open'); 
-    button.setAttribute('aria-expanded', String(isOpen)); 
-    this.syncCategoryHeight(card); 
-    if (navigator.vibrate) navigator.vibrate(10); 
-  }, 
-  syncCategoryHeight(card) { 
-    const list = card.querySelector('.problem-list'); 
-    if (!list) return; 
-    list.style.maxHeight = card.classList.contains('open') ? `${list.scrollHeight}px` : '0px'; 
-  } 
-}; 
+   ========================================================================== */
+const App = {
+  init() {
+    this.renderCatalog();
+  },
+  nav(id, navIndex = 3) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const view = document.getElementById(id);
+    if (!view) return;
+    view.classList.add('active');
+    this.updateNav(navIndex);
+    const bottomNav = document.getElementById('bottomNav');
+    if (id === 'view-shutter') bottomNav.classList.add('compact');
+    else bottomNav.classList.remove('compact');
+    if (navigator.vibrate) navigator.vibrate(15);
+  },
+  updateNav(index) {
+    const navItems = document.querySelectorAll('.nav-bottom > a');
+    navItems.forEach(i => i.classList.remove('active'));
+    if (navItems[index]) navItems[index].classList.add('active');
+  },
+  renderCatalog() {
+    const list = document.getElementById('catalog-container');
+    const grouped = DATA.reduce((acc, item) => {
+      if (!acc[item.category]) acc[item.category] = [];
+      acc[item.category].push(item);
+      return acc;
+    }, {});
+    list.innerHTML = Object.entries(grouped).map(([category, items], index) => {
+      const meta = CATEGORY_META[category] || { icon: 'fa-folder', hint: 'Pflegeprobleme' };
+      return `
+        <section class="category-card ${index === 0 ? 'open' : ''}" data-category="${escapeHtml(category)}">
+          <button class="category-toggle" type="button" onclick="App.toggleCategory(this)" aria-expanded="${index === 0 ? 'true' : 'false'}">
+            <div class="category-left">
+              <div class="category-icon"><i class="fa-solid ${meta.icon}"></i></div>
+              <div class="category-title">
+                <h3>${escapeHtml(category)}</h3>
+                <p>${items.length} Pflegeprobleme · ${escapeHtml(meta.hint)}</p>
+              </div>
+            </div>
+            <div class="category-chevron"><i class="fa-solid fa-chevron-down"></i></div>
+          </button>
+          <div class="problem-list">
+            <div class="problem-list-inner">
+              ${items.map(item => `
+                <article class="topic-card" onclick="Shutter.open('${item.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Shutter.open('${item.id}');}">
+                  <div class="topic-info">
+                    <div class="topic-icon">${escapeHtml(item.icon)}</div>
+                    <div class="topic-title">
+                      <p>${escapeHtml(item.category)}</p>
+                      <h3>${escapeHtml(item.title)}</h3>
+                    </div>
+                  </div>
+                  <div class="topic-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </article>
+              `).join('')}
+            </div>
+          </div>
+        </section>
+      `;
+    }).join('');
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.category-card').forEach(card => this.syncCategoryHeight(card));
+    });
+  },
+  toggleCategory(button) {
+    const card = button.closest('.category-card');
+    if (!card) return;
+    const isOpen = card.classList.toggle('open');
+    button.setAttribute('aria-expanded', String(isOpen));
+    this.syncCategoryHeight(card);
+    if (navigator.vibrate) navigator.vibrate(10);
+  },
+  syncCategoryHeight(card) {
+    const panel = card.querySelector('.problem-list');
+    if (!panel) return;
+    panel.style.maxHeight = card.classList.contains('open') ? `${panel.scrollHeight}px` : '0px';
+  }
+};
 
 /* ========================================================================== 
    3. SHUTTER ENGINE 
-   ========================================================================== */ 
-const Shutter = { 
-  open(id) { 
-    const data = DATA.find(d => d.id === id); 
-    if (!data) return; 
-    document.getElementById('shutter-main-title').innerText = data.title; 
-    document.getElementById('content-problem').innerHTML = ` 
-      <div class="rich-card"><div class="rich-card-icon"><i class="fa-solid fa-user-injured"></i></div><div class="rich-card-title">Situationsbeschreibung</div><div class="rich-card-text">${escapeHtml(data.problemText)}</div></div> 
-    `; 
-    document.getElementById('content-goals').innerHTML = data.goals.map(g => ` 
-      <div class="rich-card"><div class="rich-card-title">${escapeHtml(g.type)}</div><div class="rich-card-text">${escapeHtml(g.text)}</div></div> 
-    `).join(''); 
-    document.getElementById('content-measures').innerHTML = data.measures.map((m, i) => ` 
-      <div class="rich-card"><div class="rich-card-title">Maßnahme ${i + 1}</div><div class="rich-card-text">${escapeHtml(m)}</div></div> 
-    `).join(''); 
-    this.focus(1); 
-    App.nav('view-shutter', 3); 
-  }, 
-  focus(index) { 
-    document.querySelectorAll('.col').forEach(c => { 
-      c.classList.remove('active'); 
-      const content = c.querySelector('.col-content'); 
-      content.style.animation = 'none'; 
-      content.offsetHeight; 
-      content.style.animation = null; 
-    }); 
-    const target = document.querySelector(`.col[data-col="${index}"]`); 
-    if (target) target.classList.add('active'); 
-    const grid = document.getElementById('shutter-grid'); 
-    if (index === 1) grid.style.gridTemplateColumns = '1fr var(--shutter-width) var(--shutter-width)'; 
-    if (index === 2) grid.style.gridTemplateColumns = 'var(--shutter-width) 1fr var(--shutter-width)'; 
-    if (index === 3) grid.style.gridTemplateColumns = 'var(--shutter-width) var(--shutter-width) 1fr'; 
-    if (navigator.vibrate) navigator.vibrate(20); 
-  } 
-}; 
+   ========================================================================== */
+const Shutter = {
+  open(id) {
+    const data = DATA.find(d => d.id === id);
+    if (!data) return;
+    document.getElementById('shutter-main-title').innerText = data.title;
+    document.getElementById('content-problem').innerHTML = `
+      <div class="rich-card"><div class="rich-card-icon"><i class="fa-solid fa-user-injured"></i></div><div class="rich-card-title">Situationsbeschreibung</div><div class="rich-card-text">${escapeHtml(data.problemText)}</div></div>
+    `;
+    document.getElementById('content-goals').innerHTML = data.goals.map(g => `
+      <div class="rich-card"><div class="rich-card-title">${escapeHtml(g.type)}</div><div class="rich-card-text">${escapeHtml(g.text)}</div></div>
+    `).join('');
+    document.getElementById('content-measures').innerHTML = data.measures.map((m, i) => `
+      <div class="rich-card"><div class="rich-card-title">Maßnahme ${i + 1}</div><div class="rich-card-text">${escapeHtml(m)}</div></div>
+    `).join('');
+    this.focus(1);
+    App.nav('view-shutter', 3);
+  },
+  focus(index) {
+    document.querySelectorAll('.col').forEach(c => {
+      c.classList.remove('active');
+      const content = c.querySelector('.col-content');
+      if (content) {
+        content.style.animation = 'none';
+        content.offsetHeight;
+        content.style.animation = null;
+      }
+    });
+    const target = document.querySelector(`.col[data-col="${index}"]`);
+    if (target) target.classList.add('active');
+    const grid = document.getElementById('shutter-grid');
+    if (index === 1) grid.style.gridTemplateColumns = '1fr var(--shutter-width) var(--shutter-width)';
+    if (index === 2) grid.style.gridTemplateColumns = 'var(--shutter-width) 1fr var(--shutter-width)';
+    if (index === 3) grid.style.gridTemplateColumns = 'var(--shutter-width) var(--shutter-width) 1fr';
+    if (navigator.vibrate) navigator.vibrate(20);
+  }
+};
 
-function escapeHtml(value) { 
-  if (!value) return '';
+function escapeHtml(value) {
+  if (value === undefined || value === null) return '';
   return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
-} 
+}
 
-document.addEventListener('DOMContentLoaded', () => App.init()); 
-window.addEventListener('resize', () => document.querySelectorAll('.category-card').forEach(card => App.syncCategoryHeight(card))); 
-</script> 
-</body> 
+document.addEventListener('DOMContentLoaded', () => App.init());
+window.addEventListener('resize', () => document.querySelectorAll('.category-card').forEach(card => App.syncCategoryHeight(card)));
+</script>
+ </body>
 </html>
