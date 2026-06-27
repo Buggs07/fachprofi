@@ -1,2098 +1,1388 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PflegefachProfi Pflege-Simulator</title>
-    <style>
-        :root {
-            --bg: #0b1219;
-            --surface: #141e28;
-            --surface2: #1a2836;
-            --border: #2a3a4a;
-            --text: #e8eef4;
-            --text2: #9aafc4;
-            --accent: #00c9a7;
-            --accent2: #00e6bf;
-            --accent-glow: #00c9a744;
-            --danger: #e0556a;
-            --warning: #f0a050;
-            --gold: #f0c040;
-            --xp: #5cb8ff;
-            --monitor-bg: #080d12;
-            --ecg: #2eff6e;
-            --skin-light: #e8c9a0;
-            --skin-pale: #d4b896;
-            --skin-older: #d9bfa0;
-            --skin-young: #f0d0b0;
-            --hair-gray: #8a8a8a;
-            --hair-dark: #3a2a1a;
-            --hair-blonde: #c8a060;
-            --hair-brown: #5a3a20;
-            --sheet: #e8f0f5;
-            --blanket: #d8e4ef;
-            --bed-metal: #c0c8d4;
-            --pillow: #f0f4f8;
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --radius: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            min-height: 100dvh;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-            line-height: 1.5;
-        }
-        @media(prefers-reduced-motion:reduce) {
-            *,
-            *::after,
-            *::before {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-        #app {
-            max-width: 860px;
-            margin: 0 auto;
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        .screen {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            padding: 12px 14px;
-            animation: fadeSlideIn 0.35s ease;
-            gap: 10px;
-        }
-        .screen.active {
-            display: flex;
-        }
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes pulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.04);
-            }
-        }
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-7px);
-            }
-            50% {
-                transform: translateX(7px);
-            }
-            75% {
-                transform: translateX(-4px);
-            }
-        }
-        @keyframes breathe {
-            0%,
-            100% {
-                transform: scaleY(1);
-            }
-            30% {
-                transform: scaleY(1.08);
-            }
-            70% {
-                transform: scaleY(0.94);
-            }
-        }
-        @keyframes floatUp {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-55px) scale(1.3);
-            }
-        }
-        @keyframes confettiDrop {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(105vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        @keyframes glowPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 6px var(--accent), 0 0 18px var(--accent2);
-            }
-            50% {
-                box-shadow: 0 0 18px var(--accent), 0 0 36px var(--accent2);
-            }
-        }
-        .shake {
-            animation: shake 0.5s ease;
-        }
-        .pulse-green {
-            animation: glowPulse 0.7s ease 2;
-        }
-        .app-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            flex-shrink: 0;
-        }
-        .logo-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #00c9a7, #008870);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-        .app-header .title {
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: -0.3px;
-            line-height: 1.2;
-        }
-        .app-header .subtitle {
-            font-size: 0.65rem;
-            color: var(--text2);
-            font-weight: 400;
-        }
-        .header-badges {
-            margin-left: auto;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .badge {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 5px 12px;
-            font-weight: 700;
-            font-size: 0.78rem;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .badge.xp-badge {
-            color: var(--xp);
-        }
-        .badge.streak-badge {
-            color: var(--warning);
-            border-color: #f0a05044;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            padding: 11px 18px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font);
-            min-height: 44px;
-            min-width: 44px;
-            white-space: nowrap;
-            letter-spacing: -0.2px;
-            outline: none;
-            text-decoration: none;
-        }
-        .btn:focus-visible {
-            outline: 3px solid var(--accent);
-            outline-offset: 3px;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 4px 14px var(--accent-glow);
-        }
-        .btn-primary:hover {
-            background: var(--accent2);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 22px #00c9a766;
-        }
-        .btn-primary:active {
-            transform: scale(0.96);
-        }
-        .btn-secondary {
-            background: var(--surface2);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover {
-            border-color: var(--accent);
-            background: #1e2e3e;
-        }
-        .btn-large {
-            padding: 15px 28px;
-            font-size: 1rem;
-            border-radius: var(--radius);
-            width: 100%;
-            max-width: 420px;
-        }
-        .btn:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-        .card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 1px var(--accent);
-        }
-        .card:active {
-            transform: scale(0.98);
-        }
-        .card.selected {
-            border-color: var(--accent);
-            background: #00c9a712;
-            box-shadow: 0 0 0 2px var(--accent);
-        }
-        .card.correct-flash {
-            border-color: #2eff6e !important;
-            background: #2eff6e15 !important;
-            box-shadow: 0 0 0 3px #2eff6e55 !important;
-        }
-        .card.wrong-flash {
-            border-color: #e0556a !important;
-            background: #e0556a15 !important;
-            box-shadow: 0 0 0 3px #e0556a44 !important;
-            animation: shake 0.5s ease;
-        }
-        .phase-indicator {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 5px 13px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--accent);
-            display: inline-block;
-            letter-spacing: 0.3px;
-        }
-        .progress-bar-wrap {
-            background: var(--border);
-            border-radius: 10px;
-            height: 7px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 10px;
-            transition: width 0.4s ease;
-        }
-        .speech-bubble {
-            background: #fff;
-            color: #1a1a1a;
-            border-radius: 14px 14px 14px 3px;
-            padding: 10px 14px;
-            font-size: 0.85rem;
-            line-height: 1.45;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-            max-width: 380px;
-            min-height: 36px;
-            word-break: break-word;
-            position: relative;
-        }
-        .speech-bubble .speaker-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            color: #666;
-            display: block;
-            margin-bottom: 1px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-        .typewriter-cursor::after {
-            content: '|';
-            animation: pulse 0.8s infinite;
-            color: #333;
-            font-weight: bold;
-        }
-        .er-room {
-            background: linear-gradient(180deg, #1a2838 0%, #141e2a 50%, #0f1820 100%);
-            border-radius: var(--radius);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-        .room-wall {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 55%;
-            background: linear-gradient(180deg, #1e2e3e 0%, #1a2836 100%);
-        }
-        .room-light {
-            position: absolute;
-            top: 6px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #ffe8c8aa, #ffe8c8aa, transparent);
-            border-radius: 2px;
-            filter: blur(2px);
-        }
-        .vital-monitor {
-            position: absolute;
-            top: 16px;
-            right: 10px;
-            width: 85px;
-            background: var(--monitor-bg);
-            border-radius: 8px;
-            padding: 6px 8px;
-            border: 1px solid #1a3028;
-            z-index: 4;
-            font-family: 'Courier New', monospace;
-            font-size: 0.55rem;
-        }
-        .vital-monitor .ecg-line {
-            width: 100%;
-            height: 32px;
-        }
-        .vital-monitor .vital-row {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2px;
-        }
-        .vital-monitor .vital-label {
-            color: #5a8;
-        }
-        .vital-monitor .vital-value {
-            color: #0f0;
-            font-weight: bold;
-        }
-        .vital-monitor .vital-value.warn {
-            color: #f0a050;
-            animation: pulse 1.2s infinite;
-        }
-        .vital-monitor .vital-value.crit {
-            color: #f04040;
-            animation: pulse 0.6s infinite;
-        }
-        .scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            min-height: 0;
-        }
-        .scroll-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        .scroll-area::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
-        .option-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 7px;
-        }
-        @media(min-width:500px) {
-            .option-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .case-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-        @media(min-width:600px) {
-            .case-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .module-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        @media(min-width:500px) {
-            .module-grid {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-        .module-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-        .module-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-        .module-icon {
-            font-size: 2rem;
-        }
-        .difficulty-badge {
-            font-size: 0.65rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 600;
-            display: inline-block;
-        }
-        .difficulty-badge.leicht {
-            background: #2eff6e22;
-            color: #2eff6e;
-        }
-        .difficulty-badge.mittel {
-            background: #f0a05022;
-            color: #f0a050;
-        }
-        .difficulty-badge.schwer {
-            background: #e0556a22;
-            color: #e0556a;
-        }
-        .stars {
-            color: var(--gold);
-            letter-spacing: 1px;
-        }
-        .info-chip {
-            display: inline-block;
-            padding: 3px 9px;
-            border-radius: 12px;
-            font-size: 0.68rem;
-            font-weight: 600;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            margin: 2px;
-        }
-        .info-chip.green {
-            border-color: #2eff6e;
-            color: #2eff6e;
-        }
-        .info-chip.red {
-            border-color: #e0556a;
-            color: #e0556a;
-        }
-        .result-circle {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 5px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0 auto;
-            background: var(--surface2);
-        }
-        .feedback-toast {
-            position: fixed;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 200;
-            padding: 9px 18px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            pointer-events: none;
-            animation: floatUp 1.6s ease forwards;
-            white-space: nowrap;
-        }
-        .feedback-toast.ok {
-            background: #2eff6e;
-            color: #000;
-        }
-        .feedback-toast.err {
-            background: #e0556a;
-            color: #fff;
-        }
-        .feedback-toast.warn {
-            background: #f0a050;
-            color: #000;
-        }
-        .xp-float {
-            position: fixed;
-            z-index: 201;
-            pointer-events: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            animation: floatUp 1.8s ease forwards;
-            color: var(--xp);
-        }
-        .confetti-piece {
-            position: fixed;
-            z-index: 250;
-            pointer-events: none;
-            animation: confettiDrop 2.8s ease-in forwards;
-            border-radius: 2px;
-        }
-        .btn-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-        }
-        .disclaimer {
-            font-size: 0.6rem;
-            color: var(--text2);
-            text-align: center;
-            opacity: 0.7;
-            flex-shrink: 0;
-        }
-        svg.patient-svg {
-            width: 100%;
-            height: auto;
-            max-height: 300px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PflegefachProfi — Karteikarten</title>
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  --bg:#ffffff;
+  --surface:#fafafa;
+  --card-bg:#ffffff;
+  --border:#e7e9ee;
+  --text:#111827;
+  --text-muted:#6b7280;
+  --text-faint:#9aa0ab;
+
+  --primary:#2563eb;
+  --primary-700:#1d4ed8;
+  --primary-100:#eaf0fe;
+  --secondary:#7c3aed;
+  --secondary-100:#f1eafe;
+  --accent:#ec4899;
+  --accent-100:#fdeaf3;
+  --success:#10b981;
+  --success-100:#e7faf2;
+  --warning:#f59e0b;
+  --warning-100:#fef5e6;
+  --danger:#ef4444;
+  --danger-100:#fdeaea;
+
+  --shadow-sm: 0 1px 2px rgba(17,24,39,.05);
+  --shadow-md: 0 2px 8px rgba(17,24,39,.06), 0 1px 2px rgba(17,24,39,.04);
+  --shadow-lg: 0 12px 32px rgba(17,24,39,.10), 0 2px 6px rgba(17,24,39,.05);
+  --shadow-card: 0 1px 1px rgba(17,24,39,.03), 0 20px 40px -16px rgba(37,99,235,.18);
+
+  --r-sm:10px;
+  --r-md:16px;
+  --r-lg:22px;
+  --r-full:999px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --bar-h: 64px;
+  --maxw: 760px;
+}
+
+[data-theme="dark"]{
+  --bg:#0a0d14;
+  --surface:#11151f;
+  --card-bg:#161b27;
+  --border:#252b3a;
+  --text:#f1f3f7;
+  --text-muted:#9aa3b5;
+  --text-faint:#67707f;
+
+  --primary:#5b8def;
+  --primary-700:#3d6fe0;
+  --primary-100:#16233f;
+  --secondary:#a78bfa;
+  --secondary-100:#241c3f;
+  --accent:#f472b6;
+  --accent-100:#3a1e30;
+  --success:#34d399;
+  --success-100:#10271f;
+  --warning:#fbbf24;
+  --warning-100:#332108;
+  --danger:#f87171;
+  --danger-100:#341515;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 2px 10px rgba(0,0,0,.35);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,.5);
+  --shadow-card: 0 1px 1px rgba(0,0,0,.2), 0 20px 40px -16px rgba(91,141,239,.25);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease, color .25s ease;
+  padding-bottom:96px;
+}
+h1,h2,h3,p{margin:0;}
+button{font-family:inherit;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+
+::selection{background:var(--primary-100);}
+
+/* Focus visibility for accessibility */
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--primary);
+  outline-offset:2px;
+  border-radius:6px;
+}
+
+/* ============================================================
+   APP BAR
+   ============================================================ */
+.appbar{
+  position:sticky; top:0; z-index:40;
+  height:var(--bar-h);
+  display:flex; align-items:center; gap:16px;
+  padding:0 20px;
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+.brand-mark{
+  width:34px; height:34px; border-radius:10px;
+  background:linear-gradient(135deg, var(--primary), var(--secondary));
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px; color:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.brand-name{font-weight:800; font-size:16.5px; letter-spacing:-.01em;}
+.brand-name span{color:var(--primary);}
+
+.search-wrap{
+  flex:1; max-width:380px; position:relative;
+  display:flex; align-items:center;
+}
+.search-wrap svg{position:absolute; left:12px; width:16px; height:16px; color:var(--text-faint); pointer-events:none;}
+.search-input{
+  width:100%;
+  padding:9px 12px 9px 34px;
+  border-radius:var(--r-full);
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+  transition:border-color .15s, box-shadow .15s;
+}
+.search-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-100);}
+.search-input::placeholder{color:var(--text-faint);}
+
+.appbar-actions{display:flex; align-items:center; gap:8px; margin-left:auto; flex-shrink:0;}
+.icon-btn{
+  width:38px; height:38px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--card-bg);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text); font-size:16px;
+  transition:transform .12s ease, background .15s, box-shadow .15s;
+}
+.icon-btn:hover{box-shadow:var(--shadow-sm); transform:translateY(-1px);}
+.icon-btn:active{transform:translateY(0) scale(.94);}
+.icon-btn svg{width:18px; height:18px;}
+
+.exam-btn{
+  display:flex; align-items:center; gap:6px;
+  padding:0 16px; height:38px; border-radius:var(--r-full);
+  border:none; cursor:pointer; font-weight:700; font-size:13.5px;
+  background:linear-gradient(135deg, var(--secondary), var(--accent));
+  color:#fff; box-shadow:var(--shadow-sm);
+  transition:transform .12s ease, box-shadow .15s;
+  white-space:nowrap;
+}
+.exam-btn:hover{transform:translateY(-1px); box-shadow:var(--shadow-md);}
+.exam-btn:active{transform:translateY(0) scale(.97);}
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+main{max-width:var(--maxw); margin:0 auto; padding:18px 18px 0;}
+
+/* Filter / topic chips */
+.filters{display:flex; flex-direction:column; gap:10px; margin-bottom:16px;}
+.chip-row{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none;}
+.chip-row::-webkit-scrollbar{display:none;}
+.chip{
+  flex-shrink:0;
+  padding:7px 14px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--card-bg);
+  color:var(--text-muted); font-size:13px; font-weight:600;
+  cursor:pointer; white-space:nowrap;
+  transition:all .15s ease;
+}
+.chip:hover{border-color:var(--primary); color:var(--text);}
+.chip.active{
+  background:var(--primary); border-color:var(--primary); color:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.subfilters{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+.select-pill{
+  padding:6px 10px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--surface);
+  color:var(--text); font-size:12.5px; font-weight:600;
+  cursor:pointer; outline:none;
+}
+.toggle-pill{
+  padding:6px 12px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--surface);
+  color:var(--text-muted); font-size:12.5px; font-weight:600;
+  cursor:pointer; display:flex; align-items:center; gap:5px;
+  transition:all .15s;
+}
+.toggle-pill.on{background:var(--accent-100); border-color:var(--accent); color:var(--accent);}
+
+/* Stats */
+.stats-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+  margin-bottom:14px;
+}
+.stat-card{
+  background:var(--card-bg); border:1px solid var(--border); border-radius:var(--r-md);
+  padding:11px 12px; box-shadow:var(--shadow-sm);
+}
+.stat-num{font-size:19px; font-weight:800; letter-spacing:-.02em; line-height:1.1;}
+.stat-label{font-size:11px; color:var(--text-muted); font-weight:600; margin-top:2px; text-transform:uppercase; letter-spacing:.03em;}
+.stat-card.streak .stat-num{color:var(--warning);}
+.stat-card.accuracy .stat-num{color:var(--success);}
+
+/* Progress bar */
+.progress-track{
+  height:6px; border-radius:var(--r-full); background:var(--border);
+  overflow:hidden; margin-bottom:22px; position:relative;
+}
+.progress-fill{
+  height:100%; border-radius:var(--r-full);
+  background:linear-gradient(90deg, var(--primary), var(--secondary));
+  width:0%; transition:width .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ============================================================
+   FLASHCARD
+   ============================================================ */
+.stage{position:relative; display:flex; align-items:center; justify-content:center; gap:10px;}
+.nav-arrow{
+  flex-shrink:0; width:42px; height:42px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--card-bg);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text); box-shadow:var(--shadow-sm);
+  transition:transform .12s, box-shadow .15s;
+}
+.nav-arrow:hover{box-shadow:var(--shadow-md); transform:translateY(-1px);}
+.nav-arrow:disabled{opacity:.3; cursor:default; transform:none; box-shadow:none;}
+@media (max-width:640px){ .nav-arrow{display:none;} }
+
+.card-zone{flex:1; max-width:560px; min-height:430px; perspective:1800px;}
+
+.flashcard{
+  position:relative; width:100%; height:100%; min-height:430px;
+  cursor:pointer; transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.22,1,.36,1);
+}
+.flashcard.flipped{transform:rotateY(180deg);}
+.flashcard.shake{animation:shake .38s ease;}
+@keyframes shake{
+  10%,90%{transform:translateX(-3px);}
+  20%,80%{transform:translateX(5px);}
+  30%,50%,70%{transform:translateX(-7px);}
+  40%,60%{transform:translateX(7px);}
+}
+
+.face{
+  position:absolute; inset:0; backface-visibility:hidden;
+  border-radius:var(--r-lg); border:1px solid var(--border);
+  background:var(--card-bg); box-shadow:var(--shadow-card);
+  padding:26px 26px 22px; display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.face.back{transform:rotateY(180deg); overflow-y:auto;}
+.face::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:5px;
+  background:linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+}
+
+.face-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+.badge-group{display:flex; gap:6px; flex-wrap:wrap;}
+.badge{
+  font-size:11px; font-weight:700; padding:4px 9px; border-radius:var(--r-full);
+  letter-spacing:.01em;
+}
+.badge.cat{background:var(--primary-100); color:var(--primary);}
+.badge.diff-easy{background:var(--success-100); color:var(--success);}
+.badge.diff-medium{background:var(--warning-100); color:var(--warning);}
+.badge.diff-hard{background:var(--danger-100); color:var(--danger);}
+.badge.type{background:var(--secondary-100); color:var(--secondary);}
+.stars{font-size:12px; color:var(--warning); letter-spacing:1px;}
+
+.bookmark-btn{
+  background:none; border:none; cursor:pointer; font-size:19px;
+  color:var(--text-faint); line-height:1; padding:2px;
+  transition:transform .15s, color .15s;
+}
+.bookmark-btn.active{color:var(--accent); transform:scale(1.15);}
+
+.face-icon{font-size:26px; margin:14px 0 6px;}
+.face-question{
+  font-size:21px; font-weight:700; line-height:1.32; letter-spacing:-.01em;
+  flex:1; display:flex; align-items:center;
+}
+.face-meta{display:flex; align-items:center; justify-content:space-between; margin-top:10px;}
+.pos-indicator{font-size:12px; color:var(--text-faint); font-weight:600;}
+
+.think-btn{
+  margin-top:14px; align-self:flex-start;
+  padding:10px 18px; border-radius:var(--r-full); border:none;
+  background:var(--text); color:var(--bg); font-weight:700; font-size:13.5px;
+  cursor:pointer; display:flex; align-items:center; gap:7px;
+  box-shadow:var(--shadow-sm);
+  transition:transform .12s, box-shadow .15s;
+}
+.think-btn:hover{transform:translateY(-1px); box-shadow:var(--shadow-md);}
+.think-btn:active{transform:scale(.97);}
+
+/* Back of card */
+.back-answer{
+  font-size:17px; font-weight:700; color:var(--primary); line-height:1.4;
+  padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:10px;
+}
+.back-block{margin-bottom:10px;}
+.back-block-label{
+  font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--text-faint); margin-bottom:3px; display:flex; align-items:center; gap:5px;
+}
+.back-block-text{font-size:13.5px; line-height:1.5; color:var(--text);}
+.back-block.tip .back-block-label{color:var(--warning);}
+.back-block.mistake .back-block-label{color:var(--danger);}
+.back-block.mnemonic .back-block-label{color:var(--secondary);}
+.back-block.clinical .back-block-label{color:var(--success);}
+
+.judge-row{display:flex; gap:8px; margin-top:auto; padding-top:12px;}
+.judge-btn{
+  flex:1; padding:11px 0; border-radius:var(--r-md); border:none; cursor:pointer;
+  font-weight:700; font-size:13.5px; display:flex; align-items:center; justify-content:center; gap:6px;
+  transition:transform .12s, box-shadow .15s;
+}
+.judge-btn:active{transform:scale(.96);}
+.judge-btn.unknown{background:var(--danger-100); color:var(--danger);}
+.judge-btn.known{background:var(--success-100); color:var(--success);}
+.judge-btn:hover{box-shadow:var(--shadow-sm);}
+
+/* Interactive card types */
+.options-list{display:flex; flex-direction:column; gap:8px; margin-top:14px;}
+.option-btn{
+  text-align:left; padding:12px 14px; border-radius:var(--r-md);
+  border:1.5px solid var(--border); background:var(--surface); color:var(--text);
+  font-size:14px; cursor:pointer; transition:all .15s;
+}
+.option-btn:hover{border-color:var(--primary);}
+.option-btn.correct{background:var(--success-100); border-color:var(--success); color:var(--success); font-weight:700;}
+.option-btn.incorrect{background:var(--danger-100); border-color:var(--danger); color:var(--danger); font-weight:700;}
+.option-btn:disabled{cursor:default;}
+
+.tf-row{display:flex; gap:10px; margin-top:16px;}
+.tf-btn{
+  flex:1; padding:16px; border-radius:var(--r-md); border:1.5px solid var(--border);
+  background:var(--surface); font-weight:800; font-size:15px; cursor:pointer;
+  color:var(--text); transition:all .15s;
+}
+.tf-btn.correct{background:var(--success-100); border-color:var(--success); color:var(--success);}
+.tf-btn.incorrect{background:var(--danger-100); border-color:var(--danger); color:var(--danger);}
+
+.fill-row{display:flex; gap:8px; margin-top:16px;}
+.fill-input{
+  flex:1; padding:11px 14px; border-radius:var(--r-md); border:1.5px solid var(--border);
+  background:var(--surface); color:var(--text); font-size:14px; outline:none;
+}
+.fill-input:focus{border-color:var(--primary);}
+.fill-check{
+  padding:0 18px; border-radius:var(--r-md); border:none; background:var(--primary);
+  color:#fff; font-weight:700; cursor:pointer; font-size:13.5px;
+}
+.fill-feedback{margin-top:10px; font-size:13.5px; font-weight:700;}
+.fill-feedback.ok{color:var(--success);}
+.fill-feedback.bad{color:var(--danger);}
+
+.hotspot-hint{
+  margin-top:14px; font-size:12.5px; color:var(--text-faint); font-weight:600;
+  display:flex; align-items:center; gap:6px;
+}
+
+/* Bottom action bar */
+.action-bar{
+  position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:6px;
+  background:var(--card-bg); border:1px solid var(--border); border-radius:var(--r-full);
+  padding:8px; box-shadow:var(--shadow-lg); z-index:30;
+}
+.action-bar button{
+  width:46px; height:46px; border-radius:var(--r-full); border:none; background:transparent;
+  display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer;
+  color:var(--text-muted); transition:background .15s, transform .12s, color .15s;
+  position:relative;
+}
+.action-bar button:hover{background:var(--surface); color:var(--text);}
+.action-bar button:active{transform:scale(.92);}
+.action-bar button.primary{background:var(--primary); color:#fff;}
+.action-bar button.primary:hover{background:var(--primary-700);}
+.ripple{
+  position:absolute; border-radius:50%; background:rgba(37,99,235,.35);
+  transform:scale(0); animation:ripple .5s ease-out; pointer-events:none;
+}
+@keyframes ripple{to{transform:scale(2.6); opacity:0;}}
+
+.kbd-hint{
+  text-align:center; font-size:11.5px; color:var(--text-faint); margin:20px 0 4px;
+}
+.kbd-hint kbd{
+  background:var(--surface); border:1px solid var(--border); border-radius:5px;
+  padding:1px 5px; font-size:10.5px; font-family:inherit; margin:0 1px;
+}
+
+.empty-state{
+  text-align:center; padding:60px 20px; color:var(--text-muted);
+}
+.empty-state .e-icon{font-size:38px; margin-bottom:10px;}
+
+/* ============================================================
+   EXAM MODE OVERLAY
+   ============================================================ */
+.exam-overlay{
+  position:fixed; inset:0; background:var(--bg); z-index:100;
+  display:none; flex-direction:column;
+}
+.exam-overlay.active{display:flex;}
+.exam-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 22px; border-bottom:1px solid var(--border);
+}
+.exam-timer{font-size:18px; font-weight:800; font-variant-numeric:tabular-nums;}
+.exam-timer.low{color:var(--danger);}
+.exam-close{
+  border:none; background:var(--surface); width:36px; height:36px; border-radius:var(--r-full);
+  cursor:pointer; font-size:16px; color:var(--text);
+}
+.exam-progress-text{font-size:13px; color:var(--text-muted); font-weight:600;}
+.exam-body{flex:1; display:flex; align-items:center; justify-content:center; padding:20px;}
+.exam-result{max-width:480px; text-align:center; margin:0 auto;}
+.exam-score{font-size:54px; font-weight:800; background:linear-gradient(135deg,var(--primary),var(--secondary)); -webkit-background-clip:text; background-clip:text; color:transparent; letter-spacing:-.03em;}
+.exam-score-label{color:var(--text-muted); font-weight:600; margin-top:-6px; margin-bottom:24px;}
+.exam-summary-row{display:flex; justify-content:space-around; margin-bottom:24px;}
+.exam-summary-row div{display:flex; flex-direction:column; align-items:center; gap:2px;}
+.exam-summary-row b{font-size:20px;}
+.exam-action-row{display:flex; gap:10px; justify-content:center;}
+.btn-solid{
+  padding:12px 22px; border-radius:var(--r-full); border:none; background:var(--primary);
+  color:#fff; font-weight:700; cursor:pointer; font-size:13.5px;
+}
+.btn-ghost{
+  padding:12px 22px; border-radius:var(--r-full); border:1px solid var(--border); background:transparent;
+  color:var(--text); font-weight:700; cursor:pointer; font-size:13.5px;
+}
+.review-list{text-align:left; max-height:160px; overflow-y:auto; margin:14px 0; padding:0 4px;}
+.review-item{
+  font-size:13px; padding:8px 10px; border-radius:var(--r-sm); background:var(--danger-100);
+  color:var(--text); margin-bottom:6px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s !important; transition-duration:.001s !important;}
+}
+
+@media (max-width:640px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .search-wrap{display:none;}
+  .face{padding:20px 18px 18px;}
+  .face-question{font-size:18.5px;}
+}
+</style>
 </head>
 <body>
-    <div id="app">
-        <header class="app-header" role="banner">
-            <div class="logo-icon" aria-hidden="true">🩺</div>
-            <div><span class="title">PflegefachProfi</span><br><span class="subtitle">Pflege-Simulator</span></div>
-            <div class="header-badges">
-                <span class="badge streak-badge" id="streakBadge" style="display:none;">🔥 <span id="streakCount">0</span></span>
-                <span class="badge xp-badge">⭐ <span id="totalXP">0</span> XP</span>
-            </div>
-        </header>
-        <div id="screenContainer" style="flex:1;display:flex;flex-direction:column;min-height:0;"></div>
+
+<header class="appbar">
+  <div class="brand">
+    <div class="brand-mark">🩺</div>
+    <div class="brand-name">Pflegefach<span>Profi</span></div>
+  </div>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" class="search-input" type="text" placeholder="Karten durchsuchen…" aria-label="Karten durchsuchen">
+  </div>
+  <div class="appbar-actions">
+    <button class="icon-btn" id="darkToggle" aria-label="Dunkelmodus umschalten" title="Dunkelmodus">🌙</button>
+    <button class="exam-btn" id="examOpenBtn">⏱ Prüfungsmodus</button>
+  </div>
+</header>
+
+<main>
+  <div class="filters">
+    <div class="chip-row" id="categoryChips" role="tablist" aria-label="Kategorie filtern"></div>
+    <div class="subfilters">
+      <select id="difficultySelect" class="select-pill" aria-label="Schwierigkeit filtern">
+        <option value="all">Alle Schwierigkeiten</option>
+        <option value="easy">🟢 Leicht</option>
+        <option value="medium">🟠 Mittel</option>
+        <option value="hard">🔴 Schwer</option>
+      </select>
+      <button class="toggle-pill" id="bookmarkFilter" data-on="false">⭐ Lesezeichen</button>
+      <button class="toggle-pill" id="incorrectFilter" data-on="false">⚠️ Falsch beantwortet</button>
+      <button class="toggle-pill" id="hideMasteredFilter" data-on="false">🙈 Gemeisterte ausblenden</button>
     </div>
-    <script>
-        // ==================== DISEASE & CASE DATA ====================
-        const MODULES = [
-            { id: 'notfaelle', title: 'Medizinische Notfälle', icon: '🚨', desc: 'Akute Notfallsituationen erkennen und handeln' },
-            { id: 'erkrankungen', title: 'Erkrankungen', icon: '🫁', desc: 'Krankheitsbilder pflegerisch begleiten' },
-            { id: 'pflegeprobleme', title: 'Pflegeprobleme', icon: '⚠️', desc: 'Risiken erkennen & Maßnahmen planen' },
-            { id: 'recht', title: 'Recht & Ethik', icon: '⚖️', desc: 'Rechtliche Rahmenbedingungen' },
-            { id: 'kommunikation', title: 'Kommunikation', icon: '💬', desc: 'Gesprächsführung & Beratung' },
-            { id: 'expertenstandards', title: 'Expertenstandards', icon: '📋', desc: 'Pflege nach Expertenstandard' },
-            { id: 'pflegeplanung', title: 'Pflegeplanung', icon: '📝', desc: 'PESR, SMART-Ziele, Maßnahmen' },
-        ];
+  </div>
 
-        const CASES = [
-            {
-                id: 'myokardinfarkt',
-                module: 'notfaelle',
-                title: 'Akuter Myokardinfarkt',
-                category: 'Kardiologie',
-                difficulty: 'Schwer',
-                setting: 'Notaufnahme',
-                patientModel: 'olderMale',
-                patient: { name: 'Herr Schneider', age: 67, gender: 'männlich',
-                    openingLine: 'Ich habe seit einer Stunde starke Schmerzen in der Brust... es fühlt sich an wie ein riesiger Druck, und mir ist schlecht.',
-                    conditionState: ['pain', 'pale', 'sweaty', 'anxious'] },
-                vitals: { rr: '24/min', spo2: '94%', pulse: '104/min', bp: '160/95 mmHg', temp: '37.4°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck', instruction: 'Was erkennst du sofort als pflegerisch relevant?',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Retrosternaler Brustschmerz mit Ausstrahlung', correct: true, points: 15,
-                                feedback: 'Leitsymptom – sofortige Reaktion nötig.', critical: true },
-                            { label: 'Patient wirkt blass und kaltschweißig', correct: true, points: 12,
-                                feedback: 'Vegetative Zeichen – Hinweis auf Infarkt.', critical: false },
-                            { label: 'Übelkeit als vegetatives Begleitsymptom', correct: true, points: 8,
-                                feedback: 'Häufig bei MI.', critical: false },
-                            { label: 'Patient möchte etwas essen', correct: false, points: -5,
-                                feedback: 'Nahrungsaufnahme ist jetzt nicht prioritär.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Welche Assessment-Fragen stellst du gezielt? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Wann genau begannen die Schmerzen?', correct: true, points: 12,
-                                feedback: 'Zeitfenster für Therapieentscheidung.', critical: true },
-                            { label: 'Strahl der Schmerz in Arm, Kiefer oder Rücken aus?', correct: true, points: 10,
-                                feedback: 'Typische Ausstrahlung erfragen.', critical: false },
-                            { label: 'Bestehen Vorerkrankungen wie Diabetes oder Hypertonie?', correct: true, points: 10,
-                                feedback: 'Risikofaktoren identifizieren.', critical: false },
-                            { label: 'Haben Sie heute schon ferngesehen?', correct: false, points: -5,
-                                feedback: 'Irrelevante Frage in der Akutsituation.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem erkennen',
-                        instruction: 'Welches Pflegeproblem steht im Vordergrund?',
-                        type: 'single',
-                        options: [
-                            { label: 'Akuter Brustschmerz mit Vernichtungsgefühl', correct: true, points: 20,
-                                feedback: 'Priorität: Schmerz + psychische Belastung.', critical: true },
-                            { label: 'Mangelnde Freizeitgestaltung', correct: false, points: -8,
-                                feedback: 'Kein akutes Pflegeproblem.', critical: false },
-                            { label: 'Leichte Übelkeit ohne Erbrechen', correct: false, points: -3,
-                                feedback: 'Sekundär, nicht das Hauptproblem.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 4 korrekte Sofortmaßnahmen.',
-                        type: 'multiple', requiredCorrect: 4,
-                        options: [
-                            { label: 'Oberkörper 30–45° hochlagern', correct: true, points: 14,
-                                feedback: 'Entlastet Herz und erleichtert Atmung.', critical: true },
-                            { label: 'Vitalzeichen engmaschig kontrollieren (RR, Puls, SpO₂)', correct: true, points: 14,
-                                feedback: 'Alle 5–15 Minuten, Veränderungen sofort melden.', critical: true },
-                            { label: 'Venösen Zugang sichern & Blutentnahme vorbereiten', correct: true, points: 10,
-                                feedback: 'Für Labor und Medikamentengabe.', critical: false },
-                            { label: 'Patienten zur Toilette begleiten', correct: false, points: -10,
-                                feedback: 'Absolute Bettruhe! Keine Belastung.', critical: true },
-                            { label: 'Psychische Betreuung: ruhig erklären, Angst nehmen', correct: true, points: 10,
-                                feedback: 'Sicherheit vermitteln, Angehörige informieren.', critical: false },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Kommunikation & Edukation',
-                        instruction: 'Was sagst du dem Patienten? Wähle die beste Antwort.',
-                        type: 'single',
-                        options: [
-                            { label: '„Ich bleibe bei Ihnen. Wir kümmern uns sofort um Sie. Der Arzt wird gleich kommen.“',
-                                correct: true, points: 15,
-                                feedback: 'Beruhigend, präsent, konkret – beste Wahl.', critical: true },
-                            { label: '„Das ist nichts Schlimmes, entspannen Sie sich einfach.“', correct: false,
-                                points: -10, feedback: 'Bagatellisierung – gefährlich.', critical: true },
-                            { label: '„Ich hole nur schnell etwas, bin gleich zurück.“', correct: false, points: -8,
-                                feedback: 'Patient nicht allein lassen!', critical: true },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation & Weitergabe',
-                        instruction: 'Was gibst du per SBAR an den Arzt weiter? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Situation: Akuter Brustschmerz seit 1h, blass, schweißig', correct: true, points: 12,
-                                feedback: 'Klare Situationsbeschreibung.', critical: true },
-                            { label: 'Background: 67J, Hypertonie bekannt, Raucher', correct: true, points: 10,
-                                feedback: 'Relevante Vorgeschichte.', critical: false },
-                            { label: 'Assessment: V.a. ACS/STEMI, EKG steht aus', correct: true, points: 14,
-                                feedback: 'Einschätzung kommunizieren.', critical: true },
-                            { label: '„Der Patient ist nett und kooperativ.“', correct: false, points: -5,
-                                feedback: 'Keine relevante SBAR-Information.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Akuter Myokardinfarkt (V.a. STEMI)',
-                definition: 'Myokardinfarkt = Nekrose von Herzmuskelgewebe durch Koronararterienverschluss.',
-                nursingSummary: 'Oberkörperhochlagern, Vitalzeichen-Monitoring, venöser Zugang, psychische Betreuung, sofortige Arztinformation per SBAR.',
-                examTip: 'STEMI vs. NSTEMI unterscheiden. Pflege: Bettruhe, Monitoring, Angst nehmen, keine Belastung.',
-            },
-            {
-                id: 'schlaganfall',
-                module: 'notfaelle',
-                title: 'Akuter ischämischer Schlaganfall',
-                category: 'Neurologie',
-                difficulty: 'Schwer',
-                setting: 'Notaufnahme',
-                patientModel: 'olderFemale',
-                patient: { name: 'Frau Krüger', age: 74, gender: 'weiblich',
-                    openingLine: 'Ich kann meinen rechten Arm nicht mehr heben... mein Mund fühlt sich taub an. Es kam so plötzlich.',
-                    conditionState: ['stroke', 'confused', 'anxious'] },
-                vitals: { rr: '18/min', spo2: '96%', pulse: '88/min', bp: '170/95 mmHg', temp: '36.9°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was erkennst du sofort? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Hemiparese rechts (Arm und Bein)', correct: true, points: 15,
-                                feedback: 'Plötzliche einseitige Schwäche – Leitsymptom.', critical: true },
-                            { label: 'Fazialisparese (hängender Mundwinkel rechts)', correct: true, points: 12,
-                                feedback: 'FAST-Kriterium erfüllt.', critical: true },
-                            { label: 'Sprachstörung (verwaschene Sprache)', correct: true, points: 10,
-                                feedback: 'Dysarthrie – drittes FAST-Kriterium.', critical: true },
-                            { label: 'Starke Bauchschmerzen', correct: false, points: -5,
-                                feedback: 'Kein Schlaganfall-Symptom.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Welche Assessments führst du durch? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'FAST-Test (Face, Arms, Speech, Time)', correct: true, points: 14,
-                                feedback: 'Standardisiertes Screening.', critical: true },
-                            { label: 'NIHSS-Beurteilung vorbereiten', correct: true, points: 10,
-                                feedback: 'Detaillierte neurologische Einschätzung.', critical: false },
-                            { label: 'Schlucktest vor oraler Gabe', correct: true, points: 12,
-                                feedback: 'Aspirationsprophylaxe!', critical: true },
-                            { label: 'Ausführliche Ernährungsberatung', correct: false, points: -5,
-                                feedback: 'Nicht prioritär in der Akutphase.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem',
-                        instruction: 'Welches Problem ist am dringlichsten?',
-                        type: 'single',
-                        options: [
-                            { label: 'Aspirationsgefahr bei Schluckstörung', correct: true, points: 18,
-                                feedback: 'Aspiration kann lebensbedrohlich sein.', critical: true },
-                            { label: 'Leichte Unsicherheit beim Gehen', correct: false, points: -5,
-                                feedback: 'Mobilisation ist aktuell nicht das Hauptproblem.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 4 Maßnahmen.',
-                        type: 'multiple', requiredCorrect: 4,
-                        options: [
-                            { label: 'Oberkörper 30° hochlagern', correct: true, points: 12,
-                                feedback: 'Fördert venösen Abfluss, senkt Hirndruck.', critical: true },
-                            { label: 'Neurologische Überwachung (Pupillen, Vigilanz, NIHSS)', correct: true, points: 14,
-                                feedback: 'Verschlechterung sofort erkennen.', critical: true },
-                            { label: 'Nüchtern belassen bis zum Schlucktest', correct: true, points: 14,
-                                feedback: 'Aspirationsprophylaxe.', critical: true },
-                            { label: 'Betroffene Extremitäten physiologisch lagern', correct: true, points: 8,
-                                feedback: 'Kontrakturenprophylaxe.', critical: false },
-                            { label: 'Patienten sofort mobilisieren', correct: false, points: -8,
-                                feedback: 'Erst nach ärztlicher Freigabe mobilisieren.', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Kommunikation',
-                        instruction: 'Wie sprichst du mit der Patientin?',
-                        type: 'single',
-                        options: [
-                            { label: 'Ruhig, langsam, einfache Sätze, Blickkontakt halten', correct: true, points: 14,
-                                feedback: 'Angepasste Kommunikation bei Sprachstörung.', critical: true },
-                            { label: 'Laut und schnell sprechen, damit sie es versteht', correct: false, points: -8,
-                                feedback: 'Überfordernd und nicht hilfreich.', critical: false },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was dokumentierst du? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Zeitpunkt des Symptombeginns (Onset)', correct: true, points: 14,
-                                feedback: 'Entscheidend für Lyse-Zeitfenster!', critical: true },
-                            { label: 'FAST-Ergebnis und NIHSS-Score', correct: true, points: 12,
-                                feedback: 'Objektivierbare neurologische Befunde.', critical: true },
-                            { label: 'Durchgeführte Maßnahmen und Arztinfo-Zeitpunkt', correct: true, points: 10,
-                                feedback: 'Lückenlose Dokumentation.', critical: false },
-                            { label: 'Lieblingsfarbe der Patientin', correct: false, points: -5,
-                                feedback: 'Nicht relevant.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Ischämischer Schlaganfall (rechtsseitige Hemiparese)',
-                nursingSummary: 'FAST-Test, Oberkörperhochlagerung, Aspirationsprophylaxe, neurologisches Monitoring, Zeitpunkt dokumentieren.',
-                examTip: 'FAST-Schema: Face, Arms, Speech, Time. Pflege: Schlucktest vor oraler Gabe, Lagerung, Monitoring.',
-            },
-            {
-                id: 'pneumonie',
-                module: 'erkrankungen',
-                title: 'Pneumonie mit Fieber und Dyspnoe',
-                category: 'Atemwege',
-                difficulty: 'Mittel',
-                setting: 'Station',
-                patientModel: 'olderMale',
-                patient: { name: 'Herr Bergmann', age: 70, gender: 'männlich',
-                    openingLine: 'Ich fühle mich so schwach und habe hohes Fieber... der Husten tut weh und ich bekomme kaum Luft.',
-                    conditionState: ['dyspnea', 'pale', 'tired', 'cough'] },
-                vitals: { rr: '26/min', spo2: '88%', pulse: '108/min', bp: '130/80 mmHg', temp: '39.2°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was fällt dir sofort auf? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Tachypnoe (26/min) und Dyspnoe', correct: true, points: 14,
-                                feedback: 'Atemnot mit erhöhter Frequenz.', critical: true },
-                            { label: 'Fieber 39,2°C mit Schwächegefühl', correct: true, points: 10,
-                                feedback: 'Systemisches Infektzeichen.', critical: false },
-                            { label: 'SpO₂ 88% – kritische Hypoxämie', correct: true, points: 16,
-                                feedback: 'Sofortige O₂-Gabe prüfen!', critical: true },
-                            { label: 'Patient hat leichten Juckreiz', correct: false, points: -5,
-                                feedback: 'Kein relevantes Symptom.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Welche pflegerischen Assessments sind wichtig? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Auskultation der Lunge (Rasselgeräusche?)', correct: true, points: 12,
-                                feedback: 'Basisassessment der Atmung.', critical: true },
-                            { label: 'Hustencharakter und Auswurf beurteilen', correct: true, points: 10,
-                                feedback: 'Farbe, Konsistenz, Menge.', critical: false },
-                            { label: 'SpO₂ kontinuierlich überwachen', correct: true, points: 14,
-                                feedback: 'Verschlechterung sofort erkennen.', critical: true },
-                            { label: 'Haarpflege durchführen', correct: false, points: -5,
-                                feedback: 'Nicht prioritär bei akuter Dyspnoe.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem',
-                        instruction: 'Formuliere das zentrale Pflegeproblem.',
-                        type: 'single',
-                        options: [
-                            { label: 'Beeinträchtigter Gasaustausch (SpO₂ 88%)', correct: true, points: 18,
-                                feedback: 'Priorität A – Atmung sichern.', critical: true },
-                            { label: 'Leichte Unruhe des Patienten', correct: false, points: -5,
-                                feedback: 'Sekundär, nicht das Hauptproblem.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 4 korrekte Maßnahmen.',
-                        type: 'multiple', requiredCorrect: 4,
-                        options: [
-                            { label: 'Oberkörperhochlagerung (mind. 30°)', correct: true, points: 14,
-                                feedback: 'Erleichtert Atmung und Zwerchfellbeweglichkeit.', critical: true },
-                            { label: 'Atemstimulierende Einreibung (ASE)', correct: true, points: 12,
-                                feedback: 'Fördert Durchlüftung und Sekretlösung.', critical: false },
-                            { label: 'Sauerstoffgabe nach ärztlicher Anordnung', correct: true, points: 14,
-                                feedback: 'Ziel: SpO₂ 92–96%.', critical: true },
-                            { label: 'Flüssigkeitsbilanz dokumentieren & Trinkmenge fördern', correct: true, points: 8,
-                                feedback: 'Sekretolyse unterstützen.', critical: false },
-                            { label: 'Patienten flach lagern', correct: false, points: -10,
-                                feedback: 'Verschlechtert die Atmung erheblich.', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Edukation',
-                        instruction: 'Was erklärst du dem Patienten zur Sekretmobilisation?',
-                        type: 'single',
-                        options: [
-                            { label: '„Atmen Sie tief ein, halten Sie kurz, husten Sie dann kräftig. Ich helfe Ihnen dabei.“',
-                                correct: true, points: 14, feedback: 'Angeleitetes Husten – effektiv.', critical: false },
-                            { label: '„Einfach abwarten, das geht von allein weg.“', correct: false, points: -8,
-                                feedback: 'Unprofessionell und falsch.', critical: false },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was gehört in die Pflegedokumentation? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Atemfrequenz, SpO₂, Hustencharakter', correct: true, points: 12,
-                                feedback: 'Objektive Atmungsparameter.', critical: true },
-                            { label: 'Durchgeführte ASE und Wirkung', correct: true, points: 10,
-                                feedback: 'Maßnahme und Ergebnis dokumentieren.', critical: false },
-                            { label: 'Fieberverlauf und Flüssigkeitsbilanz', correct: true, points: 10,
-                                feedback: 'Verlaufsparameter.', critical: false },
-                            { label: 'Wetterbericht von heute', correct: false, points: -5,
-                                feedback: 'Kein pflegerelevantes Dokument.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Ambulant erworbene Pneumonie mit Hypoxämie',
-                nursingSummary: 'Oberkörperhochlagerung, ASE, SpO₂-Monitoring, O₂-Gabe nach AO, Flüssigkeitsbilanz.',
-                examTip: 'Pflege: ASE, Atmung überwachen, Flüssigkeit, Frühmobilisation. Achtung: Delir bei Älteren als einziges Symptom möglich.',
-            },
-            {
-                id: 'copd_exaz',
-                module: 'erkrankungen',
-                title: 'COPD-Exazerbation mit akuter Dyspnoe',
-                category: 'Atmung',
-                difficulty: 'Mittel',
-                setting: 'Notaufnahme',
-                patientModel: 'breathlessOlderMale',
-                patient: { name: 'Herr Wagner', age: 69, gender: 'männlich',
-                    openingLine: 'Ich kriege keine Luft... mein Spray hilft gar nicht. Der Husten ist so schlimm.',
-                    conditionState: ['dyspnea', 'anxious', 'sweaty', 'cough'] },
-                vitals: { rr: '30/min', spo2: '85%', pulse: '115/min', bp: '150/90 mmHg', temp: '37.6°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was erkennst du sofort? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Schwere Dyspnoe mit Einsatz der Atemhilfsmuskulatur', correct: true, points: 16,
-                                feedback: 'Atemnot mit sichtbarer Anstrengung.', critical: true },
-                            { label: 'SpO₂ 85% – kritische Hypoxämie', correct: true, points: 16,
-                                feedback: 'Sofortiger Handlungsbedarf!', critical: true },
-                            { label: 'Tachykardie 115/min als Kompensation', correct: true, points: 8,
-                                feedback: 'Kreislauf kompensiert Hypoxämie.', critical: false },
-                            { label: 'Patient hat Hunger', correct: false, points: -5,
-                                feedback: 'Nicht prioritär.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Welche Assessments? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Atemfrequenz und Atemmuster beobachten', correct: true, points: 12,
-                                feedback: 'Tachypnoe, Lippenbremse?', critical: true },
-                            { label: 'Auskultation (Giemen, Brummen?)', correct: true, points: 10,
-                                feedback: 'Obstruktive Atemgeräusche.', critical: false },
-                            { label: 'BGA-Werte erfragen (CO₂-Retention?)', correct: true, points: 12,
-                                feedback: 'Hyperkapnie-Risiko bei COPD.', critical: true },
-                            { label: 'Schuhgröße erfragen', correct: false, points: -5,
-                                feedback: 'Irrelevant.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem',
-                        instruction: 'Zentrales Problem?',
-                        type: 'single',
-                        options: [
-                            { label: 'Akute respiratorische Insuffizienz bei COPD-Exazerbation', correct: true, points: 20,
-                                feedback: 'Priorität: Atmung sichern.', critical: true },
-                            { label: 'Mangelnde Krankheitseinsicht', correct: false, points: -8,
-                                feedback: 'Nicht das akute Problem.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 4 Maßnahmen.',
-                        type: 'multiple', requiredCorrect: 4,
-                        options: [
-                            { label: 'Oberkörperhochlagerung (Herzbettlage)', correct: true, points: 14,
-                                feedback: 'Erleichtert Atmung.', critical: true },
-                            { label: 'Lippenbremse anleiten', correct: true, points: 14,
-                                feedback: 'Vermindert Bronchialkollaps.', critical: true },
-                            { label: 'SpO₂ engmaschig überwachen (Ziel 88–92%)', correct: true, points: 14,
-                                feedback: 'Vorsicht: Zu viel O₂ kann Atemantrieb unterdrücken.', critical: true },
-                            { label: 'Atemerleichternde Position (Kutschersitz) ermöglichen', correct: true, points: 10,
-                                feedback: 'Unterstützt Atemmechanik.', critical: false },
-                            { label: 'Patienten flach lagern', correct: false, points: -12,
-                                feedback: 'Lebensgefährlich bei Dyspnoe!', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Kommunikation',
-                        instruction: 'Wie leitest du die Lippenbremse an?',
-                        type: 'single',
-                        options: [
-                            { label: '„Atmen Sie langsam durch die Nase ein, dann durch leicht geschlossene Lippen aus – wie beim Kerze-Ausblasen.“',
-                                correct: true, points: 14, feedback: 'Klare, bildhafte Anleitung.', critical: false },
-                            { label: '„Atmen Sie so schnell wie möglich.“', correct: false, points: -10,
-                                feedback: 'Falsch – verschlimmert Dyspnoe.', critical: true },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was dokumentierst du? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Atemfrequenz, SpO₂, Atemmuster', correct: true, points: 12,
-                                feedback: 'Objektive Parameter.', critical: true },
-                            { label: 'Wirkung der Lippenbremse und Lagerung', correct: true, points: 10,
-                                feedback: 'Evaluation der Maßnahmen.', critical: false },
-                            { label: 'Arztinfo bei Verschlechterung', correct: true, points: 12,
-                                feedback: 'Dokumentationspflicht.', critical: true },
-                            { label: 'Farbe der Bettwäsche', correct: false, points: -5,
-                                feedback: 'Nicht relevant.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'COPD-Exazerbation mit akuter respiratorischer Insuffizienz',
-                nursingSummary: 'Oberkörperhochlagerung, Lippenbremse, SpO₂ 88–92% Ziel, atemerleichternde Position, engmaschiges Monitoring.',
-                examTip: 'COPD: SpO₂-Ziel 88–92%, nicht höher! Pflege: Lippenbremse, Kutschersitz, ASE.',
-            },
-            {
-                id: 'hypoglykaemie',
-                module: 'notfaelle',
-                title: 'Schwere Hypoglykämie bei Diabetes mellitus',
-                category: 'Stoffwechsel',
-                difficulty: 'Mittel',
-                setting: 'Station',
-                patientModel: 'middleAgedFemale',
-                patient: { name: 'Frau Yilmaz', age: 45, gender: 'weiblich',
-                    openingLine: 'Mir ist so schwindelig... ich zittere und schwitze. Ich habe Insulin gespritzt aber nichts gegessen...',
-                    conditionState: ['sweaty', 'confused', 'tired', 'hypoglycemic'] },
-                vitals: { rr: '20/min', spo2: '97%', pulse: '98/min', bp: '120/75 mmHg', temp: '36.4°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was fällt dir auf? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Zittern und Schwitzen (adrenerge Symptome)', correct: true, points: 14,
-                                feedback: 'Klassische Hypoglykämie-Zeichen.', critical: true },
-                            { label: 'Schwindel und Konzentrationsstörung', correct: true, points: 12,
-                                feedback: 'Neuroglukopenische Symptome.', critical: true },
-                            { label: 'Insulin gespritzt, aber keine Nahrungsaufnahme', correct: true, points: 14,
-                                feedback: 'Ursache klar erkennbar.', critical: true },
-                            { label: 'Patientin hat Durst', correct: false, points: -5,
-                                feedback: 'Durst = Hyperglykämie, nicht Hypo.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Was tust du zuerst? Wähle die wichtigste Maßnahme.',
-                        type: 'single',
-                        options: [
-                            { label: 'Sofort Blutzucker messen', correct: true, points: 18,
-                                feedback: 'Erste und wichtigste Maßnahme.', critical: true },
-                            { label: 'Die Patientin nach ihrem Befinden fragen', correct: false, points: -8,
-                                feedback: 'Zu unspezifisch – BZ-Messung ist objektiv.', critical: true },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem',
-                        instruction: 'Pflegeproblem?',
-                        type: 'single',
-                        options: [
-                            { label: 'Akute Hypoglykämie mit Bewusstseinsbeeinträchtigung', correct: true, points: 18,
-                                feedback: 'Priorität: BZ anheben.', critical: true },
-                            { label: 'Chronische Müdigkeit', correct: false, points: -6,
-                                feedback: 'Nicht das akute Problem.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 3 Maßnahmen bei BZ <50 mg/dl und Schluckfähigkeit.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: '20–30g schnell resorbierbare KH oral (Traubenzucker/Saft)', correct: true, points: 16,
-                                feedback: 'Erste Wahl bei Schluckfähigkeit.', critical: true },
-                            { label: 'BZ nach 15 Minuten kontrollieren', correct: true, points: 14,
-                                feedback: 'Schema: messen – KH – 15 min – messen.', critical: true },
-                            { label: 'Patientin nicht allein lassen, überwachen', correct: true, points: 10,
-                                feedback: 'Sicherheit gewährleisten.', critical: false },
-                            { label: 'Insulin nachspritzen', correct: false, points: -15,
-                                feedback: 'Lebensgefährlich! Insulin senkt BZ weiter.', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Edukation',
-                        instruction: 'Was erklärst du der Patientin nach Stabilisierung?',
-                        type: 'single',
-                        options: [
-                            { label: '„Nach dem Insulinspritzen müssen Sie innerhalb von 30 Minuten etwas essen. Tragen Sie immer Traubenzucker bei sich.“',
-                                correct: true, points: 14, feedback: 'Konkrete Verhaltensregel.', critical: false },
-                            { label: '„Das war nicht so schlimm, machen Sie einfach weiter wie bisher.“', correct: false,
-                                points: -10, feedback: 'Gefährliche Bagatellisierung.', critical: true },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was dokumentierst du? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'BZ-Wert vor und nach KH-Gabe', correct: true, points: 12,
-                                feedback: 'Objektive Werte dokumentieren.', critical: true },
-                            { label: 'Verabreichte KH-Menge und Form', correct: true, points: 10,
-                                feedback: 'Nachvollziehbarkeit.', critical: false },
-                            { label: 'Patientenreaktion und BZ-Verlauf', correct: true, points: 10,
-                                feedback: 'Evaluation.', critical: false },
-                            { label: 'Wetterdaten', correct: false, points: -5,
-                                feedback: 'Irrelevant.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Schwere Hypoglykämie (BZ <50 mg/dl) nach Insulin-Applikation ohne Nahrungsaufnahme',
-                nursingSummary: 'Sofort BZ messen, orale KH bei Schluckfähigkeit, nach 15 min kontrollieren, überwachen.',
-                examTip: 'BZ <70 = Hypoglykämie. Schema: messen → KH oral → 15 min warten → erneut messen. Nie Insulin geben!',
-            },
-            {
-                id: 'dekubitus',
-                module: 'expertenstandards',
-                title: 'Dekubitusrisiko bei immobilen Patienten',
-                category: 'Expertenstandard',
-                difficulty: 'Mittel',
-                setting: 'Station',
-                patientModel: 'olderMale',
-                patient: { name: 'Herr Meier', age: 78, gender: 'männlich',
-                    openingLine: 'Ich liege schon so lange im Bett... ich kann mich kaum selbst bewegen.',
-                    conditionState: ['tired', 'pale'] },
-                vitals: { rr: '16/min', spo2: '95%', pulse: '72/min', bp: '135/85 mmHg', temp: '36.8°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was ist pflegerisch relevant? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Immobilität – Patient kann sich kaum selbst bewegen', correct: true, points: 14,
-                                feedback: 'Hauptrisikofaktor für Dekubitus.', critical: true },
-                            { label: 'Langandauernde Bettlägerigkeit', correct: true, points: 12,
-                                feedback: 'Druckexposition über Knochenvorsprüngen.', critical: true },
-                            { label: 'Blasses Hautbild – mögliche Mangelversorgung', correct: true, points: 8,
-                                feedback: 'Hinweis auf reduzierten Allgemeinzustand.', critical: false },
-                            { label: 'Patient hat Besuch erwartet', correct: false, points: -5,
-                                feedback: 'Nicht pflegerisch relevant.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Welche Assessments nach Expertenstandard? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Hautbeobachtung an allen Prädilektionsstellen', correct: true, points: 14,
-                                feedback: 'Täglich inspizieren.', critical: true },
-                            { label: 'Braden-Skala oder Norton-Skala anwenden', correct: true, points: 12,
-                                feedback: 'Standardisiertes Risikoeinschätzungsinstrument.', critical: true },
-                            { label: 'Bewegungsfähigkeit und Mobilität einschätzen', correct: true, points: 10,
-                                feedback: 'Eigenbewegung fördern.', critical: false },
-                            { label: 'Musikgeschmack erfragen', correct: false, points: -5,
-                                feedback: 'Kein Assessment nach Expertenstandard.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem',
-                        instruction: 'Formuliere das Pflegeproblem nach PESR.',
-                        type: 'single',
-                        options: [
-                            { label: 'Dekubitusrisiko (R) bedingt durch Immobilität (U) bei Bettlägerigkeit (S)', correct: true,
-                                points: 18, feedback: 'Korrekte PESR-Formulierung.', critical: true },
-                            { label: 'Patient ist unzufrieden mit dem Essen', correct: false, points: -8,
-                                feedback: 'Kein Zusammenhang mit Dekubitusrisiko.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 4 Maßnahmen nach Expertenstandard.',
-                        type: 'multiple', requiredCorrect: 4,
-                        options: [
-                            { label: '30°-Lagerung und regelmäßiger Positionswechsel (2-stündlich)', correct: true, points: 14,
-                                feedback: 'Druckentlastung – zentrale Maßnahme.', critical: true },
-                            { label: 'Druckentlastende Hilfsmittel (Spezialmatratze) einsetzen', correct: true, points: 14,
-                                feedback: 'Nach Risikoeinschätzung.', critical: true },
-                            { label: 'Haut täglich inspizieren und dokumentieren', correct: true, points: 12,
-                                feedback: 'Früherkennung von Hautveränderungen.', critical: true },
-                            { label: 'Mobilisation und Bewegungsübungen fördern', correct: true, points: 10,
-                                feedback: 'Eigenbewegung erhalten.', critical: false },
-                            { label: 'Patienten durchgehend in Rückenlage belassen', correct: false, points: -14,
-                                feedback: 'Widerspricht dem Expertenstandard!', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Edukation',
-                        instruction: 'Was erklärst du dem Patienten?',
-                        type: 'single',
-                        options: [
-                            { label: '„Wir lagern Sie regelmäßig um, um Ihre Haut zu schützen. Bitte melden Sie, wenn Sie Druck spüren.“',
-                                correct: true, points: 14, feedback: 'Patient einbeziehen.', critical: false },
-                            { label: '„Sie müssen einfach nur still liegen bleiben.“', correct: false, points: -10,
-                                feedback: 'Falsch – fördert Dekubitus.', critical: true },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was gehört in die Dokumentation? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Risikoeinschätzung (Braden-Skala Score)', correct: true, points: 12,
-                                feedback: 'Standardisiert dokumentieren.', critical: true },
-                            { label: 'Lagerungsintervalle und Positionen', correct: true, points: 10,
-                                feedback: 'Nachvollziehbarkeit.', critical: false },
-                            { label: 'Hautzustand und Veränderungen', correct: true, points: 12,
-                                feedback: 'Verlaufsdokumentation.', critical: true },
-                            { label: 'Fernsehprogramm des Patienten', correct: false, points: -5,
-                                feedback: 'Nicht pflegerelevant.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Dekubitusrisiko Grad 2 nach Braden-Skala bei Immobilität',
-                nursingSummary: '30°-Lagerung, 2-stündlicher Positionswechsel, druckentlastende Hilfsmittel, tägliche Hautinspektion.',
-                examTip: 'Expertenstandard Dekubitusprophylaxe: Risikoeinschätzung, Lagerung, Hilfsmittel, Hautbeobachtung, Dokumentation.',
-            },
-            {
-                id: 'sturzrisiko',
-                module: 'pflegeprobleme',
-                title: 'Sturzrisiko bei älterer Patientin',
-                category: 'Sicherheit',
-                difficulty: 'Mittel',
-                setting: 'Station',
-                patientModel: 'olderFemale',
-                patient: { name: 'Frau Schulz', age: 82, gender: 'weiblich',
-                    openingLine: 'Ich wollte nur schnell zur Toilette... aber ich bin so unsicher auf den Beinen.',
-                    conditionState: ['tired', 'anxious'] },
-                vitals: { rr: '17/min', spo2: '96%', pulse: '76/min', bp: '140/85 mmHg', temp: '36.6°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was erkennst du? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Gangunsicherheit und Sturzanamnese', correct: true, points: 14,
-                                feedback: 'Zentraler Risikofaktor.', critical: true },
-                            { label: 'Alter 82 Jahre – erhöhtes Sturzrisiko', correct: true, points: 10,
-                                feedback: 'Alter ist ein Risikofaktor.', critical: false },
-                            { label: 'Patientin möchte ohne Hilfe mobilisieren', correct: true, points: 12,
-                                feedback: 'Gefährliches Verhalten.', critical: true },
-                            { label: 'Patientin trägt eine Brille', correct: false, points: -3,
-                                feedback: 'Nicht direkt ein Risikofaktor.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Welche Assessments? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Sturzrisiko-Skala (z.B. STRATIFY) anwenden', correct: true, points: 12,
-                                feedback: 'Standardisiertes Assessment.', critical: true },
-                            { label: 'Mobilität und Gleichgewicht testen', correct: true, points: 10,
-                                feedback: 'Funktionelle Einschätzung.', critical: false },
-                            { label: 'Umgebungsfaktoren prüfen (Stolperfallen, Licht)', correct: true, points: 12,
-                                feedback: 'Äußere Risikofaktoren.', critical: true },
-                            { label: 'Blutgruppe bestimmen', correct: false, points: -5,
-                                feedback: 'Nicht relevant für Sturzrisiko.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem',
-                        instruction: 'Pflegeproblem?',
-                        type: 'single',
-                        options: [
-                            { label: 'Erhöhtes Sturzrisiko bei Gangunsicherheit und mangelnder Einsicht', correct: true,
-                                points: 18, feedback: 'Präzise Problembeschreibung.', critical: true },
-                            { label: 'Patientin ist ungeduldig', correct: false, points: -6,
-                                feedback: 'Zu unspezifisch.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 4 Maßnahmen.',
-                        type: 'multiple', requiredCorrect: 4,
-                        options: [
-                            { label: 'Rufanlage in Reichweite platzieren & erklären', correct: true, points: 14,
-                                feedback: 'Patientin kann Hilfe rufen.', critical: true },
-                            { label: 'Stolperfallen beseitigen & Umgebung sichern', correct: true, points: 12,
-                                feedback: 'Äußere Risiken minimieren.', critical: true },
-                            { label: 'Geeignetes Schuhwerk und Hilfsmittel bereitstellen', correct: true, points: 10,
-                                feedback: 'Sicherheit beim Gehen.', critical: false },
-                            { label: 'Patientin über Sturzrisiko aufklären & beraten', correct: true, points: 12,
-                                feedback: 'Edukation ist zentral.', critical: true },
-                            { label: 'Patientin im Zimmer einschließen', correct: false, points: -14,
-                                feedback: 'Freiheitsentzug – rechtlich unzulässig!', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Beratung',
-                        instruction: 'Wie berätst du die Patientin?',
-                        type: 'single',
-                        options: [
-                            { label: '„Bitte klingeln Sie, wenn Sie aufstehen möchten. Ich helfe Ihnen dann sicher zur Toilette.“',
-                                correct: true, points: 14, feedback: 'Konkret, unterstützend, sicher.', critical: false },
-                            { label: '„Sie dürfen auf keinen Fall aufstehen!“', correct: false, points: -6,
-                                feedback: 'Zu direktiv, keine Alternative angeboten.', critical: false },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was dokumentierst du? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Sturzrisikoeinschätzung und Score', correct: true, points: 12,
-                                feedback: 'Standardisiert.', critical: true },
-                            { label: 'Getroffene Maßnahmen (Umgebung, Hilfsmittel)', correct: true, points: 10,
-                                feedback: 'Nachvollziehbarkeit.', critical: false },
-                            { label: 'Beratungsgespräch und Patientenreaktion', correct: true, points: 10,
-                                feedback: 'Edukation dokumentieren.', critical: false },
-                            { label: 'Private Telefonnummer der Patientin', correct: false, points: -5,
-                                feedback: 'Datenschutz – nicht in Pflegedoku.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Erhöhtes Sturzrisiko (STRATIFY positiv) bei Gangunsicherheit',
-                nursingSummary: 'Rufanlage, Umgebung sichern, Hilfsmittel, Beratung, Assessment dokumentieren.',
-                examTip: 'Sturzprophylaxe: Assessment, Umgebung, Hilfsmittel, Edukation. Keine freiheitsentziehenden Maßnahmen ohne Genehmigung.',
-            },
-            {
-                id: 'angst_op',
-                module: 'kommunikation',
-                title: 'Angst vor einer Operation',
-                category: 'Psychosozial',
-                difficulty: 'Leicht',
-                setting: 'Station',
-                patientModel: 'middleAgedFemale',
-                patient: { name: 'Frau Fischer', age: 52, gender: 'weiblich',
-                    openingLine: 'Ich habe solche Angst vor der OP morgen... ich kann nicht schlafen und muss ständig daran denken.',
-                    conditionState: ['anxious', 'tired'] },
-                vitals: { rr: '18/min', spo2: '97%', pulse: '90/min', bp: '145/90 mmHg', temp: '36.7°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was nimmst du wahr? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Ausgeprägte Angst mit Schlafstörung', correct: true, points: 12,
-                                feedback: 'Psychische Belastung deutlich.', critical: false },
-                            { label: 'Leicht erhöhter Puls und Blutdruck', correct: true, points: 8,
-                                feedback: 'Körperliche Angstreaktion.', critical: false },
-                            { label: 'Patientin sucht das Gespräch', correct: true, points: 10,
-                                feedback: 'Ressource – Gesprächsbereitschaft.', critical: false },
-                            { label: 'Patientin hat Fieber', correct: false, points: -5,
-                                feedback: 'Nicht vorhanden.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Wie schätzt du die Angst ein? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Angstauslöser konkret erfragen', correct: true, points: 14,
-                                feedback: 'Was genau macht Angst?', critical: true },
-                            { label: 'Ressourcen der Patientin explorieren', correct: true, points: 10,
-                                feedback: 'Was hilft ihr sonst?', critical: false },
-                            { label: 'Körperliche Angstsymptome erfassen', correct: true, points: 8,
-                                feedback: 'Schlaf, Appetit, Unruhe.', critical: false },
-                            { label: 'Finanzielle Situation erfragen', correct: false, points: -5,
-                                feedback: 'Nicht primär relevant.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem',
-                        instruction: 'Pflegeproblem?',
-                        type: 'single',
-                        options: [
-                            { label: 'Präoperative Angst mit Schlafstörung und psychovegetativen Symptomen', correct: true,
-                                points: 18, feedback: 'Präzise Beschreibung.', critical: true },
-                            { label: 'Patientin ist zu emotional', correct: false, points: -8,
-                                feedback: 'Abwertend – nicht professionell.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 3 Maßnahmen.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Aktives Zuhören und validieren der Gefühle', correct: true, points: 14,
-                                feedback: '„Ich verstehe, dass Sie Angst haben.“', critical: true },
-                            { label: 'Informationen über den OP-Ablauf geben', correct: true, points: 12,
-                                feedback: 'Wissen reduziert Angst.', critical: false },
-                            { label: 'Ressourcen aktivieren (Angehörige, Musik, Ablenkung)', correct: true, points: 10,
-                                feedback: 'Coping-Strategien fördern.', critical: false },
-                            { label: 'Der Patientin sagen, sie solle sich nicht so anstellen', correct: false, points: -14,
-                                feedback: 'Absolut unprofessionell!', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Gesprächsführung',
-                        instruction: 'Wähle die beste Gesprächsreaktion.',
-                        type: 'single',
-                        options: [
-                            { label: '„Ich nehme mir jetzt Zeit für Sie. Erzählen Sie mir, was Ihnen am meisten Sorgen macht.“',
-                                correct: true, points: 16, feedback: 'Offene Einladung, präsent.', critical: true },
-                            { label: '„Ach, das wird schon. Die OP ist doch Routine.“', correct: false, points: -10,
-                                feedback: 'Bagatellisierend.', critical: false },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was dokumentierst du? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Angstausprägung und psychovegetative Symptome', correct: true, points: 10,
-                                feedback: 'Objektiv erfassbar.', critical: false },
-                            { label: 'Durchgeführtes Beratungsgespräch', correct: true, points: 12,
-                                feedback: 'Dokumentationspflicht.', critical: true },
-                            { label: 'Patientenreaktion und Coping-Strategien', correct: true, points: 10,
-                                feedback: 'Evaluation.', critical: false },
-                            { label: 'Private Meinung zur Operation', correct: false, points: -5,
-                                feedback: 'Subjektiv – nicht in Doku.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Präoperative Angststörung mit psychovegetativer Symptomatik',
-                nursingSummary: 'Aktives Zuhören, validieren, informieren, Ressourcen aktivieren, Gespräch dokumentieren.',
-                examTip: 'Kommunikation: Validieren ≠ Bagatellisieren. Offene Fragen stellen, präsent sein, Ressourcen erfragen.',
-            },
-            {
-                id: 'fem',
-                module: 'recht',
-                title: 'Freiheitsentziehende Maßnahmen (FEM)',
-                category: 'Recht & Ethik',
-                difficulty: 'Schwer',
-                setting: 'Station',
-                patientModel: 'confusedElderly',
-                patient: { name: 'Herr Kunze', age: 84, gender: 'männlich',
-                    openingLine: 'Ich will nach Hause! Lassen Sie mich los! Wo bin ich hier überhaupt?',
-                    conditionState: ['confused', 'anxious'] },
-                vitals: { rr: '18/min', spo2: '95%', pulse: '84/min', bp: '150/90 mmHg', temp: '36.5°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was erkennst du? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Verwirrtheit mit örtlicher Desorientierung', correct: true, points: 12,
-                                feedback: 'Delirante Symptomatik möglich.', critical: true },
-                            { label: 'Weglauftendenz – Patient will nach Hause', correct: true, points: 14,
-                                feedback: 'Eigengefährdung möglich.', critical: true },
-                            { label: 'Anspannung und Unruhe', correct: true, points: 8,
-                                feedback: 'Psychomotorische Unruhe.', critical: false },
-                            { label: 'Patient ist gut orientiert', correct: false, points: -8,
-                                feedback: 'Offensichtlich nicht – widerspricht Aussage.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Was prüfst du vor einer FEM? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Ursache der Verwirrtheit (Delir, Demenz, Infekt?)', correct: true, points: 14,
-                                feedback: 'Ursachenabklärung vor Zwangsmaßnahme.', critical: true },
-                            { label: 'Weniger einschränkende Alternativen prüfen', correct: true, points: 14,
-                                feedback: 'Ultima-Ratio-Prinzip.', critical: true },
-                            { label: 'Richterliche Genehmigung erforderlich?', correct: true, points: 12,
-                                feedback: 'FEM benötigt richterliche Genehmigung.', critical: true },
-                            { label: 'Lieblingsfarbe des Patienten', correct: false, points: -5,
-                                feedback: 'Irrelevant.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Ethisch-rechtliches Problem',
-                        instruction: 'Welches Problem steht im Vordergrund?',
-                        type: 'single',
-                        options: [
-                            { label: 'Abwägung zwischen Freiheitsrecht und Fürsorgepflicht bei Weglauftendenz', correct: true,
-                                points: 20, feedback: 'Zentrales ethisches Dilemma.', critical: true },
-                            { label: 'Patient ist unbequem für das Personal', correct: false, points: -12,
-                                feedback: 'Unethisch – nicht patientenzentriert.', critical: true },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 3 Maßnahmen VOR einer FEM.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Beruhigende Gesprächsführung und Orientierung geben', correct: true, points: 14,
-                                feedback: 'Deeskalation als erste Maßnahme.', critical: true },
-                            { label: 'Angehörige einbeziehen (wenn möglich)', correct: true, points: 10,
-                                feedback: 'Vertraute Personen beruhigen.', critical: false },
-                            { label: 'Umgebung anpassen (Licht, Lärm reduzieren)', correct: true, points: 10,
-                                feedback: 'Reizabschirmung.', critical: false },
-                            { label: 'Sofort Bettgitter anbringen ohne Einwilligung', correct: false, points: -16,
-                                feedback: 'FEM ohne Genehmigung = Freiheitsberaubung!', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Kommunikation',
-                        instruction: 'Wie sprichst du mit dem verwirrten Patienten?',
-                        type: 'single',
-                        options: [
-                            { label: 'Ruhig, langsam, mit einfachen Sätzen Orientierung geben: „Sie sind im Krankenhaus, ich bin bei Ihnen.“',
-                                correct: true, points: 16, feedback: 'Validation und Orientierung.', critical: true },
-                            { label: '„Wenn Sie nicht ruhig sind, müssen wir Sie fixieren!“', correct: false, points: -14,
-                                feedback: 'Drohung – unethisch und kontraproduktiv.', critical: true },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was muss bei FEM dokumentiert werden? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Richterliche Genehmigung oder Eilfall-Begründung', correct: true, points: 14,
-                                feedback: 'Rechtliche Voraussetzung.', critical: true },
-                            { label: 'Weniger einschränkende Alternativen und deren Scheitern', correct: true, points: 12,
-                                feedback: 'Ultima-Ratio dokumentieren.', critical: true },
-                            { label: 'Regelmäßige Überprüfung der Notwendigkeit', correct: true, points: 10,
-                                feedback: 'Befristung und Reevaluation.', critical: false },
-                            { label: 'Private Meinung der Pflegekraft', correct: false, points: -5,
-                                feedback: 'Subjektives gehört nicht in Doku.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Verwirrtheitszustand mit Weglauftendenz – Abwägung FEM',
-                nursingSummary: 'Deeskalation, Alternativen prüfen, richterliche Genehmigung bei FEM, Dokumentation.',
-                examTip: 'FEM = Ultima Ratio. Immer: Alternativen prüfen, richterliche Genehmigung, Befristung, Dokumentation.',
-            },
-            {
-                id: 'pflegeplanung_svd',
-                module: 'pflegeplanung',
-                title: 'Pflegeplanung bei Selbstversorgungsdefizit',
-                category: 'Pflegeplanung',
-                difficulty: 'Mittel',
-                setting: 'Station',
-                patientModel: 'olderFemale',
-                patient: { name: 'Frau Lehmann', age: 76, gender: 'weiblich',
-                    openingLine: 'Ich kann mich nach dem Schlaganfall nicht mehr allein waschen und anziehen... ich brauche bei allem Hilfe.',
-                    conditionState: ['tired', 'stroke'] },
-                vitals: { rr: '16/min', spo2: '96%', pulse: '74/min', bp: '135/80 mmHg', temp: '36.5°C' },
-                phases: [
-                    { id: 'first', title: 'Phase 1: Ersteindruck',
-                        instruction: 'Was ist pflegerisch relevant? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Selbstversorgungsdefizit bei Körperpflege und Ankleiden', correct: true, points: 14,
-                                feedback: 'Kernproblem nach Schlaganfall.', critical: true },
-                            { label: 'Hemiparese als Ursache des Defizits', correct: true, points: 12,
-                                feedback: 'Ursache benennen.', critical: true },
-                            { label: 'Patientin äußert Hilfebedarf', correct: true, points: 8,
-                                feedback: 'Ressource: Krankheitseinsicht.', critical: false },
-                            { label: 'Patientin hat gut geschlafen', correct: false, points: -3,
-                                feedback: 'Nicht das zentrale Problem.', critical: false },
-                        ] },
-                    { id: 'assessment', title: 'Phase 2: Assessment',
-                        instruction: 'Wie erfasst du das Defizit? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Barthel-Index oder FIM erheben', correct: true, points: 14,
-                                feedback: 'Standardisierte Funktionserfassung.', critical: true },
-                            { label: 'Ressourcen der Patientin erfragen', correct: true, points: 10,
-                                feedback: 'Was kann sie noch selbst?', critical: false },
-                            { label: 'Biografie und Gewohnheiten erfassen', correct: true, points: 8,
-                                feedback: 'Individualisierte Pflege.', critical: false },
-                            { label: 'Kontoauszüge prüfen', correct: false, points: -5,
-                                feedback: 'Datenschutzverletzung.', critical: false },
-                        ] },
-                    { id: 'problem', title: 'Phase 3: Pflegeproblem (PESR)',
-                        instruction: 'Formuliere nach PESR.',
-                        type: 'single',
-                        options: [
-                            { label: 'Selbstversorgungsdefizit (P) bedingt durch Hemiparese (U) – Patientin kann Körperpflege nicht selbst durchführen (S)',
-                                correct: true, points: 20, feedback: 'Korrekte PESR-Formulierung.', critical: true },
-                            { label: 'Patientin ist pflegebedürftig', correct: false, points: -6,
-                                feedback: 'Zu unspezifisch.', critical: false },
-                        ] },
-                    { id: 'massnahmen', title: 'Phase 4: Pflegerische Maßnahmen',
-                        instruction: 'Wähle 3 SMART formulierte Maßnahmen.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'Tägliches Anleiten der Körperpflege mit betroffenem Arm (innerhalb 1 Woche soll Patientin Gesicht selbst waschen)',
-                                correct: true, points: 14, feedback: 'SMART: spezifisch, messbar, terminiert.',
-                                critical: true },
-                            { label: 'Hilfsmittel (Waschlappen, Griffverdickung) bereitstellen', correct: true, points: 10,
-                                feedback: 'Ressourcen fördern.', critical: false },
-                            { label: 'Erfolge loben und dokumentieren', correct: true, points: 10,
-                                feedback: 'Positive Verstärkung.', critical: false },
-                            { label: 'Alles für die Patientin übernehmen', correct: false, points: -12,
-                                feedback: 'Fördert Abhängigkeit – widerspricht Pflegeziel.', critical: true },
-                        ] },
-                    { id: 'kommunikation', title: 'Phase 5: Edukation',
-                        instruction: 'Wie motivierst du die Patientin?',
-                        type: 'single',
-                        options: [
-                            { label: '„Versuchen Sie es gemeinsam mit mir. Ich helfe nur, wo es nötig ist. Sie schaffen das.“',
-                                correct: true, points: 14,
-                                feedback: 'Förderung der Selbstständigkeit mit Unterstützung.', critical: false },
-                            { label: '„Das mache ich schnell für Sie, das geht schneller.“', correct: false, points: -8,
-                                feedback: 'Übernimmt – fördert Abhängigkeit.', critical: false },
-                        ] },
-                    { id: 'doku', title: 'Phase 6: Dokumentation',
-                        instruction: 'Was gehört in die Pflegeplanung? Wähle 3.',
-                        type: 'multiple', requiredCorrect: 3,
-                        options: [
-                            { label: 'SMART-Ziele mit Zeitrahmen', correct: true, points: 14,
-                                feedback: 'Ziele müssen überprüfbar sein.', critical: true },
-                            { label: 'Konkrete Maßnahmen mit Häufigkeit', correct: true, points: 12,
-                                feedback: 'Nicht: „Hilfe bei Körperpflege“, sondern konkret.', critical: true },
-                            { label: 'Evaluation und Anpassung', correct: true, points: 10,
-                                feedback: 'Pflegeplanung ist dynamisch.', critical: false },
-                            { label: 'Unwichtige Details ohne Pflegebezug', correct: false, points: -5,
-                                feedback: 'Nicht in Pflegeplanung.', critical: false },
-                        ] },
-                ],
-                finalDiagnosis: 'Selbstversorgungsdefizit bei Z.n. Schlaganfall mit Hemiparese',
-                nursingSummary: 'PESR formulieren, SMART-Ziele setzen, Ressourcen fördern, Evaluation dokumentieren.',
-                examTip: 'Pflegeplanung: PESR-Schema, SMART-Ziele, Maßnahmen konkret formulieren, regelmäßig evaluieren.',
-            },
-        ];
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num" id="statToday">0</div>
+      <div class="stat-label">Heute gelernt</div>
+    </div>
+    <div class="stat-card accuracy">
+      <div class="stat-num" id="statAccuracy">–</div>
+      <div class="stat-label">Genauigkeit</div>
+    </div>
+    <div class="stat-card streak">
+      <div class="stat-num" id="statStreak">0</div>
+      <div class="stat-label">Streak</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statRemaining">0</div>
+      <div class="stat-label">Verbleibend</div>
+    </div>
+  </div>
 
-        // ==================== GAME STATE ====================
-        const STORAGE_KEY = 'pflegefachprofi_save_v2';
-        let gameState = {
-            totalXP: 0,
-            streak: 0,
-            casesCompleted: {},
-            currentCaseId: null,
-            currentPhase: 0,
-            currentScore: 0,
-            maxPossibleScore: 0,
-            selectedOptions: [],
-            phaseData: null,
-            screen: 'landing',
-            currentModule: null,
-            feedbackQueue: null,
-        };
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 
-        function loadState() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const p = JSON.parse(raw);
-                    gameState.totalXP = p.totalXP || 0;
-                    gameState.streak = p.streak || 0;
-                    gameState.casesCompleted = p.casesCompleted || {};
-                }
-            } catch (e) {}
+  <div class="stage">
+    <button class="nav-arrow" id="prevBtn" aria-label="Vorherige Karte">‹</button>
+    <div class="card-zone" id="cardZone"></div>
+    <button class="nav-arrow" id="nextBtn" aria-label="Nächste Karte">›</button>
+  </div>
+
+  <p class="kbd-hint">
+    <kbd>←</kbd><kbd>→</kbd> Navigieren · <kbd>Leertaste</kbd> Umdrehen · <kbd>K</kbd> Gewusst · <kbd>U</kbd> Nicht gewusst · <kbd>B</kbd> Lesezeichen
+  </p>
+</main>
+
+<div class="action-bar" id="actionBar">
+  <button id="shuffleBtn" aria-label="Mischen" title="Mischen">🔀</button>
+  <button id="bookmarkBtn" aria-label="Lesezeichen setzen" title="Lesezeichen">☆</button>
+  <button id="repeatBtn" aria-label="Wiederholen" title="Diese Karte wiederholen">↻</button>
+  <button class="primary" id="flipBtn" aria-label="Karte umdrehen" title="Umdrehen">⤾</button>
+</div>
+
+<!-- EXAM MODE -->
+<div class="exam-overlay" id="examOverlay">
+  <div class="exam-head">
+    <button class="exam-close" id="examCloseBtn" aria-label="Prüfungsmodus verlassen">✕</button>
+    <div class="exam-progress-text" id="examProgressText">Frage 1 / 20</div>
+    <div class="exam-timer" id="examTimer">02:00</div>
+  </div>
+  <div class="exam-body" id="examBody"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const CARDS = [
+{id:1, topic:"Pflegeprozess", category:"Pflegeprozess & Modelle", type:"definition", difficulty:"medium", priority:3,
+ question:"Nennen Sie die sechs Schritte des Pflegeprozesses nach Fiechter und Meier.",
+ answer:"1. Informationssammlung · 2. Probleme & Ressourcen erkennen · 3. Pflegeziele festlegen · 4. Maßnahmen planen · 5. Maßnahmen durchführen · 6. Wirkung beurteilen",
+ explain:"Der Pflegeprozess ist zirkulär: nach Schritt 6 folgt bei Bedarf erneut Schritt 1.",
+ mnemonic:"I-P-Z-P-D-B: Informationen, Probleme, Ziele, Planen, Durchführen, Beurteilen.",
+ examTip:"Reihenfolge ist bewertungsrelevant – jeder Schritt einzeln benennen, nicht zusammenfassen.",
+ mistake:"WHO-Modell hat nur 4 Phasen – nicht mit Fiechter & Meier verwechseln.",
+ clinical:"", tags:["pflegeprozess","fiechter","meier","modell"]},
+
+{id:2, topic:"Expertenstandard", category:"Recht & Qualität", type:"definition", difficulty:"medium", priority:3,
+ question:"Was ist die Zielsetzung des Expertenstandards Dekubitusprophylaxe?",
+ answer:"Jeder pflegebedürftige Mensch mit einem Dekubitusrisiko erhält eine Prophylaxe, die geeignet ist, einen Dekubitus zu vermeiden.",
+ explain:"Der Standard gliedert sich in Struktur-, Prozess- und Ergebniskriterien (S/P/E).",
+ mnemonic:"", examTip:"Zielsetzung möglichst wörtlich wiedergeben – wird oft 1:1 abgefragt.",
+ mistake:"Nicht mit der Behandlung eines bestehenden Dekubitus verwechseln – es geht um Prophylaxe.",
+ clinical:"", tags:["dnqp","dekubitus","expertenstandard"]},
+
+{id:3, topic:"COPD vs. Asthma", category:"Pneumologie", type:"difference", difficulty:"medium", priority:3,
+ question:"COPD vs. Asthma bronchiale – nennen Sie den zentralen Unterschied in der Obstruktion.",
+ answer:"COPD: irreversible (kaum reversible) Atemwegsobstruktion. Asthma: reversible, anfallsweise auftretende Obstruktion.",
+ explain:"COPD entsteht meist durch langjährigen Noxenkontakt (v. a. Rauchen), Asthma ist meist allergisch/entzündlich bedingt und beginnt oft im Kindesalter.",
+ mnemonic:"Asthma = anfallsweise, COPD = chronisch fortschreitend.",
+ examTip:"Bei Fallfragen immer Anamnese nutzen: Raucher + progrediente Dyspnoe → COPD; episodisch + jung + Allergie → Asthma.",
+ mistake:"Lippenbremse hilft bei COPD typischerweise mehr als reiner Bronchospasmolyse-Therapie.",
+ clinical:"Herr M., 68 J., 40 Packungsjahre, langsam zunehmende Belastungsdyspnoe → typisch COPD.",
+ tags:["copd","asthma","pneumologie","obstruktion"]},
+
+{id:4, topic:"Demenzformen", category:"Neurologie & Geriatrie", type:"difference", difficulty:"hard", priority:2,
+ question:"Alzheimer-Demenz vs. vaskuläre Demenz – wie unterscheidet sich der Verlauf?",
+ answer:"Alzheimer: schleichender, kontinuierlich fortschreitender Verlauf. Vaskuläre Demenz: stufenförmiger Verlauf mit plötzlichen Verschlechterungen nach Ischämien.",
+ explain:"Ursache bei Alzheimer ist neurodegenerativ (Amyloid-Plaques), bei vaskulärer Demenz liegt eine zerebrale Durchblutungsstörung zugrunde.",
+ mnemonic:"Vaskulär = Verlauf in 'Treppenstufen'.",
+ examTip:"Verlaufsform ist die häufigste Unterscheidungsfrage – nicht die Symptome selbst.",
+ mistake:"Mischformen sind häufig – im Examen trotzdem die 'Lehrbuch-Reinform' beider Typen benennen.",
+ clinical:"", tags:["demenz","alzheimer","vaskulär","geriatrie"]},
+
+{id:5, topic:"Wundversorgung", category:"Wundmanagement", type:"sequence", difficulty:"medium", priority:2,
+ question:"Bringen Sie die Schritte einer aseptischen Wundversorgung in die richtige Reihenfolge.",
+ answer:"1. Händedesinfektion · 2. Material vorbereiten/Non-Touch · 3. Alten Verband steril entfernen · 4. Wunde inspizieren · 5. Wundreinigung/-spülung · 6. Neuen Verband anlegen · 7. Dokumentation",
+ explain:"Das Non-Touch-Prinzip (Wunde nie mit bloßer Hand berühren) gilt während des gesamten Vorgangs.",
+ mnemonic:"", examTip:"Dokumentation als letzten Schritt nicht vergessen – wird oft separat bepunktet.",
+ mistake:"Reinigung von außen nach innen statt von innen (Wunde) nach außen ist ein häufiger Fehler in Prüfungsantworten.",
+ clinical:"", tags:["wunde","verbandwechsel","asepsis"]},
+
+{id:6, topic:"Notfall ABCDE", category:"Notfall", type:"sequence", difficulty:"easy", priority:3,
+ question:"Nennen Sie das ABCDE-Schema zur Notfalleinschätzung in der richtigen Reihenfolge.",
+ answer:"A – Airway (Atemweg) · B – Breathing (Atmung) · C – Circulation (Kreislauf) · D – Disability (neurolog. Defizit) · E – Exposure/Environment (Entkleiden/Umgebung)",
+ explain:"Das Schema priorisiert lebensbedrohliche Probleme in absteigender Dringlichkeit.",
+ mnemonic:"A-B-C-D-E = Atemweg, Belüftung, Cirkulation, Defizit, Exposition.",
+ examTip:"Bei Fallsituationen das Schema strikt der Reihe nach abarbeiten, nicht springen.",
+ mistake:"Disability (D) wird oft mit Bewusstseinslage allein verwechselt – gemeint ist neurologisches Gesamtbild (GCS, Pupillen).",
+ clinical:"", tags:["notfall","abcde","airway"]},
+
+{id:7, topic:"Sturzfall", category:"Notfall", type:"clinical", difficulty:"medium", priority:3,
+ question:"Frau K., 82 J., wird liegend im Bad gefunden, klagt über Hüftschmerz, Bein außenrotiert verkürzt. Was ist die wahrscheinlichste Verdachtsdiagnose und die Sofortmaßnahme?",
+ answer:"Verdacht auf Schenkelhalsfraktur. Sofortmaßnahme: Patientin nicht bewegen/nicht aufstellen, Vitalzeichen prüfen, Bein lagern/stabilisieren, Arzt informieren, Schmerzmanagement, Sturzdokumentation.",
+ explain:"Außenrotation und Beinverkürzung sind klassische Leitsymptome der Schenkelhalsfraktur.",
+ mnemonic:"", examTip:"Immer 'nicht mobilisieren' explizit erwähnen – wird als eigener Punkt bewertet.",
+ mistake:"Patientin selbst aufrichten lassen ist ein klassischer Punktabzug in der Musterlösung.",
+ clinical:"", tags:["sturz","schenkelhals","fraktur","notfall"]},
+
+{id:8, topic:"Hypoglykämie", category:"Notfall", type:"clinical", difficulty:"medium", priority:3,
+ question:"Herr B., insulinpflichtiger Diabetiker, ist zittrig, schwitzig und verwirrt. BZ-Messung zeigt 42 mg/dl. Wie reagieren Sie als Pflegefachkraft?",
+ answer:"Bei ansprechbarem Patienten: schnell wirksame Kohlenhydrate oral (z. B. Traubenzucker/Saft), nach 15 Min. BZ-Kontrolle. Bei Bewusstlosigkeit: keine orale Gabe, stabile Seitenlage, Arzt/Notfallteam informieren, ggf. Glukose i.v. nach ärztlicher Anordnung.",
+ explain:"Symptome (Zittern, Schwitzen, Verwirrtheit) sind typische adrenerge und neuroglykopenische Hypoglykämiezeichen.",
+ mnemonic:"", examTip:"Immer zwischen 'ansprechbar' und 'bewusstlos' differenzieren – beide Szenarien werden oft getrennt bepunktet.",
+ mistake:"Bei Bewusstlosigkeit orale Gabe von Zucker ist ein gravierender (aspirationsgefährdender) Fehler.",
+ clinical:"", tags:["hypoglykämie","diabetes","notfall"]},
+
+{id:9, topic:"Furosemid", category:"Medikamente", type:"medication", difficulty:"medium", priority:2,
+ question:"Furosemid – Wirkstoffgruppe, Wirkung und wichtigste pflegerische Beobachtung?",
+ answer:"Schleifendiuretikum. Wirkung: Hemmung der Na+/K+/2Cl–-Rückresorption in der Henle-Schleife → starke Diurese. Pflegerisch: Flüssigkeitsbilanz, Elektrolyte (v. a. Kalium), Blutdruck, Körpergewicht regelmäßig kontrollieren.",
+ explain:"Hauptrisiko ist eine Hypokaliämie durch die starke Kaliumausscheidung.",
+ mnemonic:"", examTip:"Nebenwirkung 'Hypokaliämie' fast immer explizit nennen.",
+ mistake:"Furosemid mit kaliumsparenden Diuretika (Spironolacton) verwechseln.",
+ clinical:"Bei gleichzeitiger Digoxin-Therapie erhöht eine Hypokaliämie das Risiko für Digitalisintoxikation.",
+ tags:["furosemid","diuretikum","medikament"]},
+
+{id:10, topic:"Digoxin", category:"Medikamente", type:"medication", difficulty:"hard", priority:2,
+ question:"Digoxin – Indikation und worauf muss pflegerisch besonders geachtet werden?",
+ answer:"Indikation: Herzinsuffizienz, tachykarde Vorhofflimmern-Formen. Pflegerisch: enges therapeutisches Fenster → Puls vor Gabe kontrollieren (bei <60/min Rücksprache Arzt), auf Intoxikationszeichen achten (Übelkeit, Sehstörungen, Arrhythmien).",
+ explain:"Digoxin hat eine geringe therapeutische Breite; Hypokaliämie verstärkt die Wirkung/Toxizität erheblich.",
+ mnemonic:"", examTip:"Puls-Kontrolle vor jeder Gabe als eigenständigen Pflegepunkt formulieren.",
+ mistake:"Gabe trotz Bradykardie ohne Rücksprache – klassischer Fehler in Prüfungsantworten.",
+ clinical:"", tags:["digoxin","herzglykosid","medikament"]},
+
+{id:11, topic:"Kalium", category:"Laborwerte", type:"lab", difficulty:"medium", priority:2,
+ question:"Normwert von Serum-Kalium und klinische Bedeutung einer Hypokaliämie?",
+ answer:"Normwert: ca. 3,5–5,0 mmol/l. Hypokaliämie: Muskelschwäche, Obstipation, Herzrhythmusstörungen, verstärkte Digitaliswirkung.",
+ explain:"Kalium ist zentral für die Erregungsleitung am Herzen – Abweichungen sind potenziell lebensbedrohlich.",
+ mnemonic:"", examTip:"Normwert mit Einheit (mmol/l) angeben – Einheit wird separat bepunktet.",
+ mistake:"Hypokaliämie und Hyperkaliämie-Symptome in der Prüfung vertauschen.",
+ clinical:"", tags:["kalium","labor","elektrolyt"]},
+
+{id:12, topic:"INR", category:"Laborwerte", type:"lab", difficulty:"medium", priority:2,
+ question:"Was zeigt der INR-Wert an und in welchem Bereich liegt der Zielwert unter Marcumar-Therapie meist?",
+ answer:"INR (International Normalized Ratio) misst die Blutgerinnungsfähigkeit. Zielbereich unter Marcumar meist 2,0–3,0 (indikationsabhängig).",
+ explain:"Ein erhöhter INR bedeutet verlangsamte Gerinnung (erhöhtes Blutungsrisiko), ein zu niedriger INR erhöhtes Thromboserisiko.",
+ mnemonic:"", examTip:"Zielbereich immer als Spanne angeben, da indikationsabhängig variabel.",
+ mistake:"INR mit PTT (für Heparin relevant) verwechseln.",
+ clinical:"", tags:["inr","marcumar","gerinnung","labor"]},
+
+{id:13, topic:"Sepsis", category:"Notfall", type:"symptoms", difficulty:"hard", priority:3,
+ question:"Sepsis – nennen Sie Frühzeichen, Spätzeichen und Red Flags (qSOFA).",
+ answer:"Früh: Fieber/Hypothermie, Tachykardie, Tachypnoe, Verwirrtheit. Spät: Hypotonie, marmorierte Haut, Bewusstseinstrübung, Organversagen. qSOFA (Red Flags): Atemfrequenz ≥22/min, systolischer RR ≤100 mmHg, veränderter Bewusstseinszustand.",
+ explain:"qSOFA dient als schnelles Bedside-Screening bei Verdacht auf Sepsis außerhalb der Intensivstation.",
+ mnemonic:"qSOFA: 'Atmung-Druck-Denken' (Atemfrequenz, Blutdruck, Bewusstsein).",
+ examTip:"Mind. 2 von 3 qSOFA-Kriterien erfüllt → Verdacht auf Sepsis, sofortige Arztinformation.",
+ mistake:"Fieber als alleiniges Kriterium ansehen – auch Hypothermie ist ein Sepsiszeichen.",
+ clinical:"", tags:["sepsis","qsofa","notfall"]},
+
+{id:14, topic:"Schlaganfall", category:"Neurologie & Geriatrie", type:"symptoms", difficulty:"medium", priority:3,
+ question:"Nennen Sie das FAST-Schema zur Schlaganfall-Erkennung.",
+ answer:"F – Face (Gesichtslähmung) · A – Arms (Armschwäche, Absinken beim Halten) · S – Speech (Sprachstörung) · T – Time (Zeit notieren, sofort Notruf)",
+ explain:"FAST ist ein international etabliertes Schnellscreening für den Verdacht auf Apoplex.",
+ mnemonic:"FAST = schnell handeln, da 'time is brain'.",
+ examTip:"Den genauen Symptombeginn (Time) im Examen immer als eigenen, bepunkteten Schritt nennen.",
+ mistake:"Symptome bagatellisieren/abwarten statt sofortigen Notruf – im Examen klar als Fehler markieren.",
+ clinical:"", tags:["schlaganfall","apoplex","fast","notfall"]},
+
+{id:15, topic:"Dekubitus", category:"Wundmanagement", type:"complications", difficulty:"medium", priority:3,
+ question:"Welche Komplikationen kann ein fortgeschrittener Dekubitus (Kategorie 3–4) verursachen und welche Sofortmaßnahme ist zentral?",
+ answer:"Komplikationen: Wundinfektion, Sepsis, Osteomyelitis, Fistelbildung. Sofortmaßnahme: konsequente Druckentlastung, Wundversorgung nach ärztlicher Anordnung, Infektionszeichen engmaschig beobachten.",
+ explain:"Druckentlastung ist die wichtigste pflegerische Maßnahme – ohne sie heilt keine Wundversorgung dauerhaft.",
+ mnemonic:"", examTip:"Druckentlastung immer als erste/zentrale Maßnahme nennen, vor Wundauflagen.",
+ mistake:"Nur die lokale Wundversorgung nennen und die Druckentlastung vergessen – häufiger Punktabzug.",
+ clinical:"", tags:["dekubitus","komplikation","wunde"]},
+
+{id:16, topic:"Immobilität", category:"Pflegeprozess & Modelle", type:"complications", difficulty:"medium", priority:2,
+ question:"Welche Folgeschäden (Sekundärerkrankungen) drohen bei Immobilität und welchen Prophylaxen begegnet man ihnen?",
+ answer:"Kontrakturen → Kontrakturprophylaxe; Pneumonie → Pneumonieprophylaxe; Thrombose → Thromboseprophylaxe; Dekubitus → Dekubitusprophylaxe; Obstipation → Obstipationsprophylaxe.",
+ explain:"Jede Immobilitätsfolge hat eine korrespondierende, im DNQP/Expertenstandard verankerte Prophylaxe.",
+ mnemonic:"K-P-T-D-O: Kontraktur, Pneumonie, Thrombose, Dekubitus, Obstipation.",
+ examTip:"Folgeschaden und passende Prophylaxe immer als Paar nennen, nicht getrennt aufzählen.",
+ mistake:"Prophylaxen ohne Bezug zum konkreten Risiko der Fallsituation aufzählen.",
+ clinical:"", tags:["immobilität","prophylaxe","komplikation"]},
+
+{id:17, topic:"Braden-Skala", category:"Recht & Qualität", type:"mc", difficulty:"easy", priority:2,
+ question:"Was misst die Braden-Skala?",
+ options:["Sturzrisiko","Dekubitusrisiko","Schmerzintensität","Ernährungszustand"],
+ correctIndex:1,
+ explain:"Die Braden-Skala bewertet u. a. Sensorik, Feuchtigkeit, Aktivität, Mobilität, Ernährung und Reibung/Scherkräfte zur Einschätzung des Dekubitusrisikos.",
+ examTip:"Nicht mit dem Norton- oder Waterlow-Score verwechseln, die ähnliche Zwecke verfolgen.",
+ mistake:"", mnemonic:"", clinical:"", tags:["braden","dekubitus","assessment"]},
+
+{id:18, topic:"MDK/MD-Prüfung", category:"Recht & Qualität", type:"mc", difficulty:"easy", priority:2,
+ question:"Welches Gremium überprüft die Pflegequalität von Pflegeeinrichtungen in Deutschland?",
+ options:["Gesundheitsamt","Medizinischer Dienst (MD)","Berufsgenossenschaft","Landesärztekammer"],
+ correctIndex:1,
+ explain:"Der Medizinische Dienst (MD, früher MDK) führt Qualitätsprüfungen nach SGB XI in Pflegeeinrichtungen durch.",
+ examTip:"Aktuelle Bezeichnung ist 'Medizinischer Dienst (MD)' – 'MDK' ist die ältere, vielen Quellen noch gebräuchliche Bezeichnung.",
+ mistake:"", mnemonic:"", clinical:"", tags:["mdk","md","qualitätsprüfung"]},
+
+{id:19, topic:"Pflegeprozess", category:"Pflegeprozess & Modelle", type:"tf", difficulty:"easy", priority:2,
+ question:"Wahr oder falsch: Der Pflegeprozess nach Fiechter & Meier verläuft linear und endet nach Schritt 6 endgültig.",
+ correctAnswer:false,
+ explain:"Falsch – der Pflegeprozess ist ein Regelkreis (zirkulär). Nach der Evaluation (Schritt 6) erfolgt bei Bedarf erneut eine Informationssammlung (Schritt 1).",
+ examTip:"Den Begriff 'Regelkreis' explizit verwenden, wenn nach dem Charakter des Pflegeprozesses gefragt wird.",
+ mistake:"", mnemonic:"", clinical:"", tags:["pflegeprozess","regelkreis"]},
+
+{id:20, topic:"Demenz & Aspiration", category:"Neurologie & Geriatrie", type:"tf", difficulty:"medium", priority:2,
+ question:"Wahr oder falsch: Menschen mit fortgeschrittener Demenz haben ein erhöhtes Aspirationspneumonie-Risiko.",
+ correctAnswer:true,
+ explain:"Wahr – durch Schluckstörungen (Dysphagie) im fortgeschrittenen Stadium steigt das Aspirationsrisiko deutlich.",
+ examTip:"Bei Fallsituationen mit Demenz immer auch Schluckassessment/Esshilfen als Maßnahme mitdenken.",
+ mistake:"", mnemonic:"", clinical:"", tags:["demenz","aspiration","pneumonie"]},
+
+{id:21, topic:"Barthel-Index", category:"Recht & Qualität", type:"fillblank", difficulty:"easy", priority:2,
+ question:"Der ____-Index misst die Selbstständigkeit eines Menschen bei Aktivitäten des täglichen Lebens (ATL).",
+ correctAnswer:"Barthel",
+ explain:"Der Barthel-Index bewertet u. a. Essen, Baden, Mobilität, Kontinenz auf einer Punkteskala von 0–100.",
+ examTip:"Schreibweise 'Barthel' (nicht 'Barthl' oder 'Bartel') korrekt verwenden.",
+ mistake:"", mnemonic:"", clinical:"", tags:["barthel","assessment","atl"]},
+
+{id:22, topic:"SIS", category:"Pflegeprozess & Modelle", type:"fillblank", difficulty:"medium", priority:3,
+ question:"SIS steht für 'Strukturierte ____________'.",
+ correctAnswer:"Informationssammlung",
+ explain:"Die SIS ist Teil des Strukturmodells zur Entbürokratisierung der Pflegedokumentation und ersetzt klassische Assessmentbögen durch ein themenfeldorientiertes Erstgespräch.",
+ examTip:"SIS immer im Zusammenhang mit dem 'Strukturmodell' erwähnen, wenn nach dem Kontext gefragt wird.",
+ mistake:"", mnemonic:"", clinical:"", tags:["sis","strukturmodell","dokumentation"]},
+
+{id:23, topic:"Basale Stimulation", category:"Bewegungskonzepte", type:"hotspot", difficulty:"medium", priority:2,
+ question:"Basale Stimulation – tippen Sie, um die Grundprinzipien aufzudecken.",
+ answer:"Wahrnehmungsbereiche: somatisch, vestibulär, vibratorisch. Ziel: Wahrnehmung, Kommunikation und Bewegung bei Menschen mit eingeschränkter Wahrnehmungsfähigkeit fördern.",
+ explain:"Entwickelt von Andreas Fröhlich, ursprünglich für die Förderung schwerstmehrfachbehinderter Kinder, heute breit in der Pflege (z. B. bei Demenz, Koma, Intensivpflege) eingesetzt.",
+ examTip:"Die drei Grundstimulationsarten (somatisch, vestibulär, vibratorisch) sind die häufigste Detailfrage.",
+ mistake:"", mnemonic:"", clinical:"", tags:["basale stimulation","fröhlich","wahrnehmung"]},
+
+{id:24, topic:"Bobath-Konzept", category:"Bewegungskonzepte", type:"hotspot", difficulty:"medium", priority:3,
+ question:"Bobath-Konzept – tippen Sie, um das Kernprinzip aufzudecken.",
+ answer:"Förderung der Bewegungsfähigkeit von Menschen mit zentralen neurologischen Schädigungen (z. B. nach Schlaganfall) durch gezielte Anbahnung physiologischer Bewegungsmuster und Vermeidung pathologischer Muster (Spastik).",
+ explain:"Zentrales Element ist die konsequente Einbeziehung der betroffenen ('hemiplegischen') Körperseite in alle Alltagshandlungen und die Lagerung.",
+ examTip:"Begriff 'betroffene Seite einbeziehen' wörtlich nennen – ist ein Standard-Bewertungspunkt.",
+ mistake:"", mnemonic:"", clinical:"", tags:["bobath","hemiplegie","neurologie"]},
+
+{id:25, topic:"Kinästhetik", category:"Bewegungskonzepte", type:"definition", difficulty:"medium", priority:2,
+ question:"Was ist die Grundidee der Kinästhetik in der Pflege?",
+ answer:"Kinästhetik nutzt die Bewegungslehre, um pflegebedürftige Menschen bei Eigenbewegungen anzuleiten und zu unterstützen, statt sie passiv zu bewegen – Ziel ist Ressourcenförderung und Vermeidung von Sekundärschäden.",
+ explain:"Im Gegensatz zu rein passivem 'Umlagern' fördert Kinästhetik die aktive Beteiligung des Patienten.",
+ mnemonic:"", examTip:"Abgrenzung zu Bobath betonen: Kinästhetik = Bewegungsförderung allgemein, Bobath = spezifisch bei neurologischen Schädigungen.",
+ mistake:"Kinästhetik und Bobath als identisch darstellen.",
+ clinical:"", tags:["kinästhetik","bewegung","ressourcen"]},
+
+{id:26, topic:"ABEDL", category:"Pflegeprozess & Modelle", type:"definition", difficulty:"medium", priority:3,
+ question:"Was ist die Grundidee des ABEDL-Modells nach Krohwinkel und wie viele Bereiche umfasst es?",
+ answer:"ABEDL = Aktivitäten, Beziehungen und existenzielle Erfahrungen des Lebens. Das Modell umfasst 13 Lebensbereiche (Krohwinkel) und stellt die Förderung von Selbstständigkeit und Beziehungsfähigkeit in den Mittelpunkt.",
+ explain:"ABEDL erweitert das ATL-Konzept um existenzielle und Beziehungsaspekte – nicht nur körperliche Verrichtungen.",
+ mnemonic:"", examTip:"Anzahl '13 Bereiche' als konkrete Zahl nennen, wenn danach gefragt wird.",
+ mistake:"ABEDL mit den 12 ATLs nach Juchli gleichsetzen – ABEDL hat 13 Bereiche und einen anderen theoretischen Anspruch.",
+ clinical:"", tags:["abedl","krohwinkel","modell"]},
+
+{id:27, topic:"Demenzkommunikation", category:"Neurologie & Geriatrie", type:"difference", difficulty:"hard", priority:2,
+ question:"Validation vs. Realitätsorientierung in der Kommunikation mit Menschen mit Demenz – wo liegt der Unterschied?",
+ answer:"Validation: Gefühle und subjektive Realität des Erkrankten werden anerkannt, nicht korrigiert. Realitätsorientierung: aktive Orientierungshilfen (Datum, Ort, Person) zur Förderung der Orientierung an der objektiven Realität.",
+ explain:"Validation eignet sich v. a. bei fortgeschrittener Demenz, Realitätsorientierung eher bei leichteren Stadien.",
+ mnemonic:"", examTip:"Die Wahl der Methode immer am Demenzstadium der Fallsituation begründen.",
+ mistake:"Bei fortgeschrittener Demenz weiterhin auf Realitätsorientierung (Korrektur) bestehen – verstärkt häufig Unruhe/Abwehr.",
+ clinical:"", tags:["validation","realitätsorientierung","demenz","kommunikation"]},
+
+{id:28, topic:"Exsikkose", category:"Neurologie & Geriatrie", type:"symptoms", difficulty:"medium", priority:2,
+ question:"Welche Anzeichen einer Exsikkose sind bei älteren Menschen typisch zu beobachten?",
+ answer:"Trockene Schleimhäute, stehende Hautfalten, Verwirrtheit/Vigilanzminderung, Tachykardie, Hypotonie, konzentrierter Urin, Gewichtsverlust.",
+ explain:"Ältere Menschen haben ein vermindertes Durstgefühl, weshalb Exsikkose-Symptome oft erst spät erkannt werden.",
+ mnemonic:"", examTip:"Verwirrtheit als mögliches Frühzeichen bei älteren Menschen explizit erwähnen – wird oft übersehen.",
+ mistake:"Verwirrtheit ausschließlich auf Demenz zurückführen, ohne Exsikkose als Differenzialdiagnose zu erwägen.",
+ clinical:"", tags:["exsikkose","geriatrie","flüssigkeitsmangel"]}
+];
+
+/* ============================================================
+   STATE  (in-memory only — see note at bottom of file)
+   ============================================================ */
+const state = {
+  filtered: [...CARDS],
+  index: 0,
+  flipped: false,
+  thought: false,
+  interactionLocked: false,
+  category: "all",
+  difficulty: "all",
+  bookmarkOnly: false,
+  incorrectOnly: false,
+  hideMastered: false,
+  searchTerm: "",
+  studiedTodaySet: new Set(),
+  totalCorrect: 0,
+  totalAnswered: 0,
+  streak: 0,
+  longestStreak: 0,
+  progress: {} // id -> {box, correct, incorrect, bookmarked, lastResult}
+};
+
+CARDS.forEach(c => { state.progress[c.id] = {box:1, correct:0, incorrect:0, bookmarked:false, lastResult:null}; });
+
+const examState = { active:false, queue:[], index:0, score:0, answers:[], timer:null, secondsLeft:0, perCardSeconds:60 };
+
+/* ============================================================
+   DOM REFS
+   ============================================================ */
+const $ = (sel) => document.querySelector(sel);
+const cardZone = $("#cardZone");
+const categoryChips = $("#categoryChips");
+const progressFill = $("#progressFill");
+const statToday = $("#statToday");
+const statAccuracy = $("#statAccuracy");
+const statStreak = $("#statStreak");
+const statRemaining = $("#statRemaining");
+
+/* ============================================================
+   INIT CATEGORY CHIPS
+   ============================================================ */
+function buildChips(){
+  const cats = ["all", ...new Set(CARDS.map(c => c.category))];
+  categoryChips.innerHTML = cats.map(cat => {
+    const label = cat === "all" ? "Alle Themen" : cat;
+    return `<button class="chip${cat===state.category?' active':''}" data-cat="${cat}" role="tab" aria-selected="${cat===state.category}">${label}</button>`;
+  }).join("");
+}
+categoryChips.addEventListener("click", (e) => {
+  const btn = e.target.closest(".chip");
+  if(!btn) return;
+  state.category = btn.dataset.cat;
+  buildChips();
+  applyFilters(true);
+});
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+function applyFilters(resetIndex){
+  let list = CARDS.filter(c => {
+    if(state.category !== "all" && c.category !== state.category) return false;
+    if(state.difficulty !== "all" && c.difficulty !== state.difficulty) return false;
+    if(state.bookmarkOnly && !state.progress[c.id].bookmarked) return false;
+    if(state.incorrectOnly && state.progress[c.id].lastResult !== "incorrect") return false;
+    if(state.hideMastered && state.progress[c.id].box >= 4) return false;
+    if(state.searchTerm){
+      const t = state.searchTerm.toLowerCase();
+      const hay = (c.question + " " + c.topic + " " + (c.tags||[]).join(" ")).toLowerCase();
+      if(!hay.includes(t)) return false;
+    }
+    return true;
+  });
+  // Leitner-ish ordering: lower box = sooner
+  list = list.sort((a,b) => state.progress[a.id].box - state.progress[b.id].box);
+  state.filtered = list;
+  if(resetIndex) state.index = 0;
+  if(state.index >= state.filtered.length) state.index = Math.max(0, state.filtered.length - 1);
+  renderCard();
+  updateStatsUI();
+}
+
+$("#difficultySelect").addEventListener("change", (e) => { state.difficulty = e.target.value; applyFilters(true); });
+
+function bindToggle(id, key){
+  const el = $(id);
+  el.addEventListener("click", () => {
+    state[key] = !state[key];
+    el.classList.toggle("on", state[key]);
+    el.dataset.on = String(state[key]);
+    applyFilters(true);
+  });
+}
+bindToggle("#bookmarkFilter", "bookmarkOnly");
+bindToggle("#incorrectFilter", "incorrectOnly");
+bindToggle("#hideMasteredFilter", "hideMastered");
+
+let searchDebounce;
+$("#searchInput").addEventListener("input", (e) => {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    state.searchTerm = e.target.value.trim();
+    applyFilters(true);
+  }, 180);
+});
+
+/* ============================================================
+   CARD RENDERING
+   ============================================================ */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+function highlight(text){
+  if(!state.searchTerm) return escapeHtml(text);
+  const t = state.searchTerm;
+  const re = new RegExp("(" + t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "ig");
+  return escapeHtml(text).replace(re, "<mark>$1</mark>");
+}
+const diffLabel = {easy:"🟢 Leicht", medium:"🟠 Mittel", hard:"🔴 Schwer"};
+const typeIcon = {definition:"📘", difference:"⚖️", sequence:"🔢", clinical:"🏥", medication:"💊", lab:"🧪", symptoms:"🩺", complications:"⚠️", mc:"☑️", tf:"✅", fillblank:"✏️", hotspot:"👆"};
+const typeLabel = {definition:"Definition", difference:"Unterschied", sequence:"Reihenfolge", clinical:"Klinischer Fall", medication:"Medikament", lab:"Laborwert", symptoms:"Symptome", complications:"Komplikationen", mc:"Multiple Choice", tf:"Wahr/Falsch", fillblank:"Lückentext", hotspot:"Aufdecken"};
+const INTERACTIVE = new Set(["mc","tf","fillblank","hotspot"]);
+
+function renderCard(){
+  if(state.filtered.length === 0){
+    cardZone.innerHTML = `<div class="empty-state"><div class="e-icon">🗂️</div><p>Keine Karten für diese Filter gefunden.</p></div>`;
+    progressFill.style.width = "0%";
+    return;
+  }
+  const card = state.filtered[state.index];
+  const prog = state.progress[card.id];
+  state.flipped = false;
+  state.thought = false;
+  state.interactionLocked = false;
+
+  const stars = "★".repeat(card.priority) + "☆".repeat(3 - card.priority);
+  const interactive = INTERACTIVE.has(card.type);
+
+  let frontInner = `
+    <div class="face-top">
+      <div class="badge-group">
+        <span class="badge cat">${escapeHtml(card.category)}</span>
+        <span class="badge diff-${card.difficulty}">${diffLabel[card.difficulty]}</span>
+        <span class="badge type">${typeIcon[card.type]} ${typeLabel[card.type]}</span>
+      </div>
+      <button class="bookmark-btn${prog.bookmarked?' active':''}" id="bmToggle" aria-label="Lesezeichen umschalten">${prog.bookmarked?'★':'☆'}</button>
+    </div>
+    <div class="face-icon" aria-hidden="true">${typeIcon[card.type]}</div>
+    <div class="face-question">${highlight(card.question)}</div>
+  `;
+
+  if(card.type === "mc"){
+    frontInner += `<div class="options-list" id="mcOptions">` +
+      card.options.map((opt,i) => `<button class="option-btn" data-i="${i}">${escapeHtml(opt)}</button>`).join("") +
+      `</div>`;
+  } else if(card.type === "tf"){
+    frontInner += `<div class="tf-row">
+      <button class="tf-btn" data-val="true">Wahr</button>
+      <button class="tf-btn" data-val="false">Falsch</button>
+    </div>`;
+  } else if(card.type === "fillblank"){
+    frontInner += `<div class="fill-row">
+      <input type="text" class="fill-input" id="fillInput" placeholder="Antwort eingeben…" aria-label="Antwort eingeben" autocomplete="off">
+      <button class="fill-check" id="fillCheck">Prüfen</button>
+    </div>
+    <div class="fill-feedback" id="fillFeedback"></div>`;
+  } else if(card.type === "hotspot"){
+    frontInner += `<div class="hotspot-hint">👆 Tippen, um die Antwort aufzudecken</div>`;
+  } else {
+    frontInner += `
+      <div class="face-meta">
+        <span class="pos-indicator">Karte ${state.index+1} / ${state.filtered.length} · ${stars}</span>
+      </div>
+      <button class="think-btn" id="thinkBtn">🤔 Ich habe nachgedacht</button>
+    `;
+  }
+
+  let backInner = `<div class="back-answer">${escapeHtml(card.answer || card.explain || "")}</div>`;
+  if(card.explain && card.answer){
+    backInner += `<div class="back-block"><div class="back-block-label">💡 Erklärung</div><div class="back-block-text">${escapeHtml(card.explain)}</div></div>`;
+  }
+  if(card.mnemonic){
+    backInner += `<div class="back-block mnemonic"><div class="back-block-label">🧠 Mnemonic</div><div class="back-block-text">${escapeHtml(card.mnemonic)}</div></div>`;
+  }
+  if(card.examTip){
+    backInner += `<div class="back-block tip"><div class="back-block-label">⭐ Exam-Tipp</div><div class="back-block-text">${escapeHtml(card.examTip)}</div></div>`;
+  }
+  if(card.mistake){
+    backInner += `<div class="back-block mistake"><div class="back-block-label">⚠️ Häufiger Fehler</div><div class="back-block-text">${escapeHtml(card.mistake)}</div></div>`;
+  }
+  if(card.clinical){
+    backInner += `<div class="back-block clinical"><div class="back-block-label">🏥 Klinisches Beispiel</div><div class="back-block-text">${escapeHtml(card.clinical)}</div></div>`;
+  }
+  backInner += `
+    <div class="judge-row">
+      <button class="judge-btn unknown" id="judgeUnknown">✗ Nicht gewusst</button>
+      <button class="judge-btn known" id="judgeKnown">✓ Gewusst</button>
+    </div>
+  `;
+
+  cardZone.innerHTML = `
+    <div class="flashcard" id="flashcard" tabindex="0" role="group" aria-label="Karteikarte">
+      <div class="face front">${frontInner}</div>
+      <div class="face back">${backInner}</div>
+    </div>
+  `;
+
+  attachCardEvents(card, prog, interactive);
+  updateProgressBar();
+  updateNavButtons();
+}
+
+function attachCardEvents(card, prog, interactive){
+  const flashcard = $("#flashcard");
+
+  $("#bmToggle")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    prog.bookmarked = !prog.bookmarked;
+    e.target.classList.toggle("active", prog.bookmarked);
+    e.target.textContent = prog.bookmarked ? "★" : "☆";
+  });
+
+  if(card.type === "definition" || card.type === "difference" || card.type === "sequence" ||
+     card.type === "clinical" || card.type === "medication" || card.type === "lab" ||
+     card.type === "symptoms" || card.type === "complications"){
+    $("#thinkBtn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      state.thought = true;
+      flipCard();
+    });
+    flashcard.addEventListener("click", () => {
+      if(!state.thought && !state.flipped){
+        flashcard.classList.remove("shake");
+        requestAnimationFrame(() => flashcard.classList.add("shake"));
+      } else if(state.flipped){
+        // allow flipping back to front to re-read question
+        flipCard(true);
+      }
+    });
+  }
+
+  if(card.type === "hotspot"){
+    flashcard.addEventListener("click", () => { if(!state.flipped) flipCard(); else flipCard(true); });
+  }
+
+  if(card.type === "mc"){
+    const opts = cardZone.querySelectorAll(".option-btn");
+    opts.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if(state.interactionLocked) return;
+        state.interactionLocked = true;
+        const i = Number(btn.dataset.i);
+        opts.forEach(o => o.disabled = true);
+        if(i === card.correctIndex){
+          btn.classList.add("correct");
+          setTimeout(() => { flipCard(); judge(true, card, prog, true); }, 500);
+        } else {
+          btn.classList.add("incorrect");
+          opts[card.correctIndex].classList.add("correct");
+          setTimeout(() => { flipCard(); judge(false, card, prog, true); }, 700);
         }
+      });
+    });
+  }
 
-        function saveState() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                    totalXP: gameState.totalXP,
-                    streak: gameState.streak,
-                    casesCompleted: gameState.casesCompleted,
-                }));
-            } catch (e) {}
+  if(card.type === "tf"){
+    const btns = cardZone.querySelectorAll(".tf-btn");
+    btns.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if(state.interactionLocked) return;
+        state.interactionLocked = true;
+        const val = btn.dataset.val === "true";
+        const correct = val === card.correctAnswer;
+        btns.forEach(b => b.disabled = true);
+        btn.classList.add(correct ? "correct" : "incorrect");
+        if(!correct){
+          btns.forEach(b => { if((b.dataset.val === "true") === card.correctAnswer) b.classList.add("correct"); });
         }
-        loadState();
+        setTimeout(() => { flipCard(); judge(correct, card, prog, true); }, 550);
+      });
+    });
+  }
 
-        // ==================== DOM HELPERS ====================
-        const screenContainer = document.getElementById('screenContainer');
-        const totalXPEl = document.getElementById('totalXP');
-        const streakBadge = document.getElementById('streakBadge');
-        const streakCountEl = document.getElementById('streakCount');
+  if(card.type === "fillblank"){
+    const input = $("#fillInput");
+    const feedback = $("#fillFeedback");
+    const check = () => {
+      if(state.interactionLocked) return;
+      const val = input.value.trim().toLowerCase();
+      const correct = val.length > 0 && val === card.correctAnswer.toLowerCase();
+      state.interactionLocked = true;
+      input.disabled = true;
+      feedback.textContent = correct ? "✓ Richtig: " + card.correctAnswer : "✗ Richtige Antwort: " + card.correctAnswer;
+      feedback.className = "fill-feedback " + (correct ? "ok" : "bad");
+      setTimeout(() => { flipCard(); judge(correct, card, prog, true); }, 700);
+    };
+    $("#fillCheck").addEventListener("click", (e) => { e.stopPropagation(); check(); });
+    input.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.stopPropagation(); check(); } });
+    input.addEventListener("click", (e) => e.stopPropagation());
+  }
 
-        function updateHeader() {
-            totalXPEl.textContent = gameState.totalXP;
-            if (gameState.streak >= 2) {
-                streakBadge.style.display = 'flex';
-                streakCountEl.textContent = gameState.streak;
-            } else { streakBadge.style.display = 'none'; }
-        }
+  $("#judgeKnown")?.addEventListener("click", (e) => { e.stopPropagation(); judge(true, card, prog, false); });
+  $("#judgeUnknown")?.addEventListener("click", (e) => { e.stopPropagation(); judge(false, card, prog, false); });
+}
 
-        function renderScreen(html) {
-            screenContainer.innerHTML = html;
-            updateHeader();
-            setTimeout(attachListeners, 60);
-        }
+function flipCard(toFront){
+  const flashcard = $("#flashcard");
+  if(!flashcard) return;
+  if(toFront){ state.flipped = false; flashcard.classList.remove("flipped"); return; }
+  state.flipped = true;
+  flashcard.classList.add("flipped");
+}
 
-        function showToast(msg, type = 'ok') {
-            const t = document.createElement('div');
-            t.className = 'feedback-toast ' + type;
-            t.textContent = msg;
-            t.setAttribute('role', 'status');
-            t.setAttribute('aria-live', 'polite');
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 1700);
-        }
+function judge(correct, card, prog, autoFromInteractive){
+  state.studiedTodaySet.add(card.id);
+  state.totalAnswered++;
+  if(correct){
+    state.totalCorrect++;
+    prog.correct++;
+    prog.box = Math.min(5, prog.box + 1);
+    prog.lastResult = "correct";
+    state.streak++;
+    state.longestStreak = Math.max(state.longestStreak, state.streak);
+  } else {
+    prog.incorrect++;
+    prog.box = 1;
+    prog.lastResult = "incorrect";
+    state.streak = 0;
+  }
+  updateStatsUI();
+  setTimeout(() => goNext(), autoFromInteractive ? 250 : 0);
+}
 
-        function spawnConfetti(count = 35) {
-            const colors = ['#00c9a7', '#2eff6e', '#f0c040', '#5cb8ff', '#f0a050', '#e0556a', '#c084fc'];
-            for (let i = 0; i < count; i++) {
-                const el = document.createElement('div');
-                el.className = 'confetti-piece';
-                el.style.left = Math.random() * 100 + '%';
-                el.style.top = -(Math.random() * 50 + 10) + 'px';
-                el.style.background = colors[Math.floor(Math.random() * colors.length)];
-                el.style.width = (Math.random() * 8 + 5) + 'px';
-                el.style.height = (Math.random() * 8 + 5) + 'px';
-                el.style.animationDuration = (Math.random() * 2 + 2.2) + 's';
-                el.style.animationDelay = Math.random() * 0.7 + 's';
-                document.body.appendChild(el);
-                setTimeout(() => el.remove(), 3500);
-            }
-        }
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function goNext(){
+  if(state.filtered.length === 0) return;
+  state.index = (state.index + 1) % state.filtered.length;
+  renderCard();
+}
+function goPrev(){
+  if(state.filtered.length === 0) return;
+  state.index = (state.index - 1 + state.filtered.length) % state.filtered.length;
+  renderCard();
+}
+function updateNavButtons(){
+  $("#prevBtn").disabled = state.filtered.length <= 1;
+  $("#nextBtn").disabled = state.filtered.length <= 1;
+}
+function updateProgressBar(){
+  const pct = state.filtered.length ? ((state.index + 1) / state.filtered.length) * 100 : 0;
+  progressFill.style.width = pct + "%";
+}
+$("#prevBtn").addEventListener("click", goPrev);
+$("#nextBtn").addEventListener("click", goNext);
 
-        // ==================== SVG PATIENT RENDERER ====================
-        function getPatientSVG(caseData) {
-            const model = caseData.patientModel || 'olderMale';
-            const conditions = caseData.patient?.conditionState || [];
-            const hasPain = conditions.includes('pain');
-            const hasPale = conditions.includes('pale');
-            const hasSweaty = conditions.includes('sweaty');
-            const hasDyspnea = conditions.includes('dyspnea');
-            const hasConfused = conditions.includes('confused');
-            const hasAnxious = conditions.includes('anxious');
-            const hasTired = conditions.includes('tired');
-            const hasStroke = conditions.includes('stroke');
-            const hasCough = conditions.includes('cough');
-            const hasHypo = conditions.includes('hypoglycemic');
+/* ============================================================
+   ACTION BAR
+   ============================================================ */
+function ripple(el){
+  const r = document.createElement("span");
+  r.className = "ripple";
+  const size = 60;
+  r.style.width = r.style.height = size + "px";
+  r.style.left = (el.clientWidth/2 - size/2) + "px";
+  r.style.top = (el.clientHeight/2 - size/2) + "px";
+  el.appendChild(r);
+  setTimeout(() => r.remove(), 500);
+}
+$("#shuffleBtn").addEventListener("click", (e) => {
+  ripple(e.currentTarget);
+  for(let i = state.filtered.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [state.filtered[i], state.filtered[j]] = [state.filtered[j], state.filtered[i]];
+  }
+  state.index = 0;
+  renderCard();
+});
+$("#bookmarkBtn").addEventListener("click", (e) => {
+  ripple(e.currentTarget);
+  $("#bmToggle")?.click();
+});
+$("#repeatBtn").addEventListener("click", (e) => {
+  ripple(e.currentTarget);
+  renderCard();
+});
+$("#flipBtn").addEventListener("click", (e) => {
+  ripple(e.currentTarget);
+  const card = state.filtered[state.index];
+  if(!card) return;
+  if(INTERACTIVE.has(card.type)) return;
+  if(!state.thought){ state.thought = true; }
+  flipCard(state.flipped);
+});
 
-            let skinColor = '#e8c9a0';
-            let hairColor = '#5a3a20';
-            let hairStyle = 'short';
-            let hasWrinkles = false;
-            let hasGrayHair = false;
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener("keydown", (e) => {
+  if(document.activeElement && document.activeElement.tagName === "INPUT") return;
+  if(examState.active) return;
+  switch(e.key){
+    case "ArrowRight": goNext(); break;
+    case "ArrowLeft": goPrev(); break;
+    case " ": e.preventDefault(); $("#flipBtn").click(); break;
+    case "k": case "K": $("#judgeKnown")?.click(); break;
+    case "u": case "U": $("#judgeUnknown")?.click(); break;
+    case "b": case "B": $("#bmToggle")?.click(); break;
+  }
+});
 
-            if (model === 'olderMale' || model === 'breathlessOlderMale' || model === 'confusedElderly') {
-                skinColor = '#d9bfa0';
-                hairColor = '#8a8a8a';
-                hasWrinkles = true;
-                hasGrayHair = true;
-                hairStyle = 'short';
-            } else if (model === 'olderFemale') {
-                skinColor = '#d9bfa0';
-                hairColor = '#9a9a9a';
-                hasWrinkles = true;
-                hasGrayHair = true;
-                hairStyle = 'bun';
-            } else if (model === 'middleAgedFemale') {
-                skinColor = '#e8c9a0';
-                hairColor = '#5a3020';
-                hairStyle = 'medium';
-            }
-            if (hasPale) skinColor = '#d4b896';
-            if (hasPain) skinColor = '#d8c0a0';
+/* ============================================================
+   SWIPE SUPPORT
+   ============================================================ */
+let touchStartX = 0;
+cardZone.addEventListener("touchstart", (e) => { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+cardZone.addEventListener("touchend", (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if(Math.abs(dx) > 60){
+    if(dx < 0) goNext(); else goPrev();
+  }
+}, {passive:true});
 
-            const breathAnim = hasDyspnea ? 'breathe 1.6s ease-in-out infinite' : 'breathe 3.5s ease-in-out infinite';
-            const mouthOpen = hasDyspnea || hasCough;
-            const eyeOpen = hasTired ? '0.4' : '1';
-            const browAngle = hasPain ? '-12' : hasAnxious ? '-8' : '0';
-            const browAngleR = hasPain ? '12' : hasAnxious ? '8' : '0';
-            const mouthCurve = hasPain ? 'M-7,28 Q0,35 7,28' : mouthOpen ? 'M-5,26 Q0,34 5,26' :
-                'M-6,27 Q0,30 6,27';
-            const sweatVisible = hasSweaty || hasHypo;
-            const strokeMouth = hasStroke ? 'M-9,27 Q-3,30 2,27' : mouthCurve;
+/* ============================================================
+   STATS UI
+   ============================================================ */
+function updateStatsUI(){
+  statToday.textContent = state.studiedTodaySet.size;
+  statAccuracy.textContent = state.totalAnswered ? Math.round((state.totalCorrect/state.totalAnswered)*100) + "%" : "–";
+  statStreak.textContent = state.streak;
+  statRemaining.textContent = state.filtered.length;
+}
 
-            const wrinkleLines = hasWrinkles ?
-                '<line x1="-10" y1="22" x2="-4" y2="22" stroke="#b09080" stroke-width="0.6" opacity="0.5"/><line x1="4" y1="22" x2="10" y2="22" stroke="#b09080" stroke-width="0.6" opacity="0.5"/>' :
-                '';
-            const confusionMark = hasConfused ? '<circle cx="0" cy="-14" r="3" fill="none" stroke="#f0a050" stroke-width="1.5" opacity="0.7"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite"/></circle>' :
-                '';
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+const root = document.documentElement;
+function setTheme(dark){
+  root.setAttribute("data-theme", dark ? "dark" : "light");
+  $("#darkToggle").textContent = dark ? "☀️" : "🌙";
+}
+let isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+setTheme(isDark);
+$("#darkToggle").addEventListener("click", () => { isDark = !isDark; setTheme(isDark); });
 
-            return `
-            <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" class="patient-svg" aria-label="Patient im Krankenhausbett">
-              <defs>
-                <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e2e3e"/><stop offset="100%" stop-color="#141e2a"/></linearGradient>
-                <linearGradient id="bedGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d0d8e0"/><stop offset="100%" stop-color="#a0acb8"/></linearGradient>
-                <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${skinColor}"/><stop offset="100%" stop-color="${hasPale?'#c8b090':skinColor}"/></linearGradient>
-              </defs>
-              <rect x="0" y="0" width="400" height="150" fill="url(#wallGrad)"/>
-              <rect x="120" y="10" width="160" height="4" rx="2" fill="#ffe8c8" opacity="0.25" filter="blur(2px)"/>
-              <rect x="40" y="155" width="320" height="55" rx="6" fill="url(#bedGrad)" stroke="#8898a8" stroke-width="1.5"/>
-              <rect x="48" y="160" width="304" height="18" rx="3" fill="#e8f0f5"/>
-              <rect x="55" y="140" width="50" height="22" rx="10" fill="#f0f4f8" stroke="#d8e0e8" stroke-width="1"/>
-              <rect x="30" y="148" width="5" height="70" rx="2" fill="#b0bcc8"/>
-              <rect x="365" y="148" width="5" height="70" rx="2" fill="#b0bcc8"/>
-              <rect x="28" y="205" width="344" height="3" rx="1" fill="#b0bcc8"/>
-              <g transform="translate(130,95)">
-                <ellipse cx="0" cy="15" rx="24" ry="28" fill="url(#skinGrad)" stroke="#c0a880" stroke-width="1"/>
-                ${wrinkleLines}
-                <ellipse cx="-8" cy="8" rx="4" ry="${eyeOpen<1?'2':'5'}" fill="${eyeOpen<1?'#888':'#1a1a1a'}" opacity="${eyeOpen}"/>
-                <ellipse cx="8" cy="8" rx="4" ry="${eyeOpen<1?'2':'5'}" fill="${eyeOpen<1?'#888':'#1a1a1a'}" opacity="${eyeOpen}"/>
-                <line x1="-13" y1="2" x2="-2" y2="${2+parseInt(browAngle)*0.2}" stroke="#4a3020" stroke-width="2" stroke-linecap="round" transform="rotate(${browAngle},-7,2)"/>
-                <line x1="2" y1="${2+parseInt(browAngleR)*0.2}" x2="13" y2="2" stroke="#4a3020" stroke-width="2" stroke-linecap="round" transform="rotate(${browAngleR},7,2)"/>
-                <path d="${strokeMouth}" fill="none" stroke="#c05550" stroke-width="1.8" stroke-linecap="round"/>
-                ${hasGrayHair?`<ellipse cx="0" cy="-5" rx="26" ry="22" fill="${hairColor}" opacity="0.7"/>`:''}
-                ${!hasGrayHair && hairStyle==='medium'?`<ellipse cx="0" cy="-3" rx="25" ry="20" fill="${hairColor}" opacity="0.6"/><ellipse cx="-10" cy="8" rx="6" ry="10" fill="${hairColor}" opacity="0.5"/>`:''}
-                ${confusionMark}
-                ${sweatyVisible?`
-                <ellipse cx="-14" cy="0" rx="1.5" ry="2.5" fill="#a0d8f0" opacity="0.7"><animate attributeName="cy" values="0;-12" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite"/></ellipse>
-                <ellipse cx="14" cy="-2" rx="1.5" ry="2.5" fill="#a0d8f0" opacity="0.7"><animate attributeName="cy" values="-2;-14" dur="2.3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.7;0" dur="2.3s" repeatCount="indefinite"/></ellipse>
-                <ellipse cx="0" cy="-4" rx="1.5" ry="2.5" fill="#a0d8f0" opacity="0.7"><animate attributeName="cy" values="-4;-16" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.7;0" dur="1.8s" repeatCount="indefinite"/></ellipse>`:''}
-              </g>
-              <g transform="translate(155,140)">
-                <rect x="-15" y="0" width="30" height="55" rx="8" fill="#d8e4ef" stroke="#c0ccd8" stroke-width="1.2"/>
-                <rect x="-12" y="10" width="24" height="3" rx="1" fill="#c8d4de"/>
-                <rect x="-12" y="25" width="24" height="3" rx="1" fill="#c8d4de"/>
-                <rect x="-8" y="18" width="16" height="10" rx="3" fill="#c0d0dc" opacity="0.5">
-                  <animate attributeName="height" values="10;14;10" dur="${hasDyspnea?'1.6s':'3.5s'}" repeatCount="indefinite"/>
-                  <animate attributeName="y" values="18;15;18" dur="${hasDyspnea?'1.6s':'3.5s'}" repeatCount="indefinite"/>
-                </rect>
-              </g>
-              ${hasStroke?`<g transform="translate(190,150)"><rect x="0" y="0" width="50" height="8" rx="3" fill="${skinColor}" opacity="0.7" stroke="#c0a880" stroke-width="1"/></g>`:''}
-              <g transform="translate(300,20)">
-                <rect x="0" y="0" width="80" height="70" rx="6" fill="#080d12" stroke="#1a3028" stroke-width="1.5"/>
-                <polyline points="5,40 15,40 18,20 22,50 26,40 75,40" fill="none" stroke="#2eff6e" stroke-width="1.5">
-                  <animate attributeName="stroke-dashoffset" from="150" to="0" dur="2s" repeatCount="indefinite"/>
-                </polyline>
-                <text x="5" y="55" fill="#5a8" font-size="7">SpO₂</text><text x="55" y="55" fill="${caseData.vitals?.spo2?.startsWith('8')?'#f04040':'#0f0'}" font-size="8" font-weight="bold">${caseData.vitals?.spo2||'96%'}</text>
-                <text x="5" y="65" fill="#5a8" font-size="7">HF</text><text x="55" y="65" fill="#0f0" font-size="8" font-weight="bold">${caseData.vitals?.pulse||'78/min'}</text>
-              </g>
-            </svg>`;
-        }
+/* ============================================================
+   EXAM MODE
+   ============================================================ */
+const examOverlay = $("#examOverlay");
+const examBody = $("#examBody");
+const examTimerEl = $("#examTimer");
 
-        function renderSpeechBubble(text, speaker) {
-            const label = speaker ? `<span class="speaker-label">${speaker}</span>` : '';
-            return `<div class="speech-bubble typewriter-cursor" aria-live="polite">${label}${text}</div>`;
-        }
+$("#examOpenBtn").addEventListener("click", startExam);
+$("#examCloseBtn").addEventListener("click", closeExam);
 
-        // ==================== SCREEN RENDERERS ====================
-        function renderLanding() {
-            const done = Object.keys(gameState.casesCompleted).length;
-            const html = `
-            <div class="screen active" style="justify-content:center;align-items:center;text-align:center;gap:16px;">
-              <div style="font-size:3.5rem;">🩺</div>
-              <h1 style="font-size:1.5rem;font-weight:700;color:var(--accent);">PflegefachProfi</h1>
-              <p style="font-size:0.95rem;color:var(--text2);max-width:380px;">Trainiere klinisches Denken, Pflegemaßnahmen und Prüfungssituationen – interaktiv und fallbasiert.</p>
-              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
-                <div><span style="color:var(--text2);font-size:0.7rem;">Fälle</span><br><strong>${done}/${CASES.length}</strong></div>
-                <div><span style="color:var(--text2);font-size:0.7rem;">XP</span><br><strong style="color:var(--xp);">${gameState.totalXP}</strong></div>
-                <div><span style="color:var(--text2);font-size:0.7rem;">Streak</span><br><strong style="color:var(--warning);">${gameState.streak}</strong></div>
-              </div>
-              <button class="btn btn-primary btn-large" id="btnStart">🚀 Simulation starten</button>
-              <p class="disclaimer">Trainingssimulation für die Ausbildung. Keine medizinische Anleitung für reale Notfälle. In echten Notfällen gelten Hausstandard, ärztliche Anordnung und Notfallalgorithmus.</p>
-            </div>`;
-            renderScreen(html);
-        }
+function startExam(){
+  const pool = state.filtered.length >= 5 ? [...state.filtered] : [...CARDS];
+  for(let i = pool.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  examState.active = true;
+  examState.queue = pool.slice(0, Math.min(20, pool.length));
+  examState.index = 0;
+  examState.score = 0;
+  examState.answers = [];
+  examOverlay.classList.add("active");
+  renderExamCard();
+}
+function closeExam(){
+  examState.active = false;
+  clearInterval(examState.timer);
+  examOverlay.classList.remove("active");
+}
+function startExamTimer(){
+  examState.secondsLeft = examState.perCardSeconds;
+  clearInterval(examState.timer);
+  updateExamTimerUI();
+  examState.timer = setInterval(() => {
+    examState.secondsLeft--;
+    updateExamTimerUI();
+    if(examState.secondsLeft <= 0){
+      clearInterval(examState.timer);
+      recordExamAnswer(null, false);
+    }
+  }, 1000);
+}
+function updateExamTimerUI(){
+  const m = String(Math.floor(Math.max(0,examState.secondsLeft)/60)).padStart(2,"0");
+  const s = String(Math.max(0,examState.secondsLeft)%60).padStart(2,"0");
+  examTimerEl.textContent = m + ":" + s;
+  examTimerEl.classList.toggle("low", examState.secondsLeft <= 10);
+}
+function renderExamCard(){
+  if(examState.index >= examState.queue.length){ renderExamResults(); return; }
+  const card = examState.queue[examState.index];
+  $("#examProgressText").textContent = `Frage ${examState.index+1} / ${examState.queue.length}`;
+  startExamTimer();
 
-        function renderModules() {
-            let cards = '';
-            MODULES.forEach(m => {
-                const modCases = CASES.filter(c => c.module === m.id);
-                const doneCount = modCases.filter(c => gameState.casesCompleted[c.id]).length;
-                cards += `
-              <div class="module-card" data-module="${m.id}" tabindex="0" role="button" aria-label="${m.title}">
-                <span class="module-icon">${m.icon}</span>
-                <strong style="font-size:0.8rem;">${m.title}</strong>
-                <span style="font-size:0.65rem;color:var(--text2);">${modCases.length} Fälle · ${doneCount} erledigt</span>
-                <div class="progress-bar-wrap" style="width:80%;"><div class="progress-bar-fill" style="width:${modCases.length>0?(doneCount/modCases.length)*100:0}%;"></div></div>
-              </div>`;
-            });
-            const html = `
-            <div class="screen active">
-              <h2 style="font-size:1.1rem;">Lernbereiche</h2>
-              <p style="font-size:0.75rem;color:var(--text2);">Wähle ein Modul, um passende Fälle zu sehen.</p>
-              <div class="scroll-area"><div class="module-grid">${cards}</div></div>
-              <button class="btn btn-secondary" id="btnBackMod">← Zurück</button>
-            </div>`;
-            renderScreen(html);
-        }
+  let body = `<div style="max-width:560px;width:100%;">
+    <div class="badge type" style="margin-bottom:14px;display:inline-block;">${typeIcon[card.type]} ${typeLabel[card.type]}</div>
+    <h2 style="font-size:22px;font-weight:800;line-height:1.35;margin-bottom:18px;">${escapeHtml(card.question)}</h2>
+    <div id="examAnswerZone"></div>
+  </div>`;
+  examBody.innerHTML = body;
+  const zone = $("#examAnswerZone");
 
-        function renderCaseSelect(moduleId) {
-            const modCases = CASES.filter(c => c.module === moduleId);
-            const modName = MODULES.find(m => m.id === moduleId)?.title || moduleId;
-            let cards = '';
-            modCases.forEach(c => {
-                const comp = gameState.casesCompleted[c.id];
-                const stars = comp ? comp.stars : 0;
-                const starStr = '★'.repeat(stars) + '☆'.repeat(3 - stars);
-                const diffClass = c.difficulty === 'Schwer' ? 'schwer' : c.difficulty === 'Mittel' ? 'mittel' :
-                    'leicht';
-                cards += `
-              <div class="card case-card" data-case-id="${c.id}" tabindex="0" role="button">
-                <div style="display:flex;justify-content:space-between;"><strong>${c.title}</strong><span class="difficulty-badge ${diffClass}">${c.difficulty}</span></div>
-                <div style="font-size:0.7rem;color:var(--text2);">${c.setting} · ${c.patient?.name}, ${c.patient?.age}J.</div>
-                <div class="stars">${starStr}</div>
-                ${comp?`<span style="font-size:0.65rem;color:#2eff6e;">Beste: ${comp.bestScore}%</span>`:''}
-              </div>`;
-            });
-            const html = `
-            <div class="screen active">
-              <h2 style="font-size:1rem;">${modName} – Fälle</h2>
-              <div class="scroll-area"><div class="case-grid">${cards}</div></div>
-              <button class="btn btn-secondary" id="btnBackCases">← Zurück zu Modulen</button>
-            </div>`;
-            renderScreen(html);
-        }
+  if(card.type === "mc"){
+    zone.innerHTML = `<div class="options-list">` + card.options.map((o,i) => `<button class="option-btn" data-i="${i}">${escapeHtml(o)}</button>`).join("") + `</div>`;
+    zone.querySelectorAll(".option-btn").forEach(btn => btn.addEventListener("click", () => {
+      const correct = Number(btn.dataset.i) === card.correctIndex;
+      recordExamAnswer(card, correct);
+    }));
+  } else if(card.type === "tf"){
+    zone.innerHTML = `<div class="tf-row"><button class="tf-btn" data-v="true">Wahr</button><button class="tf-btn" data-v="false">Falsch</button></div>`;
+    zone.querySelectorAll(".tf-btn").forEach(btn => btn.addEventListener("click", () => {
+      const correct = (btn.dataset.v === "true") === card.correctAnswer;
+      recordExamAnswer(card, correct);
+    }));
+  } else if(card.type === "fillblank"){
+    zone.innerHTML = `<div class="fill-row"><input class="fill-input" id="examFillInput" placeholder="Antwort…"><button class="fill-check" id="examFillCheck">Bestätigen</button></div>`;
+    const submit = () => {
+      const val = $("#examFillInput").value.trim().toLowerCase();
+      recordExamAnswer(card, val === card.correctAnswer.toLowerCase());
+    };
+    $("#examFillCheck").addEventListener("click", submit);
+    $("#examFillInput").addEventListener("keydown", (e) => { if(e.key === "Enter") submit(); });
+  } else {
+    zone.innerHTML = `<div class="judge-row" style="margin-top:6px;">
+      <button class="judge-btn unknown" id="examUnknown">✗ Wusste ich nicht</button>
+      <button class="judge-btn known" id="examKnown">✓ Wusste ich</button>
+    </div>`;
+    $("#examKnown").addEventListener("click", () => recordExamAnswer(card, true));
+    $("#examUnknown").addEventListener("click", () => recordExamAnswer(card, false));
+  }
+}
+function recordExamAnswer(card, correct){
+  clearInterval(examState.timer);
+  if(card){
+    examState.answers.push({card, correct});
+    if(correct) examState.score++;
+  }
+  examState.index++;
+  renderExamCard();
+}
+function renderExamResults(){
+  const total = examState.queue.length;
+  const pct = total ? Math.round((examState.score/total)*100) : 0;
+  const wrong = examState.answers.filter(a => !a.correct);
+  examBody.innerHTML = `
+    <div class="exam-result">
+      <div class="exam-score">${pct}%</div>
+      <div class="exam-score-label">Ergebnis</div>
+      <div class="exam-summary-row">
+        <div><b style="color:var(--success)">${examState.score}</b><span style="font-size:11.5px;color:var(--text-muted)">Richtig</span></div>
+        <div><b style="color:var(--danger)">${wrong.length}</b><span style="font-size:11.5px;color:var(--text-muted)">Falsch</span></div>
+        <div><b>${total}</b><span style="font-size:11.5px;color:var(--text-muted)">Gesamt</span></div>
+      </div>
+      ${wrong.length ? `<div class="review-list">` + wrong.map(w => `<div class="review-item">${escapeHtml(w.card.question)}</div>`).join("") + `</div>` : ""}
+      <div class="exam-action-row">
+        <button class="btn-ghost" id="examReviewBtn">Falsche wiederholen</button>
+        <button class="btn-solid" id="examRestartBtn">Neuer Versuch</button>
+      </div>
+    </div>
+  `;
+  $("#examRestartBtn").addEventListener("click", startExam);
+  $("#examReviewBtn").addEventListener("click", () => {
+    if(wrong.length === 0) return;
+    examState.queue = wrong.map(w => w.card);
+    examState.index = 0;
+    examState.score = 0;
+    examState.answers = [];
+    renderExamCard();
+  });
+}
 
-        function getPhaseInfo(idx) {
-            const names = ['Phase 1: Ersteindruck', 'Phase 2: Assessment', 'Phase 3: Problem erkennen',
-                'Phase 4: Maßnahmen auswählen', 'Phase 5: Kommunikation / Edukation',
-                'Phase 6: Dokumentation / Weitergabe'
-            ];
-            return names[idx] || `Phase ${idx+1}`;
-        }
+/* ============================================================
+   BOOTSTRAP
+   ============================================================ */
+buildChips();
+applyFilters(true);
 
-        function renderSimulation() {
-            const caseData = CASES.find(c => c.id === gameState.currentCaseId);
-            if (!caseData) { renderModules(); return; }
-            const phaseIdx = gameState.currentPhase;
-            const phase = caseData.phases[phaseIdx];
-            if (!phase) { renderResult(); return; }
-            const selSet = new Set(gameState.selectedOptions);
-            let optsHTML = '';
-            phase.options.forEach((opt, i) => {
-                const sel = selSet.has(i) ? ' selected' : '';
-                optsHTML +=
-                    `<div class="card option-card${sel}" data-opt="${i}" tabindex="0" role="checkbox" aria-checked="${selSet.has(i)}">${opt.label}</div>`;
-            });
-            const hint = phase.requiredCorrect ? `Wähle ${phase.requiredCorrect} aus.` : (phase.type === 'single' ?
-                'Wähle die beste Antwort.' : 'Mehrere Antworten möglich.');
-            const svg = getPatientSVG(caseData);
-            const speech = phaseIdx === 0 ? caseData.patient.openingLine : (gameState._speech || caseData.patient
-                .openingLine);
-            const speaker = phaseIdx === 0 ? `${caseData.patient.name}, ${caseData.patient.age} J.` : '';
-            const html = `
-            <div class="screen active">
-              <span class="phase-indicator">${getPhaseInfo(phaseIdx)}</span>
-              <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${(phaseIdx/caseData.phases.length)*100}%;"></div></div>
-              <div class="er-room">${svg}</div>
-              ${renderSpeechBubble(speech, speaker)}
-              <p style="font-size:0.78rem;color:var(--text2);">${phase.instruction} <em>(${hint})</em></p>
-              <div class="scroll-area" style="max-height:35vh;"><div class="option-grid">${optsHTML}</div></div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
-                <button class="btn btn-primary" id="btnSubmit" ${gameState.selectedOptions.length===0?'disabled':''}>✅ Bestätigen</button>
-                ${phaseIdx>0?`<button class="btn btn-secondary" id="btnSkip">Überspringen</button>`:''}
-              </div>
-              <span style="font-size:0.65rem;color:var(--text2);text-align:center;">Punkte: ${gameState.currentScore} | Phase ${phaseIdx+1}/${caseData.phases.length}</span>
-            </div>`;
-            renderScreen(html);
-            gameState.phaseData = { phase, caseData, phaseIdx };
-        }
+})();
+</script>
 
-        function renderFeedback(feedbackItems) {
-            let htmlItems = '';
-            feedbackItems.forEach(f => {
-                const cls = f.correct ? 'green' : 'red';
-                const icon = f.correct ? '✅' : '❌';
-                htmlItems += `
-              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;margin:3px 0;">
-                <span class="info-chip ${cls}">${icon} ${f.correct?'Richtig':'Falsch'}</span>
-                <strong style="display:block;margin-top:3px;">${f.label}</strong>
-                <span style="font-size:0.7rem;color:var(--text2);">${f.feedback}</span>
-                ${f.points!==undefined?`<span style="font-size:0.65rem;color:${f.points>0?'var(--accent)':'var(--danger)'};">${f.points>0?'+':''}${f.points} Pkt.</span>`:''}
-              </div>`;
-            });
-            const html = `
-            <div class="screen active">
-              <h3 style="color:var(--accent);">📋 Rückmeldung</h3>
-              <div class="scroll-area" style="max-height:55vh;">${htmlItems}</div>
-              <button class="btn btn-primary btn-large" id="btnContinue">Weiter →</button>
-            </div>`;
-            renderScreen(html);
-        }
-
-        function renderResult() {
-            const caseData = CASES.find(c => c.id === gameState.currentCaseId);
-            if (!caseData) { renderModules(); return; }
-            const pct = gameState.maxPossibleScore > 0 ? Math.round((gameState.currentScore / gameState.maxPossibleScore) *
-                100) : 0;
-            const clamped = Math.max(0, Math.min(100, pct));
-            const stars = clamped >= 90 ? 3 : clamped >= 70 ? 2 : clamped >= 50 ? 1 : 0;
-            const xp = Math.round(clamped * 1.8);
-            const starStr = '★'.repeat(stars) + '☆'.repeat(3 - stars);
-            const prev = gameState.casesCompleted[caseData.id];
-            if (!prev || clamped > prev.bestScore) {
-                gameState.casesCompleted[caseData.id] = { bestScore: clamped, stars, completedAt: Date.now() };
-            }
-            if (stars >= 2) gameState.streak++;
-            else gameState.streak = Math.max(0, gameState.streak - 1);
-            gameState.totalXP += xp;
-            saveState();
-            const html = `
-            <div class="screen active" style="text-align:center;gap:10px;">
-              <h2 style="color:var(--accent);">🏁 Fall abgeschlossen</h2>
-              <div class="result-circle">${clamped}%</div>
-              <div class="stars" style="font-size:1.5rem;">${starStr}</div>
-              <p style="color:var(--xp);font-weight:700;">+${xp} XP</p>
-              <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:left;font-size:0.8rem;">
-                <strong>📌 ${caseData.finalDiagnosis}</strong>
-                <p style="margin-top:4px;">${caseData.nursingSummary}</p>
-                <p style="color:var(--gold);margin-top:6px;"><strong>📝 Prüfungstipp:</strong> ${caseData.examTip}</p>
-              </div>
-              <div class="btn-row">
-                <button class="btn btn-secondary" id="btnRepeat">🔄 Wiederholen</button>
-                <button class="btn btn-primary" id="btnNextCase">▶️ Nächster Fall</button>
-                <button class="btn btn-secondary" id="btnHome">🏠 Fallauswahl</button>
-              </div>
-            </div>`;
-            renderScreen(html);
-            spawnConfetti(40);
-            updateHeader();
-        }
-
-        // ==================== GAME LOGIC ====================
-        function startCase(caseId) {
-            const c = CASES.find(x => x.id === caseId);
-            if (!c) return;
-            gameState.currentCaseId = caseId;
-            gameState.currentPhase = 0;
-            gameState.currentScore = 0;
-            gameState.selectedOptions = [];
-            gameState._speech = null;
-            gameState.maxPossibleScore = 0;
-            c.phases.forEach(p => p.options.forEach(o => { if (o.correct) gameState.maxPossibleScore += Math.abs(o
-                    .points); }));
-            gameState.screen = 'simulation';
-            renderSimulation();
-        }
-
-        function submitPhase() {
-            const { phase, caseData, phaseIdx } = gameState.phaseData || {};
-            if (!phase) return;
-            const sel = [...gameState.selectedOptions];
-            if (phase.requiredCorrect && sel.length !== phase.requiredCorrect) {
-                showToast(`Bitte wähle genau ${phase.requiredCorrect} Optionen.`, 'warn');
-                return;
-            }
-            let fb = [];
-            let pts = 0;
-            phase.options.forEach((o, i) => {
-                const chosen = sel.includes(i);
-                let earned = 0;
-                if (chosen && o.correct) { earned = o.points;
-                    pts += earned; } else if (chosen && !o.correct) { earned = o.points;
-                    pts += earned; } else if (!chosen && o.correct && o.critical) { earned = -Math.abs(o.points) *
-                    0.6;
-                    pts += earned; }
-                fb.push({ label: o.label, correct: o.correct, wasChosen: chosen, feedback: o.feedback,
-                    points: Math.round(earned) });
-            });
-            gameState.currentScore += Math.round(pts);
-            gameState.feedbackQueue = fb;
-            gameState.screen = 'feedback';
-            renderFeedback(fb);
-            if (pts > 0) showToast(`+${Math.round(pts)} Punkte`, 'ok');
-            else if (pts < 0) showToast(`${Math.round(pts)} Punkte`, 'err');
-            gameState.selectedOptions = [];
-        }
-
-        function advancePhase() {
-            gameState.currentPhase++;
-            gameState.selectedOptions = [];
-            const caseData = CASES.find(c => c.id === gameState.currentCaseId);
-            if (!caseData || gameState.currentPhase >= caseData.phases.length) {
-                renderResult();
-                gameState.screen = 'result';
-            } else {
-                gameState.screen = 'simulation';
-                gameState._speech = null;
-                renderSimulation();
-            }
-        }
-
-        function skipPhase() {
-            gameState.selectedOptions = [];
-            gameState._speech = null;
-            advancePhase();
-        }
-
-        // ==================== EVENT LISTENERS ====================
-        function attachListeners() {
-            const btnStart = document.getElementById('btnStart');
-            if (btnStart) btnStart.addEventListener('click', () => { gameState.screen = 'modules';
-                renderModules(); });
-            const btnBackMod = document.getElementById('btnBackMod');
-            if (btnBackMod) btnBackMod.addEventListener('click', () => { gameState.screen = 'landing';
-                renderLanding(); });
-            document.querySelectorAll('.module-card').forEach(c => {
-                c.addEventListener('click', function() {
-                    const m = this.getAttribute('data-module');
-                    if (m) { gameState.currentModule = m;
-                        gameState.screen = 'caseSelect';
-                        renderCaseSelect(m); }
-                });
-                c.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e
-                        .preventDefault();
-                        this.click(); } });
-            });
-            document.querySelectorAll('.case-card').forEach(c => {
-                c.addEventListener('click', function() {
-                    const id = this.getAttribute('data-case-id');
-                    if (id) startCase(id);
-                });
-                c.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e
-                        .preventDefault();
-                        this.click(); } });
-            });
-            const btnBackCases = document.getElementById('btnBackCases');
-            if (btnBackCases) btnBackCases.addEventListener('click', () => { gameState.screen = 'modules';
-                renderModules(); });
-            document.querySelectorAll('.option-card').forEach(c => {
-                c.addEventListener('click', function() {
-                    const idx = parseInt(this.getAttribute('data-opt'));
-                    if (isNaN(idx)) return;
-                    const s = new Set(gameState.selectedOptions);
-                    const phaseData = gameState.phaseData?.phase;
-                    if (s.has(idx)) { s.delete(idx); } else {
-                        if (phaseData?.type === 'single') { s.clear(); }
-                        if (phaseData?.requiredCorrect && s.size >= phaseData.requiredCorrect) { const
-                                first = [...s][0];
-                            s.delete(first); }
-                        s.add(idx);
-                    }
-                    gameState.selectedOptions = [...s];
-                    renderSimulation();
-                });
-                c.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e
-                        .preventDefault();
-                        this.click(); } });
-            });
-            const btnSubmit = document.getElementById('btnSubmit');
-            if (btnSubmit) btnSubmit.addEventListener('click', submitPhase);
-            const btnSkip = document.getElementById('btnSkip');
-            if (btnSkip) btnSkip.addEventListener('click', skipPhase);
-            const btnContinue = document.getElementById('btnContinue');
-            if (btnContinue) btnContinue.addEventListener('click', advancePhase);
-            const btnRepeat = document.getElementById('btnRepeat');
-            if (btnRepeat) btnRepeat.addEventListener('click', () => { if (gameState.currentCaseId) startCase(gameState
-                    .currentCaseId); });
-            const btnNextCase = document.getElementById('btnNextCase');
-            if (btnNextCase) btnNextCase.addEventListener('click', () => {
-                const mod = CASES.find(c => c.id === gameState.currentCaseId)?.module;
-                const modCases = CASES.filter(c => c.module === mod);
-                const idx = modCases.findIndex(c => c.id === gameState.currentCaseId);
-                const next = modCases[(idx + 1) % modCases.length];
-                if (next) startCase(next.id);
-                else renderModules();
-            });
-            const btnHome = document.getElementById('btnHome');
-            if (btnHome) btnHome.addEventListener('click', () => { gameState.screen = 'modules';
-                renderModules(); });
-        }
-
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape' && (gameState.screen === 'simulation' || gameState.screen === 'feedback')) {
-                gameState.screen = 'modules';
-                renderModules();
-            }
-            if (gameState.screen === 'simulation' && e.key >= '1' && e.key <= '9') {
-                const idx = parseInt(e.key) - 1;
-                const pd = gameState.phaseData?.phase;
-                if (pd && idx < pd.options.length) {
-                    const s = new Set(gameState.selectedOptions);
-                    if (s.has(idx)) s.delete(idx);
-                    else {
-                        if (pd.type === 'single') s.clear();
-                        if (pd.requiredCorrect && s.size >= pd.requiredCorrect) { const f = [...s][0];
-                            s.delete(f); }
-                        s.add(idx);
-                    }
-                    gameState.selectedOptions = [...s];
-                    renderSimulation();
-                }
-            }
-            if (gameState.screen === 'simulation' && e.key === 'Enter' && gameState.selectedOptions.length > 0) {
-                e.preventDefault();
-                submitPhase();
-            }
-        });
-
-        function init() {
-            updateHeader();
-            gameState.screen = 'landing';
-            renderLanding();
-        }
-        init();
-        console.log('🩺 PflegefachProfi Pflege-Simulator – Bereit mit ' + CASES.length + ' Fällen.');
-    </script>
+<!--
+  HINWEIS ZUR PERSISTENZ:
+  Diese Datei hält Lernfortschritt, Streak und Statistiken bewusst im Arbeitsspeicher
+  (JS-Variablen), nicht in localStorage — damit die Vorschau in Claude.ai zuverlässig
+  funktioniert. Für den produktiven Einsatz auf der echten Website kann der Fortschritt
+  persistent gemacht werden, indem `state.progress`, `state.studiedTodaySet`,
+  `state.totalCorrect/totalAnswered` und `state.streak/longestStreak` beim Start aus
+  localStorage geladen und bei jeder Änderung dorthin zurückgeschrieben werden.
+-->
 </body>
 </html>
