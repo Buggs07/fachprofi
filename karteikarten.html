@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PflegefachProfi — Karteikarten</title>
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  --bg:#ffffff;
+  --surface:#fafafa;
+  --card-bg:#ffffff;
+  --border:#e7e9ee;
+  --text:#111827;
+  --text-muted:#6b7280;
+  --text-faint:#9aa0ab;
+
+  --primary:#2563eb;
+  --primary-700:#1d4ed8;
+  --primary-100:#eaf0fe;
+  --secondary:#7c3aed;
+  --secondary-100:#f1eafe;
+  --accent:#ec4899;
+  --accent-100:#fdeaf3;
+  --success:#10b981;
+  --success-100:#e7faf2;
+  --warning:#f59e0b;
+  --warning-100:#fef5e6;
+  --danger:#ef4444;
+  --danger-100:#fdeaea;
+
+  --shadow-sm: 0 1px 2px rgba(17,24,39,.05);
+  --shadow-md: 0 2px 8px rgba(17,24,39,.06), 0 1px 2px rgba(17,24,39,.04);
+  --shadow-lg: 0 12px 32px rgba(17,24,39,.10), 0 2px 6px rgba(17,24,39,.05);
+  --shadow-card: 0 1px 1px rgba(17,24,39,.03), 0 20px 40px -16px rgba(37,99,235,.18);
+
+  --r-sm:10px;
+  --r-md:16px;
+  --r-lg:22px;
+  --r-full:999px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --bar-h: 64px;
+  --maxw: 760px;
+}
+
+[data-theme="dark"]{
+  --bg:#0a0d14;
+  --surface:#11151f;
+  --card-bg:#161b27;
+  --border:#252b3a;
+  --text:#f1f3f7;
+  --text-muted:#9aa3b5;
+  --text-faint:#67707f;
+
+  --primary:#5b8def;
+  --primary-700:#3d6fe0;
+  --primary-100:#16233f;
+  --secondary:#a78bfa;
+  --secondary-100:#241c3f;
+  --accent:#f472b6;
+  --accent-100:#3a1e30;
+  --success:#34d399;
+  --success-100:#10271f;
+  --warning:#fbbf24;
+  --warning-100:#332108;
+  --danger:#f87171;
+  --danger-100:#341515;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 2px 10px rgba(0,0,0,.35);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,.5);
+  --shadow-card: 0 1px 1px rgba(0,0,0,.2), 0 20px 40px -16px rgba(91,141,239,.25);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease, color .25s ease;
+  padding-bottom:96px;
+}
+h1,h2,h3,p{margin:0;}
+button{font-family:inherit;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+
+::selection{background:var(--primary-100);}
+
+/* Focus visibility for accessibility */
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--primary);
+  outline-offset:2px;
+  border-radius:6px;
+}
+
+/* ============================================================
+   APP BAR
+   ============================================================ */
+.appbar{
+  position:sticky; top:0; z-index:40;
+  height:var(--bar-h);
+  display:flex; align-items:center; gap:16px;
+  padding:0 20px;
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--border);
+}
+.burger-btn{
+  width:38px; height:38px; border-radius:var(--r-full); border:1px solid var(--border);
+  background:var(--card-bg); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; flex-shrink:0;
+}
+.burger-icon{display:flex; flex-direction:column; gap:3px; width:16px;}
+.burger-icon span{display:block; height:2px; width:100%; background:var(--text); border-radius:2px; transition:transform .2s, opacity .2s;}
+.burger-btn.open .burger-icon span:nth-child(1){transform:translateY(5px) rotate(45deg);}
+.burger-btn.open .burger-icon span:nth-child(2){opacity:0;}
+.burger-btn.open .burger-icon span:nth-child(3){transform:translateY(-5px) rotate(-45deg);}
+
+.brand{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+.brand-mark{
+  width:34px; height:34px; border-radius:10px;
+  background:linear-gradient(135deg, var(--primary), var(--secondary));
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px; color:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.brand-name{font-weight:800; font-size:16.5px; letter-spacing:-.01em;}
+.brand-name span{color:var(--primary);}
+
+.search-wrap{
+  flex:1; max-width:380px; position:relative;
+  display:flex; align-items:center;
+}
+.search-wrap svg{position:absolute; left:12px; width:16px; height:16px; color:var(--text-faint); pointer-events:none;}
+.search-input{
+  width:100%;
+  padding:9px 12px 9px 34px;
+  border-radius:var(--r-full);
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+  transition:border-color .15s, box-shadow .15s;
+}
+.search-input:focus{border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-100);}
+.search-input::placeholder{color:var(--text-faint);}
+
+.appbar-actions{display:flex; align-items:center; gap:8px; margin-left:auto; flex-shrink:0;}
+.icon-btn{
+  width:38px; height:38px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--card-bg);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text); font-size:16px;
+  transition:transform .12s ease, background .15s, box-shadow .15s;
+}
+.icon-btn:hover{box-shadow:var(--shadow-sm); transform:translateY(-1px);}
+.icon-btn:active{transform:translateY(0) scale(.94);}
+.icon-btn svg{width:18px; height:18px;}
+
+.exam-btn{
+  display:flex; align-items:center; gap:6px;
+  padding:0 16px; height:38px; border-radius:var(--r-full);
+  border:none; cursor:pointer; font-weight:700; font-size:13.5px;
+  background:linear-gradient(135deg, var(--secondary), var(--accent));
+  color:#fff; box-shadow:var(--shadow-sm);
+  transition:transform .12s ease, box-shadow .15s;
+  white-space:nowrap;
+}
+.exam-btn:hover{transform:translateY(-1px); box-shadow:var(--shadow-md);}
+.exam-btn:active{transform:translateY(0) scale(.97);}
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+main{max-width:var(--maxw); margin:0 auto; padding:18px 18px 0;}
+
+/* Filter / topic chips */
+.filters{display:flex; flex-direction:column; gap:10px; margin-bottom:16px;}
+.chip-row{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none;}
+.chip-row::-webkit-scrollbar{display:none;}
+.chip{
+  flex-shrink:0;
+  padding:7px 14px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--card-bg);
+  color:var(--text-muted); font-size:13px; font-weight:600;
+  cursor:pointer; white-space:nowrap;
+  transition:all .15s ease;
+}
+.chip:hover{border-color:var(--primary); color:var(--text);}
+.chip.active{
+  background:var(--primary); border-color:var(--primary); color:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.subfilters{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+.select-pill{
+  padding:6px 10px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--surface);
+  color:var(--text); font-size:12.5px; font-weight:600;
+  cursor:pointer; outline:none;
+}
+.toggle-pill{
+  padding:6px 12px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--surface);
+  color:var(--text-muted); font-size:12.5px; font-weight:600;
+  cursor:pointer; display:flex; align-items:center; gap:5px;
+  transition:all .15s;
+}
+.toggle-pill.on{background:var(--accent-100); border-color:var(--accent); color:var(--accent);}
+
+/* Stats */
+.stats-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+  margin-bottom:14px;
+}
+.stat-card{
+  background:var(--card-bg); border:1px solid var(--border); border-radius:var(--r-md);
+  padding:11px 12px; box-shadow:var(--shadow-sm);
+}
+.stat-num{font-size:19px; font-weight:800; letter-spacing:-.02em; line-height:1.1;}
+.stat-label{font-size:11px; color:var(--text-muted); font-weight:600; margin-top:2px; text-transform:uppercase; letter-spacing:.03em;}
+.stat-card.streak .stat-num{color:var(--warning);}
+.stat-card.accuracy .stat-num{color:var(--success);}
+
+/* Progress bar */
+.progress-track{
+  height:6px; border-radius:var(--r-full); background:var(--border);
+  overflow:hidden; margin-bottom:22px; position:relative;
+}
+.progress-fill{
+  height:100%; border-radius:var(--r-full);
+  background:linear-gradient(90deg, var(--primary), var(--secondary));
+  width:0%; transition:width .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ============================================================
+   FLASHCARD
+   ============================================================ */
+.stage{position:relative; display:flex; align-items:center; justify-content:center; gap:10px;}
+.nav-arrow{
+  flex-shrink:0; width:42px; height:42px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--card-bg);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text); box-shadow:var(--shadow-sm);
+  transition:transform .12s, box-shadow .15s;
+}
+.nav-arrow:hover{box-shadow:var(--shadow-md); transform:translateY(-1px);}
+.nav-arrow:disabled{opacity:.3; cursor:default; transform:none; box-shadow:none;}
+@media (max-width:640px){ .nav-arrow{display:none;} }
+
+.card-zone{flex:1; max-width:560px; min-height:430px; perspective:1800px;}
+
+.flashcard{
+  position:relative; width:100%; height:100%; min-height:430px;
+  cursor:pointer; transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.22,1,.36,1);
+}
+.flashcard.flipped{transform:rotateY(180deg);}
+.flashcard.shake{animation:shake .38s ease;}
+@keyframes shake{
+  10%,90%{transform:translateX(-3px);}
+  20%,80%{transform:translateX(5px);}
+  30%,50%,70%{transform:translateX(-7px);}
+  40%,60%{transform:translateX(7px);}
+}
+
+.face{
+  position:absolute; inset:0; backface-visibility:hidden;
+  border-radius:var(--r-lg); border:1px solid var(--border);
+  background:var(--card-bg); box-shadow:var(--shadow-card);
+  padding:26px 26px 22px; display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.face.back{transform:rotateY(180deg); overflow-y:auto;}
+.face::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:5px;
+  background:linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+}
+
+.face-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+.badge-group{display:flex; gap:6px; flex-wrap:wrap;}
+.badge{
+  font-size:11px; font-weight:700; padding:4px 9px; border-radius:var(--r-full);
+  letter-spacing:.01em;
+}
+.badge.cat{background:var(--primary-100); color:var(--primary);}
+.badge.diff-easy{background:var(--success-100); color:var(--success);}
+.badge.diff-medium{background:var(--warning-100); color:var(--warning);}
+.badge.diff-hard{background:var(--danger-100); color:var(--danger);}
+.badge.type{background:var(--secondary-100); color:var(--secondary);}
+.stars{font-size:12px; color:var(--warning); letter-spacing:1px;}
+
+.bookmark-btn{
+  background:none; border:none; cursor:pointer; font-size:19px;
+  color:var(--text-faint); line-height:1; padding:2px;
+  transition:transform .15s, color .15s;
+}
+.bookmark-btn.active{color:var(--accent); transform:scale(1.15);}
+
+.face-icon{font-size:26px; margin:14px 0 6px;}
+.face-question{
+  font-size:21px; font-weight:700; line-height:1.32; letter-spacing:-.01em;
+  flex:1; display:flex; align-items:center;
+}
+.face-meta{display:flex; align-items:center; justify-content:space-between; margin-top:10px;}
+.pos-indicator{font-size:12px; color:var(--text-faint); font-weight:600;}
+
+.think-btn{
+  margin-top:14px; align-self:flex-start;
+  padding:10px 18px; border-radius:var(--r-full); border:none;
+  background:var(--text); color:var(--bg); font-weight:700; font-size:13.5px;
+  cursor:pointer; display:flex; align-items:center; gap:7px;
+  box-shadow:var(--shadow-sm);
+  transition:transform .12s, box-shadow .15s;
+}
+.think-btn:hover{transform:translateY(-1px); box-shadow:var(--shadow-md);}
+.think-btn:active{transform:scale(.97);}
+
+/* Back of card */
+.back-answer{
+  font-size:17px; font-weight:700; color:var(--primary); line-height:1.4;
+  padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:10px;
+}
+.back-block{margin-bottom:10px;}
+.back-block-label{
+  font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--text-faint); margin-bottom:3px; display:flex; align-items:center; gap:5px;
+}
+.back-block-text{font-size:13.5px; line-height:1.5; color:var(--text);}
+.back-block.tip .back-block-label{color:var(--warning);}
+.back-block.mistake .back-block-label{color:var(--danger);}
+.back-block.mnemonic .back-block-label{color:var(--secondary);}
+.back-block.clinical .back-block-label{color:var(--success);}
+
+.judge-row{display:flex; gap:8px; margin-top:auto; padding-top:12px;}
+.judge-btn{
+  flex:1; padding:11px 0; border-radius:var(--r-md); border:none; cursor:pointer;
+  font-weight:700; font-size:13.5px; display:flex; align-items:center; justify-content:center; gap:6px;
+  transition:transform .12s, box-shadow .15s;
+}
+.judge-btn:active{transform:scale(.96);}
+.judge-btn.unknown{background:var(--danger-100); color:var(--danger);}
+.judge-btn.known{background:var(--success-100); color:var(--success);}
+.judge-btn:hover{box-shadow:var(--shadow-sm);}
+
+/* Interactive card types */
+.options-list{display:flex; flex-direction:column; gap:8px; margin-top:14px;}
+.option-btn{
+  text-align:left; padding:12px 14px; border-radius:var(--r-md);
+  border:1.5px solid var(--border); background:var(--surface); color:var(--text);
+  font-size:14px; cursor:pointer; transition:all .15s;
+}
+.option-btn:hover{border-color:var(--primary);}
+.option-btn.correct{background:var(--success-100); border-color:var(--success); color:var(--success); font-weight:700;}
+.option-btn.incorrect{background:var(--danger-100); border-color:var(--danger); color:var(--danger); font-weight:700;}
+.option-btn:disabled{cursor:default;}
+
+.tf-row{display:flex; gap:10px; margin-top:16px;}
+.tf-btn{
+  flex:1; padding:16px; border-radius:var(--r-md); border:1.5px solid var(--border);
+  background:var(--surface); font-weight:800; font-size:15px; cursor:pointer;
+  color:var(--text); transition:all .15s;
+}
+.tf-btn.correct{background:var(--success-100); border-color:var(--success); color:var(--success);}
+.tf-btn.incorrect{background:var(--danger-100); border-color:var(--danger); color:var(--danger);}
+
+.fill-row{display:flex; gap:8px; margin-top:16px;}
+.fill-input{
+  flex:1; padding:11px 14px; border-radius:var(--r-md); border:1.5px solid var(--border);
+  background:var(--surface); color:var(--text); font-size:14px; outline:none;
+}
+.fill-input:focus{border-color:var(--primary);}
+.fill-check{
+  padding:0 18px; border-radius:var(--r-md); border:none; background:var(--primary);
+  color:#fff; font-weight:700; cursor:pointer; font-size:13.5px;
+}
+.fill-feedback{margin-top:10px; font-size:13.5px; font-weight:700;}
+.fill-feedback.ok{color:var(--success);}
+.fill-feedback.bad{color:var(--danger);}
+
+.hotspot-hint{
+  margin-top:14px; font-size:12.5px; color:var(--text-faint); font-weight:600;
+  display:flex; align-items:center; gap:6px;
+}
+
+/* Bottom action bar */
+.action-bar{
+  position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:6px;
+  background:var(--card-bg); border:1px solid var(--border); border-radius:var(--r-full);
+  padding:8px; box-shadow:var(--shadow-lg); z-index:30;
+}
+.action-bar button{
+  width:46px; height:46px; border-radius:var(--r-full); border:none; background:transparent;
+  display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer;
+  color:var(--text-muted); transition:background .15s, transform .12s, color .15s;
+  position:relative;
+}
+.action-bar button:hover{background:var(--surface); color:var(--text);}
+.action-bar button:active{transform:scale(.92);}
+.action-bar button.primary{background:var(--primary); color:#fff;}
+.action-bar button.primary:hover{background:var(--primary-700);}
+.ripple{
+  position:absolute; border-radius:50%; background:rgba(37,99,235,.35);
+  transform:scale(0); animation:ripple .5s ease-out; pointer-events:none;
+}
+@keyframes ripple{to{transform:scale(2.6); opacity:0;}}
+
+.kbd-hint{
+  text-align:center; font-size:11.5px; color:var(--text-faint); margin:20px 0 4px;
+}
+.kbd-hint kbd{
+  background:var(--surface); border:1px solid var(--border); border-radius:5px;
+  padding:1px 5px; font-size:10.5px; font-family:inherit; margin:0 1px;
+}
+
+.empty-state{
+  text-align:center; padding:60px 20px; color:var(--text-muted);
+}
+.empty-state .e-icon{font-size:38px; margin-bottom:10px;}
+
+/* ============================================================
+   EXAM MODE OVERLAY
+   ============================================================ */
+.exam-overlay{
+  position:fixed; inset:0; background:var(--bg); z-index:100;
+  display:none; flex-direction:column;
+}
+.exam-overlay.active{display:flex;}
+.exam-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 22px; border-bottom:1px solid var(--border);
+}
+.exam-timer{font-size:18px; font-weight:800; font-variant-numeric:tabular-nums;}
+.exam-timer.low{color:var(--danger);}
+.exam-close{
+  border:none; background:var(--surface); width:36px; height:36px; border-radius:var(--r-full);
+  cursor:pointer; font-size:16px; color:var(--text);
+}
+.exam-progress-text{font-size:13px; color:var(--text-muted); font-weight:600;}
+.exam-body{flex:1; display:flex; align-items:center; justify-content:center; padding:20px;}
+.exam-result{max-width:480px; text-align:center; margin:0 auto;}
+.exam-score{font-size:54px; font-weight:800; background:linear-gradient(135deg,var(--primary),var(--secondary)); -webkit-background-clip:text; background-clip:text; color:transparent; letter-spacing:-.03em;}
+.exam-score-label{color:var(--text-muted); font-weight:600; margin-top:-6px; margin-bottom:24px;}
+.exam-summary-row{display:flex; justify-content:space-around; margin-bottom:24px;}
+.exam-summary-row div{display:flex; flex-direction:column; align-items:center; gap:2px;}
+.exam-summary-row b{font-size:20px;}
+.exam-action-row{display:flex; gap:10px; justify-content:center;}
+.btn-solid{
+  padding:12px 22px; border-radius:var(--r-full); border:none; background:var(--primary);
+  color:#fff; font-weight:700; cursor:pointer; font-size:13.5px;
+}
+.btn-ghost{
+  padding:12px 22px; border-radius:var(--r-full); border:1px solid var(--border); background:transparent;
+  color:var(--text); font-weight:700; cursor:pointer; font-size:13.5px;
+}
+.review-list{text-align:left; max-height:160px; overflow-y:auto; margin:14px 0; padding:0 4px;}
+.review-item{
+  font-size:13px; padding:8px 10px; border-radius:var(--r-sm); background:var(--danger-100);
+  color:var(--text); margin-bottom:6px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s !important; transition-duration:.001s !important;}
+}
+
+/* ============================================================
+   NAV DRAWER
+   ============================================================ */
+.nav-overlay{
+  position:fixed; inset:0; background:rgba(15,18,26,.45); z-index:60;
+  opacity:0; pointer-events:none; transition:opacity .25s ease;
+}
+.nav-overlay.active{opacity:1; pointer-events:auto;}
+.nav-drawer{
+  position:fixed; top:0; left:0; height:100%; width:280px; max-width:84vw;
+  background:var(--card-bg); border-right:1px solid var(--border);
+  z-index:61; transform:translateX(-100%); transition:transform .28s cubic-bezier(.22,1,.36,1);
+  display:flex; flex-direction:column; padding:18px;
+  box-shadow:var(--shadow-lg);
+}
+.nav-drawer.active{transform:translateX(0);}
+.nav-drawer-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;}
+.nav-drawer-close{
+  width:32px; height:32px; border-radius:var(--r-full); border:1px solid var(--border);
+  background:var(--surface); cursor:pointer; font-size:15px; color:var(--text);
+}
+.nav-link{
+  display:flex; align-items:center; gap:12px; padding:13px 14px; border-radius:var(--r-md);
+  color:var(--text); font-weight:700; font-size:15px; cursor:pointer; margin-bottom:4px;
+  transition:background .15s;
+}
+.nav-link:hover{background:var(--surface);}
+.nav-link.active{background:var(--primary-100); color:var(--primary);}
+.nav-link .nl-icon{font-size:19px;}
+.nav-drawer-footer{margin-top:auto; font-size:11.5px; color:var(--text-faint); padding-top:14px; border-top:1px solid var(--border);}
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+.view{display:none;}
+.view.active{display:block;}
+
+/* ============================================================
+   ERKRANKUNGEN VIEW
+   ============================================================ */
+.disease-search-wrap{position:relative; margin-bottom:14px;}
+.disease-search-wrap svg{position:absolute; left:13px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--text-faint);}
+.disease-search{
+  width:100%; padding:11px 14px 11px 36px; border-radius:var(--r-full);
+  border:1px solid var(--border); background:var(--surface); color:var(--text);
+  font-size:14px; outline:none;
+}
+.disease-search:focus{border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-100);}
+
+.disease-count{font-size:12.5px; color:var(--text-muted); margin-bottom:12px; font-weight:600;}
+
+.disease-list{display:flex; flex-direction:column; gap:10px; padding-bottom:30px;}
+.disease-card{
+  border:1px solid var(--border); border-radius:var(--r-md); background:var(--card-bg);
+  overflow:hidden; box-shadow:var(--shadow-sm); transition:box-shadow .15s;
+}
+.disease-head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:14px 16px; cursor:pointer;
+}
+.disease-head:hover{background:var(--surface);}
+.disease-title-wrap{display:flex; flex-direction:column; gap:3px; min-width:0;}
+.disease-name{font-weight:700; font-size:15px; line-height:1.3;}
+.disease-cat-tag{font-size:11px; color:var(--primary); font-weight:700;}
+.disease-chevron{flex-shrink:0; transition:transform .25s ease; color:var(--text-faint); font-size:14px;}
+.disease-card.open .disease-chevron{transform:rotate(180deg);}
+
+.disease-body{
+  max-height:0; overflow:hidden; transition:max-height .3s ease;
+  border-top:1px solid transparent;
+}
+.disease-card.open .disease-body{border-top:1px solid var(--border);}
+.disease-body-inner{padding:16px;}
+
+.dsec{margin-bottom:14px;}
+.dsec:last-child{margin-bottom:0;}
+.dsec-label{
+  font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+  margin-bottom:5px; display:flex; align-items:center; gap:6px;
+}
+.dsec-label.def{color:var(--primary);}
+.dsec-label.urs{color:var(--secondary);}
+.dsec-label.std{color:var(--warning);}
+.dsec-label.mn{color:var(--success);}
+.dsec-text{font-size:13.5px; line-height:1.55; color:var(--text);}
+.mn-list{margin:0; padding-left:20px; font-size:13.5px; line-height:1.6; color:var(--text);}
+.mn-list li{margin-bottom:3px;}
+
+.disease-empty{text-align:center; padding:50px 20px; color:var(--text-muted);}
+
+@media (min-width:900px){
+  .disease-list{display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start;}
+}
+
+@media (max-width:640px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .search-wrap{display:none;}
+  .face{padding:20px 18px 18px;}
+  .face-question{font-size:18.5px;}
+}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <button class="burger-btn" id="burgerBtn" aria-label="Navigation öffnen" aria-expanded="false">
+    <span class="burger-icon"><span></span><span></span><span></span></span>
+  </button>
+  <div class="brand">
+    <div class="brand-mark">🩺</div>
+    <div class="brand-name">Pflegefach<span>Profi</span></div>
+  </div>
+  <div class="search-wrap" id="flashSearchWrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" class="search-input" type="text" placeholder="Karten durchsuchen…" aria-label="Karten durchsuchen">
+  </div>
+  <div class="appbar-actions">
+    <button class="icon-btn" id="darkToggle" aria-label="Dunkelmodus umschalten" title="Dunkelmodus">🌙</button>
+    <button class="exam-btn" id="examOpenBtn">⏱ Prüfungsmodus</button>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="nav-drawer" id="navDrawer" aria-label="Hauptnavigation">
+  <div class="nav-drawer-head">
+    <div class="brand"><div class="brand-mark">🩺</div><div class="brand-name">Pflegefach<span>Profi</span></div></div>
+    <button class="nav-drawer-close" id="navCloseBtn" aria-label="Navigation schließen">✕</button>
+  </div>
+  <div class="nav-link active" id="navFlashcards" data-view="flashcards"><span class="nl-icon">🗂️</span> Karteikarten</div>
+  <div class="nav-link" id="navDiseases" data-view="diseases"><span class="nl-icon">🩻</span> Erkrankungen</div>
+  <div class="nav-drawer-footer">PflegefachProfi · Abschlussprüfung Pflegefachmann/-frau</div>
+</nav>
+
+<main>
+<div class="view active" id="view-flashcards">
+  <div class="filters">
+    <div class="chip-row" id="categoryChips" role="tablist" aria-label="Kategorie filtern"></div>
+    <div class="subfilters">
+      <select id="difficultySelect" class="select-pill" aria-label="Schwierigkeit filtern">
+        <option value="all">Alle Schwierigkeiten</option>
+        <option value="easy">🟢 Leicht</option>
+        <option value="medium">🟠 Mittel</option>
+        <option value="hard">🔴 Schwer</option>
+      </select>
+      <button class="toggle-pill" id="bookmarkFilter" data-on="false">⭐ Lesezeichen</button>
+      <button class="toggle-pill" id="incorrectFilter" data-on="false">⚠️ Falsch beantwortet</button>
+      <button class="toggle-pill" id="hideMasteredFilter" data-on="false">🙈 Gemeisterte ausblenden</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num" id="statToday">0</div>
+      <div class="stat-label">Heute gelernt</div>
+    </div>
+    <div class="stat-card accuracy">
+      <div class="stat-num" id="statAccuracy">–</div>
+      <div class="stat-label">Genauigkeit</div>
+    </div>
+    <div class="stat-card streak">
+      <div class="stat-num" id="statStreak">0</div>
+      <div class="stat-label">Streak</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statRemaining">0</div>
+      <div class="stat-label">Verbleibend</div>
+    </div>
+  </div>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="stage">
+    <button class="nav-arrow" id="prevBtn" aria-label="Vorherige Karte">‹</button>
+    <div class="card-zone" id="cardZone"></div>
+    <button class="nav-arrow" id="nextBtn" aria-label="Nächste Karte">›</button>
+  </div>
+
+  <p class="kbd-hint">
+    <kbd>←</kbd><kbd>→</kbd> Navigieren · <kbd>Leertaste</kbd> Umdrehen · <kbd>K</kbd> Gewusst · <kbd>U</kbd> Nicht gewusst · <kbd>B</kbd> Lesezeichen
+  </p>
+</div>
+
+<div class="view" id="view-diseases">
+  <div class="disease-search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="diseaseSearch" class="disease-search" type="text" placeholder="Erkrankung suchen…" aria-label="Erkrankung suchen">
+  </div>
+  <div class="chip-row" id="diseaseCategoryChips" role="tablist" aria-label="Erkrankungskategorie filtern" style="margin-bottom:10px;"></div>
+  <div class="disease-count" id="diseaseCount"></div>
+  <div class="disease-list" id="diseaseList"></div>
+</div>
+</main>
+
+<div class="action-bar" id="actionBar">
+  <button id="shuffleBtn" aria-label="Mischen" title="Mischen">🔀</button>
+  <button id="bookmarkBtn" aria-label="Lesezeichen setzen" title="Lesezeichen">☆</button>
+  <button id="repeatBtn" aria-label="Wiederholen" title="Diese Karte wiederholen">↻</button>
+  <button class="primary" id="flipBtn" aria-label="Karte umdrehen" title="Umdrehen">⤾</button>
+</div>
+
+<!-- EXAM MODE -->
+<div class="exam-overlay" id="examOverlay">
+  <div class="exam-head">
+    <button class="exam-close" id="examCloseBtn" aria-label="Prüfungsmodus verlassen">✕</button>
+    <div class="exam-progress-text" id="examProgressText">Frage 1 / 20</div>
+    <div class="exam-timer" id="examTimer">02:00</div>
+  </div>
+  <div class="exam-body" id="examBody"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const CARDS = [
+{id:1, topic:"Pflegeprozess", category:"Pflegeprozess & Modelle", type:"definition", difficulty:"medium", priority:3,
+ question:"Nennen Sie die sechs Schritte des Pflegeprozesses nach Fiechter und Meier.",
+ answer:"1. Informationssammlung · 2. Probleme & Ressourcen erkennen · 3. Pflegeziele festlegen · 4. Maßnahmen planen · 5. Maßnahmen durchführen · 6. Wirkung beurteilen",
+ explain:"Der Pflegeprozess ist zirkulär: nach Schritt 6 folgt bei Bedarf erneut Schritt 1.",
+ mnemonic:"I-P-Z-P-D-B: Informationen, Probleme, Ziele, Planen, Durchführen, Beurteilen.",
+ examTip:"Reihenfolge ist bewertungsrelevant – jeder Schritt einzeln benennen, nicht zusammenfassen.",
+ mistake:"WHO-Modell hat nur 4 Phasen – nicht mit Fiechter & Meier verwechseln.",
+ clinical:"", tags:["pflegeprozess","fiechter","meier","modell"]},
+
+{id:2, topic:"Expertenstandard", category:"Recht & Qualität", type:"definition", difficulty:"medium", priority:3,
+ question:"Was ist die Zielsetzung des Expertenstandards Dekubitusprophylaxe?",
+ answer:"Jeder pflegebedürftige Mensch mit einem Dekubitusrisiko erhält eine Prophylaxe, die geeignet ist, einen Dekubitus zu vermeiden.",
+ explain:"Der Standard gliedert sich in Struktur-, Prozess- und Ergebniskriterien (S/P/E).",
+ mnemonic:"", examTip:"Zielsetzung möglichst wörtlich wiedergeben – wird oft 1:1 abgefragt.",
+ mistake:"Nicht mit der Behandlung eines bestehenden Dekubitus verwechseln – es geht um Prophylaxe.",
+ clinical:"", tags:["dnqp","dekubitus","expertenstandard"]},
+
+{id:3, topic:"COPD vs. Asthma", category:"Pneumologie", type:"difference", difficulty:"medium", priority:3,
+ question:"COPD vs. Asthma bronchiale – nennen Sie den zentralen Unterschied in der Obstruktion.",
+ answer:"COPD: irreversible (kaum reversible) Atemwegsobstruktion. Asthma: reversible, anfallsweise auftretende Obstruktion.",
+ explain:"COPD entsteht meist durch langjährigen Noxenkontakt (v. a. Rauchen), Asthma ist meist allergisch/entzündlich bedingt und beginnt oft im Kindesalter.",
+ mnemonic:"Asthma = anfallsweise, COPD = chronisch fortschreitend.",
+ examTip:"Bei Fallfragen immer Anamnese nutzen: Raucher + progrediente Dyspnoe → COPD; episodisch + jung + Allergie → Asthma.",
+ mistake:"Lippenbremse hilft bei COPD typischerweise mehr als reiner Bronchospasmolyse-Therapie.",
+ clinical:"Herr M., 68 J., 40 Packungsjahre, langsam zunehmende Belastungsdyspnoe → typisch COPD.",
+ tags:["copd","asthma","pneumologie","obstruktion"]},
+
+{id:4, topic:"Demenzformen", category:"Neurologie & Geriatrie", type:"difference", difficulty:"hard", priority:2,
+ question:"Alzheimer-Demenz vs. vaskuläre Demenz – wie unterscheidet sich der Verlauf?",
+ answer:"Alzheimer: schleichender, kontinuierlich fortschreitender Verlauf. Vaskuläre Demenz: stufenförmiger Verlauf mit plötzlichen Verschlechterungen nach Ischämien.",
+ explain:"Ursache bei Alzheimer ist neurodegenerativ (Amyloid-Plaques), bei vaskulärer Demenz liegt eine zerebrale Durchblutungsstörung zugrunde.",
+ mnemonic:"Vaskulär = Verlauf in 'Treppenstufen'.",
+ examTip:"Verlaufsform ist die häufigste Unterscheidungsfrage – nicht die Symptome selbst.",
+ mistake:"Mischformen sind häufig – im Examen trotzdem die 'Lehrbuch-Reinform' beider Typen benennen.",
+ clinical:"", tags:["demenz","alzheimer","vaskulär","geriatrie"]},
+
+{id:5, topic:"Wundversorgung", category:"Wundmanagement", type:"sequence", difficulty:"medium", priority:2,
+ question:"Bringen Sie die Schritte einer aseptischen Wundversorgung in die richtige Reihenfolge.",
+ answer:"1. Händedesinfektion · 2. Material vorbereiten/Non-Touch · 3. Alten Verband steril entfernen · 4. Wunde inspizieren · 5. Wundreinigung/-spülung · 6. Neuen Verband anlegen · 7. Dokumentation",
+ explain:"Das Non-Touch-Prinzip (Wunde nie mit bloßer Hand berühren) gilt während des gesamten Vorgangs.",
+ mnemonic:"", examTip:"Dokumentation als letzten Schritt nicht vergessen – wird oft separat bepunktet.",
+ mistake:"Reinigung von außen nach innen statt von innen (Wunde) nach außen ist ein häufiger Fehler in Prüfungsantworten.",
+ clinical:"", tags:["wunde","verbandwechsel","asepsis"]},
+
+{id:6, topic:"Notfall ABCDE", category:"Notfall", type:"sequence", difficulty:"easy", priority:3,
+ question:"Nennen Sie das ABCDE-Schema zur Notfalleinschätzung in der richtigen Reihenfolge.",
+ answer:"A – Airway (Atemweg) · B – Breathing (Atmung) · C – Circulation (Kreislauf) · D – Disability (neurolog. Defizit) · E – Exposure/Environment (Entkleiden/Umgebung)",
+ explain:"Das Schema priorisiert lebensbedrohliche Probleme in absteigender Dringlichkeit.",
+ mnemonic:"A-B-C-D-E = Atemweg, Belüftung, Cirkulation, Defizit, Exposition.",
+ examTip:"Bei Fallsituationen das Schema strikt der Reihe nach abarbeiten, nicht springen.",
+ mistake:"Disability (D) wird oft mit Bewusstseinslage allein verwechselt – gemeint ist neurologisches Gesamtbild (GCS, Pupillen).",
+ clinical:"", tags:["notfall","abcde","airway"]},
+
+{id:7, topic:"Sturzfall", category:"Notfall", type:"clinical", difficulty:"medium", priority:3,
+ question:"Frau K., 82 J., wird liegend im Bad gefunden, klagt über Hüftschmerz, Bein außenrotiert verkürzt. Was ist die wahrscheinlichste Verdachtsdiagnose und die Sofortmaßnahme?",
+ answer:"Verdacht auf Schenkelhalsfraktur. Sofortmaßnahme: Patientin nicht bewegen/nicht aufstellen, Vitalzeichen prüfen, Bein lagern/stabilisieren, Arzt informieren, Schmerzmanagement, Sturzdokumentation.",
+ explain:"Außenrotation und Beinverkürzung sind klassische Leitsymptome der Schenkelhalsfraktur.",
+ mnemonic:"", examTip:"Immer 'nicht mobilisieren' explizit erwähnen – wird als eigener Punkt bewertet.",
+ mistake:"Patientin selbst aufrichten lassen ist ein klassischer Punktabzug in der Musterlösung.",
+ clinical:"", tags:["sturz","schenkelhals","fraktur","notfall"]},
+
+{id:8, topic:"Hypoglykämie", category:"Notfall", type:"clinical", difficulty:"medium", priority:3,
+ question:"Herr B., insulinpflichtiger Diabetiker, ist zittrig, schwitzig und verwirrt. BZ-Messung zeigt 42 mg/dl. Wie reagieren Sie als Pflegefachkraft?",
+ answer:"Bei ansprechbarem Patienten: schnell wirksame Kohlenhydrate oral (z. B. Traubenzucker/Saft), nach 15 Min. BZ-Kontrolle. Bei Bewusstlosigkeit: keine orale Gabe, stabile Seitenlage, Arzt/Notfallteam informieren, ggf. Glukose i.v. nach ärztlicher Anordnung.",
+ explain:"Symptome (Zittern, Schwitzen, Verwirrtheit) sind typische adrenerge und neuroglykopenische Hypoglykämiezeichen.",
+ mnemonic:"", examTip:"Immer zwischen 'ansprechbar' und 'bewusstlos' differenzieren – beide Szenarien werden oft getrennt bepunktet.",
+ mistake:"Bei Bewusstlosigkeit orale Gabe von Zucker ist ein gravierender (aspirationsgefährdender) Fehler.",
+ clinical:"", tags:["hypoglykämie","diabetes","notfall"]},
+
+{id:9, topic:"Furosemid", category:"Medikamente", type:"medication", difficulty:"medium", priority:2,
+ question:"Furosemid – Wirkstoffgruppe, Wirkung und wichtigste pflegerische Beobachtung?",
+ answer:"Schleifendiuretikum. Wirkung: Hemmung der Na+/K+/2Cl–-Rückresorption in der Henle-Schleife → starke Diurese. Pflegerisch: Flüssigkeitsbilanz, Elektrolyte (v. a. Kalium), Blutdruck, Körpergewicht regelmäßig kontrollieren.",
+ explain:"Hauptrisiko ist eine Hypokaliämie durch die starke Kaliumausscheidung.",
+ mnemonic:"", examTip:"Nebenwirkung 'Hypokaliämie' fast immer explizit nennen.",
+ mistake:"Furosemid mit kaliumsparenden Diuretika (Spironolacton) verwechseln.",
+ clinical:"Bei gleichzeitiger Digoxin-Therapie erhöht eine Hypokaliämie das Risiko für Digitalisintoxikation.",
+ tags:["furosemid","diuretikum","medikament"]},
+
+{id:10, topic:"Digoxin", category:"Medikamente", type:"medication", difficulty:"hard", priority:2,
+ question:"Digoxin – Indikation und worauf muss pflegerisch besonders geachtet werden?",
+ answer:"Indikation: Herzinsuffizienz, tachykarde Vorhofflimmern-Formen. Pflegerisch: enges therapeutisches Fenster → Puls vor Gabe kontrollieren (bei <60/min Rücksprache Arzt), auf Intoxikationszeichen achten (Übelkeit, Sehstörungen, Arrhythmien).",
+ explain:"Digoxin hat eine geringe therapeutische Breite; Hypokaliämie verstärkt die Wirkung/Toxizität erheblich.",
+ mnemonic:"", examTip:"Puls-Kontrolle vor jeder Gabe als eigenständigen Pflegepunkt formulieren.",
+ mistake:"Gabe trotz Bradykardie ohne Rücksprache – klassischer Fehler in Prüfungsantworten.",
+ clinical:"", tags:["digoxin","herzglykosid","medikament"]},
+
+{id:11, topic:"Kalium", category:"Laborwerte", type:"lab", difficulty:"medium", priority:2,
+ question:"Normwert von Serum-Kalium und klinische Bedeutung einer Hypokaliämie?",
+ answer:"Normwert: ca. 3,5–5,0 mmol/l. Hypokaliämie: Muskelschwäche, Obstipation, Herzrhythmusstörungen, verstärkte Digitaliswirkung.",
+ explain:"Kalium ist zentral für die Erregungsleitung am Herzen – Abweichungen sind potenziell lebensbedrohlich.",
+ mnemonic:"", examTip:"Normwert mit Einheit (mmol/l) angeben – Einheit wird separat bepunktet.",
+ mistake:"Hypokaliämie und Hyperkaliämie-Symptome in der Prüfung vertauschen.",
+ clinical:"", tags:["kalium","labor","elektrolyt"]},
+
+{id:12, topic:"INR", category:"Laborwerte", type:"lab", difficulty:"medium", priority:2,
+ question:"Was zeigt der INR-Wert an und in welchem Bereich liegt der Zielwert unter Marcumar-Therapie meist?",
+ answer:"INR (International Normalized Ratio) misst die Blutgerinnungsfähigkeit. Zielbereich unter Marcumar meist 2,0–3,0 (indikationsabhängig).",
+ explain:"Ein erhöhter INR bedeutet verlangsamte Gerinnung (erhöhtes Blutungsrisiko), ein zu niedriger INR erhöhtes Thromboserisiko.",
+ mnemonic:"", examTip:"Zielbereich immer als Spanne angeben, da indikationsabhängig variabel.",
+ mistake:"INR mit PTT (für Heparin relevant) verwechseln.",
+ clinical:"", tags:["inr","marcumar","gerinnung","labor"]},
+
+{id:13, topic:"Sepsis", category:"Notfall", type:"symptoms", difficulty:"hard", priority:3,
+ question:"Sepsis – nennen Sie Frühzeichen, Spätzeichen und Red Flags (qSOFA).",
+ answer:"Früh: Fieber/Hypothermie, Tachykardie, Tachypnoe, Verwirrtheit. Spät: Hypotonie, marmorierte Haut, Bewusstseinstrübung, Organversagen. qSOFA (Red Flags): Atemfrequenz ≥22/min, systolischer RR ≤100 mmHg, veränderter Bewusstseinszustand.",
+ explain:"qSOFA dient als schnelles Bedside-Screening bei Verdacht auf Sepsis außerhalb der Intensivstation.",
+ mnemonic:"qSOFA: 'Atmung-Druck-Denken' (Atemfrequenz, Blutdruck, Bewusstsein).",
+ examTip:"Mind. 2 von 3 qSOFA-Kriterien erfüllt → Verdacht auf Sepsis, sofortige Arztinformation.",
+ mistake:"Fieber als alleiniges Kriterium ansehen – auch Hypothermie ist ein Sepsiszeichen.",
+ clinical:"", tags:["sepsis","qsofa","notfall"]},
+
+{id:14, topic:"Schlaganfall", category:"Neurologie & Geriatrie", type:"symptoms", difficulty:"medium", priority:3,
+ question:"Nennen Sie das FAST-Schema zur Schlaganfall-Erkennung.",
+ answer:"F – Face (Gesichtslähmung) · A – Arms (Armschwäche, Absinken beim Halten) · S – Speech (Sprachstörung) · T – Time (Zeit notieren, sofort Notruf)",
+ explain:"FAST ist ein international etabliertes Schnellscreening für den Verdacht auf Apoplex.",
+ mnemonic:"FAST = schnell handeln, da 'time is brain'.",
+ examTip:"Den genauen Symptombeginn (Time) im Examen immer als eigenen, bepunkteten Schritt nennen.",
+ mistake:"Symptome bagatellisieren/abwarten statt sofortigen Notruf – im Examen klar als Fehler markieren.",
+ clinical:"", tags:["schlaganfall","apoplex","fast","notfall"]},
+
+{id:15, topic:"Dekubitus", category:"Wundmanagement", type:"complications", difficulty:"medium", priority:3,
+ question:"Welche Komplikationen kann ein fortgeschrittener Dekubitus (Kategorie 3–4) verursachen und welche Sofortmaßnahme ist zentral?",
+ answer:"Komplikationen: Wundinfektion, Sepsis, Osteomyelitis, Fistelbildung. Sofortmaßnahme: konsequente Druckentlastung, Wundversorgung nach ärztlicher Anordnung, Infektionszeichen engmaschig beobachten.",
+ explain:"Druckentlastung ist die wichtigste pflegerische Maßnahme – ohne sie heilt keine Wundversorgung dauerhaft.",
+ mnemonic:"", examTip:"Druckentlastung immer als erste/zentrale Maßnahme nennen, vor Wundauflagen.",
+ mistake:"Nur die lokale Wundversorgung nennen und die Druckentlastung vergessen – häufiger Punktabzug.",
+ clinical:"", tags:["dekubitus","komplikation","wunde"]},
+
+{id:16, topic:"Immobilität", category:"Pflegeprozess & Modelle", type:"complications", difficulty:"medium", priority:2,
+ question:"Welche Folgeschäden (Sekundärerkrankungen) drohen bei Immobilität und welchen Prophylaxen begegnet man ihnen?",
+ answer:"Kontrakturen → Kontrakturprophylaxe; Pneumonie → Pneumonieprophylaxe; Thrombose → Thromboseprophylaxe; Dekubitus → Dekubitusprophylaxe; Obstipation → Obstipationsprophylaxe.",
+ explain:"Jede Immobilitätsfolge hat eine korrespondierende, im DNQP/Expertenstandard verankerte Prophylaxe.",
+ mnemonic:"K-P-T-D-O: Kontraktur, Pneumonie, Thrombose, Dekubitus, Obstipation.",
+ examTip:"Folgeschaden und passende Prophylaxe immer als Paar nennen, nicht getrennt aufzählen.",
+ mistake:"Prophylaxen ohne Bezug zum konkreten Risiko der Fallsituation aufzählen.",
+ clinical:"", tags:["immobilität","prophylaxe","komplikation"]},
+
+{id:17, topic:"Braden-Skala", category:"Recht & Qualität", type:"mc", difficulty:"easy", priority:2,
+ question:"Was misst die Braden-Skala?",
+ options:["Sturzrisiko","Dekubitusrisiko","Schmerzintensität","Ernährungszustand"],
+ correctIndex:1,
+ explain:"Die Braden-Skala bewertet u. a. Sensorik, Feuchtigkeit, Aktivität, Mobilität, Ernährung und Reibung/Scherkräfte zur Einschätzung des Dekubitusrisikos.",
+ examTip:"Nicht mit dem Norton- oder Waterlow-Score verwechseln, die ähnliche Zwecke verfolgen.",
+ mistake:"", mnemonic:"", clinical:"", tags:["braden","dekubitus","assessment"]},
+
+{id:18, topic:"MDK/MD-Prüfung", category:"Recht & Qualität", type:"mc", difficulty:"easy", priority:2,
+ question:"Welches Gremium überprüft die Pflegequalität von Pflegeeinrichtungen in Deutschland?",
+ options:["Gesundheitsamt","Medizinischer Dienst (MD)","Berufsgenossenschaft","Landesärztekammer"],
+ correctIndex:1,
+ explain:"Der Medizinische Dienst (MD, früher MDK) führt Qualitätsprüfungen nach SGB XI in Pflegeeinrichtungen durch.",
+ examTip:"Aktuelle Bezeichnung ist 'Medizinischer Dienst (MD)' – 'MDK' ist die ältere, vielen Quellen noch gebräuchliche Bezeichnung.",
+ mistake:"", mnemonic:"", clinical:"", tags:["mdk","md","qualitätsprüfung"]},
+
+{id:19, topic:"Pflegeprozess", category:"Pflegeprozess & Modelle", type:"tf", difficulty:"easy", priority:2,
+ question:"Wahr oder falsch: Der Pflegeprozess nach Fiechter & Meier verläuft linear und endet nach Schritt 6 endgültig.",
+ correctAnswer:false,
+ explain:"Falsch – der Pflegeprozess ist ein Regelkreis (zirkulär). Nach der Evaluation (Schritt 6) erfolgt bei Bedarf erneut eine Informationssammlung (Schritt 1).",
+ examTip:"Den Begriff 'Regelkreis' explizit verwenden, wenn nach dem Charakter des Pflegeprozesses gefragt wird.",
+ mistake:"", mnemonic:"", clinical:"", tags:["pflegeprozess","regelkreis"]},
+
+{id:20, topic:"Demenz & Aspiration", category:"Neurologie & Geriatrie", type:"tf", difficulty:"medium", priority:2,
+ question:"Wahr oder falsch: Menschen mit fortgeschrittener Demenz haben ein erhöhtes Aspirationspneumonie-Risiko.",
+ correctAnswer:true,
+ explain:"Wahr – durch Schluckstörungen (Dysphagie) im fortgeschrittenen Stadium steigt das Aspirationsrisiko deutlich.",
+ examTip:"Bei Fallsituationen mit Demenz immer auch Schluckassessment/Esshilfen als Maßnahme mitdenken.",
+ mistake:"", mnemonic:"", clinical:"", tags:["demenz","aspiration","pneumonie"]},
+
+{id:21, topic:"Barthel-Index", category:"Recht & Qualität", type:"fillblank", difficulty:"easy", priority:2,
+ question:"Der ____-Index misst die Selbstständigkeit eines Menschen bei Aktivitäten des täglichen Lebens (ATL).",
+ correctAnswer:"Barthel",
+ explain:"Der Barthel-Index bewertet u. a. Essen, Baden, Mobilität, Kontinenz auf einer Punkteskala von 0–100.",
+ examTip:"Schreibweise 'Barthel' (nicht 'Barthl' oder 'Bartel') korrekt verwenden.",
+ mistake:"", mnemonic:"", clinical:"", tags:["barthel","assessment","atl"]},
+
+{id:22, topic:"SIS", category:"Pflegeprozess & Modelle", type:"fillblank", difficulty:"medium", priority:3,
+ question:"SIS steht für 'Strukturierte ____________'.",
+ correctAnswer:"Informationssammlung",
+ explain:"Die SIS ist Teil des Strukturmodells zur Entbürokratisierung der Pflegedokumentation und ersetzt klassische Assessmentbögen durch ein themenfeldorientiertes Erstgespräch.",
+ examTip:"SIS immer im Zusammenhang mit dem 'Strukturmodell' erwähnen, wenn nach dem Kontext gefragt wird.",
+ mistake:"", mnemonic:"", clinical:"", tags:["sis","strukturmodell","dokumentation"]},
+
+{id:23, topic:"Basale Stimulation", category:"Bewegungskonzepte", type:"hotspot", difficulty:"medium", priority:2,
+ question:"Basale Stimulation – tippen Sie, um die Grundprinzipien aufzudecken.",
+ answer:"Wahrnehmungsbereiche: somatisch, vestibulär, vibratorisch. Ziel: Wahrnehmung, Kommunikation und Bewegung bei Menschen mit eingeschränkter Wahrnehmungsfähigkeit fördern.",
+ explain:"Entwickelt von Andreas Fröhlich, ursprünglich für die Förderung schwerstmehrfachbehinderter Kinder, heute breit in der Pflege (z. B. bei Demenz, Koma, Intensivpflege) eingesetzt.",
+ examTip:"Die drei Grundstimulationsarten (somatisch, vestibulär, vibratorisch) sind die häufigste Detailfrage.",
+ mistake:"", mnemonic:"", clinical:"", tags:["basale stimulation","fröhlich","wahrnehmung"]},
+
+{id:24, topic:"Bobath-Konzept", category:"Bewegungskonzepte", type:"hotspot", difficulty:"medium", priority:3,
+ question:"Bobath-Konzept – tippen Sie, um das Kernprinzip aufzudecken.",
+ answer:"Förderung der Bewegungsfähigkeit von Menschen mit zentralen neurologischen Schädigungen (z. B. nach Schlaganfall) durch gezielte Anbahnung physiologischer Bewegungsmuster und Vermeidung pathologischer Muster (Spastik).",
+ explain:"Zentrales Element ist die konsequente Einbeziehung der betroffenen ('hemiplegischen') Körperseite in alle Alltagshandlungen und die Lagerung.",
+ examTip:"Begriff 'betroffene Seite einbeziehen' wörtlich nennen – ist ein Standard-Bewertungspunkt.",
+ mistake:"", mnemonic:"", clinical:"", tags:["bobath","hemiplegie","neurologie"]},
+
+{id:25, topic:"Kinästhetik", category:"Bewegungskonzepte", type:"definition", difficulty:"medium", priority:2,
+ question:"Was ist die Grundidee der Kinästhetik in der Pflege?",
+ answer:"Kinästhetik nutzt die Bewegungslehre, um pflegebedürftige Menschen bei Eigenbewegungen anzuleiten und zu unterstützen, statt sie passiv zu bewegen – Ziel ist Ressourcenförderung und Vermeidung von Sekundärschäden.",
+ explain:"Im Gegensatz zu rein passivem 'Umlagern' fördert Kinästhetik die aktive Beteiligung des Patienten.",
+ mnemonic:"", examTip:"Abgrenzung zu Bobath betonen: Kinästhetik = Bewegungsförderung allgemein, Bobath = spezifisch bei neurologischen Schädigungen.",
+ mistake:"Kinästhetik und Bobath als identisch darstellen.",
+ clinical:"", tags:["kinästhetik","bewegung","ressourcen"]},
+
+{id:26, topic:"ABEDL", category:"Pflegeprozess & Modelle", type:"definition", difficulty:"medium", priority:3,
+ question:"Was ist die Grundidee des ABEDL-Modells nach Krohwinkel und wie viele Bereiche umfasst es?",
+ answer:"ABEDL = Aktivitäten, Beziehungen und existenzielle Erfahrungen des Lebens. Das Modell umfasst 13 Lebensbereiche (Krohwinkel) und stellt die Förderung von Selbstständigkeit und Beziehungsfähigkeit in den Mittelpunkt.",
+ explain:"ABEDL erweitert das ATL-Konzept um existenzielle und Beziehungsaspekte – nicht nur körperliche Verrichtungen.",
+ mnemonic:"", examTip:"Anzahl '13 Bereiche' als konkrete Zahl nennen, wenn danach gefragt wird.",
+ mistake:"ABEDL mit den 12 ATLs nach Juchli gleichsetzen – ABEDL hat 13 Bereiche und einen anderen theoretischen Anspruch.",
+ clinical:"", tags:["abedl","krohwinkel","modell"]},
+
+{id:27, topic:"Demenzkommunikation", category:"Neurologie & Geriatrie", type:"difference", difficulty:"hard", priority:2,
+ question:"Validation vs. Realitätsorientierung in der Kommunikation mit Menschen mit Demenz – wo liegt der Unterschied?",
+ answer:"Validation: Gefühle und subjektive Realität des Erkrankten werden anerkannt, nicht korrigiert. Realitätsorientierung: aktive Orientierungshilfen (Datum, Ort, Person) zur Förderung der Orientierung an der objektiven Realität.",
+ explain:"Validation eignet sich v. a. bei fortgeschrittener Demenz, Realitätsorientierung eher bei leichteren Stadien.",
+ mnemonic:"", examTip:"Die Wahl der Methode immer am Demenzstadium der Fallsituation begründen.",
+ mistake:"Bei fortgeschrittener Demenz weiterhin auf Realitätsorientierung (Korrektur) bestehen – verstärkt häufig Unruhe/Abwehr.",
+ clinical:"", tags:["validation","realitätsorientierung","demenz","kommunikation"]},
+
+{id:28, topic:"Exsikkose", category:"Neurologie & Geriatrie", type:"symptoms", difficulty:"medium", priority:2,
+ question:"Welche Anzeichen einer Exsikkose sind bei älteren Menschen typisch zu beobachten?",
+ answer:"Trockene Schleimhäute, stehende Hautfalten, Verwirrtheit/Vigilanzminderung, Tachykardie, Hypotonie, konzentrierter Urin, Gewichtsverlust.",
+ explain:"Ältere Menschen haben ein vermindertes Durstgefühl, weshalb Exsikkose-Symptome oft erst spät erkannt werden.",
+ mnemonic:"", examTip:"Verwirrtheit als mögliches Frühzeichen bei älteren Menschen explizit erwähnen – wird oft übersehen.",
+ mistake:"Verwirrtheit ausschließlich auf Demenz zurückführen, ohne Exsikkose als Differenzialdiagnose zu erwägen.",
+ clinical:"", tags:["exsikkose","geriatrie","flüssigkeitsmangel"]}
+];
+
+const ERKRANKUNGEN = [{"id": 1, "name": "Herzinsuffizienz", "category": "Kardiologie", "definition": "Das Herz kann den Körper nicht mehr ausreichend mit Blut versorgen („Pumpschwäche“). Merksatz: Herz zu schwach → Stau vor dem Herzen.", "ursachen": "Häufigste Ursachen: KHK, Herzinfarkt, arterielle Hypertonie, Herzklappenfehler, Kardiomyopathie. Risikofaktoren: Rauchen, Diabetes, Adipositas, Bewegungsmangel, hohes Alter.", "stadien": "NYHA-Klassifikation: I = beschwerdefrei bei normaler Belastung · II = leichte Einschränkung · III = deutliche Einschränkung, Beschwerden bei geringer Belastung · IV = Beschwerden bereits in Ruhe.", "massnahmen": ["Vitalzeichen (RR, Puls, Atmung, SpO₂) regelmäßig kontrollieren", "Tägliche Gewichtskontrolle zur Ödem-/Flüssigkeitskontrolle", "Ein- und Ausfuhr bilanzieren, Flüssigkeitsrestriktion beachten", "Oberkörperhochlagerung bei Dyspnoe/Lungenstauung", "Kochsalzarme Kost fördern, Ernährungsberatung einbeziehen", "Auf Ödeme (Beine, prätibial) und Hautzustand achten", "Medikamentengabe (Diuretika, ACE-Hemmer) nach Anordnung überwachen", "Belastungsgrenzen beachten, schonende Mobilisation fördern"]}, {"id": 2, "name": "Koronare Herzkrankheit (KHK) / Angina pectoris", "category": "Kardiologie", "definition": "Verengung der Herzkranzgefäße durch Arteriosklerose, die zu einer Minderdurchblutung des Herzmuskels führt. Leitsymptom: belastungsabhängiger Brustschmerz (Angina pectoris).", "ursachen": "Ursache: Arteriosklerose der Koronararterien. Risikofaktoren: Rauchen, Hypertonie, Diabetes mellitus, Hypercholesterinämie, Adipositas, Bewegungsmangel, familiäre Belastung.", "stadien": null, "massnahmen": ["Vitalzeichen und Schmerzcharakter engmaschig beobachten", "Bei akutem Brustschmerz sofort Arzt informieren, 12-Kanal-EKG veranlassen", "Oberkörperhochlagerung, Patient beruhigen, körperliche Schonung", "Sauerstoffgabe nach ärztlicher Anordnung bei Hypoxie", "Nitrogabe nach Anordnung vorbereiten und Wirkung überwachen", "Über Risikofaktoren aufklären (Rauchstopp, Ernährung, Bewegung)", "Stressreduktion fördern, beruhigende Gesprächsführung", "Medikamentenadhärenz (Thrombozytenaggregationshemmer, Statine) unterstützen"]}, {"id": 3, "name": "Myokardinfarkt", "category": "Kardiologie", "definition": "Akuter Verschluss einer Herzkranzarterie mit Untergang von Herzmuskelgewebe. Leitsymptom: plötzlicher, anhaltender Vernichtungsschmerz in der Brust, oft mit Ausstrahlung.", "ursachen": "Ursache: thrombotischer Verschluss eines arteriosklerotisch veränderten Koronargefäßes. Risikofaktoren: wie KHK – Rauchen, Hypertonie, Diabetes, Hypercholesterinämie, Stress.", "stadien": null, "massnahmen": ["Sofort Notarzt/Reanimationsbereitschaft sicherstellen", "Strikte Bettruhe, körperliche Schonung einhalten", "Engmaschiges Monitoring von EKG, RR, SpO₂", "Sauerstoffgabe nach Anordnung bei Sättigungsabfall", "Schmerzmittel- und Nitrogabe nach Anordnung überwachen", "Oberkörperhochlagerung zur Atemerleichterung", "Patient beruhigen, Angst und Unruhe ernst nehmen", "Frühzeitige, ärztlich begleitete Mobilisation nach Akutphase planen"]}, {"id": 4, "name": "Arterielle Hypertonie", "category": "Kardiologie", "definition": "Chronisch erhöhter Blutdruck (≥140/90 mmHg). Oft symptomlos („stiller Killer“), erhöht aber das Risiko für Herzinfarkt, Schlaganfall und Niereninsuffizienz.", "ursachen": "Meist primär (essenziell, multifaktoriell). Risikofaktoren: Übergewicht, hoher Salzkonsum, Bewegungsmangel, Stress, Rauchen, Alkohol, familiäre Vorbelastung, höheres Alter.", "stadien": null, "massnahmen": ["Regelmäßige, standardisierte Blutdruckmessung (Zeitpunkt, Lage, Manschettengröße)", "Medikamenteneinnahme (Antihypertensiva) überwachen und fördern", "Kochsalzarme, ausgewogene Ernährung unterstützen", "Zu regelmäßiger körperlicher Bewegung motivieren", "Gewichtskontrolle und Beratung zur Gewichtsreduktion", "Stressreduktion und Entspannungstechniken fördern", "Über Wechselwirkungen/Nebenwirkungen der Medikation aufklären", "Auf hypertensive Krisen (Kopfschmerz, Sehstörung, Schwindel) achten"]}, {"id": 5, "name": "Vorhofflimmern", "category": "Kardiologie", "definition": "Häufigste Herzrhythmusstörung: unkoordinierte elektrische Erregung der Vorhöfe mit unregelmäßigem, oft schnellem Puls. Risiko: Thrombenbildung → Schlaganfallgefahr.", "ursachen": "Ursachen: KHK, Herzinsuffizienz, Hypertonie, Klappenerkrankungen, Hyperthyreose. Risikofaktoren: höheres Alter, Alkohol, Schlafapnoe, Adipositas.", "stadien": null, "massnahmen": ["Pulsqualität und -rhythmus (nicht nur Frequenz) kontrollieren", "EKG-Monitoring nach Anordnung sicherstellen", "Antikoagulanzien-Gabe gewissenhaft überwachen (Blutungszeichen beachten)", "Auf Schlaganfallsymptome (FAST-Schema) aufmerksam bleiben", "Sturzrisiko einschätzen, besonders unter Antikoagulation", "Patient über Wichtigkeit der Therapietreue aufklären", "Alkohol- und Koffeinkonsum thematisieren", "Bei Palpitationen/Unwohlsein sofort Vitalzeichen kontrollieren"]}, {"id": 6, "name": "Periphere arterielle Verschlusskrankheit (pAVK)", "category": "Kardiologie", "definition": "Durchblutungsstörung der Beinarterien durch Arteriosklerose. Leitsymptom: belastungsabhängiger Beinschmerz, der zum Stehenbleiben zwingt („Schaufenster-krankheit“).", "ursachen": "Ursache: Arteriosklerose. Risikofaktoren: Rauchen (Hauptrisikofaktor!), Diabetes mellitus, Hypertonie, Hypercholesterinämie.", "stadien": null, "massnahmen": ["Hautzustand und Durchblutung der Extremitäten beobachten (Farbe, Temperatur, Pulse)", "Auf Wunden/Druckstellen an Füßen besonders achten (Verletzungsgefahr)", "Keine einengende Kleidung oder Kompression am betroffenen Bein", "Zu regelmäßigem Gehtraining motivieren (Kollateralenbildung)", "Wärmeapplikation direkt auf der Haut vermeiden (Verbrühungsgefahr bei Sensibilitätsstörung)", "Fußpflege und Hautinspektion routinemäßig durchführen", "Über strikten Rauchstopp aufklären und unterstützen", "Schmerzen dokumentieren, Schmerztherapie nach Anordnung sicherstellen"]}, {"id": 7, "name": "Tiefe Beinvenenthrombose (Phlebothrombose)", "category": "Kardiologie", "definition": "Blutgerinnsel (Thrombus) in einer tiefen Beinvene, das den venösen Rückfluss behindert. Leitsymptome: einseitige Schwellung, Schmerz, Überwärmung, Rötung.", "ursachen": "Ursachen (Virchow-Trias): verlangsamter Blutfluss, Gefäßwandschädigung, erhöhte Gerinnungsbereitschaft. Risikofaktoren: Immobilität, lange Reisen, Operationen, Schwangerschaft, Adipositas, Rauchen.", "stadien": null, "massnahmen": ["Betroffenes Bein hochlagern, NICHT massieren", "Kompressionstherapie (Verband/Strumpf) nach Anordnung anlegen", "Frühmobilisation fördern, sobald ärztlich freigegeben", "Auf Zeichen einer Lungenembolie (akute Dyspnoe, Thoraxschmerz) achten", "Antikoagulanzien-Gabe überwachen, Blutungszeichen beobachten", "Umfangsmessung des Beins zur Verlaufskontrolle durchführen", "Ausreichende Flüssigkeitszufuhr unterstützen", "Über Thromboseprophylaxe bei künftigen Risikosituationen aufklären"]}, {"id": 8, "name": "Lungenembolie", "category": "Kardiologie", "definition": "Akuter Verschluss einer Lungenarterie, meist durch einen verschleppten Thrombus aus den Beinvenen. Leitsymptome: plötzliche Dyspnoe, Thoraxschmerz, Tachykardie, Angst.", "ursachen": "Ursache: losgelöster venöser Thrombus (meist Bein-/Beckenvenen). Risikofaktoren: Immobilität, TVT in der Vorgeschichte, Operationen, Tumorerkrankungen, Schwangerschaft.", "stadien": null, "massnahmen": ["Sofort Arzt informieren, Notfallmaßnahmen einleiten", "Oberkörperhochlagerung zur Atemerleichterung", "Sauerstoffgabe nach Anordnung bei Hypoxie", "Engmaschiges Monitoring von SpO₂, Puls, Atemfrequenz, RR", "Patient beruhigen, Angst und Unruhe ernst nehmen", "Strikte Bettruhe bis zur ärztlichen Freigabe einhalten", "Antikoagulation nach Anordnung überwachen", "Reanimationsbereitschaft bei hämodynamischer Instabilität sicherstellen"]}, {"id": 9, "name": "COPD (Chronisch obstruktive Lungenerkrankung)", "category": "Pneumologie", "definition": "Dauerhafte, fortschreitende Verengung der Atemwege mit chronischem Husten, Auswurf und Atemnot. Merksatz: „Raucherlunge“ – kaum reversible Obstruktion.", "ursachen": "Hauptursache: langjähriges Rauchen (ca. 90 % der Fälle). Weitere Risikofaktoren: berufliche Schadstoffexposition, Luftverschmutzung, Alpha-1-Antitrypsin-Mangel.", "stadien": "GOLD-Stadien nach Lungenfunktion: I = leicht · II = mittelschwer · III = schwer · IV = sehr schwer (jeweils nach FEV₁-Wert).", "massnahmen": ["Atemerleichternde Lagerung (z. B. Kutschersitz) anbieten", "Lippenbremse und dosierte Lippenbremse-Atemtechnik anleiten", "Sauerstoffgabe nach Anordnung, Vorsicht bei niedrig dosierter O₂-Gabe (CO₂-Narkose-Risiko)", "Inhalationstechnik (Dosieraerosol/Pulverinhalator) anleiten und überprüfen", "Sekretmobilisation fördern: ausreichende Flüssigkeitszufuhr, Atemphysiotherapie", "Rauchstopp-Beratung konsequent anbieten", "Auf Infektzeichen (Exazerbation) frühzeitig achten", "Energiesparende Alltagstechniken vermitteln (Pacing)"]}, {"id": 10, "name": "Asthma bronchiale", "category": "Pneumologie", "definition": "Chronisch-entzündliche Atemwegserkrankung mit anfallsweiser, reversibler Bronchialverengung. Leitsymptome: anfallsweise Atemnot, Husten, exspiratorisches Giemen.", "ursachen": "Ursachen: allergisch (extrinsisch) oder nicht-allergisch (intrinsisch, z. B. Infekte, Kälte, Anstrengung). Risikofaktoren: Atopie, familiäre Vorbelastung, Rauchen, Luftschadstoffe.", "stadien": null, "massnahmen": ["Atemerleichternde Lagerung (Kutschersitz) anbieten", "Bedarfsmedikation (Bronchodilatator) griffbereit halten und Anwendung anleiten", "Inhalationstechnik regelmäßig überprüfen und korrigieren", "Auslöser (Allergene, Kälte, Anstrengung) gemeinsam identifizieren", "Patient bei Anfall beruhigen, Atemtechnik (Lippenbremse) anleiten", "Peak-Flow-Selbstmessung anleiten und Werte dokumentieren", "Notfallplan mit Patient/Angehörigen besprechen", "Auf Zeichen eines lebensbedrohlichen Status asthmaticus achten"]}, {"id": 11, "name": "Pneumonie", "category": "Pneumologie", "definition": "Akute Infektion des Lungengewebes, meist bakteriell oder viral verursacht. Leitsymptome: Fieber, Husten, Auswurf, Dyspnoe, ggf. Schmerzen beim Atmen.", "ursachen": "Ursachen: Bakterien (häufig Pneumokokken), Viren, Aspiration. Risikofaktoren: hohes Alter, Immobilität, Immunsuppression, Schluckstörungen, vorbestehende Lungenerkrankungen.", "stadien": null, "massnahmen": ["Vitalzeichen (Temperatur, Atemfrequenz, SpO₂) engmaschig überwachen", "Oberkörperhochlagerung zur Atemerleichterung", "Ausreichende Flüssigkeitszufuhr zur Sekretverflüssigung fördern", "Atemtherapie (z. B. Triflo, Vibrationsmassage) unterstützen", "Antibiotikagabe nach Anordnung zeitgerecht durchführen", "Frühmobilisation fördern, soweit Zustand es zulässt", "Sekretmanagement: Abhusten anleiten, ggf. Absaugen", "Pneumonieprophylaxe bei Risikopatienten konsequent durchführen"]}, {"id": 12, "name": "Bronchialkarzinom (Lungenkrebs)", "category": "Pneumologie", "definition": "Bösartiger Tumor des Lungengewebes, oft lange symptomarm. Spätsymptome: anhaltender Husten, Bluthusten (Hämoptysen), Gewichtsverlust, Thoraxschmerz.", "ursachen": "Hauptursache: Rauchen (ca. 85 % der Fälle). Weitere Risikofaktoren: Asbest, Feinstaub, berufliche Schadstoffe, genetische Disposition.", "stadien": null, "massnahmen": ["Schmerzmanagement individuell anpassen und evaluieren", "Atemnot lindern: Lagerung, ggf. Sauerstoffgabe nach Anordnung", "Psychosoziale Begleitung bei Diagnoseverarbeitung anbieten", "Ernährungszustand beobachten, Mangelernährung vorbeugen", "Über Therapieoptionen aufklärend begleiten (in Abstimmung mit Arzt)", "Hustenmanagement unterstützen (Sekretmobilisation, Hustentechnik)", "Angehörige in Beratung und Begleitung einbeziehen", "Bei fortgeschrittener Erkrankung palliative Versorgung frühzeitig einbinden"]}, {"id": 13, "name": "Tuberkulose", "category": "Pneumologie", "definition": "Bakterielle Infektionskrankheit (Mycobacterium tuberculosis), meist die Lunge betreffend. Leitsymptome: chronischer Husten >3 Wochen, Nachtschweiß, Gewichtsverlust, subfebrile Temperaturen.", "ursachen": "Ursache: Übertragung durch Tröpfcheninfektion (aerogen). Risikofaktoren: Immunsuppression, Mangelernährung, beengte Wohnverhältnisse, enger Kontakt zu Erkrankten.", "stadien": null, "massnahmen": ["Isolationsmaßnahmen (Schutzkleidung, Atemschutzmaske) konsequent einhalten", "Patientenaufklärung zu Husten-/Nies-Hygiene durchführen", "Medikamentenadhärenz bei Langzeittherapie engmaschig unterstützen", "Vitalzeichen und Gewichtsverlauf regelmäßig kontrollieren", "Ausreichende, eiweißreiche Ernährung fördern", "Psychosoziale Unterstützung bei Stigmatisierungsängsten anbieten", "Kontaktpersonen-Screening in Abstimmung mit Gesundheitsamt unterstützen", "Meldepflicht beachten und Dokumentation sicherstellen"]}, {"id": 14, "name": "Apoplex (Schlaganfall)", "category": "Neurologie", "definition": "Akute Durchblutungsstörung des Gehirns (ischämisch oder hämorrhagisch) mit plötzlichem neurologischem Defizit. Merksatz: „Time is brain“ – jede Minute zählt.", "ursachen": "Ursachen: ischämisch (ca. 85 %, z. B. Thrombus/Embolus) oder hämorrhagisch (ca. 15 %, Hirnblutung). Risikofaktoren: Hypertonie, Vorhofflimmern, Diabetes, Rauchen, Hypercholesterinämie.", "stadien": null, "massnahmen": ["FAST-Schema zur Früherkennung anwenden, sofort Notruf", "Oberkörper 30° hochlagern (bei stabilem Kreislauf)", "Schluckfähigkeit vor jeder Nahrungs-/Flüssigkeitsgabe prüfen (Aspirationsgefahr)", "Vitalzeichen und neurologischen Status engmaschig kontrollieren", "Frühmobilisation und Lagerung nach Bobath-Konzept einplanen", "Betroffene Körperseite konsequent in Alltagshandlungen einbeziehen", "Kommunikationsunterstützung bei Aphasie anbieten (Geduld, einfache Sprache)", "Dekubitus- und Kontrakturprophylaxe bei Hemiplegie sicherstellen"]}, {"id": 15, "name": "Morbus Parkinson", "category": "Neurologie", "definition": "Neurodegenerative Erkrankung durch Dopaminmangel im Gehirn. Leitsymptome (Trias): Rigor (Steifheit), Tremor (Ruhezittern), Akinese/Bradykinese (Bewegungsarmut).", "ursachen": "Ursache: fortschreitender Untergang dopaminerger Neurone (meist idiopathisch). Risikofaktoren: höheres Alter, genetische Disposition, ggf. Umweltfaktoren.", "stadien": "Hoehn-und-Yahr-Skala: Stadium I = einseitige Symptome · II = beidseitig, keine Gleichgewichtsstörung · III = Gleichgewichtsstörung, noch selbstständig · IV = stark eingeschränkt, Hilfe nötig · V = bettlägerig/rollstuhlpflichtig.", "massnahmen": ["Medikamenteneinnahme (L-Dopa) zeitgenau nach Plan unterstützen", "Sturzrisiko einschätzen, Wohnumfeld anpassen", "Ausreichend Zeit für Bewegungsabläufe einplanen, nicht hetzen", "Mahlzeiten an Schluck- und Kaufähigkeit anpassen", "Mimikarmut nicht als Desinteresse missverstehen, aktiv kommunizieren", "Bewegungsförderung und Physiotherapie unterstützen", "Obstipationsprophylaxe (häufige Begleiterscheinung) durchführen", "Tagesstruktur an „On-off-Phasen“ der Medikation anpassen"]}, {"id": 16, "name": "Multiple Sklerose", "category": "Neurologie", "definition": "Chronisch-entzündliche Autoimmunerkrankung des zentralen Nervensystems mit Zerstörung der Myelinscheiden. Leitsymptome: Sehstörungen, Sensibilitätsstörungen, Lähmungen, Fatigue.", "ursachen": "Ursache: autoimmune Entzündungsreaktion gegen Myelin (Auslöser unklar). Risikofaktoren: genetische Disposition, Vitamin-D-Mangel, Virusinfekte (z. B. EBV), Rauchen.", "stadien": "Verlaufsformen: schubförmig-remittierend (häufigste Form) · sekundär progredient · primär progredient – keine klassischen „Stadien“, sondern unterschiedliche Verlaufstypen.", "massnahmen": ["Fatigue ernst nehmen, Aktivitäten energiesparend planen (Pacing)", "Sturzrisiko durch Sensibilitäts-/Gleichgewichtsstörungen einschätzen", "Blasenmanagement bei neurogener Blasenstörung unterstützen", "Hitzevermeidung beachten (kann Symptome verstärken)", "Kontrakturprophylaxe bei Spastik konsequent durchführen", "Psychosoziale Unterstützung bei chronischem Verlauf anbieten", "Bewegungsübungen/Physiotherapie in den Alltag integrieren", "Medikamentenadhärenz bei immunmodulierender Therapie fördern"]}, {"id": 17, "name": "Epilepsie", "category": "Neurologie", "definition": "Erkrankung mit wiederkehrenden, unprovozierten epileptischen Anfällen durch abnorme elektrische Entladungen im Gehirn.", "ursachen": "Ursachen: idiopathisch, strukturelle Hirnschädigung (z. B. nach Schlaganfall, Trauma, Tumor), Stoffwechselstörungen. Risikofaktoren: Schlafmangel, Alkohol, Flackerlicht, Medikamenten-Nichteinnahme.", "stadien": null, "massnahmen": ["Bei Anfall: Patient vor Verletzungen schützen, NICHTS in den Mund geben", "Umgebung sichern (gefährliche Gegenstände entfernen), nicht fixieren", "Anfallsdauer und -ablauf genau beobachten und dokumentieren", "Nach dem Anfall stabile Seitenlage, bis volles Bewusstsein zurückkehrt", "Bei Anfall >5 Minuten oder Serienanfällen sofort Notarzt rufen", "Medikamentenadhärenz bei Dauertherapie engmaschig fördern", "Auslöser (Schlafmangel, Alkohol) gemeinsam identifizieren", "Psychosoziale Unterstützung bei Stigmatisierung anbieten"]}, {"id": 18, "name": "Demenz vom Alzheimer-Typ", "category": "Neurologie", "definition": "Häufigste Demenzform: neurodegenerative Erkrankung mit schleichendem, kontinuierlichem Abbau von Gedächtnis, Orientierung und Alltagskompetenz.", "ursachen": "Ursache: Ablagerung von Amyloid-Plaques und Tau-Fibrillen im Gehirn (neurodegenerativ). Risikofaktoren: höheres Alter, genetische Disposition, Hypertonie, Diabetes, Bewegungsmangel.", "stadien": "Schweregrade: leicht (Alltag noch weitgehend selbstständig) · mittelschwer (zunehmende Hilfsbedürftigkeit, Orientierungsverlust) · schwer (vollständige Pflegeabhängigkeit, Sprachverlust).", "massnahmen": ["Klare, einfache Sprache und feste Tagesstruktur bieten", "Biografiearbeit zur Stabilisierung und Beziehungsgestaltung nutzen", "Validation statt Korrektur bei Realitätsverlust anwenden", "Sturzrisiko und Selbstgefährdung im Alltag einschätzen", "Ausreichende Flüssigkeits- und Nahrungsaufnahme sicherstellen", "Reizarme, sichere Umgebung gestalten (Orientierungshilfen)", "Angehörige in Pflege und Kommunikation einbeziehen/beraten", "Herausforderndes Verhalten ursachenorientiert (nicht symptomatisch) deuten"]}, {"id": 19, "name": "Vaskuläre Demenz", "category": "Neurologie", "definition": "Demenzform durch zerebrale Durchblutungsstörungen (z. B. wiederholte kleine Infarkte). Typisch: stufenförmiger Verlauf mit plötzlichen Verschlechterungen.", "ursachen": "Ursache: zerebrovaskuläre Erkrankungen (Multiinfarkt-Geschehen). Risikofaktoren: Hypertonie, Diabetes, Vorhofflimmern, Rauchen, Hypercholesterinämie – dieselben wie beim Schlaganfall.", "stadien": null, "massnahmen": ["Vaskuläre Risikofaktoren (RR, BZ) konsequent kontrollieren", "Klare, einfache Sprache und feste Tagesstruktur bieten", "Sturzrisiko einschätzen, insbesondere bei begleitenden motorischen Defiziten", "Auf erneute Schlaganfallsymptome (FAST) aufmerksam bleiben", "Ausreichende Flüssigkeits- und Nahrungsaufnahme sicherstellen", "Biografiearbeit und Validation zur Beziehungsgestaltung nutzen", "Angehörige in Pflege und Krankheitsverständnis einbeziehen", "Reizarme, sichere Umgebung mit Orientierungshilfen gestalten"]}, {"id": 20, "name": "Meningitis", "category": "Neurologie", "definition": "Akute Entzündung der Hirnhäute, meist bakteriell oder viral. Leitsymptome: starke Kopfschmerzen, Fieber, Nackensteifigkeit (Meningismus), Lichtempfindlichkeit.", "ursachen": "Ursachen: Bakterien (z. B. Meningokokken, Pneumokokken) oder Viren. Risikofaktoren: enger Kontakt zu Erkrankten, geschwächtes Immunsystem, fehlende Impfung.", "stadien": null, "massnahmen": ["Bei Verdacht sofort Arzt informieren – Notfall!", "Isolationsmaßnahmen bei bakterieller Meningitis konsequent einhalten", "Reizarme Umgebung schaffen (abgedunkelter, ruhiger Raum)", "Vitalzeichen und Bewusstseinslage engmaschig überwachen", "Schmerzmanagement bei starken Kopfschmerzen sicherstellen", "Auf Hautveränderungen (Petechien) bei Meningokokken achten", "Antibiotikagabe nach Anordnung zeitgerecht durchführen", "Kontaktpersonen-Prophylaxe in Abstimmung mit Arzt veranlassen"]}, {"id": 21, "name": "Depression", "category": "Psychiatrie", "definition": "Psychische Erkrankung mit anhaltend gedrückter Stimmung, Freud- und Interessenverlust sowie Antriebsmangel über mindestens zwei Wochen.", "ursachen": "Ursachen: multifaktoriell – biologisch (Neurotransmitter-Dysbalance), psychosozial (Verlust, Stress, Trauma), genetisch. Risikofaktoren: belastende Lebensereignisse, chronische Erkrankungen, Isolation, Suchtmittelkonsum.", "stadien": null, "massnahmen": ["Aktiv und wertschätzend zuhören, Beziehung aufbauen", "Suizidalität aktiv und direkt ansprechen, nicht tabuisieren", "Tagesstruktur fördern, ohne zu überfordern", "Kleine, erreichbare Ziele gemeinsam setzen (keine Druckausübung)", "Selbstfürsorge unterstützen (Schlaf, Ernährung, Bewegung)", "Soziale Kontakte und Angehörige behutsam einbeziehen", "Medikamentenadhärenz bei Antidepressiva-Therapie fördern", "Eigene Grenzen wahren, professionelle Unterstützung vermitteln"]}, {"id": 22, "name": "Schizophrenie", "category": "Psychiatrie", "definition": "Psychische Erkrankung mit Störungen von Denken, Wahrnehmung und Ich-Erleben. Leitsymptome: Positivsymptome (Wahn, Halluzinationen) und Negativsymptome (Antriebsarmut, sozialer Rückzug).", "ursachen": "Ursache: multifaktorielles Zusammenspiel von Genetik, neurobiologischen Faktoren (Dopamin-Dysregulation) und Umweltstress („Vulnerabilitäts-Stress-Modell“).", "stadien": null, "massnahmen": ["Ruhige, klare und nicht wertende Kommunikation pflegen", "Wahnvorstellungen nicht diskutieren oder bestätigen, sondern Gefühle validieren", "Reizarme, strukturierte Umgebung anbieten", "Auf Eigen- oder Fremdgefährdung aufmerksam bleiben", "Medikamentenadhärenz (Antipsychotika) engmaschig unterstützen", "Verlässliche Beziehung und Tagesstruktur aufbauen", "Angehörige psychoedukativ einbeziehen", "Soziale Reintegration und Alltagskompetenzen schrittweise fördern"]}, {"id": 23, "name": "Angst- und Panikstörung", "category": "Psychiatrie", "definition": "Übermäßige, unverhältnismäßige Angstreaktion bzw. plötzliche Panikattacken mit körperlichen Symptomen (Herzrasen, Atemnot, Schwitzen) ohne reale Gefahr.", "ursachen": "Ursachen: multifaktoriell – genetische Disposition, Lerngeschichte, neurobiologische Faktoren. Risikofaktoren: chronischer Stress, traumatische Erlebnisse, Substanzkonsum.", "stadien": null, "massnahmen": ["Ruhig und präsent bleiben, Sicherheit vermitteln", "Bei Panikattacke: langsames, geführtes Atmen anleiten", "Reizarme, ruhige Umgebung anbieten", "Körperliche Symptome ernst nehmen, aber nicht dramatisieren", "Vermeidungsverhalten behutsam ansprechen, nicht forcieren", "Selbsthilfetechniken (Erdungsübungen) vermitteln", "Therapietreue bei verhaltenstherapeutischer Behandlung fördern", "Auf Anzeichen einer Suchtmittelentwicklung (Selbstmedikation) achten"]}, {"id": 24, "name": "Alkoholabhängigkeit", "category": "Psychiatrie", "definition": "Chronische Suchterkrankung mit körperlichem und psychischem Kontrollverlust über den Alkoholkonsum trotz negativer Folgen.", "ursachen": "Ursachen: multifaktoriell – genetische Disposition, psychosoziale Belastung, Lernfaktoren. Risikofaktoren: familiäre Vorbelastung, Stress, soziale Isolation, frühe Konsumerfahrung.", "stadien": null, "massnahmen": ["Wertschätzend und nicht moralisierend begegnen", "Auf Entzugssymptome (Tremor, Unruhe, Krampfanfälle) achten", "Vitalzeichen bei Entzugsbehandlung engmaschig überwachen", "Flüssigkeits- und Vitaminsubstitution (v. a. Thiamin) unterstützen", "Sturz- und Verletzungsrisiko bei Entzugsdelir einschätzen", "Motivierende Gesprächsführung zur Veränderungsbereitschaft nutzen", "Rückfallprophylaxe und Suchtberatung vermitteln", "Angehörige (Co-Abhängigkeit) in Beratung einbeziehen"]}, {"id": 25, "name": "Borderline-Persönlichkeitsstörung", "category": "Psychiatrie", "definition": "Persönlichkeitsstörung mit starker emotionaler Instabilität, Impulsivität und instabilem Selbstbild und Beziehungsverhalten.", "ursachen": "Ursachen: multifaktoriell – traumatische Kindheitserfahrungen (häufig), genetische Vulnerabilität, gestörte Emotionsregulation. Risikofaktoren: Vernachlässigung, Missbrauchserfahrungen.", "stadien": null, "massnahmen": ["Klare, verlässliche und konsistente Grenzen setzen", "Auf selbstverletzendes Verhalten konsequent und ruhig reagieren", "Skills/Selbstregulationstechniken (z. B. aus DBT) unterstützen", "Beziehungsgestaltung mit professioneller Distanz und Kontinuität", "Stimmungsschwankungen beobachten und dokumentieren", "Im Team einheitliches, abgestimmtes Vorgehen sicherstellen", "Eigene emotionale Reaktionen reflektieren (Supervision nutzen)", "Krisenplan gemeinsam mit Patient erarbeiten und nutzen"]}, {"id": 26, "name": "Diabetes mellitus Typ 1", "category": "Endokrinologie", "definition": "Autoimmune Zerstörung der insulinproduzierenden Beta-Zellen → absoluter Insulinmangel. Beginnt meist im Kindes-/Jugendalter, erfordert lebenslange Insulintherapie.", "ursachen": "Ursache: Autoimmunprozess (genetisch + Umweltfaktoren, z. B. Virusinfekte). Kein klassischer Lebensstil-Risikofaktor wie bei Typ 2.", "stadien": null, "massnahmen": ["Blutzucker regelmäßig nach Plan kontrollieren", "Insulingabe (Spritzschema/Pumpe) korrekt durchführen und überwachen", "Hypoglykämiezeichen (Zittern, Schwitzen, Verwirrtheit) frühzeitig erkennen", "BZ-Selbstmanagement und Spritztechnik anleiten", "Ernährung und Kohlenhydrataustausch (BE/KE) besprechen", "Fußinspektion und Hautpflege routinemäßig durchführen", "Bei Sport/Belastung BZ-Anpassung beachten", "Notfallset (Traubenzucker/Glukagon) griffbereit halten"]}, {"id": 27, "name": "Diabetes mellitus Typ 2", "category": "Endokrinologie", "definition": "Chronische Stoffwechselerkrankung mit Insulinresistenz und relativem Insulinmangel. Meist schleichender Beginn im Erwachsenenalter, oft mit Übergewicht assoziiert.", "ursachen": "Ursachen: Insulinresistenz, oft genetisch + lebensstilbedingt. Risikofaktoren: Übergewicht/Adipositas, Bewegungsmangel, ungesunde Ernährung, familiäre Vorbelastung, höheres Alter.", "stadien": "Verlauf typischerweise: Prädiabetes → manifester Diabetes → mikro-/makrovaskuläre Spätkomplikationen (Retinopathie, Nephropathie, Neuropathie, Herz-Kreislauf-Erkrankungen).", "massnahmen": ["Blutzucker regelmäßig kontrollieren und dokumentieren", "Medikamenten- bzw. Insulingabe nach Plan überwachen", "Ernährungsberatung (kohlenhydratbewusst) unterstützen", "Zu regelmäßiger Bewegung motivieren", "Fußinspektion zur Früherkennung des diabetischen Fußsyndroms", "Hypo- und Hyperglykämiezeichen kennen und beobachten", "Gewichtsmanagement und Lebensstilberatung fördern", "Folgeerkrankungen (Augen, Nieren, Gefäße) im Blick behalten"]}, {"id": 28, "name": "Hyperthyreose", "category": "Endokrinologie", "definition": "Überfunktion der Schilddrüse mit erhöhter Hormonproduktion. Leitsymptome: Gewichtsverlust trotz Heißhunger, Tachykardie, innere Unruhe, Schwitzen, Wärmeintoleranz.", "ursachen": "Ursachen: Morbus Basedow (Autoimmunerkrankung), autonomes Schilddrüsenadenom, Schilddrüsenentzündung. Risikofaktoren: weibliches Geschlecht, familiäre Vorbelastung, Jodexzess.", "stadien": null, "massnahmen": ["Vitalzeichen (Puls, RR, Temperatur) engmaschig kontrollieren", "Ausreichende, kalorienreiche Ernährung unterstützen", "Ruhige, reizarme Umgebung anbieten (innere Unruhe lindern)", "Gewichtsverlauf regelmäßig dokumentieren", "Auf thyreotoxische Krise (Fieber, Tachykardie, Unruhe) achten", "Medikamentenadhärenz (Thyreostatika) fördern", "Augenpflege bei endokriner Orbitopathie unterstützen (Morbus Basedow)", "Hitze vermeiden, leichte Kleidung empfehlen"]}, {"id": 29, "name": "Hypothyreose", "category": "Endokrinologie", "definition": "Unterfunktion der Schilddrüse mit verminderter Hormonproduktion. Leitsymptome: Müdigkeit, Gewichtszunahme, Kälteempfindlichkeit, verlangsamter Herzschlag, trockene Haut.", "ursachen": "Ursachen: meist Hashimoto-Thyreoiditis (Autoimmunerkrankung), Zustand nach Schilddrüsenoperation/-bestrahlung. Risikofaktoren: weibliches Geschlecht, familiäre Vorbelastung.", "stadien": null, "massnahmen": ["Medikamentenadhärenz (L-Thyroxin, morgens nüchtern) fördern", "Vitalzeichen (Puls, RR) regelmäßig kontrollieren", "Auf Kälteempfindlichkeit achten, angemessene Kleidung/Raumtemperatur", "Obstipationsprophylaxe (häufiges Begleitsymptom) durchführen", "Hautpflege bei trockener, kühler Haut unterstützen", "Gewichtsverlauf und Ernährung beobachten", "Auf Antriebsarmut/Depressivität achten und ansprechen", "Bei Myxödem-Koma (Notfall) sofort Arzt informieren"]}, {"id": 30, "name": "Gicht", "category": "Endokrinologie", "definition": "Stoffwechselerkrankung mit erhöhter Harnsäure im Blut, die sich als Kristalle in Gelenken ablagert. Leitsymptom: akuter, hochschmerzhafter Gelenkanfall (häufig Großzehengrundgelenk).", "ursachen": "Ursache: Hyperurikämie (Harnsäureüberschuss). Risikofaktoren: purinreiche Ernährung (Fleisch, Alkohol), Übergewicht, Niereninsuffizienz, familiäre Vorbelastung.", "stadien": null, "massnahmen": ["Betroffenes Gelenk im akuten Anfall ruhigstellen und hochlagern", "Kühlung des betroffenen Gelenks anbieten", "Schmerzmanagement nach Anordnung sicherstellen", "Purinarme Ernährung besprechen (wenig Fleisch, Innereien, Alkohol)", "Ausreichende Flüssigkeitszufuhr fördern (Harnsäureausscheidung)", "Gewichtsreduktion bei Übergewicht unterstützen", "Medikamentenadhärenz (Urikostatika) fördern", "Alkoholkonsum (besonders Bier) thematisieren"]}, {"id": 31, "name": "Gastritis", "category": "Gastroenterologie", "definition": "Entzündung der Magenschleimhaut, akut oder chronisch. Leitsymptome: Oberbauchschmerzen, Völlegefühl, Übelkeit, Appetitlosigkeit.", "ursachen": "Ursachen: Helicobacter pylori, NSAR/Medikamente, Alkohol, Stress, Autoimmunprozesse. Risikofaktoren: Schmerzmittel-Dauergebrauch, Alkohol- und Nikotinkonsum, Stress.", "stadien": null, "massnahmen": ["Schonkost und kleine, häufige Mahlzeiten empfehlen", "Reizstoffe (Alkohol, Kaffee, scharfe Speisen, Nikotin) meiden", "Medikamentenadhärenz bei Protonenpumpenhemmer-Therapie fördern", "Auf Alarmsymptome (Bluterbrechen, Teerstuhl) achten", "Schmerzmanagement nach Anordnung sicherstellen", "Stressreduktion thematisieren und unterstützen", "Flüssigkeitszufuhr bei Erbrechen sicherstellen", "Bei NSAR-Dauertherapie auf Magenschutz hinweisen"]}, {"id": 32, "name": "Magen-/Duodenalulkus", "category": "Gastroenterologie", "definition": "Schleimhautdefekt im Magen oder Zwölffingerdarm, der bis in tiefere Wandschichten reicht. Leitsymptom: nüchterner/nächtlicher Oberbauchschmerz, oft nahrungsabhängig.", "ursachen": "Ursachen: Helicobacter pylori (häufigste Ursache), NSAR-Dauergebrauch, Stress, Rauchen, Alkohol.", "stadien": null, "massnahmen": ["Auf Alarmzeichen einer Blutung (Teerstuhl, Bluterbrechen, Schwarzfärbung) achten", "Schonkost und Vermeidung von Reizstoffen empfehlen", "Medikamentenadhärenz (Protonenpumpenhemmer, ggf. Eradikationstherapie) fördern", "Schmerzcharakter und -zeitpunkt dokumentieren", "Nikotin- und Alkoholverzicht besprechen", "Bei akuter Blutung: Vitalzeichen engmaschig überwachen, Arzt informieren", "Stressreduktion und Entlastung im Alltag fördern", "Bei Perforation (akutes Abdomen) sofortige Notfallmaßnahmen einleiten"]}, {"id": 33, "name": "Morbus Crohn", "category": "Gastroenterologie", "definition": "Chronisch-entzündliche Darmerkrankung, die den gesamten Verdauungstrakt (Mund bis Anus) in Schüben befallen kann, segmental und alle Wandschichten betreffend.", "ursachen": "Ursache: multifaktoriell – genetische Disposition, gestörte Immunreaktion gegen Darmflora. Risikofaktoren: Rauchen (verschlechtert Verlauf!), familiäre Vorbelastung, westlicher Lebensstil.", "stadien": null, "massnahmen": ["Schubsymptome (Durchfall, Schmerzen, Fieber) engmaschig beobachten", "Ernährung an Schubaktivität anpassen (in akuter Phase leicht verdaulich)", "Flüssigkeits- und Elektrolythaushalt überwachen", "Anale Hautpflege bei häufigen Durchfällen sicherstellen", "Mangelernährung und Gewichtsverlauf im Blick behalten", "Medikamentenadhärenz (Immunsuppressiva/Biologika) fördern", "Psychosoziale Unterstützung bei chronischem Verlauf anbieten", "Strikte Empfehlung zum Rauchstopp aussprechen"]}, {"id": 34, "name": "Colitis ulcerosa", "category": "Gastroenterologie", "definition": "Chronisch-entzündliche Darmerkrankung, die kontinuierlich vom Rektum aufsteigend nur die Dickdarmschleimhaut befällt. Leitsymptom: blutig-schleimige Durchfälle.", "ursachen": "Ursache: multifaktoriell – genetische Disposition, fehlgesteuerte Immunreaktion. Risikofaktoren: familiäre Vorbelastung; Nichtrauchen gilt (anders als bei Crohn) als Risikofaktor.", "stadien": null, "massnahmen": ["Stuhlfrequenz, -konsistenz und Blutbeimengungen dokumentieren", "Flüssigkeits- und Elektrolythaushalt engmaschig überwachen", "Anale Hautpflege bei häufigen, aggressiven Durchfällen sicherstellen", "Ernährung an Schubaktivität anpassen", "Mangelernährung und Anämie (durch Blutverlust) im Blick behalten", "Medikamentenadhärenz (5-ASA-Präparate, Immunsuppressiva) fördern", "Psychosoziale Begleitung bei Krankheitsbewältigung anbieten", "Auf Komplikationen (toxisches Megakolon) bei schwerem Schub achten"]}, {"id": 35, "name": "Leberzirrhose", "category": "Gastroenterologie", "definition": "Irreversibler, bindegewebiger Umbau der Leber mit Funktionsverlust. Leitsymptome: Ikterus, Aszites, Ödeme, Gerinnungsstörungen, hepatische Enzephalopathie.", "ursachen": "Häufigste Ursachen: chronischer Alkoholkonsum, chronische Virushepatitis (B/C), nichtalkoholische Fettlebererkrankung.", "stadien": "Schweregrad nach Child-Pugh-Score (A, B, C) anhand von Bilirubin, Albumin, Gerinnung, Aszites und Enzephalopathie – A = kompensiert, C = schwer dekompensiert.", "massnahmen": ["Bauchumfang und Gewicht zur Aszites-Verlaufskontrolle messen", "Auf Zeichen einer hepatischen Enzephalopathie (Verwirrtheit, Flapping tremor) achten", "Hautpflege bei Ikterus/Juckreiz sicherstellen", "Blutungsneigung beobachten (Gerinnungsstörung), vorsichtig bei Injektionen", "Natriumarme Ernährung bei Aszites unterstützen", "Alkoholabstinenz konsequent fördern und begleiten", "Flüssigkeitsbilanzierung bei Diuretikatherapie durchführen", "Sturzrisiko bei Enzephalopathie/Schwäche einschätzen"]}, {"id": 36, "name": "Cholezystitis / Cholelithiasis", "category": "Gastroenterologie", "definition": "Gallensteine (Cholelithiasis) bzw. die dadurch ausgelöste Entzündung der Gallenblase (Cholezystitis). Leitsymptom: kolikartiger rechter Oberbauchschmerz, oft nach fettreichem Essen.", "ursachen": "Ursachen: Fehlzusammensetzung der Gallenflüssigkeit (Cholesterinsteine). Risikofaktoren („6-F-Regel“): female, fat, forty, fertile, fair, family (weiblich, übergewichtig, >40 J., Schwangerschaften, hellhäutig, familiär).", "stadien": null, "massnahmen": ["Schmerzmanagement bei Kolik nach Anordnung sicherstellen", "Fettarme Kost bei akuter Symptomatik empfehlen", "Auf Fieber/Ikterus (Hinweis auf Komplikation) achten", "Nüchternheit vor geplanter Operation/ERCP sicherstellen", "Vitalzeichen bei akuter Cholezystitis engmaschig überwachen", "Postoperative Wundkontrolle nach Cholezystektomie durchführen", "Frühmobilisation nach Operation fördern", "Über langfristige Ernährungsanpassung beraten"]}, {"id": 37, "name": "Akute Pankreatitis", "category": "Gastroenterologie", "definition": "Akute Entzündung der Bauchspeicheldrüse durch Selbstverdauung des Organs. Leitsymptom: heftiger, gürtelförmiger Oberbauchschmerz, oft mit Übelkeit/Erbrechen.", "ursachen": "Hauptursachen: Gallensteine und chronischer Alkoholkonsum (zusammen >80 % der Fälle). Weitere Ursachen: Medikamente, Hypertriglyzeridämie.", "stadien": null, "massnahmen": ["Strikte Nahrungskarenz in der Akutphase nach Anordnung einhalten", "Schmerzmanagement engmaschig sicherstellen", "Flüssigkeits- und Elektrolythaushalt engmaschig überwachen", "Vitalzeichen häufig kontrollieren (Schockgefahr)", "Oberkörperhochlagerung/schmerzlindernde Lagerung anbieten", "Alkoholabstinenz thematisieren und fördern", "Auf Komplikationszeichen (Fieber, Verschlechterung) achten", "Schrittweisen Kostaufbau nach ärztlicher Freigabe begleiten"]}, {"id": 38, "name": "Divertikulitis", "category": "Gastroenterologie", "definition": "Entzündung von Darmwandausstülpungen (Divertikeln), meist im Sigma. Leitsymptom: linksseitiger Unterbauchschmerz, Fieber, veränderte Stuhlgewohnheiten.", "ursachen": "Ursache: Entzündung bestehender Divertikel. Risikofaktoren: ballaststoffarme Ernährung, Übergewicht, Bewegungsmangel, höheres Alter, Bewegungsmangel.", "stadien": null, "massnahmen": ["Vitalzeichen und Schmerzverlauf engmaschig beobachten", "Nahrungskarenz/leichte Kost je nach Akuität nach Anordnung", "Auf Zeichen einer Perforation (akutes Abdomen) achten", "Antibiotikagabe nach Anordnung zeitgerecht durchführen", "Ausreichende Flüssigkeitszufuhr sicherstellen", "Stuhlgang und Abdomen regelmäßig beobachten", "Ballaststoffreiche Ernährung in der Remissionsphase fördern", "Bewegungsförderung zur Rezidivprophylaxe besprechen"]}, {"id": 39, "name": "Ileus", "category": "Gastroenterologie", "definition": "Darmverschluss mit Unterbrechung der Darmpassage – mechanisch (z. B. Tumor, Verwachsung) oder paralytisch (Darmlähmung). Leitsymptome: Übelkeit, Erbrechen, fehlender Stuhl- und Windabgang, aufgetriebenes Abdomen.", "ursachen": "Ursachen: mechanisch (Verwachsungen, Tumor, Hernie) oder paralytisch (postoperativ, Elektrolytstörung, Entzündung). Risikofaktoren: frühere Bauchoperationen, Tumorerkrankungen.", "stadien": null, "massnahmen": ["Strikte Nahrungs- und Flüssigkeitskarenz nach Anordnung", "Magensonde zur Entlastung nach Anordnung anlegen/pflegen", "Vitalzeichen engmaschig überwachen (Schock-/Perforationsgefahr)", "Abdomen regelmäßig beobachten (Umfang, Darmgeräusche, Abwehrspannung)", "Flüssigkeits- und Elektrolytsubstitution nach Anordnung sicherstellen", "Schmerzmanagement engmaschig durchführen", "Bilanzierung von Ein- und Ausfuhr genau dokumentieren", "Bei Verschlechterung sofort Arzt informieren (OP-Indikation)"]}, {"id": 40, "name": "Chronische Niereninsuffizienz", "category": "Nephrologie", "definition": "Fortschreitender, irreversibler Verlust der Nierenfunktion über Monate/Jahre. Spätfolge: Urämie mit Ansammlung harnpflichtiger Substanzen im Blut.", "ursachen": "Häufigste Ursachen: Diabetes mellitus, arterielle Hypertonie, chronische Glomerulonephritis. Risikofaktoren: schlecht eingestellter Diabetes/Hypertonie, Nephrotoxische Medikamente.", "stadien": "KDIGO-Stadien G1–G5 nach glomerulärer Filtrationsrate (GFR): G1 = normal/erhöht … G5 = Nierenversagen (GFR <15, dialysepflichtig).", "massnahmen": ["Flüssigkeitsbilanzierung (Ein-/Ausfuhr) konsequent durchführen", "Gewichtskontrolle zur Flüssigkeitsretention täglich durchführen", "Kalium- und phosphatarme Ernährung nach ärztlicher Vorgabe unterstützen", "Blutdruck regelmäßig kontrollieren", "Shuntpflege bei Dialysepatienten sorgfältig durchführen (kein RR-Messen am Shuntarm)", "Auf Urämiezeichen (Juckreiz, Übelkeit, Konzentrationsstörung) achten", "Medikamentendosierung auf Nierenfunktion abstimmen lassen", "Psychosoziale Begleitung bei Dialysepflicht anbieten"]}, {"id": 41, "name": "Akutes Nierenversagen", "category": "Nephrologie", "definition": "Plötzlicher, potenziell reversibler Abfall der Nierenfunktion innerhalb von Stunden bis Tagen. Leitsymptom häufig: stark reduzierte Urinausscheidung (Oligurie/Anurie).", "ursachen": "Ursachen: prärenal (z. B. Schock, Flüssigkeitsmangel), renal (z. B. Medikamentenschädigung), postrenal (Harnabflussstörung). Risikofaktoren: Operationen, Sepsis, nephrotoxische Medikamente.", "stadien": null, "massnahmen": ["Stündliche Urinausscheidung engmaschig überwachen", "Flüssigkeitsbilanzierung exakt durchführen", "Vitalzeichen engmaschig kontrollieren (Kreislaufüberwachung)", "Gewichtsverlauf täglich dokumentieren", "Kaliumwerte im Blick behalten (Gefahr der Hyperkaliämie)", "Nephrotoxische Medikamente in Rücksprache mit Arzt vermeiden", "Auf Urämiezeichen (Übelkeit, Verwirrtheit) achten", "Dialysebereitschaft bei Verschlechterung sicherstellen"]}, {"id": 42, "name": "Harnwegsinfekt", "category": "Nephrologie", "definition": "Bakterielle Infektion der Harnwege (Blase und/oder Niere). Leitsymptome: Dysurie, Pollakisurie, Drangsymptomatik, ggf. Flankenschmerz und Fieber bei Nierenbeteiligung.", "ursachen": "Ursache: meist aufsteigende Infektion mit Darmbakterien (v. a. E. coli). Risikofaktoren: weibliches Geschlecht, Dauerkatheter, Blasenentleerungsstörungen, Diabetes mellitus.", "stadien": null, "massnahmen": ["Ausreichende Flüssigkeitszufuhr (ca. 1,5–2 l/Tag) fördern", "Auf Trübung, Geruch und Farbe des Urins achten", "Intimhygiene und korrekte Wischtechnik (von vorn nach hinten) anleiten", "Antibiotikagabe nach Anordnung zeitgerecht durchführen", "Bei Dauerkatheter: aseptisches Vorgehen und Katheterpflege sicherstellen", "Temperaturkontrolle bei Verdacht auf Pyelonephritis", "Vollständige Blasenentleerung fördern (kein Harnverhalt)", "Rezidivprophylaxe (Hygiene, Trinkmenge) besprechen"]}, {"id": 43, "name": "Benigne Prostatahyperplasie (BPH)", "category": "Nephrologie", "definition": "Gutartige Vergrößerung der Prostata im höheren Lebensalter, die die Harnröhre einengt. Leitsymptome: abgeschwächter Harnstrahl, Nachtröpfeln, häufiger nächtlicher Harndrang.", "ursachen": "Ursache: altersbedingte hormonelle Veränderungen (Testosteron-/Östrogen-Verhältnis). Risikofaktor: steigendes Alter (sehr häufig ab dem 60. Lebensjahr).", "stadien": null, "massnahmen": ["Miktionsverhalten (Frequenz, Restharngefühl) beobachten und dokumentieren", "Auf Harnverhalt (akute Notfallsituation) achten", "Ausreichende, aber nicht übermäßige Flüssigkeitszufuhr fördern", "Koffein- und Alkoholkonsum abends reduzieren (nächtlicher Harndrang)", "Sturzrisiko bei nächtlichen Toilettengängen einschätzen", "Katheterisierung bei Harnverhalt nach Anordnung vorbereiten", "Postoperative Beobachtung nach TURP (Blutung, Spülung) sicherstellen", "Über Beckenbodentraining bei Restharnproblematik informieren"]}, {"id": 44, "name": "Mammakarzinom", "category": "Onkologie", "definition": "Bösartiger Tumor der Brustdrüse, häufigste Krebserkrankung der Frau. Leitsymptom: meist schmerzloser, tastbarer Knoten oder Veränderung der Brustform/-haut.", "ursachen": "Ursachen: multifaktoriell, oft hormonabhängiges Wachstum. Risikofaktoren: familiäre Belastung (BRCA1/2), höheres Alter, frühe Menarche/späte Menopause, Hormonersatztherapie.", "stadien": "UICC/TNM-Stadien I–IV nach Tumorgröße (T), Lymphknotenbefall (N) und Metastasen (M) – Stadium IV entspricht Fernmetastasierung.", "massnahmen": ["Psychosoziale Begleitung bei Diagnoseverarbeitung anbieten", "Wunddrainage und Narbenpflege nach Operation fachgerecht durchführen", "Lymphödemprophylaxe am betroffenen Arm beachten", "Schmerzmanagement individuell anpassen", "Über Körperbildveränderungen einfühlsam sprechen", "Nebenwirkungen der Chemo-/Strahlentherapie beobachten und lindern", "Selbsthilfegruppen und psychoonkologische Angebote vermitteln", "Angehörige in Beratung und Unterstützung einbeziehen"]}, {"id": 45, "name": "Kolorektales Karzinom", "category": "Onkologie", "definition": "Bösartiger Tumor des Dick- oder Mastdarms. Leitsymptome (oft spät): Blut im Stuhl, veränderte Stuhlgewohnheiten, Gewichtsverlust, Anämie.", "ursachen": "Ursachen: multifaktoriell, oft aus Polypen (Adenom-Karzinom-Sequenz). Risikofaktoren: ballaststoffarme/fettreiche Ernährung, Rauchen, Alkohol, chronisch-entzündliche Darmerkrankungen, familiäre Belastung.", "stadien": "UICC/TNM-Stadien I–IV nach Eindringtiefe, Lymphknotenbefall und Fernmetastasen.", "massnahmen": ["Stuhlverhalten und Blutbeimengungen beobachten und dokumentieren", "Stomapflege und -anleitung bei Anus praeter sicherstellen", "Psychosoziale Unterstützung bei Stoma-Anlage anbieten", "Ernährungszustand und Gewichtsverlauf im Blick behalten", "Schmerzmanagement individuell anpassen", "Nebenwirkungen der Chemotherapie beobachten und lindern", "Über Vorsorgeuntersuchungen (Koloskopie) aufklären", "Angehörige in Beratung und Pflege einbeziehen"]}, {"id": 46, "name": "Prostatakarzinom", "category": "Onkologie", "definition": "Bösartiger Tumor der Prostata, häufigste Krebserkrankung des Mannes. Oft lange symptomlos, da meist in der Drüsenperipherie wachsend.", "ursachen": "Ursachen: multifaktoriell, hormonabhängiges Wachstum (Testosteron). Risikofaktoren: höheres Alter, familiäre Belastung, ethnische Faktoren.", "stadien": "UICC/TNM-Stadien I–IV; zusätzlich Gleason-Score zur Beurteilung der Aggressivität des Tumorgewebes.", "massnahmen": ["Miktionsverhalten beobachten und dokumentieren", "Postoperative Kontinenzförderung nach Prostatektomie (Beckenbodentraining)", "Psychosoziale Begleitung bei Diagnose- und Therapieverarbeitung anbieten", "Über erektile Dysfunktion als mögliche Folge einfühlsam informieren", "Schmerzmanagement bei Knochenmetastasen individuell anpassen", "Hormontherapie-Nebenwirkungen (Hitzewallungen) beobachten", "Katheterpflege postoperativ fachgerecht durchführen", "Angehörige in Beratung und Unterstützung einbeziehen"]}, {"id": 47, "name": "Schenkelhalsfraktur / pertrochantäre Femurfraktur", "category": "Orthopädie", "definition": "Knochenbruch im hüftnahen Oberschenkel, häufig nach Sturz bei älteren Menschen. Leitsymptome: Hüftschmerz, Beinverkürzung, Außenrotation des betroffenen Beins.", "ursachen": "Ursache: meist Sturz. Risikofaktoren: Osteoporose, höheres Alter, Sturzneigung, Seh-/Gleichgewichtsstörungen, Multimorbidität.", "stadien": null, "massnahmen": ["Betroffenes Bein ruhigstellen, NICHT mobilisieren bis zur ärztlichen Versorgung", "Schmerzmanagement engmaschig sicherstellen", "Vitalzeichen überwachen (Frakturen können Kreislaufreaktionen auslösen)", "Postoperative Mobilisation nach Anordnung schrittweise fördern (z. B. Vollbelastung nach TEP)", "Thromboseprophylaxe konsequent durchführen", "Dekubitusprophylaxe bei eingeschränkter Mobilität sicherstellen", "Postoperatives Delirrisiko beobachten (häufig bei älteren Patienten)", "Sturzprophylaxe für die Zukunft mit Patient/Angehörigen besprechen"]}, {"id": 48, "name": "Osteoporose", "category": "Orthopädie", "definition": "Systemische Skeletterkrankung mit verminderter Knochendichte und erhöhter Brüchigkeit der Knochen. Oft erstes Symptom: Wirbelkörper- oder Schenkelhalsfraktur nach Bagatelltrauma.", "ursachen": "Ursachen: primär (postmenopausal, altersbedingt) oder sekundär (z. B. durch Kortison, Immobilität). Risikofaktoren: weibliches Geschlecht, Menopause, Bewegungsmangel, Calcium-/Vitamin-D-Mangel, Rauchen.", "stadien": "WHO-Klassifikation nach T-Score (Knochendichtemessung): Normalbefund · Osteopenie (Vorstufe) · Osteoporose · manifeste Osteoporose (mit bereits aufgetretener Fraktur).", "massnahmen": ["Sturzprophylaxe im Wohnumfeld konsequent umsetzen", "Calcium- und vitamin-D-reiche Ernährung fördern", "Zu regelmäßiger, knochenbelastender Bewegung motivieren", "Vorsichtige Mobilisation und Transfertechniken anwenden (Frakturgefahr)", "Medikamentenadhärenz (Bisphosphonate, Calcium/Vitamin D) fördern", "Über Rauch- und Alkoholverzicht aufklären", "Hilfsmittel (Gehhilfe, Hüftprotektoren) bei Bedarf einsetzen", "Schmerzmanagement bei Wirbelkörperfrakturen sicherstellen"]}, {"id": 49, "name": "Gonarthrose / Coxarthrose (Arthrose)", "category": "Orthopädie", "definition": "Fortschreitender, degenerativer Gelenkverschleiß (Knie- bzw. Hüftgelenk) mit Knorpelabbau. Leitsymptome: belastungsabhängiger Schmerz, Anlaufschmerz, zunehmende Bewegungseinschränkung.", "ursachen": "Ursachen: primär (altersbedingter Verschleiß) oder sekundär (z. B. nach Verletzung, Fehlstellung, Übergewicht). Risikofaktoren: Übergewicht, einseitige Belastung, höheres Alter, frühere Gelenkverletzungen.", "stadien": null, "massnahmen": ["Schmerzmanagement individuell anpassen und evaluieren", "Gelenkschonende Bewegung fördern (z. B. Schwimmen, Radfahren)", "Gewichtsreduktion bei Übergewicht unterstützen", "Hilfsmittel (Gehstock, orthopädische Schuhe) bei Bedarf einsetzen", "Wärmeanwendung bei chronischem Schmerz anbieten (individuell prüfen)", "Postoperative Mobilisation nach Gelenkersatz (TEP) schrittweise fördern", "Thrombose- und Dekubitusprophylaxe perioperativ sicherstellen", "Über gelenkschonende Alltagstechniken beraten"]}, {"id": 50, "name": "Rheumatoide Arthritis", "category": "Orthopädie", "definition": "Chronisch-entzündliche Autoimmunerkrankung der Gelenke. Leitsymptome: symmetrische Gelenkschwellung/-schmerz (v. a. Hände/Finger), Morgensteifigkeit >1 Stunde.", "ursachen": "Ursache: Autoimmunprozess gegen körpereigenes Gelenkgewebe. Risikofaktoren: genetische Disposition, Rauchen, weibliches Geschlecht.", "stadien": null, "massnahmen": ["Gelenkschonende Bewegungsabläufe anleiten", "Morgensteifigkeit durch warme Anwendungen lindern", "Hilfsmittel zur Gelenkentlastung im Alltag einsetzen", "Schmerzmanagement individuell anpassen", "Medikamentenadhärenz (Immunsuppressiva/Biologika) fördern", "Auf Infektionszeichen unter Immunsuppression besonders achten", "Selbstständigkeit bei Alltagsaktivitäten fördern, nicht übernehmen", "Psychosoziale Unterstützung bei chronischem Schmerzverlauf anbieten"]}, {"id": 51, "name": "Bandscheibenvorfall", "category": "Orthopädie", "definition": "Verlagerung von Gallertkern-Gewebe der Bandscheibe nach außen mit möglicher Nervenwurzelkompression. Leitsymptome: starke, oft ausstrahlende Rückenschmerzen, ggf. Sensibilitäts-/Kraftverlust.", "ursachen": "Ursachen: degenerative Bandscheibenveränderung, Fehlbelastung, Heben schwerer Lasten. Risikofaktoren: einseitige Belastung, Übergewicht, Bewegungsmangel, höheres Alter.", "stadien": null, "massnahmen": ["Schmerzma
